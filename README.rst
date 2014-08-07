@@ -27,3 +27,13 @@ Testing
 To run the full test-suite run::
 
     python -m unittest discover
+
+
+Directory structure
+-------------------
+
+There are three subpackages:
+
+- core -- used for common low level classes and utility code
+- cuds -- to hold all the native cuds implementations
+- io -- to hold the io specific code
