@@ -11,7 +11,7 @@ VERSION = '0.0.1dev'
 def write_version_py(filename=None):
     if filename is None:
         filename = os.path.join(
-            os.path.dirname(__file__), 'pikos', 'version.py')
+            os.path.dirname(__file__), 'simphony', 'version.py')
     ver = """\
 version = '%s'
 """
