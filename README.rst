@@ -1,7 +1,9 @@
 simphony-common
 ===============
 
-The native implementation of the Simphony cuds objects
+The native implementation of the Simphony cuds objects and io code.
+
+
 
 Repository
 ----------
