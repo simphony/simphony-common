@@ -4,8 +4,8 @@ This module contains the implentation to store, acces,
 and modify a mesh
 
 """
-import tables
-import itertools
+# import tables
+# import itertools
 
 
 class Point(object):
