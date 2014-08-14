@@ -5,7 +5,7 @@ mesh module functionalities
 
 """
 import unittest
-import cuds.mesh
+import simphony.cuds.mesh
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -17,12 +17,12 @@ class TestSequenceFunctions(unittest.TestCase):
         to tests all the mesh methods
 
         """
-        self.mesh = cuds.mesh.Mesh()
-        self.points = [cuds.mesh.Point(0, (0.0, 0.0, 0.0), 0),
-                       cuds.mesh.Point(1, (1.0, 0.0, 0.0), 0),
-                       cuds.mesh.Point(2, (0.0, 1.0, 0.0), 0),
-                       cuds.mesh.Point(3, (0.0, 0.0, 1.0), 0),
-                       cuds.mesh.Point(4, (1.0, 0.0, 1.0), 0)
+        self.mesh = simphony.cuds.mesh.Mesh()
+        self.points = [simphony.cuds.mesh.Point(0, (0.0, 0.0, 0.0), 0),
+                       simphony.cuds.mesh.Point(1, (1.0, 0.0, 0.0), 0),
+                       simphony.cuds.mesh.Point(2, (0.0, 1.0, 0.0), 0),
+                       simphony.cuds.mesh.Point(3, (0.0, 0.0, 1.0), 0),
+                       simphony.cuds.mesh.Point(4, (1.0, 0.0, 1.0), 0)
                        ]
 
     def test_emtpy_edges(self):
@@ -56,7 +56,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = cuds.mesh.Edge(0, points, 0)
+        edge = simphony.cuds.mesh.Edge(0, points, 0)
 
         self.mesh.add_edge(edge)
 
@@ -73,7 +73,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = cuds.mesh.Face(0, points, 0)
+        face = simphony.cuds.mesh.Face(0, points, 0)
 
         self.mesh.add_face(face)
 
@@ -91,7 +91,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = cuds.mesh.Cell(0, points, 0)
+        cell = simphony.cuds.mesh.Cell(0, points, 0)
 
         self.mesh.add_cell(cell)
         self.assertTrue(self.mesh.has_cells())
@@ -115,8 +115,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        edgeA = cuds.mesh.Edge(0, pointsA, 0)
-        edgeB = cuds.mesh.Edge(1, pointsB, 0)
+        edgeA = simphony.cuds.mesh.Edge(0, pointsA, 0)
+        edgeB = simphony.cuds.mesh.Edge(1, pointsB, 0)
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -149,8 +149,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        faceA = cuds.mesh.Face(0, pointsA, 0)
-        faceB = cuds.mesh.Face(1, pointsB, 0)
+        faceA = simphony.cuds.mesh.Face(0, pointsA, 0)
+        faceB = simphony.cuds.mesh.Face(1, pointsB, 0)
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -185,8 +185,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = cuds.mesh.Cell(0, pointsA, 0)
-        cellB = cuds.mesh.Cell(1, pointsB, 0)
+        cellA = simphony.cuds.mesh.Cell(0, pointsA, 0)
+        cellB = simphony.cuds.mesh.Cell(1, pointsB, 0)
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
