@@ -208,7 +208,7 @@ class Mesh(object):
     add_point, add_edge, add_face, add_cell
     __add_points
     update_point, update_edge, update_face, update_cell
-    iter_points, iter_edges, iter_face, iter_cell
+    iter_points, iter_edges, iter_faces, iter_cells
     has_edges, has_faces, has_cells
 
     """
@@ -643,7 +643,7 @@ class Mesh(object):
         else:
             return iter(self.edges.values())
 
-    def iter_face(self, face_ids=[]):
+    def iter_faces(self, face_ids=[]):
         """ Returns an iterator over the selected faces.
 
         Returns an interator over the faces with id in
@@ -673,7 +673,7 @@ class Mesh(object):
         else:
             return iter(self.faces.values())
 
-    def iter_cell(self, cell_ids=[]):
+    def iter_cells(self, cell_ids=[]):
         """ Returns an iterator over the selected cells.
 
         Returns an interator over the cells with id in
