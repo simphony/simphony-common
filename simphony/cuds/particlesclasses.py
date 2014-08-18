@@ -609,13 +609,14 @@ class Particle(ElementsCommon):
     """
 
     def __init__(self, x_coord=0.0, y_coord=0.0, z_coord=0.0):
+        super(Particle, self).__init__(0)
         self.x = x_coord
         self.y = y_coord
         self.z = z_coord
 
     def __str__(self):
-        total_str = "{0}_{1}_{2}_{3}".format(self._id, self.x, self.y, self.z)
-        # return str(self._id)
+        total_str = "{0}_{1}_{2}_{3}".format(self.get_id(), self.x, self.y, self.z)
+        # return str(self.get_id())
         return total_str
 
 
@@ -642,6 +643,7 @@ class Bond(ElementsCommon):
     """
 
     def __init__(self, particles_list=[]):
+        super(Bond, self).__init__(0)
         if len(particles_list) > 0:
             self.particles = particles_list
         else:
@@ -649,8 +651,8 @@ class Bond(ElementsCommon):
             self.particles.append(1)
 
     def __str__(self):
-        total_str = "{0}_{1}".format(self._id, self.particles)
-        # return str(self._id)
+        total_str = "{0}_{1}".format(self.get_id(), self.particles)
+        # return str(self.get_id())
         return total_str
 
 # Just an information message of the module
