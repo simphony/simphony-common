@@ -5,7 +5,11 @@ mesh module functionalities
 
 """
 import unittest
-import simphony.cuds.mesh
+import simphony.cuds.mesh.Point as Point
+import simphony.cuds.mesh.Edge as Edge
+import simphony.cuds.mesh.Face as Face
+import simphony.cuds.mesh.Cell as Cell
+import simphony.cuds.mesh.Mesh as Mesh
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -17,12 +21,12 @@ class TestSequenceFunctions(unittest.TestCase):
         to tests all the mesh methods
 
         """
-        self.mesh = simphony.cuds.mesh.Mesh()
-        self.points = [simphony.cuds.mesh.Point(0, (0.0, 0.0, 0.0), 0),
-                       simphony.cuds.mesh.Point(1, (1.0, 0.0, 0.0), 0),
-                       simphony.cuds.mesh.Point(2, (0.0, 1.0, 0.0), 0),
-                       simphony.cuds.mesh.Point(3, (0.0, 0.0, 1.0), 0),
-                       simphony.cuds.mesh.Point(4, (1.0, 0.0, 1.0), 0)
+        self.mesh = Mesh()
+        self.points = [Point(0, (0.0, 0.0, 0.0), 0),
+                       Point(1, (1.0, 0.0, 0.0), 0),
+                       Point(2, (0.0, 1.0, 0.0), 0),
+                       Point(3, (0.0, 0.0, 1.0), 0),
+                       Point(4, (1.0, 0.0, 1.0), 0)
                        ]
 
     def test_emtpy_edges(self):
@@ -46,6 +50,68 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.assertFalse(self.mesh.has_cells())
 
+    def test_add_point(self):
+        """ Check that a point can be added correctly
+
+        """
+
+        point = self.points[0]
+
+        self.mesh.add_point(point)
+
+        self.assertTrue(len(self.mesh.points.keys()))
+
+    def test_add_edge(self):
+        """ Check that an edge can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1]
+            ]
+
+        edge = Edge(0, points, 0)
+
+        self.mesh.add_edge(edge)
+
+        self.assertTrue(len(self.mesh.edges.keys()))
+
+    def test_add_face(self):
+        """ Check that a face can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        face = Face(0, points, 0)
+
+        self.mesh.add_face(face)
+
+        self.assertTrue(len(self.mesh.faces.keys()))
+
+    def test_add_cell(self):
+        """ Check that a cell can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        cell = Cell(0, points, 0)
+
+        self.mesh.add_cell(cell)
+
+        self.assertTrue(len(self.mesh.cells.keys()))
+
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
 
@@ -56,7 +122,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = simphony.cuds.mesh.Edge(0, points, 0)
+        edge = Edge(0, points, 0)
 
         self.mesh.add_edge(edge)
 
@@ -73,7 +139,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = simphony.cuds.mesh.Face(0, points, 0)
+        face = Face(0, points, 0)
 
         self.mesh.add_face(face)
 
@@ -91,10 +157,85 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = simphony.cuds.mesh.Cell(0, points, 0)
+        cell = Cell(0, points, 0)
 
         self.mesh.add_cell(cell)
+
         self.assertTrue(self.mesh.has_cells())
+
+    def test_get_point(self):
+        """ Check that a point can be retrieved correctly
+
+        """
+
+        point = self.points[0]
+
+        self.mesh.add_point(point)
+
+        point_ret = self.mesh.get_point(0)
+
+        self.assertTrue(isinstance(point_ret, Point))
+        self.assertEqual(point.id, point_ret.id)
+
+    def test_get_edge(self):
+        """ Check that an edge can be retrieved correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1]
+            ]
+
+        edge = Edge(0, points, 0)
+
+        self.mesh.add_edge(edge)
+
+        edge_ret = self.mesh.get_edge(0)
+
+        self.assertTrue(isinstance(edge_ret, Edge))
+        self.assertEqual(edge.id, edge_ret.id)
+
+    def test_get_face(self):
+        """ Check that a point can be retrieved correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        face = Face(0, points, 0)
+
+        self.mesh.add_face(face)
+
+        face_ret = self.mesh.get_face(0)
+
+        self.assertTrue(isinstance(face_ret, Face))
+        self.assertEqual(face.id, face_ret.id)
+
+    def test_get_cell(self):
+        """ Check that a point can be retrieved correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        cell = Cell(0, points, 0)
+
+        self.mesh.add_cell(cell)
+
+        cell_ret = self.mesh.get_cell(0)
+
+        self.assertTrue(isinstance(cell_ret, Cell))
+        self.assertEqual(cell.id, cell_ret.id)
 
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
@@ -115,8 +256,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        edgeA = simphony.cuds.mesh.Edge(0, pointsA, 0)
-        edgeB = simphony.cuds.mesh.Edge(1, pointsB, 0)
+        edgeA = Edge(0, pointsA, 0)
+        edgeB = Edge(1, pointsB, 0)
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -149,8 +290,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        faceA = simphony.cuds.mesh.Face(0, pointsA, 0)
-        faceB = simphony.cuds.mesh.Face(1, pointsB, 0)
+        faceA = Face(0, pointsA, 0)
+        faceB = Face(1, pointsB, 0)
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -185,8 +326,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = simphony.cuds.mesh.Cell(0, pointsA, 0)
-        cellB = simphony.cuds.mesh.Cell(1, pointsB, 0)
+        cellA = Cell(0, pointsA, 0)
+        cellB = Cell(1, pointsB, 0)
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
@@ -221,9 +362,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        edgeA = simphony.cuds.mesh.Edge(0, pointsA, 0)
-        edgeB = simphony.cuds.mesh.Edge(1, pointsB, 0)
-        edgeC = simphony.cuds.mesh.Edge(2, pointsC, 0)
+        edgeA = Edge(0, pointsA, 0)
+        edgeB = Edge(1, pointsB, 0)
+        edgeC = Edge(2, pointsC, 0)
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -262,9 +403,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        faceA = simphony.cuds.mesh.Face(0, pointsA, 0)
-        faceB = simphony.cuds.mesh.Face(1, pointsB, 0)
-        faceC = simphony.cuds.mesh.Face(2, pointsC, 0)
+        faceA = Face(0, pointsA, 0)
+        faceB = Face(1, pointsB, 0)
+        faceC = Face(2, pointsC, 0)
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -306,9 +447,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = simphony.cuds.mesh.Cell(0, pointsA, 0)
-        cellB = simphony.cuds.mesh.Cell(1, pointsB, 0)
-        cellC = simphony.cuds.mesh.Cell(2, pointsC, 0)
+        cellA = Cell(0, pointsA, 0)
+        cellB = Cell(1, pointsB, 0)
+        cellC = Cell(2, pointsC, 0)
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
@@ -320,8 +461,6 @@ class TestSequenceFunctions(unittest.TestCase):
         cells_id = [cell.id for cell in cells]
 
         self.assertItemsEqual(source_id, cells_id)
-
-
 
 if __name__ == '__main__':
     unittest.main()
