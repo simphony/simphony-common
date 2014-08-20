@@ -590,33 +590,26 @@ class Particle(ElementsCommon):
 
     Attributes
     ----------
-        x : float
-            x coordinate of the particle
-        y : float
-            y coordinate of the particle
-        z : float
-            z coordinate of the particle
+        coordinates : list / tuple
+            x,y,z coordinates of the particle
 
     Parameters:
 
     Parameters
     ----------
-        x_coord : float
-            x coordinate of the particle (Default: 0)
-        y_coord : float
-            y coordinate of the particle (Default: 0)
-        z_coord : float
-            z coordinate of the particle (Default: 0)
+        coordinates : list / tuple
+            x,y,z coordinates of the particle (Default: [0, 0, 0])
     """
 
-    def __init__(self, x_coord=0.0, y_coord=0.0, z_coord=0.0):
+    def __init__(self, ext_coordinates=None):
         super(Particle, self).__init__(0)
-        self.x = x_coord
-        self.y = y_coord
-        self.z = z_coord
+        if ext_coordinates:
+            self.coordinates = ext_coordinates
+        else:
+            self.coordinates = [0.0, 0.0, 0.0]
 
     def __str__(self):
-        total_str = "{0}_{1}_{2}_{3}".format(self.get_id(), self.x, self.y, self.z)
+        total_str = "{0}_{1}".format(self.get_id(), self.coordinates)
         # return str(self.get_id())
         return total_str
 

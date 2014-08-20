@@ -20,25 +20,20 @@ class ParticleTestCase(unittest.TestCase):
         """Creation of the particle."""
         particle = pc.Particle()
         self.assertIsInstance(particle, pc.Particle, "Error: not a Particle!")
-        self.assertEqual(particle.x, 0)
-        self.assertEqual(particle.y, 0)
-        self.assertEqual(particle.z, 0)
+        self.assertEqual(particle.coordinates, [0, 0, 0])
 
     def test_simple_particle_custom(self):
         """Creation of the particle."""
-        particle = pc.Particle(20.5, 30.5, 40.5)
+        particle = pc.Particle([20.5, 30.5, 40.5])
         self.assertIsInstance(particle, pc.Particle, "Error: not a Particle!")
-        self.assertEqual(particle.x, 20.5)
-        self.assertEqual(particle.y, 30.5)
-        self.assertEqual(particle.z, 40.5)
+        self.assertEqual(particle.coordinates, [20.5, 30.5, 40.5])
 
     def test_simple_particle_print(self):
         """Conversion to str - this could change as the str method in the
         class could change also due to specifications -."""
         particle = pc.Particle()
         self.assertNotEqual(str(particle), '', "Error: empty string!")
-        total_str = str(particle.get_id()) + '_' + str(particle.x) + '_' +\
-            str(particle.y) + '_' + str(particle.z)
+        total_str = str(particle.get_id()) + '_' + str(particle.coordinates)
         # print total_str
         self.assertEqual(str(particle), total_str,
                          "Error: wrong str conversion!")
@@ -82,7 +77,7 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
         self.p_list = []
         self.b_list = []
         for i in xrange(10):
-            self.p_list.append(pc.Particle(i, i*10, i*100))
+            self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
         self.pc = pc.ParticleContainer()
 
@@ -124,7 +119,7 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
         self.b_list = []
         self.pc = pc.ParticleContainer()
         for i in xrange(10):
-            self.p_list.append(pc.Particle(i, i*10, i*100))
+            self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_particle(self.p_list[i])
 
@@ -134,15 +129,12 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
     def test_update_particle_ok(self):
         """Update an existing particle in a correct way."""
         particle = self.pc.get_particle(self.p_list[1].get_id())
-        part_coords = (particle.x, particle.y, particle.z)
-        particle.x = 123
-        particle.y = 456
-        particle.z = 789
-        part_coords = (particle.x, particle.y, particle.z)
+        particle.coordinates = [123, 456, 789]
+        part_coords = particle.coordinates
         self.pc.update_particle(particle)
         new_particle = self.pc.get_particle(particle.get_id())
         self.assertTrue(new_particle is not particle)
-        new_part_coords = (new_particle.x, new_particle.y, new_particle.z)
+        new_part_coords = new_particle.coordinates
 
         self.assertEqual(part_coords, new_part_coords,
                          "Error: not same coords!")
@@ -229,7 +221,7 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
         self.p_list = []
         self.b_list = []
         for i in xrange(10):
-            self.p_list.append(pc.Particle(i, i*10, i*100))
+            self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
         self.pc = pc.ParticleContainer()
 
@@ -271,7 +263,7 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
         self.b_list = []
         self.pc = pc.ParticleContainer()
         for i in xrange(10):
-            self.p_list.append(pc.Particle(i, i*10, i*100))
+            self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_bond(self.b_list[i])
 
