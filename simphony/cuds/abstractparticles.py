@@ -88,30 +88,14 @@ class ElementsCommon(object):
     def get_id(self):
         return self._id
 
-    def __lt__(self, other):
-        return self._id < other.get_id()
-
-    def __le__(self, other):
-        return self._id <= other.get_id()
-
-    def __eq__(self, other):
-        return self._id == other.get_id()
-
-    def __ne__(self, other):
-        return self._id != other.get_id()
-
-    def __gt__(self, other):
-        return self._id > other.get_id()
-
-    def __ge__(self, other):
-        return self._id >= other.get_id()
-
     def __str__(self):
         pass
 
     def __repr__(self):
         # text = "%d_%lf_%lf_%lf" % self.__id, self.x, self.y, self.z
         return self.__str__()
+
+    id = property(get_id)
 
 
 # Just an information message of the module

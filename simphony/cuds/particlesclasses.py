@@ -608,6 +608,10 @@ class Particle(ElementsCommon):
         else:
             self.coordinates = [0.0, 0.0, 0.0]
 
+    def __eq__(self, other):
+        return (self._id == other.get_id() and
+                self.coordinates == other.coordinates)
+
     def __str__(self):
         total_str = "{0}_{1}".format(self.get_id(), self.coordinates)
         # return str(self.get_id())
@@ -643,6 +647,10 @@ class Bond(ElementsCommon):
         else:
             raise PCE.B_IncorrectTupleError()
             self.particles.append(1)
+
+    def __eq__(self, other):
+        return (self._id == other.get_id() and
+                self.particles == other.particles)
 
     def __str__(self):
         total_str = "{0}_{1}".format(self.get_id(), self.particles)
