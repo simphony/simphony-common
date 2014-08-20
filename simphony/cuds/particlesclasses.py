@@ -14,6 +14,7 @@
 
 # from abc import ABCMeta, abstractmethod
 # import bisect
+import copy
 
 # custom imports:
 from abstractparticles import ABCParticlesContainer, ElementsCommon
@@ -268,7 +269,7 @@ class ParticlesContainer(ABCParticlesContainer):
         """
 
         try:
-            cur_particle = self._particles[particle_id]
+            cur_particle = copy.deepcopy(self._particles[particle_id])
             return cur_particle
         except KeyError:
             print "Error: particle not found!"
@@ -281,7 +282,7 @@ class ParticlesContainer(ABCParticlesContainer):
         """
 
         try:
-            cur_bond = self._bonds[bond_id]
+            cur_bond = copy.deepcopy(self._bonds[bond_id])
             return cur_bond
         except KeyError:
             print "Error: bond not found!"
@@ -516,10 +517,10 @@ class ParticlesContainer(ABCParticlesContainer):
     def __iter_elements__(self, cur_dict, cur_ids):
         for cur_id in cur_ids:
             if cur_id in cur_dict:
-                yield cur_dict[cur_id]
+                yield copy.deepcopy(cur_dict[cur_id])
             else:
                 """this point can be discussed: if one of the ids is not in the
-                dictionary, should be stop the iteration and raise an
+                dictionary, should we stop the iteration and raise an
                 Exception? If we return 'None', the iteration can continue,
                 but whoever is using the method to iterate will have to check
                 if the returned object is valid or not;
@@ -528,14 +529,14 @@ class ParticlesContainer(ABCParticlesContainer):
 
     def __iter_all__(self, cur_dict):
         for cur_element in cur_dict.values():
-            yield cur_element
+            yield copy.deepcopy(cur_element)
 
     def __add_element__(self, cur_dict, element):
         # We check if the current dictionary has the element
         cur_id = element.get_id()
         if cur_id not in cur_dict:
             # This means the element is not in the dict - hence we can add it
-            cur_dict[cur_id] = element
+            cur_dict[cur_id] = copy.deepcopy(element)
         else:
             raise PCE.PC_DuplicatedValueError()
 
@@ -545,7 +546,7 @@ class ParticlesContainer(ABCParticlesContainer):
         if cur_id in cur_dict:
             # This means the element IS in the current dictionary
             # (this should be the standard case...), so we proceed
-            cur_dict[cur_id] = element
+            cur_dict[cur_id] = copy.deepcopy(element)
         else:
             raise PCE.PC_UnknownValueError()
 

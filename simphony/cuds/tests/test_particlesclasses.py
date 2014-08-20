@@ -141,6 +141,7 @@ class ParticlesContainerParticlesTestCase2(unittest.TestCase):
         part_coords = (particle.x, particle.y, particle.z)
         self.pc.update_particle(particle)
         new_particle = self.pc.get_particle(particle.get_id())
+        self.assertTrue(new_particle is not particle)
         new_part_coords = (new_particle.x, new_particle.y, new_particle.z)
 
         self.assertEqual(part_coords, new_part_coords,
@@ -284,6 +285,7 @@ class ParticlesContainerBondsTestCase2(unittest.TestCase):
         bond_particles = bond.particles
         self.pc.update_bond(bond)
         new_bond = self.pc.get_bond(bond.get_id())
+        self.assertTrue(new_bond is not bond)
         bond_new_particles = new_bond.particles
 
         self.assertEqual(bond_particles, bond_new_particles,
