@@ -2,7 +2,7 @@
 """
     Module for Particle classes:
 
-        ParticlesContainer ------> Concrete implementation of the Particles
+        ParticleContainer ------> Concrete implementation of the Particles
            Containter class for stand-alone use of the container within python.
         Particle ----------------> Concrete implementation of the class repre-
            senting the Particles and Atoms for stand-alone use.
@@ -17,13 +17,13 @@
 import copy
 
 # custom imports:
-from abstractparticles import ABCParticlesContainer, ElementsCommon
+from abstractparticles import ABCParticleContainer, ElementsCommon
 import pcexceptions as PCE
 # import bisectservice as BS
 # import DataContainers ?¿?¿?
 
 
-class ParticlesContainer(ABCParticlesContainer):
+class ParticleContainer(ABCParticleContainer):
     """Class that represents a container of particles and bonds. It can
        add particles and bonds, remove them and update them.
 
@@ -662,7 +662,7 @@ class Bond(ElementsCommon):
 def main():
     print """
             Module for Particle classes:
-                ParticlesContainer ------> Concrete implementation of the
+                ParticleContainer ------> Concrete implementation of the
                     Particles Containter class for stand-alone use of the
                     container within python.
                 Particle ----------------> Concrete implementation of the

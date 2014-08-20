@@ -11,8 +11,8 @@
 _PC_errors = {
     'IncorrectParticlesTuple': """Incorrect length of particles tuple: \
     it shouldn\'t be empty.""",
-    'ParticlesContainer_DuplicatedValue': 'Object already exists!',
-    'ParticlesContainer_UnknownValue': 'Value doesn\'t exists!'
+    'ParticleContainer_DuplicatedValue': 'Object already exists!',
+    'ParticleContainer_UnknownValue': 'Value doesn\'t exists!'
 }
 
 
@@ -22,7 +22,7 @@ class PC_DuplicatedValueError(Exception):
     """
     def __init__(self):
         Exception.__init__(self,
-                           _PC_errors['ParticlesContainer_DuplicatedValue'])
+                           _PC_errors['ParticleContainer_DuplicatedValue'])
 
 
 class PC_UnknownValueError(Exception):
@@ -30,7 +30,7 @@ class PC_UnknownValueError(Exception):
     removed, etc. was not in the Particle Container.
     """
     def __init__(self):
-        Exception.__init__(self, _PC_errors['ParticlesContainer_UnknownValue'])
+        Exception.__init__(self, _PC_errors['ParticleContainer_UnknownValue'])
 
 
 class B_IncorrectTupleError(Exception):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Module for Abstract Particle class:
-        ABCParticlesContainer ---> Common Base abstract class ("interface") for
+        ABCParticleContainer ---> Common Base abstract class ("interface") for
             the the Particles container.
 """
 
@@ -10,7 +10,7 @@ import random
 from sys import maxint
 
 
-class ABCParticlesContainer(object):
+class ABCParticleContainer(object):
     """Abstract base class for a ParticleContainer item."""
     __metaclass__ = ABCMeta
 
@@ -71,7 +71,7 @@ class ElementsCommon(object):
     """
     def __init__(self, external_id=0):
         """open question: how should we manage the id? since add_particle method
-        of ParticlesContainer gets a Particle as parameter, the id should be
+        of ParticleContainer gets a Particle as parameter, the id should be
         created automatically here inside Particle when we create a new one?
         In the case is automatically generated: should it be private so the
         user can't change it?. - Same for Bonds.
@@ -117,7 +117,7 @@ class ElementsCommon(object):
 # Just an information message of the module
 def main():
     print """Module for Particle classes:
-               ABCParticlesContainer ---> Common Base abstract class
+               ABCParticleContainer ---> Common Base abstract class
                ("interface") for the the Particles container.
            """
 

@@ -76,15 +76,15 @@ class BondTestCase(unittest.TestCase):
                          "Error: wrong str conversion!")
 
 
-class ParticlesContainerParticlesTestCase1(unittest.TestCase):
-    """Test case for addition of Particle to ParticlesContainer."""
+class ParticleContainerParticlesTestCase1(unittest.TestCase):
+    """Test case for addition of Particle to ParticleContainer."""
     def setUp(self):
         self.p_list = []
         self.b_list = []
         for i in xrange(10):
             self.p_list.append(pc.Particle(i, i*10, i*100))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticlesContainer()
+        self.pc = pc.ParticleContainer()
 
     def tearDown(self):
         pass
@@ -116,13 +116,13 @@ class ParticlesContainerParticlesTestCase1(unittest.TestCase):
         self.assertIsInstance(exc, pce.PC_DuplicatedValueError)
 
 
-class ParticlesContainerParticlesTestCase2(unittest.TestCase):
+class ParticleContainerParticlesTestCase2(unittest.TestCase):
     """Test case for updating, removing and iteration of Particle inside
     the container."""
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticlesContainer()
+        self.pc = pc.ParticleContainer()
         for i in xrange(10):
             self.p_list.append(pc.Particle(i, i*10, i*100))
             self.b_list.append(pc.Bond([1, 2, 3]))
@@ -223,15 +223,15 @@ class ParticlesContainerParticlesTestCase2(unittest.TestCase):
                          "Error: incorrect iteration!")
 
 
-class ParticlesContainerBondsTestCase1(unittest.TestCase):
-    """Test case for addition of Bond to ParticlesContainer."""
+class ParticleContainerBondsTestCase1(unittest.TestCase):
+    """Test case for addition of Bond to ParticleContainer."""
     def setUp(self):
         self.p_list = []
         self.b_list = []
         for i in xrange(10):
             self.p_list.append(pc.Particle(i, i*10, i*100))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticlesContainer()
+        self.pc = pc.ParticleContainer()
 
     def tearDown(self):
         pass
@@ -263,13 +263,13 @@ class ParticlesContainerBondsTestCase1(unittest.TestCase):
         self.assertIsInstance(exc, pce.PC_DuplicatedValueError)
 
 
-class ParticlesContainerBondsTestCase2(unittest.TestCase):
+class ParticleContainerBondsTestCase2(unittest.TestCase):
     """Test case for updating, removing and iteration of Bond inside
     the container."""
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticlesContainer()
+        self.pc = pc.ParticleContainer()
         for i in xrange(10):
             self.p_list.append(pc.Particle(i, i*10, i*100))
             self.b_list.append(pc.Bond([1, 2, 3]))
@@ -374,17 +374,17 @@ if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=2).run(suite)
 
     suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticlesContainerParticlesTestCase1)
+        ParticleContainerParticlesTestCase1)
     unittest.TextTestRunner(verbosity=2).run(suite)
 
     suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticlesContainerParticlesTestCase2)
+        ParticleContainerParticlesTestCase2)
     unittest.TextTestRunner(verbosity=2).run(suite)
 
     suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticlesContainerBondsTestCase1)
+        ParticleContainerBondsTestCase1)
     unittest.TextTestRunner(verbosity=2).run(suite)
 
     suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticlesContainerBondsTestCase2)
+        ParticleContainerBondsTestCase2)
     unittest.TextTestRunner(verbosity=2).run(suite)
