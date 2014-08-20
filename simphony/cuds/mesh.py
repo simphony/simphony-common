@@ -374,7 +374,7 @@ class Mesh(object):
                 + "Point expected."
             raise TypeError(error_str)
 
-        self.points.update({point.uuid: point})
+        self.points.update({point.id: point})
 
     def __add_points(self, points):
         """ Adds a list of points to the mesh.
