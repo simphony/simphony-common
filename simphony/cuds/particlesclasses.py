@@ -272,7 +272,7 @@ class ParticleContainer(ABCParticleContainer):
             cur_particle = copy.deepcopy(self._particles[particle_id])
             return cur_particle
         except KeyError:
-            print "Error: particle not found!"
+            print "Error: particle not found!: ", str(particle_id)
             return None
 
     def get_bond(self, bond_id):
@@ -285,7 +285,7 @@ class ParticleContainer(ABCParticleContainer):
             cur_bond = copy.deepcopy(self._bonds[bond_id])
             return cur_bond
         except KeyError:
-            print "Error: bond not found!"
+            print "Error: bond not found! ", str(bond_id)
             return None
 
     def remove_particle(self, particle_id):
@@ -538,7 +538,7 @@ class ParticleContainer(ABCParticleContainer):
             # This means the element is not in the dict - hence we can add it
             cur_dict[cur_id] = copy.deepcopy(element)
         else:
-            raise PCE.PC_DuplicatedValueError()
+            raise PCE.PC_DuplicatedValueError(cur_id)
 
     def __update_element__(self, cur_dict, element):
         # We use the bisect module to optimize the lists
@@ -548,7 +548,7 @@ class ParticleContainer(ABCParticleContainer):
             # (this should be the standard case...), so we proceed
             cur_dict[cur_id] = copy.deepcopy(element)
         else:
-            raise PCE.PC_UnknownValueError()
+            raise PCE.PC_UnknownValueError(cur_id)
 
     def __remove_element__(self, cur_dict, element):
         cur_id = element.get_id()
@@ -556,7 +556,7 @@ class ParticleContainer(ABCParticleContainer):
             # Element IS in dict, we proceed
             del cur_dict[cur_id]
         else:
-            raise PCE.PC_UnknownValueError()
+            raise PCE.PC_UnknownValueError(cur_id)
 
 # ==========================================================================
 

@@ -20,17 +20,19 @@ class PC_DuplicatedValueError(Exception):
     """This exception indicates that particle or the bond to be added already
     was in the Particle Container.
     """
-    def __init__(self):
+    def __init__(self, id):
         Exception.__init__(self,
-                           _PC_errors['ParticleContainer_DuplicatedValue'])
+                           _PC_errors['ParticleContainer_DuplicatedValue']
+                           + " id: " + str(id))
 
 
 class PC_UnknownValueError(Exception):
     """This exception indicates that particle or the bond to be updated,
     removed, etc. was not in the Particle Container.
     """
-    def __init__(self):
-        Exception.__init__(self, _PC_errors['ParticleContainer_UnknownValue'])
+    def __init__(self, id):
+        Exception.__init__(self, _PC_errors['ParticleContainer_UnknownValue']
+                           + " id: " + str(id))
 
 
 class B_IncorrectTupleError(Exception):
