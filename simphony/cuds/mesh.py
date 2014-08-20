@@ -355,18 +355,26 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If other point with the same uuid was already
             in the mesh
+
+        TypeError
+            If the object provided is not a point
 
         """
 
         if point.id in list(self.points.keys()):
             error_str = "Trying to add an already existing point with uuid: "\
                 + str(point.id)
-            raise Exception(error_str)
-        else:
-            self.points.update({point.uuid: point})
+            raise KeyError(error_str)
+
+        if not isinstance(point, Point):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "Point expected."
+            raise TypeError(error_str)
+
+        self.points.update({point.uuid: point})
 
     def __add_points(self, points):
         """ Adds a list of points to the mesh.
@@ -395,19 +403,27 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If other edge with the same uuid was already
             in the mesh
+
+        TypeError
+            If the object provided is not an edge
 
         """
 
         if edge.id in list(self.edges.keys()):
             error_str = "Trying to add an already existing edge with uuid: "\
                 + str(edge.id)
-            raise Exception(error_str)
-        else:
-            self.edges.update({edge.id: edge})
-            self.__add_points(edge.points)
+            raise KeyError(error_str)
+
+        if not isinstance(edge, Edge):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "Edge expected."
+            raise TypeError(error_str)
+
+        self.edges.update({edge.id: edge})
+        self.__add_points(edge.points)
 
     def add_face(self, face):
         """ Adds a new face to the mesh.
@@ -419,19 +435,27 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If other face with the same uuid was already
             in the mesh
+
+        TypeError
+            If the object provided is not a face
 
         """
 
         if face.id in list(self.faces.keys()):
             error_str = "Trying to add an already existing face with uuid: "\
                 + str(face.id)
-            raise Exception(error_str)
-        else:
-            self.faces.update({face.id: face})
-            self.__add_points(face.points)
+            raise KeyError(error_str)
+
+        if not isinstance(face, Face):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "Face expected."
+            raise TypeError(error_str)
+
+        self.faces.update({face.id: face})
+        self.__add_points(face.points)
 
     def add_cell(self, cell):
         """ Adds a new cell to the mesh.
@@ -443,19 +467,27 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If other cell with the same uuid was already
             in the mesh
+
+        TypeError
+            If the object provided is not a cell
 
         """
 
         if cell.id in list(self.cells.keys()):
             error_str = "Trying to add an already existing cell with uuid: "\
                 + str(cell.id)
-            raise Exception(error_str)
-        else:
-            self.cells.update({cell.id: cell})
-            self.__add_points(cell.points)
+            raise KeyError(error_str)
+
+        if not isinstance(cell, Cell):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "Cell expected."
+            raise TypeError(error_str)
+
+        self.cells.update({cell.id: cell})
+        self.__add_points(cell.points)
 
     def update_point(self, point):
         """ Updates the information of a point.
@@ -480,12 +512,12 @@ class Mesh(object):
             error_str = "Trying to update a non existing point with uuid: "\
                 + str(point.id)
             raise Exception(error_str)
-        else:
-            point_to_update = self.points[point.id]
 
-            point_to_update.data = point.data
-            point_to_update.coordinates = point.coordinates
-            point_to_update.past_data = point.past_data
+        point_to_update = self.points[point.id]
+
+        point_to_update.data = point.data
+        point_to_update.coordinates = point.coordinates
+        point_to_update.past_data = point.past_data
 
     def update_edge(self, edge):
         """ Updates the information of an edge.
@@ -510,14 +542,14 @@ class Mesh(object):
             error_str = "Trying to update a non existing edge with uuid: "\
                 + str(edge.id)
             raise Exception(error_str)
-        else:
-            edge_to_update = self.edges[edge.id]
 
-            edge_to_update.data = edge.data
-            edge_to_update.points = edge.points
-            edge_to_update.shared_data = edge.shared_data
+        edge_to_update = self.edges[edge.id]
 
-            edge_to_update.length = edge.length
+        edge_to_update.data = edge.data
+        edge_to_update.points = edge.points
+        edge_to_update.shared_data = edge.shared_data
+
+        edge_to_update.length = edge.length
 
     def update_face(self, face):
         """ Updates the information of a face.
@@ -542,14 +574,14 @@ class Mesh(object):
             error_str = "Trying to update a non existing face with uuid: "\
                 + str(face.id)
             raise Exception(error_str)
-        else:
-            face_to_update = self.faces[face.id]
 
-            face_to_update.data = face.data
-            face_to_update.points = face.points
-            face_to_update.shared_data = face.shared_data
+        face_to_update = self.faces[face.id]
 
-            face_to_update.area = face.area
+        face_to_update.data = face.data
+        face_to_update.points = face.points
+        face_to_update.shared_data = face.shared_data
+
+        face_to_update.area = face.area
 
     def update_cell(self, cell):
         """ Updates the information of a cell.
@@ -574,14 +606,14 @@ class Mesh(object):
             error_str = "Trying to update a non existing cell with uuid: "\
                 + str(cell.id)
             raise Exception(error_str)
-        else:
-            cell_to_update = self.cells[cell.id]
 
-            cell_to_update.data = cell.data
-            cell_to_update.points = cell.points
-            cell_to_update.shared_data = cell.shared_data
+        cell_to_update = self.cells[cell.id]
 
-            cell_to_update.volume = cell.volume
+        cell_to_update.data = cell.data
+        cell_to_update.points = cell.points
+        cell_to_update.shared_data = cell.shared_data
+
+        cell_to_update.volume = cell.volume
 
     def iter_points(self, point_ids=[]):
         """ Returns an iterator over the selected points.
