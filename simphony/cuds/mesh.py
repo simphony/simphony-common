@@ -503,15 +503,23 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If the point was not found in the mesh
+
+        TypeError
+            If the object provided is not a point
 
         """
 
         if point.id not in list(self.points.keys()):
             error_str = "Trying to update a non existing point with uuid: "\
                 + str(point.id)
-            raise Exception(error_str)
+            raise KeyError(error_str)
+
+        if not isinstance(point, Point):
+            error_str = "Trying to update an object with the wrong type. "\
+                + "Point expected."
+            raise TypeError(error_str)
 
         point_to_update = self.points[point.id]
 
@@ -533,15 +541,23 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If the edge was not found in the mesh
+
+        TypeError
+            If the object provided is not an edge
 
         """
 
         if edge.id not in list(self.edges.keys()):
             error_str = "Trying to update a non existing edge with uuid: "\
                 + str(edge.id)
-            raise Exception(error_str)
+            raise KeyError(error_str)
+
+        if not isinstance(edge, Edge):
+            error_str = "Trying to update an object with the wrong type. "\
+                + "Edge expected."
+            raise TypeError(error_str)
 
         edge_to_update = self.edges[edge.id]
 
@@ -565,15 +581,23 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If the face was not found in the mesh
+
+        TypeError
+            If the object provided is not a face
 
         """
 
         if face.id not in list(self.faces.keys()):
             error_str = "Trying to update a non existing face with uuid: "\
                 + str(face.id)
-            raise Exception(error_str)
+            raise KeyError(error_str)
+
+        if not isinstance(face, Face):
+            error_str = "Trying to update an object with the wrong type. "\
+                + "Face expected."
+            raise TypeError(error_str)
 
         face_to_update = self.faces[face.id]
 
@@ -597,15 +621,23 @@ class Mesh(object):
 
         Raises
         ------
-        ExistsException
+        KeyError
             If the cell was not found in the mesh
+
+        TypeError
+            If the object provided is not a cell
 
         """
 
         if cell.id not in list(self.cells.keys()):
             error_str = "Trying to update a non existing cell with uuid: "\
                 + str(cell.id)
-            raise Exception(error_str)
+            raise KeyError(error_str)
+
+        if not isinstance(cell, Cell):
+            error_str = "Trying to update an object with the wrong type. "\
+                + "Cell expected."
+            raise TypeError(error_str)
 
         cell_to_update = self.cells[cell.id]
 
