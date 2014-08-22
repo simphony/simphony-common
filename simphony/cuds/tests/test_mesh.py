@@ -4,12 +4,13 @@ This module contains the unitary tests for the
 mesh module functionalities
 
 """
+
 import unittest
-import simphony.cuds.mesh.Point as Point
-import simphony.cuds.mesh.Edge as Edge
-import simphony.cuds.mesh.Face as Face
-import simphony.cuds.mesh.Cell as Cell
-import simphony.cuds.mesh.Mesh as Mesh
+from simphony.cuds.mesh import Mesh
+from simphony.cuds.mesh import Point
+from simphony.cuds.mesh import Edge
+from simphony.cuds.mesh import Face
+from simphony.cuds.mesh import Cell
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -111,6 +112,59 @@ class TestSequenceFunctions(unittest.TestCase):
         self.mesh.add_cell(cell)
 
         self.assertTrue(len(self.mesh.cells.keys()))
+
+    def test_add_wrong_type_point(self):
+        """ Check that a only points can be added to the point list
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1]
+            ]
+
+        edge = Edge(0, points, 0)
+
+        with self.assertRaises(Exception) as cm:
+            self.mesh.add_point(edge)
+
+        self.assertIsInstance(cm.exception, TypeError)
+
+    def test_add_wrong_type_edge(self):
+        """ Check that a only edges can be added to the edge list
+
+        """
+
+        point = self.points[0]
+
+        with self.assertRaises(Exception) as cm:
+            self.mesh.add_edge(point)
+
+        self.assertIsInstance(cm.exception, TypeError)
+
+    def test_add_wrong_type_face(self):
+        """ Check that a only faces can be added to the face list
+
+        """
+
+        point = self.points[0]
+
+        with self.assertRaises(Exception) as cm:
+            self.mesh.add_face(point)
+
+        self.assertIsInstance(cm.exception, TypeError)
+
+    def test_add_wrong_type_cell(self):
+        """ Check that a only cells can be added to the cell list
+
+        """
+
+        point = self.points[0]
+
+        with self.assertRaises(Exception) as cm:
+            self.mesh.add_cell(point)
+
+        self.assertIsInstance(cm.exception, TypeError)
 
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
