@@ -4,6 +4,7 @@ This module contains the implentation to store, acces,
 and modify a mesh
 
 """
+import copy
 # import tables
 # import itertools
 
@@ -250,7 +251,7 @@ class Mesh(object):
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return self.points[uuid]
+            return copy.deepcopy(self.points[uuid])
 
     def get_edge(self, uuid):
         """ Returns an edge with a given uuid.
@@ -281,7 +282,7 @@ class Mesh(object):
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return self.edges[uuid]
+            return copy.deepcopy(self.edges[uuid])
 
     def get_face(self, uuid):
         """ Returns an face with a given uuid.
@@ -312,7 +313,7 @@ class Mesh(object):
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return self.faces[uuid]
+            return copy.deepcopy(self.faces[uuid])
 
     def get_cell(self, uuid):
         """ Returns an cell with a given uuid.
@@ -343,7 +344,7 @@ class Mesh(object):
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return self.cells[uuid]
+            return copy.deepcopy(self.cells[uuid])
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
@@ -673,9 +674,9 @@ class Mesh(object):
                 sub_points: self.points.get(sub_points, None)
                 for sub_points in point_ids
             }
-            return iter(points.values())
+            return iter(copy.deepcopy(points.values()))
         else:
-            return iter(self.points.values())
+            return iter(copy.deepcopy(self.points.values()))
 
     def iter_edges(self, edge_ids=[]):
         """ Returns an iterator over the selected edges.
@@ -703,9 +704,9 @@ class Mesh(object):
                 sub_edges: self.edges.get(sub_edges, None)
                 for sub_edges in edge_ids
             }
-            return iter(edges.values())
+            return iter(copy.deepcopy(edges.values()))
         else:
-            return iter(self.edges.values())
+            return iter(copy.deepcopy(self.edges.values()))
 
     def iter_faces(self, face_ids=[]):
         """ Returns an iterator over the selected faces.
@@ -733,9 +734,9 @@ class Mesh(object):
                 sub_faces: self.faces.get(sub_faces, None)
                 for sub_faces in face_ids
             }
-            return iter(faces.values())
+            return iter(copy.deepcopy(faces.values()))
         else:
-            return iter(self.faces.values())
+            return iter(copy.deepcopy(self.faces.values()))
 
     def iter_cells(self, cell_ids=[]):
         """ Returns an iterator over the selected cells.
@@ -763,9 +764,9 @@ class Mesh(object):
                 sub_cells: self.cells.get(sub_cells, None)
                 for sub_cells in cell_ids
             }
-            return iter(cells.values())
+            return iter(copy.deepcopy(cells.values()))
         else:
-            return iter(self.cells.values())
+            return iter(copy.deepcopy(self.cells.values()))
 
     def has_edges(self):
         """ Check if the mesh has edges
