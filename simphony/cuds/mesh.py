@@ -566,6 +566,9 @@ class Mesh(object):
         edge_to_update.points = edge.points
         edge_to_update.shared_data = edge.shared_data
 
+        for point in edge.points:
+            self.update_point(point)
+
         edge_to_update.length = edge.length
 
     def update_face(self, face):
@@ -606,6 +609,9 @@ class Mesh(object):
         face_to_update.points = face.points
         face_to_update.shared_data = face.shared_data
 
+        for point in face.points:
+            self.update_point(point)
+
         face_to_update.area = face.area
 
     def update_cell(self, cell):
@@ -645,6 +651,9 @@ class Mesh(object):
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
         cell_to_update.shared_data = cell.shared_data
+
+        for point in cell.points:
+            self.update_point(point)
 
         cell_to_update.volume = cell.volume
 
