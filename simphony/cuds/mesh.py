@@ -375,7 +375,7 @@ class Mesh(object):
                 + "Point expected."
             raise TypeError(error_str)
 
-        self.points.update({point.id: point})
+        self.points.update({point.id: copy.deepcopy(point)})
 
     def __add_points(self, points):
         """ Adds a list of points to the mesh.
@@ -392,7 +392,7 @@ class Mesh(object):
 
         for point in points:
             if point.id not in list(self.points.keys()):
-                self.points.update({point.id: point})
+                self.points.update({point.id: copy.deepcopy(point)})
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh.
@@ -423,7 +423,7 @@ class Mesh(object):
                 + "Edge expected."
             raise TypeError(error_str)
 
-        self.edges.update({edge.id: edge})
+        self.edges.update({edge.id: copy.deepcopy(edge)})
         self.__add_points(edge.points)
 
     def add_face(self, face):
@@ -455,7 +455,7 @@ class Mesh(object):
                 + "Face expected."
             raise TypeError(error_str)
 
-        self.faces.update({face.id: face})
+        self.faces.update({face.id: copy.deepcopy(face)})
         self.__add_points(face.points)
 
     def add_cell(self, cell):
@@ -487,7 +487,7 @@ class Mesh(object):
                 + "Cell expected."
             raise TypeError(error_str)
 
-        self.cells.update({cell.id: cell})
+        self.cells.update({cell.id: copy.deepcopy(cell)})
         self.__add_points(cell.points)
 
     def update_point(self, point):
