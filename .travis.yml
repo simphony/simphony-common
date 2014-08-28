@@ -1,7 +1,13 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install libhdf5-serial-dev
 install:
+  - pip install cython
+  - pip install numexpr
+  - pip install tables
   - python setup.py develop
 script:
   - python -m unittest discover
