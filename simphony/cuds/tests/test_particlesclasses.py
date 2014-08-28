@@ -4,8 +4,8 @@
 
 import unittest
 
-import particlesclasses as pc
-import pcexceptions as pce
+import simphony.cuds.particlesclasses as pc
+import simphony.cuds.pcexceptions as pce
 
 
 class ParticleTestCase(unittest.TestCase):
