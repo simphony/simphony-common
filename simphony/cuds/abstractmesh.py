@@ -4,8 +4,7 @@ Module for Abstract Mesh class
 """
 
 from abc import ABCMeta, abstractmethod
-import random
-from sys import maxint
+
 
 class ABCMesh(object):
     """Abstract base class for mesh."""
