@@ -176,7 +176,7 @@ class Cell(Element):
         return "Type: Cell\n" + Element.__str__(self)
 
 
-class Mesh(object):
+class Mesh(ABCMesh):
     """ Mesh object to store points and elements.
 
     Stores general mesh information Points and Elements
