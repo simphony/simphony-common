@@ -5,6 +5,7 @@ and modify a mesh
 
 """
 import copy
+from abstractmesh import ABCMesh
 # import tables
 # import itertools
 
