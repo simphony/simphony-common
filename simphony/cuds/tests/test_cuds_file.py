@@ -1,8 +1,8 @@
 import unittest
 import os
 
-from particle import Particle
-from cuds_file import CudsFile
+from simphony.cuds.particle import Particle
+from simphony.cuds.cuds_file import CudsFile
 
 
 class _EmptyParticleContainer():

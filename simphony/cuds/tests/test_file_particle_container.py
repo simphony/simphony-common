@@ -1,6 +1,6 @@
 import unittest
 import copy
-from particle import Particle
+from simphony.cuds.particle import Particle
 import cuds_file
 import os
 
