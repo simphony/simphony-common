@@ -31,6 +31,16 @@ class TestCudsFile(unittest.TestCase):
         os.remove('test_A.cuds')
         os.remove('test_B.cuds')
 
+    def test_valid(self):
+        dummyFile = CudsFile()
+        self.assertFalse(dummyFile.valid())
+
+        self.assertTrue(self.file_a.valid())
+        self.file_a.close()
+        self.assertFalse(self.file_a.valid())
+        self.file_a.open('test_A.cuds')
+        self.assertTrue(self.file_a.valid())
+
     def test_add_get_particle_container(self):
         #add empty particle container
         self.file_a.add_particle_container('test', _EmptyParticleContainer())

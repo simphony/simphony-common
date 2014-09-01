@@ -4,16 +4,23 @@ from file_particle_container import FileParticleContainer
 
 
 class CudsFile(object):
-    def __init__(self):
-        self._file = None
-        self._particle_containers = {}
-
-    def open(self, filename, title=''):
+    def __init__(self, filename, title=''):
         self._file = tables.open_file(filename, 'a', title=title)
         self._particle_containers = {}
         for group in ('particle_container', 'lattice', 'mesh'):
             if "/" + group not in self._file:
                 self._file.create_group('/', group, group)
+
+    def valid(self):
+        """ Checks if file is valid (i.e. open)"""
+        if self._file and self._file.isopen:
+            return True
+        else:
+            return False
+
+    def open(self, filename, title=''):
+        """ Opens a file"""
+        return self(filename, title='')
 
     def close(self):
         self._file.close()
