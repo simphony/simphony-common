@@ -3,7 +3,8 @@ This class illustrates use of a particles container class for files
 """
 import copy
 from abc_particle_container import ABCParticleContainer
-from particle_container import Particle
+from particle import Particle
+
 import tables
 
 

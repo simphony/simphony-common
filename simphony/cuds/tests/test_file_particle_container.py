@@ -1,7 +1,7 @@
 import unittest
 import copy
 from simphony.cuds.particle import Particle
-import cuds_file
+from simphony.cuds.cuds_file import CudsFile
 import os
 
 
@@ -16,7 +16,7 @@ class TestFileParticleContainer(unittest.TestCase):
 
     def setUp(self):
         #create empty particle container and two particles (with unique ids)
-        self.file = cuds_file.CudsFile()
+        self.file = CudsFile()
         self.file.open('test_file.cuds')
 
         self.file.add_particle_container("test", _EmptyParticleContainer())
