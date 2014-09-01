@@ -20,10 +20,8 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(10):
             self.particles.append(Particle(i, (1.1*i, 2.2*i, 3.3*i)))
 
-        self.file_a = CudsFile()
-        self.file_a.open('test_A.cuds')
-        self.file_b = CudsFile()
-        self.file_b.open('test_B.cuds')
+        self.file_a = CudsFile.open('test_A.cuds')
+        self.file_b = CudsFile.open('test_B.cuds')
 
     def tearDown(self):
         self.file_a.close()
@@ -32,13 +30,10 @@ class TestCudsFile(unittest.TestCase):
         os.remove('test_B.cuds')
 
     def test_valid(self):
-        dummyFile = CudsFile()
-        self.assertFalse(dummyFile.valid())
-
         self.assertTrue(self.file_a.valid())
         self.file_a.close()
         self.assertFalse(self.file_a.valid())
-        self.file_a.open('test_A.cuds')
+        self.file_a = CudsFile.open('test_A.cuds')
         self.assertTrue(self.file_a.valid())
 
     def test_add_get_particle_container(self):
@@ -76,7 +71,7 @@ class TestCudsFile(unittest.TestCase):
             pc_closed_file.delete(self.particles[0].id)
 
         # reopen file
-        self.file_a.open('test_A.cuds')
+        self.file_a = CudsFile.open('test_A.cuds')
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
             p1 = pc_test_a.get_particle(p.id)

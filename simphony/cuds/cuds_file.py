@@ -18,13 +18,14 @@ class CudsFile(object):
         else:
             return False
 
-    def open(self, filename, title=''):
+    @classmethod
+    def open(cls, filename, title=''):
         """ Opens a file"""
-        return self(filename, title='')
+        return cls(filename, title='')
 
     def close(self):
+        """ Closes a file"""
         self._file.close()
-        self._particles_containers = {}
 
     def add_particle_container(self, name, particle_container):
         if name in self._file.root.particle_container:

@@ -16,8 +16,7 @@ class TestFileParticleContainer(unittest.TestCase):
 
     def setUp(self):
         #create empty particle container and two particles (with unique ids)
-        self.file = CudsFile()
-        self.file.open('test_file.cuds')
+        self.file = CudsFile.open('test_file.cuds')
 
         self.file.add_particle_container("test", _EmptyParticleContainer())
 
