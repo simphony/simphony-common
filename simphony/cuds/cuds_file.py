@@ -23,7 +23,7 @@ class CudsFile(object):
         if name in self._file.root.particle_container:
             raise Exception(
                 'Particle container \'{n}\` already exists'.format(n=name))
-        
+
         group = self._file.create_group('/particle_container/', name)
         pc = FileParticleContainer(group, self._file)
         self._particle_containers[name] = pc
