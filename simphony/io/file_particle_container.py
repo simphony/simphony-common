@@ -2,8 +2,8 @@
 This class illustrates use of a particles container class for files
 """
 import copy
-from abc_particle_container import ABCParticleContainer
-from particle import Particle
+from simphony.cuds.abc_particle_container import ABCParticleContainer
+from simphony.cuds.particle import Particle
 
 import tables
 

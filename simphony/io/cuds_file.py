@@ -6,7 +6,7 @@ formated in the CUDS-hdf5 file format
 
 import tables
 import copy
-from file_particle_container import FileParticleContainer
+from simphony.io.file_particle_container import FileParticleContainer
 
 
 class CudsFile(object):
