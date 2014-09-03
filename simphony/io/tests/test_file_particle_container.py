@@ -1,8 +1,9 @@
 import unittest
 import copy
-from simphony.cuds.particle import Particle
-from simphony.io.cuds_file import CudsFile
 import os
+from simphony.cuds.particle import Particle
+from simphony.cuds.bond import Bond
+from simphony.io.cuds_file import CudsFile
 
 
 class _EmptyParticleContainer():
@@ -15,14 +16,18 @@ class _EmptyParticleContainer():
 class TestFileParticleContainer(unittest.TestCase):
 
     def setUp(self):
-        #create empty particle container and two particles (with unique ids)
+        #create file with empty particle container
         self.file = CudsFile.open('test_file.cuds')
-
         self.file.add_particle_container("test", _EmptyParticleContainer())
-
         self.pc = self.file.get_particle_container('test')
+
+        #create two particles (with unique ids)
         self.particle_1 = Particle(0, (0.1, 0.4, 5.0))
         self.particle_2 = Particle(1, (0.2, 0.45, 50.0))
+
+        #create two bonds (with unique ids)
+        self.bond_1 = Bond(0, (1, 0))
+        self.bond_2 = Bond(1, (0, 1))
 
     def tearDown(self):
         self.file.close()
@@ -92,6 +97,55 @@ class TestFileParticleContainer(unittest.TestCase):
         self.assertEqual(particles1, particles2)
         self.assertEqual(particles1, particles3)
 
+    def test_add_get_bond(self):
+        self.pc.add_bond(self.bond_1)
+        bond = self.pc.get_bond(self.bond_1.id)
+        self.assertTrue(bond is not self.bond_1)
+        self.assertEqual(bond, self.bond_1)
+
+    def test_add_bond_with_same_id(self):
+        self.pc.add_bond(self.bond_1)
+        with self.assertRaises(Exception):
+            self.pc.add_bond(self.bond_1)
+
+    def test_get_bond_throws(self):
+        with self.assertRaises(Exception):
+            self.pc.get_bond(0)
+
+    def test_update_bond(self):
+        with self.assertRaises(Exception):
+            self.pc.update_bond(self.bond_1)
+
+        self.pc.add_bond(self.bond_1)
+        self.pc.add_bond(self.bond_2)
+        b = copy.deepcopy(self.bond_1)
+        b.particles = (1, 1)
+        self.pc.update_bond(b)
+        updated_b = self.pc.get_bond(b.id)
+
+        self.assertEqual(b, updated_b)
+        self.assertNotEqual(b, self.bond_1)
+
+    def test_iter_bonds(self):
+        bondsA = [self.bond_1, self.bond_2]
+        for bond in bondsA:
+            self.pc.add_bond(bond)
+
+        # test iterating bonds without giving ids
+        bondsB = list(p for p in self.pc.iter_bonds())
+
+        self.assertEquals(len(bondsA), len(bondsB))
+        for bond in bondsA:
+            self.assertTrue(bond in bondsB)
+
+        # test iterating bonds by giving ids
+        bondsA = [self.bond_1, self.bond_2]
+        ids1 = list(p.id for p in bondsA)
+        bondsB = list(p for p in self.pc.iter_bonds(ids1))
+        self.assertEqual(bondsA, bondsB)
+
+if __name__ == '__main__':
+    unittest.main()
 
 if __name__ == '__main__':
     unittest.main()
