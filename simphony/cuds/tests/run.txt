@@ -1,0 +1,5 @@
+:: nx ny geom_fname tau ax titers evol_tstep
+python.exe test_abc_lattice.py 20 12 channel_x20_y12.raw 1.0 0.00001 200 200
+::python.exe test_abc_lattice.py 128 128 complex_x128_y128.raw 1.0 0.00001 400 20
+
+::python.exe test_abc_lattice_io.py 20 12 channel_x20_y12.raw 1.0 0.00001 200 200
