@@ -104,7 +104,7 @@ class CudsFile(object):
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
     def iter_particle_container(self, names=None):
-        """Iterate over all or a subset of particle containe
+        """Iterate over all or a subset of particle container
         contained in the file.
 
         Parameters
