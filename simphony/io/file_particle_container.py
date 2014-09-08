@@ -67,8 +67,7 @@ class FileParticleContainer(ABCParticleContainer):
     def get_particle(self, id):
         """Get particle"""
         for r in self._group.particles.where('id == {id}'.format(id=id)):
-            p = Particle(r['id'], tuple(r['coordinates']))
-            return p
+            return Particle(r['id'], tuple(r['coordinates']))
 
         raise Exception(
             'Particle (id={id}) does not exist'.format(id=id))
@@ -84,15 +83,13 @@ class FileParticleContainer(ABCParticleContainer):
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
         if ids is None:
-            ids = []
-            for r in self._group.particles:
-                ids.append(r['id'])
+            for row in self._group.particles:
+                yield Particle(row['id'], tuple(row['coordinates']))
         else:
             ids = copy.deepcopy(ids)
-
-        while ids:
-            particle_id = ids.pop(0)
-            yield self.get_particle(particle_id)
+            while ids:
+                particle_id = ids.pop(0)
+                yield self.get_particle(particle_id)
 
     def _set_bond_row(self, row, b):
         n = len(b.particles)
@@ -136,8 +133,7 @@ class FileParticleContainer(ABCParticleContainer):
         for r in self._group.bonds.where('id == {id}'.format(id=id)):
             n = r['n_particle_ids']
             particles = r['particle_ids'][:n]
-            p = Bond(r['id'], tuple(particles))
-            return p
+            return Bond(r['id'], tuple(particles))
 
         raise Exception(
             'Bond (id={id}) does not exist'.format(id=id))
@@ -153,12 +149,13 @@ class FileParticleContainer(ABCParticleContainer):
     def iter_bonds(self, ids=None):
         """Get iterator over bonds"""
         if ids is None:
-            ids = []
-            for r in self._group.bonds:
-                ids.append(r['id'])
+            for row in self._group.bonds:
+                n = row['n_particle_ids']
+                particles = row['particle_ids'][:n]
+                yield Bond(row['id'], tuple(particles))
         else:
             ids = copy.deepcopy(ids)
 
-        while ids:
-            bond_id = ids.pop(0)
-            yield self.get_bond(bond_id)
+            while ids:
+                bond_id = ids.pop(0)
+                yield self.get_bond(bond_id)
