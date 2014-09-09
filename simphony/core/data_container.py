@@ -28,8 +28,8 @@ class DataContainer(dict):
             super(DataContainer, self).__init__(**kwards)
             for key, value in args[0]:
                 self.__setitem__(key, value)
-            return
-        super(DataContainer, self).__init__(*args, **kwards)
+        else:
+            super(DataContainer, self).__init__(*args, **kwards)
 
     def __setitem__(self, key, value):
         """ Set/Update the key value only when
@@ -47,8 +47,8 @@ class DataContainer(dict):
         if len(args) == 1 and not hasattr(args[0], 'keys'):
             for key, value in argument:
                 self.__setitem__(key, value)
-            return
-        super(DataContainer, self).update(*args, **kwards)
+        else:
+            super(DataContainer, self).update(*args, **kwards)
 
     def _check_arguments(self, args, kwards):
         """ Check for the right arguments
