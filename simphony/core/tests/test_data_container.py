@@ -3,6 +3,7 @@ import unittest
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
+
 class TestDataContainer(unittest.TestCase):
 
     def setUp(self):
@@ -53,11 +54,11 @@ class TestDataContainer(unittest.TestCase):
 
     def test_initialization_with_non_cuba_dict(self):
         with self.assertRaises(ValueError):
-            DataContainer({'foo':5})
+            DataContainer({'foo': 5})
 
     def test_initialization_with_non_cuba_iterable(self):
         with self.assertRaises(ValueError):
-            DataContainer([('foo',5)])
+            DataContainer([('foo', 5)])
 
     def test_update_with_a_dictionary(self):
         container = DataContainer()
@@ -112,12 +113,12 @@ class TestDataContainer(unittest.TestCase):
     def test_update_with_non_cuba_dict(self):
         container = DataContainer()
         with self.assertRaises(ValueError):
-            container.update({'foo':5})
+            container.update({'foo': 5})
 
     def test_update_with_non_cuba_iterable(self):
         container = DataContainer()
         with self.assertRaises(ValueError):
-            container.update([('foo',5)])
+            container.update([('foo', 5)])
 
     def test_setitem_with_int_key(self):
         container = DataContainer()
