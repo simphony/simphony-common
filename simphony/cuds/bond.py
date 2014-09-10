@@ -2,10 +2,14 @@ class Bond(object):
     """
     Bond entity
     """
-    def __init__(self, id, particles, data={}):
+    def __init__(self, id, particles, data=None):
         self.id = id
         self.particles = particles
-        self.data = data
+        if data is None:
+            self.data = {}
+        else:
+            self.data = data
+
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

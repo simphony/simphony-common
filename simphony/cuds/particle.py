@@ -2,10 +2,13 @@ class Particle(object):
     """
     Particle entity
     """
-    def __init__(self, id, coordinates, data={}):
+    def __init__(self, id, coordinates, data=None):
         self.id = id
         self.coordinates = coordinates
-        self.data = data
+        if data is None:
+            self.data = {}
+        else:
+            self.data = data
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
