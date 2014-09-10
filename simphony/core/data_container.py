@@ -1,9 +1,6 @@
-from collections import Mapping
-
 from simphony.core.cuba import CUBA
 
-_ERROR_MESSAGE = "Keys {!r} are not in the approved CUBA keywords"
-_CUBA_KEYS = set(CUBA)
+_CUBA_MEMBERS = CUBA.__members__.viewkeys()
 
 
 class DataContainer(dict):
@@ -18,54 +15,54 @@ class DataContainer(dict):
     __slots__ = ()
 
     def __init__(self, *args, **kwards):
-        """ Contructor.
+        """ Constructor.
 
         Initialization follows the behaviour of the python dict class.
 
         """
         self._check_arguments(args, kwards)
         if len(args) == 1 and not hasattr(args[0], 'keys'):
-            super(DataContainer, self).__init__(**kwards)
+            super(DataContainer, self).__init__()
             for key, value in args[0]:
                 self.__setitem__(key, value)
-        else:
-            super(DataContainer, self).__init__(*args, **kwards)
+        elif len(args) == 1:
+            mapping = args[0]
+            if not isinstance(mapping, DataContainer):
+                mapping = {
+                    CUBA(key): value for key, value in mapping.iteritems()}
+            super(DataContainer, self).__init__(mapping)
+        super(DataContainer, self).update(
+            {CUBA[kward]: value for kward, value in kwards.iteritems()})
 
     def __setitem__(self, key, value):
-        """ Set/Update the key value only when
-
+        """ Set/Update the key value only when it can successfully be coerced
 
         """
-        if key in _CUBA_KEYS:
-            super(DataContainer, self).__setitem__(key, value)
-        else:
-            message = "Key {!r} is not in the approved CUBA keywords"
-            raise KeyError(message.format(key))
+        super(DataContainer, self).__setitem__(CUBA(key), value)
 
     def update(self, *args, **kwards):
         self._check_arguments(args, kwards)
         if len(args) == 1 and not hasattr(args[0], 'keys'):
-            for key, value in argument:
+            for key, value in args[0]:
                 self.__setitem__(key, value)
-        else:
-            super(DataContainer, self).update(*args, **kwards)
+        elif len(args) == 1:
+            mapping = args[0]
+            if not isinstance(mapping, DataContainer):
+                mapping = {
+                    CUBA(key): value for key, value in mapping.iteritems()}
+            super(DataContainer, self).update(mapping)
+        super(DataContainer, self).update(
+            {CUBA[kward]: value for kward, value in kwards.iteritems()})
 
     def _check_arguments(self, args, kwards):
         """ Check for the right arguments
 
         """
-        # See if there are any non CUBA keys in the mapping argument
-        non_cuba_keys = kwards.viewkeys() - _CUBA_KEYS
+        # See if there are any non CUBA keys in the keyword arguments
+        non_cuba_keys = kwards.viewkeys() - _CUBA_MEMBERS
         if len(non_cuba_keys) > 0:
-            raise KeyError(_ERROR_MESSAGE.format(non_cuba_keys))
-        if len(args) == 1:
-            argument = args[0]
-            if isinstance(argument, DataContainer):
-                # This is already a DataContainer so we are sure that
-                # it only contains CUBA keys.
-                return
-            if isinstance(argument, Mapping):
-                # See if there any non CUBA keys in the mapping argument
-                non_cuba_keys = set(argument.keys()) - _CUBA_KEYS
-                if len(non_cuba_keys) > 0:
-                    raise KeyError(_ERROR_MESSAGE.format(non_cuba_keys))
+            message = "Keys {!r} are not in the approved CUBA keywords"
+            raise ValueError(message.format(non_cuba_keys))
+        if len(args) > 1:
+            message = 'DataContainer expected at most 1 arguments, got {}'
+            raise TypeError(message.format(len(args)))
