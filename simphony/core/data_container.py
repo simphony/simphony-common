@@ -9,6 +9,20 @@ class DataContainer(dict):
     The DataContainer object is implemented as a python dictionary whose keys
     are restricted to be members of the CUBA enum class.
 
+    The data container can be initialized like a typical python dict
+    using the mapping and iterables where the keys are CUBA enum members.
+
+    For convenience int keys are also accepted, as long as they correspond
+    to a CUBA member::
+
+        >>> DataContainer({19: 234})  # CUBA.ACCELERATION is 19
+        {<CUBA.ACCELERATION: 19>: 234}
+
+    Similarly, keywords can be passed as capitalized CUBA enum members::
+
+        >>> DataContainer(ACCELERATION=234)  # CUBA.ACCELERATION is 19
+        {<CUBA.ACCELERATION: 19>: 234}
+
     """
 
     # Memory usage optimization.
@@ -55,7 +69,7 @@ class DataContainer(dict):
             {CUBA[kward]: value for kward, value in kwards.iteritems()})
 
     def _check_arguments(self, args, kwards):
-        """ Check for the right arguments
+        """ Check for the right arguments.
 
         """
         # See if there are any non CUBA keys in the keyword arguments
