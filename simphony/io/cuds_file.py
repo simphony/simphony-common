@@ -67,7 +67,7 @@ class CudsFile(object):
             particle container to be added
         """
         if name in self._file.root.particle_container:
-            raise Exception(
+            raise ValueError(
                 'Particle container \'{n}\` already exists'.format(n=name))
 
         group = self._file.create_group('/particle_container/', name)
@@ -100,7 +100,7 @@ class CudsFile(object):
             self._particle_containers[name] = pc
             return pc
         else:
-            raise Exception(
+            raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
     def iter_particle_container(self, names=None):
