@@ -10,7 +10,6 @@ class Bond(object):
         else:
             self.data = data
 
-
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return (self.id == other.id and
