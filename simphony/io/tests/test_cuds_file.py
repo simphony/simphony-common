@@ -15,7 +15,7 @@ class _EmptyParticleContainer():
 class TestCudsFile(unittest.TestCase):
 
     def setUp(self):
-        #create some particles
+        # create some particles
         self.particles = []
         for i in xrange(10):
             self.particles.append(Particle(i, (1.1*i, 2.2*i, 3.3*i)))
@@ -37,10 +37,10 @@ class TestCudsFile(unittest.TestCase):
         self.assertTrue(self.file_a.valid())
 
     def test_add_get_particle_container(self):
-        #add empty particle container
+        # add empty particle container
         self.file_a.add_particle_container('test', _EmptyParticleContainer())
 
-        #add points to this pc
+        # add points to this pc
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
             pc_test_a.add_particle(p)
@@ -49,7 +49,7 @@ class TestCudsFile(unittest.TestCase):
         self.assertEqual(num_particles, len(self.particles))
 
         # add the particle container from the first file
-        #into the second file
+        # into the second file
         self.file_b.add_particle_container("other_test", pc_test_a)
         pc_test_b = self.file_b.get_particle_container('other_test')
 
@@ -61,7 +61,7 @@ class TestCudsFile(unittest.TestCase):
             self.file_a.add_particle_container(
                 'test', _EmptyParticleContainer())
 
-        #close file and test if we can access it
+        # close file and test if we can access it
         self.file_a.close()
         with self.assertRaises(Exception):
             pc_test_a.delete(self.particles[0].id)

@@ -16,16 +16,16 @@ class _EmptyParticleContainer():
 class TestFileParticleContainer(unittest.TestCase):
 
     def setUp(self):
-        #create file with empty particle container
+        # create file with empty particle container
         self.file = CudsFile.open('test_file.cuds')
         self.file.add_particle_container("test", _EmptyParticleContainer())
         self.pc = self.file.get_particle_container('test')
 
-        #create two particles (with unique ids)
+        # create two particles (with unique ids)
         self.particle_1 = Particle(0, (0.1, 0.4, 5.0))
         self.particle_2 = Particle(1, (0.2, 0.45, 50.0))
 
-        #create two bonds (with unique ids)
+        # create two bonds (with unique ids)
         self.bond_1 = Bond(0, (1, 0))
         self.bond_2 = Bond(1, (0, 1))
 

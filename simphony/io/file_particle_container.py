@@ -20,7 +20,7 @@ class _ParticleDescription(tables.IsDescription):
 
 class _BondDescription(tables.IsDescription):
     id = tables.Int32Col()
-    #storing up to fixed number of particles for each bond
+    # storing up to fixed number of particles for each bond
     particle_ids = tables.Int64Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
     n_particle_ids = tables.Int64Col()
 
@@ -32,11 +32,11 @@ class FileParticleContainer(ABCParticleContainer):
     def __init__(self, group, file):
         self._group = group
         if "particles" not in self._group:
-            #create table to hold particles
+            # create table to hold particles
             file.create_table(group, "particles", _ParticleDescription)
 
         if "bonds" not in self._group:
-            #create table to hold bonds
+            # create table to hold bonds
             file.create_table(group, "bonds", _BondDescription)
 
     def add_particle(self, p):
@@ -45,7 +45,7 @@ class FileParticleContainer(ABCParticleContainer):
             raise Exception(
                 'Particle (id={id}) already exists'.format(id=p.id))
 
-        #Insert a new particle record
+        # insert a new particle record
         particle = self._group.particles.row
         particle['id'] = p.id
         particle['coordinates'] = p.coordinates
@@ -96,7 +96,7 @@ class FileParticleContainer(ABCParticleContainer):
         if n > MAX_NUMBER_PARTICLES_IN_BOND:
             raise Exception(
                 'Bond has too many particles ({n} > {maxn})'.format(
-                n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
+                    n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
         row['id'] = b.id
         row['n_particle_ids'] = n
         particles = list(b.particles)
@@ -110,7 +110,7 @@ class FileParticleContainer(ABCParticleContainer):
             raise Exception(
                 'Bond (id={id}) already exists'.format(id=b.id))
 
-        #Insert a new bond record
+        # insert a new bond record
         row = self._group.bonds.row
         self._set_bond_row(row, b)
         row.append()

@@ -29,7 +29,7 @@ class CudsFile(object):
         self._file = tables.open_file(filename, 'a', title=title)
         self._particle_containers = {}
 
-        #create the high-level structure of the cuds file
+        # create the high-level structure of the cuds file
         for group in ('particle_container', 'lattice', 'mesh'):
             if "/" + group not in self._file:
                 self._file.create_group('/', group, group)
