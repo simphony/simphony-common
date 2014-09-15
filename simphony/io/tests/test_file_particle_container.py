@@ -72,6 +72,28 @@ class TestFileParticleContainer(unittest.TestCase):
         self.assertEqual(p, updated_p)
         self.assertNotEqual(p, self.particle_1)
 
+    def test_remove_particle(self):
+        with self.assertRaises(ValueError):
+            self.pc.remove_particle(0)
+
+        particles = []
+        for i in xrange(10):
+            particles.append(Particle(
+                id=i, coordinates=(0.0, 0.0, 0.0)))
+
+        for p in particles:
+            self.pc.add_particle(p)
+
+        for p in particles:
+            self.pc.remove_particle(p.id)
+
+        for p in particles:
+            with self.assertRaises(ValueError):
+                self.pc.get_particle(p.id)
+
+        current = [p for p in self.pc.iter_particles()]
+        self.assertFalse(current)
+
     def test_iter_particles(self):
         particles1 = [self.particle_1, self.particle_2]
         for particle in particles1:
@@ -142,6 +164,24 @@ class TestFileParticleContainer(unittest.TestCase):
 
         self.assertEqual(b, updated_b)
         self.assertNotEqual(b, self.bond_1)
+
+    def test_remove_bond(self):
+        with self.assertRaises(ValueError):
+            self.pc.remove_bond(0)
+
+        bonds = []
+        for i in xrange(10):
+            bonds.append(Bond(id=i, particles=(0, 0)))
+
+        for bond in bonds:
+            self.pc.add_bond(bond)
+
+        for bond in bonds:
+            self.pc.remove_bond(bond.id)
+
+        for bond in bonds:
+            with self.assertRaises(ValueError):
+                self.pc.get_bond(bond.id)
 
     def test_iter_bonds(self):
         bondsA = [self.bond_1, self.bond_2]

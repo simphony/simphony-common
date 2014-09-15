@@ -32,14 +32,23 @@ class FileParticleContainer(ABCParticleContainer):
     Responsible class to synchronize operations on particles
     """
     def __init__(self, group, file):
+        self._file = file
         self._group = group
         if "particles" not in self._group:
             # create table to hold particles
-            file.create_table(group, "particles", _ParticleDescription)
+            self._create_particles_table()
 
         if "bonds" not in self._group:
             # create table to hold bonds
-            file.create_table(group, "bonds", _BondDescription)
+            self._create_bonds_table()
+
+    def _create_particles_table(self):
+            self._file.create_table(
+                self._group, "particles", _ParticleDescription)
+
+    def _create_bonds_table(self):
+            self._file.create_table(
+                self._group, "bonds", _BondDescription)
 
     def add_particle(self, particle):
         """Add particle
@@ -97,11 +106,21 @@ class FileParticleContainer(ABCParticleContainer):
 
     def remove_particle(self, id):
         """Remove particle"""
-        for r in self._group.particles.where('id == {id}'.format(id=id)):
-            self._group.particles.remove_rows(r.nrow, r.nrow)
-            return
-        raise Exception(
-            'Particle (id={id}) does not exist'.format(id=id))
+        index = [r.nrow for r in self._group.particles.where(
+            'id == {id}'.format(id=id))]
+        if index:
+            if self._group.particles.nrows == 1:
+                # pytables due to hdf5 limitations does
+                # not support removing the last row of table
+                # so we delete the table and
+                # create new empty table in this situation
+                self._group.particles.remove()
+                self._create_particles_table()
+            else:
+                self._group.particles.remove_row(index[0])
+        else:
+            raise ValueError(
+                'Particle (id={id}) does not exist'.format(id=id))
 
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
@@ -194,11 +213,21 @@ class FileParticleContainer(ABCParticleContainer):
 
     def remove_bond(self, id):
         """Remove bond"""
-        for r in self._group.bonds.where('id == {id}'.format(id=id)):
-            self._group.bonds.remove_rows(r.nrow, r.nrow)
-            return
-        raise Exception(
-            'Bond (id={id}) does not exist'.format(id=id))
+        index = [r.nrow for r in self._group.bonds.where(
+            'id == {id}'.format(id=id))]
+        if index:
+            if self._group.bonds.nrows == 1:
+                # pytables due to hdf5 limitations does
+                # not support removing the last row of table
+                # so we delete the table and
+                # create new empty table in this situation
+                self._group.bonds.remove()
+                self._create_bonds_table()
+            else:
+                self._group.bonds.remove_row(index[0])
+        else:
+            raise ValueError(
+                'Bond (id={id}) does not exist'.format(id=id))
 
     def iter_bonds(self, ids=None):
         """Get iterator over bonds"""
