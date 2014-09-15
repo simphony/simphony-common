@@ -20,7 +20,7 @@ class TestCudsFile(unittest.TestCase):
         # create some particles
         self.particles = []
         for i in xrange(10):
-            self.particles.append(Particle(i, (1.1*i, 2.2*i, 3.3*i)))
+            self.particles.append(Particle((1.1*i, 2.2*i, 3.3*i), id=i))
 
         self.file_a = CudsFile.open('test_A.cuds')
         self.file_b = CudsFile.open('test_B.cuds')
@@ -82,7 +82,9 @@ class TestCudsFile(unittest.TestCase):
         # add points to this pc
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
-            pc_test_a.add_particle(p)
+            id = pc_test_a.add_particle(p)
+            self.assertEqual(p.id, id)
+            self.assertEqual(p, pc_test_a.get_particle(id))
 
         num_particles = len(list(p for p in pc_test_a.iter_particles()))
         self.assertEqual(num_particles, len(self.particles))

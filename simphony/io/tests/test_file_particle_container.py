@@ -1,6 +1,7 @@
 import unittest
 import copy
 import os
+
 from simphony.cuds.particle import Particle
 from simphony.cuds.bond import Bond
 from simphony.io.cuds_file import CudsFile
@@ -22,12 +23,12 @@ class TestFileParticleContainer(unittest.TestCase):
         self.pc = self.file.get_particle_container('test')
 
         # create two particles (with unique ids)
-        self.particle_1 = Particle(0, (0.1, 0.4, 5.0))
-        self.particle_2 = Particle(1, (0.2, 0.45, 50.0))
+        self.particle_1 = Particle((0.1, 0.4, 5.0), id=0)
+        self.particle_2 = Particle((0.2, 0.45, 50.0), id=1)
 
         # create two bonds (with unique ids)
-        self.bond_1 = Bond(0, (1, 0))
-        self.bond_2 = Bond(1, (0, 1))
+        self.bond_1 = Bond((1, 0), id=0)
+        self.bond_2 = Bond((0, 1), id=1)
 
     def tearDown(self):
         self.file.close()
@@ -44,6 +45,14 @@ class TestFileParticleContainer(unittest.TestCase):
         self.pc.add_particle(self.particle_1)
         with self.assertRaises(Exception):
             self.pc.add_particle(self.particle_1)
+
+    def test_add_get_particle_with_default_id(self):
+        p = Particle((1.0, 1.0, 0.0))
+        id = self.pc.add_particle(p)
+        particle = self.pc.get_particle(id)
+        self.assertTrue(particle is not p)
+        self.assertEqual(particle.id, id)
+        self.assertEqual(particle.coordinates, p.coordinates)
 
     def test_get_particle_throws(self):
         with self.assertRaises(Exception):
@@ -102,6 +111,14 @@ class TestFileParticleContainer(unittest.TestCase):
         bond = self.pc.get_bond(self.bond_1.id)
         self.assertTrue(bond is not self.bond_1)
         self.assertEqual(bond, self.bond_1)
+
+    def test_add_get_bond_with_default_id(self):
+        b = Bond((1, 0))
+        id = self.pc.add_bond(b)
+        bond = self.pc.get_bond(id)
+        self.assertTrue(bond is not b)
+        self.assertEqual(bond.id, id)
+        self.assertEqual(bond.particles, b.particles)
 
     def test_add_bond_with_same_id(self):
         self.pc.add_bond(self.bond_1)

@@ -2,7 +2,7 @@ class Bond(object):
     """
     Bond entity
     """
-    def __init__(self, id, particles, data=None):
+    def __init__(self, particles, data=None, id=None):
         self.id = id
         self.particles = particles
         if data is None:

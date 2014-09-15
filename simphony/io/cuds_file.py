@@ -27,14 +27,13 @@ class CudsFile(object):
         if not isinstance(file, tables.File):
             raise ValueError(
                 "File should be a Pytable file")
-        
+
         if file.mode is 'r':
             raise ValueError(
                 "File should not be opened in read-only mode")
 
         self._file = file
         self._particle_containers = {}
-
 
     def valid(self):
         """Checks if file is valid (i.e. open)
@@ -70,12 +69,12 @@ class CudsFile(object):
                 "'a' and 'w' are acceptable modes " % mode)
 
         file = tables.open_file(filename, mode, title=title)
-        
+
         # create the high-level structure of the cuds file
         for group in ('particle_container', 'lattice', 'mesh'):
             if "/" + group not in file:
                 file.create_group('/', group, group)
-        
+
         return cls(file)
 
     def close(self):
