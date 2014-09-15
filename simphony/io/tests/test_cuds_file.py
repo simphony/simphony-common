@@ -5,6 +5,7 @@ import tables
 
 from simphony.cuds.particle import Particle
 from simphony.io.cuds_file import CudsFile
+from simphony.io.file_particle_container import FileParticleContainer
 
 
 class _EmptyParticleContainer():
@@ -117,6 +118,31 @@ class TestCudsFile(unittest.TestCase):
         for p in self.particles:
             p1 = pc_test_a.get_particle(p.id)
             self.assertEqual(p1, p)
+
+    def test_iter_particle_container(self):
+        pc_names = []
+        # add a few empty particle containers
+        for i in xrange(5):
+            name = "test_" + str(i)
+            pc_names.append(name)
+            self.file_a.add_particle_container(name, _EmptyParticleContainer())
+
+        # test iterating over all
+        names = list(
+            name for pc, name in self.file_a.iter_particle_containers())
+        self.assertEquals(len(names), len(pc_names))
+        for name in names:
+            self.assertTrue(name in pc_names)
+
+        # test iterating over a specific subset
+        subset = pc_names[:3]
+        names = list(
+            name for pc, name in self.file_a.iter_particle_containers(subset))
+        self.assertEquals(names, subset)
+
+        for pc, name in self.file_a.iter_particle_containers(pc_names):
+            self.assertTrue(isinstance(pc, FileParticleContainer))
+
 
 if __name__ == '__main__':
     unittest.main()

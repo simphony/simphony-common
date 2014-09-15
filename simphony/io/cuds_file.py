@@ -130,8 +130,10 @@ class CudsFile(object):
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
-    def iter_particle_container(self, names=None):
-        """Iterate over all or a subset of particle container
+    def iter_particle_containers(self, names=None):
+        """Returns an iterator over a subset or all
+        of the particle containers. The iterator iterator yields
+        (name, particlecontainer) tuples for each particle container
         contained in the file.
 
         Parameters
@@ -140,10 +142,11 @@ class CudsFile(object):
             names of specific particle containers to be iterated over.
             If names is not given, then all particle containers will
             be iterated over.
+
         """
         names = copy.deepcopy(names)
         if names is None:
             names = self._particle_containers.keys()
         while names:
             name = names.pop(0)
-            yield self.get_particle_container(name)
+            yield self.get_particle_container(name), name
