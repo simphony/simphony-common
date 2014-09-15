@@ -16,13 +16,6 @@ class TestDataContainer(unittest.TestCase):
         for key in container:
             self.assertIsInstance(key, CUBA)
 
-    def test_initialization_with_a_dictionary_of_ints(self):
-        data = {int(key): key + 3 for key in CUBA}
-        container = DataContainer(data)
-        self.assertEqual(container, data)
-        for key in container:
-            self.assertIsInstance(key, CUBA)
-
     def test_initialization_with_a_iterable(self):
         data = [(key,  key + 3) for key in CUBA]
         container = DataContainer(data)
@@ -41,7 +34,7 @@ class TestDataContainer(unittest.TestCase):
         data = {
             key: index + 3 for index, key in enumerate(CUBA.__members__)
             if key != str(CUBA(10))[5:]}
-        container = DataContainer([(10, 23)], **data)
+        container = DataContainer([(CUBA(10), 23)], **data)
         expected = {key: key + 3 for key in CUBA}
         expected[CUBA(10)] = 23
         self.assertDictEqual(container, expected)
@@ -60,6 +53,15 @@ class TestDataContainer(unittest.TestCase):
         with self.assertRaises(ValueError):
             DataContainer([('foo', 5)])
 
+    def test_initialization_with_multiple_arguments(self):
+        with self.assertRaises(TypeError):
+            DataContainer([('foo', 5)], 45)
+
+    def test_initialization_with_a_dictionary_of_ints(self):
+        data = {int(key): key + 3 for key in CUBA}
+        with self.assertRaises(ValueError):
+            DataContainer(data)
+
     def test_update_with_a_dictionary(self):
         container = DataContainer()
         data = {key: key + 3 for key in CUBA}
@@ -71,10 +73,8 @@ class TestDataContainer(unittest.TestCase):
     def test_update_with_a_dictionary_of_ints(self):
         container = DataContainer()
         data = {int(key): key + 3 for key in CUBA}
-        container.update(data)
-        self.assertEqual(container, data)
-        for key in container:
-            self.assertIsInstance(key, CUBA)
+        with self.assertRaises(ValueError):
+            container.update(data)
 
     def test_update_with_a_iterable(self):
         container = DataContainer()
@@ -98,7 +98,7 @@ class TestDataContainer(unittest.TestCase):
         data = {
             key: index + 3 for index, key in enumerate(CUBA.__members__)
             if key != str(CUBA(10))[5:]}
-        container.update([(10, 23)], **data)
+        container.update([(CUBA(10), 23)], **data)
         expected = {key: key + 3 for key in CUBA}
         expected[CUBA(10)] = 23
         self.assertDictEqual(container, expected)
@@ -122,9 +122,8 @@ class TestDataContainer(unittest.TestCase):
 
     def test_setitem_with_int_key(self):
         container = DataContainer()
-        container[10] = 29
-        self.assertIsInstance(container.keys()[0], CUBA)
-        self.assertEqual(container[CUBA(10)], 29)
+        with self.assertRaises(ValueError):
+            container[10] = 29
 
     def test_setitem_with_cuba_key(self):
         container = DataContainer()
