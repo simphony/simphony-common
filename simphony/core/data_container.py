@@ -74,7 +74,7 @@ class DataContainer(dict):
         super(DataContainer, self).update(
             {CUBA[kwarg]: value for kwarg, value in kwards.viewitems()})
 
-    def _check_arguments(self, args, kwards):
+    def _check_arguments(self, args, kwargs):
         """ Check for the right arguments.
 
         """
