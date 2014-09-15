@@ -11,10 +11,6 @@ data_container = DataContainer(dict_data)
 indices = [random.randint(0, len(CUBA) - 1) for i in range(len(CUBA))]
 
 
-def dict_setup():
-    return
-
-
 def data_container_setup():
     return DataContainer(dict_data)
 

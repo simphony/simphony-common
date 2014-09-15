@@ -3,6 +3,7 @@ from simphony.core.cuba import CUBA
 _CUBA_MEMBERS = CUBA.__members__
 _CUBA_KEYS = set(CUBA)
 
+
 class DataContainer(dict):
     """ A DataContainer instance
 
@@ -12,13 +13,7 @@ class DataContainer(dict):
     The data container can be initialized like a typical python dict
     using the mapping and iterables where the keys are CUBA enum members.
 
-    For convenience int keys are also accepted, as long as they correspond
-    to a CUBA member::
-
-        >>> DataContainer({19: 234})  # CUBA.ACCELERATION is 19
-        {<CUBA.ACCELERATION: 19>: 234}
-
-    Similarly, keywords can be passed as capitalized CUBA enum members::
+    For convenience keywords can be passed as capitalized CUBA enum members::
 
         >>> DataContainer(ACCELERATION=234)  # CUBA.ACCELERATION is 19
         {<CUBA.ACCELERATION: 19>: 234}
@@ -53,7 +48,7 @@ class DataContainer(dict):
             {CUBA[kward]: value for kward, value in kwards.viewitems()})
 
     def __setitem__(self, key, value):
-        """ Set/Update the key value only when it can successfully be coerced
+        """ Set/Update the key value only when the key is a CUBA key.
 
         """
         if isinstance(key, CUBA):
@@ -85,11 +80,11 @@ class DataContainer(dict):
 
         """
         # See if there are any non CUBA keys in the keyword arguments
-
         if any(key not in _CUBA_MEMBERS for key in kwards):
             non_cuba_keys = kwards.viewkeys() - _CUBA_MEMBERS.viewkeys()
             message = "Key(s) {!r} are not in the approved CUBA keywords"
             raise ValueError(message.format(non_cuba_keys))
+        # Only one positional argument is allowed.
         if len(args) > 1:
             message = 'DataContainer expected at most 1 arguments, got {}'
             raise TypeError(message.format(len(args)))
