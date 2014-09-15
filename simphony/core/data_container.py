@@ -1,7 +1,6 @@
 from simphony.core.cuba import CUBA
 
 _CUBA_MEMBERS = CUBA.__members__
-_CUBA_KEYS = set(CUBA)
 
 
 class DataContainer(dict):
@@ -23,13 +22,13 @@ class DataContainer(dict):
     # Memory usage optimization.
     __slots__ = ()
 
-    def __init__(self, *args, **kwards):
+    def __init__(self, *args, **kwargs):
         """ Constructor.
 
         Initialization follows the behaviour of the python dict class.
 
         """
-        self._check_arguments(args, kwards)
+        self._check_arguments(args, kwargs)
         if len(args) == 1 and not hasattr(args[0], 'keys'):
             super(DataContainer, self).__init__()
             for key, value in args[0]:
@@ -45,7 +44,7 @@ class DataContainer(dict):
                     raise ValueError(message.format(non_cuba_keys))
             super(DataContainer, self).__init__(mapping)
         super(DataContainer, self).update(
-            {CUBA[kward]: value for kward, value in kwards.viewitems()})
+            {CUBA[kwarg]: value for kwarg, value in kwargs.viewitems()})
 
     def __setitem__(self, key, value):
         """ Set/Update the key value only when the key is a CUBA key.
@@ -57,8 +56,8 @@ class DataContainer(dict):
             message = "Key {!r} is not in the approved CUBA keywords"
             raise ValueError(message.format(key))
 
-    def update(self, *args, **kwards):
-        self._check_arguments(args, kwards)
+    def update(self, *args, **kwargs):
+        self._check_arguments(args, kwargs)
         if len(args) == 1 and not hasattr(args[0], 'keys'):
             for key, value in args[0]:
                 self.__setitem__(key, value)
@@ -73,15 +72,15 @@ class DataContainer(dict):
                     raise ValueError(message.format(non_cuba_keys))
             super(DataContainer, self).update(mapping)
         super(DataContainer, self).update(
-            {CUBA[kward]: value for kward, value in kwards.viewitems()})
+            {CUBA[kwarg]: value for kwarg, value in kwards.viewitems()})
 
     def _check_arguments(self, args, kwards):
         """ Check for the right arguments.
 
         """
         # See if there are any non CUBA keys in the keyword arguments
-        if any(key not in _CUBA_MEMBERS for key in kwards):
-            non_cuba_keys = kwards.viewkeys() - _CUBA_MEMBERS.viewkeys()
+        if any(key not in _CUBA_MEMBERS for key in kwargs):
+            non_cuba_keys = kwargs.viewkeys() - _CUBA_MEMBERS.viewkeys()
             message = "Key(s) {!r} are not in the approved CUBA keywords"
             raise ValueError(message.format(non_cuba_keys))
         # Only one positional argument is allowed.
