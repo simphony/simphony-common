@@ -72,7 +72,7 @@ class DataContainer(dict):
                     raise ValueError(message.format(non_cuba_keys))
             super(DataContainer, self).update(mapping)
         super(DataContainer, self).update(
-            {CUBA[kwarg]: value for kwarg, value in kwards.viewitems()})
+            {CUBA[kwarg]: value for kwarg, value in kwargs.viewitems()})
 
     def _check_arguments(self, args, kwargs):
         """ Check for the right arguments.
