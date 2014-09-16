@@ -63,8 +63,12 @@ class TestCudsFile(unittest.TestCase):
 
         with tables.open_file('test.cuds', mode="r") as pfile:
             with self.assertRaises(Exception):
-                CudsFile.open(pfile)
+                CudsFile(pfile)
         os.remove('test.cuds')
+
+    def test_init_with_non_file(self):
+        with self.assertRaises(Exception):
+            CudsFile(None)
 
     def test_valid(self):
         self.assertTrue(self.file_a.valid())
