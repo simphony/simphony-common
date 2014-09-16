@@ -99,7 +99,7 @@ class CudsFile(object):
 
         group = self._file.create_group('/particle_container/', name)
         pc = FileParticleContainer(group, self._file)
-        self._particle_containers[name] = pc
+        self._particle_containers[name] = (pc, group)
 
         for particle in particle_container.iter_particles():
             pc.add_particle(particle)
@@ -120,12 +120,27 @@ class CudsFile(object):
             name of particle container to return
         """
         if name in self._particle_containers:
-            return self._particle_containers[name]
+            return self._particle_containers[name][0]
         elif name in self._file.root.particle_container:
             group = tables.Group(self._file.root.particle_container, name)
             pc = FileParticleContainer(group, self._file)
             self._particle_containers[name] = pc
             return pc
+        else:
+            raise ValueError(
+                'Particle container \'{n}\` does not exist'.format(n=name))
+
+    def delete_particle_container(self, name):
+        """Delete particle container from file.
+
+        Parameters
+        ----------
+        name : str
+            name of particle container to delete
+        """
+        if name in self._particle_containers:
+            self._particle_containers[name][1]._f_remove(recursive=True)
+            del self._particle_containers[name]
         else:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))

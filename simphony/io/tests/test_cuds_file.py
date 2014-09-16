@@ -147,6 +147,30 @@ class TestCudsFile(unittest.TestCase):
         for pc, name in self.file_a.iter_particle_containers(pc_names):
             self.assertTrue(isinstance(pc, FileParticleContainer))
 
+    def test_delete_particle_container(self):
+        pc_names = []
+
+        # add a few empty particle containers
+        for i in xrange(5):
+            name = "test_" + str(i)
+            pc_names.append(name)
+            self.file_a.add_particle_container(name, _EmptyParticleContainer())
+
+        # delete each of the particle containers
+        for pc, name in self.file_a.iter_particle_containers():
+            self.file_a.delete_particle_container(name)
+
+            # test that we can't get deleted container
+            with self.assertRaises(ValueError):
+                self.file_a.get_particle_container(name)
+
+            # test that we can't use the deleted container
+            with self.assertRaises(Exception):
+                pc.add_particle(self.particles[0])
+
+    def test_delete_non_existing_particle_container(self):
+            with self.assertRaises(ValueError):
+                self.file_a.delete_particle_container("foo")
 
 if __name__ == '__main__':
     unittest.main()
