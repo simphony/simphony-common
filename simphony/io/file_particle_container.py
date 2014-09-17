@@ -130,8 +130,7 @@ class FileParticleContainer(ABCParticleContainer):
                     id=row['id'], coordinates=tuple(row['coordinates']))
         else:
             ids = copy.deepcopy(ids)
-            while ids:
-                particle_id = ids.pop(0)
+            for particle_id in ids:
                 yield self.get_particle(particle_id)
 
     def _set_bond_row(self, row, bond, id):
@@ -143,8 +142,11 @@ class FileParticleContainer(ABCParticleContainer):
         row['id'] = id
         row['n_particle_ids'] = n
         particles = list(bond.particles)
-        while len(particles) < MAX_NUMBER_PARTICLES_IN_BOND:
-            particles.append(0)
+        if n < MAX_NUMBER_PARTICLES_IN_BOND:
+            # so that the particles-list has the required length
+            # we fill it up with some zeros.
+            for x in xrange(MAX_NUMBER_PARTICLES_IN_BOND - n):
+                particles.append(0)
         row['particle_ids'] = particles
 
     def _generate_unique_id(self, table, number_tries=1000):
@@ -239,6 +241,5 @@ class FileParticleContainer(ABCParticleContainer):
         else:
             ids = copy.deepcopy(ids)
 
-            while ids:
-                bond_id = ids.pop(0)
+            for bond_id in ids:
                 yield self.get_bond(bond_id)

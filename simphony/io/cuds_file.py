@@ -177,6 +177,5 @@ class CudsFile(object):
         names = copy.deepcopy(names)
         if names is None:
             names = self._particle_containers.keys()
-        while names:
-            name = names.pop(0)
+        for name in names:
             yield self.get_particle_container(name), name
