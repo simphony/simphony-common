@@ -8,13 +8,6 @@ from simphony.io.cuds_file import CudsFile
 from simphony.io.file_particle_container import FileParticleContainer
 
 
-class _EmptyParticleContainer():
-
-    def iter_particles(self, ids=None):
-        return
-        yield
-
-
 class TestCudsFile(unittest.TestCase):
 
     def setUp(self):
@@ -81,11 +74,19 @@ class TestCudsFile(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.file_a.get_particle_container('foo')
 
+    def test_add_particle_container_empty(self):
+        pc = self.file_a.add_particle_container('test')
+        self.assertEqual(0, len(list(b for b in pc.iter_particles())))
+        self.assertEqual(0, len(list(p for p in pc.iter_bonds())))
+
+    def test_add_particle_container_with_same_name(self):
+        self.file_a.add_particle_container('test')
+        with self.assertRaises(ValueError):
+            self.file_a.add_particle_container('test')
+
     def test_add_get_particle_container(self):
-        # add empty particle container
-        self.file_a.add_particle_container('test', _EmptyParticleContainer())
-        # add points to this pc
-        pc_test_a = self.file_a.get_particle_container('test')
+        # add particle container and add points to it
+        pc_test_a = self.file_a.add_particle_container('test')
         for p in self.particles:
             id = pc_test_a.add_particle(p)
             self.assertEqual(p.id, id)
@@ -96,17 +97,11 @@ class TestCudsFile(unittest.TestCase):
 
         # add the particle container from the first file
         # into the second file
-        self.file_b.add_particle_container("other_test", pc_test_a)
-        pc_test_b = self.file_b.get_particle_container('other_test')
+        pc_test_b = self.file_b.add_particle_container("other_test", pc_test_a)
 
         for p1 in pc_test_a.iter_particles():
             p2 = pc_test_b.get_particle(p1.id)
             self.assertEqual(p1, p2)
-
-        # test adding particle container with same name
-        with self.assertRaises(ValueError):
-            self.file_a.add_particle_container(
-                'test', _EmptyParticleContainer())
 
         # close file and test if we can access it
         self.file_a.close()
@@ -129,7 +124,7 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(5):
             name = "test_" + str(i)
             pc_names.append(name)
-            self.file_a.add_particle_container(name, _EmptyParticleContainer())
+            self.file_a.add_particle_container(name)
 
         # test iterating over all
         names = list(
@@ -154,7 +149,7 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(5):
             name = "test_" + str(i)
             pc_names.append(name)
-            self.file_a.add_particle_container(name, _EmptyParticleContainer())
+            self.file_a.add_particle_container(name)
 
         # delete each of the particle containers
         for pc, name in self.file_a.iter_particle_containers():

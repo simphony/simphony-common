@@ -22,6 +22,7 @@ class CudsFile(object):
         ----------
         file : table.file
             file to be used
+
         """
 
         if not isinstance(file, tables.File):
@@ -62,6 +63,7 @@ class CudsFile(object):
         title : str
             Title attribute of root node (only applies to a file which
               is being created
+
         """
         if mode not in ('a', 'w'):
             raise ValueError(
@@ -83,15 +85,23 @@ class CudsFile(object):
         """
         self._file.close()
 
-    def add_particle_container(self, name, particle_container):
+    def add_particle_container(self, name, particle_container=None):
         """Add particle container to the file.
 
         Parameters
         ----------
         name : str
             name of particle container
-        particle_container
-            particle container to be added
+        particle_container : ABCParticleContainer, optional
+            particle container to be added. If none is give,
+            then an empty particle container is added.
+
+        Returns
+        ----------
+        FileParticleContainer
+            The particle container newly added to the file.  See
+            get_particle_container for more information.
+
         """
         if name in self._file.root.particle_container:
             raise ValueError(
@@ -101,10 +111,15 @@ class CudsFile(object):
         pc = FileParticleContainer(group, self._file)
         self._particle_containers[name] = (pc, group)
 
-        for particle in particle_container.iter_particles():
-            pc.add_particle(particle)
+        if particle_container:
+            # copy the contents of the particle container to the file
+            for particle in particle_container.iter_particles():
+                pc.add_particle(particle)
+            for bond in particle_container.iter_bonds():
+                pc.add_bond(bond)
 
         self._file.flush()
+        return pc
 
     def get_particle_container(self, name):
         """Get particle container from file.

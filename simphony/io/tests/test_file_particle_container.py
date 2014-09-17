@@ -7,20 +7,12 @@ from simphony.cuds.bond import Bond
 from simphony.io.cuds_file import CudsFile
 
 
-class _EmptyParticleContainer():
-
-    def iter_particles(self, ids=None):
-        return
-        yield
-
-
 class TestFileParticleContainer(unittest.TestCase):
 
     def setUp(self):
         # create file with empty particle container
         self.file = CudsFile.open('test_file.cuds')
-        self.file.add_particle_container("test", _EmptyParticleContainer())
-        self.pc = self.file.get_particle_container('test')
+        self.pc = self.file.add_particle_container("test")
 
         # create two particles (with unique ids)
         self.particle_1 = Particle((0.1, 0.4, 5.0), id=0)
