@@ -2,6 +2,7 @@
 branch = True
 source = simphony
 omit = */tests/*
+       */bench/*    
 
 [report]
 # Regexes for lines to exclude from consideration
