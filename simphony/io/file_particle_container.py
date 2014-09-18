@@ -16,12 +16,12 @@ MAX_NUMBER_PARTICLES_IN_BOND = 20
 
 
 class _ParticleDescription(tables.IsDescription):
-    id = tables.Int64Col()
+    id = tables.UInt32Col()
     coordinates = tables.Float64Col(shape=(3,))
 
 
 class _BondDescription(tables.IsDescription):
-    id = tables.Int64Col()
+    id = tables.UInt32Col()
     # storing up to fixed number of particles for each bond
     particle_ids = tables.Int64Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
     n_particle_ids = tables.Int64Col()
@@ -150,7 +150,7 @@ class FileParticleContainer(ABCParticleContainer):
         row['particle_ids'] = particles
 
     def _generate_unique_id(self, table, number_tries=1000):
-        max_int = np.iinfo(np.int64).max
+        max_int = np.iinfo(np.uint32).max
         for n in xrange(number_tries):
             id = random.randint(0, max_int)
             for r in table.where('id == {id}'.format(id=id)):
