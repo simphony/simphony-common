@@ -85,11 +85,11 @@ class FileParticleContainer(ABCParticleContainer):
                 'id == value', condvars={'value': id}):
             row['coordinates'] = list(particle.coordinates)
             row.update()
-            break
+            self._group.particles.flush()
+            return
         else:
             raise ValueError(
                 'Particle (id={id}) does not exist'.format(id=id))
-        self._group.particles.flush()
 
     def get_particle(self, id):
         """Get particle"""
@@ -114,6 +114,7 @@ class FileParticleContainer(ABCParticleContainer):
                 self._create_particles_table()
             else:
                 self._group.particles.remove_row(row.nrow)
+            return
         else:
             raise ValueError(
                 'Particle (id={id}) does not exist'.format(id=id))
@@ -172,7 +173,7 @@ class FileParticleContainer(ABCParticleContainer):
             self._set_bond_row(row, bond, bond.id)
             row.update()
             self._group.bonds.flush()
-            break
+            return
         else:
             raise ValueError(
                 'Bond (id={id}) does not exist'.format(id=bond.id))
@@ -200,6 +201,7 @@ class FileParticleContainer(ABCParticleContainer):
                 self._create_bonds_table()
             else:
                 self._group.bonds.remove_row(row.nrow)
+            return
         else:
             raise ValueError(
                 'Bond (id={id}) does not exist'.format(id=id))
