@@ -233,13 +233,9 @@ class FileParticleContainer(ABCParticleContainer):
                     n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
         row['id'] = id
         row['n_particle_ids'] = n
-        particles = list(bond.particles)
-        if n < MAX_NUMBER_PARTICLES_IN_BOND:
-            # so that the particles-list has the required length
-            # we fill it up with some zeros.
-            for x in xrange(MAX_NUMBER_PARTICLES_IN_BOND - n):
-                particles.append(0)
-        row['particle_ids'] = particles
+        particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
+        particle_ids[:n] = bond.particles
+        row['particle_ids'] = particle_ids
 
     def _generate_unique_id(self, table, number_tries=1000):
         for n in xrange(number_tries):
