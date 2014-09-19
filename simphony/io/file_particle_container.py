@@ -4,7 +4,7 @@ This class illustrates use of a particles container class for files
 import random
 
 import tables
-import numpy as np
+import numpy
 
 from simphony.cuds.abc_particle_container import ABCParticleContainer
 from simphony.cuds.particle import Particle
@@ -12,6 +12,7 @@ from simphony.cuds.bond import Bond
 
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
+MAX_INT = numpy.iinfo(numpy.uint32).max
 
 
 class _ParticleDescription(tables.IsDescription):
@@ -244,10 +245,11 @@ class FileParticleContainer(ABCParticleContainer):
         row['particle_ids'] = particles
 
     def _generate_unique_id(self, table, number_tries=1000):
-        max_int = np.iinfo(np.uint32).max
         for n in xrange(number_tries):
-            id = random.randint(0, max_int)
-            if table.where('id == value', condvars={'value': id}):
+            id = random.randint(0, MAX_INT)
+            for _ in table.where('id == value', condvars={'value': id}):
+                break
+            else:
                 return id
         else:
             raise Exception('Id could not be generated')
