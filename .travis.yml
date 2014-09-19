@@ -5,9 +5,9 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install libhdf5-serial-dev
 install:
-  # install numexpr externally because the requirements does
+  # install cython and numexpr externally because the requirements does
   # not work well.
-  - pip install numexpr
+  - pip install numexpr cython
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
   - python setup.py develop
