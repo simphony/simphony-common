@@ -1,2 +1,4 @@
+cython==0.20
 enum34
 tables
+numexpr
