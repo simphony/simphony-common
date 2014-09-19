@@ -1,4 +1,4 @@
-cython==0.20
+cython
 enum34
-tables
 numexpr
+tables
