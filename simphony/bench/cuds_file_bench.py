@@ -67,22 +67,22 @@ if __name__ == '__main__':
 
     print(
         "create_file_with_particles:",
-        bench(lambda: create_file_with_particles(), repeat=2))
+        bench(lambda: create_file_with_particles(), repeat=3))
 
     print(
-        "create_file_with_particles:",
-        bench(lambda: create_file_with_id_particles(), repeat=2))
+        "create_file_with_id_particles:",
+        bench(lambda: create_file_with_id_particles(), repeat=3))
 
     with Container() as pc:
         add_particles_to_container(pc)
         print(
-            "iter_particles_in_file",
+            "iter_particles_in_container",
             bench(lambda: iter_particles_in_container(pc)))
 
     with Container() as pc:
         add_particles_to_container(pc)
         print(
-            "update_coordinates_of_particles_in_file_using_iter",
+            "update_coordinates_of_particles_in_container_using_iter",
             bench(
                 lambda: update_coordinates_of_particles_in_container(pc),
                 repeat=2))
