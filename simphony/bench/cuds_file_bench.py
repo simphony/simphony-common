@@ -9,10 +9,10 @@ from simphony.io.cuds_file import CudsFile
 from simphony.cuds.particle import Particle
 
 particles = [
-    Particle(coordinates=(0.0, 1.1, 2.2)) for i in range(1000)]
+    Particle(coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
 
 id_particles = [
-    Particle(id=i, coordinates=(0.0, 1.1, 2.2)) for i in range(1000)]
+    Particle(id=i, coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
 
 def create_file_with_particles():
     with Container() as pc:
@@ -61,11 +61,11 @@ if __name__ == '__main__':
 
     print(
          "create_file_with_particles:",
-         bench(lambda: create_file_with_particles()))
+         bench(lambda: create_file_with_particles(), repeat=2))
 
     print(
          "create_file_with_particles:",
-         bench(lambda: create_file_with_id_particles()))
+         bench(lambda: create_file_with_id_particles(), repeat=2))
 
     with Container() as pc:
         add_particles_to_container(pc)
@@ -74,7 +74,9 @@ if __name__ == '__main__':
             lambda: iter_particles_in_container(pc)))
 
     with Container() as pc:
-        add_particles_to_container(pc)
-        print(
-            "update_coordinates_of_particles_in_file_using_iter",
-            bench(lambda: update_coordinates_of_particles_in_container(pc)))
+         add_particles_to_container(pc)
+         print(
+             "update_coordinates_of_particles_in_file_using_iter",
+             bench(
+                 lambda: update_coordinates_of_particles_in_container(pc),
+                 repeat=2))
