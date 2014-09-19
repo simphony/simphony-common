@@ -1,6 +1,8 @@
-import unittest
 import copy
 import os
+import tempfile
+import shutil
+import unittest
 
 from simphony.cuds.particle import Particle
 from simphony.cuds.bond import Bond
@@ -21,6 +23,30 @@ def _convert_to_tuple_list(particle_or_bond_list):
 
 class TestFileParticleContainer(unittest.TestCase):
 
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        # configure how equality for bond/particles will be tested
+        self.addTypeEqualityFunc(Particle, self.assertParticleEqual)
+        self.addTypeEqualityFunc(Bond, self.assertBondEqual)
+
+        # create file with empty particle container
+        self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        self.file = CudsFile.open(self.filename)
+        self.pc = self.file.add_particle_container("test")
+
+        # create two particles (with unique ids)
+        self.particle_1 = Particle((0.1, 0.4, 5.0), id=0)
+        self.particle_2 = Particle((0.2, 0.45, 50.0), id=1)
+
+        # create two bonds (with unique ids)
+        self.bond_1 = Bond((1, 0), id=0)
+        self.bond_2 = Bond((0, 1), id=1)
+
+    def tearDown(self):
+        if os.path.exists(self.filename):
+            self.file.close()
+        shutil.rmtree(self.temp_dir)
+
     def compare_list(self, a, b, order_sensitive=True):
         # helper method used to tests lists of
         # particles or bonds
@@ -33,35 +59,6 @@ class TestFileParticleContainer(unittest.TestCase):
             for item in a:
                 self.assertTrue(item in b)
                 b.remove(item)
-
-    def assertParticleEqual(self, a, b, msg=None):
-        self.assertEqual(a.id, b.id)
-        self.assertEqual(a.coordinates, b.coordinates)
-
-    def assertBondEqual(self, a, b, msg=None):
-        self.assertEqual(a.id, b.id)
-        self.assertEqual(a.particles, b.particles)
-
-    def setUp(self):
-        # configure how equality for bond/particles will be tested
-        self.addTypeEqualityFunc(Particle, self.assertParticleEqual)
-        self.addTypeEqualityFunc(Bond, self.assertBondEqual)
-
-        # create file with empty particle container
-        self.file = CudsFile.open('test_file.cuds')
-        self.pc = self.file.add_particle_container("test")
-
-        # create two particles (with unique ids)
-        self.particle_1 = Particle((0.1, 0.4, 5.0), id=0)
-        self.particle_2 = Particle((0.2, 0.45, 50.0), id=1)
-
-        # create two bonds (with unique ids)
-        self.bond_1 = Bond((1, 0), id=0)
-        self.bond_2 = Bond((0, 1), id=1)
-
-    def tearDown(self):
-        self.file.close()
-        os.remove('test_file.cuds')
 
     def test_add_get__particle(self):
         self.pc.add_particle(self.particle_1)
@@ -213,6 +210,14 @@ class TestFileParticleContainer(unittest.TestCase):
         ids1 = list(p.id for p in bondsA)
         bondsB = list(p for p in self.pc.iter_bonds(ids1))
         self.compare_list(bondsA, bondsB)
+
+    def assertParticleEqual(self, a, b, msg=None):
+        self.assertEqual(a.id, b.id)
+        self.assertEqual(a.coordinates, b.coordinates)
+
+    def assertBondEqual(self, a, b, msg=None):
+        self.assertEqual(a.id, b.id)
+        self.assertEqual(a.particles, b.particles)
 
 if __name__ == '__main__':
     unittest.main()
