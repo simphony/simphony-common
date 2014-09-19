@@ -6,8 +6,8 @@
 """
 
 from abc import ABCMeta, abstractmethod
-import random
-from sys import maxint
+# import random
+# from sys import maxint
 
 
 class ABCParticleContainer(object):
@@ -69,24 +69,23 @@ class ElementsCommon(object):
         data : DataContainer
             data attributes of the element (not implemented yet)
     """
-    def __init__(self, external_id=0):
+    def __init__(self, external_id=None):
         """open question: how should we manage the id? since add_particle method
         of ParticleContainer gets a Particle as parameter, the id should be
         created automatically here inside Particle when we create a new one?
         In the case is automatically generated: should it be private so the
         user can't change it?. - Same for Bonds.
         """
-        if external_id == 0:
-            # stub --> generate random
-            self._id = random.randint(-maxint, maxint)
-        else:
-            self._id = external_id
+        self._id = external_id
 
         # when ready:
         # self.data = DataContainer()
 
     def get_id(self):
         return self._id
+
+    def set_id(self, new_id):
+        self._id = new_id
 
     def __str__(self):
         pass
@@ -95,7 +94,7 @@ class ElementsCommon(object):
         # text = "%d_%lf_%lf_%lf" % self.__id, self.x, self.y, self.z
         return self.__str__()
 
-    id = property(get_id)
+    id = property(get_id, set_id)
 
 
 # Just an information message of the module

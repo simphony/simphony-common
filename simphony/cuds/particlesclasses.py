@@ -15,7 +15,8 @@
 # from abc import ABCMeta, abstractmethod
 # import bisect
 import copy
-
+import random
+import numpy as np
 # custom imports:
 from abstractparticles import ABCParticleContainer, ElementsCommon
 import pcexceptions as PCE
@@ -534,11 +535,16 @@ class ParticleContainer(ABCParticleContainer):
     def __add_element__(self, cur_dict, element):
         # We check if the current dictionary has the element
         cur_id = element.get_id()
-        if cur_id not in cur_dict:
-            # This means the element is not in the dict - hence we can add it
+        if cur_id is None:
+            cur_id = self.__generate_unique_id__(cur_dict)
+            element.id = cur_id
             cur_dict[cur_id] = copy.deepcopy(element)
         else:
-            raise PCE.PC_DuplicatedValueError(cur_id)
+            if cur_id not in cur_dict:
+                # Means the element is not in the dict - hence we can add it
+                cur_dict[cur_id] = copy.deepcopy(element)
+            else:
+                raise PCE.PC_DuplicatedValueError(cur_id)
 
     def __update_element__(self, cur_dict, element):
         # We use the bisect module to optimize the lists
@@ -557,6 +563,14 @@ class ParticleContainer(ABCParticleContainer):
             del cur_dict[cur_id]
         else:
             raise PCE.PC_UnknownValueError(cur_id)
+
+    def __generate_unique_id__(self, cur_dict, number_tries=1000):
+        max_int = np.iinfo(np.uint32).max
+        for n in xrange(number_tries):
+            cur_id = random.randint(0, max_int)
+            if cur_id not in cur_dict:
+                return cur_id
+        raise PCE.PC_IdNotGeneratedError()
 
 # ==========================================================================
 
@@ -601,8 +615,8 @@ class Particle(ElementsCommon):
             x,y,z coordinates of the particle (Default: [0, 0, 0])
     """
 
-    def __init__(self, ext_coordinates=None):
-        super(Particle, self).__init__(0)
+    def __init__(self, ext_coordinates=None, id=None):
+        super(Particle, self).__init__(id)
         if ext_coordinates:
             self.coordinates = ext_coordinates
         else:
@@ -640,13 +654,13 @@ class Bond(ElementsCommon):
             list of particles of the bond. It can not be empty (Defaul: (1,))
     """
 
-    def __init__(self, particles_list=[]):
-        super(Bond, self).__init__(0)
-        if len(particles_list) > 0:
+    def __init__(self, particles_list=None, id=None):
+        super(Bond, self).__init__(id)
+        if particles_list is not None:
             self.particles = particles_list
         else:
-            raise PCE.B_IncorrectTupleError()
             self.particles.append(1)
+            raise PCE.B_IncorrectTupleError()
 
     def __eq__(self, other):
         return (self._id == other.get_id() and

@@ -12,7 +12,9 @@ _PC_errors = {
     'IncorrectParticlesTuple': """Incorrect length of particles tuple: \
     it shouldn\'t be empty.""",
     'ParticleContainer_DuplicatedValue': 'Object already exists!',
-    'ParticleContainer_UnknownValue': 'Value doesn\'t exists!'
+    'ParticleContainer_UnknownValue': 'Value doesn\'t exists!',
+    'ParticleContainer_IdNotGenerated': """The particle container didnt\
+    generate an unique id."""
 }
 
 
@@ -33,6 +35,14 @@ class PC_UnknownValueError(Exception):
     def __init__(self, id):
         Exception.__init__(self, _PC_errors['ParticleContainer_UnknownValue']
                            + " id: " + str(id))
+
+
+class PC_IdNotGeneratedError(Exception):
+    """This exception indicates that the particle container couldn't generate
+    an unique id"""
+    def __init__(self, id):
+        Exception.__init__(self, _PC_errors['ParticleContainer_IdNotGenerated']
+                           )
 
 
 class B_IncorrectTupleError(Exception):
