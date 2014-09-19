@@ -21,10 +21,11 @@ class _ParticleDescription(tables.IsDescription):
 
 
 class _BondDescription(tables.IsDescription):
-    id = tables.UInt32Col()
+    id = tables.UInt32Col(pos=1)
     # storing up to fixed number of particles for each bond
-    particle_ids = tables.Int64Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
-    n_particle_ids = tables.Int64Col()
+    particle_ids = tables.Int64Col(
+        pos=1, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
+    n_particle_ids = tables.Int64Col(pos=3)
 
 
 class FileParticleContainer(ABCParticleContainer):
