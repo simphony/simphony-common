@@ -656,11 +656,11 @@ class Bond(ElementsCommon):
 
     def __init__(self, particles_list=None, id=None):
         super(Bond, self).__init__(id)
-        if particles_list is not None:
+        if particles_list is not None and len(particles_list) > 0:
             self.particles = particles_list
         else:
-            self.particles.append(1)
             raise PCE.B_IncorrectTupleError()
+            self.particles.append(1)
 
     def __eq__(self, other):
         return (self._id == other.get_id() and
