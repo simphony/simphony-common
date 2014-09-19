@@ -42,7 +42,7 @@ class FileParticleContainer(ABCParticleContainer):
             # create table to hold bonds
             self._create_bonds_table()
 
-    ### Particle methods ######################################################
+    # Particle methods ######################################################
 
     def add_particle(self, particle):
         """Add particle
@@ -131,7 +131,7 @@ class FileParticleContainer(ABCParticleContainer):
             for particle_id in ids:
                 yield self.get_particle(particle_id)
 
-    ### Bond methods #######################################################
+    # Bond methods #######################################################
 
     def add_bond(self, bond):
         """Add bond
@@ -219,7 +219,7 @@ class FileParticleContainer(ABCParticleContainer):
             for id in ids:
                 yield self.get_bond(id)
 
-    ### Private methods #######################################################
+    # Private methods #######################################################
 
     def _create_particles_table(self):
             self._file.create_table(
