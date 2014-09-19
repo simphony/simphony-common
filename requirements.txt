@@ -1,4 +1,4 @@
 enum34
-tables
-numexpr
 cython
+numexpr
+tables
