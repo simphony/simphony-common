@@ -14,29 +14,36 @@ particles = [
 id_particles = [
     Particle(id=i, coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
 
+
 def create_file_with_particles():
     with Container() as pc:
         add_particles_to_container(pc)
+
 
 def create_file_with_id_particles():
     with Container() as pc:
         add_id_particles_to_container(pc)
 
+
 def add_id_particles_to_container(particle_container):
     for particle in id_particles:
         particle_container.add_particle(particle)
+
 
 def add_particles_to_container(particle_container):
     for particle in particles:
         particle_container.add_particle(particle)
 
+
 def iter_particles_in_container(particle_container):
     return [particle for particle in particle_container.iter_particles()]
+
 
 def update_coordinates_of_particles_in_container(particle_container):
     for particle in particle_container.iter_particles():
         particle.coordinates = (0.1, 1.0, 1.0)
         particle_container.update_particle(particle)
+
 
 class Container(object):
     def __init__(self):
@@ -59,23 +66,23 @@ class Container(object):
 if __name__ == '__main__':
 
     print(
-         "create_file_with_particles:",
-         bench(lambda: create_file_with_particles(), repeat=2))
+        "create_file_with_particles:",
+        bench(lambda: create_file_with_particles(), repeat=2))
 
     print(
-         "create_file_with_particles:",
-         bench(lambda: create_file_with_id_particles(), repeat=2))
+        "create_file_with_particles:",
+        bench(lambda: create_file_with_id_particles(), repeat=2))
 
     with Container() as pc:
         add_particles_to_container(pc)
         print(
-            "iter_particles_in_file", bench(
-            lambda: iter_particles_in_container(pc)))
+            "iter_particles_in_file",
+            bench(lambda: iter_particles_in_container(pc)))
 
     with Container() as pc:
         add_particles_to_container(pc)
         print(
-        "update_coordinates_of_particles_in_file_using_iter",
-        bench(
-            lambda: update_coordinates_of_particles_in_container(pc),
-            repeat=2))
+            "update_coordinates_of_particles_in_file_using_iter",
+            bench(
+                lambda: update_coordinates_of_particles_in_container(pc),
+                repeat=2))

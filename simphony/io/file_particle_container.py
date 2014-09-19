@@ -1,7 +1,6 @@
 """
 This class illustrates use of a particles container class for files
 """
-import copy
 import random
 
 import tables
@@ -181,7 +180,7 @@ class FileParticleContainer(ABCParticleContainer):
     def get_bond(self, id):
         """Get bond"""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': bond.id}):
+                'id == value', condvars={'value': id}):
             particles = row['particle_ids'][:row['n_particle_ids']]
             # FIXME: do we have to convert to a tuple, why not a list?
             return Bond(id=row['id'], particles=tuple(particles))
@@ -191,7 +190,7 @@ class FileParticleContainer(ABCParticleContainer):
     def remove_bond(self, id):
         """Remove bond"""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': bond.id}):
+                'id == value', condvars={'value': id}):
             if self._group.bonds.nrows == 1:
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
