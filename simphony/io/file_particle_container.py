@@ -81,23 +81,23 @@ class FileParticleContainer(ABCParticleContainer):
 
     def update_particle(self, particle):
         """Update particle"""
-        id = particle.id
         for row in self._group.particles.where(
-                'id == value', condvars={'value': id}):
+                'id == value', condvars={'value': particle.id}):
             row['coordinates'] = list(particle.coordinates)
             row.update()
-            self._group.particles.flush()
+            # see https://github.com/PyTables/PyTables/issues/8
+            row._flush_mod_rows()
             return
         else:
             raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=id))
+                'Particle (id={id}) does not exist'.format(id=particle.id))
 
     def get_particle(self, id):
         """Get particle"""
         for row in self._group.particles.where(
                 'id == value', condvars={'value': id}):
             return Particle(
-                id=row['id'], coordinates=tuple(row['coordinates']))
+                id=id, coordinates=tuple(row['coordinates']))
         else:
             raise ValueError(
                 'Particle (id={id}) does not exist'.format(id=id))
@@ -173,7 +173,8 @@ class FileParticleContainer(ABCParticleContainer):
                 'id == value', condvars={'value': bond.id}):
             self._set_bond_row(row, bond, bond.id)
             row.update()
-            self._group.bonds.flush()
+            # see https://github.com/PyTables/PyTables/issues/8
+            row._flush_mod_rows()
             return
         else:
             raise ValueError(
