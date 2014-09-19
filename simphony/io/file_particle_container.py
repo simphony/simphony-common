@@ -16,8 +16,8 @@ MAX_INT = numpy.iinfo(numpy.uint32).max
 
 
 class _ParticleDescription(tables.IsDescription):
-    id = tables.UInt32Col()
-    coordinates = tables.Float64Col(shape=(3,))
+    id = tables.UInt32Col(pos=1)
+    coordinates = tables.Float64Col(pos=2, shape=(3,))
 
 
 class _BondDescription(tables.IsDescription):
@@ -72,11 +72,7 @@ class FileParticleContainer(ABCParticleContainer):
                     'Particle (id={id}) already exists'.format(id=id))
 
         # insert a new particle record
-        row = self._group.particles.row
-        row['id'] = id
-        row['coordinates'] = particle.coordinates
-        row.append()
-        self._group.particles.flush()
+        self._group.particles.append([(id, particle.coordinates)])
         return id
 
     def update_particle(self, particle):
