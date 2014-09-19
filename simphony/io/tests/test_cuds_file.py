@@ -90,7 +90,8 @@ class TestCudsFile(unittest.TestCase):
         for p in self.particles:
             id = pc_test_a.add_particle(p)
             self.assertEqual(p.id, id)
-            self.assertEqual(p, pc_test_a.get_particle(id))
+            self.assertEqual(
+                p.coordinates, pc_test_a.get_particle(id).coordinates)
 
         num_particles = len(list(p for p in pc_test_a.iter_particles()))
         self.assertEqual(num_particles, len(self.particles))
@@ -99,9 +100,10 @@ class TestCudsFile(unittest.TestCase):
         # into the second file
         pc_test_b = self.file_b.add_particle_container("other_test", pc_test_a)
 
-        for p1 in pc_test_a.iter_particles():
-            p2 = pc_test_b.get_particle(p1.id)
-            self.assertEqual(p1, p2)
+        for p in pc_test_a.iter_particles():
+            p1 = pc_test_b.get_particle(p.id)
+            self.assertEqual(p1.id, p.id)
+            self.assertEqual(p1.coordinates, p.coordinates)
 
         # close file and test if we can access it
         self.file_a.close()
@@ -116,7 +118,8 @@ class TestCudsFile(unittest.TestCase):
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
             p1 = pc_test_a.get_particle(p.id)
-            self.assertEqual(p1, p)
+            self.assertEqual(p1.id, p.id)
+            self.assertEqual(p1.coordinates, p.coordinates)
 
     def test_iter_particle_container(self):
         pc_names = []

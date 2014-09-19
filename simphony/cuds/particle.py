@@ -9,14 +9,3 @@ class Particle(object):
             self.data = {}
         else:
             self.data = data
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (self.id == other.id and
-                    self.coordinates == other.coordinates and
-                    self.data == self.data)
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self == other

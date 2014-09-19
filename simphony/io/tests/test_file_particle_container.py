@@ -7,9 +7,46 @@ from simphony.cuds.bond import Bond
 from simphony.io.cuds_file import CudsFile
 
 
+def _convert_to_tuple_list(particle_or_bond_list):
+    converted = []
+    for item in particle_or_bond_list:
+        if isinstance(item, Particle):
+            converted.append((item.id, item.coordinates))
+        elif isinstance(item, Bond):
+            converted.append((item.id, item.particles))
+        else:
+            raise Exception('unexpected type: %s' % type(item))
+    return converted
+
+
 class TestFileParticleContainer(unittest.TestCase):
 
+    def compare_list(self, a, b, order_sensitive=True):
+        # helper method used to tests lists of
+        # particles or bonds
+        a = _convert_to_tuple_list(a)
+        b = _convert_to_tuple_list(b)
+        if order_sensitive:
+            self.assertEqual(a, b)
+        else:
+            self.assertEqual(len(a), len(b))
+            for item in a:
+                self.assertTrue(item in b)
+                b.remove(item)
+
+    def assertParticleEqual(self, a, b, msg=None):
+        self.assertEqual(a.id, b.id)
+        self.assertEqual(a.coordinates, b.coordinates)
+
+    def assertBondEqual(self, a, b, msg=None):
+        self.assertEqual(a.id, b.id)
+        self.assertEqual(a.particles, b.particles)
+
     def setUp(self):
+        # configure how equality for bond/particles will be tested
+        self.addTypeEqualityFunc(Particle, self.assertParticleEqual)
+        self.addTypeEqualityFunc(Bond, self.assertBondEqual)
+
         # create file with empty particle container
         self.file = CudsFile.open('test_file.cuds')
         self.pc = self.file.add_particle_container("test")
@@ -93,32 +130,19 @@ class TestFileParticleContainer(unittest.TestCase):
 
         # test iterating particles without giving ids
         particles2 = list(p for p in self.pc.iter_particles())
-
-        self.assertEquals(len(particles1), len(particles2))
-        for particle in particles1:
-            self.assertTrue(particle in particles2)
+        self.compare_list(particles1, particles2, order_sensitive=False)
 
         # test iterating particles by giving ids
         particles1 = [self.particle_1, self.particle_2]
         ids1 = list(p.id for p in particles1)
         particles2 = list(p for p in self.pc.iter_particles(ids1))
-        self.assertEqual(particles1, particles2)
+        self.compare_list(particles1, particles2)
 
         # test again with different order of ids
         particles1 = [self.particle_2, self.particle_1, self.particle_1]
         ids1 = list(p.id for p in particles1)
         particles2 = list(p for p in self.pc.iter_particles(ids1))
-        self.assertEqual(particles1, particles2)
-
-        self.assertEquals(len(ids1), 3)
-        self.assertEquals(len(particles1), len(particles2))
-        self.assertEqual(particles1, particles2)
-        p_iter = self.pc.iter_particles(ids1)
-        particles2 = list(p for p in p_iter)
-        p_iter2 = self.pc.iter_particles(ids1)
-        particles3 = list(p for p in p_iter2)
-        self.assertEqual(particles1, particles2)
-        self.assertEqual(particles1, particles3)
+        self.compare_list(particles1, particles2, order_sensitive=False)
 
     def test_add_get_bond(self):
         self.pc.add_bond(self.bond_1)
@@ -182,16 +206,13 @@ class TestFileParticleContainer(unittest.TestCase):
 
         # test iterating bonds without giving ids
         bondsB = list(p for p in self.pc.iter_bonds())
-
-        self.assertEquals(len(bondsA), len(bondsB))
-        for bond in bondsA:
-            self.assertTrue(bond in bondsB)
+        self.compare_list(bondsA, bondsB, order_sensitive=False)
 
         # test iterating bonds by giving ids
         bondsA = [self.bond_1, self.bond_2]
         ids1 = list(p.id for p in bondsA)
         bondsB = list(p for p in self.pc.iter_bonds(ids1))
-        self.assertEqual(bondsA, bondsB)
+        self.compare_list(bondsA, bondsB)
 
 if __name__ == '__main__':
     unittest.main()
