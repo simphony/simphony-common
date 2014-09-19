@@ -24,7 +24,7 @@ class _BondDescription(tables.IsDescription):
     id = tables.UInt32Col(pos=1)
     # storing up to fixed number of particles for each bond
     particle_ids = tables.Int64Col(
-        pos=1, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
+        pos=2, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
     n_particle_ids = tables.Int64Col(pos=3)
 
 
@@ -158,17 +158,15 @@ class FileParticleContainer(ABCParticleContainer):
                     'Bond (id={id}) already exists'.format(id=id))
 
         # insert a new bond record
-        row = self._group.bonds.row
-        self._set_bond_row(row, bond, id)
-        row.append()
-        self._group.bonds.flush()
+        self._group.bonds.append([self._bond_to_row(bond, id)])
         return id
 
     def update_bond(self, bond):
         """Update particle"""
         for row in self._group.bonds.where(
                 'id == value', condvars={'value': bond.id}):
-            self._set_bond_row(row, bond, bond.id)
+            _, row['particle_ids'], row['n_particle_ids'] = \
+                self._bond_to_row(bond, bond.id)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/8
             row._flush_mod_rows()
@@ -226,17 +224,15 @@ class FileParticleContainer(ABCParticleContainer):
             self._file.create_table(
                 self._group, "bonds", _BondDescription)
 
-    def _set_bond_row(self, row, bond, id):
+    def _bond_to_row(self, bond, id):
         n = len(bond.particles)
         if n > MAX_NUMBER_PARTICLES_IN_BOND:
             raise Exception(
                 'Bond has too many particles ({n} > {maxn})'.format(
                     n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
-        row['id'] = id
-        row['n_particle_ids'] = n
         particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
         particle_ids[:n] = bond.particles
-        row['particle_ids'] = particle_ids
+        return id, particle_ids, n
 
     def _generate_unique_id(self, table, number_tries=1000):
         for n in xrange(number_tries):
