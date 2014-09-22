@@ -17,9 +17,9 @@ import copy
 import random
 import numpy as np
 # custom imports:
-from abstractparticles import ABCParticleContainer, Element
-import pcexceptions as PCE
-# import DataContainers ?¿?¿?
+from simphony.cuds.abstractparticles import ABCParticleContainer, Element
+import simphony.cuds.pcexceptions as PCE
+import simphony.core.data_container as dc
 
 
 class ParticleContainer(ABCParticleContainer):
@@ -47,8 +47,7 @@ class ParticleContainer(ABCParticleContainer):
     def __init__(self):
         self._particles = {}
         self._bonds = {}
-        # When ready:
-        # self._data = DataContainer()
+        self._data = dc.DataContainer()
 
 # ================================================================
 
@@ -610,12 +609,16 @@ class Particle(Element):
             x,y,z coordinates of the particle (Default: [0, 0, 0])
     """
 
-    def __init__(self, ext_coordinates=None, id=None):
+    def __init__(self, ext_coordinates=None, id=None, data=None):
         super(Particle, self).__init__(id)
         if ext_coordinates:
             self.coordinates = ext_coordinates
         else:
             self.coordinates = [0.0, 0.0, 0.0]
+        if data:
+            self.data = copy.deepcopy(data)
+        else:
+            self.data = dc.DataContainer()
 
     def __eq__(self, other):
         return (self._id == other.get_id() and
@@ -649,13 +652,17 @@ class Bond(Element):
             list of particles of the bond. It can not be empty (Defaul: (1,))
     """
 
-    def __init__(self, particles_list=None, id=None):
+    def __init__(self, particles_list=None, id=None, data=None):
         super(Bond, self).__init__(id)
         if particles_list is not None and len(particles_list) > 0:
             self.particles = particles_list
         else:
             raise PCE.B_IncorrectTupleError()
             self.particles.append(1)
+        if data:
+            self.data = copy.deepcopy(data)
+        else:
+            self.data = dc.DataContainer()
 
     def __eq__(self, other):
         return (self._id == other.get_id() and
