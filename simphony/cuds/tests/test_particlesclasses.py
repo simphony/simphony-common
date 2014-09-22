@@ -4,7 +4,7 @@
 
 import unittest
 
-import simphony.cuds.particlesclasses as pc
+import simphony.cuds.particles as pc
 import simphony.cuds.pcexceptions as pce
 
 
@@ -33,8 +33,7 @@ class ParticleTestCase(unittest.TestCase):
         class could change also due to specifications -."""
         particle = pc.Particle()
         self.assertNotEqual(str(particle), '', "Error: empty string!")
-        total_str = str(particle.get_id()) + '_' + str(particle.coordinates)
-        # print total_str
+        total_str = str(particle.id) + '_' + str(particle.coordinates)
         self.assertEqual(str(particle), total_str,
                          "Error: wrong str conversion!")
 
@@ -57,16 +56,14 @@ class BondTestCase(unittest.TestCase):
     def test_wrong_tuple(self):
         """Expected a exception when the constructor recives an empty tuple."""
         with self.assertRaises(pce.B_IncorrectTupleError) as cm:
-            bond = pc.Bond(())
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.B_IncorrectTupleError)
+            pc.Bond(())
 
     def test_simple_bond_print(self):
         """Conversion to str - this could change as the str method in the
         class could change also due to specifications -."""
         bond = pc.Bond([1, 2, 3])
         self.assertNotEqual(str(bond), '', "Error: empty string!")
-        total_str = str(bond.get_id()) + '_[1, 2, 3]'
+        total_str = str(bond.id) + '_[1, 2, 3]'
         self.assertEqual(str(bond), total_str,
                          "Error: wrong str conversion!")
 
@@ -89,16 +86,8 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
         for particle in self.p_list:
             self.pc.add_particle(particle)
         for particle in self.p_list:
-            self.assertIn(particle, self.pc,
+            self.assertTrue(self.pc.has_particle(particle.id),
                           "Error: particle not inside the container!")
-
-    def test_add_particle_wrong_type_error(self):
-        """Add something that is not a particle to the container."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.add_particle(self.b_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
 
     def test_add_particle_wrong_duplicated_value(self):
         """Add a particle that already exists in the container."""
@@ -106,10 +95,15 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
             self.pc.add_particle(particle)
         with self.assertRaises(pce.PC_DuplicatedValueError) as cm:
             self.pc.add_particle(self.p_list[0])
+        
+    def test_has_particle_ok(self):
+        """Checks that a particle already added is in the container."""
+        self.pc.add_particle(self.p_list[0])
+        self.assertTrue(self.pc.has_particle(self.p_list[0].id))
 
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_DuplicatedValueError)
-
+    def test_has_particle_wrong(self):
+        """Checks that an unexisting particle is not in the container."""
+        self.assertFalse(self.pc.has_particle(9876))
 
 class ParticleContainerParticlesTestCase2(unittest.TestCase):
     """Test case for updating, removing and iteration of Particle inside
@@ -128,24 +122,16 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
 
     def test_update_particle_ok(self):
         """Update an existing particle in a correct way."""
-        particle = self.pc.get_particle(self.p_list[1].get_id())
+        particle = self.pc.get_particle(self.p_list[1].id)
         particle.coordinates = [123, 456, 789]
         part_coords = particle.coordinates
         self.pc.update_particle(particle)
-        new_particle = self.pc.get_particle(particle.get_id())
+        new_particle = self.pc.get_particle(particle.id)
         self.assertTrue(new_particle is not particle)
         new_part_coords = new_particle.coordinates
 
         self.assertEqual(part_coords, new_part_coords,
                          "Error: not same coords!")
-
-    def test_update_particle_wrong_type_error(self):
-        """Trying to pass a non-Particle item."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.update_particle(self.b_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
 
     def test_update_particle_wrong_unknown_value(self):
         """Trying to update a Particle that is not in the container."""
@@ -153,66 +139,39 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
         with self.assertRaises(pce.PC_UnknownValueError) as cm:
             self.pc.update_particle(particle)
 
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_UnknownValueError)
-
     def test_remove_particle_ok(self):
         """Removing an existing particle."""
         particle = self.p_list[0]
-        self.pc.remove_particle(particle)
-        self.assertNotIn(particle, self.pc)
-
-    def test_remove_particle_wrong_type_error(self):
-        """Removing a non-Particle item."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.remove_particle(self.b_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
+        self.pc.remove_particle(particle.id)
+        self.assertFalse(self.pc.has_particle(particle.id))
 
     def test_remove_particle_wrong_unknown_value(self):
         """Removing a particle that is not in the container."""
         particle = pc.Particle()
         with self.assertRaises(pce.PC_UnknownValueError) as cm:
-            self.pc.remove_particle(particle)
-
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_UnknownValueError)
+            self.pc.remove_particle(particle.id)
 
     def test_iter_particles_ok_list(self):
-        particle_ids = [p.get_id() for p in self.p_list[::2]]
+        particle_ids = [p.id for p in self.p_list[::2]]
         iterated_ids = []
         for particle in self.pc.iter_particles(particle_ids):
-            iterated_ids.append(particle.get_id())
+            iterated_ids.append(particle.id)
         self.assertEqual(particle_ids.sort(), iterated_ids.sort(),
                          "Error: incorrect iteration!")
 
     def test_iter_particles_ok_all(self):
-        particle_ids = [p.get_id() for p in self.p_list[:]]
+        particle_ids = [p.id for p in self.p_list[:]]
         iterated_ids = []
         for particle in self.pc.iter_particles():
-            iterated_ids.append(particle.get_id())
+            iterated_ids.append(particle.id)
         self.assertEqual(particle_ids.sort(), iterated_ids.sort(),
                          "Error: incorrect iteration!")
 
     def test_iter_particles_wrong_list(self):
         particle_ids = [i for i in xrange(10)]
-        for particle in self.pc.iter_particles(particle_ids):
-            self.assertEqual(particle, None, "Error: incorrect iteration!")
-
-    def test_iter_particles_ok_mixed_list(self):
-        correct_ids = [p.get_id() for p in self.p_list[:]]
-        particle_ids = []
-        for i in xrange(10):
-            particle_ids.append(self.p_list[i])
-            particle_ids.append(i)
-
-        iterated_ids = []
-        for particle in self.pc.iter_particles(particle_ids):
-            if particle:
-                iterated_ids.append(particle.get_id())
-        self.assertEqual(correct_ids.sort(), iterated_ids.sort(),
-                         "Error: incorrect iteration!")
+        with self.assertRaises(KeyError):
+            for particle in self.pc.iter_particles(particle_ids):
+                continue
 
 
 class ParticleContainerBondsTestCase1(unittest.TestCase):
@@ -233,16 +192,8 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
         for bond in self.b_list:
             self.pc.add_bond(bond)
         for particle in self.p_list:
-            self.assertIn(bond, self.pc,
-                          "Error: particle not inside the container!")
-
-    def test_add_bond_wrong_type_error(self):
-        """Add something that is not a bond to the container."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.add_bond(self.p_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
+            self.assertTrue(self.pc.has_bond(bond.id),
+                          "Error: bond not inside the container!")
 
     def test_add_bond_wrong_duplicated_value(self):
         """Add a bond that already exists in the container."""
@@ -251,8 +202,14 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
         with self.assertRaises(pce.PC_DuplicatedValueError) as cm:
             self.pc.add_bond(self.b_list[0])
 
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_DuplicatedValueError)
+    def test_has_bond_ok(self):
+        """Checks that a bond already added is in the container."""
+        self.pc.add_bond(self.b_list[0])
+        self.assertTrue(self.pc.has_bond(self.b_list[0].id))
+
+    def test_has_bond_wrong(self):
+        """Checks that an unexisting bond is not in the container."""
+        self.assertFalse(self.pc.has_bond(3765))
 
 
 class ParticleContainerBondsTestCase2(unittest.TestCase):
@@ -272,24 +229,16 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
 
     def test_update_bond_ok(self):
         """Update an existing bond in a correct way."""
-        bond = self.pc.get_bond(self.b_list[1].get_id())
+        bond = self.pc.get_bond(self.b_list[1].id)
         bond.particles.append(99)
         bond_particles = bond.particles
         self.pc.update_bond(bond)
-        new_bond = self.pc.get_bond(bond.get_id())
+        new_bond = self.pc.get_bond(bond.id)
         self.assertTrue(new_bond is not bond)
         bond_new_particles = new_bond.particles
 
         self.assertEqual(bond_particles, bond_new_particles,
                          "Error: not same coords!")
-
-    def test_update_bond_wrong_type_error(self):
-        """Trying to pass a non-Bond item."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.update_bond(self.p_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
 
     def test_update_bond_wrong_unknown_value(self):
         """Trying to update a Bond that is not in the container."""
@@ -297,86 +246,40 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
         with self.assertRaises(pce.PC_UnknownValueError) as cm:
             self.pc.update_bond(bond)
 
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_UnknownValueError)
-
     def test_remove_bond_ok(self):
         """Removing an existing particle."""
         bond = self.b_list[0]
-        self.pc.remove_bond(bond)
-        self.assertNotIn(bond, self.pc)
-
-    def test_remove_bond_wrong_type_error(self):
-        """Removing a non-Bond item."""
-        with self.assertRaises(TypeError) as cm:
-            self.pc.remove_bond(self.p_list[0])
-
-        exc = cm.exception
-        self.assertIsInstance(exc, TypeError)
+        self.pc.remove_bond(bond.id)
+        self.assertFalse(self.pc.has_bond(bond.id))
 
     def test_remove_bond_wrong_unknown_value(self):
         """Removing a bond that is not in the container."""
         bond = pc.Bond([1, 2])
         with self.assertRaises(pce.PC_UnknownValueError) as cm:
-            self.pc.remove_bond(bond)
-
-        exc = cm.exception
-        self.assertIsInstance(exc, pce.PC_UnknownValueError)
+            self.pc.remove_bond(bond.id)
 
     def test_iter_bonds_ok_list(self):
-        bonds_ids = [b.get_id() for b in self.b_list[::2]]
+        bonds_ids = [b.id for b in self.b_list[::2]]
         iterated_ids = []
         for bond in self.pc.iter_bonds(bonds_ids):
-            iterated_ids.append(bond.get_id())
+            iterated_ids.append(bond.id)
         self.assertEqual(bonds_ids.sort(), iterated_ids.sort(),
                          "Error: incorrect iteration!")
 
     def test_iter_bonds_ok_all(self):
-        particle_ids = [p.get_id() for p in self.p_list[:]]
+        particle_ids = [p.id for p in self.p_list[:]]
         iterated_ids = []
         for particle in self.pc.iter_particles():
-            iterated_ids.append(particle.get_id())
+            iterated_ids.append(particle.id)
         self.assertEqual(particle_ids.sort(), iterated_ids.sort(),
                          "Error: incorrect iteration!")
 
     def test_iter_bonds_wrong_list(self):
         bonds_ids = [i for i in xrange(10)]
-        for bond in self.pc.iter_bonds(bonds_ids):
-            self.assertEqual(bond, None, "Error: incorrect iteration!")
+        with self.assertRaises(KeyError):
+            for bond in self.pc.iter_bonds(bonds_ids):
+                continue
 
-    def test_iter_bonds_ok_mixed_list(self):
-        correct_ids = [b.get_id() for b in self.b_list[:]]
-        bonds_ids = []
-        for i in xrange(10):
-            bonds_ids.append(self.b_list[i])
-            bonds_ids.append(i)
-
-        iterated_ids = []
-        for bond in self.pc.iter_bonds(bonds_ids):
-            if bond:
-                iterated_ids.append(bond.get_id())
-        self.assertEqual(correct_ids.sort(), iterated_ids.sort(),
-                         "Error: incorrect iteration!")
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(ParticleTestCase)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(BondTestCase)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticleContainerParticlesTestCase1)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticleContainerParticlesTestCase2)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticleContainerBondsTestCase1)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(
-        ParticleContainerBondsTestCase2)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    unittest.main()

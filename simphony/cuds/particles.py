@@ -12,15 +12,13 @@
 """
 
 
-# from abc import ABCMeta, abstractmethod
-# import bisect
+from __future__ import print_function
 import copy
 import random
 import numpy as np
 # custom imports:
-from abstractparticles import ABCParticleContainer, ElementsCommon
+from abstractparticles import ABCParticleContainer, Element
 import pcexceptions as PCE
-# import bisectservice as BS
 # import DataContainers ?¿?¿?
 
 
@@ -59,7 +57,7 @@ class ParticleContainer(ABCParticleContainer):
 # ================================================================
 
     def add_particle(self, new_particle):
-        r"""Adds the 'new_particle' particle to the container.
+        """Adds the 'new_particle' particle to the container.
 
         Since the particle has it's own id, it won't add the particle if a
         particle with the same id already exists. If the user wants to replace
@@ -103,13 +101,13 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container.add_particle(part)
         """
 
-        if isinstance(new_particle, Particle):
-            self.__add_element__(self._particles, new_particle)
-        else:
-            raise TypeError
+        try:
+            self._add_element(self._particles, new_particle)
+        except Exception as exc:
+            raise exc
 
     def add_bond(self, new_bond):
-        r"""Adds the 'new_bond' bond to the container.
+        """Adds the 'new_bond' bond to the container.
 
         Also like with particles, since the bond has it's own id, it won't add
         the bond if a bond with the same id already exists. If the user wants
@@ -153,13 +151,13 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container.add_bond(bond)
         """
 
-        if isinstance(new_bond, Bond):
-            self.__add_element__(self._bonds, new_bond)
-        else:
-            raise TypeError
+        try:
+            self._add_element(self._bonds, new_bond)
+        except Exception as exc:
+            raise exc
 
     def update_particle(self, particle):
-        r"""Replaces an existing particle with the 'particle' new particle.
+        """Replaces an existing particle with the 'particle' new particle.
 
         Takes the id of 'particle' and searchs inside the container for
         that particle. If the particle exists, it is replaced with the new
@@ -206,13 +204,13 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container.update_particle(part)
         """
 
-        if isinstance(particle, Particle):
-            self.__update_element__(self._particles, particle)
-        else:
-            raise TypeError
+        try:
+            self._update_element(self._particles, particle)
+        except Exception as exc:
+            raise exc
 
     def update_bond(self, bond):
-        r"""Replaces an existing bond with the 'bond' new bond.
+        """Replaces an existing bond with the 'bond' new bond.
 
         Takes the id of 'bond' and searchs inside the container for
         that bond. If the bond exists, it is replaced with the new
@@ -258,10 +256,10 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the bond
         >>> part_container.update_bond(bond)
         """
-        if isinstance(bond, Bond):
-            self.__update_element__(self._bonds, bond)
-        else:
-            raise TypeError
+        try:
+            self._update_element(self._bonds, bond)
+        except Exception as exc:
+            raise exc
 
     def get_particle(self, particle_id):
         """Returns a copy of the particle with the 'particle_id' id.
@@ -270,11 +268,11 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         try:
-            cur_particle = copy.deepcopy(self._particles[particle_id])
-            return cur_particle
+            cur_particle = self._particles[particle_id]
         except KeyError:
-            print "Error: particle not found!: ", str(particle_id)
-            return None
+            raise KeyError('Particle with id { } not found!'.format(
+                particle_id))
+        return copy.deepcopy(cur_particle)
 
     def get_bond(self, bond_id):
         """Returns a copy of the bond with the 'bond_id' id.
@@ -283,14 +281,14 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         try:
-            cur_bond = copy.deepcopy(self._bonds[bond_id])
-            return cur_bond
+            cur_bond = self._bonds[bond_id]
         except KeyError:
-            print "Error: bond not found! ", str(bond_id)
-            return None
+            raise KeyError('Bond with id { } not found!'.format(
+                bond_id))
+        return copy.deepcopy(cur_bond)
 
     def remove_particle(self, particle_id):
-        r"""Removes the particle with the 'particle_id' id from the container.
+        """Removes the particle with the 'particle_id' id from the container.
 
         The id passed as parameter should exists in the container. If it
         doesn't exists, nothing will happen.
@@ -335,13 +333,14 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container.remove_particle(id)
         """
 
-        if isinstance(particle_id, Particle):
-            self.__remove_element__(self._particles, particle_id)
-        else:
-            raise TypeError
+        try:
+            self._remove_element(self._particles, particle_id)
+        except KeyError:
+            raise KeyError('Particle with id { } not found!'.format(
+                particle_id))
 
     def remove_bond(self, bond_id):
-        r"""Removes the bond with the 'bond_id' id from the container.
+        """Removes the bond with the 'bond_id' id from the container.
 
         The id passed as parameter should exists in the container. If
         it doesn't exists, nothing will happen.
@@ -386,13 +385,14 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container.remove_bond(id)
         """
 
-        if isinstance(bond_id, Bond):
-            self.__remove_element__(self._bonds, bond_id)
-        else:
-            raise TypeError
+        try:
+            self._remove_element(self._bonds, bond_id)
+        except KeyError:
+            raise KeyError('Bond with id { } not found!'.format(
+                bond_id))
 
     def iter_particles(self, particle_ids=None):
-        r"""Generator method for iterating over the particles of the container.
+        """Generator method for iterating over the particles of the container.
 
         It can recieve any kind of sequence of particle ids to iterate over
         those concrete particles. If nothing is passed as parameter, it will
@@ -446,12 +446,15 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         if particle_ids:
-            return self.__iter_elements__(self._particles, particle_ids)
+            try:
+                return self._iter_elements(self._particles, particle_ids)
+            except KeyError as exception:
+                raise exception
         else:
-            return self.__iter_all__(self._particles)
+            return self._iter_all(self._particles)
 
     def iter_bonds(self, bond_ids=None):
-        r"""Generator method for iterating over the bonds of the container.
+        """Generator method for iterating over the bonds of the container.
 
         It can recieve any kind of sequence of bond ids to iterate over
         those concrete bond. If nothing is passed as parameter, it will
@@ -504,10 +507,18 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         if bond_ids:
-            return self.__iter_elements__(self._bonds, bond_ids)
+            try:
+                return self._iter_elements(self._bonds, bond_ids)
+            except KeyError as exception:
+                raise exception
         else:
-            return self.__iter_all__(self._bonds)
+            return self._iter_all(self._bonds)
 
+    def has_particle(self, id):
+        return id in self._particles
+        
+    def has_bond(self, id):
+        return id in self._bonds
 
 # ================================================================
 
@@ -515,28 +526,22 @@ class ParticleContainer(ABCParticleContainer):
 
 # ================================================================
 
-    def __iter_elements__(self, cur_dict, cur_ids):
+    def _iter_elements(self, cur_dict, cur_ids):
         for cur_id in cur_ids:
-            if cur_id in cur_dict:
+            try:
                 yield copy.deepcopy(cur_dict[cur_id])
-            else:
-                """this point can be discussed: if one of the ids is not in the
-                dictionary, should we stop the iteration and raise an
-                Exception? If we return 'None', the iteration can continue,
-                but whoever is using the method to iterate will have to check
-                if the returned object is valid or not;
-                otherwise the script will fail."""
-                yield None
+            except KeyError:
+                raise KeyError('id {} not found!'.format(cur_id))
 
-    def __iter_all__(self, cur_dict):
-        for cur_element in cur_dict.values():
+    def _iter_all(self, cur_dict):
+        for cur_element in cur_dict.itervalues():
             yield copy.deepcopy(cur_element)
 
-    def __add_element__(self, cur_dict, element):
+    def _add_element(self, cur_dict, element):
         # We check if the current dictionary has the element
         cur_id = element.get_id()
         if cur_id is None:
-            cur_id = self.__generate_unique_id__(cur_dict)
+            cur_id = self._generate_unique_id(cur_dict)
             element.id = cur_id
             cur_dict[cur_id] = copy.deepcopy(element)
         else:
@@ -546,7 +551,7 @@ class ParticleContainer(ABCParticleContainer):
             else:
                 raise PCE.PC_DuplicatedValueError(cur_id)
 
-    def __update_element__(self, cur_dict, element):
+    def _update_element(self, cur_dict, element):
         # We use the bisect module to optimize the lists
         cur_id = element.get_id()
         if cur_id in cur_dict:
@@ -556,15 +561,14 @@ class ParticleContainer(ABCParticleContainer):
         else:
             raise PCE.PC_UnknownValueError(cur_id)
 
-    def __remove_element__(self, cur_dict, element):
-        cur_id = element.get_id()
+    def _remove_element(self, cur_dict, cur_id):
         if cur_id in cur_dict:
             # Element IS in dict, we proceed
             del cur_dict[cur_id]
         else:
             raise PCE.PC_UnknownValueError(cur_id)
 
-    def __generate_unique_id__(self, cur_dict, number_tries=1000):
+    def _generate_unique_id(self, cur_dict, number_tries=1000):
         max_int = np.iinfo(np.uint32).max
         for n in xrange(number_tries):
             cur_id = random.randint(0, max_int)
@@ -584,17 +588,8 @@ class ParticleContainer(ABCParticleContainer):
     def get_n_bonds(self):
         return len(self._bonds)
 
-    def __contains__(self, item):
-        if isinstance(item, Particle):
-            return item.get_id() in self._particles
-        elif isinstance(item, Bond):
-            return item.get_id() in self._bonds
-        else:
-            raise TypeError
-            return False
 
-
-class Particle(ElementsCommon):
+class Particle(Element):
     """Class representing a particle.
 
     It has an id (private) and coordinates. Also has a dictionary containing
@@ -632,7 +627,7 @@ class Particle(ElementsCommon):
         return total_str
 
 
-class Bond(ElementsCommon):
+class Bond(Element):
     """Class reprensenting a bond.
 
     It counts with a list of particle id's that compounds the bond.
@@ -668,14 +663,13 @@ class Bond(ElementsCommon):
 
     def __str__(self):
         total_str = "{0}_{1}".format(self.get_id(), self.particles)
-        # return str(self.get_id())
         return total_str
 
 # Just an information message of the module
 
 
 def main():
-    print """
+    print("""
             Module for Particle classes:
                 ParticleContainer ------> Concrete implementation of the
                     Particles Containter class for stand-alone use of the
@@ -687,7 +681,7 @@ def main():
                     representing the bonds between Particles or Atoms.
                     This class should represent any kind of interaction
                     (between atoms, molecules, etc.)
-           """
+           """)
 
 if __name__ == '__main__':
     main()

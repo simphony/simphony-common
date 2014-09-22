@@ -5,9 +5,8 @@
             the the Particles container.
 """
 
+from __future__ import print_function
 from abc import ABCMeta, abstractmethod
-# import random
-# from sys import maxint
 
 
 class ABCParticleContainer(object):
@@ -53,9 +52,17 @@ class ABCParticleContainer(object):
     @abstractmethod
     def iter_bonds(self, bond_ids=None):
         pass
+        
+    @abstractmethod
+    def has_particle(self, id):
+        pass
+
+    @abstractmethod
+    def has_bond(self, id):
+        pass
 
 
-class ElementsCommon(object):
+class Element(object):
     """Base Class that overrides standard methods for comparison and string
     conversion (in case we need it).
 
@@ -70,14 +77,7 @@ class ElementsCommon(object):
             data attributes of the element (not implemented yet)
     """
     def __init__(self, external_id=None):
-        """open question: how should we manage the id? since add_particle method
-        of ParticleContainer gets a Particle as parameter, the id should be
-        created automatically here inside Particle when we create a new one?
-        In the case is automatically generated: should it be private so the
-        user can't change it?. - Same for Bonds.
-        """
         self._id = external_id
-
         # when ready:
         # self.data = DataContainer()
 
@@ -87,22 +87,17 @@ class ElementsCommon(object):
     def set_id(self, new_id):
         self._id = new_id
 
-    def __str__(self):
-        pass
 
-    def __repr__(self):
-        # text = "%d_%lf_%lf_%lf" % self.__id, self.x, self.y, self.z
-        return self.__str__()
 
     id = property(get_id, set_id)
 
 
 # Just an information message of the module
 def main():
-    print """Module for Particle classes:
+    print("""Module for Particle classes:
                ABCParticleContainer ---> Common Base abstract class
                ("interface") for the the Particles container.
-           """
+          """)
 
 if __name__ == '__main__':
     main()
