@@ -515,7 +515,7 @@ class ParticleContainer(ABCParticleContainer):
 
     def has_particle(self, id):
         return id in self._particles
-        
+
     def has_bond(self, id):
         return id in self._bonds
 

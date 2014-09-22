@@ -52,7 +52,7 @@ class ABCParticleContainer(object):
     @abstractmethod
     def iter_bonds(self, bond_ids=None):
         pass
-        
+
     @abstractmethod
     def has_particle(self, id):
         pass
@@ -86,8 +86,6 @@ class Element(object):
 
     def set_id(self, new_id):
         self._id = new_id
-
-
 
     id = property(get_id, set_id)
 

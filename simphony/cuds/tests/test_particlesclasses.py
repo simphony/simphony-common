@@ -55,7 +55,7 @@ class BondTestCase(unittest.TestCase):
 
     def test_wrong_tuple(self):
         """Expected a exception when the constructor recives an empty tuple."""
-        with self.assertRaises(pce.B_IncorrectTupleError) as cm:
+        with self.assertRaises(pce.B_IncorrectTupleError):
             pc.Bond(())
 
     def test_simple_bond_print(self):
@@ -87,15 +87,15 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
             self.pc.add_particle(particle)
         for particle in self.p_list:
             self.assertTrue(self.pc.has_particle(particle.id),
-                          "Error: particle not inside the container!")
+                            "Error: particle not inside the container!")
 
     def test_add_particle_wrong_duplicated_value(self):
         """Add a particle that already exists in the container."""
         for particle in self.p_list:
             self.pc.add_particle(particle)
-        with self.assertRaises(pce.PC_DuplicatedValueError) as cm:
+        with self.assertRaises(pce.PC_DuplicatedValueError):
             self.pc.add_particle(self.p_list[0])
-        
+
     def test_has_particle_ok(self):
         """Checks that a particle already added is in the container."""
         self.pc.add_particle(self.p_list[0])
@@ -104,6 +104,7 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
     def test_has_particle_wrong(self):
         """Checks that an unexisting particle is not in the container."""
         self.assertFalse(self.pc.has_particle(9876))
+
 
 class ParticleContainerParticlesTestCase2(unittest.TestCase):
     """Test case for updating, removing and iteration of Particle inside
@@ -136,7 +137,7 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
     def test_update_particle_wrong_unknown_value(self):
         """Trying to update a Particle that is not in the container."""
         particle = pc.Particle()
-        with self.assertRaises(pce.PC_UnknownValueError) as cm:
+        with self.assertRaises(pce.PC_UnknownValueError):
             self.pc.update_particle(particle)
 
     def test_remove_particle_ok(self):
@@ -148,7 +149,7 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
     def test_remove_particle_wrong_unknown_value(self):
         """Removing a particle that is not in the container."""
         particle = pc.Particle()
-        with self.assertRaises(pce.PC_UnknownValueError) as cm:
+        with self.assertRaises(pce.PC_UnknownValueError):
             self.pc.remove_particle(particle.id)
 
     def test_iter_particles_ok_list(self):
@@ -193,13 +194,13 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
             self.pc.add_bond(bond)
         for particle in self.p_list:
             self.assertTrue(self.pc.has_bond(bond.id),
-                          "Error: bond not inside the container!")
+                            "Error: bond not inside the container!")
 
     def test_add_bond_wrong_duplicated_value(self):
         """Add a bond that already exists in the container."""
         for bond in self.b_list:
             self.pc.add_bond(bond)
-        with self.assertRaises(pce.PC_DuplicatedValueError) as cm:
+        with self.assertRaises(pce.PC_DuplicatedValueError):
             self.pc.add_bond(self.b_list[0])
 
     def test_has_bond_ok(self):
@@ -243,7 +244,7 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
     def test_update_bond_wrong_unknown_value(self):
         """Trying to update a Bond that is not in the container."""
         bond = pc.Bond([1, 2])
-        with self.assertRaises(pce.PC_UnknownValueError) as cm:
+        with self.assertRaises(pce.PC_UnknownValueError):
             self.pc.update_bond(bond)
 
     def test_remove_bond_ok(self):
@@ -255,7 +256,7 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
     def test_remove_bond_wrong_unknown_value(self):
         """Removing a bond that is not in the container."""
         bond = pc.Bond([1, 2])
-        with self.assertRaises(pce.PC_UnknownValueError) as cm:
+        with self.assertRaises(pce.PC_UnknownValueError):
             self.pc.remove_bond(bond.id)
 
     def test_iter_bonds_ok_list(self):
