@@ -1,11 +1,10 @@
 """
 This class illustrates use of a particles container class for files
 """
-import copy
 import random
 
 import tables
-import numpy as np
+import numpy
 
 from simphony.cuds.abc_particle_container import ABCParticleContainer
 from simphony.cuds.particle import Particle
@@ -13,18 +12,20 @@ from simphony.cuds.bond import Bond
 
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
+MAX_INT = numpy.iinfo(numpy.uint32).max
 
 
 class _ParticleDescription(tables.IsDescription):
-    id = tables.UInt32Col()
-    coordinates = tables.Float64Col(shape=(3,))
+    id = tables.UInt32Col(pos=1)
+    coordinates = tables.Float64Col(pos=2, shape=(3,))
 
 
 class _BondDescription(tables.IsDescription):
-    id = tables.UInt32Col()
+    id = tables.UInt32Col(pos=1)
     # storing up to fixed number of particles for each bond
-    particle_ids = tables.Int64Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
-    n_particle_ids = tables.Int64Col()
+    particle_ids = tables.Int64Col(
+        pos=2, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
+    n_particle_ids = tables.Int64Col(pos=3)
 
 
 class FileParticleContainer(ABCParticleContainer):
@@ -42,13 +43,7 @@ class FileParticleContainer(ABCParticleContainer):
             # create table to hold bonds
             self._create_bonds_table()
 
-    def _create_particles_table(self):
-            self._file.create_table(
-                self._group, "particles", _ParticleDescription)
-
-    def _create_bonds_table(self):
-            self._file.create_table(
-                self._group, "bonds", _BondDescription)
+    # Particle methods ######################################################
 
     def add_particle(self, particle):
         """Add particle
@@ -72,43 +67,42 @@ class FileParticleContainer(ABCParticleContainer):
         if id is None:
             id = self._generate_unique_id(self._group.particles)
         else:
-            for r in self._group.particles.where('id == {id}'.format(id=id)):
+            for _ in self._group.particles.where(
+                    'id == value', condvars={'value': id}):
                 raise ValueError(
                     'Particle (id={id}) already exists'.format(id=id))
 
         # insert a new particle record
-        row = self._group.particles.row
-        row['id'] = id
-        row['coordinates'] = particle.coordinates
-        row.append()
-        self._group.particles.flush()
+        self._group.particles.append([(id, particle.coordinates)])
         return id
 
     def update_particle(self, particle):
         """Update particle"""
-        row_indexes = self._group.particles.get_where_list(
-            'id == {id}'.format(id=particle.id))
-        if len(row_indexes) is not 1:
-            raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=particle.id))
-        for row in self._group.particles.itersequence(row_indexes):
+        for row in self._group.particles.where(
+                'id == value', condvars={'value': particle.id}):
             row['coordinates'] = list(particle.coordinates)
             row.update()
-        self._group.particles.flush()
+            # see https://github.com/PyTables/PyTables/issues/8
+            row._flush_mod_rows()
+            return
+        else:
+            raise ValueError(
+                'Particle (id={id}) does not exist'.format(id=particle.id))
 
     def get_particle(self, id):
         """Get particle"""
-        for r in self._group.particles.where('id == {id}'.format(id=id)):
-            return Particle(id=r['id'], coordinates=tuple(r['coordinates']))
-
-        raise ValueError(
-            'Particle (id={id}) does not exist'.format(id=id))
+        for row in self._group.particles.where(
+                'id == value', condvars={'value': id}):
+            return Particle(
+                id=id, coordinates=tuple(row['coordinates']))
+        else:
+            raise ValueError(
+                'Particle (id={id}) does not exist'.format(id=id))
 
     def remove_particle(self, id):
         """Remove particle"""
-        index = [r.nrow for r in self._group.particles.where(
-            'id == {id}'.format(id=id))]
-        if index:
+        for row in self._group.particles.where(
+                'id == value', condvars={'value': id}):
             if self._group.particles.nrows == 1:
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
@@ -117,7 +111,8 @@ class FileParticleContainer(ABCParticleContainer):
                 self._group.particles.remove()
                 self._create_particles_table()
             else:
-                self._group.particles.remove_row(index[0])
+                self._group.particles.remove_row(row.nrow)
+            return
         else:
             raise ValueError(
                 'Particle (id={id}) does not exist'.format(id=id))
@@ -129,34 +124,11 @@ class FileParticleContainer(ABCParticleContainer):
                 yield Particle(
                     id=row['id'], coordinates=tuple(row['coordinates']))
         else:
-            ids = copy.deepcopy(ids)
+            # FIXME: we might want to use an indexed query for these cases.
             for particle_id in ids:
                 yield self.get_particle(particle_id)
 
-    def _set_bond_row(self, row, bond, id):
-        n = len(bond.particles)
-        if n > MAX_NUMBER_PARTICLES_IN_BOND:
-            raise Exception(
-                'Bond has too many particles ({n} > {maxn})'.format(
-                    n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
-        row['id'] = id
-        row['n_particle_ids'] = n
-        particles = list(bond.particles)
-        if n < MAX_NUMBER_PARTICLES_IN_BOND:
-            # so that the particles-list has the required length
-            # we fill it up with some zeros.
-            for x in xrange(MAX_NUMBER_PARTICLES_IN_BOND - n):
-                particles.append(0)
-        row['particle_ids'] = particles
-
-    def _generate_unique_id(self, table, number_tries=1000):
-        max_int = np.iinfo(np.uint32).max
-        for n in xrange(number_tries):
-            id = random.randint(0, max_int)
-            for r in table.where('id == {id}'.format(id=id)):
-                continue
-            return id
-        raise Exception('Id could not be generated')
+    # Bond methods #######################################################
 
     def add_bond(self, bond):
         """Add bond
@@ -180,44 +152,43 @@ class FileParticleContainer(ABCParticleContainer):
         if id is None:
             id = self._generate_unique_id(self._group.bonds)
         else:
-            for r in self._group.bonds.where('id == {id}'.format(id=id)):
+            for r in self._group.bonds.where(
+                    'id == value', condvars={'value': id}):
                 raise ValueError(
                     'Bond (id={id}) already exists'.format(id=id))
 
         # insert a new bond record
-        row = self._group.bonds.row
-        self._set_bond_row(row, bond, id)
-        row.append()
-        self._group.bonds.flush()
+        self._group.bonds.append([self._bond_to_row(bond, id)])
         return id
 
     def update_bond(self, bond):
         """Update particle"""
-        row_indexes = self._group.bonds.get_where_list(
-            'id == {id}'.format(id=bond.id))
-        if len(row_indexes) is not 1:
+        for row in self._group.bonds.where(
+                'id == value', condvars={'value': bond.id}):
+            _, row['particle_ids'], row['n_particle_ids'] = \
+                self._bond_to_row(bond, bond.id)
+            row.update()
+            # see https://github.com/PyTables/PyTables/issues/8
+            row._flush_mod_rows()
+            return
+        else:
             raise ValueError(
                 'Bond (id={id}) does not exist'.format(id=bond.id))
-        for row in self._group.bonds.itersequence(row_indexes):
-            self._set_bond_row(row, bond, bond.id)
-            row.update()
-        self._group.bonds.flush()
 
     def get_bond(self, id):
         """Get bond"""
-        for r in self._group.bonds.where('id == {id}'.format(id=id)):
-            n = r['n_particle_ids']
-            particles = r['particle_ids'][:n]
-            return Bond(id=r['id'], particles=tuple(particles))
-
-        raise ValueError(
-            'Bond (id={id}) does not exist'.format(id=id))
+        for row in self._group.bonds.where(
+                'id == value', condvars={'value': id}):
+            particles = row['particle_ids'][:row['n_particle_ids']]
+            # FIXME: do we have to convert to a tuple, why not a list?
+            return Bond(id=row['id'], particles=tuple(particles))
+        else:
+            raise ValueError('Bond (id={id}) does not exist'.format(id=id))
 
     def remove_bond(self, id):
         """Remove bond"""
-        index = [r.nrow for r in self._group.bonds.where(
-            'id == {id}'.format(id=id))]
-        if index:
+        for row in self._group.bonds.where(
+                'id == value', condvars={'value': id}):
             if self._group.bonds.nrows == 1:
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
@@ -226,7 +197,8 @@ class FileParticleContainer(ABCParticleContainer):
                 self._group.bonds.remove()
                 self._create_bonds_table()
             else:
-                self._group.bonds.remove_row(index[0])
+                self._group.bonds.remove_row(row.nrow)
+            return
         else:
             raise ValueError(
                 'Bond (id={id}) does not exist'.format(id=id))
@@ -239,7 +211,35 @@ class FileParticleContainer(ABCParticleContainer):
                 particles = row['particle_ids'][:n]
                 yield Bond(id=row['id'], particles=tuple(particles))
         else:
-            ids = copy.deepcopy(ids)
+            for id in ids:
+                yield self.get_bond(id)
 
-            for bond_id in ids:
-                yield self.get_bond(bond_id)
+    # Private methods #######################################################
+
+    def _create_particles_table(self):
+            self._file.create_table(
+                self._group, "particles", _ParticleDescription)
+
+    def _create_bonds_table(self):
+            self._file.create_table(
+                self._group, "bonds", _BondDescription)
+
+    def _bond_to_row(self, bond, id):
+        n = len(bond.particles)
+        if n > MAX_NUMBER_PARTICLES_IN_BOND:
+            raise Exception(
+                'Bond has too many particles ({n} > {maxn})'.format(
+                    n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
+        particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
+        particle_ids[:n] = bond.particles
+        return id, particle_ids, n
+
+    def _generate_unique_id(self, table, number_tries=1000):
+        for n in xrange(number_tries):
+            id = random.randint(0, MAX_INT)
+            for _ in table.where('id == value', condvars={'value': id}):
+                break
+            else:
+                return id
+        else:
+            raise Exception('Id could not be generated')

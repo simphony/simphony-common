@@ -2,7 +2,7 @@ from __future__ import print_function
 from timeit import Timer
 
 
-def bench(stmt='pass', setup='pass'):
+def bench(stmt='pass', setup='pass', repeat=5):
     """ BenchMark the function.
 
     """
@@ -13,6 +13,6 @@ def bench(stmt='pass', setup='pass'):
         if time > 0.2:
             break
 
-    times = [timer.timeit(number) for i in range(5)]
-    message = '{} calls, best of 5 repeats: {:f} sec per call'
-    return message.format(number, min(times)/number)
+    times = [timer.timeit(number) for i in range(repeat)]
+    message = '{} calls, best of {} repeats: {:f} sec per call'
+    return message.format(number, repeat, min(times)/number)
