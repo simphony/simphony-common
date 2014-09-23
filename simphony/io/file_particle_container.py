@@ -82,7 +82,7 @@ class FileParticleContainer(ABCParticleContainer):
                 'id == value', condvars={'value': particle.id}):
             row['coordinates'] = list(particle.coordinates)
             row.update()
-            # see https://github.com/PyTables/PyTables/issues/8
+            # see https://github.com/PyTables/PyTables/issues/11
             row._flush_mod_rows()
             return
         else:
@@ -168,7 +168,7 @@ class FileParticleContainer(ABCParticleContainer):
             _, row['particle_ids'], row['n_particle_ids'] = \
                 self._bond_to_row(bond, bond.id)
             row.update()
-            # see https://github.com/PyTables/PyTables/issues/8
+            # see https://github.com/PyTables/PyTables/issues/11
             row._flush_mod_rows()
             return
         else:
