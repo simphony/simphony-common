@@ -28,8 +28,6 @@ class ParticleContainer(ABCParticleContainer):
 
        Internally uses a dictionary to keep particles and another one for
        bonds.
-       Also there is another dictionary for aditional data
-       (not implemented yet).
 
        Parameters: ---
 
@@ -42,7 +40,7 @@ class ParticleContainer(ABCParticleContainer):
         _bonds : dictionary
             data structure for bonds storage
         data : DataContainer
-            data attributes of the element (not implemented yet)
+            data attributes of the element
     """
     def __init__(self):
         self._particles = {}
