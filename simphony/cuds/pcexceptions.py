@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    Module for definition of custom exceptions for Particles classes.
-    The exceptions have a custom message contained in a private dictionary.
+    Module for definition of custom messages for exceptions for Particles
+    classes.
 """
 
 """
@@ -16,38 +16,3 @@ _PC_errors = {
     'ParticleContainer_IdNotGenerated': """The particle container didnt\
     generate an unique id."""
 }
-
-
-class PC_DuplicatedValueError(Exception):
-    """This exception indicates that particle or the bond to be added already
-    was in the Particle Container.
-    """
-    def __init__(self, id):
-        Exception.__init__(self,
-                           _PC_errors['ParticleContainer_DuplicatedValue']
-                           + " id: " + str(id))
-
-
-class PC_UnknownValueError(Exception):
-    """This exception indicates that particle or the bond to be updated,
-    removed, etc. was not in the Particle Container.
-    """
-    def __init__(self, id):
-        Exception.__init__(self, _PC_errors['ParticleContainer_UnknownValue']
-                           + " id: " + str(id))
-
-
-class PC_IdNotGeneratedError(Exception):
-    """This exception indicates that the particle container couldn't generate
-    an unique id"""
-    def __init__(self, id):
-        Exception.__init__(self, _PC_errors['ParticleContainer_IdNotGenerated']
-                           )
-
-
-class B_IncorrectTupleError(Exception):
-    """This exception indicates that the bond to be created wasn't provided
-    with a correct particle tuple.
-    """
-    def __init__(self):
-        Exception.__init__(self, _PC_errors['IncorrectParticlesTuple'])

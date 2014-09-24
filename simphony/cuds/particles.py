@@ -18,7 +18,7 @@ import random
 import numpy as np
 # custom imports:
 from simphony.cuds.abstractparticles import ABCParticleContainer, Element
-import simphony.cuds.pcexceptions as PCE
+import simphony.cuds.pcexceptions as pce
 import simphony.core.data_container as dc
 
 
@@ -548,7 +548,9 @@ class ParticleContainer(ABCParticleContainer):
                 # Means the element is not in the dict - hence we can add it
                 cur_dict[cur_id] = copy.deepcopy(element)
             else:
-                raise PCE.PC_DuplicatedValueError(cur_id)
+                raise Exception(
+                    pce._PC_errors['ParticleContainer_DuplicatedValue']
+                    + " id: " + str(cur_id))
 
     def _update_element(self, cur_dict, element):
         # We use the bisect module to optimize the lists
@@ -558,14 +560,16 @@ class ParticleContainer(ABCParticleContainer):
             # (this should be the standard case...), so we proceed
             cur_dict[cur_id] = copy.deepcopy(element)
         else:
-            raise PCE.PC_UnknownValueError(cur_id)
+            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
+                           + " id: " + str(cur_id))
 
     def _remove_element(self, cur_dict, cur_id):
         if cur_id in cur_dict:
             # Element IS in dict, we proceed
             del cur_dict[cur_id]
         else:
-            raise PCE.PC_UnknownValueError(cur_id)
+            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
+                           + " id: " + str(cur_id))
 
     def _generate_unique_id(self, cur_dict, number_tries=1000):
         max_int = np.iinfo(np.uint32).max
@@ -573,7 +577,7 @@ class ParticleContainer(ABCParticleContainer):
             cur_id = random.randint(0, max_int)
             if cur_id not in cur_dict:
                 return cur_id
-        raise PCE.PC_IdNotGeneratedError()
+        raise Exception(pce._PC_errors['ParticleContainer_IdNotGenerated'])
 
 # ==========================================================================
 
@@ -657,7 +661,7 @@ class Bond(Element):
         if particles_list is not None and len(particles_list) > 0:
             self.particles = particles_list
         else:
-            raise PCE.B_IncorrectTupleError()
+            raise Exception(pce._PC_errors['IncorrectParticlesTuple'])
             self.particles.append(1)
         if data:
             self.data = copy.deepcopy(data)
