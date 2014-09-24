@@ -29,10 +29,6 @@ class ParticleContainer(ABCParticleContainer):
        Internally uses a dictionary to keep particles and another one for
        bonds.
 
-       Parameters: ---
-
-       Attributes:
-
        Attributes
        ----------
         _particles : dictionary
@@ -67,26 +63,9 @@ class ParticleContainer(ABCParticleContainer):
         new_particle : Particle
             the new particle that will be included in the container.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         update_particle, remove_particle
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -117,26 +96,12 @@ class ParticleContainer(ABCParticleContainer):
         new_bond : Bond
             the new bond that will be included in the container.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         update_bond, remove_bond
 
         Notes
         -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -167,26 +132,9 @@ class ParticleContainer(ABCParticleContainer):
         particle : Particle
             the particle that will be replaced.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         add_particle, remove_particle
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -220,26 +168,9 @@ class ParticleContainer(ABCParticleContainer):
         bond : Bond
             the bond that will be replaced.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         add_bond, remove_bond
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -296,26 +227,9 @@ class ParticleContainer(ABCParticleContainer):
         particle_id : Particle
             the id of the particle to be removed.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         add_particle, update_particle
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -348,26 +262,9 @@ class ParticleContainer(ABCParticleContainer):
         bond_id : Particle
             the id of the bond to be removed.
 
-        Returns
-        -------
-        None
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
-
         See Also
         --------
         add_bond, update_bond
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -402,26 +299,13 @@ class ParticleContainer(ABCParticleContainer):
             sequence containing the id's of the particles that will be
             iterated.
 
-        Returns
+        Yields
         -------
         Yields each particle to be used.
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
 
         See Also
         --------
         iter_bonds, add_particle, remove_particle, update_particle
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -463,26 +347,13 @@ class ParticleContainer(ABCParticleContainer):
         bond_ids : array_like
             sequence containing the id's of the bond that will be iterated.
 
-        Returns
+        Yields
         -------
         Yields each bond to be used.
-
-        Other parameters
-        ----------------
-
-        Raises
-        ------
-        None (for the moment)
 
         See Also
         --------
         iter_particles, add_bond, remove_bond, update_bond
-
-        Notes
-        -----
-
-        References
-        ----------
 
         Examples
         --------
@@ -596,14 +467,10 @@ class Particle(Element):
     It has an id (private) and coordinates. Also has a dictionary containing
     attributes of the particle (not implemented yet).
 
-    Attributes:
-
     Attributes
     ----------
         coordinates : list / tuple
             x,y,z coordinates of the particle
-
-    Parameters:
 
     Parameters
     ----------
@@ -622,10 +489,6 @@ class Particle(Element):
         else:
             self.data = dc.DataContainer()
 
-    def __eq__(self, other):
-        return (self._id == other.get_id() and
-                self.coordinates == other.coordinates)
-
     def __str__(self):
         total_str = "{0}_{1}".format(self.get_id(), self.coordinates)
         # return str(self.get_id())
@@ -635,18 +498,10 @@ class Particle(Element):
 class Bond(Element):
     """Class reprensenting a bond.
 
-    It counts with a list of particle id's that compounds the bond.
-    We understand a bond as any kind of interaction that needs to be
-    represented (for example a chemical bond).
-
-    Attributes:
-
     Attributes
     ----------
         particles : list
             list of particles / elements of the bond
-
-    Parameters:
 
     Parameters
     ----------
@@ -665,10 +520,6 @@ class Bond(Element):
             self.data = copy.deepcopy(data)
         else:
             self.data = dc.DataContainer()
-
-    def __eq__(self, other):
-        return (self._id == other.get_id() and
-                self.particles == other.particles)
 
     def __str__(self):
         total_str = "{0}_{1}".format(self.get_id(), self.particles)

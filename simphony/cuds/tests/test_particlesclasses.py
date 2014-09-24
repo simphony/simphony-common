@@ -9,11 +9,6 @@ import simphony.cuds.particles as pc
 
 class ParticleTestCase(unittest.TestCase):
     """Test case for Particle class."""
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
 
     def test_simple_particle_default(self):
         """Creation of the particle."""
@@ -39,11 +34,6 @@ class ParticleTestCase(unittest.TestCase):
 
 class BondTestCase(unittest.TestCase):
     """Test case for Bond class."""
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
 
     def test_simple_bond(self):
         """Creation of the bond."""
@@ -76,9 +66,6 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
         self.pc = pc.ParticleContainer()
-
-    def tearDown(self):
-        pass
 
     def test_add_particle_ok(self):
         """Add particles to a ParticleContainer."""
@@ -116,9 +103,6 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_particle(self.p_list[i])
-
-    def tearDown(self):
-        pass
 
     def test_update_particle_ok(self):
         """Update an existing particle in a correct way."""
@@ -184,9 +168,6 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
             self.b_list.append(pc.Bond([1, 2, 3]))
         self.pc = pc.ParticleContainer()
 
-    def tearDown(self):
-        pass
-
     def test_add_bond_ok(self):
         """Add bond to a ParticleContainer."""
         for bond in self.b_list:
@@ -223,9 +204,6 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_bond(self.b_list[i])
-
-    def tearDown(self):
-        pass
 
     def test_update_bond_ok(self):
         """Update an existing bond in a correct way."""
