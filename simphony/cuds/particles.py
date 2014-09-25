@@ -17,7 +17,7 @@ import copy
 import random
 import numpy as np
 # custom imports:
-from simphony.cuds.abstractparticles import ABCParticleContainer, Element
+from simphony.cuds.abstractparticles import ABCParticleContainer
 import simphony.cuds.pcexceptions as pce
 import simphony.core.data_container as dc
 
@@ -25,9 +25,6 @@ import simphony.core.data_container as dc
 class ParticleContainer(ABCParticleContainer):
     """Class that represents a container of particles and bonds. It can
        add particles and bonds, remove them and update them.
-
-       Internally uses a dictionary to keep particles and another one for
-       bonds.
 
        Attributes
        ----------
@@ -52,8 +49,10 @@ class ParticleContainer(ABCParticleContainer):
     def add_particle(self, new_particle):
         """Adds the 'new_particle' particle to the container.
 
-        Since the particle has it's own id, it won't add the particle if a
-        particle with the same id already exists. If the user wants to replace
+        If the new particle has no id, the particle container
+        will generate a new unique id for it. If the particle has
+        already an id (user set), it won't add the particle if a particle
+        with the same id already exists. If the user wants to replace
         an existing particle in the container there is an 'update_particle'
         method for that purpose.
 
@@ -62,6 +61,10 @@ class ParticleContainer(ABCParticleContainer):
 
         new_particle : Particle
             the new particle that will be included in the container.
+
+        Raises
+        ------
+        Exception when the new particle already exists in the container.
 
         See Also
         --------
@@ -85,16 +88,21 @@ class ParticleContainer(ABCParticleContainer):
     def add_bond(self, new_bond):
         """Adds the 'new_bond' bond to the container.
 
-        Also like with particles, since the bond has it's own id, it won't add
-        the bond if a bond with the same id already exists. If the user wants
-        to replace an existing bond in the container there is an 'update_bond'
-        method for that purpose.
+        Also like with particles, if the bond has an user defined id,
+        it won't add the bond if a bond with the same id already exists, and
+        if the bond has no id the particle container will generate an
+        unique id. If the user wants to replace an existing bond in the
+        container there is an 'update_bond' method for that purpose.
 
         Parameters
         ----------
 
         new_bond : Bond
             the new bond that will be included in the container.
+
+        Raises
+        ------
+        Exception when the new particle already exists in the container.
 
         See Also
         --------
@@ -123,14 +131,18 @@ class ParticleContainer(ABCParticleContainer):
 
         Takes the id of 'particle' and searchs inside the container for
         that particle. If the particle exists, it is replaced with the new
-        particle passed as parameter. If the particle doesn't exist, nothing
-        will happen.
+        particle passed as parameter. If the particle doesn't exist, it will
+        raise an exception.
 
         Parameters
         ----------
 
         particle : Particle
             the particle that will be replaced.
+
+        Raises
+        ------
+        KeyError exception if the particle doesn't exists.
 
         See Also
         --------
@@ -159,14 +171,18 @@ class ParticleContainer(ABCParticleContainer):
 
         Takes the id of 'bond' and searchs inside the container for
         that bond. If the bond exists, it is replaced with the new
-        bond passed as parameter. If the bond doesn't exist, nothing
-        will happen.
+        bond passed as parameter. If the bond doesn't exist, it will
+        raise an exception.
 
         Parameters
         ----------
 
         bond : Bond
             the bond that will be replaced.
+
+        Raises
+        ------
+        KeyError exception if the bond doesn't exists.
 
         See Also
         --------
@@ -192,7 +208,19 @@ class ParticleContainer(ABCParticleContainer):
     def get_particle(self, particle_id):
         """Returns a copy of the particle with the 'particle_id' id.
 
-        If the particle doesn't exists in the container, it will return 'None'.
+        Parameters
+        ----------
+
+        particle_id : uint32
+            the id of the particle
+
+        Raises
+        ------
+        KeyError when the particle is not in the container.
+
+        Returns
+        -------
+        A copy of the particle
         """
 
         try:
@@ -205,7 +233,19 @@ class ParticleContainer(ABCParticleContainer):
     def get_bond(self, bond_id):
         """Returns a copy of the bond with the 'bond_id' id.
 
-        If the bond doesn't exists in the container, it will return 'None'.
+        Parameters
+        ----------
+
+        bond_id : uint32
+            the id of the bond
+
+        Raises
+        ------
+        KeyError when the bond is not in the container.
+
+        Returns
+        -------
+        A copy of the bond
         """
 
         try:
@@ -218,14 +258,18 @@ class ParticleContainer(ABCParticleContainer):
     def remove_particle(self, particle_id):
         """Removes the particle with the 'particle_id' id from the container.
 
-        The id passed as parameter should exists in the container. If it
-        doesn't exists, nothing will happen.
+        The id passed as parameter should exists in the container. Otherwise
+        an expcetion will be raised.
 
         Parameters
         ----------
 
         particle_id : Particle
             the id of the particle to be removed.
+
+        Raises
+        ------
+        KeyError exception if the particle doesn't exist.
 
         See Also
         --------
@@ -239,7 +283,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ...
         >>> part = part_container.get_particle(id)
         >>> ...
-        >>> part_container.remove_particle(part.get_id())
+        >>> part_container.remove_particle(part.id)
         or directly
         >>> part_container.remove_particle(id)
         """
@@ -259,7 +303,7 @@ class ParticleContainer(ABCParticleContainer):
         Parameters
         ----------
 
-        bond_id : Particle
+        bond_id : Bond
             the id of the bond to be removed.
 
         See Also
@@ -274,7 +318,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ...
         >>> bond = part_container.get_bond(id)
         >>> ...
-        >>> part_container.remove_bond(bond.get_id())
+        >>> part_container.remove_bond(bond.id)
         or directly
         >>> part_container.remove_bond(id)
         """
@@ -302,6 +346,11 @@ class ParticleContainer(ABCParticleContainer):
         Yields
         -------
         Yields each particle to be used.
+
+        Raises
+        ------
+        KeyError exception if any of the ids passed as parameters are not
+        in the container.
 
         See Also
         --------
@@ -339,7 +388,7 @@ class ParticleContainer(ABCParticleContainer):
 
         It can recieve any kind of sequence of bond ids to iterate over
         those concrete bond. If nothing is passed as parameter, it will
-        iterate over all the bond.
+        iterate over all the bonds.
 
         Parameters
         ----------
@@ -350,6 +399,11 @@ class ParticleContainer(ABCParticleContainer):
         Yields
         -------
         Yields each bond to be used.
+
+        Raises
+        ------
+        KeyError exception if any of the ids passed as parameters are not
+        in the container.
 
         See Also
         --------
@@ -383,9 +437,13 @@ class ParticleContainer(ABCParticleContainer):
             return self._iter_all(self._bonds)
 
     def has_particle(self, id):
+        """Checks if a particle with the given id already exists
+        in the container."""
         return id in self._particles
 
     def has_bond(self, id):
+        """Checks if a bond with the given id already exists
+        in the container."""
         return id in self._bonds
 
 # ================================================================
@@ -407,7 +465,7 @@ class ParticleContainer(ABCParticleContainer):
 
     def _add_element(self, cur_dict, element):
         # We check if the current dictionary has the element
-        cur_id = element.get_id()
+        cur_id = element.id
         if cur_id is None:
             cur_id = self._generate_unique_id(cur_dict)
             element.id = cur_id
@@ -422,8 +480,7 @@ class ParticleContainer(ABCParticleContainer):
                     + " id: " + str(cur_id))
 
     def _update_element(self, cur_dict, element):
-        # We use the bisect module to optimize the lists
-        cur_id = element.get_id()
+        cur_id = element.id
         if cur_id in cur_dict:
             # This means the element IS in the current dictionary
             # (this should be the standard case...), so we proceed
@@ -455,31 +512,38 @@ class ParticleContainer(ABCParticleContainer):
 # ==========================================================================
 
     def get_n_particles(self):
+        """Returns the total number of particles that are in the container."""
         return len(self._particles)
 
     def get_n_bonds(self):
+        """Returns the total number of bonds that are in the container."""
         return len(self._bonds)
 
 
-class Particle(Element):
+class Particle():
     """Class representing a particle.
-
-    It has an id (private) and coordinates. Also has a dictionary containing
-    attributes of the particle (not implemented yet).
 
     Attributes
     ----------
+        id : uint32
+            the unique id of the particle
         coordinates : list / tuple
             x,y,z coordinates of the particle
+        data : DataContainer
+            DataContainer to store the attributes of the particle
 
     Parameters
     ----------
-        coordinates : list / tuple
+        ext_coordinates : list / tuple
             x,y,z coordinates of the particle (Default: [0, 0, 0])
+        id : uint32
+            the id, None as default (the particle container will generate it)
+        data : DataContainer
+            the data, the particle will have a copy of this
     """
 
     def __init__(self, ext_coordinates=None, id=None, data=None):
-        super(Particle, self).__init__(id)
+        self.id = id
         if ext_coordinates:
             self.coordinates = ext_coordinates
         else:
@@ -490,27 +554,34 @@ class Particle(Element):
             self.data = dc.DataContainer()
 
     def __str__(self):
-        total_str = "{0}_{1}".format(self.get_id(), self.coordinates)
-        # return str(self.get_id())
+        total_str = "{0}_{1}".format(self.id, self.coordinates)
         return total_str
 
 
-class Bond(Element):
+class Bond():
     """Class reprensenting a bond.
 
     Attributes
     ----------
+        id : uint32
+            the unique id of the bond
         particles : list
             list of particles / elements of the bond
+        data : DataContainer
+            DataContainer to store the attributes of the bond
 
     Parameters
     ----------
-       particles_list : list
+        particles_list : sequence
             list of particles of the bond. It can not be empty (Defaul: (1,))
+        id : uint32
+            the id, None as default (the particle container will generate it)
+        data : DataContainer
+            DataContainer to store the attributes of the bond
     """
 
     def __init__(self, particles_list=None, id=None, data=None):
-        super(Bond, self).__init__(id)
+        self.id = id
         if particles_list is not None and len(particles_list) > 0:
             self.particles = particles_list
         else:
@@ -522,10 +593,8 @@ class Bond(Element):
             self.data = dc.DataContainer()
 
     def __str__(self):
-        total_str = "{0}_{1}".format(self.get_id(), self.particles)
+        total_str = "{0}_{1}".format(self.id, self.particles)
         return total_str
-
-# Just an information message of the module
 
 
 def main():

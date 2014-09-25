@@ -62,35 +62,6 @@ class ABCParticleContainer(object):
         pass
 
 
-class Element(object):
-    """Base Class that overrides standard methods for comparison and string
-    conversion (in case we need it).
-
-    Also has some common attributes for derived classes (Particles and Bonds
-    for the moment).
-
-    Attributes
-    ----------
-        _id : int (for the moment)
-            unique id of the element
-        data : DataContainer
-            data attributes of the element (not implemented yet)
-    """
-    def __init__(self, external_id=None):
-        self._id = external_id
-        # when ready:
-        # self.data = DataContainer()
-
-    def get_id(self):
-        return self._id
-
-    def set_id(self, new_id):
-        self._id = new_id
-
-    id = property(get_id, set_id)
-
-
-# Just an information message of the module
 def main():
     print("""Module for Particle classes:
                ABCParticleContainer ---> Common Base abstract class
