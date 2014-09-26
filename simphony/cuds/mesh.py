@@ -8,6 +8,7 @@ import copy
 from abstractmesh import ABCMesh
 import simphony.core.data_container as dc
 
+
 class Point(object):
     """ Coordinates descriving a point in the space
 
@@ -212,7 +213,7 @@ class Cell(Element):
 
     """
 
-    def __ini__(self, uuid, points, data):
+    def __ini__(self, uuid, points, data, shared_data):
         Element.__init__(self, uuid, points, data, shared_data)
         self.volume = 0.0
 
