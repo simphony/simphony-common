@@ -12,7 +12,7 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 import simphony.core.data_container as dc
-#from simphony.core.cuba import CUBA
+# from simphony.core.cuba import CUBA
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -25,12 +25,13 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
         self.mesh = Mesh()
-        self.points = [Point(0, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-                       Point(1, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-                       Point(2, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-                       Point(3, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
-                       Point(4, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer())
-                       ]
+        self.points = [
+            Point(0, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(1, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(2, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(3, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
+            Point(4, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer())
+        ]
 
     def test_emtpy_edges(self):
         """ Checks that the list of edges is empty
