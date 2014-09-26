@@ -40,3 +40,4 @@ There are three subpackages:
 - core -- used for common low level classes and utility code
 - cuds -- to hold all the native cuds implementations
 - io -- to hold the io specific code
+- bench -- holds basic benchmarking code
