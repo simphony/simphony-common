@@ -11,6 +11,8 @@ from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
+import simphony.core.data_container as dc
+from simphony.core.cuba import CUBA
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -23,11 +25,11 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
         self.mesh = Mesh()
-        self.points = [Point(0, (0.0, 0.0, 0.0), 0),
-                       Point(1, (1.0, 0.0, 0.0), 0),
-                       Point(2, (0.0, 1.0, 0.0), 0),
-                       Point(3, (0.0, 0.0, 1.0), 0),
-                       Point(4, (1.0, 0.0, 1.0), 0)
+        self.points = [Point(0, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+                       Point(1, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+                       Point(2, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+                       Point(3, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
+                       Point(4, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer())
                        ]
 
     def test_emtpy_edges(self):
@@ -72,7 +74,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, 0)
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edge)
 
@@ -89,7 +91,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, 0)
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(face)
 
@@ -107,7 +109,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, 0)
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cell)
 
@@ -123,7 +125,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, 0)
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
 
         with self.assertRaises(Exception) as cm:
             self.mesh.add_point(edge)
@@ -176,7 +178,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, 0)
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edge)
 
@@ -193,7 +195,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, 0)
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(face)
 
@@ -211,7 +213,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, 0)
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cell)
 
@@ -241,7 +243,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, 0)
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edge)
 
@@ -261,7 +263,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, 0)
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(face)
 
@@ -282,7 +284,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, 0)
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cell)
 
@@ -310,8 +312,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        edgeA = Edge(0, pointsA, 0)
-        edgeB = Edge(1, pointsB, 0)
+        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -344,8 +346,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        faceA = Face(0, pointsA, 0)
-        faceB = Face(1, pointsB, 0)
+        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -380,8 +382,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = Cell(0, pointsA, 0)
-        cellB = Cell(1, pointsB, 0)
+        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
@@ -416,9 +418,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        edgeA = Edge(0, pointsA, 0)
-        edgeB = Edge(1, pointsB, 0)
-        edgeC = Edge(2, pointsC, 0)
+        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        edgeC = Edge(2, pointsC, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -457,9 +459,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        faceA = Face(0, pointsA, 0)
-        faceB = Face(1, pointsB, 0)
-        faceC = Face(2, pointsC, 0)
+        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        faceC = Face(2, pointsC, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -501,9 +503,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = Cell(0, pointsA, 0)
-        cellB = Cell(1, pointsB, 0)
-        cellC = Cell(2, pointsC, 0)
+        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
+        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        cellC = Cell(2, pointsC, dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)

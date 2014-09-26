@@ -6,9 +6,7 @@ and modify a mesh
 """
 import copy
 from abstractmesh import ABCMesh
-# import tables
-# import itertools
-
+import simphony.core.data_container as dc
 
 class Point(object):
     """ Coordinates descriving a point in the space
@@ -36,13 +34,30 @@ class Point(object):
     past_data : DataContainer
         object to store point data about previous simulation steps
 
+    Raises
+    ------
+    TypeError
+        If the data or past_data provided are not
+        instances of DataContainer
+
     """
 
-    def __init__(self, uuid, coordinates, data):
+    def __init__(self, uuid, coordinates, data, past_data):
+
+        if not isinstance(data, dc.DataContainer):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "DataContainer expected."
+            raise TypeError(error_str)
+
+        if not isinstance(past_data, dc.DataContainer):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "DataContainer expected."
+            raise TypeError(error_str)
+
         self.id = uuid
         self.data = data
         self.coordinates = coordinates
-        self.past_data = 0
+        self.past_data = past_data
 
     def __str__(self):
         return "PointID: " + str(self.id) + "\n" \
@@ -61,7 +76,10 @@ class Element(object):
     points : list of Point
         list of points defining the edge.
     data : DataContainer
-        object to store data relative to the edge
+        object to store data relative to the element
+    shared_data: DataContainer
+        object to store shared data realtive to a group
+        of elements
 
     Attributes
     ----------
@@ -74,13 +92,30 @@ class Element(object):
     shared_data : list of points
         Shared data between group of elements
 
+    Raises
+    ------
+    TypeError
+        If the data or shared_data provided are not
+        instances of DataContainer
+
     """
 
-    def __init__(self, uuid, points, data):
+    def __init__(self, uuid, points, data, shared_data):
+
+        if not isinstance(data, dc.DataContainer):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "DataContainer expected."
+            raise TypeError(error_str)
+
+        if not isinstance(shared_data, dc.DataContainer):
+            error_str = "Trying to add an object with the wrong type. "\
+                + "DataContainer expected."
+            raise TypeError(error_str)
+
         self.id = uuid
         self.data = data
         self.points = points
-        self.shared_data = 0
+        self.shared_data = shared_data
 
     def __str__(self):
         string = "Id: " + str(self.id) + "\n" + "Points: \n"
@@ -102,6 +137,9 @@ class Edge(Element):
         list of points defining the edge.
     data : DataContainer
         object to store data relative to the edge
+    shared_data: DataContainer
+        object to store shared data realtive to a group
+        of elements
 
     Attributes
     ----------
@@ -110,8 +148,8 @@ class Edge(Element):
 
     """
 
-    def __init__(self, uuid, points, data):
-        Element.__init__(self, uuid, points, data)
+    def __init__(self, uuid, points, data, shared_data):
+        Element.__init__(self, uuid, points, data, shared_data)
         self.length = 0.0
 
     def __str__(self):
@@ -131,6 +169,9 @@ class Face(Element):
         list of points defining the face.
     data: DataContainer
         object to store data relative to the face
+    shared_data: DataContainer
+        object to store shared data realtive to a group
+        of faces
 
     Attributes
     ----------
@@ -139,8 +180,8 @@ class Face(Element):
 
     """
 
-    def __init__(self, uuid, points, data):
-        Element.__init__(self, uuid, points, data)
+    def __init__(self, uuid, points, data, shared_data):
+        Element.__init__(self, uuid, points, data, shared_data)
         self.area = 0.0
 
     def __str__(self):
@@ -160,6 +201,9 @@ class Cell(Element):
         list of points defining the cell.
     data: DataContainer
         object to store data relative to the cell
+    shared_data: DataContainer
+        object to store shared data realtive to a group
+        of cells
 
     Attributes
     ----------
@@ -169,7 +213,7 @@ class Cell(Element):
     """
 
     def __ini__(self, uuid, points, data):
-        Element.__init__(self, uuid, points, data)
+        Element.__init__(self, uuid, points, data, shared_data)
         self.volume = 0.0
 
     def __str__(self):
@@ -377,23 +421,6 @@ class Mesh(ABCMesh):
             raise TypeError(error_str)
 
         self.points.update({point.id: copy.deepcopy(point)})
-
-    def __add_points(self, points):
-        """ Adds a list of points to the mesh.
-
-        Adds a list of points to the mesh. If the point
-        is already in the mesh, it is not added.
-
-        Parameters
-        ----------
-        points : list of Point
-            Points to be added to the mesh
-
-        """
-
-        for point in points:
-            if point.id not in list(self.points.keys()):
-                self.points.update({point.id: copy.deepcopy(point)})
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh.
@@ -820,3 +847,20 @@ class Mesh(ABCMesh):
         if len(self.cells):
             return True
         return False
+
+    def __add_points(self, points):
+        """ Adds a list of points to the mesh.
+
+        Adds a list of points to the mesh. If the point
+        is already in the mesh, it is not added.
+
+        Parameters
+        ----------
+        points : list of Point
+            Points to be added to the mesh
+
+        """
+
+        for point in points:
+            if point.id not in list(self.points.keys()):
+                self.points.update({point.id: copy.deepcopy(point)})
