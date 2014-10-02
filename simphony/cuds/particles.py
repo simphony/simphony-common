@@ -573,7 +573,7 @@ class Bond(object):
     Parameters
     ----------
         particles : sequence
-            list of particles of the bond. It can not be empty (Defaul: (1,))
+            list of particles of the bond. It can not be empty.
         id : uint32
             the id, None as default (the particle container will generate it)
         data : DataContainer
