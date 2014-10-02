@@ -520,7 +520,7 @@ class ParticleContainer(ABCParticleContainer):
         return len(self._bonds)
 
 
-class Particle():
+class Particle(object):
     """Class representing a particle.
 
     Attributes
@@ -534,7 +534,7 @@ class Particle():
 
     Parameters
     ----------
-        ext_coordinates : list / tuple
+        coordinates : list / tuple
             x,y,z coordinates of the particle (Default: [0, 0, 0])
         id : uint32
             the id, None as default (the particle container will generate it)
@@ -542,10 +542,10 @@ class Particle():
             the data, the particle will have a copy of this
     """
 
-    def __init__(self, ext_coordinates=None, id=None, data=None):
+    def __init__(self, coordinates=None, id=None, data=None):
         self.id = id
-        if ext_coordinates:
-            self.coordinates = ext_coordinates
+        if coordinates:
+            self.coordinates = coordinates
         else:
             self.coordinates = [0.0, 0.0, 0.0]
         if data:
@@ -558,7 +558,7 @@ class Particle():
         return total_str
 
 
-class Bond():
+class Bond(object):
     """Class reprensenting a bond.
 
     Attributes
@@ -572,7 +572,7 @@ class Bond():
 
     Parameters
     ----------
-        particles_list : sequence
+        particles : sequence
             list of particles of the bond. It can not be empty (Defaul: (1,))
         id : uint32
             the id, None as default (the particle container will generate it)
@@ -580,13 +580,12 @@ class Bond():
             DataContainer to store the attributes of the bond
     """
 
-    def __init__(self, particles_list=None, id=None, data=None):
+    def __init__(self, particles=None, id=None, data=None):
         self.id = id
-        if particles_list is not None and len(particles_list) > 0:
-            self.particles = particles_list
+        if particles is not None and len(particles) > 0:
+            self.particles = particles
         else:
             raise Exception(pce._PC_errors['IncorrectParticlesTuple'])
-            self.particles.append(1)
         if data:
             self.data = copy.deepcopy(data)
         else:

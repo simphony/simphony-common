@@ -4,8 +4,7 @@ import tempfile
 import shutil
 import unittest
 
-from simphony.cuds.particle import Particle
-from simphony.cuds.bond import Bond
+from simphony.cuds.particles import Particle, Bond
 from simphony.io.cuds_file import CudsFile
 
 
