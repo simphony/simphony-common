@@ -38,7 +38,7 @@ class ParticleContainer(ABCParticleContainer):
     def __init__(self):
         self._particles = {}
         self._bonds = {}
-        self._data = dc.DataContainer()
+        self.data = dc.DataContainer()
 
 # ================================================================
 
