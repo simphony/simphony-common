@@ -580,7 +580,7 @@ class Bond(object):
             DataContainer to store the attributes of the bond
     """
 
-    def __init__(self, particles=None, id=None, data=None):
+    def __init__(self, particles, id=None, data=None):
         self.id = id
         if particles is not None and len(particles) > 0:
             self.particles = particles
