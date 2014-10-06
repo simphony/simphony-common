@@ -76,7 +76,7 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticleContainer()
+        self.pc = pc.ParticleContainer('Test_Pc')
 
     def test_has_particle_ok(self):
         """Checks that a particle already added is in the container."""
@@ -109,7 +109,7 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticleContainer()
+        self.pc = pc.ParticleContainer('Test_Pc')
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
@@ -188,7 +188,7 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticleContainer()
+        self.pc = pc.ParticleContainer('Test_Pc')
 
     def test_has_bond_ok(self):
         """Checks that a bond already added is in the container."""
@@ -221,7 +221,7 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticleContainer()
+        self.pc = pc.ParticleContainer('Test_Pc')
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))

@@ -28,6 +28,9 @@ class ParticleContainer(ABCParticleContainer):
 
        Attributes
        ----------
+
+        name : str
+            name that identifies the ParticleContainer
         _particles : dictionary
             data structure for particles storage
         _bonds : dictionary
@@ -35,7 +38,8 @@ class ParticleContainer(ABCParticleContainer):
         data : DataContainer
             data attributes of the element
     """
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self._particles = {}
         self._bonds = {}
         self.data = dc.DataContainer()
