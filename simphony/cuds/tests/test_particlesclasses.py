@@ -76,7 +76,7 @@ class ParticleContainerParticlesTestCase1(unittest.TestCase):
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticleContainer('Test_Pc')
+        self.pc = pc.ParticleContainer()
 
     def test_has_particle_ok(self):
         """Checks that a particle already added is in the container."""
@@ -109,15 +109,11 @@ class ParticleContainerParticlesTestCase2(unittest.TestCase):
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticleContainer('Test_Pc')
+        self.pc = pc.ParticleContainer()
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_particle(self.p_list[i])
-
-    def test_n_particles_ok(self):
-        """Test that the particle container has correct number of particles."""
-        self.assertEqual(self.pc.get_n_particles(), 10)
 
     def test_update_particle_ok(self):
         """Update an existing particle in a correct way."""
@@ -188,7 +184,7 @@ class ParticleContainerBondsTestCase1(unittest.TestCase):
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
-        self.pc = pc.ParticleContainer('Test_Pc')
+        self.pc = pc.ParticleContainer()
 
     def test_has_bond_ok(self):
         """Checks that a bond already added is in the container."""
@@ -221,15 +217,11 @@ class ParticleContainerBondsTestCase2(unittest.TestCase):
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = pc.ParticleContainer('Test_Pc')
+        self.pc = pc.ParticleContainer()
         for i in xrange(10):
             self.p_list.append(pc.Particle([i, i*10, i*100]))
             self.b_list.append(pc.Bond([1, 2, 3]))
             self.pc.add_bond(self.b_list[i])
-
-    def test_n_bonds_ok(self):
-        """Test that the particle container has correct number of bonds."""
-        self.assertEqual(self.pc.get_n_bonds(), 10)
 
     def test_update_bond_ok(self):
         """Update an existing bond in a correct way."""

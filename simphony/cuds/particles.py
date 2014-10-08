@@ -29,8 +29,6 @@ class ParticleContainer(ABCParticleContainer):
        Attributes
        ----------
 
-        name : str
-            name that identifies the ParticleContainer
         _particles : dictionary
             data structure for particles storage
         _bonds : dictionary
@@ -38,8 +36,7 @@ class ParticleContainer(ABCParticleContainer):
         data : DataContainer
             data attributes of the element
     """
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self._particles = {}
         self._bonds = {}
         self.data = dc.DataContainer()
@@ -508,20 +505,6 @@ class ParticleContainer(ABCParticleContainer):
             if cur_id not in cur_dict:
                 return cur_id
         raise Exception(pce._PC_errors['ParticleContainer_IdNotGenerated'])
-
-# ==========================================================================
-
-    # Additional methods that we maybe need
-
-# ==========================================================================
-
-    def get_n_particles(self):
-        """Returns the total number of particles that are in the container."""
-        return len(self._particles)
-
-    def get_n_bonds(self):
-        """Returns the total number of bonds that are in the container."""
-        return len(self._bonds)
 
 
 class Particle(object):
