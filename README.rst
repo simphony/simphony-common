@@ -3,7 +3,7 @@ Simphony-common
 
 The native implementation of the Simphony cuds objects and io code.
 
-.. image: https://travis-ci.org/simphony/simphony-common.svg?branch=master
+.. image:: https://travis-ci.org/simphony/simphony-common.svg?branch=master
     :target: https://travis-ci.org/simphony/simphony-common
 
 Repository
