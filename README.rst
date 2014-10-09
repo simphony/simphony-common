@@ -1,7 +1,7 @@
 Simphony-common
 ===============
 
-The native implementation of the Simphony cuds objects and io code.
+The native implementation of the SimPhoNy cuds objects and io code.
 
 .. image:: https://travis-ci.org/simphony/simphony-common.svg?branch=master
     :target: https://travis-ci.org/simphony/simphony-common
@@ -21,7 +21,7 @@ The package requires python 2.7.x, installation is based on setuptools::
 
 or::
 
-    # build for inplace development
+    # build for in-place development
     python setup.py develop
 
 Testing
@@ -35,7 +35,7 @@ To run the full test-suite run::
 Directory structure
 -------------------
 
-There are three subpackages:
+There are four subpackages:
 
 - core -- used for common low level classes and utility code
 - cuds -- to hold all the native cuds implementations
