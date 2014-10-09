@@ -3,7 +3,7 @@ import os
 
 import tables
 
-from simphony.cuds.particle import Particle
+from simphony.cuds.particles import Particle
 from simphony.io.cuds_file import CudsFile
 from simphony.io.file_particle_container import FileParticleContainer
 

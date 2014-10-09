@@ -6,9 +6,8 @@ import random
 import tables
 import numpy
 
-from simphony.cuds.abc_particle_container import ABCParticleContainer
-from simphony.cuds.particle import Particle
-from simphony.cuds.bond import Bond
+from simphony.cuds.abstractparticles import ABCParticleContainer
+from simphony.cuds.particles import Particle, Bond
 
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
@@ -213,6 +212,20 @@ class FileParticleContainer(ABCParticleContainer):
         else:
             for id in ids:
                 yield self.get_bond(id)
+
+    def has_particle(self, id):
+        """Checks if a particle with id "id" exists in the container."""
+        for row in self._group.particles.where(
+                'id == value', condvars={'value': id}):
+            return True
+        return False
+
+    def has_bond(self, id):
+        """Checks if a bond with id "id" exists in the container."""
+        for row in self._group.bonds.where(
+                'id == value', condvars={'value': id}):
+            return True
+        return False
 
     # Private methods #######################################################
 

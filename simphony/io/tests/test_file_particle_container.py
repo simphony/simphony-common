@@ -4,8 +4,7 @@ import tempfile
 import shutil
 import unittest
 
-from simphony.cuds.particle import Particle
-from simphony.cuds.bond import Bond
+from simphony.cuds.particles import Particle, Bond
 from simphony.io.cuds_file import CudsFile
 
 
@@ -60,7 +59,7 @@ class TestFileParticleContainer(unittest.TestCase):
                 self.assertTrue(item in b)
                 b.remove(item)
 
-    def test_add_get__particle(self):
+    def test_add_get_particle(self):
         self.pc.add_particle(self.particle_1)
         particles = self.pc.get_particle(self.particle_1.id)
         self.assertTrue(particles is not self.particle_1)
@@ -71,6 +70,13 @@ class TestFileParticleContainer(unittest.TestCase):
         self.pc.add_particle(self.particle_1)
         with self.assertRaises(Exception):
             self.pc.add_particle(self.particle_1)
+
+    def test_has_particle_ok(self):
+        self.pc.add_particle(self.particle_1)
+        self.assertTrue(self.pc.has_particle(self.particle_1.id))
+
+    def test_has_particle_false(self):
+        self.assertFalse(self.pc.has_particle(self.particle_1))
 
     def test_add_get_particle_with_default_id(self):
         p = Particle((1.0, 1.0, 0.0))
@@ -159,6 +165,13 @@ class TestFileParticleContainer(unittest.TestCase):
         self.pc.add_bond(self.bond_1)
         with self.assertRaises(Exception):
             self.pc.add_bond(self.bond_1)
+
+    def test_has_bond_ok(self):
+        self.pc.add_bond(self.bond_1)
+        self.assertTrue(self.pc.has_bond(self.bond_1.id))
+
+    def test_has_bond_false(self):
+        self.assertFalse(self.pc.has_bond(self.bond_1))
 
     def test_get_bond_throws(self):
         with self.assertRaises(Exception):
