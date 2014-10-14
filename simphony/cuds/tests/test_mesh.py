@@ -63,7 +63,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.mesh.add_point(point)
 
-        self.assertTrue(len(self.mesh.points.keys()))
+        self.assertIsNotNone(self.mesh.get_point(0))
 
     def test_add_edge(self):
         """ Check that an edge can be added correctly
@@ -75,11 +75,11 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_edge(edge)
 
-        self.assertTrue(len(self.mesh.edges.keys()))
+        self.assertIsNotNone(self.mesh.get_edge(0))
 
     def test_add_face(self):
         """ Check that a face can be added correctly
@@ -92,11 +92,11 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_face(face)
 
-        self.assertTrue(len(self.mesh.faces.keys()))
+        self.assertIsNotNone(self.mesh.get_face(0))
 
     def test_add_cell(self):
         """ Check that a cell can be added correctly
@@ -110,11 +110,11 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_cell(cell)
 
-        self.assertTrue(len(self.mesh.cells.keys()))
+        self.assertIsNotNone(self.mesh.get_cell(0))
 
     def test_add_wrong_type_point(self):
         """ Check that a only points can be added to the point list
@@ -126,7 +126,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         with self.assertRaises(Exception) as cm:
             self.mesh.add_point(edge)
@@ -179,7 +179,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_edge(edge)
 
@@ -196,7 +196,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_face(face)
 
@@ -214,7 +214,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_cell(cell)
 
@@ -244,7 +244,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_edge(edge)
 
@@ -264,7 +264,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
+        face = Face(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_face(face)
 
@@ -285,7 +285,7 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
+        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_cell(cell)
 
@@ -313,8 +313,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -347,8 +347,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -383,8 +383,8 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
+        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
@@ -419,9 +419,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        edgeC = Edge(2, pointsC, dc.DataContainer(), dc.DataContainer())
+        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
+        edgeC = Edge(2, pointsC, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_edge(edgeA)
         self.mesh.add_edge(edgeB)
@@ -460,9 +460,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        faceC = Face(2, pointsC, dc.DataContainer(), dc.DataContainer())
+        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
+        faceC = Face(2, pointsC, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_face(faceA)
         self.mesh.add_face(faceB)
@@ -504,9 +504,9 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[4]
             ]
 
-        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        cellC = Cell(2, pointsC, dc.DataContainer(), dc.DataContainer())
+        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer(), 0)
+        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer(), 0)
+        cellC = Cell(2, pointsC, dc.DataContainer(), dc.DataContainer(), 0)
 
         self.mesh.add_cell(cellA)
         self.mesh.add_cell(cellB)
