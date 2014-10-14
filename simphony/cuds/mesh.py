@@ -161,7 +161,6 @@ class Edge(Element):
             edge.length
         )
 
-
     def __str__(self):
         return "Type: Edge\n" + super(Edge, self).__str__()
 
