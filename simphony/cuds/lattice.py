@@ -43,38 +43,42 @@ class LatticeNode:
     """
     A single node of a lattice.
 
-    Parameters:
+    Attributes:
     -----------
     id: tuple of D x int
         node index coordinate
-    lat_node: reference to a LatticeNode object
-        data copied from the given node
+    data: reference to a DataContainer object
+        the given data is cloned for the node
     """
-    def __init__(self, id, lat_node=None):
+    def __init__(self, id, data=None):
         self.id = tuple(id)
         self.data = dc.DataContainer()
 
-        if lat_node is not None:
-            self.copy_data(lat_node)
+        if data is not None:
+            self.clone_data(data)
         # end if
 
     # -----------------------------------------------------------------------
-    def copy_data(self, lat_node):
-        """Copy data from the given node.
+    def clone_data(self, data):
+        """Clone the given data for the node.
 
         Parameters:
         -----------
-        lat_node: reference to a LatticeNode object
+        data: reference to a DataContainer object
         """
-        if lat_node is None:
+        if data is None:
             return
         # end if
 
-        for key in lat_node.data:
-            self.data[key] = copy.deepcopy(lat_node.data[key])
+        for key in self.data:
+            if key not in data:
+                self.data.pop(key, None)
+            # end if
         # end for
 
-    # -----------------------------------------------------------------------
+        for key in data:
+            self.data[key] = copy.deepcopy(data[key])
+        # end for
 # end
 
 
@@ -85,7 +89,7 @@ class Lattice:
     """
     A Bravais lattice; stores references to LatticeNodes.
 
-    Parameters:
+    Attributes:
     -----------
     name: string
     type: string
@@ -102,7 +106,7 @@ class Lattice:
         self.base_vect = np.array(base_vect, dtype=np.float)
         self.size = np.array(size, dtype=np.uint32)
         self.origin = np.array(origin, dtype=np.float)
-        self.lat_nodes = np.empty(size, dtype=object)
+        self._lat_nodes = np.empty(size, dtype=object)
 
     # -----------------------------------------------------------------------
     def get_node(self, id):
@@ -117,7 +121,12 @@ class Lattice:
         A reference to a LatticeNode object
         """
         tuple_id = tuple(id)
-        return LatticeNode(tuple_id, self.lat_nodes[tuple_id])
+
+        if self._lat_nodes[tuple_id] is None:
+            return LatticeNode(tuple_id)
+        else:
+            return LatticeNode(tuple_id, self._lat_nodes[tuple_id].data)
+        # end if else
 
     # -----------------------------------------------------------------------
     def update_node(self, lat_node):
@@ -129,10 +138,12 @@ class Lattice:
             data copied from the given node
         """
         id = lat_node.id
-        if self.lat_nodes[id] is None:
-            self.lat_nodes[id] = LatticeNode(id, lat_node)
+
+        if self._lat_nodes[id] is None:
+            self._lat_nodes[id] = LatticeNode(id, lat_node.data)
         else:
-            self.lat_nodes[id].copy_data(lat_node)
+            self._lat_nodes[id].clone_data(lat_node.data)
+        # end if else
 
     # -----------------------------------------------------------------------
     def iter_nodes(self, ids=None):
@@ -147,7 +158,7 @@ class Lattice:
         A generator for LatticeNode objects
         """
         if ids is None:
-            for id, val in np.ndenumerate(self.lat_nodes):
+            for id, val in np.ndenumerate(self._lat_nodes):
                 yield self.get_node(id)
         else:
             for id in ids:

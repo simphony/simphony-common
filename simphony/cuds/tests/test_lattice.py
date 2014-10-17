@@ -4,6 +4,7 @@
 # ---------------------------------------------------------------------------
 import unittest
 import numpy as np
+import numpy.testing as np_test
 from math import sqrt
 from simphony.core.cuba import CUBA
 import simphony.cuds.lattice as la
@@ -32,7 +33,7 @@ class LatticeNodeTestCase(unittest.TestCase):
         node_org.data[CUBA.DENSITY] = 1.5
         node_org.data[CUBA.VELOCITY] = (0.2, -0.1)
 
-        node_new = la.LatticeNode((2, 3), node_org)
+        node_new = la.LatticeNode((2, 3), node_org.data)
 
         self.assertIsInstance(node_new, la.LatticeNode,
                               "Error: not a LatticeNode!")
@@ -62,59 +63,53 @@ class LatticeTestCase(unittest.TestCase):
                                                   (0.5, 0.54, 0.58),
                                                   (15, 25), (7, 8, 9))
 
-        self.assertIsInstance(hexag_lat,   la.Lattice, "Error: not a Lattice!")
-        self.assertIsInstance(square_lat,  la.Lattice, "Error: not a Lattice!")
+        self.assertIsInstance(hexag_lat, la.Lattice, "Error: not a Lattice!")
+        self.assertIsInstance(square_lat, la.Lattice, "Error: not a Lattice!")
         self.assertIsInstance(rectang_lat, la.Lattice, "Error: not a Lattice!")
-        self.assertIsInstance(cubic_lat,   la.Lattice, "Error: not a Lattice!")
-        self.assertIsInstance(orthop_lat,  la.Lattice, "Error: not a Lattice!")
+        self.assertIsInstance(cubic_lat, la.Lattice, "Error: not a Lattice!")
+        self.assertIsInstance(orthop_lat, la.Lattice, "Error: not a Lattice!")
 
-        self.assertEqual(hexag_lat.name,   'Lattice1')
-        self.assertEqual(square_lat.name,  'Lattice2')
+        self.assertEqual(hexag_lat.name, 'Lattice1')
+        self.assertEqual(square_lat.name, 'Lattice2')
         self.assertEqual(rectang_lat.name, 'Lattice3')
-        self.assertEqual(cubic_lat.name,   'Lattice4')
-        self.assertEqual(orthop_lat.name,  'Lattice5')
+        self.assertEqual(cubic_lat.name, 'Lattice4')
+        self.assertEqual(orthop_lat.name, 'Lattice5')
 
-        self.assertEqual(hexag_lat.type,   'Hexagonal')
-        self.assertEqual(square_lat.type,  'Square')
+        self.assertEqual(hexag_lat.type, 'Hexagonal')
+        self.assertEqual(square_lat.type, 'Square')
         self.assertEqual(rectang_lat.type, 'Rectangular')
-        self.assertEqual(cubic_lat.type,   'Cubic')
-        self.assertEqual(orthop_lat.type,  'OrthorombicP')
+        self.assertEqual(cubic_lat.type, 'Cubic')
+        self.assertEqual(orthop_lat.type, 'OrthorombicP')
 
-        self.assertTrue(np.all(hexag_lat.size == (11, 21)))
-        self.assertTrue(np.all(square_lat.size == (12, 22)))
-        self.assertTrue(np.all(rectang_lat.size == (13, 23)))
-        self.assertTrue(np.all(cubic_lat.size == (14, 24)))
-        self.assertTrue(np.all(orthop_lat.size == (15, 25)))
+        np_test.assert_array_equal(hexag_lat.size, (11, 21))
+        np_test.assert_array_equal(square_lat.size, (12, 22))
+        np_test.assert_array_equal(rectang_lat.size, (13, 23))
+        np_test.assert_array_equal(cubic_lat.size, (14, 24))
+        np_test.assert_array_equal(orthop_lat.size, (15, 25))
 
-        self.assertTrue(np.all(hexag_lat.origin == (0, 0)))
-        self.assertTrue(np.all(square_lat.origin == (0, 0)))
-        self.assertTrue(np.all(rectang_lat.origin == (0, 0)))
-        self.assertTrue(np.all(cubic_lat.origin == (4, 5, 6)))
-        self.assertTrue(np.all(orthop_lat.origin == (7, 8, 9)))
+        np_test.assert_array_equal(hexag_lat.origin, (0, 0))
+        np_test.assert_array_equal(square_lat.origin, (0, 0))
+        np_test.assert_array_equal(rectang_lat.origin, (0, 0))
+        np_test.assert_array_equal(cubic_lat.origin, (4, 5, 6))
+        np_test.assert_array_equal(orthop_lat.origin, (7, 8, 9))
 
-        self.assertTrue(np.all(hexag_lat.origin == (0, 0)))
-        self.assertTrue(np.all(square_lat.origin == (0, 0)))
-        self.assertTrue(np.all(rectang_lat.origin == (0, 0)))
-        self.assertTrue(np.all(cubic_lat.origin == (4, 5, 6)))
-        self.assertTrue(np.all(orthop_lat.origin == (7, 8, 9)))
+        np_test.assert_array_equal(hexag_lat.base_vect,
+                                   (0.5*0.1, 0.5*sqrt(3)*0.1))
+        np_test.assert_array_equal(square_lat.base_vect, (0.2, 0.2))
+        np_test.assert_array_equal(rectang_lat.base_vect, (0.3, 0.35))
+        np_test.assert_array_equal(cubic_lat.base_vect, (0.4, 0.4, 0.4))
+        np_test.assert_array_equal(orthop_lat.base_vect, (0.5, 0.54, 0.58))
 
-        self.assertTrue(np.all(hexag_lat.base_vect ==
-                               (0.5*0.1, 0.5*sqrt(3)*0.1)))
-        self.assertTrue(np.all(square_lat.base_vect == (0.2, 0.2)))
-        self.assertTrue(np.all(rectang_lat.base_vect == (0.3, 0.35)))
-        self.assertTrue(np.all(cubic_lat.base_vect == (0.4, 0.4, 0.4)))
-        self.assertTrue(np.all(orthop_lat.base_vect == (0.5, 0.54, 0.58)))
-
-        self.assertTrue(np.all(hexag_lat.lat_nodes ==
-                               np.empty(hexag_lat.size, dtype=object)))
-        self.assertTrue(np.all(square_lat.lat_nodes ==
-                               np.empty(square_lat.size, dtype=object)))
-        self.assertTrue(np.all(rectang_lat.lat_nodes ==
-                               np.empty(rectang_lat.size, dtype=object)))
-        self.assertTrue(np.all(cubic_lat.lat_nodes ==
-                               np.empty(cubic_lat.size, dtype=object)))
-        self.assertTrue(np.all(orthop_lat.lat_nodes ==
-                               np.empty(orthop_lat.size, dtype=object)))
+        np_test.assert_array_equal(hexag_lat._lat_nodes,
+                                   np.empty(hexag_lat.size, dtype=object))
+        np_test.assert_array_equal(square_lat._lat_nodes,
+                                   np.empty(square_lat.size, dtype=object))
+        np_test.assert_array_equal(rectang_lat._lat_nodes,
+                                   np.empty(rectang_lat.size, dtype=object))
+        np_test.assert_array_equal(cubic_lat._lat_nodes,
+                                   np.empty(cubic_lat.size, dtype=object))
+        np_test.assert_array_equal(orthop_lat._lat_nodes,
+                                   np.empty(orthop_lat.size, dtype=object))
 
     def test_set_get_iter_lattice_nodes(self):
         """Creation of lattices using the factory functions."""
@@ -127,11 +122,11 @@ class LatticeTestCase(unittest.TestCase):
             rect_lat.update_node(node)
         # end for
 
-        node_count = np.count_nonzero(rect_lat.lat_nodes !=
+        node_count = np.count_nonzero(rect_lat._lat_nodes !=
                                       np.empty(rect_lat.size, dtype=object))
         self.assertEqual(node_count, 10)
 
-        node_coords = np.transpose(np.nonzero(rect_lat.lat_nodes !=
+        node_coords = np.transpose(np.nonzero(rect_lat._lat_nodes !=
                                    np.empty(rect_lat.size, dtype=object)))
         self.assertEqual(node_coords.shape[0], 10)
 
@@ -151,7 +146,7 @@ class LatticeTestCase(unittest.TestCase):
 
         check_sum2 = 0
         for node in rect_lat.iter_nodes():
-            if rect_lat.lat_nodes[node.id] is None:
+            if rect_lat._lat_nodes[node.id] is None:
                 check_sum2 += 1
             # end if
         # end for
