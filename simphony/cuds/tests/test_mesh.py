@@ -5,7 +5,6 @@ mesh module functionalities
 
 """
 
-import uuid
 import unittest
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
@@ -27,12 +26,42 @@ class TestSequenceFunctions(unittest.TestCase):
         """
         self.mesh = Mesh()
         self.points = [
-            Point(None, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(None, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(None, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(None, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
-            Point(None, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
-            Point(None, (0.0, 1.0, 1.0), dc.DataContainer(), dc.DataContainer())
+            Point(
+                None,
+                (0.0, 0.0, 0.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                ),
+            Point(
+                None,
+                (1.0, 0.0, 0.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                ),
+            Point(
+                None,
+                (0.0, 1.0, 0.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                ),
+            Point(
+                None,
+                (0.0, 0.0, 1.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                ),
+            Point(
+                None,
+                (1.0, 0.0, 1.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                ),
+            Point(
+                None,
+                (0.0, 1.0, 1.0),
+                dc.DataContainer(),
+                dc.DataContainer()
+                )
         ]
 
     def test_emtpy_edges(self):
@@ -340,7 +369,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         for point in points:
             pid = self.mesh.add_point(point)
-            pids.append(pid)    
+            pids.append(pid)
 
         edges = [
             Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer()),
@@ -432,7 +461,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         icells = self.mesh.iter_cells()
 
-        icells_id = [cell.id for cell in cells]
+        icells_id = [cell.id for cell in icells]
 
         self.assertItemsEqual(icells_id, cids)
 
