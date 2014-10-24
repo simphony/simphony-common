@@ -48,14 +48,14 @@ class Point(object):
         self.id = uuid
         self.data = dc.DataContainer(data)
         self.coordinates = coordinates
-        self.past_data = dc.DataContainer(data)
+        self.past_data = dc.DataContainer(past_data)
 
     @classmethod
     def from_point(cls, point):
         return cls(
             point.id,
-            point.data,
             point.coordinates[:],
+            point.data,
             point.past_data
         )
 
@@ -424,7 +424,7 @@ class Mesh(ABCMesh):
                 + "Point expected."
             raise TypeError(error_str)
 
-        self._points.update({point.id: copy.deepcopy(point)})
+        self._points[point.id] = Point.from_point(point)
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh.
@@ -455,7 +455,7 @@ class Mesh(ABCMesh):
                 + "Edge expected."
             raise TypeError(error_str)
 
-        self._edges.update({edge.id: copy.deepcopy(edge)})
+        self._edges[edge.id] = Edge.from_edge(edge)
         self.__add_points(edge.points)
 
     def add_face(self, face):
@@ -487,7 +487,7 @@ class Mesh(ABCMesh):
                 + "Face expected."
             raise TypeError(error_str)
 
-        self._faces.update({face.id: Face.from_face(face)})
+        self._faces[face.id] = Face.from_face(face)
         self.__add_points(face.points)
 
     def add_cell(self, cell):
@@ -519,7 +519,7 @@ class Mesh(ABCMesh):
                 + "Cell expected."
             raise TypeError(error_str)
 
-        self._cells.update({cell.id: copy.deepcopy(cell)})
+        self._cells[cell.id] = Cell.from_cell(cell)
         self.__add_points(cell.points)
 
     def update_point(self, point):
