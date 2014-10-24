@@ -55,7 +55,7 @@ class Point(object):
         return cls(
             point.id,
             point.data,
-            point.coordinates,
+            point.coordinates[:],
             point.past_data
         )
 
@@ -100,7 +100,7 @@ class Element(object):
 
         self.id = uuid
         self.data = dc.DataContainer(data)
-        self.points = points
+        self.points = points[:]
         self.shared_data = dc.DataContainer(shared_data)
 
     @classmethod
