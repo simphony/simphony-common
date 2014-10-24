@@ -59,10 +59,6 @@ class Point(object):
             point.past_data
         )
 
-    def __str__(self):
-        return "PointID: " + str(self.id) + "\n" \
-            + "Coordinates: " + str(self.coordinates)
-
 
 class Element(object):
     """ Element base class
@@ -116,12 +112,6 @@ class Element(object):
             element.shared_data
         )
 
-    def __str__(self):
-        string = "Id: " + str(self.id) + "\n" + "Points: \n"
-        for point in self.points:
-            string = string + str(point) + "\n\n"
-        return string
-
 
 class Edge(Element):
     """ Edge element
@@ -161,9 +151,6 @@ class Edge(Element):
             edge.length
         )
 
-    def __str__(self):
-        return "Type: Edge\n" + super(Edge, self).__str__()
-
 
 class Face(Element):
     """ Face element
@@ -195,11 +182,6 @@ class Face(Element):
 
     @classmethod
     def from_face(cls, face):
-        print "-----------"
-        print face
-        print type(face)
-        print face.id
-        print "+++++++++++"
         return cls(
             face.id,
             face.points,
@@ -207,9 +189,6 @@ class Face(Element):
             face.shared_data,
             face.area
         )
-
-    def __str__(self):
-        return "Type: Face\n" + super(Face, self).__str__()
 
 
 class Cell(Element):
@@ -249,9 +228,6 @@ class Cell(Element):
             cell.shared_data,
             cell.volume
         )
-
-    def __str__(self):
-        return "Type: Cell\n" + super(Cell, self).__str__()
 
 
 class Mesh(ABCMesh):
@@ -296,10 +272,10 @@ class Mesh(ABCMesh):
     def __init__(self):
         self.data = 0
 
-        self.__points = {}
-        self.__edges = {}
-        self.__faces = {}
-        self.__cells = {}
+        self._points = {}
+        self._edges = {}
+        self._faces = {}
+        self._cells = {}
 
     def get_point(self, uuid):
         """ Returns a point with a given uuid.
@@ -325,12 +301,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self.__points:
+        if uuid not in self._points:
             error_str = "Trying to get an non existing point with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return copy.deepcopy(self.__points[uuid])
+            return copy.deepcopy(self._points[uuid])
 
     def get_edge(self, uuid):
         """ Returns an edge with a given uuid.
@@ -356,12 +332,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self.__edges:
+        if uuid not in self._edges:
             error_str = "Trying to get an non existing edge with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return copy.deepcopy(self.__edges[uuid])
+            return copy.deepcopy(self._edges[uuid])
 
     def get_face(self, uuid):
         """ Returns an face with a given uuid.
@@ -387,12 +363,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self.__faces:
+        if uuid not in self._faces:
             error_str = "Trying to get an non existing face with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return copy.deepcopy(self.__faces[uuid])
+            return copy.deepcopy(self._faces[uuid])
 
     def get_cell(self, uuid):
         """ Returns an cell with a given uuid.
@@ -418,12 +394,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self.__cells:
+        if uuid not in self._cells:
             error_str = "Trying to get an non existing cell with id: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
-            return copy.deepcopy(self.__cells[uuid])
+            return copy.deepcopy(self._cells[uuid])
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
@@ -444,7 +420,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if point.id in self.__points:
+        if point.id in self._points:
             error_str = "Trying to add an already existing point with uuid: "\
                 + str(point.id)
             raise KeyError(error_str)
@@ -454,7 +430,7 @@ class Mesh(ABCMesh):
                 + "Point expected."
             raise TypeError(error_str)
 
-        self.__points.update({point.id: copy.deepcopy(point)})
+        self._points.update({point.id: copy.deepcopy(point)})
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh.
@@ -475,7 +451,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if edge.id in self.__edges:
+        if edge.id in self._edges:
             error_str = "Trying to add an already existing edge with uuid: "\
                 + str(edge.id)
             raise KeyError(error_str)
@@ -485,7 +461,7 @@ class Mesh(ABCMesh):
                 + "Edge expected."
             raise TypeError(error_str)
 
-        self.__edges.update({edge.id: copy.deepcopy(edge)})
+        self._edges.update({edge.id: copy.deepcopy(edge)})
         self.__add_points(edge.points)
 
     def add_face(self, face):
@@ -507,7 +483,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if face.id in self.__faces:
+        if face.id in self._faces:
             error_str = "Trying to add an already existing face with uuid: "\
                 + str(face.id)
             raise KeyError(error_str)
@@ -517,7 +493,7 @@ class Mesh(ABCMesh):
                 + "Face expected."
             raise TypeError(error_str)
 
-        self.__faces.update({face.id: Face.from_face(face)})
+        self._faces.update({face.id: Face.from_face(face)})
         self.__add_points(face.points)
 
     def add_cell(self, cell):
@@ -539,7 +515,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if cell.id in self.__cells:
+        if cell.id in self._cells:
             error_str = "Trying to add an already existing cell with uuid: "\
                 + str(cell.id)
             raise KeyError(error_str)
@@ -549,7 +525,7 @@ class Mesh(ABCMesh):
                 + "Cell expected."
             raise TypeError(error_str)
 
-        self.__cells.update({cell.id: copy.deepcopy(cell)})
+        self._cells.update({cell.id: copy.deepcopy(cell)})
         self.__add_points(cell.points)
 
     def update_point(self, point):
@@ -574,7 +550,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if point.id not in self.__points:
+        if point.id not in self._points:
             error_str = "Trying to update a non existing point with uuid: "\
                 + str(point.id)
             raise KeyError(error_str)
@@ -584,7 +560,7 @@ class Mesh(ABCMesh):
                 + "Point expected."
             raise TypeError(error_str)
 
-        point_to_update = self.__points[point.id]
+        point_to_update = self._points[point.id]
 
         point_to_update.data = point.data
         point_to_update.coordinates = point.coordinates
@@ -612,7 +588,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if edge.id not in self.__edges:
+        if edge.id not in self._edges:
             error_str = "Trying to update a non existing edge with uuid: "\
                 + str(edge.id)
             raise KeyError(error_str)
@@ -622,7 +598,7 @@ class Mesh(ABCMesh):
                 + "Edge expected."
             raise TypeError(error_str)
 
-        edge_to_update = self.__edges[edge.id]
+        edge_to_update = self._edges[edge.id]
 
         edge_to_update.data = edge.data
         edge_to_update.points = edge.points
@@ -655,7 +631,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if face.id not in self.__faces:
+        if face.id not in self._faces:
             error_str = "Trying to update a non existing face with uuid: "\
                 + str(face.id)
             raise KeyError(error_str)
@@ -665,7 +641,7 @@ class Mesh(ABCMesh):
                 + "Face expected."
             raise TypeError(error_str)
 
-        face_to_update = self.__faces[face.id]
+        face_to_update = self._faces[face.id]
 
         face_to_update.data = face.data
         face_to_update.points = face.points
@@ -698,7 +674,7 @@ class Mesh(ABCMesh):
 
         """
 
-        if cell.id not in self.__cells:
+        if cell.id not in self._cells:
             error_str = "Trying to update a non existing cell with uuid: "\
                 + str(cell.id)
             raise KeyError(error_str)
@@ -708,7 +684,7 @@ class Mesh(ABCMesh):
                 + "Cell expected."
             raise TypeError(error_str)
 
-        cell_to_update = self.__cells[cell.id]
+        cell_to_update = self._cells[cell.id]
 
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
@@ -741,11 +717,11 @@ class Mesh(ABCMesh):
         """
 
         if point_ids is None:
-            for point in self.__points.values():
+            for point in self._points.values():
                 yield Point.from_point(point)
         else:
             for point_id in point_ids:
-                yield Point.from_point(self.__points[point_id])
+                yield Point.from_point(self._points[point_id])
 
     def iter_edges(self, edge_ids=None):
         """ Returns an iterator over the selected edges.
@@ -769,11 +745,11 @@ class Mesh(ABCMesh):
         """
 
         if edge_ids is None:
-            for edge in self.__edges.values():
+            for edge in self._edges.values():
                 yield Edge.from_edge(edge)
         else:
             for edge_id in edge_ids:
-                yield Edge.from_edge(self.__edges[edge_id])
+                yield Edge.from_edge(self._edges[edge_id])
 
     def iter_faces(self, face_ids=None):
         """ Returns an iterator over the selected faces.
@@ -797,11 +773,11 @@ class Mesh(ABCMesh):
         """
 
         if face_ids is None:
-            for face in self.__faces.values():
+            for face in self._faces.values():
                 yield Face.from_face(face)
         else:
             for face_id in face_ids:
-                yield Face.from_face(self.__faces[face_id])
+                yield Face.from_face(self._faces[face_id])
 
     def iter_cells(self, cell_ids=None):
         """ Returns an iterator over the selected cells.
@@ -825,11 +801,11 @@ class Mesh(ABCMesh):
         """
 
         if cell_ids is None:
-            for cell in self.__cells.values():
+            for cell in self._cells.values():
                 yield Cell.from_cell(cell)
         else:
             for cell_id in cell_ids:
-                yield Cell.from_cell(self.__cells[cell_id])
+                yield Cell.from_cell(self._cells[cell_id])
 
     def has_edges(self):
         """ Check if the mesh has edges
@@ -842,7 +818,7 @@ class Mesh(ABCMesh):
 
         """
 
-        return len(self.__edges) > 0
+        return len(self._edges) > 0
 
     def has_faces(self):
         """ Check if the mesh has faces
@@ -854,7 +830,7 @@ class Mesh(ABCMesh):
             False otherwise
 
         """
-        return len(self.__faces) > 0
+        return len(self._faces) > 0
 
     def has_cells(self):
         """ Check if the mesh has cells
@@ -866,7 +842,7 @@ class Mesh(ABCMesh):
             False otherwise
 
         """
-        return len(self.__cells) > 0
+        return len(self._cells) > 0
 
     def __add_points(self, points):
         """ Adds a list of points to the mesh.
@@ -882,5 +858,5 @@ class Mesh(ABCMesh):
         """
 
         for point in points:
-            if point.id not in list(self.__points.keys()):
-                self.__points.update({point.id: copy.deepcopy(point)})
+            if point.id not in list(self._points.keys()):
+                self._points.update({point.id: copy.deepcopy(point)})
