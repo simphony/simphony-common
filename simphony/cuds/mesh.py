@@ -419,11 +419,6 @@ class Mesh(ABCMesh):
                 + str(point.id)
             raise KeyError(error_str)
 
-        if not isinstance(point, Point):
-            error_str = "Trying to add an object with the wrong type. "\
-                + "Point expected."
-            raise TypeError(error_str)
-
         self._points[point.id] = Point.from_point(point)
 
     def add_edge(self, edge):
@@ -449,11 +444,6 @@ class Mesh(ABCMesh):
             error_str = "Trying to add an already existing edge with uuid: "\
                 + str(edge.id)
             raise KeyError(error_str)
-
-        if not isinstance(edge, Edge):
-            error_str = "Trying to add an object with the wrong type. "\
-                + "Edge expected."
-            raise TypeError(error_str)
 
         self._edges[edge.id] = Edge.from_edge(edge)
         self.__add_points(edge.points)
@@ -482,11 +472,6 @@ class Mesh(ABCMesh):
                 + str(face.id)
             raise KeyError(error_str)
 
-        if not isinstance(face, Face):
-            error_str = "Trying to add an object with the wrong type. "\
-                + "Face expected."
-            raise TypeError(error_str)
-
         self._faces[face.id] = Face.from_face(face)
         self.__add_points(face.points)
 
@@ -513,11 +498,6 @@ class Mesh(ABCMesh):
             error_str = "Trying to add an already existing cell with uuid: "\
                 + str(cell.id)
             raise KeyError(error_str)
-
-        if not isinstance(cell, Cell):
-            error_str = "Trying to add an object with the wrong type. "\
-                + "Cell expected."
-            raise TypeError(error_str)
 
         self._cells[cell.id] = Cell.from_cell(cell)
         self.__add_points(cell.points)
