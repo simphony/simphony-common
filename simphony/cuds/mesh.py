@@ -47,14 +47,14 @@ class Point(object):
     def __init__(self, uuid, coordinates, data, past_data):
         self.id = uuid
         self.data = dc.DataContainer(data)
-        self.coordinates = coordinates
+        self.coordinates = tuple(coordinates)
         self.past_data = dc.DataContainer(past_data)
 
     @classmethod
     def from_point(cls, point):
         return cls(
             point.id,
-            point.coordinates[:],
+            point.coordinates,
             point.data,
             point.past_data
         )
