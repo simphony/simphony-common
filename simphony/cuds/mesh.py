@@ -833,4 +833,4 @@ class Mesh(ABCMesh):
 
         for point in points:
             if point.id not in list(self._points.keys()):
-                self._points.update({point.id: copy.deepcopy(point)})
+                self._points[point.id] = Point.from_point(point)
