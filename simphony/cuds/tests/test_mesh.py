@@ -5,6 +5,7 @@ mesh module functionalities
 
 """
 
+import uuid
 import unittest
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
@@ -26,11 +27,12 @@ class TestSequenceFunctions(unittest.TestCase):
         """
         self.mesh = Mesh()
         self.points = [
-            Point(0, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(1, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(2, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
-            Point(3, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
-            Point(4, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer())
+            Point(None, (0.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(None, (1.0, 0.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(None, (0.0, 1.0, 0.0), dc.DataContainer(), dc.DataContainer()),
+            Point(None, (0.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
+            Point(None, (1.0, 0.0, 1.0), dc.DataContainer(), dc.DataContainer()),
+            Point(None, (0.0, 1.0, 1.0), dc.DataContainer(), dc.DataContainer())
         ]
 
     def test_emtpy_edges(self):
@@ -59,11 +61,17 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        point = self.points[0]
+        points = [
+            self.points[0]
+            ]
 
-        self.mesh.add_point(point)
+        pids = []
 
-        self.assertIsNotNone(self.mesh.get_point(0))
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        self.assertIsNotNone(self.mesh.get_point(pids[0]))
 
     def test_add_edge(self):
         """ Check that an edge can be added correctly
@@ -75,11 +83,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+        eids = []
 
-        self.mesh.add_edge(edge)
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
 
-        self.assertIsNotNone(self.mesh.get_edge(0))
+        edge = Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer())
+
+        eid = self.mesh.add_edge(edge)
+        eids.append(eid)
+
+        self.assertIsNotNone(self.mesh.get_edge(eids[0]))
 
     def test_add_face(self):
         """ Check that a face can be added correctly
@@ -92,11 +108,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+        fids = []
 
-        self.mesh.add_face(face)
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
 
-        self.assertIsNotNone(self.mesh.get_face(0))
+        face = Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer())
+
+        fid = self.mesh.add_face(face)
+        fids.append(fid)
+
+        self.assertIsNotNone(self.mesh.get_face(fids[0]))
 
     def test_add_cell(self):
         """ Check that a cell can be added correctly
@@ -110,11 +134,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+        cids = []
 
-        self.mesh.add_cell(cell)
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
 
-        self.assertIsNotNone(self.mesh.get_cell(0))
+        cell = Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer())
+
+        cid = self.mesh.add_cell(cell)
+        cids.append(cid)
+
+        self.assertIsNotNone(self.mesh.get_cell(cids[0]))
 
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
@@ -126,7 +158,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        edge = Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_edge(edge)
 
@@ -143,7 +181,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        face = Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_face(face)
 
@@ -161,7 +205,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
+        pids = []
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        cell = Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer())
 
         self.mesh.add_cell(cell)
 
@@ -172,19 +222,348 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        point = self.points[0]
+        pids = []
 
-        self.mesh.add_point(point)
+        points = [self.points[0]]
 
-        point_ret = self.mesh.get_point(0)
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        point_ret = self.mesh.get_point(pids[0])
 
         self.assertTrue(isinstance(point_ret, Point))
-        self.assertEqual(point.id, point_ret.id)
+        self.assertEqual(pids[0], point_ret.id)
 
     def test_get_edge(self):
         """ Check that an edge can be retrieved correctly
 
         """
+
+        pids = []
+        eids = []
+
+        points = [
+            self.points[0],
+            self.points[1]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        edge = Edge(None, pids[:], dc.DataContainer(), dc.DataContainer())
+
+        eid = self.mesh.add_edge(edge)
+        eids.append(eid)
+
+        edge_ret = self.mesh.get_edge(eids[0])
+
+        self.assertTrue(isinstance(edge_ret, Edge))
+        self.assertEqual(eids[0], edge_ret.id)
+
+    def test_get_face(self):
+        """ Check that a point can be retrieved correctly
+
+        """
+
+        pids = []
+        fids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        face = Face(None, pids[:], dc.DataContainer(), dc.DataContainer())
+
+        fid = self.mesh.add_face(face)
+        fids.append(fid)
+
+        face_ret = self.mesh.get_face(fids[0])
+
+        self.assertTrue(isinstance(face_ret, Face))
+        self.assertEqual(fids[0], face_ret.id)
+
+    def test_get_cell(self):
+        """ Check that a point can be retrieved correctly
+
+        """
+
+        pids = []
+        cids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        cell = Cell(None, pids[:], dc.DataContainer(), dc.DataContainer())
+
+        cid = self.mesh.add_cell(cell)
+        cids.append(cid)
+
+        cell_ret = self.mesh.get_cell(cids[0])
+
+        self.assertTrue(isinstance(cell_ret, Cell))
+        self.assertEqual(cids[0], cell_ret.id)
+
+    def test_get_all_edges_iterator(self):
+        """ Checks the edge iterator
+
+        Checks that an interator over all
+        the edges of the mesh is returned
+        when the function iter_edges is called
+        without arguments
+
+        """
+
+        pids = []
+        eids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)    
+
+        edges = [
+            Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer()),
+            Edge(None, pids[1:3], dc.DataContainer(), dc.DataContainer())
+        ]
+
+        for edge in edges:
+            eid = self.mesh.add_edge(edge)
+            eids.append(eid)
+
+        iedges = self.mesh.iter_edges()
+
+        iedges_id = [edge.id for edge in iedges]
+
+        self.assertItemsEqual(iedges_id, eids)
+
+    def test_get_all_faces_iterator(self):
+        """ Checks the face iterator
+
+        Checks that an interator over all
+        the faces of the mesh is returned
+        when the function iter_faces is called
+        without arguments
+
+        """
+
+        pids = []
+        fids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        faces = [
+            Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer()),
+            Face(None, pids[1:4], dc.DataContainer(), dc.DataContainer())
+        ]
+
+        for face in faces:
+            fid = self.mesh.add_face(face)
+            fids.append(fid)
+
+        ifaces = self.mesh.iter_faces()
+
+        ifaces_id = [face.id for face in ifaces]
+
+        self.assertItemsEqual(fids, ifaces_id)
+
+    def test_get_all_cells_iterator(self):
+        """ Checks the cell iterators
+
+        Checks that an interator over all
+        the cells of the mesh is returned
+        when the function iter_cells is called
+        without arguments
+
+        """
+
+        pids = []
+        cids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3],
+            self.points[4]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        cells = [
+            Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer()),
+            Cell(None, pids[1:5], dc.DataContainer(), dc.DataContainer())
+            ]
+
+        for cell in cells:
+            cid = self.mesh.add_cell(cell)
+            cids.append(cid)
+
+        icells = self.mesh.iter_cells()
+
+        icells_id = [cell.id for cell in cells]
+
+        self.assertItemsEqual(icells_id, cids)
+
+    def test_get_subset_edges_iterator(self):
+        """ Checks the edge iterator
+
+        Checks that an interator over a subset of
+        the edges of the mesh is returned
+        when the function iter_edges is called
+        selecting a list of id's
+
+        """
+
+        pids = []
+        eids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        edges = [
+            Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer()),
+            Edge(None, pids[2:3], dc.DataContainer(), dc.DataContainer()),
+            Edge(None, pids[3:4], dc.DataContainer(), dc.DataContainer())
+            ]
+
+        for edge in edges:
+            eid = self.mesh.add_edge(edge)
+            eids.append(eid)
+
+        iedges = self.mesh.iter_edges([eids[0], eids[2]])
+
+        source_id = [eids[0], eids[2]]
+        iedges_id = [edge.id for edge in iedges]
+
+        self.assertItemsEqual(source_id, iedges_id)
+
+    def test_get_subset_faces_iterator(self):
+        """ Checks the face iterator
+
+        Checks that an interator over a subset of
+        the faces of the mesh is returned
+        when the function iter_faces is called
+        selecting a list of id's
+
+        """
+
+        pids = []
+        fids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3],
+            self.points[4]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        faces = [
+            Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer()),
+            Face(None, pids[1:4], dc.DataContainer(), dc.DataContainer()),
+            Face(None, pids[2:5], dc.DataContainer(), dc.DataContainer())
+            ]
+
+        for face in faces:
+            fid = self.mesh.add_face(face)
+            fids.append(fid)
+
+        ifaces = self.mesh.iter_faces([fids[0], fids[2]])
+
+        source_id = [fids[0], fids[2]]
+        ifaces_id = [face.id for face in ifaces]
+
+        self.assertItemsEqual(source_id, ifaces_id)
+
+    def test_get_subset_cells_iterator(self):
+        """ Checks the cell iterator
+
+        Checks that an interator over a subset of
+        the cells of the mesh is returned
+        when the function iter_cells is called
+        selecting a list of id's
+
+        """
+
+        pids = []
+        cids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3],
+            self.points[4],
+            self.points[5]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        cells = [
+            Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer()),
+            Cell(None, pids[1:5], dc.DataContainer(), dc.DataContainer()),
+            Cell(None, pids[2:6], dc.DataContainer(), dc.DataContainer())
+            ]
+
+        for cell in cells:
+            cid = self.mesh.add_cell(cell)
+            cids.append(cid)
+
+        icells = self.mesh.iter_cells([cids[0], cids[2]])
+
+        source_id = [cids[0], cids[2]]
+        icells_id = [cell.id for cell in icells]
+
+        self.assertItemsEqual(source_id, icells_id)
+
+    '''
+    def test_modify_point():
 
         points = [
             self.points[0],
@@ -199,272 +578,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.assertTrue(isinstance(edge_ret, Edge))
         self.assertEqual(edge.id, edge_ret.id)
-
-    def test_get_face(self):
-        """ Check that a point can be retrieved correctly
-
-        """
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-
-        face = Face(0, points, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_face(face)
-
-        face_ret = self.mesh.get_face(0)
-
-        self.assertTrue(isinstance(face_ret, Face))
-        self.assertEqual(face.id, face_ret.id)
-
-    def test_get_cell(self):
-        """ Check that a point can be retrieved correctly
-
-        """
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        cell = Cell(0, points, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_cell(cell)
-
-        cell_ret = self.mesh.get_cell(0)
-
-        self.assertTrue(isinstance(cell_ret, Cell))
-        self.assertEqual(cell.id, cell_ret.id)
-
-    def test_get_all_edges_iterator(self):
-        """ Checks the edge iterator
-
-        Checks that an interator over all
-        the edges of the mesh is returned
-        when the function iter_edges is called
-        without arguments
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2]
-            ]
-
-        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_edge(edgeA)
-        self.mesh.add_edge(edgeB)
-
-        edges = self.mesh.iter_edges()
-
-        source_id = [0, 1]
-        edges_id = [edge.id for edge in edges]
-
-        self.assertItemsEqual(source_id, edges_id)
-
-    def test_get_all_faces_iterator(self):
-        """ Checks the face iterator
-
-        Checks that an interator over all
-        the faces of the mesh is returned
-        when the function iter_faces is called
-        without arguments
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_face(faceA)
-        self.mesh.add_face(faceB)
-
-        faces = self.mesh.iter_faces()
-
-        source_id = [0, 1]
-        faces_id = [face.id for face in faces]
-
-        self.assertItemsEqual(source_id, faces_id)
-
-    def test_get_all_cells_iterator(self):
-        """ Checks the cell iterators
-
-        Checks that an interator over all
-        the cells of the mesh is returned
-        when the function iter_cells is called
-        without arguments
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
-
-        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_cell(cellA)
-        self.mesh.add_cell(cellB)
-
-        cells = self.mesh.iter_cells()
-
-        source_id = [0, 1]
-        cells_id = [cell.id for cell in cells]
-
-        self.assertItemsEqual(source_id, cells_id)
-
-    def test_get_subset_edges_iterator(self):
-        """ Checks the edge iterator
-
-        Checks that an interator over a subset of
-        the edges of the mesh is returned
-        when the function iter_edges is called
-        selecting a list of id's
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2]
-            ]
-        pointsC = [
-            self.points[2],
-            self.points[3]
-            ]
-
-        edgeA = Edge(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        edgeB = Edge(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        edgeC = Edge(2, pointsC, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_edge(edgeA)
-        self.mesh.add_edge(edgeB)
-        self.mesh.add_edge(edgeC)
-
-        edges = self.mesh.iter_edges([0, 2])
-
-        source_id = [0, 2]
-        edges_id = [edge.id for edge in edges]
-
-        self.assertItemsEqual(source_id, edges_id)
-
-    def test_get_subset_faces_iterator(self):
-        """ Checks the face iterator
-
-        Checks that an interator over a subset of
-        the faces of the mesh is returned
-        when the function iter_faces is called
-        selecting a list of id's
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-        pointsC = [
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
-
-        faceA = Face(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        faceB = Face(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        faceC = Face(2, pointsC, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_face(faceA)
-        self.mesh.add_face(faceB)
-        self.mesh.add_face(faceC)
-
-        faces = self.mesh.iter_faces([0, 2])
-
-        source_id = [0, 2]
-        faces_id = [face.id for face in faces]
-
-        self.assertItemsEqual(source_id, faces_id)
-
-    def test_get_subset_cells_iterator(self):
-        """ Checks the cell iterator
-
-        Checks that an interator over a subset of
-        the cells of the mesh is returned
-        when the function iter_cells is called
-        selecting a list of id's
-
-        """
-
-        pointsA = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-        pointsB = [
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
-        pointsC = [
-            self.points[0],
-            self.points[1],
-            self.points[3],
-            self.points[4]
-            ]
-
-        cellA = Cell(0, pointsA, dc.DataContainer(), dc.DataContainer())
-        cellB = Cell(1, pointsB, dc.DataContainer(), dc.DataContainer())
-        cellC = Cell(2, pointsC, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_cell(cellA)
-        self.mesh.add_cell(cellB)
-        self.mesh.add_cell(cellC)
-
-        cells = self.mesh.iter_cells([0, 2])
-
-        source_id = [0, 2]
-        cells_id = [cell.id for cell in cells]
-
-        self.assertItemsEqual(source_id, cells_id)
+    '''
 
 if __name__ == '__main__':
     unittest.main()

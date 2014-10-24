@@ -4,6 +4,7 @@ This module contains the implentation to store, acces,
 and modify a mesh
 
 """
+import uuid
 import copy
 from abstractmesh import ABCMesh
 import simphony.core.data_container as dc
@@ -44,7 +45,6 @@ class Point(object):
     """
 
     def __init__(self, uuid, coordinates, data, past_data):
-
         self.id = uuid
         self.data = dc.DataContainer(data)
         self.coordinates = coordinates
@@ -97,7 +97,6 @@ class Element(object):
     """
 
     def __init__(self, uuid, points, data, shared_data):
-
         self.id = uuid
         self.data = dc.DataContainer(data)
         self.points = points[:]
@@ -256,7 +255,6 @@ class Mesh(ABCMesh):
     --------
     get_point, get_edge, get_face, get_cell
     add_point, add_edge, add_face, add_cell
-    __add_points
     update_point, update_edge, update_face, update_cell
     iter_points, iter_edges, iter_faces, iter_cells
     has_edges, has_faces, has_cells
@@ -414,12 +412,17 @@ class Mesh(ABCMesh):
 
         """
 
+        if point.id is None:
+            point.id = self._generate_uuid()
+
         if point.id in self._points:
             error_str = "Trying to add an already existing point with uuid: "\
                 + str(point.id)
             raise KeyError(error_str)
 
         self._points[point.id] = Point.from_point(point)
+
+        return point.id
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh.
@@ -440,13 +443,17 @@ class Mesh(ABCMesh):
 
         """
 
+        if edge.id is None:
+            edge.id = self._generate_uuid()
+
         if edge.id in self._edges:
             error_str = "Trying to add an already existing edge with uuid: "\
                 + str(edge.id)
             raise KeyError(error_str)
 
         self._edges[edge.id] = Edge.from_edge(edge)
-        self.__add_points(edge.points)
+
+        return edge.id
 
     def add_face(self, face):
         """ Adds a new face to the mesh.
@@ -467,13 +474,17 @@ class Mesh(ABCMesh):
 
         """
 
+        if face.id is None:
+            face.id = self._generate_uuid()
+
         if face.id in self._faces:
             error_str = "Trying to add an already existing face with uuid: "\
                 + str(face.id)
             raise KeyError(error_str)
 
         self._faces[face.id] = Face.from_face(face)
-        self.__add_points(face.points)
+
+        return face.id
 
     def add_cell(self, cell):
         """ Adds a new cell to the mesh.
@@ -494,13 +505,17 @@ class Mesh(ABCMesh):
 
         """
 
+        if cell.id is None:
+            cell.id = self._generate_uuid()
+
         if cell.id in self._cells:
             error_str = "Trying to add an already existing cell with uuid: "\
                 + str(cell.id)
             raise KeyError(error_str)
 
         self._cells[cell.id] = Cell.from_cell(cell)
-        self.__add_points(cell.points)
+
+        return cell.id
 
     def update_point(self, point):
         """ Updates the information of a point.
@@ -818,19 +833,12 @@ class Mesh(ABCMesh):
         """
         return len(self._cells) > 0
 
-    def __add_points(self, points):
-        """ Adds a list of points to the mesh.
+    # Is this correct? have we reach a conclusion about the use
+    # universaly unique id's?
+    def _generate_uuid(self):
+        """ Provides and id for the object
 
-        Adds a list of points to the mesh. If the point
-        is already in the mesh, it is not added.
-
-        Parameters
-        ----------
-        points : list of Point
-            Points to be added to the mesh
-
+        Provides an uuid as defined in the standard RFC 4122
         """
 
-        for point in points:
-            if point.id not in list(self._points.keys()):
-                self._points[point.id] = Point.from_point(point)
+        return uuid.uuid1()
