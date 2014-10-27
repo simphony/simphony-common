@@ -805,11 +805,11 @@ class Mesh(ABCMesh):
 
         """
         return len(self._cells) > 0
-        
+
     def _generate_uuid(self):
         """ Provides and id for the object
 
         Provides an uuid as defined in the standard RFC 4122
         """
 
-        return uuid.uuid1()
+        return uuid.uuid4()
