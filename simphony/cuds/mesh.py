@@ -261,7 +261,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        NotFoundException
+        Exception
             If the point identified by uuid was not found
 
         """
@@ -292,7 +292,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        NotFoundException
+        Exception
             If the edge identified by uuid was not found
 
         """
@@ -323,7 +323,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        NotFoundException
+        Exception
             If the face identified by uuid was not found
 
         """
@@ -354,7 +354,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        NotFoundException
+        Exception
             If the cell identified by uuid was not found
 
         """
