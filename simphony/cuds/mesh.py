@@ -129,11 +129,6 @@ class Edge(Element):
         object to store shared data realtive to a group
         of elements
 
-    Attributes
-    ----------
-    length : double
-        Length of the element.
-
     """
 
     def __init__(self, uuid, points, data, shared_data):
@@ -166,11 +161,6 @@ class Face(Element):
         object to store shared data realtive to a group
         of faces
 
-    Attributes
-    ----------
-    area : double
-        Area of the element.
-
     """
 
     def __init__(self, uuid, points, data, shared_data):
@@ -202,11 +192,6 @@ class Cell(Element):
     shared_data: DataContainer
         object to store shared data realtive to a group
         of cells
-
-    Attributes
-    ----------
-    volume : double
-        Volume of the element.
 
     """
 
