@@ -36,12 +36,6 @@ class Point(object):
     past_data : DataContainer
         object to store point data about previous simulation steps
 
-    Raises
-    ------
-    TypeError
-        If the data or past_data provided are not
-        instances of DataContainer
-
     """
 
     def __init__(self, uuid, coordinates, data, past_data):
@@ -87,12 +81,6 @@ class Element(object):
         list of points defining the element.
     shared_data : IndexedDataContainer
         Shared data between group of elements
-
-    Raises
-    ------
-    TypeError
-        If the data or shared_data provided are not
-        instances of DataContainer
 
     """
 
