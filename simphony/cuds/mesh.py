@@ -1,6 +1,6 @@
 """ Mesh module
 
-This module contains the implentation to store, acces,
+This module contains the implementation to store, access,
 and modify a mesh
 
 """
@@ -11,9 +11,9 @@ import simphony.core.data_container as dc
 
 
 class Point(object):
-    """ Coordinates descriving a point in the space
+    """ Coordinates describing a point in the space
 
-    Set of coordinates(x,y,z) descriving a point in
+    Set of coordinates(x,y,z) describing a point in
     the space and data about that point
 
     Parameters
@@ -21,7 +21,7 @@ class Point(object):
     uuid : uint64
         uuid of the point.
     coordinates : list of double
-        set of coordinates (x,y,z) descriving the point position.
+        set of coordinates (x,y,z) describing the point position.
     data : DataContainer
         object to store point data
 
@@ -32,7 +32,7 @@ class Point(object):
     data : DataContainer
         object to store point data
     coordinates : list of double
-        set of coordinates (x,y,z) descriving the point position.
+        set of coordinates (x,y,z) describing the point position.
     past_data : DataContainer
         object to store point data about previous simulation steps
 
@@ -68,7 +68,7 @@ class Element(object):
     data : DataContainer
         object to store data relative to the element
     shared_data: IndexedDataContainer
-        object to store shared data realtive to a group
+        object to store shared data relative to a group
         of elements
 
     Attributes
@@ -114,7 +114,7 @@ class Edge(Element):
     data : DataContainer
         object to store data relative to the edge
     shared_data: DataContainer
-        object to store shared data realtive to a group
+        object to store shared data relative to a group
         of elements
 
     """
@@ -146,7 +146,7 @@ class Face(Element):
     data: DataContainer
         object to store data relative to the face
     shared_data: DataContainer
-        object to store shared data realtive to a group
+        object to store shared data relative to a group
         of faces
 
     """
@@ -178,7 +178,7 @@ class Cell(Element):
     data: DataContainer
         object to store data relative to the cell
     shared_data: DataContainer
-        object to store shared data realtive to a group
+        object to store shared data relative to a group
         of cells
 
     """
@@ -202,7 +202,7 @@ class Mesh(ABCMesh):
     Stores general mesh information Points and Elements
     such as Edges, Faces and Cells and provide the
     methods to interact with them. The methods are
-    divided in four diferent blocks:
+    divided in four different blocks:
 
     (1) methods to get the related item with the provided uuid;
     (2) methods to add a new item or replace;
@@ -267,7 +267,7 @@ class Mesh(ABCMesh):
         """
 
         if uuid not in self._points:
-            error_str = "Trying to get an non existing point with uuid: "\
+            error_str = "Trying to get an non-existing point with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
@@ -278,7 +278,7 @@ class Mesh(ABCMesh):
 
         Returns the edge stored in the mesh
         identified by uuid. If such edge do not
-        exists a exception is raised.
+        exists an exception is raised.
 
         Parameters
         ----------
@@ -298,18 +298,18 @@ class Mesh(ABCMesh):
         """
 
         if uuid not in self._edges:
-            error_str = "Trying to get an non existing edge with uuid: "\
+            error_str = "Trying to get an non-existing edge with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
             return copy.deepcopy(self._edges[uuid])
 
     def get_face(self, uuid):
-        """ Returns an face with a given uuid.
+        """ Returns a face with a given uuid.
 
         Returns the face stored in the mesh
         identified by uuid. If such face do not
-        exists a exception is raised.
+        exists an exception is raised.
 
         Parameters
         ----------
@@ -329,18 +329,18 @@ class Mesh(ABCMesh):
         """
 
         if uuid not in self._faces:
-            error_str = "Trying to get an non existing face with uuid: "\
+            error_str = "Trying to get an non-existing face with uuid: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
             return copy.deepcopy(self._faces[uuid])
 
     def get_cell(self, uuid):
-        """ Returns an cell with a given uuid.
+        """ Returns a cell with a given uuid.
 
         Returns the cell stored in the mesh
         identified by uuid . If such cell do not
-        exists a exception is raised.
+        exists an exception is raised.
 
         Parameters
         ----------
@@ -360,7 +360,7 @@ class Mesh(ABCMesh):
         """
 
         if uuid not in self._cells:
-            error_str = "Trying to get an non existing cell with id: "\
+            error_str = "Trying to get an non-existing cell with id: "\
                 + str(uuid)
             raise Exception(error_str)
         else:
@@ -513,7 +513,7 @@ class Mesh(ABCMesh):
         """
 
         if point.id not in self._points:
-            error_str = "Trying to update a non existing point with uuid: "\
+            error_str = "Trying to update a non-existing point with uuid: "\
                 + str(point.id)
             raise KeyError(error_str)
 
@@ -551,7 +551,7 @@ class Mesh(ABCMesh):
         """
 
         if edge.id not in self._edges:
-            error_str = "Trying to update a non existing edge with uuid: "\
+            error_str = "Trying to update a non-existing edge with uuid: "\
                 + str(edge.id)
             raise KeyError(error_str)
 
@@ -594,7 +594,7 @@ class Mesh(ABCMesh):
         """
 
         if face.id not in self._faces:
-            error_str = "Trying to update a non existing face with uuid: "\
+            error_str = "Trying to update a non-existing face with uuid: "\
                 + str(face.id)
             raise KeyError(error_str)
 
@@ -637,7 +637,7 @@ class Mesh(ABCMesh):
         """
 
         if cell.id not in self._cells:
-            error_str = "Trying to update a non existing cell with uuid: "\
+            error_str = "Trying to update a non-existing cell with uuid: "\
                 + str(cell.id)
             raise KeyError(error_str)
 
@@ -660,11 +660,11 @@ class Mesh(ABCMesh):
     def iter_points(self, point_ids=None):
         """ Returns an iterator over the selected points.
 
-        Returns an interator over the points with id in
-        point_ids. If non of the ids in point_ids exists,
+        Returns an iterator over the points with id in
+        point_ids. If none of the ids in point_ids exists,
         an empty iterator is returned. If there is no ids
         inside point_ids, a iterator over all points of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
@@ -688,11 +688,11 @@ class Mesh(ABCMesh):
     def iter_edges(self, edge_ids=None):
         """ Returns an iterator over the selected edges.
 
-        Returns an interator over the edged with id in
-        edge_id. If non of the ids in edge_ids exists,
+        Returns an iterator over the edged with id in
+        edge_id. If none of the ids in edge_ids exists,
         an empty iterator is returned. If there is no ids
         inside edge_ids, a iterator over all edges of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
@@ -716,11 +716,11 @@ class Mesh(ABCMesh):
     def iter_faces(self, face_ids=None):
         """ Returns an iterator over the selected faces.
 
-        Returns an interator over the faces with id in
-        face_ids. If non of the ids in face_ids exists,
+        Returns an iterator over the faces with id in
+        face_ids. If none of the ids in face_ids exists,
         an empty iterator is returned. If there is no ids
         inside face_ids, a iterator over all faces of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
@@ -744,11 +744,11 @@ class Mesh(ABCMesh):
     def iter_cells(self, cell_ids=None):
         """ Returns an iterator over the selected cells.
 
-        Returns an interator over the cells with id in
-        cell_ids. If non of the ids in cell_ids exists,
+        Returns an iterator over the cells with id in
+        cell_ids. If none of the ids in cell_ids exists,
         an empty iterator is returned. If there is no ids
         inside cell_ids, a iterator over all cells of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
@@ -805,9 +805,7 @@ class Mesh(ABCMesh):
 
         """
         return len(self._cells) > 0
-
-    # Is this correct? have we reach a conclusion about the use
-    # universaly unique id's?
+        
     def _generate_uuid(self):
         """ Provides and id for the object
 
