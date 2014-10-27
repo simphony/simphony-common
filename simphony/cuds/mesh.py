@@ -251,7 +251,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid : int
+        uuid
             uuid of the desired point.
 
         Returns
@@ -282,7 +282,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid : uint64
+        uuid
             uuid of the desired edge.
 
         Returns
@@ -313,7 +313,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid : uint64
+        uuid
             uuid of the desired face.
 
         Returns
@@ -344,7 +344,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid : uint64
+        uuid
             uuid of the desired cell.
 
         Returns
@@ -668,7 +668,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        point_ids : list of uint64, optional
+        point_ids : list of ids, optional
             Uuids of the desired points, default empty
 
         Returns
@@ -696,7 +696,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        edge_ids : list of uint64, optional
+        edge_ids : list of ids, optional
             Uuids of the desired edges, default empty
 
         Returns
@@ -724,7 +724,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        face_ids : list of uint64, optional
+        face_ids : list of ids, optional
             Uuids of the desired faces, default empty
 
         Returns
@@ -752,7 +752,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        cell_ids : list of uint64, optional
+        cell_ids : list of ids, optional
             Uuids of the desired cell, default empty
 
         Returns
