@@ -11,7 +11,7 @@ from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
-import simphony.core.data_container as dc
+# import simphony.core.data_container as dc
 # from simphony.core.cuba import CUBA
 
 
