@@ -266,12 +266,11 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self._points:
-            error_str = "Trying to get an non-existing point with uuid: "\
-                + str(uuid)
-            raise Exception(error_str)
-        else:
-            return copy.deepcopy(self._points[uuid])
+        try:
+            return Point.from_point(self._points[uuid]))
+        except KeyError:
+            error_str = "Trying to get an non-existing point with uuid: {}"
+            raise ValueError(error_str.format(uuid))
 
     def get_edge(self, uuid):
         """ Returns an edge with a given uuid.
@@ -297,12 +296,11 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self._edges:
-            error_str = "Trying to get an non-existing edge with uuid: "\
-                + str(uuid)
-            raise Exception(error_str)
-        else:
-            return copy.deepcopy(self._edges[uuid])
+        try:
+            return Point.from_point(self._edges[uuid]))
+        except KeyError:
+            error_str = "Trying to get an non-existing edge with uuid: {}"
+            raise ValueError(error_str.format(uuid))
 
     def get_face(self, uuid):
         """ Returns a face with a given uuid.
@@ -328,12 +326,11 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self._faces:
-            error_str = "Trying to get an non-existing face with uuid: "\
-                + str(uuid)
-            raise Exception(error_str)
-        else:
-            return copy.deepcopy(self._faces[uuid])
+        try:
+            return Point.from_point(self._faces[uuid]))
+        except KeyError:
+            error_str = "Trying to get an non-existing face with uuid: {}"
+            raise ValueError(error_str.format(uuid))
 
     def get_cell(self, uuid):
         """ Returns a cell with a given uuid.
@@ -359,12 +356,11 @@ class Mesh(ABCMesh):
 
         """
 
-        if uuid not in self._cells:
-            error_str = "Trying to get an non-existing cell with id: "\
-                + str(uuid)
-            raise Exception(error_str)
-        else:
-            return copy.deepcopy(self._cells[uuid])
+        try:
+            return Cell.from_cell(self._cells[uuid]))
+        except KeyError:
+            error_str = "Trying to get an non-existing cell with uuid: {}"
+            raise ValueError(error_str.format(uuid))
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
