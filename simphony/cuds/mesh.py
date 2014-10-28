@@ -38,7 +38,7 @@ class Point(object):
 
     """
 
-    def __init__(self, uuid, coordinates, data, past_data):
+    def __init__(self, coordinates, uuid=None, data=None, past_data=None):
         self.id = uuid
         self.data = dc.DataContainer(data)
         self.coordinates = tuple(coordinates)
@@ -84,7 +84,7 @@ class Element(object):
 
     """
 
-    def __init__(self, uuid, points, data, shared_data):
+    def __init__(self, points, uuid=None, data=None, shared_data=None):
         self.id = uuid
         self.data = dc.DataContainer(data)
         self.points = points[:]
@@ -119,7 +119,7 @@ class Edge(Element):
 
     """
 
-    def __init__(self, uuid, points, data, shared_data):
+    def __init__(self, points, uuid=None, data=None, shared_data=None):
         super(Edge, self).__init__(uuid, points, data, shared_data)
 
     @classmethod
@@ -151,7 +151,7 @@ class Face(Element):
 
     """
 
-    def __init__(self, uuid, points, data, shared_data):
+    def __init__(self, points, uuid=None, data=None, shared_data=None):
         super(Face, self).__init__(uuid, points, data, shared_data)
 
     @classmethod
@@ -183,7 +183,7 @@ class Cell(Element):
 
     """
 
-    def __init__(self, uuid, points, data, shared_data):
+    def __init__(self, points, uuid=None, data=None, shared_data=None):
         super(Cell, self).__init__(uuid, points, data, shared_data)
 
     @classmethod
