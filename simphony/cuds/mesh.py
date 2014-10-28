@@ -5,7 +5,6 @@ and modify a mesh
 
 """
 import uuid
-import copy
 from abstractmesh import ABCMesh
 import simphony.core.data_container as dc
 
@@ -258,7 +257,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._points[uuid]))
+            return Point.from_point(self._points[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing point with uuid: {}"
             raise ValueError(error_str.format(uuid))
@@ -288,7 +287,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._edges[uuid]))
+            return Point.from_point(self._edges[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing edge with uuid: {}"
             raise ValueError(error_str.format(uuid))
@@ -318,7 +317,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._faces[uuid]))
+            return Point.from_point(self._faces[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing face with uuid: {}"
             raise ValueError(error_str.format(uuid))
@@ -348,7 +347,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Cell.from_cell(self._cells[uuid]))
+            return Cell.from_cell(self._cells[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing cell with uuid: {}"
             raise ValueError(error_str.format(uuid))
