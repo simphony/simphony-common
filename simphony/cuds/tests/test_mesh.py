@@ -26,42 +26,12 @@ class TestSequenceFunctions(unittest.TestCase):
         """
         self.mesh = Mesh()
         self.points = [
-            Point(
-                None,
-                (0.0, 0.0, 0.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                ),
-            Point(
-                None,
-                (1.0, 0.0, 0.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                ),
-            Point(
-                None,
-                (0.0, 1.0, 0.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                ),
-            Point(
-                None,
-                (0.0, 0.0, 1.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                ),
-            Point(
-                None,
-                (1.0, 0.0, 1.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                ),
-            Point(
-                None,
-                (0.0, 1.0, 1.0),
-                dc.DataContainer(),
-                dc.DataContainer()
-                )
+            Point((0.0, 0.0, 0.0)),
+            Point((1.0, 0.0, 0.0)),
+            Point((0.0, 1.0, 0.0)),
+            Point((0.0, 0.0, 1.0)),
+            Point((1.0, 0.0, 1.0)),
+            Point((0.0, 1.0, 1.0))
         ]
 
     def test_emtpy_edges(self):
@@ -119,7 +89,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        edge = Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer())
+        edge = Edge(pids[0:2])
 
         eid = self.mesh.add_edge(edge)
         eids.append(eid)
@@ -144,7 +114,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        face = Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer())
+        face = Face(pids[0:3])
 
         fid = self.mesh.add_face(face)
         fids.append(fid)
@@ -170,7 +140,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        cell = Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer())
+        cell = Cell(pids[0:4])
 
         cid = self.mesh.add_cell(cell)
         cids.append(cid)
@@ -193,7 +163,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        edge = Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer())
+        edge = Edge(pids[0:2])
 
         self.mesh.add_edge(edge)
 
@@ -216,7 +186,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        face = Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer())
+        face = Face(pids[0:3])
 
         self.mesh.add_face(face)
 
@@ -240,7 +210,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        cell = Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer())
+        cell = Cell(pids[0:4])
 
         self.mesh.add_cell(cell)
 
@@ -281,7 +251,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        edge = Edge(None, pids[:], dc.DataContainer(), dc.DataContainer())
+        edge = Edge(pids[:])
 
         eid = self.mesh.add_edge(edge)
         eids.append(eid)
@@ -309,7 +279,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        face = Face(None, pids[:], dc.DataContainer(), dc.DataContainer())
+        face = Face(pids[:])
 
         fid = self.mesh.add_face(face)
         fids.append(fid)
@@ -338,7 +308,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pid = self.mesh.add_point(point)
             pids.append(pid)
 
-        cell = Cell(None, pids[:], dc.DataContainer(), dc.DataContainer())
+        cell = Cell(pids[:])
 
         cid = self.mesh.add_cell(cell)
         cids.append(cid)
@@ -372,8 +342,8 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         edges = [
-            Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer()),
-            Edge(None, pids[1:3], dc.DataContainer(), dc.DataContainer())
+            Edge(pids[0:2]),
+            Edge(pids[1:3])
         ]
 
         for edge in edges:
@@ -411,8 +381,8 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         faces = [
-            Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer()),
-            Face(None, pids[1:4], dc.DataContainer(), dc.DataContainer())
+            Face(pids[0:3]),
+            Face(pids[1:4])
         ]
 
         for face in faces:
@@ -451,8 +421,8 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         cells = [
-            Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer()),
-            Cell(None, pids[1:5], dc.DataContainer(), dc.DataContainer())
+            Cell(pids[0:4]),
+            Cell(pids[1:5])
             ]
 
         for cell in cells:
@@ -490,9 +460,9 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         edges = [
-            Edge(None, pids[0:2], dc.DataContainer(), dc.DataContainer()),
-            Edge(None, pids[2:3], dc.DataContainer(), dc.DataContainer()),
-            Edge(None, pids[3:4], dc.DataContainer(), dc.DataContainer())
+            Edge(pids[0:2]),
+            Edge(pids[2:3]),
+            Edge(pids[3:4])
             ]
 
         for edge in edges:
@@ -532,9 +502,9 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         faces = [
-            Face(None, pids[0:3], dc.DataContainer(), dc.DataContainer()),
-            Face(None, pids[1:4], dc.DataContainer(), dc.DataContainer()),
-            Face(None, pids[2:5], dc.DataContainer(), dc.DataContainer())
+            Face(pids[0:3]),
+            Face(pids[1:4]),
+            Face(pids[2:5])
             ]
 
         for face in faces:
@@ -575,9 +545,9 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         cells = [
-            Cell(None, pids[0:4], dc.DataContainer(), dc.DataContainer()),
-            Cell(None, pids[1:5], dc.DataContainer(), dc.DataContainer()),
-            Cell(None, pids[2:6], dc.DataContainer(), dc.DataContainer())
+            Cell(pids[0:4]),
+            Cell(pids[1:5]),
+            Cell(pids[2:6])
             ]
 
         for cell in cells:
@@ -590,24 +560,6 @@ class TestSequenceFunctions(unittest.TestCase):
         icells_id = [cell.id for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
-
-    '''
-    def test_modify_point():
-
-        points = [
-            self.points[0],
-            self.points[1]
-            ]
-
-        edge = Edge(0, points, dc.DataContainer(), dc.DataContainer())
-
-        self.mesh.add_edge(edge)
-
-        edge_ret = self.mesh.get_edge(0)
-
-        self.assertTrue(isinstance(edge_ret, Edge))
-        self.assertEqual(edge.id, edge_ret.id)
-    '''
 
 if __name__ == '__main__':
     unittest.main()

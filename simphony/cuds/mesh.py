@@ -39,15 +39,23 @@ class Point(object):
 
     def __init__(self, coordinates, uuid=None, data=None, past_data=None):
         self.id = uuid
-        self.data = dc.DataContainer(data)
         self.coordinates = tuple(coordinates)
-        self.past_data = dc.DataContainer(past_data)
+
+        if data:
+            self.data = dc.DataContainer(data)
+        else:
+            self.data = dc.DataContainer()
+
+        if past_data:
+            self.past_data = dc.DataContainer(past_data)
+        else:
+            self.past_data = dc.DataContainer()
 
     @classmethod
     def from_point(cls, point):
         return cls(
-            point.id,
             point.coordinates,
+            point.id,
             point.data,
             point.past_data
         )
@@ -85,15 +93,23 @@ class Element(object):
 
     def __init__(self, points, uuid=None, data=None, shared_data=None):
         self.id = uuid
-        self.data = dc.DataContainer(data)
         self.points = points[:]
-        self.shared_data = dc.DataContainer(shared_data)
+
+        if data:
+            self.data = dc.DataContainer(data)
+        else:
+            self.data = dc.DataContainer()
+
+        if shared_data:
+            self.shared_data = dc.DataContainer(shared_data)
+        else:
+            self.shared_data = dc.DataContainer()
 
     @classmethod
     def from_element(cls, element):
         return cls(
-            element.id,
             element.points,
+            element.id,
             element.data,
             element.shared_data
         )
@@ -121,8 +137,8 @@ class Edge(Element):
     @classmethod
     def from_edge(cls, edge):
         return cls(
-            edge.id,
             edge.points,
+            edge.id,
             edge.data,
             edge.shared_data,
         )
@@ -150,8 +166,8 @@ class Face(Element):
     @classmethod
     def from_face(cls, face):
         return cls(
-            face.id,
             face.points,
+            face.id,
             face.data,
             face.shared_data,
         )
@@ -179,8 +195,8 @@ class Cell(Element):
     @classmethod
     def from_cell(cls, cell):
         return cls(
-            cell.id,
             cell.points,
+            cell.id,
             cell.data,
             cell.shared_data,
         )
@@ -287,7 +303,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._edges[uuid])
+            return Edge.from_edge(self._edges[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing edge with uuid: {}"
             raise ValueError(error_str.format(uuid))
@@ -317,7 +333,7 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._faces[uuid])
+            return Face.from_face(self._faces[uuid])
         except KeyError:
             error_str = "Trying to get an non-existing face with uuid: {}"
             raise ValueError(error_str.format(uuid))
