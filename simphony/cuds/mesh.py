@@ -119,9 +119,6 @@ class Edge(Element):
 
     """
 
-    def __init__(self, points, uuid=None, data=None, shared_data=None):
-        super(Edge, self).__init__(uuid, points, data, shared_data)
-
     @classmethod
     def from_edge(cls, edge):
         return cls(
@@ -151,9 +148,6 @@ class Face(Element):
 
     """
 
-    def __init__(self, points, uuid=None, data=None, shared_data=None):
-        super(Face, self).__init__(uuid, points, data, shared_data)
-
     @classmethod
     def from_face(cls, face):
         return cls(
@@ -182,9 +176,6 @@ class Cell(Element):
         of cells
 
     """
-
-    def __init__(self, points, uuid=None, data=None, shared_data=None):
-        super(Cell, self).__init__(uuid, points, data, shared_data)
 
     @classmethod
     def from_cell(cls, cell):
