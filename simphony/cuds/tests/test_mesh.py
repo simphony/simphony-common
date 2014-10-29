@@ -573,7 +573,7 @@ class TestSequenceFunctions(unittest.TestCase):
             pids.append(pid)
 
         point_ret = self.mesh.get_point(pids[0])
-        point_ret.coordinates = [-1.0 -1.0 -1.0]
+        point_ret.coordinates = [-1.0, -1.0, -1.0]
         self.mesh.update_point(point_ret)
 
         point_upd = self.mesh.get_point(pids[0])

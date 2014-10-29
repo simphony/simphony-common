@@ -98,7 +98,7 @@ class Element(object):
             self.data = dc.DataContainer()
 
         self.shared_data = None
- 
+
     @classmethod
     def from_element(cls, element):
         return cls(
