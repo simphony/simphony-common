@@ -32,7 +32,7 @@ class Point(object):
         object to store point data
     coordinates : list of double
         set of coordinates (x,y,z) describing the point position.
-    past_data : DataContainer
+    past_data : StepDataContainer
         object to store point data about previous simulation steps
 
     """
@@ -128,7 +128,7 @@ class Edge(Element):
         list of points defining the edge.
     data : DataContainer
         object to store data relative to the edge
-    shared_data: DataContainer
+    shared_data: IndexedDataContainer
         object to store shared data relative to a group
         of elements
 
@@ -157,7 +157,7 @@ class Face(Element):
         list of points defining the face.
     data: DataContainer
         object to store data relative to the face
-    shared_data: DataContainer
+    shared_data: IndexedDataContainer
         object to store shared data relative to a group
         of faces
 
@@ -186,7 +186,7 @@ class Cell(Element):
         list of points defining the cell.
     data: DataContainer
         object to store data relative to the cell
-    shared_data: DataContainer
+    shared_data: IndexedDataContainer
         object to store shared data relative to a group
         of cells
 
