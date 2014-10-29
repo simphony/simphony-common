@@ -46,10 +46,7 @@ class Point(object):
         else:
             self.data = dc.DataContainer()
 
-        if past_data:
-            self.past_data = dc.DataContainer(past_data)
-        else:
-            self.past_data = dc.DataContainer()
+        self.past_data = None
 
     @classmethod
     def from_point(cls, point):
@@ -100,11 +97,8 @@ class Element(object):
         else:
             self.data = dc.DataContainer()
 
-        if shared_data:
-            self.shared_data = dc.DataContainer(shared_data)
-        else:
-            self.shared_data = dc.DataContainer()
-
+        self.shared_data = None
+ 
     @classmethod
     def from_element(cls, element):
         return cls(
