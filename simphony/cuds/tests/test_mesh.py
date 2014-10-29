@@ -262,7 +262,7 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(eids[0], edge_ret.id)
 
     def test_get_face(self):
-        """ Check that a point can be retrieved correctly
+        """ Check that a face can be retrieved correctly
 
         """
 
@@ -290,7 +290,7 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(fids[0], face_ret.id)
 
     def test_get_cell(self):
-        """ Check that a point can be retrieved correctly
+        """ Check that a cell can be retrieved correctly
 
         """
 
@@ -560,6 +560,121 @@ class TestSequenceFunctions(unittest.TestCase):
         icells_id = [cell.id for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
+
+    def test_update_point(self):
+        pids = []
+
+        points = [
+            self.points[0],
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        point_ret = self.mesh.get_point(pids[0])
+        point_ret.coordinates = [-1.0 -1.0 -1.0]
+        self.mesh.update_point(point_ret)
+
+        point_upd = self.mesh.get_point(pids[0])
+
+        self.assertItemsEqual(point_upd.coordinates, point_ret.coordinates)
+
+    def test_update_edge(self):
+        """ Check that an edge can be updated correctly
+
+        """
+
+        pids = []
+        eids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        edge = Edge(pids[0:2])
+
+        eid = self.mesh.add_edge(edge)
+        eids.append(eid)
+
+        edge_ret = self.mesh.get_edge(eids[0])
+        edge_ret.points[1] = pids[2]
+        self.mesh.update_edge(edge_ret)
+
+        edge_upd = self.mesh.get_edge(eids[0])
+
+        self.assertItemsEqual(edge_upd.points, edge_ret.points)
+
+    def test_update_face(self):
+        """ Check that a face can be updated correctly
+
+        """
+
+        pids = []
+        fids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        face = Face(pids[0:3])
+
+        fid = self.mesh.add_face(face)
+        fids.append(fid)
+
+        face_ret = self.mesh.get_face(fids[0])
+        face_ret.points[2] = pids[3]
+        self.mesh.update_face(face_ret)
+
+        face_upd = self.mesh.get_face(fids[0])
+
+        self.assertItemsEqual(face_upd.points, face_ret.points)
+
+    def test_update_cell(self):
+        """ Check that a cell can be updated correctly
+
+        """
+
+        pids = []
+        cids = []
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3],
+            self.points[4]
+            ]
+
+        for point in points:
+            pid = self.mesh.add_point(point)
+            pids.append(pid)
+
+        cell = Cell(pids[0:4])
+
+        cid = self.mesh.add_cell(cell)
+        cids.append(cid)
+
+        cell_ret = self.mesh.get_cell(cids[0])
+        cell_ret.points[3] = pids[4]
+        self.mesh.update_cell(cell_ret)
+
+        cell_upd = self.mesh.get_cell(cids[0])
+
+        self.assertItemsEqual(cell_upd.points, cell_ret.points)
 
 if __name__ == '__main__':
     unittest.main()

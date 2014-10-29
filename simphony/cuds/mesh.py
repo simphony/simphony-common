@@ -568,11 +568,6 @@ class Mesh(ABCMesh):
         edge_to_update.points = edge.points
         edge_to_update.shared_data = edge.shared_data
 
-        for point in edge.__points:
-            self.update_point(point)
-
-        edge_to_update.length = edge.length
-
     def update_face(self, face):
         """ Updates the information of a face.
 
@@ -611,11 +606,6 @@ class Mesh(ABCMesh):
         face_to_update.points = face.points
         face_to_update.shared_data = face.shared_data
 
-        for point in face.__points:
-            self.update_point(point)
-
-        face_to_update.area = face.area
-
     def update_cell(self, cell):
         """ Updates the information of a cell.
 
@@ -653,11 +643,6 @@ class Mesh(ABCMesh):
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
         cell_to_update.shared_data = cell.shared_data
-
-        for point in cell.__points:
-            self.update_point(point)
-
-        cell_to_update.volume = cell.volume
 
     def iter_points(self, point_ids=None):
         """ Returns an iterator over the selected points.
