@@ -32,12 +32,10 @@ class Point(object):
         object to store point data
     coordinates : list of double
         set of coordinates (x,y,z) describing the point position.
-    past_data : StepDataContainer
-        object to store point data about previous simulation steps
 
     """
 
-    def __init__(self, coordinates, uuid=None, data=None, past_data=None):
+    def __init__(self, coordinates, uuid=None, data=None):
         self.id = uuid
         self.coordinates = tuple(coordinates)
 
@@ -46,15 +44,12 @@ class Point(object):
         else:
             self.data = dc.DataContainer()
 
-        self.past_data = None
-
     @classmethod
     def from_point(cls, point):
         return cls(
             point.coordinates,
             point.id,
-            point.data,
-            point.past_data
+            point.data
         )
 
 
@@ -71,9 +66,6 @@ class Element(object):
         list of points defining the edge.
     data : DataContainer
         object to store data relative to the element
-    shared_data: IndexedDataContainer
-        object to store shared data relative to a group
-        of elements
 
     Attributes
     ----------
@@ -83,12 +75,10 @@ class Element(object):
         Element data
     points : list of Point
         list of points defining the element.
-    shared_data : IndexedDataContainer
-        Shared data between group of elements
 
     """
 
-    def __init__(self, points, uuid=None, data=None, shared_data=None):
+    def __init__(self, points, uuid=None, data=None):
         self.id = uuid
         self.points = points[:]
 
@@ -97,15 +87,12 @@ class Element(object):
         else:
             self.data = dc.DataContainer()
 
-        self.shared_data = None
-
     @classmethod
     def from_element(cls, element):
         return cls(
             element.points,
             element.id,
-            element.data,
-            element.shared_data
+            element.data
         )
 
 
@@ -122,9 +109,6 @@ class Edge(Element):
         list of points defining the edge.
     data : DataContainer
         object to store data relative to the edge
-    shared_data: IndexedDataContainer
-        object to store shared data relative to a group
-        of elements
 
     """
 
@@ -133,8 +117,7 @@ class Edge(Element):
         return cls(
             edge.points,
             edge.id,
-            edge.data,
-            edge.shared_data,
+            edge.data
         )
 
 
@@ -151,9 +134,6 @@ class Face(Element):
         list of points defining the face.
     data: DataContainer
         object to store data relative to the face
-    shared_data: IndexedDataContainer
-        object to store shared data relative to a group
-        of faces
 
     """
 
@@ -162,8 +142,7 @@ class Face(Element):
         return cls(
             face.points,
             face.id,
-            face.data,
-            face.shared_data,
+            face.data
         )
 
 
@@ -180,9 +159,6 @@ class Cell(Element):
         list of points defining the cell.
     data: DataContainer
         object to store data relative to the cell
-    shared_data: IndexedDataContainer
-        object to store shared data relative to a group
-        of cells
 
     """
 
@@ -191,8 +167,7 @@ class Cell(Element):
         return cls(
             cell.points,
             cell.id,
-            cell.data,
-            cell.shared_data,
+            cell.data
         )
 
 
@@ -522,7 +497,6 @@ class Mesh(ABCMesh):
 
         point_to_update.data = point.data
         point_to_update.coordinates = point.coordinates
-        point_to_update.past_data = point.past_data
 
     def update_edge(self, edge):
         """ Updates the information of an edge.
@@ -560,7 +534,6 @@ class Mesh(ABCMesh):
 
         edge_to_update.data = edge.data
         edge_to_update.points = edge.points
-        edge_to_update.shared_data = edge.shared_data
 
     def update_face(self, face):
         """ Updates the information of a face.
@@ -598,7 +571,6 @@ class Mesh(ABCMesh):
 
         face_to_update.data = face.data
         face_to_update.points = face.points
-        face_to_update.shared_data = face.shared_data
 
     def update_cell(self, cell):
         """ Updates the information of a cell.
@@ -636,7 +608,6 @@ class Mesh(ABCMesh):
 
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
-        cell_to_update.shared_data = cell.shared_data
 
     def iter_points(self, point_ids=None):
         """ Returns an iterator over the selected points.
