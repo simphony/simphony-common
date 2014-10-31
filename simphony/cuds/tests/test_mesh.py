@@ -64,13 +64,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[0]
             ]
 
-        pids = []
+        puuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        self.assertIsNotNone(self.mesh.get_point(pids[0]))
+        self.assertIsNotNone(self.mesh.get_point(puuids[0]))
 
     def test_add_edge(self):
         """ Check that an edge can be added correctly
@@ -82,19 +82,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        pids = []
-        eids = []
+        puuids = []
+        euuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        edge = Edge(pids[0:2])
+        edge = Edge(puuids[0:2])
 
-        eid = self.mesh.add_edge(edge)
-        eids.append(eid)
+        euuid = self.mesh.add_edge(edge)
+        euuids.append(euuid)
 
-        self.assertIsNotNone(self.mesh.get_edge(eids[0]))
+        self.assertIsNotNone(self.mesh.get_edge(euuids[0]))
 
     def test_add_face(self):
         """ Check that a face can be added correctly
@@ -107,19 +107,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        pids = []
-        fids = []
+        puuids = []
+        fuuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        face = Face(pids[0:3])
+        face = Face(puuids[0:3])
 
-        fid = self.mesh.add_face(face)
-        fids.append(fid)
+        fuuid = self.mesh.add_face(face)
+        fuuids.append(fuuid)
 
-        self.assertIsNotNone(self.mesh.get_face(fids[0]))
+        self.assertIsNotNone(self.mesh.get_face(fuuids[0]))
 
     def test_add_cell(self):
         """ Check that a cell can be added correctly
@@ -133,19 +133,19 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        pids = []
-        cids = []
+        puuids = []
+        cuuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        cell = Cell(pids[0:4])
+        cell = Cell(puuids[0:4])
 
-        cid = self.mesh.add_cell(cell)
-        cids.append(cid)
+        cuuid = self.mesh.add_cell(cell)
+        cuuids.append(cuuid)
 
-        self.assertIsNotNone(self.mesh.get_cell(cids[0]))
+        self.assertIsNotNone(self.mesh.get_cell(cuuids[0]))
 
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
@@ -157,13 +157,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[1]
             ]
 
-        pids = []
+        puuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        edge = Edge(pids[0:2])
+        edge = Edge(puuids[0:2])
 
         self.mesh.add_edge(edge)
 
@@ -180,13 +180,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[2]
             ]
 
-        pids = []
+        puuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        face = Face(pids[0:3])
+        face = Face(puuids[0:3])
 
         self.mesh.add_face(face)
 
@@ -204,13 +204,13 @@ class TestSequenceFunctions(unittest.TestCase):
             self.points[3]
             ]
 
-        pids = []
+        puuids = []
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        cell = Cell(pids[0:4])
+        cell = Cell(puuids[0:4])
 
         self.mesh.add_cell(cell)
 
@@ -221,26 +221,26 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
+        puuids = []
 
         points = [self.points[0]]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        point_ret = self.mesh.get_point(pids[0])
+        point_ret = self.mesh.get_point(puuids[0])
 
         self.assertTrue(isinstance(point_ret, Point))
-        self.assertEqual(pids[0], point_ret.id)
+        self.assertEqual(puuids[0], point_ret.uuid)
 
     def test_get_edge(self):
         """ Check that an edge can be retrieved correctly
 
         """
 
-        pids = []
-        eids = []
+        puuids = []
+        euuids = []
 
         points = [
             self.points[0],
@@ -248,26 +248,26 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        edge = Edge(pids[:])
+        edge = Edge(puuids[:])
 
-        eid = self.mesh.add_edge(edge)
-        eids.append(eid)
+        euuid = self.mesh.add_edge(edge)
+        euuids.append(euuid)
 
-        edge_ret = self.mesh.get_edge(eids[0])
+        edge_ret = self.mesh.get_edge(euuids[0])
 
         self.assertTrue(isinstance(edge_ret, Edge))
-        self.assertEqual(eids[0], edge_ret.id)
+        self.assertEqual(euuids[0], edge_ret.uuid)
 
     def test_get_face(self):
         """ Check that a face can be retrieved correctly
 
         """
 
-        pids = []
-        fids = []
+        puuids = []
+        fuuids = []
 
         points = [
             self.points[0],
@@ -276,26 +276,26 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        face = Face(pids[:])
+        face = Face(puuids[:])
 
-        fid = self.mesh.add_face(face)
-        fids.append(fid)
+        fuuid = self.mesh.add_face(face)
+        fuuids.append(fuuid)
 
-        face_ret = self.mesh.get_face(fids[0])
+        face_ret = self.mesh.get_face(fuuids[0])
 
         self.assertTrue(isinstance(face_ret, Face))
-        self.assertEqual(fids[0], face_ret.id)
+        self.assertEqual(fuuids[0], face_ret.uuid)
 
     def test_get_cell(self):
         """ Check that a cell can be retrieved correctly
 
         """
 
-        pids = []
-        cids = []
+        puuids = []
+        cuuids = []
 
         points = [
             self.points[0],
@@ -305,18 +305,18 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        cell = Cell(pids[:])
+        cell = Cell(puuids[:])
 
-        cid = self.mesh.add_cell(cell)
-        cids.append(cid)
+        cuuid = self.mesh.add_cell(cell)
+        cuuids.append(cuuid)
 
-        cell_ret = self.mesh.get_cell(cids[0])
+        cell_ret = self.mesh.get_cell(cuuids[0])
 
         self.assertTrue(isinstance(cell_ret, Cell))
-        self.assertEqual(cids[0], cell_ret.id)
+        self.assertEqual(cuuids[0], cell_ret.uuid)
 
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
@@ -328,8 +328,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        eids = []
+        puuids = []
+        euuids = []
 
         points = [
             self.points[0],
@@ -338,23 +338,23 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         edges = [
-            Edge(pids[0:2]),
-            Edge(pids[1:3])
+            Edge(puuids[0:2]),
+            Edge(puuids[1:3])
         ]
 
         for edge in edges:
-            eid = self.mesh.add_edge(edge)
-            eids.append(eid)
+            euuid = self.mesh.add_edge(edge)
+            euuids.append(euuid)
 
         iedges = self.mesh.iter_edges()
 
-        iedges_id = [edge.id for edge in iedges]
+        iedges_id = [edge.uuid for edge in iedges]
 
-        self.assertItemsEqual(iedges_id, eids)
+        self.assertItemsEqual(iedges_id, euuids)
 
     def test_get_all_faces_iterator(self):
         """ Checks the face iterator
@@ -366,8 +366,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        fids = []
+        puuids = []
+        fuuids = []
 
         points = [
             self.points[0],
@@ -377,23 +377,23 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         faces = [
-            Face(pids[0:3]),
-            Face(pids[1:4])
+            Face(puuids[0:3]),
+            Face(puuids[1:4])
         ]
 
         for face in faces:
-            fid = self.mesh.add_face(face)
-            fids.append(fid)
+            fuuid = self.mesh.add_face(face)
+            fuuids.append(fuuid)
 
         ifaces = self.mesh.iter_faces()
 
-        ifaces_id = [face.id for face in ifaces]
+        ifaces_id = [face.uuid for face in ifaces]
 
-        self.assertItemsEqual(fids, ifaces_id)
+        self.assertItemsEqual(fuuids, ifaces_id)
 
     def test_get_all_cells_iterator(self):
         """ Checks the cell iterators
@@ -405,8 +405,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        cids = []
+        puuids = []
+        cuuids = []
 
         points = [
             self.points[0],
@@ -417,23 +417,23 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         cells = [
-            Cell(pids[0:4]),
-            Cell(pids[1:5])
+            Cell(puuids[0:4]),
+            Cell(puuids[1:5])
             ]
 
         for cell in cells:
-            cid = self.mesh.add_cell(cell)
-            cids.append(cid)
+            cuuid = self.mesh.add_cell(cell)
+            cuuids.append(cuuid)
 
         icells = self.mesh.iter_cells()
 
-        icells_id = [cell.id for cell in icells]
+        icells_id = [cell.uuid for cell in icells]
 
-        self.assertItemsEqual(icells_id, cids)
+        self.assertItemsEqual(icells_id, cuuids)
 
     def test_get_subset_edges_iterator(self):
         """ Checks the edge iterator
@@ -441,12 +441,12 @@ class TestSequenceFunctions(unittest.TestCase):
         Checks that an interator over a subset of
         the edges of the mesh is returned
         when the function iter_edges is called
-        selecting a list of id's
+        selecting a list of uuid's
 
         """
 
-        pids = []
-        eids = []
+        puuids = []
+        euuids = []
 
         points = [
             self.points[0],
@@ -456,23 +456,23 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         edges = [
-            Edge(pids[0:2]),
-            Edge(pids[2:3]),
-            Edge(pids[3:4])
+            Edge(puuids[0:2]),
+            Edge(puuids[2:3]),
+            Edge(puuids[3:4])
             ]
 
         for edge in edges:
-            eid = self.mesh.add_edge(edge)
-            eids.append(eid)
+            euuid = self.mesh.add_edge(edge)
+            euuids.append(euuid)
 
-        iedges = self.mesh.iter_edges([eids[0], eids[2]])
+        iedges = self.mesh.iter_edges([euuids[0], euuids[2]])
 
-        source_id = [eids[0], eids[2]]
-        iedges_id = [edge.id for edge in iedges]
+        source_id = [euuids[0], euuids[2]]
+        iedges_id = [edge.uuid for edge in iedges]
 
         self.assertItemsEqual(source_id, iedges_id)
 
@@ -482,12 +482,12 @@ class TestSequenceFunctions(unittest.TestCase):
         Checks that an interator over a subset of
         the faces of the mesh is returned
         when the function iter_faces is called
-        selecting a list of id's
+        selecting a list of uuid's
 
         """
 
-        pids = []
-        fids = []
+        puuids = []
+        fuuids = []
 
         points = [
             self.points[0],
@@ -498,23 +498,23 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         faces = [
-            Face(pids[0:3]),
-            Face(pids[1:4]),
-            Face(pids[2:5])
+            Face(puuids[0:3]),
+            Face(puuids[1:4]),
+            Face(puuids[2:5])
             ]
 
         for face in faces:
-            fid = self.mesh.add_face(face)
-            fids.append(fid)
+            fuuid = self.mesh.add_face(face)
+            fuuids.append(fuuid)
 
-        ifaces = self.mesh.iter_faces([fids[0], fids[2]])
+        ifaces = self.mesh.iter_faces([fuuids[0], fuuids[2]])
 
-        source_id = [fids[0], fids[2]]
-        ifaces_id = [face.id for face in ifaces]
+        source_id = [fuuids[0], fuuids[2]]
+        ifaces_id = [face.uuid for face in ifaces]
 
         self.assertItemsEqual(source_id, ifaces_id)
 
@@ -524,12 +524,12 @@ class TestSequenceFunctions(unittest.TestCase):
         Checks that an interator over a subset of
         the cells of the mesh is returned
         when the function iter_cells is called
-        selecting a list of id's
+        selecting a list of uuid's
 
         """
 
-        pids = []
-        cids = []
+        puuids = []
+        cuuids = []
 
         points = [
             self.points[0],
@@ -541,42 +541,46 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
         cells = [
-            Cell(pids[0:4]),
-            Cell(pids[1:5]),
-            Cell(pids[2:6])
+            Cell(puuids[0:4]),
+            Cell(puuids[1:5]),
+            Cell(puuids[2:6])
             ]
 
         for cell in cells:
-            cid = self.mesh.add_cell(cell)
-            cids.append(cid)
+            cuuid = self.mesh.add_cell(cell)
+            cuuids.append(cuuid)
 
-        icells = self.mesh.iter_cells([cids[0], cids[2]])
+        icells = self.mesh.iter_cells([cuuids[0], cuuids[2]])
 
-        source_id = [cids[0], cids[2]]
-        icells_id = [cell.id for cell in icells]
+        source_id = [cuuids[0], cuuids[2]]
+        icells_id = [cell.uuid for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
 
     def test_update_point(self):
-        pids = []
+        """ Check that a point can be updated correctly
+
+        """
+
+        puuids = []
 
         points = [
             self.points[0],
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        point_ret = self.mesh.get_point(pids[0])
+        point_ret = self.mesh.get_point(puuids[0])
         point_ret.coordinates = [-1.0, -1.0, -1.0]
         self.mesh.update_point(point_ret)
 
-        point_upd = self.mesh.get_point(pids[0])
+        point_upd = self.mesh.get_point(puuids[0])
 
         self.assertItemsEqual(point_upd.coordinates, point_ret.coordinates)
 
@@ -585,8 +589,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        eids = []
+        puuids = []
+        euuids = []
 
         points = [
             self.points[0],
@@ -595,19 +599,19 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        edge = Edge(pids[0:2])
+        edge = Edge(puuids[0:2])
 
-        eid = self.mesh.add_edge(edge)
-        eids.append(eid)
+        euuid = self.mesh.add_edge(edge)
+        euuids.append(euuid)
 
-        edge_ret = self.mesh.get_edge(eids[0])
-        edge_ret.points[1] = pids[2]
+        edge_ret = self.mesh.get_edge(euuids[0])
+        edge_ret.points[1] = puuids[2]
         self.mesh.update_edge(edge_ret)
 
-        edge_upd = self.mesh.get_edge(eids[0])
+        edge_upd = self.mesh.get_edge(euuids[0])
 
         self.assertItemsEqual(edge_upd.points, edge_ret.points)
 
@@ -616,8 +620,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        fids = []
+        puuids = []
+        fuuids = []
 
         points = [
             self.points[0],
@@ -627,19 +631,19 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        face = Face(pids[0:3])
+        face = Face(puuids[0:3])
 
-        fid = self.mesh.add_face(face)
-        fids.append(fid)
+        fuuid = self.mesh.add_face(face)
+        fuuids.append(fuuid)
 
-        face_ret = self.mesh.get_face(fids[0])
-        face_ret.points[2] = pids[3]
+        face_ret = self.mesh.get_face(fuuids[0])
+        face_ret.points[2] = puuids[3]
         self.mesh.update_face(face_ret)
 
-        face_upd = self.mesh.get_face(fids[0])
+        face_upd = self.mesh.get_face(fuuids[0])
 
         self.assertItemsEqual(face_upd.points, face_ret.points)
 
@@ -648,8 +652,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
         """
 
-        pids = []
-        cids = []
+        puuids = []
+        cuuids = []
 
         points = [
             self.points[0],
@@ -660,19 +664,19 @@ class TestSequenceFunctions(unittest.TestCase):
             ]
 
         for point in points:
-            pid = self.mesh.add_point(point)
-            pids.append(pid)
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
 
-        cell = Cell(pids[0:4])
+        cell = Cell(puuids[0:4])
 
-        cid = self.mesh.add_cell(cell)
-        cids.append(cid)
+        cuuid = self.mesh.add_cell(cell)
+        cuuids.append(cuuid)
 
-        cell_ret = self.mesh.get_cell(cids[0])
-        cell_ret.points[3] = pids[4]
+        cell_ret = self.mesh.get_cell(cuuids[0])
+        cell_ret.points[3] = puuids[4]
         self.mesh.update_cell(cell_ret)
 
-        cell_upd = self.mesh.get_cell(cids[0])
+        cell_upd = self.mesh.get_cell(cuuids[0])
 
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
 
