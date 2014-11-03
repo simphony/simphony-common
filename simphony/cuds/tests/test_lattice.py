@@ -122,13 +122,21 @@ class LatticeTestCase(unittest.TestCase):
             rect_lat.update_node(node)
         # end for
 
-        node_count = np.count_nonzero(rect_lat._lat_nodes !=
-                                      np.empty(rect_lat.size, dtype=object))
+        node_count = 0
+        for node in rect_lat.iter_nodes():
+            if CUBA.LABEL in node.data:
+                node_count += 1
+        # end for
+
         self.assertEqual(node_count, 10)
 
-        node_coords = np.transpose(np.nonzero(rect_lat._lat_nodes !=
-                                   np.empty(rect_lat.size, dtype=object)))
-        self.assertEqual(node_coords.shape[0], 10)
+        iter = 0
+        node_coords = np.zeros((10, 2), dtype=np.int32)
+        for node in rect_lat.iter_nodes():
+            if CUBA.LABEL in node.data:
+                node_coords[iter, :] = node.id
+                iter += 1
+        # end for
 
         iter = 0
         check_sum1 = 0
@@ -144,15 +152,7 @@ class LatticeTestCase(unittest.TestCase):
             iter += 1
         # end for
 
-        check_sum2 = 0
-        for node in rect_lat.iter_nodes():
-            if rect_lat._lat_nodes[node.id] is None:
-                check_sum2 += 1
-            # end if
-        # end for
-
         self.assertEqual(check_sum1, 45)
-        self.assertEqual(check_sum2, 90)
 
 # ----------------------------------------------------------------------------
 if __name__ == '__main__':
