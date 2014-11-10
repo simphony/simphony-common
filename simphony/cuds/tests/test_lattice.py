@@ -1,7 +1,6 @@
 """
     Testing module for lattice data classes.
 """
-# ---------------------------------------------------------------------------
 import unittest
 import numpy as np
 import numpy.testing as np_test
@@ -10,7 +9,6 @@ from simphony.core.cuba import CUBA
 import simphony.cuds.lattice as la
 
 
-# ----------------------------------------------------------------------------
 class LatticeNodeTestCase(unittest.TestCase):
     """Test case for LatticeNode class."""
     def setUp(self):
@@ -42,7 +40,6 @@ class LatticeNodeTestCase(unittest.TestCase):
         self.assertEqual(node_new.data[CUBA.VELOCITY], (0.2, -0.1))
 
 
-# ----------------------------------------------------------------------------
 class LatticeTestCase(unittest.TestCase):
     """Test case for Lattic class."""
     def setUp(self):
@@ -100,17 +97,6 @@ class LatticeTestCase(unittest.TestCase):
         np_test.assert_array_equal(cubic_lat.base_vect, (0.4, 0.4, 0.4))
         np_test.assert_array_equal(orthop_lat.base_vect, (0.5, 0.54, 0.58))
 
-        np_test.assert_array_equal(hexag_lat._lat_nodes,
-                                   np.empty(hexag_lat.size, dtype=object))
-        np_test.assert_array_equal(square_lat._lat_nodes,
-                                   np.empty(square_lat.size, dtype=object))
-        np_test.assert_array_equal(rectang_lat._lat_nodes,
-                                   np.empty(rectang_lat.size, dtype=object))
-        np_test.assert_array_equal(cubic_lat._lat_nodes,
-                                   np.empty(cubic_lat.size, dtype=object))
-        np_test.assert_array_equal(orthop_lat._lat_nodes,
-                                   np.empty(orthop_lat.size, dtype=object))
-
     def test_set_get_iter_lattice_nodes(self):
         """Creation of lattices using the factory functions."""
         rect_lat = la.make_rectangular_lattice('Lattice1', (0.1, 0.2),
@@ -120,13 +106,11 @@ class LatticeTestCase(unittest.TestCase):
             node = rect_lat.get_node((i, i))
             node.data[CUBA.LABEL] = i
             rect_lat.update_node(node)
-        # end for
 
         node_count = 0
         for node in rect_lat.iter_nodes():
             if CUBA.LABEL in node.data:
                 node_count += 1
-        # end for
 
         self.assertEqual(node_count, 10)
 
@@ -136,7 +120,6 @@ class LatticeTestCase(unittest.TestCase):
             if CUBA.LABEL in node.data:
                 node_coords[iter, :] = node.id
                 iter += 1
-        # end for
 
         iter = 0
         check_sum1 = 0
@@ -150,11 +133,8 @@ class LatticeTestCase(unittest.TestCase):
             self.assertEqual(coord[1], 0.2*iter + 1.5)
 
             iter += 1
-        # end for
 
         self.assertEqual(check_sum1, 45)
 
-# ----------------------------------------------------------------------------
 if __name__ == '__main__':
     unittest.main()
-# ----------------------------------------------------------------------------

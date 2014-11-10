@@ -27,18 +27,11 @@ make_cubic_lattice:
 make_orthorombicp_lattice:
     create and return a 3D orthorhombic (primitive) lattice.
 """
-# ===========================================================================
-# Import modules
-# ===========================================================================
-import copy
 import numpy as np
 from math import sqrt
 import simphony.core.data_container as dc
 
 
-# ===========================================================================
-# class LatticeNode
-# ===========================================================================
 class LatticeNode:
     """
     A single node of a lattice.
@@ -56,9 +49,7 @@ class LatticeNode:
 
         if data is not None:
             self.clone_data(data)
-        # end if
 
-    # -----------------------------------------------------------------------
     def clone_data(self, data):
         """Clone the given data for the node.
 
@@ -68,24 +59,11 @@ class LatticeNode:
         """
         if data is None:
             return
-        # end if
 
-        for key in self.data:
-            if key not in data:
-                self.data.pop(key, None)
-            # end if
-        # end for
-
-        for key in data:
-            self.data[key] = copy.deepcopy(data[key])
-        # end for
-# end
+        self.data = dc.DataContainer(data)
 
 
-# ===========================================================================
-# class Lattice
-# ===========================================================================
-class Lattice:
+class Lattice(object):
     """
     A Bravais lattice; stores references to LatticeNodes.
 
@@ -102,13 +80,28 @@ class Lattice:
     """
     def __init__(self, name, type, base_vect, size, origin):
         self.name = name
-        self.type = type
-        self.base_vect = np.array(base_vect, dtype=np.float)
-        self.size = np.array(size, dtype=np.uint32)
-        self.origin = np.array(origin, dtype=np.float)
+        self._type = type
+        self._base_vect = np.array(base_vect, dtype=np.float)
+        self._size = np.array(size, dtype=np.uint32)
+        self._origin = np.array(origin, dtype=np.float)
         self._lat_nodes = np.empty(size, dtype=object)
 
-    # -----------------------------------------------------------------------
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def base_vect(self):
+        return self._base_vect
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def origin(self):
+        return self._origin
+
     def get_node(self, id):
         """Get a copy of the node corresponding to the given id.
 
@@ -126,9 +119,7 @@ class Lattice:
             return LatticeNode(tuple_id)
         else:
             return LatticeNode(tuple_id, self._lat_nodes[tuple_id].data)
-        # end if else
 
-    # -----------------------------------------------------------------------
     def update_node(self, lat_node):
         """Update the corresponding lattice node (data copied).
 
@@ -143,9 +134,7 @@ class Lattice:
             self._lat_nodes[id] = LatticeNode(id, lat_node.data)
         else:
             self._lat_nodes[id].clone_data(lat_node.data)
-        # end if else
 
-    # -----------------------------------------------------------------------
     def iter_nodes(self, ids=None):
         """Get an iterator over the LatticeNodes described by the ids.
 
@@ -163,9 +152,7 @@ class Lattice:
         else:
             for id in ids:
                 yield self.get_node(id)
-        # end if else
 
-    # -----------------------------------------------------------------------
     def get_coordinate(self, id):
         """Get coordinate of the given index coordinate.
 
@@ -179,12 +166,7 @@ class Lattice:
         """
         return self.origin + self.base_vect*np.array(id)
 
-# end
 
-
-# ===========================================================================
-# Functions for creating Bravais lattices
-# ===========================================================================
 def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     """Create and return a 2D hexagonal lattice.
 
@@ -205,7 +187,6 @@ def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     return Lattice(name, 'Hexagonal', (0.5*h, 0.5*sqrt(3)*h), size, origin)
 
 
-# ---------------------------------------------------------------------------
 def make_square_lattice(name, h, size, origin=(0, 0)):
     """Create and return a 2D square lattice.
 
@@ -226,7 +207,6 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
     return Lattice(name, 'Square', (h, h), size, origin)
 
 
-# ---------------------------------------------------------------------------
 def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
     """Create and return a 2D rectangular lattice.
 
@@ -247,7 +227,6 @@ def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
     return Lattice(name, 'Rectangular', hs, size, origin)
 
 
-# ---------------------------------------------------------------------------
 def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     """Create and return a 3D cubic lattice.
 
@@ -268,7 +247,6 @@ def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     return Lattice(name, 'Cubic', (h, h, h), size, origin)
 
 
-# ---------------------------------------------------------------------------
 def make_orthorombicp_lattice(name, hs, size, origin=(0, 0, 0)):
     """Create and return a 3D orthorombic primitive lattice.
 
@@ -287,6 +265,3 @@ def make_orthorombicp_lattice(name, hs, size, origin=(0, 0, 0)):
     A reference to a Lattice object.
     """
     return Lattice(name, 'OrthorombicP', hs, size, origin)
-# ===========================================================================
-# Keijo Mattila & Tuomas Puurtinen, SimPhoNy, JYU, 2014.
-# ===========================================================================
