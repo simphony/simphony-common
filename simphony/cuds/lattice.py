@@ -7,7 +7,7 @@ LatticeNode:
     (used as the node id) and node related data in a data container.
 
 Lattice:
-    describes a Bravais lattice. Stores references to lattice nodes.
+    describes a Bravais lattice. Stores references to node related data.
     References stored only on demand (i.e. default references are to None)
 
 Routines:
@@ -29,7 +29,7 @@ make_orthorombicp_lattice:
 """
 import numpy as np
 from math import sqrt
-import simphony.core.data_container as dc
+from simphony.core.data_container import DataContainer
 
 
 class LatticeNode:
@@ -41,31 +41,21 @@ class LatticeNode:
     id: tuple of D x int
         node index coordinate
     data: reference to a DataContainer object
-        the given data is cloned for the node
+        node related data
     """
     def __init__(self, id, data=None):
         self.id = tuple(id)
-        self.data = dc.DataContainer()
 
-        if data is not None:
-            self.clone_data(data)
-
-    def clone_data(self, data):
-        """Clone the given data for the node.
-
-        Parameters:
-        -----------
-        data: reference to a DataContainer object
-        """
         if data is None:
-            return
-
-        self.data = dc.DataContainer(data)
+            self.data = DataContainer()
+        else:
+            self.data = DataContainer(data)
 
 
 class Lattice(object):
     """
-    A Bravais lattice; stores references to LatticeNodes.
+    A Bravais lattice;
+    stores references to data containers (node related data).
 
     Attributes:
     -----------
@@ -84,7 +74,7 @@ class Lattice(object):
         self._base_vect = np.array(base_vect, dtype=np.float)
         self._size = np.array(size, dtype=np.uint32)
         self._origin = np.array(origin, dtype=np.float)
-        self._lat_nodes = np.empty(size, dtype=object)
+        self._dcs = np.empty(size, dtype=object)
 
     @property
     def type(self):
@@ -114,11 +104,7 @@ class Lattice(object):
         A reference to a LatticeNode object
         """
         tuple_id = tuple(id)
-
-        if self._lat_nodes[tuple_id] is None:
-            return LatticeNode(tuple_id)
-        else:
-            return LatticeNode(tuple_id, self._lat_nodes[tuple_id].data)
+        return LatticeNode(tuple_id, self._dcs[tuple_id])
 
     def update_node(self, lat_node):
         """Update the corresponding lattice node (data copied).
@@ -129,11 +115,7 @@ class Lattice(object):
             data copied from the given node
         """
         id = lat_node.id
-
-        if self._lat_nodes[id] is None:
-            self._lat_nodes[id] = LatticeNode(id, lat_node.data)
-        else:
-            self._lat_nodes[id].clone_data(lat_node.data)
+        self._dcs[id] = DataContainer(lat_node.data)
 
     def iter_nodes(self, ids=None):
         """Get an iterator over the LatticeNodes described by the ids.
@@ -147,7 +129,7 @@ class Lattice(object):
         A generator for LatticeNode objects
         """
         if ids is None:
-            for id, val in np.ndenumerate(self._lat_nodes):
+            for id, val in np.ndenumerate(self._dcs):
                 yield self.get_node(id)
         else:
             for id in ids:
