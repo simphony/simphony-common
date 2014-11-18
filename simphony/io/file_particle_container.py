@@ -1,7 +1,7 @@
 """
 This class illustrates use of a particles container class for files
 """
-import random
+import uuid
 
 import tables
 import numpy
@@ -64,7 +64,7 @@ class FileParticleContainer(ABCParticleContainer):
         """
         id = particle.id
         if id is None:
-            id = self._generate_unique_id(self._group.particles)
+            id = uuid.uuid4()
         else:
             for _ in self._group.particles.where(
                     'id == value', condvars={'value': id}):
@@ -149,7 +149,7 @@ class FileParticleContainer(ABCParticleContainer):
         """
         id = bond.id
         if id is None:
-            id = self._generate_unique_id(self._group.bonds)
+            id = uuid.uuid4()
         else:
             for r in self._group.bonds.where(
                     'id == value', condvars={'value': id}):
@@ -218,24 +218,26 @@ class FileParticleContainer(ABCParticleContainer):
         for row in self._group.particles.where(
                 'id == value', condvars={'value': id}):
             return True
-        return False
+        else:
+            return False
 
     def has_bond(self, id):
         """Checks if a bond with id "id" exists in the container."""
         for row in self._group.bonds.where(
                 'id == value', condvars={'value': id}):
             return True
-        return False
+        else:
+            return False
 
     # Private methods #######################################################
 
     def _create_particles_table(self):
-            self._file.create_table(
-                self._group, "particles", _ParticleDescription)
+        self._file.create_table(
+            self._group, "particles", _ParticleDescription)
 
     def _create_bonds_table(self):
-            self._file.create_table(
-                self._group, "bonds", _BondDescription)
+        self._file.create_table(
+            self._group, "bonds", _BondDescription)
 
     def _bond_to_row(self, bond, id):
         n = len(bond.particles)
@@ -246,13 +248,3 @@ class FileParticleContainer(ABCParticleContainer):
         particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
         particle_ids[:n] = bond.particles
         return id, particle_ids, n
-
-    def _generate_unique_id(self, table, number_tries=1000):
-        for n in xrange(number_tries):
-            id = random.randint(0, MAX_INT)
-            for _ in table.where('id == value', condvars={'value': id}):
-                break
-            else:
-                return id
-        else:
-            raise Exception('Id could not be generated')
