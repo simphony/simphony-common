@@ -9,6 +9,7 @@ import copy
 import tables
 
 from simphony.io.file_particle_container import FileParticleContainer
+from simphony.io.file_mesh import FileMesh
 
 
 class CudsFile(object):
@@ -35,6 +36,7 @@ class CudsFile(object):
 
         self._file = file
         self._particle_containers = {}
+        self._meshes = {}
 
     def valid(self):
         """Checks if file is valid (i.e. open)
@@ -121,6 +123,46 @@ class CudsFile(object):
         self._file.flush()
         return pc
 
+    def add_mesh(self, name, mesh=None):
+        """Add a mesh to the file.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh 
+        mesh_container : ABCMesh, optional
+            mesh to be added. If none is give,
+            then an empty mesh is added.
+
+        Returns
+        ----------
+        FileMesh
+            The mesh newly added to the file.  
+            See get_mesh for more information.
+
+        """
+        if name in self._file.root.mesh:
+            raise ValueError(
+                'Mesh \'{n}\` already exists'.format(n=name))
+
+        group = self._file.create_group('/mesh/', name)
+        file_mesh = FileMesh(group, self._file)
+        self._meshes[name] = (file_mesh, group)
+
+        if mesh:
+            # copy the contents of the mesh to the file
+            for point in mesh.iter_points():
+                file_mesh.add_point(point)
+            for edge in mesh.iter_edges():
+                file_mesh.add_edge(bond)
+            for face in mesh.iter_faces():
+                file_mesh.add_face(bond)
+            for cell in mesh.iter_cells():
+                file_mesh.add_cell(bond)
+
+        self._file.flush()
+        return file_mesh
+
     def get_particle_container(self, name):
         """Get particle container from file.
 
@@ -145,6 +187,30 @@ class CudsFile(object):
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
+    def get_mesh(self, name):
+        """Get mesh from file.
+
+        The returned mesh can be used to query
+        and change the related data stored in the file. If the
+        file has been closed then the mesh should no longer be used.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh to return
+        """
+
+        if name in self._meshes:
+            return self._meshes[name][0]
+        elif name in self._file.root.mesh_container:
+            group = tables.Group(self._file.root.mesh_container, name)
+            m = FileMeshContainer(group, self._file)
+            self._meshes[name] = pc
+            return m
+        else:
+            raise ValueError(
+                'Mesh \'{n}\` does not exist'.format(n=name))
+
     def delete_particle_container(self, name):
         """Delete particle container from file.
 
@@ -159,6 +225,22 @@ class CudsFile(object):
         else:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
+
+    def delete_mesh(self, name):
+        """Delete mesh from file.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh to delete
+        """
+
+        if name in self._meshes:
+            self._meshes[name][1]._f_remove(recursive=True)
+            del self._meshes[name]
+        else:
+            raise ValueError(
+                'Mesh \'{n}\` does not exist'.format(n=name))
 
     def iter_particle_containers(self, names=None):
         """Returns an iterator over a subset or all
@@ -179,3 +261,23 @@ class CudsFile(object):
             names = self._particle_containers.keys()
         for name in names:
             yield self.get_particle_container(name), name
+
+    def iter_meshes(self, names=None):
+        """Returns an iterator over a subset or all
+        of the meshes. The iterator iterator yields
+        (name, mesh) tuples for each mesh container
+        contained in the file.
+
+        Parameters
+        ----------
+        names : list of str
+            names of specific mesh containers to be iterated over.
+            If names is not given, then all meshes will be iterated over.
+
+        """
+
+        names = copy.deepcopy(names)
+        if names is None:
+            names = self._meshes.keys()
+        for name in names:
+            yield self.get_meshes(name), name
