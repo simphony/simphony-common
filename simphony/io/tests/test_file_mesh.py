@@ -1,11 +1,8 @@
-import copy
 import os
 import tempfile
 import shutil
 import unittest
 
-import unittest
-from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
@@ -19,7 +16,7 @@ class TestFileMesh(unittest.TestCase):
     def setUp(self):
 
         self.temp_dir = tempfile.mkdtemp()
-        
+
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.file = CudsFile.open(self.filename)
         self.mesh = self.file.add_mesh("test")

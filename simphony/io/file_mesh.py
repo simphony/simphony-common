@@ -6,10 +6,7 @@ and modify a file storing mesh data
 """
 import tables
 import uuid
-import simphony.core.data_container as dc
 
-from simphony.cuds.abstractmesh import ABCMesh
-from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
@@ -19,6 +16,7 @@ MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 3
 MAX_POINTS_IN_CELL = 4
 
+
 class _PointDescriptor(tables.IsDescription):
     """ Descriptor for storing Point information
 
@@ -27,12 +25,12 @@ class _PointDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32,pos=1)
+    uuid = tables.StringCol(32, pos=1)
     coordinates = tables.Float64Col(
         pos=2, shape=(3,)
         )
 
-# Note: Should length,area and volumne be saved here?
+
 class _EdgeDescriptor(tables.IsDescription):
     """ Descriptor for storing Edge information
 
@@ -41,10 +39,11 @@ class _EdgeDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32,pos=1)
+    uuid = tables.StringCol(32, pos=1)
     points_uuids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_EDGE,)
         )
+
 
 class _FaceDescriptor(tables.IsDescription):
     """ Descriptor for storing Face information
@@ -54,10 +53,11 @@ class _FaceDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32,pos=1)
+    uuid = tables.StringCol(32, pos=1)
     points_uuids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_FACE,)
         )
+
 
 class _CellDescriptor(tables.IsDescription):
     """ Descriptor for storing Cell information
@@ -67,10 +67,11 @@ class _CellDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32,pos=1)
+    uuid = tables.StringCol(32, pos=1)
     points_uuids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_CELL,)
         )
+
 
 class _MeshDescriptor(tables.IsDescription):
     """ Descriptor for storing Mesh information
@@ -79,7 +80,8 @@ class _MeshDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32,pos=1)
+    uuid = tables.StringCol(32, pos=1)
+
 
 class FileMesh(object):
     """ FileMesh.
@@ -199,7 +201,8 @@ class FileMesh(object):
             for row in self._group.edges:
                 if row['uuid'] == e_uuid.bytes:
                     return Edge(
-                        list(uuid.UUID(bytes=pb) for pb in row['points_uuids']),
+                        list(uuid.UUID(bytes=pb)
+                            for pb in row['points_uuids']),
                         uuid.UUID(bytes=row['uuid'])
                         )
         except:
@@ -234,7 +237,8 @@ class FileMesh(object):
             for row in self._group.faces:
                 if row['uuid'] == f_uuid.bytes:
                     return Face(
-                        list(uuid.UUID(bytes=pb) for pb in row['points_uuids']),
+                        list(uuid.UUID(bytes=pb)
+                            for pb in row['points_uuids']),
                         uuid.UUID(bytes=row['uuid'])
                         )
         except:
@@ -269,7 +273,8 @@ class FileMesh(object):
             for row in self._group.cells:
                 if row['uuid'] == c_uuid.bytes:
                     return Cell(
-                        list(uuid.UUID(bytes=pb) for pb in row['points_uuids']),
+                        list(uuid.UUID(bytes=pb)
+                            for pb in row['points_uuids']),
                         uuid.UUID(bytes=row['uuid'])
                         )
         except:
@@ -297,11 +302,11 @@ class FileMesh(object):
 
         for row in self._group.points:
             if row['uuid'] == point.uuid.bytes:
-                error_str = "Trying to add an already existing point with uuid: "\
-                    + str(point.uuid)
+                error_str = "Trying to add an already\
+                    existing point with uuid" + str(point.uuid)
                 raise KeyError(error_str)
 
-        row = self._group.points.row;
+        row = self._group.points.row
 
         row['uuid'] = point.uuid.bytes
         row['coordinates'] = point.coordinates
@@ -332,11 +337,11 @@ class FileMesh(object):
 
         for row in self._group.edges:
             if row['uuid'] == edge.uuid.bytes:
-                error_str = "Trying to add an already existing edge with uuid: "\
-                    + str(edge.uuid)
+                error_str = "Trying to add an already\
+                    existing edge with uuid" + str(edge.uuid)
                 raise KeyError(error_str)
 
-        row = self._group.edges.row;
+        row = self._group.edges.row
 
         row['uuid'] = edge.uuid.bytes
         row['points_uuids'] = [puuid.bytes for puuid in edge.points]
@@ -367,11 +372,11 @@ class FileMesh(object):
 
         for row in self._group.faces:
             if row['uuid'] == face.uuid.bytes:
-                error_str = "Trying to add an already existing face with uuid: "\
-                    + str(face.uuid)
+                error_str = "Trying to add an already\
+                    existing face with uuid" + str(face.uuid)
                 raise KeyError(error_str)
 
-        row = self._group.faces.row;
+        row = self._group.faces.row
 
         row['uuid'] = face.uuid.bytes
         row['points_uuids'] = [puuid.bytes for puuid in face.points]
@@ -402,11 +407,11 @@ class FileMesh(object):
 
         for row in self._group.cells:
             if row['uuid'] == cell.uuid.bytes:
-                error_str = "Trying to add an already existing cell with uuid: "\
-                    + str(cell.uuid)
+                error_str = "Trying to add an already\
+                    existing cell with uuid" + str(cell.uuid)
                 raise KeyError(error_str)
 
-        row = self._group.cells.row;
+        row = self._group.cells.row
 
         row['uuid'] = cell.uuid.bytes
         row['points_uuids'] = [puuid.bytes for puuid in cell.points]
@@ -440,8 +445,8 @@ class FileMesh(object):
                 row.update()
                 row._flush_mod_rows()
             else:
-                error_str = "Trying to add an already existing point with uuid: "\
-                    + str(point.uuid)
+                error_str = "Trying to add an already\
+                    existing point with uuid: " + str(point.uuid)
                 raise KeyError(error_str)
 
     def update_edge(self, edge):
@@ -468,8 +473,8 @@ class FileMesh(object):
                 row.update()
                 row._flush_mod_rows()
             else:
-                error_str = "Trying to add an already existing edge with uuid: "\
-                    + str(edge.uuid)
+                error_str = "Trying to add an already\
+                    existing edge with uuid: " + str(edge.uuid)
                 raise KeyError(error_str)
 
     def update_face(self, face):
@@ -496,8 +501,8 @@ class FileMesh(object):
                 row.update()
                 row._flush_mod_rows()
             else:
-                error_str = "Trying to add an already existing face with uuid: "\
-                    + str(face.uuid)
+                error_str = "Trying to add an already\
+                    existing face with uuid: " + str(face.uuid)
                 raise KeyError(error_str)
 
     def update_cell(self, cell):
@@ -524,8 +529,8 @@ class FileMesh(object):
                 row.update()
                 row._flush_mod_rows()
             else:
-                error_str = "Trying to add an already existing cell with uuid: "\
-                    + str(cell.uuid)
+                error_str = "Trying to add an already\
+                    existing cell with uuid: " + str(cell.uuid)
                 raise KeyError(error_str)
 
     def iter_points(self, point_uuids=None):
