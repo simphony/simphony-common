@@ -11,7 +11,6 @@
            present any kind of interaction (between atoms, molecules, etc.)
 """
 from __future__ import print_function
-import copy
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
@@ -151,7 +150,8 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the particle
         >>> part_container.update_particle(part)
         """
-        self._update_element(self._particles, particle)
+        self._update_element(
+            self._particles, particle, clone=Particle.from_particle)
 
     def update_bond(self, bond):
         """Replaces an existing bond with the 'bond' new bond.
@@ -187,7 +187,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the bond
         >>> part_container.update_bond(bond)
         """
-        self._update_element(self._bonds, bond)
+        self._update_element(self._bonds, bond, clone=Bond.from_bond)
 
     def get_particle(self, particle_id):
         """Returns a copy of the particle with the 'particle_id' id.
@@ -457,12 +457,12 @@ class ParticleContainer(ABCParticleContainer):
                     pce._PC_errors['ParticleContainer_DuplicatedValue']
                     + " id: " + str(cur_id))
 
-    def _update_element(self, cur_dict, element):
+    def _update_element(self, cur_dict, element, clone):
         cur_id = element.id
         if cur_id in cur_dict:
             # This means the element IS in the current dictionary
             # (this should be the standard case...), so we proceed
-            cur_dict[cur_id] = copy.deepcopy(element)
+            cur_dict[cur_id] = clone(element)
         else:
             raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
                            + " id: " + str(cur_id))
@@ -547,6 +547,7 @@ class Bond(object):
             the id, None as default (the particle container will generate it)
         data : DataContainer
             DataContainer to store the attributes of the bond
+
         """
         self.id = id
         if particles is not None and len(particles) > 0:
