@@ -10,16 +10,13 @@
            senting the bonds between Particles or Atoms. This class should re-
            present any kind of interaction (between atoms, molecules, etc.)
 """
-
-
 from __future__ import print_function
 import copy
-import random
-import numpy as np
-# custom imports:
+import uuid
+
 from simphony.cuds.abstractparticles import ABCParticleContainer
 import simphony.cuds.pcexceptions as pce
-import simphony.core.data_container as dc
+from simphony.core.data_container import DataContainer
 
 
 class ParticleContainer(ABCParticleContainer):
@@ -39,7 +36,7 @@ class ParticleContainer(ABCParticleContainer):
     def __init__(self):
         self._particles = {}
         self._bonds = {}
-        self.data = dc.DataContainer()
+        self.data = DataContainer()
 
 # ================================================================
 
@@ -80,11 +77,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_particle(part)
         """
-
-        try:
-            self._add_element(self._particles, new_particle)
-        except Exception as exc:
-            raise exc
+        self._add_element(self._particles, new_particle, clone=Particle.from_particle)
 
     def add_bond(self, new_bond):
         """Adds the 'new_bond' bond to the container.
@@ -121,11 +114,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_bond(bond)
         """
-
-        try:
-            self._add_element(self._bonds, new_bond)
-        except Exception as exc:
-            raise exc
+        self._add_element(self._bonds, new_bond, Bond.from_bond)
 
     def update_particle(self, particle):
         """Replaces an existing particle with the 'particle' new particle.
@@ -161,11 +150,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the particle
         >>> part_container.update_particle(part)
         """
-
-        try:
-            self._update_element(self._particles, particle)
-        except Exception as exc:
-            raise exc
+        self._update_element(self._particles, particle)
 
     def update_bond(self, bond):
         """Replaces an existing bond with the 'bond' new bond.
@@ -201,10 +186,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the bond
         >>> part_container.update_bond(bond)
         """
-        try:
-            self._update_element(self._bonds, bond)
-        except Exception as exc:
-            raise exc
+        self._update_element(self._bonds, bond)
 
     def get_particle(self, particle_id):
         """Returns a copy of the particle with the 'particle_id' id.
@@ -223,13 +205,12 @@ class ParticleContainer(ABCParticleContainer):
         -------
         A copy of the particle
         """
-
         try:
-            cur_particle = self._particles[particle_id]
+            particle = self._particles[particle_id]
         except KeyError:
-            raise KeyError('Particle with id { } not found!'.format(
-                particle_id))
-        return copy.deepcopy(cur_particle)
+            raise KeyError(
+                'Particle with id {} not found!'.format(particle_id))
+        return Particle.from_particle(particle)
 
     def get_bond(self, bond_id):
         """Returns a copy of the bond with the 'bond_id' id.
@@ -248,13 +229,12 @@ class ParticleContainer(ABCParticleContainer):
         -------
         A copy of the bond
         """
-
         try:
-            cur_bond = self._bonds[bond_id]
+            bond = self._bonds[bond_id]
         except KeyError:
-            raise KeyError('Bond with id { } not found!'.format(
-                bond_id))
-        return copy.deepcopy(cur_bond)
+            raise KeyError(
+                'Bond with id {} not found!'.format(bond_id))
+        return Bond.from_bond(bond)
 
     def remove_particle(self, particle_id):
         """Removes the particle with the 'particle_id' id from the container.
@@ -292,8 +272,8 @@ class ParticleContainer(ABCParticleContainer):
         try:
             self._remove_element(self._particles, particle_id)
         except KeyError:
-            raise KeyError('Particle with id { } not found!'.format(
-                particle_id))
+            raise KeyError(
+                'Particle with id { } not found!'.format(particle_id))
 
     def remove_bond(self, bond_id):
         """Removes the bond with the 'bond_id' id from the container.
@@ -327,8 +307,8 @@ class ParticleContainer(ABCParticleContainer):
         try:
             self._remove_element(self._bonds, bond_id)
         except KeyError:
-            raise KeyError('Bond with id { } not found!'.format(
-                bond_id))
+            raise KeyError(
+                'Bond with id { } not found!'.format(bond_id))
 
     def iter_particles(self, particle_ids=None):
         """Generator method for iterating over the particles of the container.
@@ -375,14 +355,12 @@ class ParticleContainer(ABCParticleContainer):
                 #in case we need it
                 part_container.update_particle(particle)
         """
-
-        if particle_ids:
-            try:
-                return self._iter_elements(self._particles, particle_ids)
-            except KeyError as exception:
-                raise exception
+        if particle_ids is not None:
+            return self._iter_elements(
+                self._particles, particle_ids, clone=Particle.from_particle)
         else:
-            return self._iter_all(self._particles)
+            return self._iter_all(
+                self._particles, clone=Particle.from_particle)
 
     def iter_bonds(self, bond_ids=None):
         """Generator method for iterating over the bonds of the container.
@@ -429,13 +407,10 @@ class ParticleContainer(ABCParticleContainer):
                 part_container.update_bond(bond)
         """
 
-        if bond_ids:
-            try:
-                return self._iter_elements(self._bonds, bond_ids)
-            except KeyError as exception:
-                raise exception
+        if bond_ids is not None:
+            return self._iter_elements(self._bonds, bond_ids, clone=Bond.from_bond)
         else:
-            return self._iter_all(self._bonds)
+            return self._iter_all(self._bonds, clone=Bond.from_bond)
 
     def has_particle(self, id):
         """Checks if a particle with the given id already exists
@@ -453,28 +428,28 @@ class ParticleContainer(ABCParticleContainer):
 
 # ================================================================
 
-    def _iter_elements(self, cur_dict, cur_ids):
+    def _iter_elements(self, cur_dict, cur_ids, clone):
         for cur_id in cur_ids:
             try:
-                yield copy.deepcopy(cur_dict[cur_id])
+                yield clone(cur_dict[cur_id])
             except KeyError:
                 raise KeyError('id {} not found!'.format(cur_id))
 
-    def _iter_all(self, cur_dict):
+    def _iter_all(self, cur_dict, clone):
         for cur_element in cur_dict.itervalues():
-            yield copy.deepcopy(cur_element)
+            yield clone(cur_element)
 
-    def _add_element(self, cur_dict, element):
+    def _add_element(self, cur_dict, element, clone):
         # We check if the current dictionary has the element
         cur_id = element.id
         if cur_id is None:
-            cur_id = self._generate_unique_id(cur_dict)
+            cur_id = uuid.uuid4()
             element.id = cur_id
-            cur_dict[cur_id] = copy.deepcopy(element)
+            cur_dict[cur_id] = clone(element)
         else:
             if cur_id not in cur_dict:
                 # Means the element is not in the dict - hence we can add it
-                cur_dict[cur_id] = copy.deepcopy(element)
+                cur_dict[cur_id] = clone(element)
             else:
                 raise Exception(
                     pce._PC_errors['ParticleContainer_DuplicatedValue']
@@ -498,14 +473,6 @@ class ParticleContainer(ABCParticleContainer):
             raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
                            + " id: " + str(cur_id))
 
-    def _generate_unique_id(self, cur_dict, number_tries=1000):
-        max_int = np.iinfo(np.uint32).max
-        for n in xrange(number_tries):
-            cur_id = random.randint(0, max_int)
-            if cur_id not in cur_dict:
-                return cur_id
-        raise Exception(pce._PC_errors['ParticleContainer_IdNotGenerated'])
-
 
 class Particle(object):
     """Class representing a particle.
@@ -519,26 +486,34 @@ class Particle(object):
         data : DataContainer
             DataContainer to store the attributes of the particle
 
-    Parameters
-    ----------
+    """
+
+    def __init__(self, coordinates=(0.0, 0.0, 0.0), id=None, data=None):
+        """ Create a Particle.
+
+        Parameters
+        ----------
         coordinates : list / tuple
             x,y,z coordinates of the particle (Default: [0, 0, 0])
-        id : uint32
+        id : uuid.UUID
             the id, None as default (the particle container will generate it)
         data : DataContainer
             the data, the particle will have a copy of this
-    """
+        """
 
-    def __init__(self, coordinates=None, id=None, data=None):
         self.id = id
-        if coordinates:
-            self.coordinates = coordinates
+        self.coordinates = tuple(coordinates)
+        if data is None:
+            self.data = DataContainer()
         else:
-            self.coordinates = [0.0, 0.0, 0.0]
-        if data:
-            self.data = copy.deepcopy(data)
-        else:
-            self.data = dc.DataContainer()
+            self.data = DataContainer(data)
+
+    @classmethod
+    def from_particle(cls, particle):
+        return cls(
+            id=uuid.UUID(bytes=particle.id.bytes),
+            coordinates=particle.coordinates,
+            data=DataContainer(particle.data))
 
     def __str__(self):
         total_str = "{0}_{1}".format(self.id, self.coordinates)
@@ -550,33 +525,44 @@ class Bond(object):
 
     Attributes
     ----------
-        id : uint32
+        id : uuid
             the unique id of the bond
-        particles : list
-            list of particles / elements of the bond
+        particles : tuple
+            tuple of uuids of the particles that are participating in the bond.
         data : DataContainer
             DataContainer to store the attributes of the bond
 
-    Parameters
-    ----------
-        particles : sequence
-            list of particles of the bond. It can not be empty.
-        id : uint32
-            the id, None as default (the particle container will generate it)
-        data : DataContainer
-            DataContainer to store the attributes of the bond
     """
 
     def __init__(self, particles, id=None, data=None):
+        """ Create a Bond.
+
+        Parameters
+        ----------
+        particles : sequence
+            list of particles of the bond. It can not be empty.
+        id : uuid.UUID
+            the id, None as default (the particle container will generate it)
+        data : DataContainer
+            DataContainer to store the attributes of the bond
+        """
         self.id = id
         if particles is not None and len(particles) > 0:
-            self.particles = particles
+            self.particles = tuple(particles)
         else:
             raise Exception(pce._PC_errors['IncorrectParticlesTuple'])
-        if data:
-            self.data = copy.deepcopy(data)
+
+        if data is None:
+            self.data = DataContainer()
         else:
-            self.data = dc.DataContainer()
+            self.data = DataContainer(data)
+
+    @classmethod
+    def from_bond(cls, bond):
+        return cls(
+            particles=bond.particles,
+            id=uuid.UUID(bytes=bond.id.bytes),
+            data=DataContainer(bond.data))
 
     def __str__(self):
         total_str = "{0}_{1}".format(self.id, self.particles)
