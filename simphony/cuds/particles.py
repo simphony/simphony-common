@@ -77,7 +77,8 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_particle(part)
         """
-        self._add_element(self._particles, new_particle, clone=Particle.from_particle)
+        self._add_element(
+            self._particles, new_particle, clone=Particle.from_particle)
 
     def add_bond(self, new_bond):
         """Adds the 'new_bond' bond to the container.
@@ -408,7 +409,8 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         if bond_ids is not None:
-            return self._iter_elements(self._bonds, bond_ids, clone=Bond.from_bond)
+            return self._iter_elements(
+                self._bonds, bond_ids, clone=Bond.from_bond)
         else:
             return self._iter_all(self._bonds, clone=Bond.from_bond)
 
