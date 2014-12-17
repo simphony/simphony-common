@@ -55,9 +55,13 @@ class ParticleContainer(ABCParticleContainer):
 
         Parameters
         ----------
-
         new_particle : Particle
             the new particle that will be included in the container.
+
+        Returns
+        -------
+        id : uuid.UUID
+            The id of the added particle.
 
         Raises
         ------
@@ -76,7 +80,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_particle(part)
         """
-        self._add_element(
+        return self._add_element(
             self._particles, new_particle, clone=Particle.from_particle)
 
     def add_bond(self, new_bond):
@@ -94,6 +98,11 @@ class ParticleContainer(ABCParticleContainer):
         new_bond : Bond
             the new bond that will be included in the container.
 
+        Returns
+        -------
+        id : uuid.UUID
+            The id of the added bond.
+
         Raises
         ------
         Exception when the new particle already exists in the container.
@@ -101,9 +110,6 @@ class ParticleContainer(ABCParticleContainer):
         See Also
         --------
         update_bond, remove_bond
-
-        Notes
-        -----
 
         Examples
         --------
@@ -114,7 +120,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_bond(bond)
         """
-        self._add_element(self._bonds, new_bond, Bond.from_bond)
+        return self._add_element(self._bonds, new_bond, Bond.from_bond)
 
     def update_particle(self, particle):
         """Replaces an existing particle with the 'particle' new particle.
@@ -456,6 +462,7 @@ class ParticleContainer(ABCParticleContainer):
                 raise Exception(
                     pce._PC_errors['ParticleContainer_DuplicatedValue']
                     + " id: " + str(cur_id))
+        return cur_id
 
     def _update_element(self, cur_dict, element, clone):
         cur_id = element.id
