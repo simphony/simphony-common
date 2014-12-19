@@ -439,15 +439,16 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.points:
-            if row['uuid'] == point.uuid.bytes:
-                row['coordinates'] = list(point.coordinates)
-                row.update()
+        try:
+            for upoint in self._group.points.where('uuid == value',
+                condvars={'value': point.uuid.bytes}):
+                upoint['coordinates'] = list(point.coordinates)
+                upoint.update()
                 self._group.points.flush()
-            else:
-                error_str = "Trying to add an already\
-                    existing point with uuid: " + str(point.uuid)
-                raise KeyError(error_str)
+        except:
+            error_str = "Trying to add an already\
+                existing point with uuid: " + str(point.uuid)
+            raise KeyError(error_str)
 
     def update_edge(self, edge):
         """ Updates the information of an edge.
@@ -467,15 +468,16 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.edges:
-            if row['uuid'] == edge.uuid.bytes:
-                row['points_uuids'] = [puuid.bytes for puuid in edge.points]
-                row.update()
+        try:
+            for uedge in self._group.edges.where('uuid == value',
+                condvars={'value': edge.uuid.bytes}):
+                uedge['points_uuids'] = [puuid.bytes for puuid in edge.points]
+                uedge.update()
                 self._group.edges.flush()
-            else:
-                error_str = "Trying to add an already\
-                    existing edge with uuid: " + str(edge.uuid)
-                raise KeyError(error_str)
+        except:
+            error_str = "Trying to add an already\
+                existing edge with uuid: " + str(edge.uuid)
+            raise KeyError(error_str)
 
     def update_face(self, face):
         """ Updates the information of a face.
@@ -495,15 +497,16 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.faces:
-            if row['uuid'] == face.uuid.bytes:
-                row['points_uuids'] = [puuid.bytes for puuid in face.points]
-                row.update()
+        try:
+            for uface in self._group.faces.where('uuid == value',
+                condvars={'value': face.uuid.bytes}):
+                uface['points_uuids'] = [puuid.bytes for puuid in face.points]
+                uface.update()
                 self._group.faces.flush()
-            else:
-                error_str = "Trying to add an already\
-                    existing face with uuid: " + str(face.uuid)
-                raise KeyError(error_str)
+        except:
+            error_str = "Trying to add an already\
+                existing face with uuid: " + str(face.uuid)
+            raise KeyError(error_str)
 
     def update_cell(self, cell):
         """ Updates the information of a cell.
@@ -523,15 +526,16 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.cells:
-            if row['uuid'] == cell.uuid.bytes:
-                row['points_uuids'] = [puuid.bytes for puuid in cell.points]
-                row.update()
+        try:
+           for ucell in self._group.cells.where('uuid == value',
+                condvars={'value': cell.uuid.bytes}):
+                ucell['points_uuids'] = [puuid.bytes for puuid in cell.points]
+                ucell.update()
                 self._group.cells.flush()
-            else:
-                error_str = "Trying to add an already\
-                    existing cell with uuid: " + str(cell.uuid)
-                raise KeyError(error_str)
+        except:
+            error_str = "Trying to add an already\
+                existing cell with uuid: " + str(cell.uuid)
+            raise KeyError(error_str)
 
     def iter_points(self, point_uuids=None):
         """ Returns an iterator over the selected points.
