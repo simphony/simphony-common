@@ -12,9 +12,9 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
-MAX_POINTS_IN_EDGE = 20
-MAX_POINTS_IN_FACE = 20
-MAX_POINTS_IN_CELL = 20
+MAX_POINTS_IN_EDGE = 2
+MAX_POINTS_IN_FACE = 3
+MAX_POINTS_IN_CELL = 4
 
 
 class _PointDescriptor(tables.IsDescription):
@@ -443,7 +443,7 @@ class FileMesh(object):
             if row['uuid'] == point.uuid.bytes:
                 row['coordinates'] = list(point.coordinates)
                 row.update()
-                row._flush_mod_rows()
+                self._group.points.flush()
             else:
                 error_str = "Trying to add an already\
                     existing point with uuid: " + str(point.uuid)
@@ -471,7 +471,7 @@ class FileMesh(object):
             if row['uuid'] == edge.uuid.bytes:
                 row['points_uuids'] = [puuid.bytes for puuid in edge.points]
                 row.update()
-                row._flush_mod_rows()
+                self._group.edges.flush()
             else:
                 error_str = "Trying to add an already\
                     existing edge with uuid: " + str(edge.uuid)
@@ -499,7 +499,7 @@ class FileMesh(object):
             if row['uuid'] == face.uuid.bytes:
                 row['points_uuids'] = [puuid.bytes for puuid in face.points]
                 row.update()
-                row._flush_mod_rows()
+                self._group.faces.flush()
             else:
                 error_str = "Trying to add an already\
                     existing face with uuid: " + str(face.uuid)
@@ -527,7 +527,7 @@ class FileMesh(object):
             if row['uuid'] == cell.uuid.bytes:
                 row['points_uuids'] = [puuid.bytes for puuid in cell.points]
                 row.update()
-                row._flush_mod_rows()
+                self._group.cells.flush()
             else:
                 error_str = "Trying to add an already\
                     existing cell with uuid: " + str(cell.uuid)
