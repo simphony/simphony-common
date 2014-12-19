@@ -36,6 +36,14 @@ class TestDataContainerTable(unittest.TestCase):
             table.append(data)
             self.assertEqual(len(table), 1)
 
+    def test_get_data(self):
+        data = DataContainer({key: key + 3 for key in CUBA})
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            table.append(data)
+            loaded_data = table[0]
+            self.assertDictEqual(loaded_data, data)
 
 
 if __name__ == '__main__':
