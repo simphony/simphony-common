@@ -52,7 +52,6 @@ def table(input, output):
     lines.extend([
         'class Data(tables.IsDescription):\n',
         '\n'])
-    template = "    {} = tables.{}Col(pos={}, shape=({}))\n"
     data_types = {
         'string': 'String',
         'double': 'Float64',
@@ -61,10 +60,20 @@ def table(input, output):
     for keyword in keywords:
         if keyword['name'] in CUBA_DATA_CONTAINER_EXLCUDE:
             continue
-        if len(keyword['shape']) == 1:
-            shape = str(keyword['shape'][0]) + ','
+        if keyword['type'] == 'string':
+            template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
+            shape = keyword['shape'][0]
         else:
-            shape = ','.join(map(str, keyword['shape']))
+            template = "    {} = tables.{}Col(pos={}{})\n"
+            shape = keyword['shape']
+            if len(shape) == 1:
+                if shape[0] == 1:
+                    shape = ''
+                else:
+                    shape = ', shape={}'.format(shape[0])
+            else:
+                shape = ', shape=({})'.format(
+                    ','.join(map(str, keyword['shape'])))
         lines.append(template.format(
             keyword['key'].lower(),
             data_types[keyword['type']],
