@@ -1,5 +1,3 @@
-from collections import Mapping
-
 import numpy
 
 
@@ -53,7 +51,6 @@ class DataContainerTable(object):
             columns[member.lower()]._v_pos: cuba
             for member, cuba in members.items()}
 
-
     def append(self, data):
         """ Append the data to the end of the table.
 
@@ -73,25 +70,24 @@ class DataContainerTable(object):
         positions = self._cuba_to_position
         columns = self._cuba_to_column
         row = table.row
-        row_mask = numpy.zeros(shape=(1, mask.atom.shape[0]), dtype=numpy.bool)
+        mask_row = numpy.zeros(shape=(1, mask.atom.shape[0]), dtype=numpy.bool)
         for key in data:
             row[columns[key]] = data[key]
-            row_mask[0, positions[key]] = True
+            mask_row[0, positions[key]] = True
         row.append()
         table.flush()
-        mask.append(row_mask)
+        mask.append(mask_row)
 
-    def __getitem__(self, nrow):
-        """ Return the DataContainer in row n.
+    def __getitem__(self, row_number):
+        """ Return the DataContainer in row.
 
         """
         cuba = self._position_to_cuba
-        row = self._table[nrow]
-        mask_row = self._mask[nrow]
+        row = self._table[row_number]
+        mask_row = self._mask[row_number]
         return DataContainer({
             cuba[index]: row[index]
-            for index, valid in enumerate(mask_row)
-            if valid})
+            for index, valid in enumerate(mask_row) if valid})
 
     def __len__(self):
         """ The number of rows in the table.
