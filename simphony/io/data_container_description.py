@@ -72,4 +72,6 @@ class Data(tables.IsDescription):
     volume_fraction = tables.Float64Col(pos=65)
 
 
-mask_atom = tables.BoolAtom(shape=66)
+class Mask(tables.IsDescription):
+
+    mask = tables.BoolCol(shape=(66,))

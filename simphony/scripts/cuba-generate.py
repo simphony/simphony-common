@@ -86,7 +86,9 @@ def table(input, output):
     # create Mask table description
     mask_size = position
     lines.extend([
-        'mask_atom = tables.BoolAtom(shape={})\n'.format(mask_size)])
+        'class Mask(tables.IsDescription):\n',
+        '\n',
+        '    mask = tables.BoolCol(shape=({},))\n'.format(mask_size)])
 
     output.writelines(lines)
 

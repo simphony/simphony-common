@@ -1,7 +1,7 @@
 import numpy
 
 
-from simphony.io.data_container_description import Data, mask_atom
+from simphony.io.data_container_description import Data, Mask
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
@@ -35,8 +35,7 @@ class DataContainerTable(object):
         self._table = getattr(
             group, 'data', handle.create_table(group, 'data', Data))
         self._mask = getattr(
-            group, 'mask', handle.create_earray(
-                group, 'mask', atom=mask_atom, shape=(0,)))
+            group, 'mask', handle.create_table(group, 'mask', Mask))
 
         # prepare useful mappings
         columns = Data.columns
@@ -70,10 +69,10 @@ class DataContainerTable(object):
         positions = self._cuba_to_position
         columns = self._cuba_to_column
         row = table.row
-        mask_row = numpy.zeros(shape=(1, mask.atom.shape[0]), dtype=numpy.bool)
+        mask_row = numpy.zeros(shape=mask.coldtypes['mask'].shape, dtype=numpy.bool)
         for key in data:
             row[columns[key]] = data[key]
-            mask_row[0, positions[key]] = True
+            mask_row[positions[key]] = True
         row.append()
         table.flush()
         mask.append(mask_row)
@@ -84,7 +83,7 @@ class DataContainerTable(object):
         """
         cuba = self._position_to_cuba
         row = self._table[row_number]
-        mask_row = self._mask[row_number]
+        mask_row = self._mask[row_number][0]
         return DataContainer({
             cuba[index]: row[index]
             for index, valid in enumerate(mask_row) if valid})
