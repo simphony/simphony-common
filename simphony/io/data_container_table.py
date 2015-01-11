@@ -1,5 +1,5 @@
 import numpy
-
+import tables
 
 from simphony.io.data_container_description import Data, Mask
 from simphony.core.cuba import CUBA
@@ -89,6 +89,21 @@ class DataContainerTable(object):
         return DataContainer({
             cuba[index]: row[index]
             for index, valid in enumerate(mask_row) if valid})
+
+    def __delitem__(self, row_number):
+        """ Delete the row.
+
+        """
+        table = self._table
+        if table.nrows == 1 and row_number == 0:
+            table.remove()
+            self._mask.remove()
+            group = self._group
+            self._table = tables.Table(group, 'data', Data)
+            self._mask = tables.Table(group, 'mask', Mask)
+        else:
+            self._table.remove_row(row_number)
+            self._mask.remove_row(row_number)
 
     def __len__(self):
         """ The number of rows in the table.

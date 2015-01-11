@@ -68,7 +68,33 @@ class TestDataContainerTable(unittest.TestCase):
             loaded_data = table[0]
             self.assertDataContainersEqual(loaded_data, data)
 
+    def test_delete_data(self):
+        data = self.create_data_container()
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            table.append(data)
+            new_data = DataContainer(data)
+            new_data[CUBA.VELOCITY] = 45
+            table.append(new_data)
+            del table[0]
+            loaded_data = table[0]
+            self.assertEqual(len(table), 1)
+            self.assertDataContainersEqual(loaded_data, new_data)
+
+    def test_delete_data_to_empty_table(self):
+        data = self.create_data_container()
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            table.append(data)
+            del table[0]
+            self.assertEqual(len(table), 0)
+
     def create_data_container(self):
+        """ Create a data container while respecting the expected data types.
+
+        """
         members = CUBA.__members__
         data = {}
         for member, cuba in members.items():
