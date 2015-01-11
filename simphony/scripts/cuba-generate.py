@@ -73,7 +73,7 @@ def table(input, output):
                     shape = ', shape={}'.format(shape[0])
             else:
                 shape = ', shape=({})'.format(
-                    ','.join(map(str, keyword['shape'])))
+                    ', '.join(map(str, keyword['shape'])))
         lines.append(template.format(
             keyword['key'].lower(),
             data_types[keyword['type']],
