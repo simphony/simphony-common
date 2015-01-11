@@ -90,6 +90,21 @@ class DataContainerTable(object):
             cuba[index]: row[index]
             for index, valid in enumerate(mask_row) if valid})
 
+    def __setitem__(self, row_number, data):
+        """ Set the data in row from the DataContainer.
+
+        """
+        table = self._table
+        mask = self._mask
+        positions = self._cuba_to_position
+        row = [0] * len(positions)
+        mask_row = [False] * len(positions)
+        for key in data:
+            row[positions[key]] = data[key]
+            mask_row[positions[key]] = True
+        table.modify_rows(start=row_number, rows=[row])
+        mask.modify_rows(start=row_number, rows=[(mask_row,)])
+
     def __delitem__(self, row_number):
         """ Delete the row.
 

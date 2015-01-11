@@ -68,6 +68,29 @@ class TestDataContainerTable(unittest.TestCase):
             loaded_data = table[0]
             self.assertDataContainersEqual(loaded_data, data)
 
+    def test_update_data(self):
+        data = self.create_data_container()
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            table.append(data)
+            data[CUBA.VELOCITY] = 45
+            table[0] = data
+            loaded_data = table[0]
+            self.assertDataContainersEqual(loaded_data, data)
+
+    def test_update_data_with_missing_keywords(self):
+        data = self.create_data_container()
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            table.append(data)
+            for i in range(20, 56):
+                del data[CUBA(i)]
+            table[0] = data
+            loaded_data = table[0]
+            self.assertDataContainersEqual(loaded_data, data)
+
     def test_delete_data(self):
         data = self.create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
