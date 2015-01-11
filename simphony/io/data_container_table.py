@@ -69,13 +69,15 @@ class DataContainerTable(object):
         positions = self._cuba_to_position
         columns = self._cuba_to_column
         row = table.row
-        mask_row = numpy.zeros(shape=mask.coldtypes['mask'].shape, dtype=numpy.bool)
+        mask_row = numpy.zeros(
+            shape=mask.coldtypes['mask'].shape, dtype=numpy.bool)
         for key in data:
             row[columns[key]] = data[key]
             mask_row[positions[key]] = True
         row.append()
         table.flush()
         mask.append(mask_row)
+        mask.flush()
 
     def __getitem__(self, row_number):
         """ Return the DataContainer in row.

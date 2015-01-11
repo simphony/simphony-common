@@ -55,7 +55,7 @@ class TestDataContainerTable(unittest.TestCase):
             table = DataContainerTable(root, 'my_data_table')
             table.append(data)
             loaded_data = table[0]
-            self.assertItemsEqual(loaded_data.items(), loaded_data.items())
+            self.assertDataContainersEqual(loaded_data, data)
 
     def test_get_data_with_missing_keywords(self):
         data = self.create_data_container()
@@ -66,7 +66,7 @@ class TestDataContainerTable(unittest.TestCase):
             table = DataContainerTable(root, 'my_data_table')
             table.append(data)
             loaded_data = table[0]
-            self.assertItemsEqual(loaded_data.items(), loaded_data.items())
+            self.assertDataContainersEqual(loaded_data, data)
 
     def create_data_container(self):
         members = CUBA.__members__
@@ -92,6 +92,12 @@ class TestDataContainerTable(unittest.TestCase):
                         'cannot create value for {}'.format(column_type))
 
         return DataContainer(data)
+
+    def assertDataContainersEqual(self, data1, data2):
+        self.assertEqual(len(data1), len(data2))
+        for key in data1:
+            self.assertIn(key, data2)
+            assert_equal(data1[key], data2[key])
 
 
 if __name__ == '__main__':
