@@ -48,6 +48,8 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertEqual(len(table), 0)
             table.append(data)
             self.assertEqual(len(table), 1)
+            table.append(data)
+            self.assertEqual(len(table), 2)
 
     def test_get_data(self):
         data = self.create_data_container()

@@ -18,7 +18,7 @@ class Data(tables.IsDescription):
     shape_side = tables.Float64Col(pos=11, shape=3)
     crystal_storage = tables.StringCol(pos=12, itemsize=20)
     name_uc = tables.StringCol(pos=13, itemsize=20)
-    lattice_vectors = tables.Float64Col(pos=14, shape=(3,3))
+    lattice_vectors = tables.Float64Col(pos=14, shape=(3, 3))
     symmetry_lattice_vectors = tables.Int32Col(pos=15)
     occupancy = tables.Float64Col(pos=16)
     bond_label = tables.StringCol(pos=17, itemsize=20)
