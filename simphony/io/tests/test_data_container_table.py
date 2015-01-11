@@ -6,6 +6,7 @@ from contextlib import closing
 
 import tables
 import numpy
+from numpy.testing import assert_equal
 
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
