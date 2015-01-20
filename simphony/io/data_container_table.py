@@ -30,12 +30,22 @@ class DataContainerTable(object):
         """
         # Setup hdf5 nodes
         handle = root._v_file
-        self._group = group = getattr(
-            root, name, handle.create_group(root, name))
-        self._table = getattr(
-            group, 'data', handle.create_table(group, 'data', Data))
-        self._mask = getattr(
-            group, 'mask', handle.create_table(group, 'mask', Mask))
+        try:
+            group = getattr(root, name)
+        except AttributeError:
+            group = handle.create_group(root, name)
+        finally:
+            self._group = group
+
+        try:
+            self._table = group.data
+        except AttributeError:
+            self._table = handle.create_table(group, 'data', Data)
+
+        try:
+            self._mask = group.mask
+        except AttributeError:
+            self._mask = handle.create_table(group, 'mask', Mask)
 
         # prepare useful mappings
         columns = Data.columns
