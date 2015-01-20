@@ -198,6 +198,8 @@ class TestDataContainerTable(unittest.TestCase):
         return DataContainer(data)
 
     def assertDataContainersEqual(self, data1, data2):
+        self.assertIsInstance(data1, DataContainer)
+        self.assertIsInstance(data2, DataContainer)
         self.assertEqual(len(data1), len(data2))
         for key in data1:
             self.assertIn(key, data2)

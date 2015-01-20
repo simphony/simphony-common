@@ -1,5 +1,6 @@
 import numpy
 import tables
+from collections import MutableMapping
 from itertools import izip
 
 from simphony.io.data_container_description import Data, Mask
@@ -7,10 +8,11 @@ from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
-class DataContainerTable(object):
+class DataContainerTable(MutableMapping):
     """ A proxy class to an HDF5 group node with serialised DataContainers.
 
-    The class implements the basic mapping api.
+    The class implements the Mutable-Mapping api where each DataContainer
+    instance is mapped to the row index in the table.
 
     """
 
