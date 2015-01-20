@@ -1,5 +1,6 @@
 import numpy
 import tables
+from itertools import izip
 
 from simphony.io.data_container_description import Data, Mask
 from simphony.core.cuba import CUBA
@@ -136,3 +137,14 @@ class DataContainerTable(object):
         """
         assert self._table.nrows == self._mask.nrows
         return self._table.nrows
+
+    def __iter__(self):
+        """ Iterate over all the rows
+        """
+        assert self._table.nrows == self._mask.nrows
+        cuba = self._position_to_cuba
+        for row, mask in izip(self._table, self._mask):
+            mask_row = mask[0]
+            yield DataContainer({
+                cuba[index]: row[index]
+                for index, valid in enumerate(mask_row) if valid})

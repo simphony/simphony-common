@@ -117,6 +117,30 @@ class TestDataContainerTable(unittest.TestCase):
             del table[0]
             self.assertEqual(len(table), 0)
 
+    def test_iteration(self):
+        # create sample data
+        data = []
+        for index in range(10):
+            data_container = self.create_data_container()
+            del data_container[CUBA(index + 3)]
+            data.append(data_container)
+
+        # add to data container table
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            for data_container in data:
+                table.append(data_container)
+            self.assertEqual(len(table), 10)
+
+        # Iterate over all the rows
+        with closing(tables.open_file(self.filename, mode='r')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            for index, loaded_data in enumerate(table):
+                self.assertDataContainersEqual(loaded_data, data[index])
+            self.assertEqual(index, 9)
+
     def create_data_container(self):
         """ Create a data container while respecting the expected data types.
 
