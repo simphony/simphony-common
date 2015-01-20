@@ -138,6 +138,20 @@ class DataContainerTable(object):
         assert self._table.nrows == self._mask.nrows
         return self._table.nrows
 
+    def itersequence(self, sequence):
+        """ Iterate over a sequence of row coordinates.
+
+        """
+        assert self._table.nrows == self._mask.nrows
+        cuba = self._position_to_cuba
+        for row, mask in izip(
+                self._table.itersequence(sequence),
+                self._mask.itersequence(sequence)):
+            mask_row = mask[0]
+            yield DataContainer({
+                cuba[index]: row[index]
+                for index, valid in enumerate(mask_row) if valid})
+
     def __iter__(self):
         """ Iterate over all the rows
         """
