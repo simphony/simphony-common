@@ -14,6 +14,35 @@ from simphony.io.data_container_table import DataContainerTable
 from simphony.io.data_container_description import Data
 
 
+def create_data_container():
+    """ Create a data container while respecting the expected data types.
+
+    """
+    members = CUBA.__members__
+    data = {}
+    for member, cuba in members.items():
+        column_type = Data.columns[member.lower()]
+        if numpy.issubdtype(column_type, str):
+            data[cuba] = member
+        elif numpy.issubdtype(column_type, numpy.float):
+            data[cuba] = float(cuba + 3)
+        elif numpy.issubdtype(column_type, numpy.integer):
+            data[cuba] = int(cuba + 3)
+        else:
+            shape = column_type.shape
+            if column_type.kind == 'float':
+                data[cuba] = numpy.ones(
+                    shape=shape, dtype=numpy.float64) * cuba + 3
+            elif column_type.kind == 'int':
+                data[cuba] = numpy.ones(
+                    shape=shape, dtype=numpy.int32) * cuba + 3
+            else:
+                raise RuntimeError(
+                    'cannot create value for {}'.format(column_type))
+
+    return DataContainer(data)
+
+
 class TestDataContainerTable(unittest.TestCase):
 
     def setUp(self):
@@ -52,7 +81,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertEqual(len(table), 2)
 
     def test_get_data(self):
-        data = self.create_data_container()
+        data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
@@ -61,7 +90,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_get_data_with_missing_keywords(self):
-        data = self.create_data_container()
+        data = create_data_container()
         for i in range(20, 56):
             del data[CUBA(i)]
         with closing(tables.open_file(self.filename, mode='w')) as handle:
@@ -72,7 +101,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_update_data(self):
-        data = self.create_data_container()
+        data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
@@ -83,7 +112,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_update_data_with_missing_keywords(self):
-        data = self.create_data_container()
+        data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
@@ -95,7 +124,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_delete_data(self):
-        data = self.create_data_container()
+        data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
@@ -109,7 +138,7 @@ class TestDataContainerTable(unittest.TestCase):
             self.assertDataContainersEqual(loaded_data, new_data)
 
     def test_delete_data_to_empty_table(self):
-        data = self.create_data_container()
+        data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
@@ -121,7 +150,7 @@ class TestDataContainerTable(unittest.TestCase):
         # create sample data
         data = []
         for index in range(10):
-            data_container = self.create_data_container()
+            data_container = create_data_container()
             del data_container[CUBA(index + 3)]
             data.append(data_container)
 
@@ -145,7 +174,7 @@ class TestDataContainerTable(unittest.TestCase):
         # create sample data
         data = []
         for index in range(10):
-            data_container = self.create_data_container()
+            data_container = create_data_container()
             del data_container[CUBA(index + 3)]
             data.append(data_container)
 
@@ -168,34 +197,6 @@ class TestDataContainerTable(unittest.TestCase):
             for index, container in enumerate(loaded_data):
                 self.assertDataContainersEqual(
                     container, data[sequence[index]])
-
-    def create_data_container(self):
-        """ Create a data container while respecting the expected data types.
-
-        """
-        members = CUBA.__members__
-        data = {}
-        for member, cuba in members.items():
-            column_type = Data.columns[member.lower()]
-            if numpy.issubdtype(column_type, str):
-                data[cuba] = member
-            elif numpy.issubdtype(column_type, numpy.float):
-                data[cuba] = float(cuba + 3)
-            elif numpy.issubdtype(column_type, numpy.integer):
-                data[cuba] = int(cuba + 3)
-            else:
-                shape = column_type.shape
-                if column_type.kind == 'float':
-                    data[cuba] = numpy.ones(
-                        shape=shape, dtype=numpy.float64) * cuba + 3
-                elif column_type.kind == 'int':
-                    data[cuba] = numpy.ones(
-                        shape=shape, dtype=numpy.int32) * cuba + 3
-                else:
-                    raise RuntimeError(
-                        'cannot create value for {}'.format(column_type))
-
-        return DataContainer(data)
 
     def assertDataContainersEqual(self, data1, data2):
         self.assertIsInstance(data1, DataContainer)
