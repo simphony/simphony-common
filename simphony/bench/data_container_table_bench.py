@@ -8,8 +8,8 @@ from contextlib import closing
 import tables
 
 from simphony.bench.util import bench
-from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 from simphony.io.data_container_table import DataContainerTable
 from simphony.io.tests.test_data_container_table import create_data_container
 
@@ -26,16 +26,13 @@ for i in range(min(CUBA), max(CUBA), 2):
 data_container = DataContainer(dict_data)
 data_container_half = DataContainer(dict_data_half)
 
-indices = random.sample(range(n), 300)
-
 
 def append(handle, n, value):
     root = handle.root
     if hasattr(root, 'my_data_table'):
         handle.remove_node(root, 'my_data_table', recursive=True)
     table = DataContainerTable(root, 'my_data_table')
-    for i in range(n):
-        table.append(value)
+    return [table.append(value) for i in range(n)]
 
 
 def iteration(container):
@@ -60,7 +57,6 @@ def setitem(table, value, indices):
 def delitem(table, indices):
     for index in indices:
         del table[index]
-        print(len(table))
 
 
 print("""
@@ -80,7 +76,8 @@ with closing(tables.open_file(filename, mode='w')) as handle:
         bench(lambda: append(handle, 1000, data_container_half)))
 
 with closing(tables.open_file(filename, mode='w')) as handle:
-    append(handle, 1000, data_container)
+    uids = append(handle, 1000, data_container)
+    sample = random.sample(uids, 300)
 
 with closing(tables.open_file(filename, mode='r')) as handle:
     root = handle.root
@@ -88,22 +85,22 @@ with closing(tables.open_file(filename, mode='r')) as handle:
     print("Iterate {}:".format(n), bench(lambda: iteration(table)))
     print(
         "IterSequence of 300:",
-        bench(lambda: iteration_with_sequence(table, indices)))
+        bench(lambda: iteration_with_sequence(table, sample)))
     print(
         'Getitem sample of 300:',
-        bench(lambda: getitem_access(table, indices)))
+        bench(lambda: getitem_access(table, sample)))
 
 with closing(tables.open_file(filename, mode='a')) as handle:
     root = handle.root
     table = DataContainerTable(root, 'my_data_table')
     print(
         "Setitem of 300 sample:",
-        bench(lambda: setitem(table, data_container_half, indices)))
+        bench(lambda: setitem(table, data_container_half, sample)))
 
 with closing(tables.open_file(filename, mode='a')) as handle:
     root = handle.root
     table = DataContainerTable(root, 'my_data_table')
     print(len(table))
     print(
-        "Delitem of 300 sample:", bench(lambda: delitem(table, indices)))
+        "Delitem of 300 sample:", bench(lambda: delitem(table, sample)))
     print(len(table))
