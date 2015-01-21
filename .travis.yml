@@ -12,8 +12,10 @@ install:
   - pip install numexpr cython==0.20
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
+  - pip install coveralls
   - python setup.py develop
 script:
   - flake8 .
   - coverage run -m unittest discover
-  - coverage report
+after_success:
+  - coveralls
