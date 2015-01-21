@@ -107,7 +107,8 @@ class DataContainerTable(MutableMapping):
         positions = self._cuba_to_position
         for row in table.where(
                 'index == value', condvars={'value': uid.bytes}):
-            mask = row['mask']
+            mask = numpy.zeros(
+                shape=table.coldtypes['mask'].shape, dtype=numpy.bool)
             data_row = list(row['Data'])
             for key in data:
                 data_row[positions[key]] = data[key]
@@ -117,6 +118,7 @@ class DataContainerTable(MutableMapping):
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
             row._flush_mod_rows()
+            break
         else:
             raise KeyError('Index {} is not found'.format(uid))
 
@@ -128,8 +130,7 @@ class DataContainerTable(MutableMapping):
         for row in table.where(
                 'index == value', condvars={'value': uid.bytes}):
             if table.nrows == 1:
-                name = table.__name__
-                print name
+                name = table._v_name
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
                 # so we delete the table and
@@ -139,10 +140,10 @@ class DataContainerTable(MutableMapping):
                 self._table = tables.Table(parent, name, Record)
             else:
                 table.remove_row(row.nrow)
+            break
         else:
             raise ValueError(
                 'Record (id={id}) does not exist'.format(id=uid))
-
 
     def __len__(self):
         """ The number of rows in the table.
@@ -151,26 +152,24 @@ class DataContainerTable(MutableMapping):
         return self._table.nrows
 
     def itersequence(self, sequence):
-        """ Iterate over a sequence of row coordinates.
+        """ Iterate over a sequence of row ids.
 
         """
-        assert self._table.nrows == self._mask.nrows
         cuba = self._position_to_cuba
-        for row, mask in izip(
-                self._table.itersequence(sequence),
-                self._mask.itersequence(sequence)):
-            mask_row = mask[0]
+        for row in self._table.itersequence(sequence):
+            mask = row['mask']
+            data = row['Data']
             yield DataContainer({
-                cuba[index]: row[index]
-                for index, valid in enumerate(mask_row) if valid})
+                cuba[index]: data[index]
+                for index, valid in enumerate(mask) if valid})
 
     def __iter__(self):
         """ Iterate over all the rows
         """
-        assert self._table.nrows == self._mask.nrows
         cuba = self._position_to_cuba
-        for row, mask in izip(self._table, self._mask):
-            mask_row = mask[0]
+        for row in self._table:
+            mask = row['mask']
+            data = row['Data']
             yield DataContainer({
-                cuba[index]: row[index]
-                for index, valid in enumerate(mask_row) if valid})
+                cuba[index]: data[index]
+                for index, valid in enumerate(mask) if valid})

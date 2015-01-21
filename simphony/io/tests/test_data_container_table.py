@@ -131,46 +131,46 @@ class TestDataContainerTable(unittest.TestCase):
             loaded_data = table[uid]
             self.assertDataContainersEqual(loaded_data, data)
 
-    def _test_update_data_with_missing_keywords(self):
+    def test_update_data_with_missing_keywords(self):
         data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            table.append(data)
+            uid = table.append(data)
         with closing(tables.open_file(self.filename, mode='a')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
             self.assertEqual(len(table), 1)
             for i in range(20, 56):
                 del data[CUBA(i)]
-            table[0] = data
-            loaded_data = table[0]
+            table[uid] = data
+            loaded_data = table[uid]
             self.assertDataContainersEqual(loaded_data, data)
 
-    def _test_delete_data(self):
+    def test_delete_data(self):
         data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            table.append(data)
+            uid0 = table.append(data)
             new_data = DataContainer(data)
             new_data[CUBA.VELOCITY] = 45
-            table.append(new_data)
-            del table[0]
-            loaded_data = table[0]
+            uid1 = table.append(new_data)
+            del table[uid0]
+            loaded_data = table[uid1]
             self.assertEqual(len(table), 1)
             self.assertDataContainersEqual(loaded_data, new_data)
 
-    def _test_delete_data_to_empty_table(self):
+    def test_delete_data_to_empty_table(self):
         data = create_data_container()
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            table.append(data)
-            del table[0]
+            uid = table.append(data)
+            del table[uid]
             self.assertEqual(len(table), 0)
 
-    def _test_iteration(self):
+    def test_iteration(self):
         # create sample data
         data = []
         for index in range(10):
@@ -194,7 +194,7 @@ class TestDataContainerTable(unittest.TestCase):
                 self.assertDataContainersEqual(loaded_data, data[index])
             self.assertEqual(index, 9)
 
-    def _test_itersequence(self):
+    def test_itersequence(self):
         # create sample data
         data = []
         for index in range(10):
