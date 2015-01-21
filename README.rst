@@ -4,7 +4,13 @@ Simphony-common
 The native implementation of the SimPhoNy cuds objects and io code.
 
 .. image:: https://travis-ci.org/simphony/simphony-common.svg?branch=master
-    :target: https://travis-ci.org/simphony/simphony-common
+   :target: https://travis-ci.org/simphony/simphony-common
+   :alt: Build status
+
+.. image:: https://coveralls.io/repos/simphony/simphony-common/badge.svg
+   :target: https://coveralls.io/r/simphony/simphony-common
+   :alt: Test coverage
+
 
 Repository
 ----------
