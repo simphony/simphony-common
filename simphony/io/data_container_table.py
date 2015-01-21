@@ -1,5 +1,4 @@
 from collections import MutableMapping
-from itertools import izip
 import uuid
 
 import numpy
@@ -28,7 +27,7 @@ class DataContainerTable(MutableMapping):
 
         Parameters
         ----------
-       root : tables.Group
+        root : tables.Group
             The root node where to add the data container table structures.
         name : string
             The name of the new group that will be created.
@@ -129,6 +128,7 @@ class DataContainerTable(MutableMapping):
         table = self._table
         for row in table.where(
                 'index == value', condvars={'value': uid.bytes}):
+            print row
             if table.nrows == 1:
                 name = table._v_name
                 # pytables due to hdf5 limitations does
