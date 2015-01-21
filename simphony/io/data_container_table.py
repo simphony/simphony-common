@@ -47,9 +47,6 @@ class DataContainerTable(MutableMapping):
         self._cuba_to_position = {
             cuba: columns[member.lower()]._v_pos
             for member, cuba in members.items()}
-        self._cuba_to_column = {
-            cuba: member.lower()
-            for member, cuba in members.items()}
         self._position_to_cuba = {
             columns[member.lower()]._v_pos: cuba
             for member, cuba in members.items()}
@@ -69,18 +66,10 @@ class DataContainerTable(MutableMapping):
 
         """
         table = self._table
-        positions = self._cuba_to_position
-        row = table.row
-        mask = numpy.zeros(
-            shape=table.coldtypes['mask'].shape, dtype=numpy.bool)
         uid = uuid.uuid4()
+        row = table.row
         row['index'] = uid.bytes
-        data_row = list(row['Data'])
-        for key in data:
-            data_row[positions[key]] = data[key]
-            mask[positions[key]] = True
-        row['mask'] = mask
-        row['Data'] = tuple(data_row)
+        self._populate(row, data)
         row.append()
         table.flush()
         return uid
@@ -89,37 +78,31 @@ class DataContainerTable(MutableMapping):
         """ Return the DataContainer in row.
 
         """
-        cuba = self._position_to_cuba
         for row in self._table.where(
                 'index == value',  condvars={'value': uid.bytes}):
-            mask = row['mask']
-            data = row['Data']
-            return DataContainer({
-                cuba[index]: data[index]
-                for index, valid in enumerate(mask) if valid})
+            return self._retrieve(row)
+        else:
+            raise ValueError(
+                'Record (id={id}) does not exist'.format(id=uid))
 
     def __setitem__(self, uid, data):
         """ Set the data in row from the DataContainer.
 
         """
         table = self._table
-        positions = self._cuba_to_position
         for row in table.where(
                 'index == value', condvars={'value': uid.bytes}):
-            mask = numpy.zeros(
-                shape=table.coldtypes['mask'].shape, dtype=numpy.bool)
-            data_row = list(row['Data'])
-            for key in data:
-                data_row[positions[key]] = data[key]
-                mask[positions[key]] = True
-            row['mask'] = mask
-            row['Data'] = tuple(data_row)
+            self._populate(row, data)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
             row._flush_mod_rows()
-            break
+            return
         else:
-            raise KeyError('Index {} is not found'.format(uid))
+            row = table.row
+            row['index'] = uid.bytes
+            self._populate(row, data)
+            row.append()
+            table.flush()
 
     def __delitem__(self, uid):
         """ Delete the row.
@@ -159,11 +142,32 @@ class DataContainerTable(MutableMapping):
 
     def __iter__(self):
         """ Iterate over all the rows
+
+        """
+        for row in self._table:
+            yield self._retrieve(row)
+
+    def _populate(self, row, value):
+        """ Populate the row from the DataContainer.
+
+        """
+        positions = self._cuba_to_position
+        mask = numpy.zeros(
+            shape=self._table.coldtypes['mask'].shape, dtype=numpy.bool)
+        data = list(row['Data'])
+        for key in value:
+            data[positions[key]] = value[key]
+            mask[positions[key]] = True
+        row['mask'] = mask
+        row['Data'] = tuple(data)
+
+    def _retrieve(self, row):
+        """ Return the DataContainer from a table row instance.
+
         """
         cuba = self._position_to_cuba
-        for row in self._table:
-            mask = row['mask']
-            data = row['Data']
-            yield DataContainer({
-                cuba[index]: data[index]
-                for index, valid in enumerate(mask) if valid})
+        mask = row['mask']
+        data = row['Data']
+        return DataContainer({
+            cuba[index]: data[index]
+            for index, valid in enumerate(mask) if valid})

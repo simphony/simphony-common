@@ -4,6 +4,7 @@ import random
 import tempfile
 import os.path
 import shutil
+import uuid
 from contextlib import closing
 
 import tables
@@ -34,6 +35,15 @@ def append(handle, n, value):
         handle.remove_node(root, 'my_data_table', recursive=True)
     table = DataContainerTable(root, 'my_data_table')
     return [table.append(value) for i in range(n)]
+
+
+def set_item(handle, uids, value):
+    root = handle.root
+    if hasattr(root, 'my_data_table'):
+        handle.remove_node(root, 'my_data_table', recursive=True)
+    table = DataContainerTable(root, 'my_data_table')
+    for uid in uids:
+        table[uid] = value
 
 
 def iteration(container):
@@ -71,6 +81,8 @@ try:
 
     """)
     with closing(tables.open_file(filename, mode='w')) as handle:
+        root = handle.root
+        table = DataContainerTable(root, 'my_data_table')
         print(
             "Append {}:".format(n),
             bench(lambda: append(handle, 1000, data_container)))
@@ -81,6 +93,24 @@ try:
         print(
             "Append {} masked:".format(n),
             bench(lambda: append(handle, 1000, data_container_half)))
+
+    uids = [uuid.uuid4() for _ in range(n)]
+    with closing(tables.open_file(filename, mode='w')) as handle:
+
+        print(
+            "Set item {}:".format(n),
+            bench(
+                lambda: set_item(handle, uids, data_container),
+                repeat=1, adjust_runs=False))
+
+    with closing(tables.open_file(filename, mode='w')) as handle:
+        root = handle.root
+        table = DataContainerTable(root, 'my_data_table')
+        print(
+            "Set item {} masked:".format(n),
+            bench(
+                lambda: set_item(handle, uids, data_container),
+                repeat=1, adjust_runs=False))
 
     uids = create_table(filename)
     sample = random.sample(uids, 300)
@@ -100,7 +130,7 @@ try:
         root = handle.root
         table = DataContainerTable(root, 'my_data_table')
         print(
-            "Setitem of 300 sample:",
+            "Update item of 300 sample:",
             bench(lambda: setitem(table, data_container_half, sample)))
         print(
             "Delitem of 300 sample:", bench(

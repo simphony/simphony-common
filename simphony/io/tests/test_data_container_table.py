@@ -3,6 +3,7 @@ import unittest
 import shutil
 import os
 import random
+import uuid
 from contextlib import closing
 
 
@@ -79,6 +80,18 @@ class TestDataContainerTable(unittest.TestCase):
             table = DataContainerTable(root, 'my_data_table')
             self.assertEqual(len(table), 1)
 
+    def test_set_data(self):
+        data = DataContainer({key: key + 3 for key in CUBA})
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            self.assertEqual(len(table), 0)
+            table[uuid.uuid4()] = data
+        with closing(tables.open_file(self.filename, mode='r')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            self.assertEqual(len(table), 1)
+
     def test_append_data_with_missing_keywords(self):
         data = DataContainer({CUBA(i): CUBA(i) + 3 for i in range(20, 67)})
         with closing(tables.open_file(self.filename, mode='w')) as handle:
@@ -94,32 +107,56 @@ class TestDataContainerTable(unittest.TestCase):
             table = DataContainerTable(root, 'my_data_table')
             self.assertEqual(len(table), 2)
 
+    def test_set_data_with_missing_keywords(self):
+        data = DataContainer({CUBA(i): CUBA(i) + 3 for i in range(20, 67)})
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            self.assertEqual(len(table), 0)
+            table[uuid.uuid4()] = data
+            self.assertEqual(len(table), 1)
+            table[uuid.uuid4()] = data
+            self.assertEqual(len(table), 2)
+        with closing(tables.open_file(self.filename, mode='r')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            self.assertEqual(len(table), 2)
+
     def test_get_data(self):
         data = create_data_container()
+        data1 = DataContainer(data)
+        data1[CUBA.NAME] = 'data 1'
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
             uid = table.append(data)
+            uid1 = uuid.uuid4()
+            table[uid1] = data1
         with closing(tables.open_file(self.filename, mode='r')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            loaded_data = table[uid]
-            self.assertEqual(len(table), 1)
-            self.assertDataContainersEqual(loaded_data, data)
+            self.assertEqual(len(table), 2)
+            self.assertDataContainersEqual(table[uid], data)
+            self.assertDataContainersEqual(table[uid1], data1)
 
     def test_get_data_with_missing_keywords(self):
         data = create_data_container()
         for i in range(20, 56):
             del data[CUBA(i)]
+        data1 = DataContainer(data)
+        data1[CUBA.NAME] = 'data 1'
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
             uid = table.append(data)
+            uid1 = uuid.uuid4()
+            table[uid1] = data1
         with closing(tables.open_file(self.filename, mode='r')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            loaded_data = table[uid]
-            self.assertDataContainersEqual(loaded_data, data)
+            self.assertEqual(len(table), 2)
+            self.assertDataContainersEqual(table[uid], data)
+            self.assertDataContainersEqual(table[uid1], data1)
 
     def test_update_data(self):
         data = create_data_container()
