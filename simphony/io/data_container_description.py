@@ -5,6 +5,7 @@ import tables
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=16, pos=0)
+
     class Data(tables.IsDescription):
 
         name = tables.StringCol(pos=0, itemsize=20)

@@ -53,6 +53,7 @@ def table(input, output):
         'class Record(tables.IsDescription):\n',
         '\n',
         '    index = tables.StringCol(itemsize=16, pos=0)\n',
+        '\n',
         '    class Data(tables.IsDescription):\n',
         '\n'])
     data_types = {
