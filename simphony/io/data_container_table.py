@@ -1,9 +1,11 @@
-import numpy
-import tables
 from collections import MutableMapping
 from itertools import izip
+import uuid
 
-from simphony.io.data_container_description import Data, Mask
+import numpy
+import tables
+
+from simphony.io.data_container_description import Record
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
@@ -12,7 +14,8 @@ class DataContainerTable(MutableMapping):
     """ A proxy class to an HDF5 group node with serialised DataContainers.
 
     The class implements the Mutable-Mapping api where each DataContainer
-    instance is mapped to the row index in the table.
+    instance is mapped to uuid.
+
 
     """
 
@@ -31,27 +34,16 @@ class DataContainerTable(MutableMapping):
             The name of the new group that will be created.
 
         """
-        # Setup hdf5 nodes
         handle = root._v_file
-        try:
-            group = getattr(root, name)
-        except AttributeError:
-            group = handle.create_group(root, name)
-        finally:
-            self._group = group
+        self._parent = parent = root
 
-        try:
-            self._table = group.data
-        except AttributeError:
-            self._table = handle.create_table(group, 'data', Data)
-
-        try:
-            self._mask = group.mask
-        except AttributeError:
-            self._mask = handle.create_table(group, 'mask', Mask)
+        if hasattr(parent, name):
+            self._table = getattr(parent, name)
+        else:
+            self._table = handle.create_table(parent, name, Record)
 
         # prepare useful mappings
-        columns = Data.columns
+        columns = Record.columns['Data']._v_colobjects
         members = CUBA.__members__
         self._cuba_to_position = {
             cuba: columns[member.lower()]._v_pos
@@ -73,71 +65,89 @@ class DataContainerTable(MutableMapping):
 
         Returns
         -------
-        index : integer
-            The index position of the saved row.
+        uid : uuid.UUID
+            The index of the saved row.
 
         """
         table = self._table
-        mask = self._mask
         positions = self._cuba_to_position
-        columns = self._cuba_to_column
         row = table.row
-        mask_row = numpy.zeros(
-            shape=mask.coldtypes['mask'].shape, dtype=numpy.bool)
+        mask = numpy.zeros(
+            shape=table.coldtypes['mask'].shape, dtype=numpy.bool)
+        uid = uuid.uuid4()
+        row['index'] = uid.bytes
+        data_row = list(row['Data'])
         for key in data:
-            row[columns[key]] = data[key]
-            mask_row[positions[key]] = True
+            data_row[positions[key]] = data[key]
+            mask[positions[key]] = True
+        row['mask'] = mask
+        row['Data'] = tuple(data_row)
         row.append()
         table.flush()
-        mask.append(mask_row)
-        mask.flush()
+        return uid
 
-    def __getitem__(self, row_number):
+    def __getitem__(self, uid):
         """ Return the DataContainer in row.
 
         """
         cuba = self._position_to_cuba
-        row = self._table[row_number]
-        mask_row = self._mask[row_number][0]
-        return DataContainer({
-            cuba[index]: row[index]
-            for index, valid in enumerate(mask_row) if valid})
+        for row in self._table.where(
+                'index == value',  condvars={'value': uid.bytes}):
+            mask = row['mask']
+            data = row['Data']
+            return DataContainer({
+                cuba[index]: data[index]
+                for index, valid in enumerate(mask) if valid})
 
-    def __setitem__(self, row_number, data):
+    def __setitem__(self, uid, data):
         """ Set the data in row from the DataContainer.
 
         """
         table = self._table
-        mask = self._mask
         positions = self._cuba_to_position
-        row = [0] * len(positions)
-        mask_row = [False] * len(positions)
-        for key in data:
-            row[positions[key]] = data[key]
-            mask_row[positions[key]] = True
-        table.modify_rows(start=row_number, rows=[row])
-        mask.modify_rows(start=row_number, rows=[(mask_row,)])
+        for row in table.where(
+                'index == value', condvars={'value': uid.bytes}):
+            mask = row['mask']
+            data_row = list(row['Data'])
+            for key in data:
+                data_row[positions[key]] = data[key]
+                mask[positions[key]] = True
+            row['mask'] = mask
+            row['Data'] = tuple(data_row)
+            row.update()
+            # see https://github.com/PyTables/PyTables/issues/11
+            row._flush_mod_rows()
+        else:
+            raise KeyError('Index {} is not found'.format(uid))
 
-    def __delitem__(self, row_number):
+    def __delitem__(self, uid):
         """ Delete the row.
 
         """
         table = self._table
-        if table.nrows == 1 and row_number == 0:
-            table.remove()
-            self._mask.remove()
-            group = self._group
-            self._table = tables.Table(group, 'data', Data)
-            self._mask = tables.Table(group, 'mask', Mask)
+        for row in table.where(
+                'index == value', condvars={'value': uid.bytes}):
+            if table.nrows == 1:
+                name = table.__name__
+                print name
+                # pytables due to hdf5 limitations does
+                # not support removing the last row of table
+                # so we delete the table and
+                # create new empty table in this situation
+                table.remove()
+                parent = self._parent
+                self._table = tables.Table(parent, name, Record)
+            else:
+                table.remove_row(row.nrow)
         else:
-            self._table.remove_row(row_number)
-            self._mask.remove_row(row_number)
+            raise ValueError(
+                'Record (id={id}) does not exist'.format(id=uid))
+
 
     def __len__(self):
         """ The number of rows in the table.
 
         """
-        assert self._table.nrows == self._mask.nrows
         return self._table.nrows
 
     def itersequence(self, sequence):
