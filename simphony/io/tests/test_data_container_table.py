@@ -2,7 +2,9 @@ import tempfile
 import unittest
 import shutil
 import os
+import random
 from contextlib import closing
+
 
 import tables
 import numpy
@@ -206,21 +208,23 @@ class TestDataContainerTable(unittest.TestCase):
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            for data_container in data:
-                table.append(data_container)
+            uids = {
+                table.append(data_container): data_container
+                for data_container in data}
+
             self.assertEqual(len(table), 10)
 
         # Iterate over a sequence of rows
         with closing(tables.open_file(self.filename, mode='r')) as handle:
             root = handle.root
             table = DataContainerTable(root, 'my_data_table')
-            sequence = [2, 8, 4]
+            sequence = random.sample(uids, 4)
             loaded_data = [
                 container for container in table.itersequence(sequence)]
-            self.assertEqual(len(loaded_data), 3)
+            self.assertEqual(len(loaded_data), 4)
             for index, container in enumerate(loaded_data):
                 self.assertDataContainersEqual(
-                    container, data[sequence[index]])
+                    container, uids[sequence[index]])
 
     def assertDataContainersEqual(self, data1, data2):
         self.assertIsInstance(data1, DataContainer)
