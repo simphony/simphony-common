@@ -23,9 +23,12 @@ def create_data_container():
     members = CUBA.__members__
     data = {}
     Data = Record.columns['Data']
-
     for member, cuba in members.items():
-        column_type = Data._v_colobjects[member.lower()]
+        try:
+            column_type = Data.columns[member.lower()]
+        except AttributeError:
+            column_type = Data._v_colobjects[member.lower()]
+
         if numpy.issubdtype(column_type, str):
             data[cuba] = member
         elif numpy.issubdtype(column_type, numpy.float):
