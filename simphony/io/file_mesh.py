@@ -164,7 +164,8 @@ class FileMesh(object):
 
         try:
             for point in self._group.points.where('uuid == value',
-                condvars={'value': p_uuid.bytes}):
+                                                  condvars={'value':
+                                                            p_uuid.bytes}):
                 return Point(
                     tuple(point['coordinates']),
                     uuid.UUID(bytes=point['uuid'])
@@ -199,10 +200,10 @@ class FileMesh(object):
 
         try:
             for edge in self._group.edges.where('uuid == value',
-                condvars={'value': e_uuid.bytes}):
+                                                condvars={'value':
+                                                          e_uuid.bytes}):
                 return Edge(
-                    list(uuid.UUID(bytes=pb)
-                        for pb in edge['points_uuids']),
+                    list(uuid.UUID(bytes=pb) for pb in edge['points_uuids']),
                     uuid.UUID(bytes=edge['uuid'])
                     )
         except:
@@ -235,10 +236,10 @@ class FileMesh(object):
 
         try:
             for face in self._group.faces.where('uuid == value',
-                condvars={'value': f_uuid.bytes}):
+                                                condvars={'value':
+                                                          f_uuid.bytes}):
                 return Face(
-                    list(uuid.UUID(bytes=pb)
-                        for pb in face['points_uuids']),
+                    list(uuid.UUID(bytes=pb) for pb in face['points_uuids']),
                     uuid.UUID(bytes=face['uuid'])
                     )
         except:
@@ -271,10 +272,10 @@ class FileMesh(object):
 
         try:
             for cell in self._group.cells.where('uuid == value',
-                condvars={'value': c_uuid.bytes}):
+                                                condvars={'value':
+                                                          c_uuid.bytes}):
                 return Cell(
-                    list(uuid.UUID(bytes=pb)
-                        for pb in cell['points_uuids']),
+                    list(uuid.UUID(bytes=pb) for pb in cell['points_uuids']),
                     uuid.UUID(bytes=cell['uuid'])
                     )
         except:
@@ -301,7 +302,8 @@ class FileMesh(object):
             point.uuid = self._generate_uuid()
 
         for point in self._group.points.where('uuid == value',
-            condvars={'value': point.uuid.bytes}):
+                                              condvars={'value':
+                                                        point.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing point with uuid" + str(point.uuid)
             raise KeyError(error_str)
@@ -336,7 +338,8 @@ class FileMesh(object):
             edge.uuid = self._generate_uuid()
 
         for edge in self._group.faces.where('uuid == value',
-            condvars={'value': edge.uuid.bytes}):
+                                            condvars={'value':
+                                                      edge.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing edge with uuid" + str(edge.uuid)
             raise KeyError(error_str)
@@ -371,7 +374,8 @@ class FileMesh(object):
             face.uuid = self._generate_uuid()
 
         for face in self._group.faces.where('uuid == value',
-            condvars={'value': face.uuid.bytes}):
+                                            condvars={'value':
+                                                      face.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing face with uuid" + str(face.uuid)
             raise KeyError(error_str)
@@ -406,7 +410,8 @@ class FileMesh(object):
             cell.uuid = self._generate_uuid()
 
         for cell in self._group.cells.where('uuid == value',
-            condvars={'value': cell.uuid.bytes}):
+                                            condvars={'value':
+                                                      cell.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing cell with uuid" + str(cell.uuid)
             raise KeyError(error_str)
@@ -441,7 +446,9 @@ class FileMesh(object):
 
         try:
             for upoint in self._group.points.where('uuid == value',
-                condvars={'value': point.uuid.bytes}):
+                                                   condvars={
+                                                       'value':
+                                                       point.uuid.bytes}):
                 upoint['coordinates'] = list(point.coordinates)
                 upoint.update()
                 self._group.points.flush()
@@ -470,7 +477,9 @@ class FileMesh(object):
 
         try:
             for uedge in self._group.edges.where('uuid == value',
-                condvars={'value': edge.uuid.bytes}):
+                                                 condvars={
+                                                     'value':
+                                                     edge.uuid.bytes}):
                 uedge['points_uuids'] = [puuid.bytes for puuid in edge.points]
                 uedge.update()
                 self._group.edges.flush()
@@ -499,7 +508,9 @@ class FileMesh(object):
 
         try:
             for uface in self._group.faces.where('uuid == value',
-                condvars={'value': face.uuid.bytes}):
+                                                 condvars={
+                                                     'value':
+                                                     face.uuid.bytes}):
                 uface['points_uuids'] = [puuid.bytes for puuid in face.points]
                 uface.update()
                 self._group.faces.flush()
@@ -528,7 +539,9 @@ class FileMesh(object):
 
         try:
             for ucell in self._group.cells.where('uuid == value',
-                condvars={'value': cell.uuid.bytes}):
+                                                 condvars={
+                                                     'value':
+                                                     cell.uuid.bytes}):
                 ucell['points_uuids'] = [puuid.bytes for puuid in cell.points]
                 ucell.update()
                 self._group.cells.flush()

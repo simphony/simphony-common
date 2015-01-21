@@ -129,7 +129,7 @@ class CudsFile(object):
         Parameters
         ----------
         name : str
-            name of the mesh 
+            name of the mesh
         mesh_container : ABCMesh, optional
             mesh to be added. If none is give,
             then an empty mesh is added.
@@ -137,7 +137,7 @@ class CudsFile(object):
         Returns
         ----------
         FileMesh
-            The mesh newly added to the file.  
+            The mesh newly added to the file.
             See get_mesh for more information.
 
         """
@@ -154,11 +154,11 @@ class CudsFile(object):
             for point in mesh.iter_points():
                 file_mesh.add_point(point)
             for edge in mesh.iter_edges():
-                file_mesh.add_edge(bond)
+                file_mesh.add_edge(edge)
             for face in mesh.iter_faces():
-                file_mesh.add_face(bond)
+                file_mesh.add_face(face)
             for cell in mesh.iter_cells():
-                file_mesh.add_cell(bond)
+                file_mesh.add_cell(cell)
 
         self._file.flush()
         return file_mesh
@@ -204,8 +204,8 @@ class CudsFile(object):
             return self._meshes[name][0]
         elif name in self._file.root.mesh_container:
             group = tables.Group(self._file.root.mesh_container, name)
-            m = FileMeshContainer(group, self._file)
-            self._meshes[name] = pc
+            m = FileMesh(group, self._file)
+            self._meshes[name] = m
             return m
         else:
             raise ValueError(
