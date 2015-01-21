@@ -128,7 +128,6 @@ class DataContainerTable(MutableMapping):
         table = self._table
         for row in table.where(
                 'index == value', condvars={'value': uid.bytes}):
-            print row
             if table.nrows == 1:
                 name = table._v_name
                 # pytables due to hdf5 limitations does

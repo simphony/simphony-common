@@ -3,6 +3,7 @@ from __future__ import print_function
 import random
 import tempfile
 import os.path
+import shutil
 from contextlib import closing
 
 import tables
@@ -59,48 +60,50 @@ def delitem(table, indices):
         del table[index]
 
 
-print("""
-Benchmarking various operations on the DataContainerTable.
+def create_table(filename):
+    with closing(tables.open_file(filename, mode='w')) as handle:
+        uids = append(handle, 1000, data_container)
+    return uids
 
-""")
-with closing(tables.open_file(filename, mode='w')) as handle:
-    print(
-        "Append {}:".format(n),
-        bench(lambda: append(handle, 1000, data_container)))
+try:
+    print("""
+    Benchmarking various operations on the DataContainerTable.
 
-with closing(tables.open_file(filename, mode='w')) as handle:
-    root = handle.root
-    table = DataContainerTable(root, 'my_data_table')
-    print(
-        "Append {} masked:".format(n),
-        bench(lambda: append(handle, 1000, data_container_half)))
+    """)
+    with closing(tables.open_file(filename, mode='w')) as handle:
+        print(
+            "Append {}:".format(n),
+            bench(lambda: append(handle, 1000, data_container)))
 
-with closing(tables.open_file(filename, mode='w')) as handle:
-    uids = append(handle, 1000, data_container)
+    with closing(tables.open_file(filename, mode='w')) as handle:
+        root = handle.root
+        table = DataContainerTable(root, 'my_data_table')
+        print(
+            "Append {} masked:".format(n),
+            bench(lambda: append(handle, 1000, data_container_half)))
+
+    uids = create_table(filename)
     sample = random.sample(uids, 300)
 
-with closing(tables.open_file(filename, mode='r')) as handle:
-    root = handle.root
-    table = DataContainerTable(root, 'my_data_table')
-    print("Iterate {}:".format(n), bench(lambda: iteration(table)))
-    print(
-        "IterSequence of 300:",
-        bench(lambda: iteration_with_sequence(table, sample)))
-    print(
-        'Getitem sample of 300:',
-        bench(lambda: getitem_access(table, sample)))
+    with closing(tables.open_file(filename, mode='r')) as handle:
+        root = handle.root
+        table = DataContainerTable(root, 'my_data_table')
+        print("Iterate {}:".format(n), bench(lambda: iteration(table)))
+        print(
+            "IterSequence of 300:",
+            bench(lambda: iteration_with_sequence(table, sample)))
+        print(
+            'Getitem sample of 300:',
+            bench(lambda: getitem_access(table, sample)))
 
-with closing(tables.open_file(filename, mode='a')) as handle:
-    root = handle.root
-    table = DataContainerTable(root, 'my_data_table')
-    print(
-        "Setitem of 300 sample:",
-        bench(lambda: setitem(table, data_container_half, sample)))
-
-with closing(tables.open_file(filename, mode='a')) as handle:
-    root = handle.root
-    table = DataContainerTable(root, 'my_data_table')
-    print(len(table))
-    print(
-        "Delitem of 300 sample:", bench(lambda: delitem(table, sample)))
-    print(len(table))
+    with closing(tables.open_file(filename, mode='a')) as handle:
+        root = handle.root
+        table = DataContainerTable(root, 'my_data_table')
+        print(
+            "Setitem of 300 sample:",
+            bench(lambda: setitem(table, data_container_half, sample)))
+        print(
+            "Delitem of 300 sample:", bench(
+                lambda: delitem(table, sample), repeat=1, adjust_runs=False))
+finally:
+    shutil.rmtree(temp_dir)
