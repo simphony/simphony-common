@@ -2,7 +2,7 @@ from __future__ import print_function
 from timeit import Timer
 
 
-def bench(stmt='pass', setup='pass', repeat=5):
+def bench(stmt='pass', setup='pass', repeat=5, adjust_runs=True):
     """ BenchMark the function.
 
     """
@@ -10,7 +10,7 @@ def bench(stmt='pass', setup='pass', repeat=5):
     for i in range(100):
         number = 10**i
         time = timer.timeit(number)
-        if time > 0.2:
+        if time > 0.2 or not adjust_runs:
             break
 
     times = [timer.timeit(number) for i in range(repeat)]
