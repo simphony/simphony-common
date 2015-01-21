@@ -155,13 +155,8 @@ class DataContainerTable(MutableMapping):
         """ Iterate over a sequence of row ids.
 
         """
-        cuba = self._position_to_cuba
-        for row in self._table.itersequence(sequence):
-            mask = row['mask']
-            data = row['Data']
-            yield DataContainer({
-                cuba[index]: data[index]
-                for index, valid in enumerate(mask) if valid})
+        for uid in sequence:
+            yield self.__getitem__(uid)
 
     def __iter__(self):
         """ Iterate over all the rows
