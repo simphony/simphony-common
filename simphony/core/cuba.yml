@@ -82,7 +82,7 @@
   number: 11
   shape: [3]
   type: double
-- description: Radio for a spherical material
+- description: Radius for a spherical material
   domain: [VIS]
   key: SHAPE_RADIUS
   name: ShapeRadius
