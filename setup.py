@@ -30,6 +30,12 @@ setup(
     author='SimPhoNy FP7 European Project',
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
+    install_requires=[
+        "cython",
+        "enum34",
+        "tables",
+        "click",
+        "pyyaml"],
     packages=find_packages(),
     entry_points={
         'console_scripts': [
