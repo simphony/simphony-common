@@ -29,6 +29,7 @@ make_orthorombicp_lattice:
 """
 import numpy as np
 from math import sqrt
+from simphony.cuds.abstractlattice import ABCLattice
 from simphony.core.data_container import DataContainer
 
 
@@ -52,7 +53,7 @@ class LatticeNode:
             self.data = DataContainer(data)
 
 
-class Lattice(object):
+class Lattice(ABCLattice):
     """
     A Bravais lattice;
     stores references to data containers (node related data).
