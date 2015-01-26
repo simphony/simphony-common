@@ -23,7 +23,7 @@ class LatticeNodeTestCase(unittest.TestCase):
 
         self.assertIsInstance(node, la.LatticeNode,
                               "Error: not a LatticeNode!")
-        self.assertEqual(node.id, (0, 0))
+        self.assertEqual(node.index, (0, 0))
 
     def test_construct_lattice_node_copy(self):
         """Creation of a lattice node (copy constructor)."""
@@ -35,13 +35,13 @@ class LatticeNodeTestCase(unittest.TestCase):
 
         self.assertIsInstance(node_new, la.LatticeNode,
                               "Error: not a LatticeNode!")
-        self.assertEqual(node_new.id, (2, 3))
+        self.assertEqual(node_new.index, (2, 3))
         self.assertEqual(node_new.data[CUBA.DENSITY], 1.5)
         self.assertEqual(node_new.data[CUBA.VELOCITY], (0.2, -0.1))
 
 
 class LatticeTestCase(unittest.TestCase):
-    """Test case for Lattic class."""
+    """Test case for Lattice class."""
     def setUp(self):
         pass
 
@@ -118,17 +118,17 @@ class LatticeTestCase(unittest.TestCase):
         node_coords = np.zeros((10, 2), dtype=np.int32)
         for node in rect_lat.iter_nodes():
             if CUBA.LABEL in node.data:
-                node_coords[iter, :] = node.id
+                node_coords[iter, :] = node.index
                 iter += 1
 
         iter = 0
         check_sum1 = 0
         for node in rect_lat.iter_nodes(node_coords):
             check_sum1 += node.data[CUBA.LABEL]
-            coord = rect_lat.get_coordinate(node.id)
+            coord = rect_lat.get_coordinate(node.index)
 
-            self.assertEqual(node.id[0], iter)
-            self.assertEqual(node.id[1], iter)
+            self.assertEqual(node.index[0], iter)
+            self.assertEqual(node.index[1], iter)
             self.assertEqual(coord[0], 0.1*iter + 1.5)
             self.assertEqual(coord[1], 0.2*iter + 1.5)
 
