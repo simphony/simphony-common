@@ -38,13 +38,13 @@ class LatticeNode:
 
     Attributes:
     -----------
-    id: tuple of D x int
+    index: tuple of D x int
         node index coordinate
     data: reference to a DataContainer object
         node related data
     """
-    def __init__(self, id, data=None):
-        self.id = tuple(id)
+    def __init__(self, index, data=None):
+        self.index = tuple(index)
 
         if data is None:
             self.data = DataContainer()
@@ -92,19 +92,19 @@ class Lattice(object):
     def origin(self):
         return self._origin
 
-    def get_node(self, id):
-        """Get a copy of the node corresponding to the given id.
+    def get_node(self, index):
+        """Get a copy of the node corresponding to the given index.
 
         Parameters:
         -----------
-        id: tuple of D x int (node index coordinate)
+        index: tuple of D x int (node index coordinate)
 
         Returns:
         -----------
         A reference to a LatticeNode object
         """
-        tuple_id = tuple(id)
-        return LatticeNode(tuple_id, self._dcs[tuple_id])
+        tuple_index = tuple(index)
+        return LatticeNode(tuple_index, self._dcs[tuple_index])
 
     def update_node(self, lat_node):
         """Update the corresponding lattice node (data copied).
@@ -114,39 +114,39 @@ class Lattice(object):
         lat_node: reference to a LatticeNode object
             data copied from the given node
         """
-        id = lat_node.id
-        self._dcs[id] = DataContainer(lat_node.data)
+        index = lat_node.index
+        self._dcs[index] = DataContainer(lat_node.data)
 
-    def iter_nodes(self, ids=None):
-        """Get an iterator over the LatticeNodes described by the ids.
+    def iter_nodes(self, indices=None):
+        """Get an iterator over the LatticeNodes described by the indices.
 
         Parameters:
         -----------
-        ids: iterable set of D x int (node index coordinates)
+        indices: iterable set of D x int (node index coordinates)
 
         Returns:
         -----------
         A generator for LatticeNode objects
         """
-        if ids is None:
-            for id, val in np.ndenumerate(self._dcs):
-                yield self.get_node(id)
+        if indices is None:
+            for index, val in np.ndenumerate(self._dcs):
+                yield self.get_node(index)
         else:
-            for id in ids:
-                yield self.get_node(id)
+            for index in indices:
+                yield self.get_node(index)
 
-    def get_coordinate(self, id):
+    def get_coordinate(self, index):
         """Get coordinate of the given index coordinate.
 
         Parameters:
         -----------
-        id: D x int (node index coordinate)
+        index: D x int (node index coordinate)
 
         Returns:
         -----------
         D x float
         """
-        return self.origin + self.base_vect*np.array(id)
+        return self.origin + self.base_vect*np.array(index)
 
 
 def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
