@@ -31,7 +31,6 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "cython",
         "enum34",
         "tables",
         "click",
