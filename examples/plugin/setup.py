@@ -7,5 +7,6 @@ setup(
     description='An example plugin package',
     packages=find_packages(),
     entry_points={
-        'simphony.visualisation': ['example = simphony_example']
+        'simphony.visualisation': ['example = simphony_example'],
+        'simphony.engine': ['example_engine = simphony_example']
     })
