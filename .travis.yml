@@ -14,6 +14,9 @@ install:
   - pip install -r dev_requirements.txt
   - pip install coveralls
   - python setup.py develop
+  - pushd examples/plugin
+  - python setup.py develop
+  - popd
 script:
   - flake8 .
   - coverage run -m unittest discover
