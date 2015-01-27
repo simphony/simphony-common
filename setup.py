@@ -34,7 +34,8 @@ setup(
         "enum34",
         "tables",
         "click",
-        "pyyaml"],
+        "pyyaml",
+        "stevedore"],
     packages=find_packages(),
     entry_points={
         'console_scripts': [
