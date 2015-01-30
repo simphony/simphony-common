@@ -7,7 +7,13 @@ from abc import ABCMeta, abstractmethod
 
 
 class ABCMesh(object):
-    """Abstract base class for mesh."""
+    """Abstract base class for mesh.
+
+    Attributes
+    ----------
+    name : str
+        name of mesh
+    """
 
     __metaclass__ = ABCMeta
 

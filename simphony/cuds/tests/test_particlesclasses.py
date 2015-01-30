@@ -64,7 +64,7 @@ class ParticleContainerAddParticlesTestCase(unittest.TestCase):
         self.p_list = []
         for i in xrange(10):
             self.p_list.append(Particle([i, i*10, i*100]))
-        self.pc = ParticleContainer()
+        self.pc = ParticleContainer(name="foo")
 
     def test_has_particle(self):
         id = self.pc.add_particle(self.p_list[0])
@@ -88,7 +88,7 @@ class ParticleContainerAddParticlesTestCase(unittest.TestCase):
 class ParticleContainerManipulatingParticlesTestCase(unittest.TestCase):
     def setUp(self):
         self.p_list = []
-        self.pc = ParticleContainer()
+        self.pc = ParticleContainer(name="foo")
         for i in xrange(10):
             particle = Particle([i, i*10, i*100], id=uuid.UUID(int=i))
             self.p_list.append(particle)
@@ -152,7 +152,7 @@ class ParticleContainerAddBondsTestCase(unittest.TestCase):
                     uuid.UUID(int=i),
                     uuid.UUID(int=i + 1),
                     uuid.UUID(int=i+2)]))
-        self.pc = ParticleContainer()
+        self.pc = ParticleContainer(name="foo")
 
     def test_has_bond(self):
         id = self.pc.add_bond(self.b_list[0])
@@ -176,7 +176,7 @@ class ParticleContainerManipulatingBondsTestCase(unittest.TestCase):
     def setUp(self):
         self.p_list = []
         self.b_list = []
-        self.pc = ParticleContainer()
+        self.pc = ParticleContainer(name="foo")
         for i in xrange(10):
             self.p_list.append(Particle([i, i*10, i*100]))
             self.b_list.append(Bond([1, 2, 3]))
