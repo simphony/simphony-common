@@ -93,7 +93,7 @@ class DataContainerTable(MutableMapping):
                 'index == value',  condvars={'value': uid.bytes}):
             return self._retrieve(row)
         else:
-            raise ValueError(
+            raise KeyError(
                 'Record (id={id}) does not exist'.format(id=uid))
 
     def __setitem__(self, uid, data):
@@ -136,7 +136,7 @@ class DataContainerTable(MutableMapping):
                 table.remove_row(row.nrow)
             break
         else:
-            raise ValueError(
+            raise KeyError(
                 'Record (id={id}) does not exist'.format(id=uid))
 
     def __len__(self):
