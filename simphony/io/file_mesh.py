@@ -162,15 +162,14 @@ class FileMesh(object):
 
         """
 
-        try:
-            for point in self._group.points.where('uuid == value',
-                                                  condvars={'value':
-                                                            p_uuid.bytes}):
+        for point in self._group.points.where('uuid == value',
+                                               condvars={'value':
+                                                          p_uuid.bytes}):
                 return Point(
                     tuple(point['coordinates']),
                     uuid.UUID(bytes=point['uuid'])
                     )
-        except KeyError:
+        else:
             error_str = "Trying to get an non existing point with uuid: {}"
             raise ValueError(error_str.format(p_uuid))
 
@@ -198,15 +197,14 @@ class FileMesh(object):
 
         """
 
-        try:
-            for edge in self._group.edges.where('uuid == value',
-                                                condvars={'value':
-                                                          e_uuid.bytes}):
-                return Edge(
-                    list(uuid.UUID(bytes=pb) for pb in edge['points_uuids']),
-                    uuid.UUID(bytes=edge['uuid'])
-                    )
-        except:
+        for edge in self._group.edges.where('uuid == value',
+                                            condvars={'value':
+                                                      e_uuid.bytes}):
+            return Edge(
+                list(uuid.UUID(bytes=pb) for pb in edge['points_uuids']),
+                uuid.UUID(bytes=edge['uuid'])
+                )
+        else:
             error_str = "Trying to get an non existing edge with uuid: {}"
             raise ValueError(error_str.format(e_uuid))
 
@@ -234,15 +232,14 @@ class FileMesh(object):
 
         """
 
-        try:
-            for face in self._group.faces.where('uuid == value',
-                                                condvars={'value':
-                                                          f_uuid.bytes}):
-                return Face(
-                    list(uuid.UUID(bytes=pb) for pb in face['points_uuids']),
-                    uuid.UUID(bytes=face['uuid'])
-                    )
-        except:
+        for face in self._group.faces.where('uuid == value',
+                                            condvars={'value':
+                                                      f_uuid.bytes}):
+            return Face(
+                list(uuid.UUID(bytes=pb) for pb in face['points_uuids']),
+                uuid.UUID(bytes=face['uuid'])
+                )
+        else:
             error_str = "Trying to get an non existing face with uuid: {}"
             raise ValueError(error_str.format(f_uuid))
 
@@ -270,15 +267,14 @@ class FileMesh(object):
 
         """
 
-        try:
-            for cell in self._group.cells.where('uuid == value',
-                                                condvars={'value':
-                                                          c_uuid.bytes}):
-                return Cell(
-                    list(uuid.UUID(bytes=pb) for pb in cell['points_uuids']),
-                    uuid.UUID(bytes=cell['uuid'])
-                    )
-        except:
+        for cell in self._group.cells.where('uuid == value',
+                                            condvars={'value':
+                                                      c_uuid.bytes}):
+            return Cell(
+                list(uuid.UUID(bytes=pb) for pb in cell['points_uuids']),
+                uuid.UUID(bytes=cell['uuid'])
+                )
+        else:
             error_str = "Trying to get an non existing cell with id: {}"
             raise ValueError(error_str.format(c_uuid))
 
