@@ -276,7 +276,6 @@ class CudsFile(object):
 
         """
 
-        names = copy.deepcopy(names)
         if names is None:
             names = self._meshes.keys()
         for name in names:
