@@ -26,7 +26,8 @@ class TestDataContainer(unittest.TestCase):
     def test_initialization_with_keywords(self):
         data = {key: index + 3 for index, key in enumerate(CUBA.__members__)}
         container = DataContainer(**data)
-        self.assertEqual(container, {key: key + 3 for key in CUBA})
+        self.assertEqual(
+            container, {key: index + 3 for index, key in enumerate(CUBA)})
         for key in container:
             self.assertIsInstance(key, CUBA)
 
@@ -35,7 +36,7 @@ class TestDataContainer(unittest.TestCase):
             key: index + 3 for index, key in enumerate(CUBA.__members__)
             if key != str(CUBA(10))[5:]}
         container = DataContainer([(CUBA(10), 23)], **data)
-        expected = {key: key + 3 for key in CUBA}
+        expected = {key: index + 3 for index, key in enumerate(CUBA)}
         expected[CUBA(10)] = 23
         self.assertDictEqual(container, expected)
         for key in container:
@@ -89,7 +90,8 @@ class TestDataContainer(unittest.TestCase):
         container = DataContainer()
         data = {key: index + 3 for index, key in enumerate(CUBA.__members__)}
         container.update(**data)
-        self.assertEqual(container, {key: key + 3 for key in CUBA})
+        self.assertEqual(
+            container, {key: index + 3 for index, key in enumerate(CUBA)})
         for key in container:
             self.assertIsInstance(key, CUBA)
 
@@ -99,7 +101,7 @@ class TestDataContainer(unittest.TestCase):
             key: index + 3 for index, key in enumerate(CUBA.__members__)
             if key != str(CUBA(10))[5:]}
         container.update([(CUBA(10), 23)], **data)
-        expected = {key: key + 3 for key in CUBA}
+        expected = {key: index + 3 for index, key in enumerate(CUBA)}
         expected[CUBA(10)] = 23
         self.assertDictEqual(container, expected)
         for key in container:
