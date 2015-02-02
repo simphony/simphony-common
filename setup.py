@@ -30,7 +30,7 @@ setup(
     author='SimPhoNy FP7 European Project',
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
-    install_requires=[
+    requires=[
         "enum34",
         "tables",
         "click",
