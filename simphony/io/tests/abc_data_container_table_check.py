@@ -114,7 +114,6 @@ class ABCDataContainerTableCheck(object):
                 handle.close()
 
     def test_creating_a_data_container_table(self):
-        saved_keys = self.saved_keys
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
             table = DataContainerTable(
@@ -123,7 +122,7 @@ class ABCDataContainerTableCheck(object):
             self.assertIn('my_data_table', root)
             self.assertTrue(table.valid)
             data_column = root.my_data_table.colinstances['Data']
-            expected_column_names = [key.name.lower() for key in saved_keys]
+            expected_column_names = [key.name.lower() for key in self.saved_keys]
             self.assertItemsEqual(
                 data_column._v_colnames, expected_column_names)
 
@@ -144,24 +143,60 @@ class ABCDataContainerTableCheck(object):
             self.assertIn(uid, table)
 
     def test_append_data_with_missing_keywords(self):
-        data = create_data_container(restrict=self.saved_keys[:-1])
+        keys = self.saved_keys[:-1]
+        data = create_data_container(restrict=keys)
         with self.new_table('my_data_table') as table:
             table.append(data)
             self.assertEqual(len(table), 1)
-            table.append(data)
+            uid = table.append(data)
             self.assertEqual(len(table), 2)
         with self.open_table('my_data_table') as table:
             self.assertEqual(len(table), 2)
+            loaded_data = table[uid]
+            expected = create_data_container(restrict=keys)
+            self.assertDataContainersEqual(loaded_data, expected)
 
     def test_set_data_with_missing_keywords(self):
-        data = create_data_container(restrict=self.saved_keys[:-1])
+        keys = self.saved_keys[:-1]
+        data = create_data_container(restrict=keys)
         with self.new_table('my_data_table') as table:
             table[uuid.uuid4()] = data
             self.assertEqual(len(table), 1)
-            table[uuid.uuid4()] = data
+            uid = uuid.uuid4()
+            table[uid] = data
             self.assertEqual(len(table), 2)
         with self.open_table('my_data_table') as table:
             self.assertEqual(len(table), 2)
+            loaded_data = table[uid]
+            expected = create_data_container(restrict=keys)
+            self.assertDataContainersEqual(loaded_data, expected)
+
+    def test_append_data_with_more_keywords(self):
+        data = create_data_container()
+        with self.new_table('my_data_table') as table:
+            table.append(data)
+            self.assertEqual(len(table), 1)
+            uid = table.append(data)
+            self.assertEqual(len(table), 2)
+        with self.open_table('my_data_table') as table:
+            self.assertEqual(len(table), 2)
+            loaded_data = table[uid]
+            expected = create_data_container(restrict=self.saved_keys)
+            self.assertDataContainersEqual(loaded_data, expected)
+
+    def test_set_data_with_more_keywords(self):
+        data = create_data_container()
+        with self.new_table('my_data_table') as table:
+            table[uuid.uuid4()] = data
+            self.assertEqual(len(table), 1)
+            uid = uuid.uuid4()
+            table[uid] = data
+            self.assertEqual(len(table), 2)
+        with self.open_table('my_data_table') as table:
+            self.assertEqual(len(table), 2)
+            loaded_data = table[uid]
+            expected = create_data_container(restrict=self.saved_keys)
+            self.assertDataContainersEqual(loaded_data, expected)
 
     def test_get_data(self):
         data = create_data_container()
