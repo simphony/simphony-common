@@ -214,6 +214,21 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(table[uid], data)
             self.assertDataContainersEqual(table[uid1], data1)
 
+    def test_get_with_invalid_uid(self):
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
+        data1 = DataContainer(data)
+        key = saved_keys[0]
+        data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
+        with self.new_table('my_data_table') as table:
+            table.append(data)
+            uid1 = uuid.uuid4()
+            table[uid1] = data1
+        with self.open_table('my_data_table') as table:
+            self.assertEqual(len(table), 2)
+            with self.assertRaises(KeyError):
+                table[uuid.uuid4()]
+
     def test_get_data_with_missing_keywords(self):
         saved_keys = self.saved_keys
         data = create_data_container(restrict=saved_keys)
@@ -268,6 +283,23 @@ class ABCDataContainerTableCheck(object):
             loaded_data = table[uid1]
             self.assertEqual(len(table), 1)
             self.assertDataContainersEqual(loaded_data, new_data)
+
+    def test_delete_data_with_invalid_uid(self):
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
+        with self.new_table('my_data_table') as table:
+            uid0 = table.append(data)
+            new_data = DataContainer(data)
+            key = saved_keys[0]
+            data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
+            uid1 = table.append(new_data)
+        with self.open_table('my_data_table', mode='a') as table:
+            del table[uid0]
+            with self.assertRaises(KeyError):
+                table[uuid.uuid4()]
+            with self.assertRaises(KeyError):
+                table[uid0]
+
 
     def test_delete_data_to_empty_table(self):
         data = create_data_container()
