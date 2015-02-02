@@ -1,8 +1,10 @@
 import unittest
+from contextlib import closing
 
 import tables
 
 from simphony.io.data_container_description import Record
+from simphony.io.data_container_table import DataContainerTable
 from simphony.io.tests.abc_data_container_table_check import (
     ABCDataContainerTableCheck)
 
@@ -31,6 +33,19 @@ class TestDataContainerTable(
     @property
     def record(self):
         return Record
+
+    def test_creating_a_data_container_table_using_default_record(self):
+        with closing(tables.open_file(self.filename, mode='w')) as handle:
+            root = handle.root
+            table = DataContainerTable(root, 'my_data_table')
+            self.assertEqual(len(table), 0)
+            self.assertIn('my_data_table', root)
+            self.assertTrue(table.valid)
+            data_column = root.my_data_table.colinstances['Data']
+            expected_column_names = [
+                key.name.lower() for key in self.saved_keys]
+            self.assertItemsEqual(
+                data_column._v_colnames, expected_column_names)
 
 
 class TestDataContainerTableWithCustomRecord(
