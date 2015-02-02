@@ -296,9 +296,9 @@ class ABCDataContainerTableCheck(object):
         with self.open_table('my_data_table', mode='a') as table:
             del table[uid0]
             with self.assertRaises(KeyError):
-                table[uuid.uuid4()]
+                del table[uuid.uuid4()]
             with self.assertRaises(KeyError):
-                table[uid0]
+                del table[uid0]
 
     def test_delete_data_to_empty_table(self):
         data = create_data_container()
