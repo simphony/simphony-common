@@ -34,7 +34,9 @@ class DataContainerTable(MutableMapping):
             'data_containers'
         record : table.IsDescription
             The table columns description to use. Default is to use the
-            main data_container record.
+            main data_container record if a new table needs to be created
+            or the already existing record if a table already exists in
+            file.
 
         """
         handle = root._v_file
