@@ -167,7 +167,7 @@ class FileMesh(object):
                                                           p_uuid.bytes}):
                 return Point(
                     tuple(point['coordinates']),
-                    uuid.UUID(bytes=point['uuid'])
+                    uuid.UUID(bytes=point['uuid'],version=4)
                     )
         else:
             error_str = "Trying to get an non existing point with uuid: {}"
@@ -201,8 +201,8 @@ class FileMesh(object):
                                             condvars={'value':
                                                       e_uuid.bytes}):
             return Edge(
-                list(uuid.UUID(bytes=pb) for pb in edge['points_uuids']),
-                uuid.UUID(bytes=edge['uuid'])
+                list(uuid.UUID(bytes=pb,version=4) for pb in edge['points_uuids']),
+                uuid.UUID(bytes=edge['uuid'],version=4)
                 )
         else:
             error_str = "Trying to get an non existing edge with uuid: {}"
@@ -236,8 +236,8 @@ class FileMesh(object):
                                             condvars={'value':
                                                       f_uuid.bytes}):
             return Face(
-                list(uuid.UUID(bytes=pb) for pb in face['points_uuids']),
-                uuid.UUID(bytes=face['uuid'])
+                list(uuid.UUID(bytes=pb,version=4) for pb in face['points_uuids']),
+                uuid.UUID(bytes=face['uuid'],version=4)
                 )
         else:
             error_str = "Trying to get an non existing face with uuid: {}"
@@ -271,8 +271,8 @@ class FileMesh(object):
                                             condvars={'value':
                                                       c_uuid.bytes}):
             return Cell(
-                list(uuid.UUID(bytes=pb) for pb in cell['points_uuids']),
-                uuid.UUID(bytes=cell['uuid'])
+                list(uuid.UUID(bytes=pb,version=4) for pb in cell['points_uuids']),
+                uuid.UUID(bytes=cell['uuid'],version=4)
                 )
         else:
             error_str = "Trying to get an non existing cell with id: {}"
@@ -571,7 +571,7 @@ class FileMesh(object):
             for row in self._group.points:
                 yield Point(
                     tuple(row['coordinates']),
-                    uuid.UUID(bytes=row['uuid'])
+                    uuid.UUID(bytes=row['uuid'],version=4)
                 )
         else:
             for point_uuid in point_uuids:
@@ -602,7 +602,7 @@ class FileMesh(object):
             for row in self._group.edges:
                 yield Edge(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'])
+                    uuid.UUID(bytes=row['uuid'],version=4)
                 )
         else:
             for edge_uuid in edge_uuids:
@@ -633,7 +633,7 @@ class FileMesh(object):
             for row in self._group.faces:
                 yield Face(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'])
+                    uuid.UUID(bytes=row['uuid'],version=4)
                 )
         else:
             for face_uuid in face_uuids:
@@ -664,7 +664,7 @@ class FileMesh(object):
             for row in self._group.cells:
                 yield Cell(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'])
+                    uuid.UUID(bytes=row['uuid'],version=4)
                 )
         else:
             for cell_uuid in cell_uuids:
