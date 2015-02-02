@@ -123,7 +123,8 @@ class ABCDataContainerTableCheck(object):
             self.assertIn('my_data_table', root)
             self.assertTrue(table.valid)
             data_column = root.my_data_table.colinstances['Data']
-            expected_column_names = [key.name.lower() for key in self.saved_keys]
+            expected_column_names = [
+                key.name.lower() for key in self.saved_keys]
             self.assertItemsEqual(
                 data_column._v_colnames, expected_column_names)
 
@@ -200,9 +201,11 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(loaded_data, expected)
 
     def test_get_data(self):
-        data = create_data_container(restrict=self.saved_keys[:-1])
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
         data1 = DataContainer(data)
-        data1[CUBA.NAME] = 'data 1'
+        key = saved_keys[0]
+        data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
             uid1 = uuid.uuid4()
@@ -213,9 +216,11 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(table[uid1], data1)
 
     def test_get_data_with_missing_keywords(self):
-        data = create_data_container(restrict=self.saved_keys)
-        data1 = create_data_container(restrict=self.saved_keys[:-1])
-        data1[CUBA.NAME] = 'data 1'
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
+        data1 = create_data_container(restrict=saved_keys[:-1])
+        key = saved_keys[0]
+        data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
             uid1 = uuid.uuid4()
@@ -251,11 +256,13 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_delete_data(self):
-        data = create_data_container(restrict=self.saved_keys)
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
         with self.new_table('my_data_table') as table:
             uid0 = table.append(data)
             new_data = DataContainer(data)
-            new_data[CUBA.VELOCITY] = 45
+            key = saved_keys[0]
+            data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
             uid1 = table.append(new_data)
         with self.open_table('my_data_table', mode='a') as table:
             del table[uid0]
