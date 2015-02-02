@@ -1,3 +1,1 @@
 sphinx
-coverage
-include ./requirements.txt
