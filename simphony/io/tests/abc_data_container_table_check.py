@@ -24,36 +24,37 @@ def create_data_container(restrict=None):
 
     if restrict is None:
         restrict = CUBA
-    members = CUBA.__members__
-    data = {}
-    Data = Record.columns['Data']
-    for member, cuba in members.items():
-        if cuba in restrict:
-            # get the column type
-            try:
-                column_type = Data.columns[member.lower()]
-            except AttributeError:
-                column_type = Data._v_colobjects[member.lower()]
-
-            if numpy.issubdtype(column_type, str):
-                data[cuba] = member
-            elif numpy.issubdtype(column_type, numpy.float):
-                data[cuba] = float(cuba + 3)
-            elif numpy.issubdtype(column_type, numpy.integer):
-                data[cuba] = int(cuba + 3)
-            else:
-                shape = column_type.shape
-                if column_type.kind == 'float':
-                    data[cuba] = numpy.ones(
-                        shape=shape, dtype=numpy.float64) * cuba + 3
-                elif column_type.kind == 'int':
-                    data[cuba] = numpy.ones(
-                        shape=shape, dtype=numpy.int32) * cuba + 3
-                else:
-                    raise RuntimeError(
-                        'cannot create value for {}'.format(column_type))
-
+    data = {cuba: dummy_cuba_value(cuba) for cuba in restrict}
     return DataContainer(data)
+
+
+def dummy_cuba_value(cuba):
+    Data = Record.columns['Data']
+    column = CUBA(cuba).name.lower()
+    # get the column type
+    try:
+        column_type = Data.columns[column]
+    except AttributeError:
+        column_type = Data._v_colobjects[column]
+
+    if numpy.issubdtype(column_type, str):
+        value = column.upper()
+    elif numpy.issubdtype(column_type, numpy.float):
+        value = float(cuba + 3)
+    elif numpy.issubdtype(column_type, numpy.integer):
+        value = int(cuba + 3)
+    else:
+        shape = column_type.shape
+        if column_type.kind == 'float':
+            value = numpy.ones(
+                shape=shape, dtype=numpy.float64) * cuba + 3
+        elif column_type.kind == 'int':
+            value = numpy.ones(
+                shape=shape, dtype=numpy.int32) * cuba + 3
+        else:
+            raise RuntimeError(
+                'cannot create value for {}'.format(column_type))
+    return value
 
 
 class ABCDataContainerTableCheck(object):
