@@ -241,8 +241,8 @@ class ABCDataContainerTableCheck(object):
             uid = table.append(data)
         with self.open_table('my_data_table', mode='a') as table:
             self.assertEqual(len(table), 1)
-            for i in range(20, 56):
-                del data[CUBA(i)]
+            for keys in data.keys()[:-1]:
+                del data[keys]
             table[uid] = data
             loaded_data = table[uid]
             self.assertDataContainersEqual(loaded_data, data)
