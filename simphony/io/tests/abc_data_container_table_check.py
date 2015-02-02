@@ -226,12 +226,14 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(table[uid1], data1)
 
     def test_update_data(self):
-        data = create_data_container(restrict=self.saved_keys[:-1])
+        saved_keys = self.saved_keys
+        data = create_data_container(restrict=saved_keys)
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
         with self.open_table('my_data_table', mode='a') as table:
             self.assertEqual(len(table), 1)
-            data[CUBA.VELOCITY] = 45
+            key = saved_keys[0]
+            data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
             table[uid] = data
             loaded_data = table[uid]
             self.assertDataContainersEqual(loaded_data, data)
