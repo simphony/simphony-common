@@ -199,7 +199,7 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(loaded_data, expected)
 
     def test_get_data(self):
-        data = create_data_container()
+        data = create_data_container(restrict=self.saved_keys[:-1])
         data1 = DataContainer(data)
         data1[CUBA.NAME] = 'data 1'
         with self.new_table('my_data_table') as table:
@@ -225,7 +225,7 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(table[uid1], data1)
 
     def test_update_data(self):
-        data = create_data_container()
+        data = create_data_container(restrict=self.saved_keys[:-1])
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
         with self.open_table('my_data_table', mode='a') as table:
@@ -236,7 +236,7 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(loaded_data, data)
 
     def test_update_data_with_missing_keywords(self):
-        data = create_data_container()
+        data = create_data_container(restrict=self.saved_keys[:-1])
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
         with self.open_table('my_data_table', mode='a') as table:
