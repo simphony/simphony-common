@@ -122,13 +122,14 @@ class DataContainerTable(MutableMapping):
                 'index == value', condvars={'value': uid.bytes}):
             if table.nrows == 1:
                 name = table._v_name
+                record = table.description
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
                 # so we delete the table and
                 # create new empty table in this situation
                 table.remove()
                 parent = self._parent
-                self._table = tables.Table(parent, name, Record)
+                self._table = tables.Table(parent, name, record)
             else:
                 table.remove_row(row.nrow)
             break
