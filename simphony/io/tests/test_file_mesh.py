@@ -161,6 +161,7 @@ class TestFileMesh(unittest.TestCase):
         puuids = []
 
         puuid = self.mesh.add_point(points[0])
+        puuids.append(puuid)
 
         self.assertRaises(KeyError, self.mesh.add_point, points[0])
 
@@ -184,6 +185,7 @@ class TestFileMesh(unittest.TestCase):
         edge = Edge(puuids[0:2])
 
         euuid = self.mesh.add_edge(edge)
+        euuids.append(euuid)
 
         self.assertRaises(KeyError, self.mesh.add_edge, edge)
 
@@ -208,6 +210,7 @@ class TestFileMesh(unittest.TestCase):
         face = Face(puuids[0:3])
 
         fuuid = self.mesh.add_face(face)
+        fuuids.append(fuuid)
 
         self.assertRaises(KeyError, self.mesh.add_face, face)
 
@@ -233,6 +236,7 @@ class TestFileMesh(unittest.TestCase):
         cell = Cell(puuids[0:4])
 
         cuuid = self.mesh.add_cell(cell)
+        cuuids.append(cuuid)
 
         self.assertRaises(KeyError, self.mesh.add_cell, cell)
 
