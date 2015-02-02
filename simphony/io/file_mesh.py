@@ -12,6 +12,8 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
+from simphony.io.data_container_table import DataContainerTable
+
 MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
 MAX_POINTS_IN_CELL = 8
@@ -26,8 +28,9 @@ class _PointDescriptor(tables.IsDescription):
     """
 
     uuid = tables.StringCol(32, pos=1)
+    data = tables.StringCol(32, pos=2)
     coordinates = tables.Float64Col(
-        pos=2, shape=(3,)
+        pos=3, shape=(3,)
         )
 
 
@@ -40,8 +43,9 @@ class _EdgeDescriptor(tables.IsDescription):
     """
 
     uuid = tables.StringCol(32, pos=1)
+    data = tables.StringCol(32, pos=2)
     points_uuids = tables.StringCol(
-        32, pos=2, shape=(MAX_POINTS_IN_EDGE,)
+        32, pos=3, shape=(MAX_POINTS_IN_EDGE,)
         )
 
 
@@ -54,8 +58,9 @@ class _FaceDescriptor(tables.IsDescription):
     """
 
     uuid = tables.StringCol(32, pos=1)
+    data = tables.StringCol(32, pos=2)
     points_uuids = tables.StringCol(
-        32, pos=2, shape=(MAX_POINTS_IN_FACE,)
+        32, pos=3, shape=(MAX_POINTS_IN_FACE,)
         )
 
 
@@ -68,8 +73,9 @@ class _CellDescriptor(tables.IsDescription):
     """
 
     uuid = tables.StringCol(32, pos=1)
+    data = tables.StringCol(32, pos=2)
     points_uuids = tables.StringCol(
-        32, pos=2, shape=(MAX_POINTS_IN_CELL,)
+        32, pos=3, shape=(MAX_POINTS_IN_CELL,)
         )
 
 
@@ -123,8 +129,10 @@ class FileMesh(object):
     """
 
     def __init__(self, group, meshFile):
+
         self._file = meshFile
         self._group = group
+        self.dataContainer = self._create_data_table()
 
         if "points" not in self._group:
             self._create_points_table()
@@ -730,3 +738,6 @@ class FileMesh(object):
     def _create_cells_table(self):
             self._file.create_table(
                 self._group, "cells", _CellDescriptor)
+
+    def _create_data_table(self):
+            data = DataContainerTable(self._file, 'data')
