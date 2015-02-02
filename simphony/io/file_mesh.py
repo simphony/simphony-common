@@ -308,7 +308,7 @@ class FileMesh(object):
         if point.uuid is None:
             point.uuid = self._generate_uuid()
 
-        for point in self._group.points.where('uuid == value',
+        for epoint in self._group.points.where('uuid == value',
                                               condvars={'value':
                                                         point.uuid.bytes}):
             error_str = "Trying to add an already\
@@ -344,7 +344,7 @@ class FileMesh(object):
         if edge.uuid is None:
             edge.uuid = self._generate_uuid()
 
-        for edge in self._group.faces.where('uuid == value',
+        for eedge in self._group.edges.where('uuid == value',
                                             condvars={'value':
                                                       edge.uuid.bytes}):
             error_str = "Trying to add an already\
@@ -383,7 +383,7 @@ class FileMesh(object):
         if face.uuid is None:
             face.uuid = self._generate_uuid()
 
-        for face in self._group.faces.where('uuid == value',
+        for eface in self._group.faces.where('uuid == value',
                                             condvars={'value':
                                                       face.uuid.bytes}):
             error_str = "Trying to add an already\
@@ -422,7 +422,7 @@ class FileMesh(object):
         if cell.uuid is None:
             cell.uuid = self._generate_uuid()
 
-        for cell in self._group.cells.where('uuid == value',
+        for ecell in self._group.cells.where('uuid == value',
                                             condvars={'value':
                                                       cell.uuid.bytes}):
             error_str = "Trying to add an already\

@@ -149,6 +149,93 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertIsNotNone(self.mesh.get_cell(cuuids[0]))
 
+    def test_add_duplicated_point(self):
+        """ Check that a point can be added correctly
+
+        """
+
+        points = [
+            self.points[0]
+            ]
+
+        puuids = []
+
+        puuid = self.mesh.add_point(points[0])
+
+        self.assertRaises(KeyError, self.mesh.add_point, points[0])
+
+    def test_add_duplicated_edge(self):
+        """ Check that an edge can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1]
+            ]
+
+        puuids = []
+        euuids = []
+
+        for point in points:
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
+
+        edge = Edge(puuids[0:2])
+
+        euuid = self.mesh.add_edge(edge)
+
+        self.assertRaises(KeyError, self.mesh.add_edge, edge)
+
+    def test_add_duplicated_face(self):
+        """ Check that a face can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2]
+            ]
+
+        puuids = []
+        fuuids = []
+
+        for point in points:
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
+
+        face = Face(puuids[0:3])
+
+        fuuid = self.mesh.add_face(face)
+
+        self.assertRaises(KeyError, self.mesh.add_face, face)
+
+    def test_add_duplicated_cell(self):
+        """ Check that a cell can be added correctly
+
+        """
+
+        points = [
+            self.points[0],
+            self.points[1],
+            self.points[2],
+            self.points[3]
+            ]
+
+        puuids = []
+        cuuids = []
+
+        for point in points:
+            puuid = self.mesh.add_point(point)
+            puuids.append(puuid)
+
+        cell = Cell(puuids[0:4])
+
+        cuuid = self.mesh.add_cell(cell)
+
+        self.assertRaises(KeyError, self.mesh.add_cell, cell)
+
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
 
