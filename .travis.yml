@@ -20,5 +20,8 @@ install:
 script:
   - flake8 .
   - coverage run -m unittest discover
+  - pushd doc
+  - make html
+  - popd
 after_success:
   - coveralls
