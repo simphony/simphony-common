@@ -289,7 +289,7 @@ class ABCDataContainerTableCheck(object):
                 self.assertDataContainersEqual(loaded_data, data[index])
             self.assertEqual(index,  len(saved_keys) - 1)
 
-    def _test_itersequence(self):
+    def test_itersequence(self):
         # create sample data
         data = []
         saved_keys = self.saved_keys
