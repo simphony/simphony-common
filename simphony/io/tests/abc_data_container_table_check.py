@@ -271,12 +271,22 @@ class ABCDataContainerTableCheck(object):
             self.assertDataContainersEqual(loaded_data, new_data)
 
     def test_delete_data_to_empty_table(self):
-        data = create_data_container(restrict=self.saved_keys)
+        data = create_data_container()
         with self.new_table('my_data_table') as table:
             uid = table.append(data)
-        with self.open_table('my_data_table', mode='a') as table:
+        with closing(tables.open_file(self.filename, mode='a')) as handle:
+            root = handle.root
+            table = DataContainerTable(
+                root, 'my_data_table', record=self.record)
             del table[uid]
             self.assertEqual(len(table), 0)
+            # The table is recreated we need to make sure that the right
+            # record is used.
+            data_column = root.my_data_table.colinstances['Data']
+            expected_column_names = [
+                key.name.lower() for key in self.saved_keys]
+            self.assertItemsEqual(
+                data_column._v_colnames, expected_column_names)
 
     def test_iteration(self):
         # create sample data
