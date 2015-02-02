@@ -13,8 +13,8 @@ from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
 MAX_POINTS_IN_EDGE = 2
-MAX_POINTS_IN_FACE = 3
-MAX_POINTS_IN_CELL = 4
+MAX_POINTS_IN_FACE = 4
+MAX_POINTS_IN_CELL = 8
 
 
 class _PointDescriptor(tables.IsDescription):
