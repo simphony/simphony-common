@@ -12,7 +12,7 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
-from simphony.io.data_container_table import DataContainerTable
+#from simphony.io.data_container_table import DataContainerTable
 
 MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
@@ -173,12 +173,12 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.points.where('uuid == value',
-                    condvars={'value': p_uuid.bytes}):
-                return Point(
-                    tuple(row['coordinates']),
-                    uuid.UUID(bytes=row['uuid'],version=4)
-                    )
+        for row in self._group.points.where(
+                'uuid == value', condvars={'value': p_uuid.bytes}):
+            return Point(
+                tuple(row['coordinates']),
+                uuid.UUID(bytes=row['uuid'], version=4)
+                )
         else:
             error_str = "Trying to get an non existing point with uuid: {}"
             raise ValueError(error_str.format(p_uuid))
@@ -207,11 +207,12 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.edges.where('uuid == value',
-                condvars={'value': e_uuid.bytes}):
-            return Edge( 
-                list(uuid.UUID(bytes=pb) for pb in row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(bytes=row['uuid'],version=4)
+        for row in self._group.edges.where(
+                'uuid == value', condvars={'value': e_uuid.bytes}):
+            return Edge(
+                list(uuid.UUID(bytes=pb) for pb in
+                     row['points_uuids'][0:row['n_points']]),
+                uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             error_str = "Trying to get an non existing edge with uuid: {}"
@@ -241,11 +242,12 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.faces.where('uuid == value',
-                condvars={'value': f_uuid.bytes}):
+        for row in self._group.faces.where(
+                'uuid == value', condvars={'value': f_uuid.bytes}):
             return Face(
-                list(uuid.UUID(bytes=pb,version=4) for pb in row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(bytes=row['uuid'],version=4)
+                list(uuid.UUID(bytes=pb, version=4) for pb in
+                     row['points_uuids'][0:row['n_points']]),
+                uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             error_str = "Trying to get an non existing face with uuid: {}"
@@ -275,11 +277,12 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.cells.where('uuid == value',
-                condvars={'value': c_uuid.bytes}):
+        for row in self._group.cells.where(
+                'uuid == value', condvars={'value': c_uuid.bytes}):
             return Cell(
-                list(uuid.UUID(bytes=pb,version=4) for pb in row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(bytes=row['uuid'],version=4)
+                list(uuid.UUID(bytes=pb, version=4) for pb in
+                     row['points_uuids'][0:row['n_points']]),
+                uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             error_str = "Trying to get an non existing cell with id: {}"
@@ -304,8 +307,8 @@ class FileMesh(object):
         if point.uuid is None:
             point.uuid = self._generate_uuid()
 
-        for row in self._group.points.where('uuid == value',
-                condvars={'value': point.uuid.bytes}):
+        for row in self._group.points.where(
+                'uuid == value', condvars={'value': point.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing point with uuid" + str(point.uuid)
             raise KeyError(error_str)
@@ -339,8 +342,8 @@ class FileMesh(object):
         if edge.uuid is None:
             edge.uuid = self._generate_uuid()
 
-        for row in self._group.edges.where('uuid == value',
-                condvars={'value': edge.uuid.bytes}):
+        for row in self._group.edges.where(
+                'uuid == value', condvars={'value': edge.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing edge with uuid" + str(edge.uuid)
             raise KeyError(error_str)
@@ -350,7 +353,8 @@ class FileMesh(object):
         row = self._group.edges.row
 
         row['uuid'] = edge.uuid.bytes
-        row['points_uuids'] = [puuid.bytes for puuid in edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
+        row['points_uuids'] = [puuid.bytes for puuid in
+                               edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
         row['n_points'] = len(edge.points)
 
         row.append()
@@ -377,8 +381,8 @@ class FileMesh(object):
         if face.uuid is None:
             face.uuid = self._generate_uuid()
 
-        for row in self._group.faces.where('uuid == value',
-                condvars={'value': face.uuid.bytes}):
+        for row in self._group.faces.where(
+                'uuid == value', condvars={'value': face.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing face with uuid" + str(face.uuid)
             raise KeyError(error_str)
@@ -388,7 +392,8 @@ class FileMesh(object):
         row = self._group.faces.row
 
         row['uuid'] = face.uuid.bytes
-        row['points_uuids'] = [puuid.bytes for puuid in face.points] + [0] * (MAX_POINTS_IN_FACE-n)
+        row['points_uuids'] = [puuid.bytes for puuid in
+                               face.points] + [0] * (MAX_POINTS_IN_FACE-n)
         row['n_points'] = n
 
         row.append()
@@ -415,8 +420,8 @@ class FileMesh(object):
         if cell.uuid is None:
             cell.uuid = self._generate_uuid()
 
-        for row in self._group.cells.where('uuid == value',
-                condvars={'value': cell.uuid.bytes}):
+        for row in self._group.cells.where(
+                'uuid == value', condvars={'value': cell.uuid.bytes}):
             error_str = "Trying to add an already\
                 existing cell with uuid" + str(cell.uuid)
             raise KeyError(error_str)
@@ -426,7 +431,8 @@ class FileMesh(object):
         row = self._group.cells.row
 
         row['uuid'] = cell.uuid.bytes
-        row['points_uuids'] = [puuid.bytes for puuid in cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+        row['points_uuids'] = [puuid.bytes for puuid in
+                               cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
         row['n_points'] = len(cell.points)
 
         row.append()
@@ -452,8 +458,8 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.points.where('uuid == value',
-                condvars={'value': point.uuid.bytes}):
+        for row in self._group.points.where(
+                'uuid == value', condvars={'value': point.uuid.bytes}):
             row['coordinates'] = list(point.coordinates)
             row.update()
             row._flush_mod_rows()
@@ -481,10 +487,11 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.edges.where('uuid == value',
-                condvars={'value': edge.uuid.bytes}):
+        for row in self._group.edges.where(
+                'uuid == value', condvars={'value': edge.uuid.bytes}):
             n = len(edge.points)
-            row['points_uuids'] = [puuid.bytes for puuid in edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
+            row['points_uuids'] = [puuid.bytes for puuid in
+                                   edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
             row.update()
             row._flush_mod_rows()
             return
@@ -511,10 +518,11 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.faces.where('uuid == value',
-                condvars={'value': face.uuid.bytes}):
+        for row in self._group.faces.where(
+                'uuid == value', condvars={'value': face.uuid.bytes}):
             n = len(face.points)
-            row['points_uuids'] = [puuid.bytes for puuid in face.points] + [0] * (MAX_POINTS_IN_FACE-n)
+            row['points_uuids'] = [puuid.bytes for puuid in
+                                   face.points] + [0] * (MAX_POINTS_IN_FACE-n)
             row.update()
             row._flush_mod_rows()
             return
@@ -541,10 +549,11 @@ class FileMesh(object):
 
         """
 
-        for row in self._group.cells.where('uuid == value',
-                condvars={'value': cell.uuid.bytes}):
+        for row in self._group.cells.where(
+                'uuid == value', condvars={'value': cell.uuid.bytes}):
             n = len(cell.points)
-            row['points_uuids'] = [puuid.bytes for puuid in cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+            row['points_uuids'] = [puuid.bytes for puuid in
+                                   cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
             row.update()
             row._flush_mod_rows()
             return
@@ -578,7 +587,7 @@ class FileMesh(object):
             for row in self._group.points:
                 yield Point(
                     tuple(row['coordinates']),
-                    uuid.UUID(bytes=row['uuid'],version=4)
+                    uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             for point_uuid in point_uuids:
@@ -609,7 +618,7 @@ class FileMesh(object):
             for row in self._group.edges:
                 yield Edge(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'],version=4)
+                    uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             for edge_uuid in edge_uuids:
@@ -640,7 +649,7 @@ class FileMesh(object):
             for row in self._group.faces:
                 yield Face(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'],version=4)
+                    uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             for face_uuid in face_uuids:
@@ -671,7 +680,7 @@ class FileMesh(object):
             for row in self._group.cells:
                 yield Cell(
                     list(row['points_uuids']),
-                    uuid.UUID(bytes=row['uuid'],version=4)
+                    uuid.UUID(bytes=row['uuid'], version=4)
                 )
         else:
             for cell_uuid in cell_uuids:
@@ -723,20 +732,21 @@ class FileMesh(object):
         return uuid.uuid4()
 
     def _create_points_table(self):
-            self._file.create_table(
-                self._group, "points", _PointDescriptor)
+        self._file.create_table(
+            self._group, "points", _PointDescriptor)
 
     def _create_edges_table(self):
-            self._file.create_table(
-                self._group, "edges", _EdgeDescriptor)
+        self._file.create_table(
+            self._group, "edges", _EdgeDescriptor)
 
     def _create_faces_table(self):
-            self._file.create_table(
-                self._group, "faces", _FaceDescriptor)
+        self._file.create_table(
+            self._group, "faces", _FaceDescriptor)
 
     def _create_cells_table(self):
-            self._file.create_table(
-                self._group, "cells", _CellDescriptor)
+        self._file.create_table(
+            self._group, "cells", _CellDescriptor)
 
     def _create_data_table(self):
-            data = DataContainerTable(self._group, 'data')
+        pass
+            #data = DataContainerTable(self._group, 'data')
