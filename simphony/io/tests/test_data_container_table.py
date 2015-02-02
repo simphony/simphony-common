@@ -19,8 +19,8 @@ class CustomRecord(tables.IsDescription):
         label = tables.Int32Col(pos=3)
         material_id = tables.Int32Col(pos=4)
         chemical_specie = tables.StringCol(pos=5, itemsize=20)
-        rolling_friction = tables.Float64Col(pos=64)
-        volume_fraction = tables.Float64Col(pos=65)
+        rolling_friction = tables.Float64Col(pos=6)
+        volume_fraction = tables.Float64Col(pos=7)
 
     mask = tables.BoolCol(pos=1, shape=(8,))
 
