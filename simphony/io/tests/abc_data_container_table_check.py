@@ -292,14 +292,13 @@ class ABCDataContainerTableCheck(object):
             new_data = DataContainer(data)
             key = saved_keys[0]
             data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
-            uid1 = table.append(new_data)
+            table.append(new_data)
         with self.open_table('my_data_table', mode='a') as table:
             del table[uid0]
             with self.assertRaises(KeyError):
                 table[uuid.uuid4()]
             with self.assertRaises(KeyError):
                 table[uid0]
-
 
     def test_delete_data_to_empty_table(self):
         data = create_data_container()
