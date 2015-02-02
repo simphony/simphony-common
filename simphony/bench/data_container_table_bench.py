@@ -13,7 +13,8 @@ from simphony.bench.util import bench
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 from simphony.io.data_container_table import DataContainerTable
-from simphony.io.tests.test_data_container_table import create_data_container
+from simphony.io.tests.abc_data_container_table_check import (
+    create_data_container)
 
 
 temp_dir = tempfile.mkdtemp()
