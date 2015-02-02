@@ -22,7 +22,7 @@ class DataContainerTable(MutableMapping):
     def valid(self):
         return self._table is not None
 
-    def __init__(self, root, name='data_containers'):
+    def __init__(self, root, name='data_containers', record=None):
         """ Create a proxy object for an HDF5 backed data container table.
 
         Parameters
@@ -30,7 +30,11 @@ class DataContainerTable(MutableMapping):
         root : tables.Group
             The root node where to add the data container table structures.
         name : string
-            The name of the new group that will be created.
+            The name of the new group that will be created. Default name is
+            'data_containers'
+        record : table.IsDescription
+            The table columns description to use. Default is to use the
+            main data_container record.
 
         """
         handle = root._v_file
@@ -39,17 +43,22 @@ class DataContainerTable(MutableMapping):
         if hasattr(parent, name):
             self._table = getattr(parent, name)
         else:
-            self._table = handle.create_table(parent, name, Record)
+            if record is None:
+                record = Record
+            self._table = handle.create_table(parent, name, record)
 
-        # prepare useful mappings
-        columns = Record.columns['Data']._v_colobjects
+        # Prepare useful mappings
+        columns = self._table.cols.Data._v_desc._v_colobjects
+
         members = CUBA.__members__
         self._cuba_to_position = {
             cuba: columns[member.lower()]._v_pos
-            for member, cuba in members.items()}
+            for member, cuba in members.items()
+            if member.lower() in columns}
         self._position_to_cuba = {
             columns[member.lower()]._v_pos: cuba
-            for member, cuba in members.items()}
+            for member, cuba in members.items()
+            if member.lower() in columns}
 
     def append(self, data):
         """ Append the data to the end of the table.
@@ -156,8 +165,9 @@ class DataContainerTable(MutableMapping):
             shape=self._table.coldtypes['mask'].shape, dtype=numpy.bool)
         data = list(row['Data'])
         for key in value:
-            data[positions[key]] = value[key]
-            mask[positions[key]] = True
+            if key in positions:
+                data[positions[key]] = value[key]
+                mask[positions[key]] = True
         row['mask'] = mask
         row['Data'] = tuple(data)
 
