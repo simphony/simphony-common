@@ -1,3 +1,6 @@
 cython
 enum34
 tables
+click
+pyyaml
+stevedore

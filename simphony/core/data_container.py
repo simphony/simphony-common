@@ -14,8 +14,8 @@ class DataContainer(dict):
 
     For convenience keywords can be passed as capitalized CUBA enum members::
 
-        >>> DataContainer(ACCELERATION=234)  # CUBA.ACCELERATION is 19
-        {<CUBA.ACCELERATION: 19>: 234}
+        >>> DataContainer(ACCELERATION=234)  # CUBA.ACCELERATION is 22
+        {<CUBA.ACCELERATION: 22>: 234}
 
     """
 

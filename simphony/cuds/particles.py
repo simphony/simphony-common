@@ -11,7 +11,6 @@
            present any kind of interaction (between atoms, molecules, etc.)
 """
 from __future__ import print_function
-import copy
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
@@ -56,9 +55,13 @@ class ParticleContainer(ABCParticleContainer):
 
         Parameters
         ----------
-
         new_particle : Particle
             the new particle that will be included in the container.
+
+        Returns
+        -------
+        id : uuid.UUID
+            The id of the added particle.
 
         Raises
         ------
@@ -77,7 +80,8 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_particle(part)
         """
-        self._add_element(self._particles, new_particle, clone=Particle.from_particle)
+        return self._add_element(
+            self._particles, new_particle, clone=Particle.from_particle)
 
     def add_bond(self, new_bond):
         """Adds the 'new_bond' bond to the container.
@@ -94,6 +98,11 @@ class ParticleContainer(ABCParticleContainer):
         new_bond : Bond
             the new bond that will be included in the container.
 
+        Returns
+        -------
+        id : uuid.UUID
+            The id of the added bond.
+
         Raises
         ------
         Exception when the new particle already exists in the container.
@@ -101,9 +110,6 @@ class ParticleContainer(ABCParticleContainer):
         See Also
         --------
         update_bond, remove_bond
-
-        Notes
-        -----
 
         Examples
         --------
@@ -114,7 +120,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> part_container = ParticleContainer()
         >>> part_container.add_bond(bond)
         """
-        self._add_element(self._bonds, new_bond, Bond.from_bond)
+        return self._add_element(self._bonds, new_bond, Bond.from_bond)
 
     def update_particle(self, particle):
         """Replaces an existing particle with the 'particle' new particle.
@@ -150,7 +156,8 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the particle
         >>> part_container.update_particle(part)
         """
-        self._update_element(self._particles, particle)
+        self._update_element(
+            self._particles, particle, clone=Particle.from_particle)
 
     def update_bond(self, bond):
         """Replaces an existing bond with the 'bond' new bond.
@@ -186,7 +193,7 @@ class ParticleContainer(ABCParticleContainer):
         >>> ... #do whatever you want with the bond
         >>> part_container.update_bond(bond)
         """
-        self._update_element(self._bonds, bond)
+        self._update_element(self._bonds, bond, clone=Bond.from_bond)
 
     def get_particle(self, particle_id):
         """Returns a copy of the particle with the 'particle_id' id.
@@ -408,7 +415,8 @@ class ParticleContainer(ABCParticleContainer):
         """
 
         if bond_ids is not None:
-            return self._iter_elements(self._bonds, bond_ids, clone=Bond.from_bond)
+            return self._iter_elements(
+                self._bonds, bond_ids, clone=Bond.from_bond)
         else:
             return self._iter_all(self._bonds, clone=Bond.from_bond)
 
@@ -454,13 +462,14 @@ class ParticleContainer(ABCParticleContainer):
                 raise Exception(
                     pce._PC_errors['ParticleContainer_DuplicatedValue']
                     + " id: " + str(cur_id))
+        return cur_id
 
-    def _update_element(self, cur_dict, element):
+    def _update_element(self, cur_dict, element, clone):
         cur_id = element.id
         if cur_id in cur_dict:
             # This means the element IS in the current dictionary
             # (this should be the standard case...), so we proceed
-            cur_dict[cur_id] = copy.deepcopy(element)
+            cur_dict[cur_id] = clone(element)
         else:
             raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
                            + " id: " + str(cur_id))
@@ -545,6 +554,7 @@ class Bond(object):
             the id, None as default (the particle container will generate it)
         data : DataContainer
             DataContainer to store the attributes of the bond
+
         """
         self.id = id
         if particles is not None and len(particles) > 0:

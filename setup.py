@@ -30,4 +30,14 @@ setup(
     author='SimPhoNy FP7 European Project',
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
-    packages=find_packages())
+    install_requires=[
+        "enum34",
+        "tables",
+        "click",
+        "pyyaml",
+        "stevedore"],
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'cuba-generate = simphony.scripts.cuba_generate:cli']
+    })

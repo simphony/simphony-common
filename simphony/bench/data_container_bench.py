@@ -8,7 +8,8 @@ from simphony.core.cuba import CUBA
 
 dict_data = {key: key + 3 for key in CUBA}
 data_container = DataContainer(dict_data)
-indices = [random.randint(0, len(CUBA) - 1) for i in range(len(CUBA))]
+indices = [int(key) for key in CUBA]
+random.shuffle(indices)
 
 
 def data_container_setup():
