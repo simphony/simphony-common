@@ -8,6 +8,9 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
+from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
+
 from simphony.io.cuds_file import CudsFile
 
 
@@ -23,12 +26,12 @@ class TestFileMesh(unittest.TestCase):
 
         self.pids = []
         self.points = [
-            Point((0.0, 0.0, 0.0)),
-            Point((1.0, 0.0, 0.0)),
-            Point((0.0, 1.0, 0.0)),
-            Point((0.0, 0.0, 1.0)),
-            Point((1.0, 0.0, 1.0)),
-            Point((0.0, 1.0, 1.0))
+            Point((0.0, 0.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
+            Point((1.0, 0.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
+            Point((0.0, 1.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
+            Point((0.0, 0.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
+            Point((1.0, 0.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
+            Point((0.0, 1.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]}))
         ]
 
     def tearDown(self):
@@ -497,6 +500,88 @@ class TestFileMesh(unittest.TestCase):
         cell_upd = self.mesh.get_cell(cuuids[0])
 
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
+
+    def test_update_point_data(self):
+        """ Check that the data of a point can be updated correctly
+
+        """
+
+        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
+
+        point_ret = self.mesh.get_point(puuids[0])
+        point_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+
+        self.mesh.update_point(point_ret)
+
+        point_upd = self.mesh.get_point(puuids[0])
+
+        self.assertItemsEqual(point_upd.data[CUBA.VELOCITY], point_ret.data[CUBA.VELOCITY])
+
+    def test_update_edge_data(self):
+        """ Check that the data of an edge can be updated correctly
+
+        """
+
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        edges = [
+            Edge(puuids[0:2])
+        ]
+
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
+
+        edge_ret = self.mesh.get_edge(euuids[0])
+        edge_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+
+        self.mesh.update_edge(edge_ret)
+
+        edge_upd = self.mesh.get_edge(euuids[0])
+
+        self.assertItemsEqual(edge_upd.data[CUBA.VELOCITY], edge_ret.data[CUBA.VELOCITY])
+
+    def test_update_face_data(self):
+        """ Check that the data of a face can be updated correctly
+
+        """
+
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+
+        faces = [
+            Face(puuids[0:3])
+        ]
+
+        fuuids = [self.mesh.add_face(face) for face in faces]
+
+        face_ret = self.mesh.get_face(fuuids[0])
+        face_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+
+        self.mesh.update_face(face_ret)
+
+        face_upd = self.mesh.get_face(fuuids[0])
+
+        self.assertItemsEqual(face_upd.data[CUBA.VELOCITY], face_ret.data[CUBA.VELOCITY])
+
+    def test_update_cell_data(self):
+        """ Check that the data of a cell can be updated correctly
+
+        """
+
+        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
+
+        cells = [
+            Cell(puuids[0:4])
+        ]
+
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+
+        cell_ret = self.mesh.get_cell(cuuids[0])
+        cell_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+
+        self.mesh.update_cell(cell_ret)
+
+        cell_upd = self.mesh.get_cell(cuuids[0])
+
+        self.assertItemsEqual(cell_upd.data[CUBA.VELOCITY], cell_ret.data[CUBA.VELOCITY])
 
 if __name__ == '__main__':
     unittest.main()
