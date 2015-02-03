@@ -113,8 +113,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
-
+        self.mesh.add_point(self.points[0])
         self.assertRaises(KeyError, self.mesh.add_point, self.points[0])
 
     def test_add_duplicated_edge(self):
@@ -128,8 +127,7 @@ class TestFileMesh(unittest.TestCase):
             Edge(puuids[0:2])
         ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
-
+        self.mesh.add_edge(edges[0])
         self.assertRaises(KeyError, self.mesh.add_edge, edges[0])
 
     def test_add_duplicated_face(self):
@@ -143,8 +141,7 @@ class TestFileMesh(unittest.TestCase):
             Face(puuids[0:3])
         ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
-
+        self.mesh.add_face(faces[0])
         self.assertRaises(KeyError, self.mesh.add_face, faces[0])
 
     def test_add_duplicated_cell(self):
@@ -158,8 +155,7 @@ class TestFileMesh(unittest.TestCase):
             Cell(puuids[0:4])
         ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
-
+        self.mesh.add_cell(cells[0])
         self.assertRaises(KeyError, self.mesh.add_cell, cells[0])
 
     def test_non_emtpy_edges(self):
