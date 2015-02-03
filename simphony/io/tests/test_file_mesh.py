@@ -26,12 +26,24 @@ class TestFileMesh(unittest.TestCase):
 
         self.pids = []
         self.points = [
-            Point((0.0, 0.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
-            Point((1.0, 0.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
-            Point((0.0, 1.0, 0.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
-            Point((0.0, 0.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
-            Point((1.0, 0.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]})),
-            Point((0.0, 1.0, 1.0),data=DataContainer({CUBA.VELOCITY:[0, 0, 0]}))
+            Point(
+                (0.0, 0.0, 0.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+            Point(
+                (1.0, 0.0, 0.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+            Point(
+                (0.0, 1.0, 0.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+            Point(
+                (0.0, 0.0, 1.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+            Point(
+                (1.0, 0.0, 1.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+            Point(
+                (0.0, 1.0, 1.0),
+                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
         ]
 
     def tearDown(self):
@@ -511,7 +523,9 @@ class TestFileMesh(unittest.TestCase):
 
         point_upd = self.mesh.get_point(puuids[0])
 
-        self.assertItemsEqual(point_upd.data[CUBA.VELOCITY], point_ret.data[CUBA.VELOCITY])
+        self.assertItemsEqual(
+            point_upd.data[CUBA.VELOCITY],
+            point_ret.data[CUBA.VELOCITY])
 
     def test_update_edge_data(self):
         """ Check that the data of an edge can be updated correctly
@@ -533,7 +547,9 @@ class TestFileMesh(unittest.TestCase):
 
         edge_upd = self.mesh.get_edge(euuids[0])
 
-        self.assertItemsEqual(edge_upd.data[CUBA.VELOCITY], edge_ret.data[CUBA.VELOCITY])
+        self.assertItemsEqual(
+            edge_upd.data[CUBA.VELOCITY],
+            edge_ret.data[CUBA.VELOCITY])
 
     def test_update_face_data(self):
         """ Check that the data of a face can be updated correctly
@@ -555,7 +571,9 @@ class TestFileMesh(unittest.TestCase):
 
         face_upd = self.mesh.get_face(fuuids[0])
 
-        self.assertItemsEqual(face_upd.data[CUBA.VELOCITY], face_ret.data[CUBA.VELOCITY])
+        self.assertItemsEqual(
+            face_upd.data[CUBA.VELOCITY],
+            face_ret.data[CUBA.VELOCITY])
 
     def test_update_cell_data(self):
         """ Check that the data of a cell can be updated correctly
@@ -577,7 +595,9 @@ class TestFileMesh(unittest.TestCase):
 
         cell_upd = self.mesh.get_cell(cuuids[0])
 
-        self.assertItemsEqual(cell_upd.data[CUBA.VELOCITY], cell_ret.data[CUBA.VELOCITY])
+        self.assertItemsEqual(
+            cell_upd.data[CUBA.VELOCITY],
+            cell_ret.data[CUBA.VELOCITY])
 
 if __name__ == '__main__':
     unittest.main()
