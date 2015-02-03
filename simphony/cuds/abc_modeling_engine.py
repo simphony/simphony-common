@@ -2,16 +2,16 @@ from abc import ABCMeta, abstractmethod
 
 
 class ABCModelingEngine(object):
-    """Abstract base class for a modeling engines in SimPhoNy
+    """Abstract base class for modeling engines in SimPhoNy
 
     Attributes
     ----------
     BC : DataContainer
-        container of attributes related to the bondary conditions
+        container of attributes related to the boundary conditions
     CM : DataContainer
         container of attributes related to the computational method
     SP : DataContainer
-        container of attributes related to the system paremters/conditions
+        container of attributes related to the system parameters/conditions
 
     """
     __metaclass__ = ABCMeta
