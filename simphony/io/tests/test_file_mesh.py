@@ -62,15 +62,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0]
-            ]
-
-        puuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
 
         self.assertIsNotNone(self.mesh.get_point(puuids[0]))
 
@@ -79,22 +71,11 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1]
-            ]
-
-        puuids = []
-        euuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
 
         edge = Edge(puuids[0:2])
 
-        euuid = self.mesh.add_edge(edge)
-        euuids.append(euuid)
+        euuids = [self.mesh.add_edge(edge)]
 
         self.assertIsNotNone(self.mesh.get_edge(euuids[0]))
 
@@ -103,23 +84,11 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-
-        puuids = []
-        fuuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         face = Face(puuids[0:3])
 
-        fuuid = self.mesh.add_face(face)
-        fuuids.append(fuuid)
+        fuuids = [self.mesh.add_face(face)]
 
         self.assertIsNotNone(self.mesh.get_face(fuuids[0]))
 
@@ -128,24 +97,11 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        puuids = []
-        cuuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         cell = Cell(puuids[0:4])
 
-        cuuid = self.mesh.add_cell(cell)
-        cuuids.append(cuuid)
+        cuuids = [self.mesh.add_cell(cell)]
 
         self.assertIsNotNone(self.mesh.get_cell(cuuids[0]))
 
@@ -154,107 +110,61 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0]
-            ]
+        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
 
-        puuids = []
-
-        puuid = self.mesh.add_point(points[0])
-        puuids.append(puuid)
-
-        self.assertRaises(KeyError, self.mesh.add_point, points[0])
+        self.assertRaises(KeyError, self.mesh.add_point, self.points[0])
 
     def test_add_duplicated_edge(self):
         """ Check that an edge can be added correctly
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1]
-            ]
+        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
 
-        puuids = []
-        euuids = []
+        edges = [
+            Edge(puuids[0:2])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
 
-        edge = Edge(puuids[0:2])
-
-        euuid = self.mesh.add_edge(edge)
-        euuids.append(euuid)
-
-        self.assertRaises(KeyError, self.mesh.add_edge, edge)
+        self.assertRaises(KeyError, self.mesh.add_edge, edges[0])
 
     def test_add_duplicated_face(self):
         """ Check that a face can be added correctly
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
-        puuids = []
-        fuuids = []
+        faces = [
+            Face(puuids[0:3])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        fuuids = [self.mesh.add_face(face) for face in faces]
 
-        face = Face(puuids[0:3])
-
-        fuuid = self.mesh.add_face(face)
-        fuuids.append(fuuid)
-
-        self.assertRaises(KeyError, self.mesh.add_face, face)
+        self.assertRaises(KeyError, self.mesh.add_face, faces[0])
 
     def test_add_duplicated_cell(self):
         """ Check that a cell can be added correctly
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
-        puuids = []
-        cuuids = []
+        cells = [
+            Cell(puuids[0:4])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
 
-        cell = Cell(puuids[0:4])
-
-        cuuid = self.mesh.add_cell(cell)
-        cuuids.append(cuuid)
-
-        self.assertRaises(KeyError, self.mesh.add_cell, cell)
+        self.assertRaises(KeyError, self.mesh.add_cell, cells[0])
 
     def test_non_emtpy_edges(self):
         """ Checks that the list of edges is not empty
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1]
-            ]
-
-        puuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
 
         edge = Edge(puuids[0:2])
 
@@ -267,17 +177,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-
-        puuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         face = Face(puuids[0:3])
 
@@ -290,18 +190,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        puuids = []
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         cell = Cell(puuids[0:4])
 
@@ -314,13 +203,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-
-        points = [self.points[0]]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
 
         point_ret = self.mesh.get_point(puuids[0])
 
@@ -332,22 +215,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        euuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
 
-        points = [
-            self.points[0],
-            self.points[1]
-            ]
+        edges = [
+            Edge(puuids[:]),
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        edge = Edge(puuids[:])
-
-        euuid = self.mesh.add_edge(edge)
-        euuids.append(euuid)
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
 
         edge_ret = self.mesh.get_edge(euuids[0])
 
@@ -359,23 +233,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        fuuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
+        faces = [
+            Face(puuids[:])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        face = Face(puuids[:])
-
-        fuuid = self.mesh.add_face(face)
-        fuuids.append(fuuid)
+        fuuids = [self.mesh.add_face(face) for face in faces]
 
         face_ret = self.mesh.get_face(fuuids[0])
 
@@ -387,24 +251,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        cuuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
+        cells = [
+            Cell(puuids[:])
             ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        cell = Cell(puuids[:])
-
-        cuuid = self.mesh.add_cell(cell)
-        cuuids.append(cuuid)
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
 
         cell_ret = self.mesh.get_cell(cuuids[0])
 
@@ -421,27 +274,14 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        euuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
             Edge(puuids[0:2]),
             Edge(puuids[1:3])
         ]
 
-        for edge in edges:
-            euuid = self.mesh.add_edge(edge)
-            euuids.append(euuid)
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
 
         iedges = self.mesh.iter_edges()
 
@@ -459,28 +299,14 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        fuuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
             Face(puuids[0:3]),
             Face(puuids[1:4])
         ]
 
-        for face in faces:
-            fuuid = self.mesh.add_face(face)
-            fuuids.append(fuuid)
+        fuuids = [self.mesh.add_face(face) for face in faces]
 
         ifaces = self.mesh.iter_faces()
 
@@ -498,29 +324,14 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        cuuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
             Cell(puuids[0:4]),
             Cell(puuids[1:5])
             ]
 
-        for cell in cells:
-            cuuid = self.mesh.add_cell(cell)
-            cuuids.append(cuuid)
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
 
         icells = self.mesh.iter_cells()
 
@@ -538,19 +349,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        euuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         edges = [
             Edge(puuids[0:2]),
@@ -558,9 +357,7 @@ class TestFileMesh(unittest.TestCase):
             Edge(puuids[3:4])
             ]
 
-        for edge in edges:
-            euuid = self.mesh.add_edge(edge)
-            euuids.append(euuid)
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
 
         iedges = self.mesh.iter_edges([euuids[0], euuids[2]])
 
@@ -579,20 +376,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        fuuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         faces = [
             Face(puuids[0:3]),
@@ -600,9 +384,7 @@ class TestFileMesh(unittest.TestCase):
             Face(puuids[2:5])
             ]
 
-        for face in faces:
-            fuuid = self.mesh.add_face(face)
-            fuuids.append(fuuid)
+        fuuids = [self.mesh.add_face(face) for face in faces]
 
         ifaces = self.mesh.iter_faces([fuuids[0], fuuids[2]])
 
@@ -621,21 +403,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        cuuids = []
-
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4],
-            self.points[5]
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:6]]
 
         cells = [
             Cell(puuids[0:4]),
@@ -643,9 +411,7 @@ class TestFileMesh(unittest.TestCase):
             Cell(puuids[2:6])
             ]
 
-        for cell in cells:
-            cuuid = self.mesh.add_cell(cell)
-            cuuids.append(cuuid)
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
 
         icells = self.mesh.iter_cells([cuuids[0], cuuids[2]])
 
@@ -659,15 +425,7 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-
-        points = [
-            self.points[0],
-            ]
-
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
+        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
 
         point_ret = self.mesh.get_point(puuids[0])
         point_ret.coordinates = [-1.0, -1.0, -1.0]
@@ -682,23 +440,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        euuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2]
-            ]
+        edges = [
+            Edge(puuids[0:2])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        edge = Edge(puuids[0:2])
-
-        euuid = self.mesh.add_edge(edge)
-        euuids.append(euuid)
+        euuids = [self.mesh.add_edge(edge) for edge in edges]
 
         edge_ret = self.mesh.get_edge(euuids[0])
         edge_ret.points[1] = puuids[2]
@@ -713,24 +461,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        fuuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3]
-            ]
+        faces = [
+            Face(puuids[0:3])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        face = Face(puuids[0:3])
-
-        fuuid = self.mesh.add_face(face)
-        fuuids.append(fuuid)
+        fuuids = [self.mesh.add_face(face) for face in faces]
 
         face_ret = self.mesh.get_face(fuuids[0])
         face_ret.points[2] = puuids[3]
@@ -745,25 +482,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = []
-        cuuids = []
+        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
 
-        points = [
-            self.points[0],
-            self.points[1],
-            self.points[2],
-            self.points[3],
-            self.points[4]
-            ]
+        cells = [
+            Cell(puuids[0:4])
+        ]
 
-        for point in points:
-            puuid = self.mesh.add_point(point)
-            puuids.append(puuid)
-
-        cell = Cell(puuids[0:4])
-
-        cuuid = self.mesh.add_cell(cell)
-        cuuids.append(cuuid)
+        cuuids = [self.mesh.add_cell(cell) for cell in cells]
 
         cell_ret = self.mesh.get_cell(cuuids[0])
         cell_ret.points[3] = puuids[4]
