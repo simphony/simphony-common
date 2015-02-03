@@ -4,6 +4,7 @@ import os
 import tables
 
 from simphony.cuds.particles import Particle
+from simphony.cuds.particles import ParticleContainer
 from simphony.io.cuds_file import CudsFile
 from simphony.io.file_particle_container import FileParticleContainer
 
@@ -75,18 +76,23 @@ class TestCudsFile(unittest.TestCase):
             self.file_a.get_particle_container('foo')
 
     def test_add_particle_container_empty(self):
-        pc = self.file_a.add_particle_container('test')
+        pc = self.file_a.add_particle_container(
+            ParticleContainer(name="test"))
+        self.assertEqual("test", pc.name)
         self.assertEqual(0, len(list(b for b in pc.iter_particles())))
         self.assertEqual(0, len(list(p for p in pc.iter_bonds())))
 
     def test_add_particle_container_with_same_name(self):
-        self.file_a.add_particle_container('test')
+        self.file_a.add_particle_container(
+            ParticleContainer(name="test"))
         with self.assertRaises(ValueError):
-            self.file_a.add_particle_container('test')
+            self.file_a.add_particle_container(
+                ParticleContainer(name="test"))
 
     def test_add_get_particle_container(self):
         # add particle container and add points to it
-        pc_test_a = self.file_a.add_particle_container('test')
+        pc_test_a = self.file_a.add_particle_container(
+            ParticleContainer(name="test"))
         for p in self.particles:
             id = pc_test_a.add_particle(p)
             self.assertEqual(p.id, id)
@@ -98,7 +104,7 @@ class TestCudsFile(unittest.TestCase):
 
         # add the particle container from the first file
         # into the second file
-        pc_test_b = self.file_b.add_particle_container("other_test", pc_test_a)
+        pc_test_b = self.file_b.add_particle_container(pc_test_a)
 
         for p in pc_test_a.iter_particles():
             p1 = pc_test_b.get_particle(p.id)
@@ -127,11 +133,12 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(5):
             name = "test_" + str(i)
             pc_names.append(name)
-            self.file_a.add_particle_container(name)
+            self.file_a.add_particle_container(
+                ParticleContainer(name=name))
 
         # test iterating over all
         names = list(
-            name for pc, name in self.file_a.iter_particle_containers())
+            pc.name for pc in self.file_a.iter_particle_containers())
         self.assertEquals(len(names), len(pc_names))
         for name in names:
             self.assertTrue(name in pc_names)
@@ -139,11 +146,16 @@ class TestCudsFile(unittest.TestCase):
         # test iterating over a specific subset
         subset = pc_names[:3]
         names = list(
-            name for pc, name in self.file_a.iter_particle_containers(subset))
+            pc.name for pc in self.file_a.iter_particle_containers(subset))
         self.assertEquals(names, subset)
 
-        for pc, name in self.file_a.iter_particle_containers(pc_names):
+        for pc in self.file_a.iter_particle_containers(pc_names):
             self.assertTrue(isinstance(pc, FileParticleContainer))
+
+    def test_iter_particle_container_wrong(self):
+        pc_names = ["wrong1", "wrong"]
+        with self.assertRaises(ValueError):
+            [pc for pc in self.file_a.iter_particle_containers(pc_names)]
 
     def test_delete_particle_container(self):
         pc_names = []
@@ -152,23 +164,47 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(5):
             name = "test_" + str(i)
             pc_names.append(name)
-            self.file_a.add_particle_container(name)
+            self.file_a.add_particle_container(
+                ParticleContainer(name=name))
 
         # delete each of the particle containers
-        for pc, name in self.file_a.iter_particle_containers():
-            self.file_a.delete_particle_container(name)
+        for pc in self.file_a.iter_particle_containers():
+            self.file_a.delete_particle_container(pc.name)
 
             # test that we can't get deleted container
             with self.assertRaises(ValueError):
-                self.file_a.get_particle_container(name)
+                self.file_a.get_particle_container(pc.name)
 
             # test that we can't use the deleted container
             with self.assertRaises(Exception):
                 pc.add_particle(self.particles[0])
 
     def test_delete_non_existing_particle_container(self):
-            with self.assertRaises(ValueError):
-                self.file_a.delete_particle_container("foo")
+        with self.assertRaises(ValueError):
+            self.file_a.delete_particle_container("foo")
+
+    def test_particle_container_rename(self):
+        pc = self.file_a.add_particle_container(
+            ParticleContainer(name="foo"))
+        pc.name = "bar"
+        self.assertEqual("bar", pc.name)
+
+        # we should not be able to use the old name "foo"
+        with self.assertRaises(ValueError):
+            self.file_a.get_particle_container("foo")
+        with self.assertRaises(ValueError):
+            self.file_a.delete_particle_container("foo")
+        with self.assertRaises(ValueError):
+            [_ for _ in self.file_a.iter_particle_containers(names=["foo"])]
+
+        # we should be able to access using the new "bar" name
+        pc_bar = self.file_a.get_particle_container("bar")
+        self.assertEqual("bar", pc_bar.name)
+
+        # and we should be able to use the no-longer used
+        # "foo" name when adding another particle container
+        pc = self.file_a.add_particle_container(
+            ParticleContainer(name="foo"))
 
 if __name__ == '__main__':
     unittest.main()
