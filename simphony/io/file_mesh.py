@@ -6,7 +6,6 @@ and modify a file storing mesh data
 """
 import tables
 import uuid
-import os
 
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
