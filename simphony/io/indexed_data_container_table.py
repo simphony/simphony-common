@@ -101,6 +101,13 @@ class IndexedDataContainerTable(Sequence):
         else:
             raise IndexError('Index {} out of bounds'.format(index))
 
+    def __iter__(self):
+        """ Iterate over all the rows
+
+        """
+        for row in self._table:
+            yield self._retrieve(row)
+
     def __len__(self):
         """ The number of rows in the table.
 
