@@ -1,4 +1,4 @@
-from collections import MutableSequence
+from collections import Sequence
 
 import numpy
 
@@ -7,11 +7,12 @@ from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
-class IndexedDataContainerTable(MutableSequence):
+class IndexedDataContainerTable(Sequence):
     """ A proxy class to an HDF5 group node with serialised DataContainers.
 
-    The class implements the MutableSequence api where each DataContainer
-    instance is mapped to the row without support of __delitem__.
+    The class implements the Sequence api where each DataContainer
+    instance is mapped to the row. In addition the class implements
+    update (i.e. ``__setitem__``) and ``append``.
 
     """
 
@@ -60,6 +61,11 @@ class IndexedDataContainerTable(MutableSequence):
             columns[member.lower()]._v_pos: cuba
             for member, cuba in members.items()
             if member.lower() in columns}
+        self._positions_with_shape = set(
+            columns[member.lower()]._v_pos
+            for member in columns
+            if member.shape == 2)
+
 
     def append(self, data):
         """ Append the data to the end of the table.
@@ -77,10 +83,10 @@ class IndexedDataContainerTable(MutableSequence):
         """
         table = self._table
         row = table.row
-        self._populate(row, data)
+        self._populate_row(row, data)
         row.append()
         table.flush()
-        return table.nrows
+        return table.nrows - 1
 
     def __getitem__(self, index):
         """ Return the DataContainer in index.
@@ -96,11 +102,14 @@ class IndexedDataContainerTable(MutableSequence):
         """ Update the data in index.
 
         """
-        row = self._table[index]
-        self._populate(row, data)
-        row.update()
-        # see https://github.com/PyTables/PyTables/issues/11
-        row._flush_mod_rows()
+        table = self._table
+        if 0 <= index < table.nrows:
+            print 'before', table[index]
+            row = self._create_rec_array(data)
+            print 'after', row
+            table[index] = tuple(row)
+        else:
+            raise IndexError('Index {} out of bounds'.format(index))
 
     def __len__(self):
         """ The number of rows in the table.
@@ -108,7 +117,7 @@ class IndexedDataContainerTable(MutableSequence):
         """
         return self._table.nrows
 
-    def _populate(self, row, value):
+    def _populate_row(self, row, value):
         """ Populate the row from the DataContainer.
 
         """
@@ -122,6 +131,26 @@ class IndexedDataContainerTable(MutableSequence):
                 mask[positions[key]] = True
         row['mask'] = mask
         row['Data'] = tuple(data)
+
+    def _create_rec_array(self, value):
+        """ Create a rec_array row from a DataContainer
+
+        """
+        positions = self._cuba_to_position
+        rec_array = numpy.zeros(shape=1, dtype=self._table._v_dtype)[0]
+        data = rec_array['Data']
+        mask = rec_array['mask']
+        for key in value:
+            if key in positions:
+                if positions[key] == 1:
+                    import ipdb; ipdb.set_trace()
+                    print 'VALUE OF KEY', value[key], value[key].shape
+                    print data[1].shape
+                    data[positions[key]][:] = value[key]
+                else:
+                    data[positions[key]] = value[key]
+                mask[positions[key]] = True
+        return rec_array
 
     def _retrieve(self, row):
         """ Return the DataContainer from a table row instance.
