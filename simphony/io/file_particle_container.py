@@ -42,6 +42,14 @@ class FileParticleContainer(ABCParticleContainer):
             # create table to hold bonds
             self._create_bonds_table()
 
+    @property
+    def name(self):
+        return self._group._v_name
+
+    @name.setter
+    def name(self, value):
+        self._group._f_rename(value)
+
     # Particle methods ######################################################
 
     def add_particle(self, particle):

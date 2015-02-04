@@ -19,23 +19,33 @@ from simphony.core.data_container import DataContainer
 
 
 class ParticleContainer(ABCParticleContainer):
-    """Class that represents a container of particles and bonds. It can
-       add particles and bonds, remove them and update them.
+    """Class that represents a container of particles and bonds.
 
-       Attributes
-       ----------
+    Class provides methods to add particles and bonds, remove them and update
+    them.
 
-        _particles : dictionary
-            data structure for particles storage
-        _bonds : dictionary
-            data structure for bonds storage
-        data : DataContainer
-            data attributes of the element
+    Parameters
+    ----------
+    name : str
+        name of the particle container
+
+    Attributes
+    ----------
+    name : str
+        name of the particle container
+    _particles : dictionary
+        data structure for particles storage
+    _bonds : dictionary
+        data structure for bonds storage
+    data : DataContainer
+        data attributes of the element
+
     """
-    def __init__(self):
+    def __init__(self, name):
         self._particles = {}
         self._bonds = {}
         self.data = DataContainer()
+        self.name = name
 
 # ================================================================
 
@@ -77,7 +87,7 @@ class ParticleContainer(ABCParticleContainer):
         passing the Particle as parameter.
 
         >>> part = Particle()
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> part_container.add_particle(part)
         """
         return self._add_element(
@@ -117,7 +127,7 @@ class ParticleContainer(ABCParticleContainer):
         passing the Bond as parameter.
 
         >>> bond = Bond()
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> part_container.add_bond(bond)
         """
         return self._add_element(self._bonds, new_bond, Bond.from_bond)
@@ -150,7 +160,7 @@ class ParticleContainer(ABCParticleContainer):
         'get_particle' method for example) and a ParticleContainer just call
         the function passing the Particle as parameter.
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> part = part_container.get_particle(id)
         >>> ... #do whatever you want with the particle
@@ -187,7 +197,7 @@ class ParticleContainer(ABCParticleContainer):
         'get_bond' method for example) and a ParticleContainer just call the
         function passing the Bond as parameter.
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> bond = part_container.get_bond(id)
         >>> ... #do whatever you want with the bond
@@ -267,7 +277,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         Having an id of an existing particle, pass it to the function.
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> part = part_container.get_particle(id)
         >>> ...
@@ -302,7 +312,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         Having an id of an existing bond, pass it to the function.
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> bond = part_container.get_bond(id)
         >>> ...
@@ -348,7 +358,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         It can be used with a sequence as parameter or withouth it:
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> for particle in part_container.iter_particles([id1, id2, id3]):
                 ...  #do stuff
@@ -399,7 +409,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         It can be used with a sequence as parameter or withouth it:
 
-        >>> part_container = ParticleContainer()
+        >>> part_container = ParticleContainer(name="foo")
         >>> ...
         >>> for bond in part_container.iter_bonds([id1, id2, id3]):
                 ...  #do stuff

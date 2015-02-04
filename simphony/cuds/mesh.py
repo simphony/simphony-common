@@ -186,8 +186,15 @@ class Mesh(ABCMesh):
     (4) inspection methods to identify if there are any edges,
         faces or cells described in the mesh.
 
+    Parameters
+    ----------
+    name : str
+        name of mesh
+
     Attributes
     ----------
+    name : str
+        name of mesh
     data : Data
         The X coordinate.
     points : dictionary of Point
@@ -209,7 +216,8 @@ class Mesh(ABCMesh):
 
     """
 
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.data = 0
 
         self._points = {}
