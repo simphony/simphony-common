@@ -7,53 +7,12 @@ import abc
 from contextlib import closing, contextmanager
 
 import tables
-import numpy
 from numpy.testing import assert_equal
 
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
-from simphony.io.data_container_description import Record
 from simphony.io.data_container_table import DataContainerTable
-
-
-def create_data_container(restrict=None):
-    """ Create a data container while respecting the expected data types.
-
-    """
-
-    if restrict is None:
-        restrict = CUBA
-    data = {cuba: dummy_cuba_value(cuba) for cuba in restrict}
-    return DataContainer(data)
-
-
-def dummy_cuba_value(cuba):
-    Data = Record.columns['Data']
-    column = CUBA(cuba).name.lower()
-    # get the column type
-    try:
-        column_type = Data.columns[column]
-    except AttributeError:
-        column_type = Data._v_colobjects[column]
-
-    if numpy.issubdtype(column_type, str):
-        value = column.upper()
-    elif numpy.issubdtype(column_type, numpy.float):
-        value = float(cuba + 3)
-    elif numpy.issubdtype(column_type, numpy.integer):
-        value = int(cuba + 3)
-    else:
-        shape = column_type.shape
-        if column_type.kind == 'float':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.float64) * cuba + 3
-        elif column_type.kind == 'int':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.int32) * cuba + 3
-        else:
-            raise RuntimeError(
-                'cannot create value for {}'.format(column_type))
-    return value
+from simphony.io.tests.utils import create_data_container, dummy_cuba_value
 
 
 class ABCDataContainerTableCheck(object):
