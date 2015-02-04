@@ -2,8 +2,6 @@ import tempfile
 import abc
 import shutil
 import os
-import random
-import uuid
 from contextlib import closing, contextmanager
 from collections import OrderedDict
 

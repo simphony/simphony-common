@@ -90,9 +90,6 @@ class IndexedDataContainerTable(Sequence):
         row = self._table[index]
         return self._retrieve(row)
 
-    def __delitem__(self, index):
-        raise NotImplementedError()
-
     def __setitem__(self, index, data):
         """ Update the data in index.
 
