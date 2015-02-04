@@ -170,8 +170,6 @@ class ABCModelingEngine(object):
     def iter_lattices(self, names=None):
         """ Returns an iterator over a subset or all of the lattices.
 
-        See get_lattice for more information.
-
         Parameters
         ----------
         names : sequence of str, optional
@@ -185,8 +183,6 @@ class ABCModelingEngine(object):
     def iter_meshes(self, names=None):
         """ Returns an iterator over a subset or all of the meshes.
 
-        See get_mesh for more information.
-
         Parameters
         ----------
         names : sequence of str, optional
@@ -199,8 +195,6 @@ class ABCModelingEngine(object):
     @abstractmethod
     def iter_particle_containers(self, names=None):
         """ Returns an iterator over a subset or all of the particle containers.
-
-        See get_particle_container for more information.
 
         Parameters
         ----------
