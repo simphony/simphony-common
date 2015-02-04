@@ -61,7 +61,7 @@ class ABCModelingEngine(object):
 
         Returns
         ----------
-        ABCLattice
+        ABCMesh
             A mesh to be used to update/query the internal representation
             stored inside the modeling-engine. See get_mesh for more
             information.
