@@ -20,7 +20,9 @@ class IndexedDataContainerTable(Sequence):
     def valid(self):
         return self._table is not None
 
-    def __init__(self, root, name='data_containers', record=None):
+    def __init__(
+            self, root, name='data_containers',
+            record=None, expected_number=None):
         """ Create a proxy object for an HDF5 backed data container table.
 
         Parameters
@@ -48,7 +50,8 @@ class IndexedDataContainerTable(Sequence):
         else:
             if record is None:
                 record = NoUIDRecord
-            self._table = handle.create_table(parent, name, record)
+            self._table = handle.create_table(
+                parent, name, record, expectedrows=expected_number)
 
         # Prepare useful mappings
         columns = self._table.cols.Data._v_desc._v_colobjects

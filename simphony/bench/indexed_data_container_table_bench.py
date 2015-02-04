@@ -33,7 +33,7 @@ def append(handle, n, value):
     root = handle.root
     if hasattr(root, 'my_data_table'):
         handle.remove_node(root, 'my_data_table', recursive=True)
-    table = IndexedDataContainerTable(root, 'my_data_table')
+    table = IndexedDataContainerTable(root, 'my_data_table', expected_number=n)
     return [table.append(value) for i in range(n)]
 
 
@@ -41,7 +41,7 @@ def set_item(handle, uids, value):
     root = handle.root
     if hasattr(root, 'my_data_table'):
         handle.remove_node(root, 'my_data_table', recursive=True)
-    table = IndexedDataContainerTable(root, 'my_data_table')
+    table = IndexedDataContainerTable(root, 'my_data_table', expected_number=n)
     for uid in uids:
         table[uid] = value
 
@@ -77,7 +77,7 @@ def create_table(filename):
 
 try:
     print("""
-    Benchmarking various operations on the DataContainerTable.
+    Benchmarking various operations on the IndexDataContainerTable.
 
     """)
     with closing(tables.open_file(filename, mode='w')) as handle:
@@ -89,7 +89,8 @@ try:
 
     with closing(tables.open_file(filename, mode='w')) as handle:
         root = handle.root
-        table = IndexedDataContainerTable(root, 'my_data_table')
+        table = IndexedDataContainerTable(
+            root, 'my_data_table', expected_number=n)
         print(
             "Append {} masked:".format(n),
             bench(lambda: append(handle, 1000, data_container_half)))
@@ -99,7 +100,8 @@ try:
 
     with closing(tables.open_file(filename, mode='r')) as handle:
         root = handle.root
-        table = IndexedDataContainerTable(root, 'my_data_table')
+        table = IndexedDataContainerTable(
+            root, 'my_data_table', expected_number=n)
         print("Iterate {}:".format(n), bench(lambda: iteration(table)))
         print(
             'Getitem sample of 300:',
@@ -107,7 +109,8 @@ try:
 
     with closing(tables.open_file(filename, mode='a')) as handle:
         root = handle.root
-        table = IndexedDataContainerTable(root, 'my_data_table')
+        table = IndexedDataContainerTable(
+            root, 'my_data_table', expected_number=n)
         print(
             "Update item of 300 sample:",
             bench(lambda: setitem(table, data_container_half, sample)))
