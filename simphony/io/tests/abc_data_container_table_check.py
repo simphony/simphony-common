@@ -5,6 +5,7 @@ import random
 import uuid
 import abc
 from contextlib import closing, contextmanager
+from collections import OrderedDict
 
 import tables
 from numpy.testing import assert_equal
@@ -72,6 +73,14 @@ class ABCDataContainerTableCheck(object):
             if handle is not None:
                 handle.close()
 
+    @property
+    def data_list(self):
+        data = create_data_container(restrict=self.saved_keys)
+        full_data = create_data_container()
+        empty_data = DataContainer()
+        reduced_data = create_data_container(restrict=self.saved_keys[:-1])
+        return [data, empty_data, full_data, reduced_data]
+
     def test_creating_a_data_container_table(self):
         with closing(tables.open_file(self.filename, mode='w')) as handle:
             root = handle.root
@@ -87,76 +96,36 @@ class ABCDataContainerTableCheck(object):
                 data_column._v_colnames, expected_column_names)
 
     def test_append_data(self):
-        data = create_data_container(restrict=self.saved_keys)
         with self.new_table('my_data_table') as table:
-            table.append(data)
+            uids = {table.append(data): data for data in self.data_list}
         with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 1)
+            self.assertEqual(len(table), 4)
+            for uid, data in uids.iteritems():
+                if len(data) <= len(self.saved_keys):
+                    self.assertDataContainersEqual(table[uid], data)
+                else:
+                    # special case for custom records since they do not
+                    # store the full set of keys
+                    self.assertDataContainersEqual(
+                        table[uid],
+                        create_data_container(restrict=self.saved_keys))
 
     def test_set_data(self):
-        data = create_data_container(restrict=self.saved_keys)
         with self.new_table('my_data_table') as table:
-            uid = uuid.uuid4()
-            table[uid] = data
+            uids = {uuid.uuid4(): data for data in self.data_list}
+            for uid, data in uids.iteritems():
+                table[uid] = data
         with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 1)
-            self.assertIn(uid, table)
-
-    def test_append_data_with_missing_keywords(self):
-        keys = self.saved_keys[:-1]
-        data = create_data_container(restrict=keys)
-        with self.new_table('my_data_table') as table:
-            table.append(data)
-            self.assertEqual(len(table), 1)
-            uid = table.append(data)
-            self.assertEqual(len(table), 2)
-        with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
-            loaded_data = table[uid]
-            expected = create_data_container(restrict=keys)
-            self.assertDataContainersEqual(loaded_data, expected)
-
-    def test_set_data_with_missing_keywords(self):
-        keys = self.saved_keys[:-1]
-        data = create_data_container(restrict=keys)
-        with self.new_table('my_data_table') as table:
-            table[uuid.uuid4()] = data
-            self.assertEqual(len(table), 1)
-            uid = uuid.uuid4()
-            table[uid] = data
-            self.assertEqual(len(table), 2)
-        with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
-            loaded_data = table[uid]
-            expected = create_data_container(restrict=keys)
-            self.assertDataContainersEqual(loaded_data, expected)
-
-    def test_append_data_with_more_keywords(self):
-        data = create_data_container()
-        with self.new_table('my_data_table') as table:
-            table.append(data)
-            self.assertEqual(len(table), 1)
-            uid = table.append(data)
-            self.assertEqual(len(table), 2)
-        with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
-            loaded_data = table[uid]
-            expected = create_data_container(restrict=self.saved_keys)
-            self.assertDataContainersEqual(loaded_data, expected)
-
-    def test_set_data_with_more_keywords(self):
-        data = create_data_container()
-        with self.new_table('my_data_table') as table:
-            table[uuid.uuid4()] = data
-            self.assertEqual(len(table), 1)
-            uid = uuid.uuid4()
-            table[uid] = data
-            self.assertEqual(len(table), 2)
-        with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
-            loaded_data = table[uid]
-            expected = create_data_container(restrict=self.saved_keys)
-            self.assertDataContainersEqual(loaded_data, expected)
+            self.assertEqual(len(table), 4)
+            for uid, data in uids.iteritems():
+                if len(data) <= len(self.saved_keys):
+                    self.assertDataContainersEqual(table[uid], data)
+                else:
+                    # special case for custom records since they do not
+                    # store the full set of keys
+                    self.assertDataContainersEqual(
+                        table[uid],
+                        create_data_container(restrict=self.saved_keys))
 
     def test_get_data(self):
         saved_keys = self.saved_keys
@@ -176,57 +145,30 @@ class ABCDataContainerTableCheck(object):
     def test_get_with_invalid_uid(self):
         saved_keys = self.saved_keys
         data = create_data_container(restrict=saved_keys)
-        data1 = DataContainer(data)
-        key = saved_keys[0]
-        data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
         with self.new_table('my_data_table') as table:
             table.append(data)
-            uid1 = uuid.uuid4()
-            table[uid1] = data1
         with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
             with self.assertRaises(KeyError):
                 table[uuid.uuid4()]
 
-    def test_get_data_with_missing_keywords(self):
-        saved_keys = self.saved_keys
-        data = create_data_container(restrict=saved_keys)
-        data1 = create_data_container(restrict=saved_keys[:-1])
-        key = saved_keys[0]
-        data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
-        with self.new_table('my_data_table') as table:
-            uid = table.append(data)
-            uid1 = uuid.uuid4()
-            table[uid1] = data1
-        with self.open_table('my_data_table') as table:
-            self.assertEqual(len(table), 2)
-            self.assertDataContainersEqual(table[uid], data)
-            self.assertDataContainersEqual(table[uid1], data1)
-
     def test_update_data(self):
-        saved_keys = self.saved_keys
-        data = create_data_container(restrict=saved_keys)
         with self.new_table('my_data_table') as table:
-            uid = table.append(data)
+            uids = OrderedDict()
+            for data in self.data_list:
+                uids[table.append(data)] = data
         with self.open_table('my_data_table', mode='a') as table:
-            self.assertEqual(len(table), 1)
-            key = saved_keys[0]
-            data[key] = dummy_cuba_value(key) + dummy_cuba_value(key)
-            table[uid] = data
-            loaded_data = table[uid]
-            self.assertDataContainersEqual(loaded_data, data)
-
-    def test_update_data_with_missing_keywords(self):
-        data = create_data_container(restrict=self.saved_keys[:-1])
-        with self.new_table('my_data_table') as table:
-            uid = table.append(data)
-        with self.open_table('my_data_table', mode='a') as table:
-            self.assertEqual(len(table), 1)
-            for keys in data.keys()[:-1]:
-                del data[keys]
-            table[uid] = data
-            loaded_data = table[uid]
-            self.assertDataContainersEqual(loaded_data, data)
+            updated_data = [data for data in reversed(self.data_list)]
+            for uid in uids:
+                for data in updated_data:
+                    table[uid] = data
+                    if len(data) <= len(self.saved_keys):
+                        self.assertDataContainersEqual(table[uid], data)
+                    else:
+                        # special case for custom records since they do not
+                        # store the full set of keys
+                        self.assertDataContainersEqual(
+                            table[uid],
+                            create_data_container(restrict=self.saved_keys))
 
     def test_delete_data(self):
         saved_keys = self.saved_keys
