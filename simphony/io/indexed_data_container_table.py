@@ -61,11 +61,6 @@ class IndexedDataContainerTable(Sequence):
             columns[member.lower()]._v_pos: cuba
             for member, cuba in members.items()
             if member.lower() in columns}
-        self._positions_with_shape = set(
-            columns[member.lower()]._v_pos
-            for member in columns
-            if member.shape == 2)
-
 
     def append(self, data):
         """ Append the data to the end of the table.
@@ -104,9 +99,7 @@ class IndexedDataContainerTable(Sequence):
         """
         table = self._table
         if 0 <= index < table.nrows:
-            print 'before', table[index]
             row = self._create_rec_array(data)
-            print 'after', row
             table[index] = tuple(row)
         else:
             raise IndexError('Index {} out of bounds'.format(index))
@@ -142,14 +135,14 @@ class IndexedDataContainerTable(Sequence):
         mask = rec_array['mask']
         for key in value:
             if key in positions:
-                if positions[key] == 1:
-                    import ipdb; ipdb.set_trace()
-                    print 'VALUE OF KEY', value[key], value[key].shape
-                    print data[1].shape
-                    data[positions[key]][:] = value[key]
+                position = positions[key]
+                # special case array valued cuba keys
+                # see numpy issue https://github.com/numpy/numpy/issues/3126
+                if numpy.isscalar(data[position]):
+                    data[position] = value[key]
                 else:
-                    data[positions[key]] = value[key]
-                mask[positions[key]] = True
+                    data[position][:] = value[key]
+                mask[position] = True
         return rec_array
 
     def _retrieve(self, row):

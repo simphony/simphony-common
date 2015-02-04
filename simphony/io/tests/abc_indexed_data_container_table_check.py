@@ -163,7 +163,7 @@ class ABCIndexedDataContainerTableCheck(object):
                             table[index],
                             create_data_container(restrict=self.saved_keys))
 
-    def __test_iteration(self):
+    def test_iteration(self):
         # create sample data
         data = []
         saved_keys = self.saved_keys
