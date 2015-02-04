@@ -33,12 +33,14 @@ def dummy_cuba_value(cuba):
         value = int(cuba + 3)
     else:
         shape = column_type.shape
+        data = numpy.arange(numpy.prod(shape)) * cuba
+        data = numpy.reshape(data, shape)
         if column_type.kind == 'float':
             value = numpy.ones(
-                shape=shape, dtype=numpy.float64) * cuba + 3
+                shape=shape, dtype=numpy.float64) * data
         elif column_type.kind == 'int':
             value = numpy.ones(
-                shape=shape, dtype=numpy.int32) * cuba + 3
+                shape=shape, dtype=numpy.int32) * data
         else:
             raise RuntimeError(
                 'cannot create value for {}'.format(column_type))
