@@ -9,11 +9,7 @@ from simphony.io.tests.abc_data_container_table_check import (
     ABCDataContainerTableCheck)
 
 
-class CustomRecord(tables.IsDescription):
-
-    index = tables.StringCol(itemsize=16, pos=0)
-
-    class Data(tables.IsDescription):
+class CustomData(tables.IsDescription):
 
         name = tables.StringCol(pos=0, itemsize=20)
         direction = tables.Float64Col(pos=1, shape=3)
@@ -24,6 +20,10 @@ class CustomRecord(tables.IsDescription):
         rolling_friction = tables.Float64Col(pos=6)
         volume_fraction = tables.Float64Col(pos=7)
 
+class CustomRecord(tables.IsDescription):
+
+    index = tables.StringCol(itemsize=16, pos=0)
+    data = CustomData()
     mask = tables.BoolCol(pos=1, shape=(8,))
 
 
@@ -41,7 +41,7 @@ class TestDataContainerTable(
             self.assertEqual(len(table), 0)
             self.assertIn('my_data_table', root)
             self.assertTrue(table.valid)
-            data_column = root.my_data_table.colinstances['Data']
+            data_column = root.my_data_table.colinstances['data']
             expected_column_names = [
                 key.name.lower() for key in self.saved_keys]
             self.assertItemsEqual(
