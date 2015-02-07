@@ -34,7 +34,7 @@ class ABCDataContainerTableCheck(object):
         members = {
             member.lower(): cuba
             for member, cuba in CUBA.__members__.iteritems()}
-        data_record = self.record.columns['Data']
+        data_record = self.record.columns['data']
         try:
             return [members[column] for column in data_record._v_names]
         except AttributeError:
@@ -89,7 +89,7 @@ class ABCDataContainerTableCheck(object):
             self.assertEqual(len(table), 0)
             self.assertIn('my_data_table', root)
             self.assertTrue(table.valid)
-            data_column = root.my_data_table.colinstances['Data']
+            data_column = root.my_data_table.colinstances['data']
             expected_column_names = [
                 key.name.lower() for key in self.saved_keys]
             self.assertItemsEqual(
@@ -213,7 +213,7 @@ class ABCDataContainerTableCheck(object):
             self.assertEqual(len(table), 0)
             # The table is recreated we need to make sure that the right
             # record is used.
-            data_column = root.my_data_table.colinstances['Data']
+            data_column = root.my_data_table.colinstances['data']
             expected_column_names = [
                 key.name.lower() for key in self.saved_keys]
             self.assertItemsEqual(

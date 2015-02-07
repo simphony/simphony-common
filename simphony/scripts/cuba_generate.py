@@ -50,11 +50,7 @@ def table(input, output):
 
     # create Data table description
     lines.extend([
-        'class Record(tables.IsDescription):\n',
-        '\n',
-        '    index = tables.StringCol(itemsize=16, pos=0)\n',
-        '\n',
-        '    class Data(tables.IsDescription):\n',
+        'class Data(tables.IsDescription):\n',
         '\n'])
     data_types = {
         'string': 'String',
@@ -65,10 +61,10 @@ def table(input, output):
         if keyword['name'] in CUBA_DATA_CONTAINER_EXLCUDE:
             continue
         if keyword['type'] == 'string':
-            template = "        {} = tables.{}Col(pos={}, itemsize={})\n"
+            template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
             shape = keyword['shape'][0]
         else:
-            template = "        {} = tables.{}Col(pos={}{})\n"
+            template = "    {} = tables.{}Col(pos={}{})\n"
             shape = keyword['shape']
             if len(shape) == 1:
                 if shape[0] == 1:
@@ -90,6 +86,10 @@ def table(input, output):
     # create Mask column
     mask_size = position  # without index
     lines.extend([
+        'class Record(tables.IsDescription):\n',
+        '\n',
+        '    index = tables.StringCol(itemsize=16, pos=0)\n',
+        '    data = Data()\n',
         '    mask = tables.BoolCol(pos=1, shape=({},))\n'.format(mask_size)])
 
     output.writelines(lines)

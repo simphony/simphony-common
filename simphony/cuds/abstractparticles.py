@@ -10,7 +10,13 @@ from abc import ABCMeta, abstractmethod
 
 
 class ABCParticleContainer(object):
-    """Abstract base class for a ParticleContainer item."""
+    """Abstract base class for a ParticleContainer item.
+
+    Attributes
+    ----------
+    name : str
+        name of particle container
+    """
     __metaclass__ = ABCMeta
 
     @abstractmethod

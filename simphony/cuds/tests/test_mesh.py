@@ -24,7 +24,7 @@ class TestSequenceFunctions(unittest.TestCase):
         to tests all the mesh methods
 
         """
-        self.mesh = Mesh()
+        self.mesh = Mesh(name="foo")
         self.points = [
             Point((0.0, 0.0, 0.0)),
             Point((1.0, 0.0, 0.0)),

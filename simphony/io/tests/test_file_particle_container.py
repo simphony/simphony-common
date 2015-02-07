@@ -4,7 +4,7 @@ import tempfile
 import shutil
 import unittest
 
-from simphony.cuds.particles import Particle, Bond
+from simphony.cuds.particles import ParticleContainer, Particle, Bond
 from simphony.io.cuds_file import CudsFile
 
 
@@ -31,7 +31,8 @@ class TestFileParticleContainer(unittest.TestCase):
         # create file with empty particle container
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.file = CudsFile.open(self.filename)
-        self.pc = self.file.add_particle_container("test")
+        self.pc = self.file.add_particle_container(
+            ParticleContainer(name="test"))
 
         # create two particles (with unique ids)
         self.particle_1 = Particle((0.1, 0.4, 5.0), id=0)
