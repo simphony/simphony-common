@@ -1,6 +1,6 @@
 import numpy
 
-from simphony.io.data_container_description import Record
+from simphony.io.data_container_description import Data
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 
@@ -17,7 +17,6 @@ def create_data_container(restrict=None):
 
 
 def dummy_cuba_value(cuba):
-    Data = Record.columns['Data']
     column = CUBA(cuba).name.lower()
     # get the column type
     try:
