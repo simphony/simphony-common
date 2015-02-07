@@ -20,6 +20,7 @@ class CustomData(tables.IsDescription):
         rolling_friction = tables.Float64Col(pos=6)
         volume_fraction = tables.Float64Col(pos=7)
 
+
 class CustomRecord(tables.IsDescription):
 
     index = tables.StringCol(itemsize=16, pos=0)
