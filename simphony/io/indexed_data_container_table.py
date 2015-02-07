@@ -54,7 +54,7 @@ class IndexedDataContainerTable(Sequence):
                 parent, name, record, expectedrows=expected_number)
 
         # Prepare useful mappings
-        columns = self._table.cols.Data._v_desc._v_colobjects
+        columns = self._table.cols.data._v_desc._v_colobjects
         members = CUBA.__members__
         self._cuba_to_position = {
             cuba: columns[member.lower()]._v_pos
@@ -124,13 +124,13 @@ class IndexedDataContainerTable(Sequence):
         positions = self._cuba_to_position
         mask = numpy.zeros(
             shape=self._table.coldtypes['mask'].shape, dtype=numpy.bool)
-        data = list(row['Data'])
+        data = list(row['data'])
         for key in value:
             if key in positions:
                 data[positions[key]] = value[key]
                 mask[positions[key]] = True
         row['mask'] = mask
-        row['Data'] = tuple(data)
+        row['data'] = tuple(data)
 
     def _create_rec_array(self, value):
         """ Create a rec_array row from a DataContainer
@@ -138,7 +138,7 @@ class IndexedDataContainerTable(Sequence):
         """
         positions = self._cuba_to_position
         rec_array = numpy.zeros(shape=1, dtype=self._table._v_dtype)[0]
-        data = rec_array['Data']
+        data = rec_array['data']
         mask = rec_array['mask']
         for key in value:
             if key in positions:
@@ -158,7 +158,7 @@ class IndexedDataContainerTable(Sequence):
         """
         cuba = self._position_to_cuba
         mask = row['mask']
-        data = row['Data']
+        data = row['data']
         return DataContainer({
             cuba[index]: data[index]
             for index, valid in enumerate(mask) if valid})
