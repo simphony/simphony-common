@@ -81,7 +81,7 @@ def table(input, output):
             shape))
         position += 1
 
-    lines.append('\n')
+    lines.append('\n\n')
 
     # create Mask column
     mask_size = position  # without index
@@ -89,6 +89,13 @@ def table(input, output):
         'class Record(tables.IsDescription):\n',
         '\n',
         '    index = tables.StringCol(itemsize=16, pos=0)\n',
+        '    data = Data()\n',
+        '    mask = tables.BoolCol(pos=1, shape=({},))\n'.format(mask_size),
+        '\n\n'])
+
+    lines.extend([
+        'class NoUIDRecord(tables.IsDescription):\n',
+        '\n',
         '    data = Data()\n',
         '    mask = tables.BoolCol(pos=1, shape=({},))\n'.format(mask_size)])
 
