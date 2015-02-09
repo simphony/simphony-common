@@ -1,31 +1,23 @@
 """Lattice data specification of SimPhoNy CUDS, a non-wrapper implementation.
 
-Classes:
---------
-LatticeNode:
-    represents a single node of a lattice. Stores the node index coordinate
-    (used as the node id) and node related data in a data container.
 
-Lattice:
-    describes a Bravais lattice. Stores references to node related data.
-    References stored only on demand (i.e. default references are to None)
+**Classes**
 
-Routines:
----------
-make_hexagonal_lattice:
-    create and return a 2D hexagonal lattice.
+.. autosummary::
 
-make_square_lattice:
-    create and return a 2D square lattice.
+    LatticeNode
+    Lattice
 
-make_rectangular_lattice:
-    create and return a 2D rectangular lattice.
+**Functions**
 
-make_cubic_lattice:
-    create and return a 3D cubic lattice.
+.. autosummary::
 
-make_orthorombicp_lattice:
-    create and return a 3D orthorhombic (primitive) lattice.
+  make_hexagonal_lattice
+  make_square_lattice
+  make_rectangular_lattice
+  make_cubic_lattice
+  make_orthorombicp_lattice
+
 """
 import numpy as np
 from math import sqrt
@@ -36,8 +28,8 @@ class LatticeNode:
     """
     A single node of a lattice.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     id: tuple of D x int
         node index coordinate
     data: reference to a DataContainer object
@@ -57,8 +49,8 @@ class Lattice(object):
     A Bravais lattice;
     stores references to data containers (node related data).
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     name: string
     type: string
         Bravais lattice type (should agree with the base_vect below).
@@ -95,12 +87,12 @@ class Lattice(object):
     def get_node(self, id):
         """Get a copy of the node corresponding to the given id.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         id: tuple of D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         A reference to a LatticeNode object
         """
         tuple_id = tuple(id)
@@ -109,8 +101,8 @@ class Lattice(object):
     def update_node(self, lat_node):
         """Update the corresponding lattice node (data copied).
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         lat_node: reference to a LatticeNode object
             data copied from the given node
         """
@@ -120,12 +112,12 @@ class Lattice(object):
     def iter_nodes(self, ids=None):
         """Get an iterator over the LatticeNodes described by the ids.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         ids: iterable set of D x int (node index coordinates)
 
-        Returns:
-        -----------
+        Returns
+        -------
         A generator for LatticeNode objects
         """
         if ids is None:
@@ -138,12 +130,12 @@ class Lattice(object):
     def get_coordinate(self, id):
         """Get coordinate of the given index coordinate.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         id: D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         D x float
         """
         return self.origin + self.base_vect*np.array(id)
@@ -152,8 +144,8 @@ class Lattice(object):
 def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     """Create and return a 2D hexagonal lattice.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name: string
     h: float
         lattice spacing.
@@ -162,9 +154,10 @@ def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     origin: 2 x float (default value = (0,0))
         lattice origin.
 
-    Returns:
-    -----------
-    A reference to a Lattice object.
+    Returns
+    -------
+    lattice : Lattice
+        A reference to a Lattice object.
     """
     return Lattice(name, 'Hexagonal', (0.5*h, 0.5*sqrt(3)*h), size, origin)
 
@@ -172,8 +165,8 @@ def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
 def make_square_lattice(name, h, size, origin=(0, 0)):
     """Create and return a 2D square lattice.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name: string
     h: float
         lattice spacing.
@@ -182,9 +175,10 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
     origin: 2 x float (default value = (0,0))
         lattice origin.
 
-    Returns:
-    -----------
-    A reference to a Lattice object.
+    Returns
+    -------
+    lattice : Lattice
+        A reference to a Lattice object.
     """
     return Lattice(name, 'Square', (h, h), size, origin)
 
@@ -192,8 +186,8 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
 def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
     """Create and return a 2D rectangular lattice.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name: string
     hs: 2 x float
         lattice spacings (in each axis direction).
@@ -202,9 +196,8 @@ def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
     origin: 2 x float (default value = (0,0))
         lattice origin.
 
-    Returns:
-    -----------
-    A reference to a Lattice object.
+    lattice : Lattice
+        A reference to a Lattice object.
     """
     return Lattice(name, 'Rectangular', hs, size, origin)
 
@@ -212,8 +205,8 @@ def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
 def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     """Create and return a 3D cubic lattice.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name: string
     h: float
         lattice spacing.
@@ -222,9 +215,10 @@ def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     origin: 3 x float (default value = (0,0,0))
         lattice origin.
 
-    Returns:
-    -----------
-    A reference to a Lattice object.
+    Returns
+    -------
+    lattice : Lattice
+        A reference to a Lattice object.
     """
     return Lattice(name, 'Cubic', (h, h, h), size, origin)
 
@@ -232,8 +226,8 @@ def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
 def make_orthorombicp_lattice(name, hs, size, origin=(0, 0, 0)):
     """Create and return a 3D orthorombic primitive lattice.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name: string
     hs: 3 x float
         lattice spacings (in each axis direction).
@@ -242,8 +236,10 @@ def make_orthorombicp_lattice(name, hs, size, origin=(0, 0, 0)):
     origin: 3 x float (default value = (0,0,0))
         lattice origin.
 
-    Returns:
-    -----------
-    A reference to a Lattice object.
+    Returns
+    -------
+    lattice : Lattice
+        A reference to a Lattice object.
+
     """
     return Lattice(name, 'OrthorombicP', hs, size, origin)

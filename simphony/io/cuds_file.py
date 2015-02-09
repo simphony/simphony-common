@@ -1,9 +1,3 @@
-""" File access to CUDS-hdf5 formatted files
-
-This module provides access (read/write) to file which are
-formatted in the CUDS-hdf5 file format
-"""
-
 import copy
 
 import tables
@@ -12,11 +6,12 @@ from simphony.io.file_particle_container import FileParticleContainer
 
 
 class CudsFile(object):
-    """ Access to CUDS-hdf5 formatted files
+    """ Access to CUDS-hdf5 formatted files.
 
     """
+
     def __init__(self, file):
-        """
+        """ Create/Open a CUDS file.
 
         Parameters
         ----------
@@ -49,7 +44,6 @@ class CudsFile(object):
         ----------
         filename : str
             Name of file to be opened.
-
 
         mode: str
             The mode to open the file:

@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 
 class ABCModelingEngine(object):
-    """Abstract base class for modeling engines in SimPhoNy
+    """Abstract base class for modeling engines in SimPhoNy.
 
     Through this interface, the user controls and interacts with the
     simulation/calculation (which is being performed by the modeling
@@ -37,15 +37,8 @@ class ABCModelingEngine(object):
 
         Parameters
         ----------
-        lattice: ABCLattice
+        lattice : ABCLattice
             lattice to be added.
-
-        Returns
-        ----------
-        ABCLattice
-            A lattice to be used to update/query the internal representation
-            stored inside the modeling-engine. See get_lattice for more
-            information.
 
         """
         pass
@@ -58,13 +51,6 @@ class ABCModelingEngine(object):
         ----------
         mesh: ABCMesh
             mesh to be added.
-
-        Returns
-        ----------
-        ABCMesh
-            A mesh to be used to update/query the internal representation
-            stored inside the modeling-engine. See get_mesh for more
-            information.
 
         """
         pass
@@ -79,7 +65,7 @@ class ABCModelingEngine(object):
             particle container to be added.
 
         Returns
-        ----------
+        -------
         ABCParticleContainer
             A particle container to be used to update/query the internal
             representation stored inside the modeling-engine. See
@@ -132,7 +118,7 @@ class ABCModelingEngine(object):
         lattice inside the modeling engine.
 
         Returns
-        ----------
+        -------
         ABCLattice
 
         """
@@ -146,7 +132,7 @@ class ABCModelingEngine(object):
         mesh inside the modeling engine.
 
         Returns
-        ----------
+        -------
         ABCMesh
 
         """
@@ -160,7 +146,7 @@ class ABCModelingEngine(object):
         state of the particle container inside the modeling engine.
 
         Returns
-        ----------
+        -------
         ABCParticleContainer
 
         """
