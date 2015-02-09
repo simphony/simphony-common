@@ -6,11 +6,17 @@
 Welcome to SimPhoNy's documentation!
 ====================================
 
-Contents:
+.. include:: ..\..\README.rst
+
+API Reference
+=============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   api/core
+   api/cuds
+   api/io
 
 
 Indices and tables
@@ -19,4 +25,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
