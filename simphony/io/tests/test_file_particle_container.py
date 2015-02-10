@@ -5,7 +5,7 @@ import shutil
 import unittest
 
 from simphony.cuds.particles import ParticleContainer, Particle, Bond
-from simphony.io.cuds_file import CudsFile
+from simphony.io.h5_cuds import H5CUDS
 
 
 def _convert_to_tuple_list(particle_or_bond_list):
@@ -30,7 +30,7 @@ class TestFileParticleContainer(unittest.TestCase):
 
         # create file with empty particle container
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
-        self.file = CudsFile.open(self.filename)
+        self.file = H5CUDS.open(self.filename)
         self.pc = self.file.add_particle_container(
             ParticleContainer(name="test"))
 
