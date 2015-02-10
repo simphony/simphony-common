@@ -40,11 +40,9 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "enum34",
-        "tables",
-        "click",
-        "pyyaml",
-        "stevedore"],
+        "enum34>=1.0.4",
+        "tables>=3.1.1",
+        "stevedore>=1.3.0"],
     packages=find_packages(),
     entry_points={
         'console_scripts': [

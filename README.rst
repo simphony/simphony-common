@@ -20,6 +20,25 @@ Repository
 
 Simphony-common is hosted on github: https://github.com/simphony/simphony-common
 
+Requirements
+------------
+
+- enum34 >= 1.0.4
+- tables >= 3.1.1
+- stevedore >= 1.3.0
+
+Optional requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+- click >= 3.3
+- pyyaml >= 3.11
+
+Documentation requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- sphinx >= 1.2.3
+- sphinxcontrib-napoleon >= 0.2.10
+
 Installation
 ------------
 

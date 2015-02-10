@@ -1,4 +1,6 @@
 -r requirements.txt
 -r doc_requirements.txt
+click >= 3.3
+pyyaml >= 3.11
 coverage
 flake8
