@@ -10,9 +10,7 @@ install:
   # (2) Pytables breaks with latest Cython
   #     see https://github.com/PyTables/PyTables/issues/388
   - pip install numexpr cython==0.20
-  - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
-  - pip install -r doc_requirements.txt
   - pip install coveralls
   - python setup.py develop
   - pushd examples/plugin
