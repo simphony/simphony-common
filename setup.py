@@ -16,6 +16,8 @@ with open('README.rst', 'r') as readme:
 
 # Setup version
 VERSION = '0.0.1.dev2'
+
+
 def write_version_py(filename=None):
     if filename is None:
         filename = os.path.join(
