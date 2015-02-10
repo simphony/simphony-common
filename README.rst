@@ -43,7 +43,7 @@ To run the full test-suite run::
 Documentation
 -------------
 
-To build the documentation run::
+To build the documentation in the doc/build directory run::
 
     python setup.py sphinx_build
 
@@ -61,3 +61,8 @@ There are four subpackages:
 - cuds -- to hold all the native cuds implementations
 - io -- to hold the io specific code
 - bench -- holds basic benchmarking code
+- examples -- holds SimPhoNy example code
+- doc -- Documentation related files
+  - source -- Sphinx rst source files
+  - build -- Documentation build directory, if documentation
+    has been generated.
