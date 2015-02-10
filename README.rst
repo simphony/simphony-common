@@ -100,5 +100,4 @@ There are four subpackages:
 - examples -- holds SimPhoNy example code
 - doc -- Documentation related files
   - source -- Sphinx rst source files
-  - build -- Documentation build directory, if documentation
-    has been generated.
+  - build -- Documentation build directory, if documentation has been generated.
