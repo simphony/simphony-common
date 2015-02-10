@@ -11,29 +11,37 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-import sys
-import os
-from mock import MagicMock
 
-# mocking PyTables so that we can built documentation without it.
-# see https://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
+def mock_modules():
+    # mocking PyTables so that we can built documentation without it.
+    # see https://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
+    import sys
 
+    from mock import MagicMock
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
+    try:
+        import tables
+    except ImportError:
+        MOCK_MODULES = ['tables']
+    else:
+        MOCK_MODULES = []
+
+    class Mock(MagicMock):
+
+        @classmethod
+        def __getattr__(cls, name):
+           return Mock()
+
+        def __call__(self, *args, **kwards):
             return Mock()
 
-try:
-    import tables
-except ImportError:
-    MOCK_MODULES = ['tables']
-else:
-    MOCK_MODULES = []
-
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+    print 'mocking {}'.format(MOCK_MODULES)
 
 # -- General configuration ------------------------------------------------
+
+# check and mock missing modules
+mock_modules()
 
 # If your documentation needs a minimal Sphinx version, state it here.
 # needs_sphinx = '1.2.3'
