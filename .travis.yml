@@ -19,8 +19,6 @@ install:
 script:
   - flake8 .
   - coverage run -m unittest discover
-  - pushd doc
-  - make html
-  - popd
+  - python setup.py sphinx_build
 after_success:
   - coveralls
