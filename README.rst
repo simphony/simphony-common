@@ -37,7 +37,7 @@ prior to installing Simphony:
 
 To support the HDF5 based native IO:
 
-- PyTables >- 3.1.1
+- PyTables >= 3.1.1
 
 To support the documentation built you need the following packages:
 
@@ -54,7 +54,7 @@ To support the documentation built you need the following packages:
     install_requires = ["simphony[H5IO, CUBAGen]"]
 
   Will make sure that the requirements of H5IO and CUBAGen support
-  are installed. (see https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies_ for more information)
+  are installed. (see https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies) for more information)
 
 Installation
 ------------
