@@ -42,7 +42,7 @@ setup(
     install_requires=[
         "enum34>=1.0.4",
         "tables>=3.1.1",
-        "stevedore>=1.3.0"],
+        "stevedore>=1.2.0"],
     packages=find_packages(),
     entry_points={
         'console_scripts': [
