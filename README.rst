@@ -40,6 +40,17 @@ To run the full test-suite run::
 
     python -m unittest discover
 
+Documentation
+-------------
+
+To build the documentation run::
+
+    python setup.py sphinx_build
+
+.. note::
+
+   One can use the --help option with a setup.py command
+   to see all available options.
 
 Directory structure
 -------------------
