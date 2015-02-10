@@ -26,11 +26,16 @@ def mock_modules():
     else:
         MOCK_MODULES = []
 
+    try:
+        import numpy
+    except ImportError:
+        MOCK_MODULES.append('numpy')
+
     class Mock(MagicMock):
 
         @classmethod
         def __getattr__(cls, name):
-           return Mock()
+            return Mock()
 
         def __call__(self, *args, **kwards):
             return Mock()
