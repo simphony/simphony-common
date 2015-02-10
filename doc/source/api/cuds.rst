@@ -1,40 +1,67 @@
 CUDS
 ====
 
+
 Abstract CUDS interfaces
 ------------------------
 
-.. automodule:: simphony.cuds.abc_modeling_engine
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. rubric:: Containers
+
+.. currentmodule:: simphony.cuds
+
+.. autosummary::
+
+   ~abstractmesh.ABCMesh
+   ~abstractparticles.ABCParticleContainer
+
+.. rubric:: Description
 
 .. automodule:: simphony.cuds.abstractmesh
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
 
 .. automodule:: simphony.cuds.abstractparticles
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
 
-Python CUDS implementation
+Pure Python implementation
 --------------------------
 
-The native python implementation of the SimPhoNy CUDS objects.
+.. rubric:: Classes
 
-.. automodule:: simphony.cuds.particles
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. currentmodule:: simphony.cuds
+
+.. autosummary::
+
+   ~lattice.LatticeNode
+   ~lattice.Lattice
+   ~particles.Particle
+   ~particles.ParticleContainer
+   ~mesh.Mesh
+   ~mesh.Point
+   ~mesh.Face
+   ~mesh.Cell
+
+.. rubric:: Functions
+
+.. autosummary::
+
+   ~lattice.make_hexagonal_lattice
+   ~lattice.make_square_lattice
+   ~lattice.make_rectangular_lattice
+   ~lattice.make_cubic_lattice
+   ~lattice.make_orthorombicp_lattice
+
+.. rubric:: Implementation
 
 .. automodule:: simphony.cuds.lattice
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
 
 .. automodule:: simphony.cuds.mesh
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.particles
+   :members:
+   :undoc-members:
