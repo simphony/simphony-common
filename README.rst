@@ -11,6 +11,9 @@ The native implementation of the SimPhoNy cuds objects and io code.
    :target: https://coveralls.io/r/simphony/simphony-common
    :alt: Test coverage
 
+.. image:: https://readthedocs.org/projects/simphony/badge/?version=latest
+   :target: https://readthedocs.org/projects/simphony/?badge=latest
+   :alt: Documentation Status
 
 Repository
 ----------
