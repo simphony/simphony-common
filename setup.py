@@ -2,14 +2,6 @@ import os
 
 from setuptools import setup, find_packages
 
-# Gather additional setup.py commands
-try:
-    from sphinx.setup_command import BuildDoc
-    cmdclass = {'sphinx_build': BuildDoc}
-except ImportError:
-    print "Sphinx not found documentation building is not available"
-    cmdclass = {}
-
 # Read description
 with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
@@ -49,4 +41,4 @@ setup(
     entry_points={
         'console_scripts': [
             'cuba-generate = simphony.scripts.cuba_generate:cli [CUBAGen]']},
-    cmdclass=cmdclass)
+    )

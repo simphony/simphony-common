@@ -81,7 +81,7 @@ Documentation
 
 To build the documentation in the doc/build directory run::
 
-    python setup.py sphinx_build
+    python setup.py build_sphinx
 
 .. note::
 
