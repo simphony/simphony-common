@@ -24,20 +24,37 @@ Requirements
 ------------
 
 - enum34 >= 1.0.4
-- tables >= 3.1.1
 - stevedore >= 1.2.0
 
 Optional requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
+To support the cuba-generate script the following packages need to be installed
+prior to installing Simphony:
+
 - click >= 3.3
 - pyyaml >= 3.11
 
-Documentation requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+To support the HDF5 based native IO:
+
+- PyTables >- 3.1.1
+
+To support the documentation built you need the following packages:
 
 - sphinx >= 1.2.3
 - sphinxcontrib-napoleon >= 0.2.10
+- mock
+
+.. note::
+
+  Packages that depend on the optional features and use setuptools should
+  append the {``H5IO`` and/or ``CUBAGen``} identifier next to
+  simphony in their ``setup_requires`` configuration. For example::
+
+    install_requires = ["simphony[H5IO, CUBAGen]"]
+
+   Will make sure that the requirements of H5IO and CUBAGen support requirements
+   are installed. (see https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies_ for more information)
 
 Installation
 ------------

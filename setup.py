@@ -41,10 +41,12 @@ setup(
     long_description=README_TEXT,
     install_requires=[
         "enum34>=1.0.4",
-        "tables>=3.1.1",
         "stevedore>=1.2.0"],
+    extras_require={
+        'H5IO': ["tables>=3.1.1"],
+        'CUBAGen': ["click >= 3.3", "pyyaml >= 3.11"]},
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'cuba-generate = simphony.scripts.cuba_generate:cli']},
+            'cuba-generate = simphony.scripts.cuba_generate:cli [CUBAGen]']},
     cmdclass=cmdclass)
