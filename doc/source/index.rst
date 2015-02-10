@@ -6,7 +6,7 @@
 Welcome to SimPhoNy's documentation!
 ====================================
 
-.. include:: ..\..\README.rst
+.. include:: ../../README.rst
 
 API Reference
 =============
