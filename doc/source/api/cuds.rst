@@ -36,6 +36,7 @@ Pure Python implementation
    ~lattice.LatticeNode
    ~lattice.Lattice
    ~particles.Particle
+   ~particles.Bond
    ~particles.ParticleContainer
    ~mesh.Mesh
    ~mesh.Point
