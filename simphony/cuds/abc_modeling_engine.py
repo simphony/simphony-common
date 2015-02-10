@@ -40,6 +40,13 @@ class ABCModelingEngine(object):
         lattice : ABCLattice
             lattice to be added.
 
+        Returns
+        -------
+        proxy : ABCLattice
+            A lattice to be used to update/query the internal representation
+            stored inside the modeling-engine. See get_lattice for more
+            information.
+
         """
         pass
 
@@ -52,6 +59,12 @@ class ABCModelingEngine(object):
         mesh: ABCMesh
             mesh to be added.
 
+        Returns
+        -------
+        proxy : ABCMesh
+            A proxy mesh to be used to update/query the internal representation
+            stored inside the modeling-engine. See get_mesh for more
+            information.
         """
         pass
 
