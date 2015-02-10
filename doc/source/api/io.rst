@@ -24,7 +24,7 @@ The CUDS to HDF5 file adapters.
 
 .. rubric:: Implementation
 
-.. automodule:: simphony.io.cuds_file
+.. automodule:: simphony.io.h5_cuds
    :members:
    :undoc-members:
    :show-inheritance:
