@@ -1,24 +1,3 @@
-"""Lattice data specification of SimPhoNy CUDS, a non-wrapper implementation.
-
-
-**Classes**
-
-.. autosummary::
-
-    LatticeNode
-    Lattice
-
-**Functions**
-
-.. autosummary::
-
-  make_hexagonal_lattice
-  make_square_lattice
-  make_rectangular_lattice
-  make_cubic_lattice
-  make_orthorombicp_lattice
-
-"""
 import numpy as np
 from math import sqrt
 from simphony.core.data_container import DataContainer
@@ -30,10 +9,11 @@ class LatticeNode:
 
     Attributes
     ----------
-    id: tuple of D x int
-        node index coordinate
-    data: reference to a DataContainer object
-        node related data
+    id :  tuple of D x int
+        Node index coordinate
+    data : DataContainer
+
+
     """
     def __init__(self, id, data=None):
         self.id = tuple(id)
@@ -49,16 +29,17 @@ class Lattice(object):
     A Bravais lattice;
     stores references to data containers (node related data).
 
-    Attributes
+    Parameters
     ----------
-    name: string
-    type: string
+    name: str
+    type: str
         Bravais lattice type (should agree with the base_vect below).
     base_vect: D x float
         defines a Bravais lattice (an alternative for primitive vectors).
     size: D x size
         number of lattice nodes (in the direction of each axis).
     origin: D x float
+
     """
     def __init__(self, name, type, base_vect, size, origin):
         self.name = name

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-    Module for Abstract Particle class:
-        ABCParticleContainer ---> Common Base abstract class ("interface") for
-            the the Particles container.
-"""
-
 from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 
@@ -66,13 +60,3 @@ class ABCParticleContainer(object):
     @abstractmethod
     def has_bond(self, id):
         pass
-
-
-def main():
-    print("""Module for Particle classes:
-               ABCParticleContainer ---> Common Base abstract class
-               ("interface") for the the Particles container.
-          """)
-
-if __name__ == '__main__':
-    main()

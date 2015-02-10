@@ -20,6 +20,9 @@ class DataContainerTable(MutableMapping):
 
     @property
     def valid(self):
+        """ A PyTables table is opened/created and the object is valid.
+
+        """
         return self._table is not None
 
     def __init__(self, root, name='data_containers', record=None):
