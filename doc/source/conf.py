@@ -12,9 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+
 def mock_modules():
-    # mocking PyTables so that we can built documentation without it.
-    # see https://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
     import sys
 
     from mock import MagicMock
