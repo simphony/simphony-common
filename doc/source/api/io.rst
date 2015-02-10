@@ -1,4 +1,4 @@
-File-IO
+HDF5 IO
 =======
 
 The CUDS to HDF5 file adapters.
@@ -9,7 +9,7 @@ The CUDS to HDF5 file adapters.
 
 .. autosummary::
 
-   ~cuds_file.CudsFile
+   ~h5_cuds.H5CUDS
    ~data_container_table.DataContainerTable
    ~indexed_data_container_table.IndexedDataContainerTable
    ~file_particle_container.FileParticleContainer
