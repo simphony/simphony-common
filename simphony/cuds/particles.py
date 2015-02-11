@@ -487,12 +487,12 @@ class Particle(object):
 
     Attributes
     ----------
-        uid : uuid.UUID
-            the unique id of the particle
-        coordinates : list / tuple
-            x,y,z coordinates of the particle
-        data : DataContainer
-            DataContainer to store the attributes of the particle
+    uid : uuid.UUID
+        the unique id of the particle
+    coordinates : list / tuple
+        x,y,z coordinates of the particle
+    data : DataContainer
+        DataContainer to store the attributes of the particle
 
     """
 
