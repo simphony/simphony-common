@@ -88,7 +88,7 @@ def table(input, output):
     lines.extend([
         'class Record(tables.IsDescription):\n',
         '\n',
-        '    index = tables.StringCol(itemsize=16, pos=0)\n',
+        '    index = tables.StringCol(itemsize=32, pos=0)\n',
         '    data = Data()\n',
         '    mask = tables.BoolCol(pos=1, shape=({},))\n'.format(mask_size),
         '\n\n'])
