@@ -36,35 +36,35 @@ class ABCParticleContainer(object):
         pass
 
     @abstractmethod
-    def get_particle(self, particle_id):
+    def get_particle(self, uid):
         pass
 
     @abstractmethod
-    def get_bond(self, bond_id):
+    def get_bond(self, uid):
         pass
 
     @abstractmethod
-    def remove_particle(self, particle_id):
+    def remove_particle(self, uid):
         pass
 
     @abstractmethod
-    def remove_bond(self, bond_id):
+    def remove_bond(self, uid):
         pass
 
     @abstractmethod
-    def iter_particles(self, particle_ids=None):
+    def iter_particles(self, uids=None):
         pass
 
     @abstractmethod
-    def iter_bonds(self, bond_ids=None):
+    def iter_bonds(self, uids=None):
         pass
 
     @abstractmethod
-    def has_particle(self, id):
+    def has_particle(self, uid):
         pass
 
     @abstractmethod
-    def has_bond(self, id):
+    def has_bond(self, uid):
         pass
 
 
