@@ -258,7 +258,7 @@ class FileParticleContainer(ABCParticleContainer):
     def _generate_unique_id(self, table, number_tries=1000):
         for n in xrange(number_tries):
             uid = random.randint(0, MAX_INT)
-            for _ in table.where('id == value', condvars={'value': uid}):
+            for _ in table.where('uid == value', condvars={'value': uid}):
                 break
             else:
                 return uid
