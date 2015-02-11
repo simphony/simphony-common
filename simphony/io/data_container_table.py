@@ -79,7 +79,7 @@ class DataContainerTable(MutableMapping):
         table = self._table
         uid = uuid.uuid4()
         row = table.row
-        row['index'] = uid.bytes
+        row['index'] = uid.hex
         self._populate(row, data)
         row.append()
         table.flush()
@@ -90,7 +90,7 @@ class DataContainerTable(MutableMapping):
 
         """
         for row in self._table.where(
-                'index == value',  condvars={'value': uid.bytes}):
+                'index == value',  condvars={'value': uid.hex}):
             return self._retrieve(row)
         else:
             raise KeyError(
@@ -102,7 +102,7 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             self._populate(row, data)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
@@ -110,7 +110,7 @@ class DataContainerTable(MutableMapping):
             return
         else:
             row = table.row
-            row['index'] = uid.bytes
+            row['index'] = uid.hex
             self._populate(row, data)
             row.append()
             table.flush()
@@ -121,7 +121,7 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             if table.nrows == 1:
                 name = table._v_name
                 record = table.description
