@@ -3,13 +3,12 @@ import os
 
 import tables
 
-from simphony.cuds.particles import Particle
-from simphony.cuds.particles import ParticleContainer
-from simphony.io.cuds_file import CudsFile
+from simphony.cuds.particles import Particle, ParticleContainer
+from simphony.io.h5_cuds import H5CUDS
 from simphony.io.file_particle_container import FileParticleContainer
 
 
-class TestCudsFile(unittest.TestCase):
+class TestH5CUDS(unittest.TestCase):
 
     def setUp(self):
         # create some particles
@@ -17,8 +16,8 @@ class TestCudsFile(unittest.TestCase):
         for i in xrange(10):
             self.particles.append(Particle((1.1*i, 2.2*i, 3.3*i), id=i))
 
-        self.file_a = CudsFile.open('test_A.cuds')
-        self.file_b = CudsFile.open('test_B.cuds')
+        self.file_a = H5CUDS.open('test_A.cuds')
+        self.file_b = H5CUDS.open('test_B.cuds')
 
     def tearDown(self):
         self.file_a.close()
@@ -27,28 +26,28 @@ class TestCudsFile(unittest.TestCase):
         os.remove('test_B.cuds')
 
     def test_init_with_append_mode(self):
-        file = CudsFile.open('test.cuds', mode='a')
+        file = H5CUDS.open('test.cuds', mode='a')
         self.assertTrue(file.valid())
         file.close()
         os.remove('test.cuds')
 
     def test_init_with_write_mode(self):
-        file = CudsFile.open('test.cuds', mode='w')
+        file = H5CUDS.open('test.cuds', mode='w')
         self.assertTrue(file.valid())
         file.close()
         os.remove('test.cuds')
 
     def test_init_with_unsupported_mode(self):
         with self.assertRaises(Exception):
-            file = CudsFile.open('test.cuds', mode='x')
+            file = H5CUDS.open('test.cuds', mode='x')
             file.valid()
 
     def test_init_with_read_only_mode(self):
-        file = CudsFile.open('test.cuds', mode='w')
+        file = H5CUDS.open('test.cuds', mode='w')
         file.close()
 
         with self.assertRaises(Exception):
-            file = CudsFile.open('test.cuds', mode='r')
+            file = H5CUDS.open('test.cuds', mode='r')
         os.remove('test.cuds')
 
     def test_init_with_read_only_file(self):
@@ -57,18 +56,18 @@ class TestCudsFile(unittest.TestCase):
 
         with tables.open_file('test.cuds', mode="r") as pfile:
             with self.assertRaises(Exception):
-                CudsFile(pfile)
+                H5CUDS(pfile)
         os.remove('test.cuds')
 
     def test_init_with_non_file(self):
         with self.assertRaises(Exception):
-            CudsFile(None)
+            H5CUDS(None)
 
     def test_valid(self):
         self.assertTrue(self.file_a.valid())
         self.file_a.close()
         self.assertFalse(self.file_a.valid())
-        self.file_a = CudsFile.open('test_A.cuds')
+        self.file_a = H5CUDS.open('test_A.cuds')
         self.assertTrue(self.file_a.valid())
 
     def test_get_missing_particle_container(self):
@@ -120,7 +119,7 @@ class TestCudsFile(unittest.TestCase):
             pc_closed_file.delete(self.particles[0].id)
 
         # reopen file (in append mode)
-        self.file_a = CudsFile.open('test_A.cuds')
+        self.file_a = H5CUDS.open('test_A.cuds')
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
             p1 = pc_test_a.get_particle(p.id)

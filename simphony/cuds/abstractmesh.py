@@ -1,8 +1,3 @@
-"""
-Module for Abstract Mesh class
-
-"""
-
 from abc import ABCMeta, abstractmethod
 
 
@@ -13,6 +8,7 @@ class ABCMesh(object):
     ----------
     name : str
         name of mesh
+
     """
 
     __metaclass__ = ABCMeta
