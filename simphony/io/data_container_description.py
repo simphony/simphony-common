@@ -74,7 +74,7 @@ class Data(tables.IsDescription):
 
 class Record(tables.IsDescription):
 
-    index = tables.StringCol(itemsize=16, pos=0)
+    index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
     mask = tables.BoolCol(pos=1, shape=(66,))
 

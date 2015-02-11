@@ -23,7 +23,7 @@ class CustomData(tables.IsDescription):
 
 class CustomRecord(tables.IsDescription):
 
-    index = tables.StringCol(itemsize=16, pos=0)
+    index = tables.StringCol(itemsize=32, pos=0)
     data = CustomData()
     mask = tables.BoolCol(pos=1, shape=(8,))
 
