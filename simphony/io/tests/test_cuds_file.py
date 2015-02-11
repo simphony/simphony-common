@@ -15,7 +15,7 @@ class TestCudsFile(unittest.TestCase):
         # create some particles
         self.particles = []
         for i in xrange(10):
-            self.particles.append(Particle((1.1*i, 2.2*i, 3.3*i), id=i))
+            self.particles.append(Particle((1.1*i, 2.2*i, 3.3*i), uid=i))
 
         self.file_a = CudsFile.open('test_A.cuds')
         self.file_b = CudsFile.open('test_B.cuds')
@@ -94,10 +94,10 @@ class TestCudsFile(unittest.TestCase):
         pc_test_a = self.file_a.add_particle_container(
             ParticleContainer(name="test"))
         for p in self.particles:
-            id = pc_test_a.add_particle(p)
-            self.assertEqual(p.id, id)
+            uid = pc_test_a.add_particle(p)
+            self.assertEqual(p.uid, uid)
             self.assertEqual(
-                p.coordinates, pc_test_a.get_particle(id).coordinates)
+                p.coordinates, pc_test_a.get_particle(uid).coordinates)
 
         num_particles = len(list(p for p in pc_test_a.iter_particles()))
         self.assertEqual(num_particles, len(self.particles))
@@ -107,24 +107,24 @@ class TestCudsFile(unittest.TestCase):
         pc_test_b = self.file_b.add_particle_container(pc_test_a)
 
         for p in pc_test_a.iter_particles():
-            p1 = pc_test_b.get_particle(p.id)
-            self.assertEqual(p1.id, p.id)
+            p1 = pc_test_b.get_particle(p.uid)
+            self.assertEqual(p1.uid, p.uid)
             self.assertEqual(p1.coordinates, p.coordinates)
 
         # close file and test if we can access it
         self.file_a.close()
         with self.assertRaises(Exception):
-            pc_test_a.delete(self.particles[0].id)
+            pc_test_a.delete(self.particles[0].uid)
         with self.assertRaises(Exception):
             pc_closed_file = self.file_a.get_particle_container('test')
-            pc_closed_file.delete(self.particles[0].id)
+            pc_closed_file.delete(self.particles[0].uid)
 
         # reopen file (in append mode)
         self.file_a = CudsFile.open('test_A.cuds')
         pc_test_a = self.file_a.get_particle_container('test')
         for p in self.particles:
-            p1 = pc_test_a.get_particle(p.id)
-            self.assertEqual(p1.id, p.id)
+            p1 = pc_test_a.get_particle(p.uid)
+            self.assertEqual(p1.uid, p.uid)
             self.assertEqual(p1.coordinates, p.coordinates)
 
     def test_iter_particle_container(self):

@@ -232,7 +232,7 @@ class TestSequenceFunctions(unittest.TestCase):
         point_ret = self.mesh.get_point(puuids[0])
 
         self.assertTrue(isinstance(point_ret, Point))
-        self.assertEqual(puuids[0], point_ret.uuid)
+        self.assertEqual(puuids[0], point_ret.uid)
 
     def test_get_edge(self):
         """ Check that an edge can be retrieved correctly
@@ -259,7 +259,7 @@ class TestSequenceFunctions(unittest.TestCase):
         edge_ret = self.mesh.get_edge(euuids[0])
 
         self.assertTrue(isinstance(edge_ret, Edge))
-        self.assertEqual(euuids[0], edge_ret.uuid)
+        self.assertEqual(euuids[0], edge_ret.uid)
 
     def test_get_face(self):
         """ Check that a face can be retrieved correctly
@@ -287,7 +287,7 @@ class TestSequenceFunctions(unittest.TestCase):
         face_ret = self.mesh.get_face(fuuids[0])
 
         self.assertTrue(isinstance(face_ret, Face))
-        self.assertEqual(fuuids[0], face_ret.uuid)
+        self.assertEqual(fuuids[0], face_ret.uid)
 
     def test_get_cell(self):
         """ Check that a cell can be retrieved correctly
@@ -316,7 +316,7 @@ class TestSequenceFunctions(unittest.TestCase):
         cell_ret = self.mesh.get_cell(cuuids[0])
 
         self.assertTrue(isinstance(cell_ret, Cell))
-        self.assertEqual(cuuids[0], cell_ret.uuid)
+        self.assertEqual(cuuids[0], cell_ret.uid)
 
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
@@ -352,7 +352,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         iedges = self.mesh.iter_edges()
 
-        iedges_id = [edge.uuid for edge in iedges]
+        iedges_id = [edge.uid for edge in iedges]
 
         self.assertItemsEqual(iedges_id, euuids)
 
@@ -391,7 +391,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         ifaces = self.mesh.iter_faces()
 
-        ifaces_id = [face.uuid for face in ifaces]
+        ifaces_id = [face.uid for face in ifaces]
 
         self.assertItemsEqual(fuuids, ifaces_id)
 
@@ -431,7 +431,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
         icells = self.mesh.iter_cells()
 
-        icells_id = [cell.uuid for cell in icells]
+        icells_id = [cell.uid for cell in icells]
 
         self.assertItemsEqual(icells_id, cuuids)
 
@@ -472,7 +472,7 @@ class TestSequenceFunctions(unittest.TestCase):
         iedges = self.mesh.iter_edges([euuids[0], euuids[2]])
 
         source_id = [euuids[0], euuids[2]]
-        iedges_id = [edge.uuid for edge in iedges]
+        iedges_id = [edge.uid for edge in iedges]
 
         self.assertItemsEqual(source_id, iedges_id)
 
@@ -514,7 +514,7 @@ class TestSequenceFunctions(unittest.TestCase):
         ifaces = self.mesh.iter_faces([fuuids[0], fuuids[2]])
 
         source_id = [fuuids[0], fuuids[2]]
-        ifaces_id = [face.uuid for face in ifaces]
+        ifaces_id = [face.uid for face in ifaces]
 
         self.assertItemsEqual(source_id, ifaces_id)
 
@@ -557,7 +557,7 @@ class TestSequenceFunctions(unittest.TestCase):
         icells = self.mesh.iter_cells([cuuids[0], cuuids[2]])
 
         source_id = [cuuids[0], cuuids[2]]
-        icells_id = [cell.uuid for cell in icells]
+        icells_id = [cell.uid for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
 
