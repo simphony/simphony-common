@@ -1,6 +1,3 @@
-"""
-This class illustrates use of a particles container class for files
-"""
 import random
 
 import tables
@@ -28,8 +25,8 @@ class _BondDescription(tables.IsDescription):
 
 
 class FileParticleContainer(ABCParticleContainer):
-    """
-    Responsible class to synchronize operations on particles
+    """ Cuds particle container.
+
     """
     def __init__(self, group, file):
         self._file = file
@@ -44,6 +41,8 @@ class FileParticleContainer(ABCParticleContainer):
 
     @property
     def name(self):
+        """ The name of the container
+        """
         return self._group._v_name
 
     @name.setter
@@ -61,12 +60,12 @@ class FileParticleContainer(ABCParticleContainer):
 
         Returns
         -------
-        int
+        int :
             id of particle
 
         Raises
-        -------
-        ValueError
+        ------
+        ValueError :
            if an id is given which already exists.
 
         """
@@ -146,12 +145,12 @@ class FileParticleContainer(ABCParticleContainer):
 
         Returns
         -------
-        int
+        int :
             id of bond
 
         Raises
-        -------
-        ValueError
+        ------
+        ValueError :
            if an id is given which already exists.
 
         """

@@ -1,9 +1,3 @@
-""" File access to CUDS-hdf5 formatted files
-
-This module provides access (read/write) to file which are
-formatted in the CUDS-hdf5 file format
-"""
-
 import copy
 
 import tables
@@ -11,12 +5,13 @@ import tables
 from simphony.io.file_particle_container import FileParticleContainer
 
 
-class CudsFile(object):
-    """ Access to CUDS-hdf5 formatted files
+class H5CUDS(object):
+    """ Access to CUDS-hdf5 formatted files.
 
     """
+
     def __init__(self, file):
-        """
+        """ Create/Open a CUDS file.
 
         Parameters
         ----------
@@ -43,21 +38,20 @@ class CudsFile(object):
 
     @classmethod
     def open(cls, filename, mode="a", title=''):
-        """Returns a SimPhony file and returns an opened CudsFile
+        """ Returns a SimPhony file and returns an opened CudsFile
 
         Parameters
         ----------
         filename : str
             Name of file to be opened.
 
-
         mode: str
             The mode to open the file:
-                * *'w'*: Write; a new file is created (an existing file
-                  with the same name would be deleted).
-                * *'a'*: Append; an existing file is opened for reading and
-                  writing, and if the file does not exist it is created.
 
+            - ``w`` -- Write; a new file is created (an existing file
+              with the same name would be deleted).
+            - ``a`` -- Append; an existing file is opened for reading and
+              writing, and if the file does not exist it is created.
 
         title : str
             Title attribute of root node (only applies to a file which
@@ -93,7 +87,7 @@ class CudsFile(object):
             particle container to be added.
 
         Returns
-        ----------
+        -------
         FileParticleContainer
             The particle container newly added to the file.  See
             get_particle_container for more information.

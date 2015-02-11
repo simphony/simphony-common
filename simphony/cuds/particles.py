@@ -1,15 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-    Module for Particle classes:
-
-        ParticleContainer ------> Concrete implementation of the Particles
-           Containter class for stand-alone use of the container within python.
-        Particle ----------------> Concrete implementation of the class repre-
-           senting the Particles and Atoms for stand-alone use.
-        Bond --------------------> Concrete implementation of the class repre-
-           senting the bonds between Particles or Atoms. This class should re-
-           present any kind of interaction (between atoms, molecules, etc.)
-"""
 from __future__ import print_function
 import uuid
 
@@ -24,24 +13,26 @@ class ParticleContainer(ABCParticleContainer):
     Class provides methods to add particles and bonds, remove them and update
     them.
 
-    Parameters
-    ----------
-    name : str
-        name of the particle container
-
     Attributes
     ----------
     name : str
         name of the particle container
-    _particles : dictionary
+    _particles : dict
         data structure for particles storage
-    _bonds : dictionary
+    _bonds : dict
         data structure for bonds storage
     data : DataContainer
         data attributes of the element
 
     """
     def __init__(self, name):
+        """ Constructor
+
+        Parameters
+        ----------
+        name : str
+            name of the particle container
+        """
         self._particles = {}
         self._bonds = {}
         self.data = DataContainer()
@@ -234,7 +225,6 @@ class ParticleContainer(ABCParticleContainer):
 
         Parameters
         ----------
-
         uid : uuid.UUID
             the id of the bond
 
@@ -261,8 +251,7 @@ class ParticleContainer(ABCParticleContainer):
 
         Parameters
         ----------
-
-       uid : uuid.UUID
+        uid : uuid.UUID
             the id of the particle to be removed.
 
         Raises
@@ -300,7 +289,6 @@ class ParticleContainer(ABCParticleContainer):
 
         Parameters
         ----------
-
         uid : uuid.UUID
             the id of the bond to be removed.
 
@@ -342,8 +330,9 @@ class ParticleContainer(ABCParticleContainer):
             iterated.
 
         Yields
-        -------
-        Yields each particle to be used.
+        ------
+        particle : Particle
+            Yields each particle to be used.
 
         Raises
         ------
@@ -393,7 +382,7 @@ class ParticleContainer(ABCParticleContainer):
             sequence containing the id's of the bond that will be iterated.
 
         Yields
-        -------
+        ------
         Yields each bond to be used.
 
         Raises
@@ -544,12 +533,12 @@ class Bond(object):
 
     Attributes
     ----------
-        uid : uuid.UUID
-            the unique id of the bond
-        particles : tuple
-            tuple of uuids of the particles that are participating in the bond.
-        data : DataContainer
-            DataContainer to store the attributes of the bond
+    uid : uuid.UUID
+        the unique id of the bond
+    particles : tuple
+        tuple of uuids of the particles that are participating in the bond.
+    data : DataContainer
+        DataContainer to store the attributes of the bond
 
     """
 
@@ -587,22 +576,3 @@ class Bond(object):
     def __str__(self):
         total_str = "{0}_{1}".format(self.uid, self.particles)
         return total_str
-
-
-def main():
-    print("""
-            Module for Particle classes:
-                ParticleContainer ------> Concrete implementation of the
-                    Particles Containter class for stand-alone use of the
-                    container within python.
-                Particle ----------------> Concrete implementation of the
-                    class representing the Particles and Atoms for stand-alone
-                    use.
-                Bond --------------------> Concrete implementation of the class
-                    representing the bonds between Particles or Atoms.
-                    This class should represent any kind of interaction
-                    (between atoms, molecules, etc.)
-           """)
-
-if __name__ == '__main__':
-    main()
