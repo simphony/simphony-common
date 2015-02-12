@@ -11,8 +11,8 @@ The native implementation of the SimPhoNy cuds objects and io code.
    :target: https://coveralls.io/r/simphony/simphony-common
    :alt: Test coverage
 
-.. image:: https://readthedocs.org/projects/simphony/badge/?version=latest
-   :target: https://readthedocs.org/projects/simphony/?badge=latest
+.. image:: https://readthedocs.org/projects/simphony/badge/?version=master
+   :target: https://readthedocs.org/projects/simphony/?badge=master
    :alt: Documentation Status
 
 Repository
@@ -48,13 +48,13 @@ To support the documentation built you need the following packages:
 .. note::
 
   Packages that depend on the optional features and use setuptools should
-  append the {``H5IO`` and/or ``CUBAGen``} identifier next to
-  simphony in their ``setup_requires`` configuration. For example::
+  append the ``H5IO`` and/or ``CUBAGen`` identifier next to
+  simphony in their ``setup_requires`` configuration option. For example::
 
     install_requires = ["simphony[H5IO, CUBAGen]"]
 
   Will make sure that the requirements of H5IO and CUBAGen support
-  are installed. (see https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies) for more information)
+  are installed. (see `setuptools extras`_ for more information)
 
 Installation
 ------------
@@ -85,8 +85,9 @@ To build the documentation in the doc/build directory run::
 
 .. note::
 
-   One can use the --help option with a setup.py command
-   to see all available options.
+   - One can use the --help option with a setup.py command
+     to see all available options.
+   - The documentation will be saved in the ``./build`` directory.
 
 Directory structure
 -------------------
@@ -99,5 +100,11 @@ There are four subpackages:
 - bench -- holds basic benchmarking code
 - examples -- holds SimPhoNy example code
 - doc -- Documentation related files
+
   - source -- Sphinx rst source files
-  - build -- Documentation build directory, if documentation has been generated.
+  - build -- Documentation build directory, if documentation has been generated
+    using the ``make`` script in the ``doc`` directory.
+
+
+
+.. _setuptools extras: https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
