@@ -13,6 +13,7 @@ Abstract CUDS interfaces
 
    ~abstractmesh.ABCMesh
    ~abstractparticles.ABCParticleContainer
+   ~abstractlattice.ABCLattice
 
 .. rubric:: Description
 
@@ -21,6 +22,10 @@ Abstract CUDS interfaces
    :undoc-members:
 
 .. automodule:: simphony.cuds.abstractparticles
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.abstractlattice
    :members:
    :undoc-members:
 
