@@ -113,7 +113,7 @@ class H5CUDS(object):
         self._file.flush()
         return pc
 
-    def add_mesh(self, name, mesh=None):
+    def add_mesh(self, mesh):
         """Add a mesh to the file.
 
         Parameters
@@ -131,26 +131,26 @@ class H5CUDS(object):
             See get_mesh for more information.
 
         """
-        if name in self._file.root.mesh:
+        if mesh.name in self._file.root.mesh:
             raise ValueError(
-                'Mesh \'{n}\` already exists'.format(n=name))
+                'Mesh \'{n}\` already exists'.format(n=mesh.name))
 
-        group = self._file.create_group('/mesh/', name)
-        file_mesh = FileMesh(group, self._file)
+        group = self._file.create_group('/mesh/', mesh.name)
+        m = FileMesh(group, self._file)
 
         if mesh:
             # copy the contents of the mesh to the file
             for point in mesh.iter_points():
-                file_mesh.add_point(point)
+                m.add_point(point)
             for edge in mesh.iter_edges():
-                file_mesh.add_edge(edge)
+                m.add_edge(edge)
             for face in mesh.iter_faces():
-                file_mesh.add_face(face)
+                m.add_face(face)
             for cell in mesh.iter_cells():
-                file_mesh.add_cell(cell)
+                m.add_cell(cell)
 
         self._file.flush()
-        return file_mesh
+        return m
 
     def get_particle_container(self, name):
         """Get particle container from file.
