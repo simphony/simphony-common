@@ -85,8 +85,9 @@ To build the documentation in the doc/build directory run::
 
 .. note::
 
-   One can use the --help option with a setup.py command
-   to see all available options.
+   - One can use the --help option with a setup.py command
+     to see all available options.
+   - The documentation will be saved in the ``./build`` directory.
 
 Directory structure
 -------------------
@@ -101,4 +102,5 @@ There are four subpackages:
 - doc -- Documentation related files
 
   - source -- Sphinx rst source files
-  - build -- Documentation build directory, if documentation has been generated.
+  - build -- Documentation build directory, if documentation has been generated
+    using the ``make`` script in the ``doc`` directory.
