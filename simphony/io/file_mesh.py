@@ -141,7 +141,7 @@ class FileMesh(object):
         if "cells" not in self._group:
             self._create_cells_table()
 
-    def get_point(self, p_uid):
+    def get_point(self, uid):
         """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
@@ -166,7 +166,7 @@ class FileMesh(object):
         """
 
         for row in self._group.points.where(
-                'uid == value', condvars={'value': p_uid.hex}):
+                'uid == value', condvars={'value': uid.hex}):
             return Point(
                 tuple(row['coordinates']),
                 uuid.UUID(hex=row['uid'], version=4),
@@ -174,9 +174,9 @@ class FileMesh(object):
                 )
         else:
             error_str = "Trying to get an non existing point with uid: {}"
-            raise ValueError(error_str.format(p_uid))
+            raise ValueError(error_str.format(uid))
 
-    def get_edge(self, e_uid):
+    def get_edge(self, uid):
         """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
@@ -185,7 +185,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        uid : uint64
+        uid : UUID
             uid of the desired edge.
 
         Returns
@@ -201,7 +201,7 @@ class FileMesh(object):
         """
 
         for row in self._group.edges.where(
-                'uid == value', condvars={'value': e_uid.hex}):
+                'uid == value', condvars={'value': uid.hex}):
             return Edge(
                 list(uuid.UUID(hex=pb) for pb in
                      row['points_uids'][0:row['n_points']]),
@@ -210,9 +210,9 @@ class FileMesh(object):
                 )
         else:
             error_str = "Trying to get an non existing edge with uid: {}"
-            raise ValueError(error_str.format(e_uid))
+            raise ValueError(error_str.format(uid))
 
-    def get_face(self, f_uid):
+    def get_face(self, uid):
         """ Returns an face with a given uid.
 
         Returns the face stored in the mesh
@@ -221,7 +221,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        uid : uint64
+        uid : UUID
             uid of the desired face.
 
         Returns
@@ -237,7 +237,7 @@ class FileMesh(object):
         """
 
         for row in self._group.faces.where(
-                'uid == value', condvars={'value': f_uid.hex}):
+                'uid == value', condvars={'value': uid.hex}):
             return Face(
                 list(uuid.UUID(hex=pb, version=4) for pb in
                      row['points_uids'][0:row['n_points']]),
@@ -246,9 +246,9 @@ class FileMesh(object):
                 )
         else:
             error_str = "Trying to get an non existing face with uid: {}"
-            raise ValueError(error_str.format(f_uid))
+            raise ValueError(error_str.format(uid))
 
-    def get_cell(self, c_uid):
+    def get_cell(self, uid):
         """ Returns an cell with a given uid.
 
         Returns the cell stored in the mesh
@@ -257,7 +257,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        uid : uint64
+        uid : UUID
             uid of the desired cell.
 
         Returns
@@ -273,7 +273,7 @@ class FileMesh(object):
         """
 
         for row in self._group.cells.where(
-                'uid == value', condvars={'value': c_uid.hex}):
+                'uid == value', condvars={'value': uid.hex}):
             return Cell(
                 list(uuid.UUID(hex=pb, version=4) for pb in
                      row['points_uids'][0:row['n_points']]),
@@ -282,7 +282,7 @@ class FileMesh(object):
                 )
         else:
             error_str = "Trying to get an non existing cell with id: {}"
-            raise ValueError(error_str.format(c_uid))
+            raise ValueError(error_str.format(uid))
 
     def add_point(self, point):
         """ Adds a new point to the mesh container.
@@ -577,7 +577,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        point_uids : list of uint64, optional
+        point_uids : list of UUID, optional
             uids of the desired points, default empty
 
         Returns
@@ -608,7 +608,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        edge_uids : list of uint64, optional
+        edge_uids : list of UUID, optional
             uids of the desired edges, default empty
 
         Returns
@@ -639,7 +639,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        face_uids : list of uint64, optional
+        face_uids : list of UUID, optional
             uids of the desired faces, default empty
 
         Returns
@@ -670,7 +670,7 @@ class FileMesh(object):
 
         Parameters
         ----------
-        cell_uids : list of uint64, optional
+        cell_uids : list of UUID, optional
             Uuds of the desired cell, default empty
 
         Returns
