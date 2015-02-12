@@ -2,10 +2,12 @@ import os
 
 from setuptools import setup, find_packages
 
+# Read description
 with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
-VERSION = '0.0.1dev'
+# Setup version
+VERSION = '0.0.1.dev2'
 
 
 def write_version_py(filename=None):
@@ -20,10 +22,9 @@ version = '%s'
         fh.write(ver % VERSION)
     finally:
         fh.close()
-
-
 write_version_py()
 
+# main setup configuration class
 setup(
     name='simphony',
     version=VERSION,
@@ -31,13 +32,13 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "enum34",
-        "tables",
-        "click",
-        "pyyaml",
-        "stevedore"],
+        "enum34>=1.0.4",
+        "stevedore>=1.2.0"],
+    extras_require={
+        'H5IO': ["tables>=3.1.1"],
+        'CUBAGen': ["click >= 3.3", "pyyaml >= 3.11"]},
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'cuba-generate = simphony.scripts.cuba_generate:cli']
-    })
+            'cuba-generate = simphony.scripts.cuba_generate:cli [CUBAGen]']},
+    )

@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-    Module for Abstract Particle class:
-        ABCParticleContainer ---> Common Base abstract class ("interface") for
-            the the Particles container.
-"""
-
 from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 
 
 class ABCParticleContainer(object):
-    """Abstract base class for a ParticleContainer item."""
+    """Abstract base class for a ParticleContainer item.
+
+    Attributes
+    ----------
+    name : str
+        name of particle container
+    """
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -30,43 +30,33 @@ class ABCParticleContainer(object):
         pass
 
     @abstractmethod
-    def get_particle(self, particle_id):
+    def get_particle(self, uid):
         pass
 
     @abstractmethod
-    def get_bond(self, bond_id):
+    def get_bond(self, uid):
         pass
 
     @abstractmethod
-    def remove_particle(self, particle_id):
+    def remove_particle(self, uid):
         pass
 
     @abstractmethod
-    def remove_bond(self, bond_id):
+    def remove_bond(self, uid):
         pass
 
     @abstractmethod
-    def iter_particles(self, particle_ids=None):
+    def iter_particles(self, uids=None):
         pass
 
     @abstractmethod
-    def iter_bonds(self, bond_ids=None):
+    def iter_bonds(self, uids=None):
         pass
 
     @abstractmethod
-    def has_particle(self, id):
+    def has_particle(self, uid):
         pass
 
     @abstractmethod
-    def has_bond(self, id):
+    def has_bond(self, uid):
         pass
-
-
-def main():
-    print("""Module for Particle classes:
-               ABCParticleContainer ---> Common Base abstract class
-               ("interface") for the the Particles container.
-          """)
-
-if __name__ == '__main__':
-    main()

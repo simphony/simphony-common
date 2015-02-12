@@ -10,7 +10,6 @@ install:
   # (2) Pytables breaks with latest Cython
   #     see https://github.com/PyTables/PyTables/issues/388
   - pip install numexpr cython==0.20
-  - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
   - pip install coveralls
   - python setup.py develop
@@ -20,5 +19,6 @@ install:
 script:
   - flake8 .
   - coverage run -m unittest discover
+  - python setup.py build_sphinx
 after_success:
   - coveralls

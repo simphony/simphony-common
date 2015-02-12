@@ -1,23 +1,17 @@
-""" File access to CUDS-hdf5 formatted files
-
-This module provides access (read/write) to file which are
-formated in the CUDS-hdf5 file format
-"""
-
 import copy
 
 import tables
 
 from simphony.io.file_particle_container import FileParticleContainer
-from simphony.io.file_mesh import FileMesh
 
 
-class CudsFile(object):
-    """ Access to CUDS-hdf5 formatted files
+class H5CUDS(object):
+    """ Access to CUDS-hdf5 formatted files.
 
     """
+
     def __init__(self, file):
-        """
+        """ Create/Open a CUDS file.
 
         Parameters
         ----------
@@ -35,8 +29,6 @@ class CudsFile(object):
                 "File should not be opened in read-only mode")
 
         self._file = file
-        self._particle_containers = {}
-        self._meshes = {}
 
     def valid(self):
         """Checks if file is valid (i.e. open)
@@ -46,21 +38,20 @@ class CudsFile(object):
 
     @classmethod
     def open(cls, filename, mode="a", title=''):
-        """Returns a SimPhony file and returns an opened CudsFile
+        """ Returns a SimPhony file and returns an opened CudsFile
 
         Parameters
         ----------
         filename : str
             Name of file to be opened.
 
-
         mode: str
             The mode to open the file:
-                * *'w'*: Write; a new file is created (an existing file
-                  with the same name would be deleted).
-                * *'a'*: Append; an existing file is opened for reading and
-                  writing, and if the file does not exist it is created.
 
+            - ``w`` -- Write; a new file is created (an existing file
+              with the same name would be deleted).
+            - ``a`` -- Append; an existing file is opened for reading and
+              writing, and if the file does not exist it is created.
 
         title : str
             Title attribute of root node (only applies to a file which
@@ -87,31 +78,29 @@ class CudsFile(object):
         """
         self._file.close()
 
-    def add_particle_container(self, name, particle_container=None):
+    def add_particle_container(self, particle_container):
         """Add particle container to the file.
 
         Parameters
         ----------
-        name : str
-            name of particle container
-        particle_container : ABCParticleContainer, optional
-            particle container to be added. If none is give,
-            then an empty particle container is added.
+        particle_container : ABCParticleContainer
+            particle container to be added.
 
         Returns
-        ----------
+        -------
         FileParticleContainer
             The particle container newly added to the file.  See
             get_particle_container for more information.
 
         """
-        if name in self._file.root.particle_container:
+        if particle_container.name in self._file.root.particle_container:
             raise ValueError(
-                'Particle container \'{n}\` already exists'.format(n=name))
+                'Particle container \'{n}\` already exists'.format(
+                    n=particle_container.name))
 
-        group = self._file.create_group('/particle_container/', name)
+        group = self._file.create_group(
+            '/particle_container/', particle_container.name)
         pc = FileParticleContainer(group, self._file)
-        self._particle_containers[name] = (pc, group)
 
         if particle_container:
             # copy the contents of the particle container to the file
@@ -176,14 +165,11 @@ class CudsFile(object):
         name : str
             name of particle container to return
         """
-        if name in self._particle_containers:
-            return self._particle_containers[name][0]
-        elif name in self._file.root.particle_container:
-            group = tables.Group(self._file.root.particle_container, name)
+        try:
+            group = self._file.root.particle_container._f_get_child(name)
             pc = FileParticleContainer(group, self._file)
-            self._particle_containers[name] = pc
             return pc
-        else:
+        except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
@@ -202,8 +188,8 @@ class CudsFile(object):
 
         if name in self._meshes:
             return self._meshes[name][0]
-        elif name in self._file.root.mesh_container:
-            group = tables.Group(self._file.root.mesh_container, name)
+        elif name in self._file.root.mesh:
+            group = tables.Group(self._file.root.mesh, name)
             m = FileMesh(group, self._file)
             self._meshes[name] = m
             return m
@@ -219,10 +205,10 @@ class CudsFile(object):
         name : str
             name of particle container to delete
         """
-        if name in self._particle_containers:
-            self._particle_containers[name][1]._f_remove(recursive=True)
-            del self._particle_containers[name]
-        else:
+        try:
+            pc_node = self._file.root.particle_container._f_get_child(name)
+            pc_node._f_remove(recursive=True)
+        except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
@@ -244,9 +230,7 @@ class CudsFile(object):
 
     def iter_particle_containers(self, names=None):
         """Returns an iterator over a subset or all
-        of the particle containers. The iterator iterator yields
-        (name, particlecontainer) tuples for each particle container
-        contained in the file.
+        of the particle containers.
 
         Parameters
         ----------
@@ -258,25 +242,28 @@ class CudsFile(object):
         """
         names = copy.deepcopy(names)
         if names is None:
-            names = self._particle_containers.keys()
-        for name in names:
-            yield self.get_particle_container(name), name
+            for pc_node in self._file.root.particle_container._f_iter_nodes():
+                yield self.get_particle_container(pc_node._v_name)
+        else:
+            for name in names:
+                yield self.get_particle_container(name)
 
-    def iter_meshes(self, names=None):
+    def iter_mesh(self, names=None):
         """Returns an iterator over a subset or all
-        of the meshes. The iterator iterator yields
-        (name, mesh) tuples for each mesh container
-        contained in the file.
+        of the meshes.
 
         Parameters
         ----------
         names : list of str
-            names of specific mesh containers to be iterated over.
-            If names is not given, then all meshes will be iterated over.
+            names of specific meshes to be iterated over.
+            If names is not given, then all meshes will
+            be iterated over.
 
         """
-
+        names = copy.deepcopy(names)
         if names is None:
-            names = self._meshes.keys()
-        for name in names:
-            yield self.get_meshes(name), name
+            for mesh_node in self._file.root.mesh._f_iter_nodes():
+                yield self.get_mesh(mesh_node._v_name)
+        else:
+            for name in names:
+                yield self.get_mesh(name)
