@@ -29,9 +29,9 @@ class ABCLattice(object):
         index: tuple of D x int
             node index coordinate
 
-        Returns:
-        --------
-        LatticeNode
+        Returns
+        -------
+        node : LatticeNode
 
         """
         pass
@@ -55,9 +55,11 @@ class ABCLattice(object):
         ----------
         indices : iterable set of D x int, optional
             node index coordinates
+
         Returns
         -------
-        A generator for LatticeNode objects
+        iterator:
+            An iterator over LatticeNode objects
 
         """
         pass
@@ -72,8 +74,8 @@ class ABCLattice(object):
             node index coordinate
 
         Returns
-        --------
-        D x float
+        -------
+        coordinates : D x float
 
         """
         pass
