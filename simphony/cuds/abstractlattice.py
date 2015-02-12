@@ -1,40 +1,49 @@
-# -*- coding: utf-8 -*-
-"""
-    Module for Abstract Lattice class:
-        ABCLattice ---> Common Base abstract class ("interface") for
-            the Lattice.
-"""
-
-from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 
 
 class ABCLattice(object):
-    """Abstract base class for a Lattice item."""
+    """Abstract base class for a lattice.
+
+    Attributes
+    ----------
+    name : str
+        name of lattice
+    type : str
+        type of lattice
+    base_vect : tuple of D x float
+        base vector of lattice
+    size : tuple of D x int
+        lattice dimensions
+    origin : tuple of D x float
+        lattice origin
+
+    """
     __metaclass__ = ABCMeta
 
     @abstractmethod
     def get_node(self, index):
-        """Get a copy of the node corresponding to the given index.
+        """Get the lattice node corresponding to the given index.
 
         Parameters:
         -----------
-        index: tuple of D x int (node index coordinate)
+        index: tuple of D x int
+            node index coordinate
 
         Returns:
-        -----------
-        A reference to a LatticeNode object
+        --------
+        LatticeNode
+
         """
         pass
 
     @abstractmethod
     def update_node(self, lat_node):
-        """Update the corresponding lattice node (data copied).
+        """Update the corresponding lattice node.
 
         Parameters:
         -----------
-        lat_node: reference to a LatticeNode object
-            data copied from the given node
+        lat_node: LatticeNode
+
         """
         pass
 
@@ -44,11 +53,12 @@ class ABCLattice(object):
 
         Parameters:
         -----------
-        indices: iterable set of D x int (node index coordinates)
-
+        indices: iterable set of D x int, optional
+            node index coordinates
         Returns:
-        -----------
+        --------
         A generator for LatticeNode objects
+
         """
         pass
 
@@ -58,20 +68,12 @@ class ABCLattice(object):
 
         Parameters:
         -----------
-        index: D x int (node index coordinate)
+        index: D x int
+            node index coordinate
 
         Returns:
-        -----------
+        --------
         D x float
+
         """
         pass
-
-
-def main():
-    print("""Module for Lattice classes:
-               ABCLattice ---> Common Base abstract class
-               ("interface") for the Lattice.
-          """)
-
-if __name__ == '__main__':
-    main()
