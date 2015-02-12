@@ -10,11 +10,11 @@ class ABCLattice(object):
         name of lattice
     type : str
         type of lattice
-    base_vect : tuple of D x float
+    base_vect : D x float
         base vector of lattice
     size : tuple of D x int
         lattice dimensions
-    origin : tuple of D x float
+    origin : D x float
         lattice origin
 
     """
