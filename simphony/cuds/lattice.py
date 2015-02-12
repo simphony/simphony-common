@@ -37,7 +37,7 @@ class Lattice(ABCLattice):
         Bravais lattice type (should agree with the base_vect below).
     base_vect : D x float
         defines a Bravais lattice (an alternative for primitive vectors).
-    size : D x size
+    size : tuple of D x size
         number of lattice nodes (in the direction of each axis).
     origin : D x float
 
@@ -46,7 +46,7 @@ class Lattice(ABCLattice):
         self.name = name
         self._type = type
         self._base_vect = np.array(base_vect, dtype=np.float)
-        self._size = np.array(size, dtype=np.uint32)
+        self._size = tuple(size)
         self._origin = np.array(origin, dtype=np.float)
         self._dcs = np.empty(size, dtype=object)
 
