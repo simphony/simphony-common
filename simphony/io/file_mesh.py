@@ -353,7 +353,7 @@ class FileMesh(object):
         row['data'] = self._data.append(edge.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                               edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
+                              edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
 
         row.append()
         self._group.edges.flush()
@@ -393,7 +393,7 @@ class FileMesh(object):
         row['data'] = self._data.append(face.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                               face.points] + [0] * (MAX_POINTS_IN_FACE-n)
+                              face.points] + [0] * (MAX_POINTS_IN_FACE-n)
 
         row.append()
         self._group.faces.flush()
@@ -433,7 +433,7 @@ class FileMesh(object):
         row['data'] = self._data.append(cell.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                               cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+                              cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
 
         row.append()
         self._group.cells.flush()
@@ -492,7 +492,7 @@ class FileMesh(object):
                 'uid == value', condvars={'value': edge.uid.hex}):
             n = len(edge.points)
             row['points_uids'] = [puid.hex for puid in
-                                   edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
+                                  edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = edge.data
             row.update()
             row._flush_mod_rows()
@@ -524,7 +524,7 @@ class FileMesh(object):
                 'uid == value', condvars={'value': face.uid.hex}):
             n = len(face.points)
             row['points_uids'] = [puid.hex for puid in
-                                   face.points] + [0] * (MAX_POINTS_IN_FACE-n)
+                                  face.points] + [0] * (MAX_POINTS_IN_FACE-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = face.data
             row.update()
             row._flush_mod_rows()
@@ -556,7 +556,7 @@ class FileMesh(object):
                 'uid == value', condvars={'value': cell.uid.hex}):
             n = len(cell.points)
             row['points_uids'] = [puid.hex for puid in
-                                   cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+                                  cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = cell.data
             row.update()
             row._flush_mod_rows()

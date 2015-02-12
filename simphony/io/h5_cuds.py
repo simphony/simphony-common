@@ -5,6 +5,7 @@ import tables
 from simphony.io.file_particle_container import FileParticleContainer
 from simphony.io.file_mesh import FileMesh
 
+
 class H5CUDS(object):
     """ Access to CUDS-hdf5 formatted files.
 
