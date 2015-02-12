@@ -257,7 +257,7 @@ class H5CUDS(object):
             be iterated over.
 
         """
-        names = copy.deepcopy(names)
+
         if names is None:
             for mesh_node in self._file.root.mesh._f_iter_nodes():
                 yield self.get_mesh(mesh_node._v_name)
