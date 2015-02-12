@@ -572,7 +572,7 @@ class FileMesh(object):
         Returns an interator over the points with uuid in
         point_uuids. If non of the ids in point_uuids exists,
         an empty iterator is returned. If there is no ids
-        inside point_ids, a iterator over all points of
+        inside point_uuids, a iterator over all points of
         the mesh is returned insted.
 
         Parameters
@@ -603,7 +603,7 @@ class FileMesh(object):
         Returns an interator over the edged with id in
         edge_uuid. If non of the ids in edge_uuids exists,
         an empty iterator is returned. If there is no ids
-        inside edge_ids, a iterator over all edges of
+        inside edge_uuids, a iterator over all edges of
         the mesh is returned insted.
 
         Parameters
@@ -634,7 +634,7 @@ class FileMesh(object):
         Returns an interator over the faces with id in
         face_uuids. If non of the ids in face_uuids exists,
         an empty iterator is returned. If there is no ids
-        inside face_ids, a iterator over all faces of
+        inside face_uuids, a iterator over all faces of
         the mesh is returned insted.
 
         Parameters
@@ -665,7 +665,7 @@ class FileMesh(object):
         Returns an interator over the cells with id in
         cell_uuids. If non of the ids in cell_uuids exists,
         an empty iterator is returned. If there is no ids
-        inside cell_ids, a iterator over all cells of
+        inside cell_uuids, a iterator over all cells of
         the mesh is returned insted.
 
         Parameters
@@ -760,7 +760,7 @@ class FileMesh(object):
             self._group, "cells", _CellDescriptor)
 
     def _create_data_table(self):
-        """ Generates the table to sotre data 
+        """ Generates the table to sotre data
 
         This table stores the uuid asociated to a given
         data record.
