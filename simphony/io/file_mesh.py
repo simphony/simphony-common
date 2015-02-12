@@ -118,6 +118,8 @@ class FileMesh(object):
     update_point, update_edge, update_face, update_cell
     iter_points, iter_edges, iter_faces, iter_cells
     has_edges, has_faces, has_cells
+    _create_points_table, _create_edges_table
+    _create_faces_table, _create_cells_table
 
     """
 
@@ -442,7 +444,7 @@ class FileMesh(object):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
-        id as the provided point and updates its information.
+        uuid as the provided point and updates its information.
 
         Parameters
         ----------
@@ -472,7 +474,7 @@ class FileMesh(object):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
-        id as the provided edge and updates its information.
+        uuid as the provided edge and updates its information.
 
         Parameters
         ----------
@@ -504,7 +506,7 @@ class FileMesh(object):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
-        id as the provided face and updates its information.
+        uuid as the provided face and updates its information.
 
         Parameters
         ----------
@@ -536,7 +538,7 @@ class FileMesh(object):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same
-        id as the provided cell and updates its information.
+        uuid as the provided cell and updates its information.
 
         Parameters
         ----------
@@ -567,8 +569,8 @@ class FileMesh(object):
     def iter_points(self, point_uuids=None):
         """ Returns an iterator over the selected points.
 
-        Returns an interator over the points with id in
-        point_ids. If non of the ids in point_ids exists,
+        Returns an interator over the points with uuid in
+        point_uuids. If non of the ids in point_uuids exists,
         an empty iterator is returned. If there is no ids
         inside point_ids, a iterator over all points of
         the mesh is returned insted.
@@ -599,7 +601,7 @@ class FileMesh(object):
         """ Returns an iterator over the selected edges.
 
         Returns an interator over the edged with id in
-        edge_id. If non of the ids in edge_ids exists,
+        edge_uuid. If non of the ids in edge_uuids exists,
         an empty iterator is returned. If there is no ids
         inside edge_ids, a iterator over all edges of
         the mesh is returned insted.
@@ -630,7 +632,7 @@ class FileMesh(object):
         """ Returns an iterator over the selected faces.
 
         Returns an interator over the faces with id in
-        face_ids. If non of the ids in face_ids exists,
+        face_uuids. If non of the ids in face_uuids exists,
         an empty iterator is returned. If there is no ids
         inside face_ids, a iterator over all faces of
         the mesh is returned insted.
@@ -661,7 +663,7 @@ class FileMesh(object):
         """ Returns an iterator over the selected cells.
 
         Returns an interator over the cells with id in
-        cell_ids. If non of the ids in cell_ids exists,
+        cell_uuids. If non of the ids in cell_uuids exists,
         an empty iterator is returned. If there is no ids
         inside cell_ids, a iterator over all cells of
         the mesh is returned insted.
@@ -734,20 +736,35 @@ class FileMesh(object):
         return uuid.uuid4()
 
     def _create_points_table(self):
+        """ Generates the table to sotre points """
+
         self._file.create_table(
             self._group, "points", _PointDescriptor)
 
     def _create_edges_table(self):
+        """ Generates the table to sotre edges """
+
         self._file.create_table(
             self._group, "edges", _EdgeDescriptor)
 
     def _create_faces_table(self):
+        """ Generates the table to sotre faces """
+
         self._file.create_table(
             self._group, "faces", _FaceDescriptor)
 
     def _create_cells_table(self):
+        """ Generates the table to sotre cells """
+
         self._file.create_table(
             self._group, "cells", _CellDescriptor)
 
     def _create_data_table(self):
+        """ Generates the table to sotre data 
+
+        This table stores the uuid asociated to a given
+        data record.
+
+        """
+
         self._data = DataContainerTable(self._group, 'data')
