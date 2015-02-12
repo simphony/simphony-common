@@ -48,13 +48,13 @@ To support the documentation built you need the following packages:
 .. note::
 
   Packages that depend on the optional features and use setuptools should
-  append the {``H5IO`` and/or ``CUBAGen``} identifier next to
-  simphony in their ``setup_requires`` configuration. For example::
+  append the ``H5IO`` and/or ``CUBAGen`` identifier next to
+  simphony in their ``setup_requires`` configuration option. For example::
 
     install_requires = ["simphony[H5IO, CUBAGen]"]
 
   Will make sure that the requirements of H5IO and CUBAGen support
-  are installed. (see https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies) for more information)
+  are installed. (see `setuptools extras`_ for more information)
 
 Installation
 ------------
@@ -104,3 +104,7 @@ There are four subpackages:
   - source -- Sphinx rst source files
   - build -- Documentation build directory, if documentation has been generated
     using the ``make`` script in the ``doc`` directory.
+
+
+
+.. _setuptools extras: https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
