@@ -3,7 +3,7 @@ import copy
 import tables
 
 from simphony.io.file_particle_container import FileParticleContainer
-
+from simphony.io.file_mesh import FileMesh
 
 class H5CUDS(object):
     """ Access to CUDS-hdf5 formatted files.
@@ -136,7 +136,6 @@ class H5CUDS(object):
 
         group = self._file.create_group('/mesh/', name)
         file_mesh = FileMesh(group, self._file)
-        self._meshes[name] = (file_mesh, group)
 
         if mesh:
             # copy the contents of the mesh to the file
@@ -186,14 +185,11 @@ class H5CUDS(object):
             name of the mesh to return
         """
 
-        if name in self._meshes:
-            return self._meshes[name][0]
-        elif name in self._file.root.mesh:
-            group = tables.Group(self._file.root.mesh, name)
+        try:
+            group = self._file.root.mesh._f_get_child(name)
             m = FileMesh(group, self._file)
-            self._meshes[name] = m
             return m
-        else:
+        except tables.NoSuchNodeError:
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
 

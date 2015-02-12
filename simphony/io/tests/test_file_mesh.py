@@ -11,7 +11,7 @@ from simphony.cuds.mesh import Cell
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
-from simphony.io.cuds_file import CudsFile
+from simphony.io.h5_cuds import H5CUDS
 
 
 class TestFileMesh(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestFileMesh(unittest.TestCase):
         self.temp_dir = tempfile.mkdtemp()
 
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
-        self.file = CudsFile.open(self.filename)
+        self.file = H5CUDS.open(self.filename)
         self.mesh = self.file.add_mesh("test")
 
         self.pids = []
@@ -77,48 +77,48 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
+        puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
-        self.assertIsNotNone(self.mesh.get_point(puuids[0]))
+        self.assertIsNotNone(self.mesh.get_point(puids[0]))
 
     def test_add_edge(self):
         """ Check that an edge can be added correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
+        puids = [self.mesh.add_point(point) for point in self.points[:2]]
 
-        edge = Edge(puuids[0:2])
+        edge = Edge(puids[0:2])
 
-        euuids = [self.mesh.add_edge(edge)]
+        euids = [self.mesh.add_edge(edge)]
 
-        self.assertIsNotNone(self.mesh.get_edge(euuids[0]))
+        self.assertIsNotNone(self.mesh.get_edge(euids[0]))
 
     def test_add_face(self):
         """ Check that a face can be added correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
-        face = Face(puuids[0:3])
+        face = Face(puids[0:3])
 
-        fuuids = [self.mesh.add_face(face)]
+        fuids = [self.mesh.add_face(face)]
 
-        self.assertIsNotNone(self.mesh.get_face(fuuids[0]))
+        self.assertIsNotNone(self.mesh.get_face(fuids[0]))
 
     def test_add_cell(self):
         """ Check that a cell can be added correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
-        cell = Cell(puuids[0:4])
+        cell = Cell(puids[0:4])
 
-        cuuids = [self.mesh.add_cell(cell)]
+        cuids = [self.mesh.add_cell(cell)]
 
-        self.assertIsNotNone(self.mesh.get_cell(cuuids[0]))
+        self.assertIsNotNone(self.mesh.get_cell(cuids[0]))
 
     def test_add_duplicated_point(self):
         """ Check that a point can be added correctly
@@ -133,10 +133,10 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
+        puids = [self.mesh.add_point(point) for point in self.points[:2]]
 
         edges = [
-            Edge(puuids[0:2])
+            Edge(puids[0:2])
         ]
 
         self.mesh.add_edge(edges[0])
@@ -147,10 +147,10 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         faces = [
-            Face(puuids[0:3])
+            Face(puids[0:3])
         ]
 
         self.mesh.add_face(faces[0])
@@ -161,10 +161,10 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         cells = [
-            Cell(puuids[0:4])
+            Cell(puids[0:4])
         ]
 
         self.mesh.add_cell(cells[0])
@@ -175,9 +175,9 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
+        puids = [self.mesh.add_point(point) for point in self.points[:2]]
 
-        edge = Edge(puuids[0:2])
+        edge = Edge(puids[0:2])
 
         self.mesh.add_edge(edge)
 
@@ -188,9 +188,9 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
-        face = Face(puuids[0:3])
+        face = Face(puids[0:3])
 
         self.mesh.add_face(face)
 
@@ -201,9 +201,9 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
-        cell = Cell(puuids[0:4])
+        cell = Cell(puids[0:4])
 
         self.mesh.add_cell(cell)
 
@@ -214,66 +214,66 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
+        puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
-        point_ret = self.mesh.get_point(puuids[0])
+        point_ret = self.mesh.get_point(puids[0])
 
         self.assertTrue(isinstance(point_ret, Point))
-        self.assertEqual(puuids[0], point_ret.uuid)
+        self.assertEqual(puids[0], point_ret.uid)
 
     def test_get_edge(self):
         """ Check that an edge can be retrieved correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:2]]
+        puids = [self.mesh.add_point(point) for point in self.points[:2]]
 
         edges = [
-            Edge(puuids[:]),
+            Edge(puids[:]),
         ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
+        euids = [self.mesh.add_edge(edge) for edge in edges]
 
-        edge_ret = self.mesh.get_edge(euuids[0])
+        edge_ret = self.mesh.get_edge(euids[0])
 
         self.assertTrue(isinstance(edge_ret, Edge))
-        self.assertEqual(euuids[0], edge_ret.uuid)
+        self.assertEqual(euids[0], edge_ret.uid)
 
     def test_get_face(self):
         """ Check that a face can be retrieved correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         faces = [
-            Face(puuids[:])
+            Face(puids[:])
         ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
+        fuids = [self.mesh.add_face(face) for face in faces]
 
-        face_ret = self.mesh.get_face(fuuids[0])
+        face_ret = self.mesh.get_face(fuids[0])
 
         self.assertTrue(isinstance(face_ret, Face))
-        self.assertEqual(fuuids[0], face_ret.uuid)
+        self.assertEqual(fuids[0], face_ret.uid)
 
     def test_get_cell(self):
         """ Check that a cell can be retrieved correctly
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         cells = [
-            Cell(puuids[:])
+            Cell(puids[:])
             ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
 
-        cell_ret = self.mesh.get_cell(cuuids[0])
+        cell_ret = self.mesh.get_cell(cuids[0])
 
         self.assertTrue(isinstance(cell_ret, Cell))
-        self.assertEqual(cuuids[0], cell_ret.uuid)
+        self.assertEqual(cuids[0], cell_ret.uid)
 
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
@@ -285,20 +285,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
-            Edge(puuids[0:2]),
-            Edge(puuids[1:3])
+            Edge(puids[0:2]),
+            Edge(puids[1:3])
         ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
+        euids = [self.mesh.add_edge(edge) for edge in edges]
 
         iedges = self.mesh.iter_edges()
 
-        iedges_id = [edge.uuid for edge in iedges]
+        iedges_id = [edge.uid for edge in iedges]
 
-        self.assertItemsEqual(iedges_id, euuids)
+        self.assertItemsEqual(iedges_id, euids)
 
     def test_get_all_faces_iterator(self):
         """ Checks the face iterator
@@ -310,20 +310,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
-            Face(puuids[0:3]),
-            Face(puuids[1:4])
+            Face(puids[0:3]),
+            Face(puids[1:4])
         ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
+        fuids = [self.mesh.add_face(face) for face in faces]
 
         ifaces = self.mesh.iter_faces()
 
-        ifaces_id = [face.uuid for face in ifaces]
+        ifaces_id = [face.uid for face in ifaces]
 
-        self.assertItemsEqual(fuuids, ifaces_id)
+        self.assertItemsEqual(fuids, ifaces_id)
 
     def test_get_all_cells_iterator(self):
         """ Checks the cell iterators
@@ -335,20 +335,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
-            Cell(puuids[0:4]),
-            Cell(puuids[1:5])
+            Cell(puids[0:4]),
+            Cell(puids[1:5])
             ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
 
         icells = self.mesh.iter_cells()
 
-        icells_id = [cell.uuid for cell in icells]
+        icells_id = [cell.uid for cell in icells]
 
-        self.assertItemsEqual(icells_id, cuuids)
+        self.assertItemsEqual(icells_id, cuids)
 
     def test_get_subset_edges_iterator(self):
         """ Checks the edge iterator
@@ -356,24 +356,24 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over a subset of
         the edges of the mesh is returned
         when the function iter_edges is called
-        selecting a list of uuid's
+        selecting a list of uid's
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         edges = [
-            Edge(puuids[0:2]),
-            Edge(puuids[2:3]),
-            Edge(puuids[3:4])
+            Edge(puids[0:2]),
+            Edge(puids[2:3]),
+            Edge(puids[3:4])
             ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
+        euids = [self.mesh.add_edge(edge) for edge in edges]
 
-        iedges = self.mesh.iter_edges([euuids[0], euuids[2]])
+        iedges = self.mesh.iter_edges([euids[0], euids[2]])
 
-        source_id = [euuids[0], euuids[2]]
-        iedges_id = [edge.uuid for edge in iedges]
+        source_id = [euids[0], euids[2]]
+        iedges_id = [edge.uid for edge in iedges]
 
         self.assertItemsEqual(source_id, iedges_id)
 
@@ -383,24 +383,24 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over a subset of
         the faces of the mesh is returned
         when the function iter_faces is called
-        selecting a list of uuid's
+        selecting a list of uid's
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         faces = [
-            Face(puuids[0:3]),
-            Face(puuids[1:4]),
-            Face(puuids[2:5])
+            Face(puids[0:3]),
+            Face(puids[1:4]),
+            Face(puids[2:5])
             ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
+        fuids = [self.mesh.add_face(face) for face in faces]
 
-        ifaces = self.mesh.iter_faces([fuuids[0], fuuids[2]])
+        ifaces = self.mesh.iter_faces([fuids[0], fuids[2]])
 
-        source_id = [fuuids[0], fuuids[2]]
-        ifaces_id = [face.uuid for face in ifaces]
+        source_id = [fuids[0], fuids[2]]
+        ifaces_id = [face.uid for face in ifaces]
 
         self.assertItemsEqual(source_id, ifaces_id)
 
@@ -410,24 +410,24 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over a subset of
         the cells of the mesh is returned
         when the function iter_cells is called
-        selecting a list of uuid's
+        selecting a list of uid's
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:6]]
+        puids = [self.mesh.add_point(point) for point in self.points[:6]]
 
         cells = [
-            Cell(puuids[0:4]),
-            Cell(puuids[1:5]),
-            Cell(puuids[2:6])
+            Cell(puids[0:4]),
+            Cell(puids[1:5]),
+            Cell(puids[2:6])
             ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
 
-        icells = self.mesh.iter_cells([cuuids[0], cuuids[2]])
+        icells = self.mesh.iter_cells([cuids[0], cuids[2]])
 
-        source_id = [cuuids[0], cuuids[2]]
-        icells_id = [cell.uuid for cell in icells]
+        source_id = [cuids[0], cuids[2]]
+        icells_id = [cell.uid for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
 
@@ -436,13 +436,13 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
+        puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
-        point_ret = self.mesh.get_point(puuids[0])
+        point_ret = self.mesh.get_point(puids[0])
         point_ret.coordinates = [-1.0, -1.0, -1.0]
         self.mesh.update_point(point_ret)
 
-        point_upd = self.mesh.get_point(puuids[0])
+        point_upd = self.mesh.get_point(puids[0])
 
         self.assertItemsEqual(point_upd.coordinates, point_ret.coordinates)
 
@@ -451,19 +451,19 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
-            Edge(puuids[0:2])
+            Edge(puids[0:2])
         ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
+        euids = [self.mesh.add_edge(edge) for edge in edges]
 
-        edge_ret = self.mesh.get_edge(euuids[0])
-        edge_ret.points[1] = puuids[2]
+        edge_ret = self.mesh.get_edge(euids[0])
+        edge_ret.points[1] = puids[2]
         self.mesh.update_edge(edge_ret)
 
-        edge_upd = self.mesh.get_edge(euuids[0])
+        edge_upd = self.mesh.get_edge(euids[0])
 
         self.assertItemsEqual(edge_upd.points, edge_ret.points)
 
@@ -472,19 +472,19 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
-            Face(puuids[0:3])
+            Face(puids[0:3])
         ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
+        fuids = [self.mesh.add_face(face) for face in faces]
 
-        face_ret = self.mesh.get_face(fuuids[0])
-        face_ret.points[2] = puuids[3]
+        face_ret = self.mesh.get_face(fuids[0])
+        face_ret.points[2] = puids[3]
         self.mesh.update_face(face_ret)
 
-        face_upd = self.mesh.get_face(fuuids[0])
+        face_upd = self.mesh.get_face(fuids[0])
 
         self.assertItemsEqual(face_upd.points, face_ret.points)
 
@@ -493,19 +493,19 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
-            Cell(puuids[0:4])
+            Cell(puids[0:4])
         ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
 
-        cell_ret = self.mesh.get_cell(cuuids[0])
-        cell_ret.points[3] = puuids[4]
+        cell_ret = self.mesh.get_cell(cuids[0])
+        cell_ret.points[3] = puids[4]
         self.mesh.update_cell(cell_ret)
 
-        cell_upd = self.mesh.get_cell(cuuids[0])
+        cell_upd = self.mesh.get_cell(cuids[0])
 
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
 
@@ -514,14 +514,14 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:1]]
+        puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
-        point_ret = self.mesh.get_point(puuids[0])
+        point_ret = self.mesh.get_point(puids[0])
         point_ret.data[CUBA.VELOCITY] = [42, 42, 42]
 
         self.mesh.update_point(point_ret)
 
-        point_upd = self.mesh.get_point(puuids[0])
+        point_upd = self.mesh.get_point(puids[0])
 
         self.assertItemsEqual(
             point_upd.data[CUBA.VELOCITY],
@@ -532,20 +532,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:3]]
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
-            Edge(puuids[0:2])
+            Edge(puids[0:2])
         ]
 
-        euuids = [self.mesh.add_edge(edge) for edge in edges]
+        euids = [self.mesh.add_edge(edge) for edge in edges]
 
-        edge_ret = self.mesh.get_edge(euuids[0])
+        edge_ret = self.mesh.get_edge(euids[0])
         edge_ret.data[CUBA.VELOCITY] = [42, 42, 42]
 
         self.mesh.update_edge(edge_ret)
 
-        edge_upd = self.mesh.get_edge(euuids[0])
+        edge_upd = self.mesh.get_edge(euids[0])
 
         self.assertItemsEqual(
             edge_upd.data[CUBA.VELOCITY],
@@ -556,20 +556,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:4]]
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
-            Face(puuids[0:3])
+            Face(puids[0:3])
         ]
 
-        fuuids = [self.mesh.add_face(face) for face in faces]
+        fuids = [self.mesh.add_face(face) for face in faces]
 
-        face_ret = self.mesh.get_face(fuuids[0])
+        face_ret = self.mesh.get_face(fuids[0])
         face_ret.data[CUBA.VELOCITY] = [42, 42, 42]
 
         self.mesh.update_face(face_ret)
 
-        face_upd = self.mesh.get_face(fuuids[0])
+        face_upd = self.mesh.get_face(fuids[0])
 
         self.assertItemsEqual(
             face_upd.data[CUBA.VELOCITY],
@@ -580,20 +580,20 @@ class TestFileMesh(unittest.TestCase):
 
         """
 
-        puuids = [self.mesh.add_point(point) for point in self.points[:5]]
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
-            Cell(puuids[0:4])
+            Cell(puids[0:4])
         ]
 
-        cuuids = [self.mesh.add_cell(cell) for cell in cells]
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
 
-        cell_ret = self.mesh.get_cell(cuuids[0])
+        cell_ret = self.mesh.get_cell(cuids[0])
         cell_ret.data[CUBA.VELOCITY] = [42, 42, 42]
 
         self.mesh.update_cell(cell_ret)
 
-        cell_upd = self.mesh.get_cell(cuuids[0])
+        cell_upd = self.mesh.get_cell(cuids[0])
 
         self.assertItemsEqual(
             cell_upd.data[CUBA.VELOCITY],

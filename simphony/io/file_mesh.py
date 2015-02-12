@@ -27,7 +27,7 @@ class _PointDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32, pos=0)
+    uid = tables.StringCol(32, pos=0)
     data = tables.StringCol(32, pos=1)
     coordinates = tables.Float64Col(
         pos=2, shape=(3,)
@@ -42,9 +42,9 @@ class _EdgeDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32, pos=0)
+    uid = tables.StringCol(32, pos=0)
     data = tables.StringCol(32, pos=1)
-    points_uuids = tables.StringCol(
+    points_uids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_EDGE,)
         )
     n_points = tables.UInt32Col(pos=3)
@@ -58,9 +58,9 @@ class _FaceDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32, pos=0)
+    uid = tables.StringCol(32, pos=0)
     data = tables.StringCol(32, pos=1)
-    points_uuids = tables.StringCol(
+    points_uids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_FACE,)
         )
     n_points = tables.UInt32Col(pos=3)
@@ -74,9 +74,9 @@ class _CellDescriptor(tables.IsDescription):
 
     """
 
-    uuid = tables.StringCol(32, pos=0)
+    uid = tables.StringCol(32, pos=0)
     data = tables.StringCol(32, pos=1)
-    points_uuids = tables.StringCol(
+    points_uids = tables.StringCol(
         32, pos=2, shape=(MAX_POINTS_IN_CELL,)
         )
     n_points = tables.UInt32Col(pos=3)
@@ -91,7 +91,7 @@ class FileMesh(object):
     methods to interact with them. The methods are
     divided in four diferent blocks:
 
-    (1) methods to get the related item with the provided uuid;
+    (1) methods to get the related item with the provided uid;
     (2) methods to add a new item or replace;
     (3) generator methods that return iterators
         over all or some of the mesh items and;
@@ -141,148 +141,148 @@ class FileMesh(object):
         if "cells" not in self._group:
             self._create_cells_table()
 
-    def get_point(self, p_uuid):
-        """ Returns a point with a given uuid.
+    def get_point(self, p_uid):
+        """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
-        identified by uuid. If such point do not
+        identified by uid. If such point do not
         exists an exception is raised.
 
         Parameters
         ----------
-        uuid : int
-            uuid of the desired point.
+        uid : int
+            uid of the desired point.
 
         Returns
         -------
         Point
-            Mesh point identified by uuid
+            Mesh point identified by uid
 
         Raises
         ------
         Exception
-            If the point identified by uuid was not found
+            If the point identified by uid was not found
 
         """
 
         for row in self._group.points.where(
-                'uuid == value', condvars={'value': p_uuid.hex}):
+                'uid == value', condvars={'value': p_uid.hex}):
             return Point(
                 tuple(row['coordinates']),
-                uuid.UUID(hex=row['uuid'], version=4),
+                uuid.UUID(hex=row['uid'], version=4),
                 self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            error_str = "Trying to get an non existing point with uuid: {}"
-            raise ValueError(error_str.format(p_uuid))
+            error_str = "Trying to get an non existing point with uid: {}"
+            raise ValueError(error_str.format(p_uid))
 
-    def get_edge(self, e_uuid):
-        """ Returns an edge with a given uuid.
+    def get_edge(self, e_uid):
+        """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
-        identified by uuid. If such edge do not
+        identified by uid. If such edge do not
         exists a exception is raised.
 
         Parameters
         ----------
-        uuid : uint64
-            uuid of the desired edge.
+        uid : uint64
+            uid of the desired edge.
 
         Returns
         -------
         Edge
-            Edge identified by uuid
+            Edge identified by uid
 
         Raises
         ------
         Exception
-            If the edge identified by uuid was not found
+            If the edge identified by uid was not found
 
         """
 
         for row in self._group.edges.where(
-                'uuid == value', condvars={'value': e_uuid.hex}):
+                'uid == value', condvars={'value': e_uid.hex}):
             return Edge(
                 list(uuid.UUID(hex=pb) for pb in
-                     row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(hex=row['uuid'], version=4),
+                     row['points_uids'][0:row['n_points']]),
+                uuid.UUID(hex=row['uid'], version=4),
                 self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            error_str = "Trying to get an non existing edge with uuid: {}"
-            raise ValueError(error_str.format(e_uuid))
+            error_str = "Trying to get an non existing edge with uid: {}"
+            raise ValueError(error_str.format(e_uid))
 
-    def get_face(self, f_uuid):
-        """ Returns an face with a given uuid.
+    def get_face(self, f_uid):
+        """ Returns an face with a given uid.
 
         Returns the face stored in the mesh
-        identified by uuid. If such face do not
+        identified by uid. If such face do not
         exists a exception is raised.
 
         Parameters
         ----------
-        uuid : uint64
-            uuid of the desired face.
+        uid : uint64
+            uid of the desired face.
 
         Returns
         -------
         Face
-            Face identified by uuid
+            Face identified by uid
 
         Raises
         ------
         Exception
-            If the face identified by uuid was not found
+            If the face identified by uid was not found
 
         """
 
         for row in self._group.faces.where(
-                'uuid == value', condvars={'value': f_uuid.hex}):
+                'uid == value', condvars={'value': f_uid.hex}):
             return Face(
                 list(uuid.UUID(hex=pb, version=4) for pb in
-                     row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(hex=row['uuid'], version=4),
+                     row['points_uids'][0:row['n_points']]),
+                uuid.UUID(hex=row['uid'], version=4),
                 self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            error_str = "Trying to get an non existing face with uuid: {}"
-            raise ValueError(error_str.format(f_uuid))
+            error_str = "Trying to get an non existing face with uid: {}"
+            raise ValueError(error_str.format(f_uid))
 
-    def get_cell(self, c_uuid):
-        """ Returns an cell with a given uuid.
+    def get_cell(self, c_uid):
+        """ Returns an cell with a given uid.
 
         Returns the cell stored in the mesh
-        identified by uuid . If such cell do not
+        identified by uid . If such cell do not
         exists a exception is raised.
 
         Parameters
         ----------
-        uuid : uint64
-            uuid of the desired cell.
+        uid : uint64
+            uid of the desired cell.
 
         Returns
         -------
         Cell
-            Cell with id identified by uuid
+            Cell with id identified by uid
 
         Raises
         ------
         Exception
-            If the cell identified by uuid was not found
+            If the cell identified by uid was not found
 
         """
 
         for row in self._group.cells.where(
-                'uuid == value', condvars={'value': c_uuid.hex}):
+                'uid == value', condvars={'value': c_uid.hex}):
             return Cell(
                 list(uuid.UUID(hex=pb, version=4) for pb in
-                     row['points_uuids'][0:row['n_points']]),
-                uuid.UUID(hex=row['uuid'], version=4),
+                     row['points_uids'][0:row['n_points']]),
+                uuid.UUID(hex=row['uid'], version=4),
                 self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             error_str = "Trying to get an non existing cell with id: {}"
-            raise ValueError(error_str.format(c_uuid))
+            raise ValueError(error_str.format(c_uid))
 
     def add_point(self, point):
         """ Adds a new point to the mesh container.
@@ -295,30 +295,30 @@ class FileMesh(object):
         Raises
         ------
         KeyError
-            If other point with the same uuid was already
+            If other point with the same uid was already
             in the mesh
 
         """
 
-        if point.uuid is None:
-            point.uuid = self._generate_uuid()
+        if point.uid is None:
+            point.uid = self._generate_uid()
 
         for row in self._group.points.where(
-                'uuid == value', condvars={'value': point.uuid.hex}):
+                'uid == value', condvars={'value': point.uid.hex}):
             error_str = "Trying to add an already\
-                existing point with uuid" + str(point.uuid)
+                existing point with uid" + str(point.uid)
             raise KeyError(error_str)
 
         row = self._group.points.row
 
-        row['uuid'] = point.uuid.hex
+        row['uid'] = point.uid.hex
         row['data'] = self._data.append(point.data).hex
         row['coordinates'] = point.coordinates
 
         row.append()
         self._group.points.flush()
 
-        return point.uuid
+        return point.uid
 
     def add_edge(self, edge):
         """ Adds a new edge to the mesh container.
@@ -331,34 +331,34 @@ class FileMesh(object):
         Raises
         ------
         KeyError
-            If other edge with the same uuid was already
+            If other edge with the same uid was already
             in the mesh
 
         """
 
-        if edge.uuid is None:
-            edge.uuid = self._generate_uuid()
+        if edge.uid is None:
+            edge.uid = self._generate_uid()
 
         for row in self._group.edges.where(
-                'uuid == value', condvars={'value': edge.uuid.hex}):
+                'uid == value', condvars={'value': edge.uid.hex}):
             error_str = "Trying to add an already\
-                existing edge with uuid" + str(edge.uuid)
+                existing edge with uid" + str(edge.uid)
             raise KeyError(error_str)
 
         n = len(edge.points)
 
         row = self._group.edges.row
 
-        row['uuid'] = edge.uuid.hex
+        row['uid'] = edge.uid.hex
         row['data'] = self._data.append(edge.data).hex
         row['n_points'] = n
-        row['points_uuids'] = [puuid.hex for puuid in
+        row['points_uids'] = [puid.hex for puid in
                                edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
 
         row.append()
         self._group.edges.flush()
 
-        return edge.uuid
+        return edge.uid
 
     def add_face(self, face):
         """ Adds a new face to the mesh container.
@@ -371,34 +371,34 @@ class FileMesh(object):
         Raises
         ------
         KeyError
-            If other face with the same uuid was already
+            If other face with the same uid was already
             in the mesh
 
         """
 
-        if face.uuid is None:
-            face.uuid = self._generate_uuid()
+        if face.uid is None:
+            face.uid = self._generate_uid()
 
         for row in self._group.faces.where(
-                'uuid == value', condvars={'value': face.uuid.hex}):
+                'uid == value', condvars={'value': face.uid.hex}):
             error_str = "Trying to add an already\
-                existing face with uuid" + str(face.uuid)
+                existing face with uid" + str(face.uid)
             raise KeyError(error_str)
 
         n = len(face.points)
 
         row = self._group.faces.row
 
-        row['uuid'] = face.uuid.hex
+        row['uid'] = face.uid.hex
         row['data'] = self._data.append(face.data).hex
         row['n_points'] = n
-        row['points_uuids'] = [puuid.hex for puuid in
+        row['points_uids'] = [puid.hex for puid in
                                face.points] + [0] * (MAX_POINTS_IN_FACE-n)
 
         row.append()
         self._group.faces.flush()
 
-        return face.uuid
+        return face.uid
 
     def add_cell(self, cell):
         """ Adds a new cell to the mesh container.
@@ -411,40 +411,40 @@ class FileMesh(object):
         Raises
         ------
         KeyError
-            If other cell with the same uuid was already
+            If other cell with the same uid was already
             in the mesh
 
         """
 
-        if cell.uuid is None:
-            cell.uuid = self._generate_uuid()
+        if cell.uid is None:
+            cell.uid = self._generate_uid()
 
         for row in self._group.cells.where(
-                'uuid == value', condvars={'value': cell.uuid.hex}):
+                'uid == value', condvars={'value': cell.uid.hex}):
             error_str = "Trying to add an already\
-                existing cell with uuid" + str(cell.uuid)
+                existing cell with uid" + str(cell.uid)
             raise KeyError(error_str)
 
         n = len(cell.points)
 
         row = self._group.cells.row
 
-        row['uuid'] = cell.uuid.hex
+        row['uid'] = cell.uid.hex
         row['data'] = self._data.append(cell.data).hex
         row['n_points'] = n
-        row['points_uuids'] = [puuid.hex for puuid in
+        row['points_uids'] = [puid.hex for puid in
                                cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
 
         row.append()
         self._group.cells.flush()
 
-        return cell.uuid
+        return cell.uid
 
     def update_point(self, point):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
-        uuid as the provided point and updates its information.
+        uid as the provided point and updates its information.
 
         Parameters
         ----------
@@ -459,7 +459,7 @@ class FileMesh(object):
         """
 
         for row in self._group.points.where(
-                'uuid == value', condvars={'value': point.uuid.hex}):
+                'uid == value', condvars={'value': point.uid.hex}):
             row['coordinates'] = list(point.coordinates)
             self._data[uuid.UUID(hex=row['data'], version=4)] = point.data
             row.update()
@@ -467,14 +467,14 @@ class FileMesh(object):
             return
         else:
             error_str = "Trying to update a non\
-                existing point with uuid: " + str(point.uuid)
+                existing point with uid: " + str(point.uid)
             raise KeyError(error_str)
 
     def update_edge(self, edge):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
-        uuid as the provided edge and updates its information.
+        uid as the provided edge and updates its information.
 
         Parameters
         ----------
@@ -489,9 +489,9 @@ class FileMesh(object):
         """
 
         for row in self._group.edges.where(
-                'uuid == value', condvars={'value': edge.uuid.hex}):
+                'uid == value', condvars={'value': edge.uid.hex}):
             n = len(edge.points)
-            row['points_uuids'] = [puuid.hex for puuid in
+            row['points_uids'] = [puid.hex for puid in
                                    edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = edge.data
             row.update()
@@ -499,14 +499,14 @@ class FileMesh(object):
             return
         else:
             error_str = "Trying to update a non\
-                existing edge with uuid: " + str(edge.uuid)
+                existing edge with uid: " + str(edge.uid)
             raise KeyError(error_str)
 
     def update_face(self, face):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
-        uuid as the provided face and updates its information.
+        uid as the provided face and updates its information.
 
         Parameters
         ----------
@@ -521,9 +521,9 @@ class FileMesh(object):
         """
 
         for row in self._group.faces.where(
-                'uuid == value', condvars={'value': face.uuid.hex}):
+                'uid == value', condvars={'value': face.uid.hex}):
             n = len(face.points)
-            row['points_uuids'] = [puuid.hex for puuid in
+            row['points_uids'] = [puid.hex for puid in
                                    face.points] + [0] * (MAX_POINTS_IN_FACE-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = face.data
             row.update()
@@ -531,14 +531,14 @@ class FileMesh(object):
             return
         else:
             error_str = "Trying to update a none\
-                existing face with uuid: " + str(face.uuid)
+                existing face with uid: " + str(face.uid)
             raise KeyError(error_str)
 
     def update_cell(self, cell):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same
-        uuid as the provided cell and updates its information.
+        uid as the provided cell and updates its information.
 
         Parameters
         ----------
@@ -553,9 +553,9 @@ class FileMesh(object):
         """
 
         for row in self._group.cells.where(
-                'uuid == value', condvars={'value': cell.uuid.hex}):
+                'uid == value', condvars={'value': cell.uid.hex}):
             n = len(cell.points)
-            row['points_uuids'] = [puuid.hex for puuid in
+            row['points_uids'] = [puid.hex for puid in
                                    cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
             self._data[uuid.UUID(hex=row['data'], version=4)] = cell.data
             row.update()
@@ -563,22 +563,22 @@ class FileMesh(object):
             return
         else:
             error_str = "Trying to update an non\
-                existing cell with uuid: " + str(cell.uuid)
+                existing cell with uid: " + str(cell.uid)
             raise KeyError(error_str)
 
-    def iter_points(self, point_uuids=None):
+    def iter_points(self, point_uids=None):
         """ Returns an iterator over the selected points.
 
-        Returns an interator over the points with uuid in
-        point_uuids. If non of the ids in point_uuids exists,
-        an empty iterator is returned. If there is no ids
-        inside point_uuids, a iterator over all points of
+        Returns an interator over the points with uid in
+        point_uids. If non of the uids in point_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside point_uids, a iterator over all points of
         the mesh is returned insted.
 
         Parameters
         ----------
-        point_uuids : list of uint64, optional
-            Uuids of the desired points, default empty
+        point_uids : list of uint64, optional
+            uids of the desired points, default empty
 
         Returns
         -------
@@ -587,29 +587,29 @@ class FileMesh(object):
 
         """
 
-        if point_uuids is None:
+        if point_uids is None:
             for row in self._group.points:
                 yield Point(
                     tuple(row['coordinates']),
-                    uuid.UUID(hex=row['uuid'], version=4)
+                    uuid.UUID(hex=row['uid'], version=4)
                 )
         else:
-            for point_uuid in point_uuids:
-                yield self.get_point(point_uuid)
+            for point_uid in point_uids:
+                yield self.get_point(point_uid)
 
-    def iter_edges(self, edge_uuids=None):
+    def iter_edges(self, edge_uids=None):
         """ Returns an iterator over the selected edges.
 
-        Returns an interator over the edged with id in
-        edge_uuid. If non of the ids in edge_uuids exists,
-        an empty iterator is returned. If there is no ids
-        inside edge_uuids, a iterator over all edges of
+        Returns an interator over the edged with uid in
+        edge_uid. If non of the uids in edge_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside edge_uids, a iterator over all edges of
         the mesh is returned insted.
 
         Parameters
         ----------
-        edge_uuids : list of uint64, optional
-            Uuids of the desired edges, default empty
+        edge_uids : list of uint64, optional
+            uids of the desired edges, default empty
 
         Returns
         -------
@@ -618,29 +618,29 @@ class FileMesh(object):
 
         """
 
-        if edge_uuids is None:
+        if edge_uids is None:
             for row in self._group.edges:
                 yield Edge(
-                    list(row['points_uuids']),
-                    uuid.UUID(hex=row['uuid'], version=4)
+                    list(row['points_uids']),
+                    uuid.UUID(hex=row['uid'], version=4)
                 )
         else:
-            for edge_uuid in edge_uuids:
-                yield self.get_edge(edge_uuid)
+            for edge_uid in edge_uids:
+                yield self.get_edge(edge_uid)
 
-    def iter_faces(self, face_uuids=None):
+    def iter_faces(self, face_uids=None):
         """ Returns an iterator over the selected faces.
 
-        Returns an interator over the faces with id in
-        face_uuids. If non of the ids in face_uuids exists,
-        an empty iterator is returned. If there is no ids
-        inside face_uuids, a iterator over all faces of
+        Returns an interator over the faces with uid in
+        face_uids. If non of the ids in face_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside face_uids, a iterator over all faces of
         the mesh is returned insted.
 
         Parameters
         ----------
-        face_uuids : list of uint64, optional
-            Uuids of the desired faces, default empty
+        face_uids : list of uint64, optional
+            uids of the desired faces, default empty
 
         Returns
         -------
@@ -649,29 +649,29 @@ class FileMesh(object):
 
         """
 
-        if face_uuids is None:
+        if face_uids is None:
             for row in self._group.faces:
                 yield Face(
-                    list(row['points_uuids']),
-                    uuid.UUID(hex=row['uuid'], version=4)
+                    list(row['points_uids']),
+                    uuid.UUID(hex=row['uid'], version=4)
                 )
         else:
-            for face_uuid in face_uuids:
-                yield self.get_face(face_uuid)
+            for face_uid in face_uids:
+                yield self.get_face(face_uid)
 
-    def iter_cells(self, cell_uuids=None):
+    def iter_cells(self, cell_uids=None):
         """ Returns an iterator over the selected cells.
 
-        Returns an interator over the cells with id in
-        cell_uuids. If non of the ids in cell_uuids exists,
-        an empty iterator is returned. If there is no ids
-        inside cell_uuids, a iterator over all cells of
+        Returns an interator over the cells with uid in
+        cell_uids. If non of the ids in cell_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside cell_uids, a iterator over all cells of
         the mesh is returned insted.
 
         Parameters
         ----------
-        cell_uuids : list of uint64, optional
-            Uuids of the desired cell, default empty
+        cell_uids : list of uint64, optional
+            Uuds of the desired cell, default empty
 
         Returns
         -------
@@ -680,15 +680,15 @@ class FileMesh(object):
 
         """
 
-        if cell_uuids is None:
+        if cell_uids is None:
             for row in self._group.cells:
                 yield Cell(
-                    list(row['points_uuids']),
-                    uuid.UUID(hex=row['uuid'], version=4)
+                    list(row['points_uids']),
+                    uuid.UUID(hex=row['uid'], version=4)
                 )
         else:
-            for cell_uuid in cell_uuids:
-                yield self.get_cell(cell_uuid)
+            for cell_uid in cell_uids:
+                yield self.get_cell(cell_uid)
 
     def has_edges(self):
         """ Check if the mesh container has edges
@@ -727,10 +727,10 @@ class FileMesh(object):
         """
         return self._group.cells.nrows != 0
 
-    def _generate_uuid(self):
-        """ Provides and id for the object
+    def _generate_uid(self):
+        """ Provides and uid for the object
 
-        Provides an uuid as defined in the standard RFC 4122
+        Provides an uid as defined in the standard RFC 4122
         """
 
         return uuid.uuid4()
