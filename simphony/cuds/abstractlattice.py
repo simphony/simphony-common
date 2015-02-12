@@ -24,8 +24,8 @@ class ABCLattice(object):
     def get_node(self, index):
         """Get the lattice node corresponding to the given index.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         index: tuple of D x int
             node index coordinate
 
@@ -40,9 +40,9 @@ class ABCLattice(object):
     def update_node(self, lat_node):
         """Update the corresponding lattice node.
 
-        Parameters:
-        -----------
-        lat_node: LatticeNode
+        Parameters
+        ----------
+        lat_node : LatticeNode
 
         """
         pass
@@ -51,12 +51,12 @@ class ABCLattice(object):
     def iter_nodes(self, indices=None):
         """Get an iterator over the LatticeNodes described by the indices.
 
-        Parameters:
-        -----------
-        indices: iterable set of D x int, optional
+        Parameters
+        ----------
+        indices : iterable set of D x int, optional
             node index coordinates
-        Returns:
-        --------
+        Returns
+        -------
         A generator for LatticeNode objects
 
         """
@@ -66,12 +66,12 @@ class ABCLattice(object):
     def get_coordinate(self, index):
         """Get coordinate of the given index coordinate.
 
-        Parameters:
-        -----------
-        index: D x int
+        Parameters
+        ----------
+        index : D x int
             node index coordinate
 
-        Returns:
+        Returns
         --------
         D x float
 

@@ -10,7 +10,7 @@ class LatticeNode:
 
     Attributes
     ----------
-    index: tuple of D x int
+    index : tuple of D x int
         Node index coordinate
     data : DataContainer
 
@@ -32,14 +32,14 @@ class Lattice(ABCLattice):
 
     Parameters
     ----------
-    name: str
-    type: str
+    name : str
+    type : str
         Bravais lattice type (should agree with the base_vect below).
-    base_vect: D x float
+    base_vect : D x float
         defines a Bravais lattice (an alternative for primitive vectors).
-    size: D x size
+    size : D x size
         number of lattice nodes (in the direction of each axis).
-    origin: D x float
+    origin : D x float
 
     """
     def __init__(self, name, type, base_vect, size, origin):
@@ -76,6 +76,7 @@ class Lattice(ABCLattice):
         Returns
         -------
         A reference to a LatticeNode object
+
         """
         tuple_index = tuple(index)
         return LatticeNode(tuple_index, self._dcs[tuple_index])
@@ -87,6 +88,7 @@ class Lattice(ABCLattice):
         ----------
         lat_node: reference to a LatticeNode object
             data copied from the given node
+
         """
         index = lat_node.index
         self._dcs[index] = DataContainer(lat_node.data)
@@ -96,11 +98,13 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        indices: iterable set of D x int (node index coordinates)
+        indices: iterable set of D x int, optional
+            node index coordinates
 
         Returns
         -------
         A generator for LatticeNode objects
+
         """
         if indices is None:
             for index, val in np.ndenumerate(self._dcs):
@@ -114,11 +118,12 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        index: D x int (node index coordinate)
+        index : D x int (node index coordinate)
 
         Returns
         -------
         D x float
+
         """
         return self.origin + self.base_vect*np.array(index)
 
@@ -128,7 +133,7 @@ def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
 
     Parameters
     ----------
-    name: string
+    name: str
     h: float
         lattice spacing.
     size: 2 x int
@@ -140,6 +145,7 @@ def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     -------
     lattice : Lattice
         A reference to a Lattice object.
+
     """
     return Lattice(name, 'Hexagonal', (0.5*h, 0.5*sqrt(3)*h), size, origin)
 
@@ -149,7 +155,7 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
 
     Parameters
     ----------
-    name: string
+    name: str
     h: float
         lattice spacing.
     size: 2 x int
@@ -161,6 +167,7 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
     -------
     lattice : Lattice
         A reference to a Lattice object.
+
     """
     return Lattice(name, 'Square', (h, h), size, origin)
 
@@ -170,16 +177,19 @@ def make_rectangular_lattice(name, hs, size, origin=(0, 0)):
 
     Parameters
     ----------
-    name: string
-    hs: 2 x float
+    name : str
+    hs : 2 x float
         lattice spacings (in each axis direction).
-    size: 2 x int
+    size : 2 x int
         number of lattice nodes (in each axis direction).
-    origin: 2 x float (default value = (0,0))
+    origin : 2 x float (default value = (0,0))
         lattice origin.
 
+    Returns
+    -------
     lattice : Lattice
         A reference to a Lattice object.
+
     """
     return Lattice(name, 'Rectangular', hs, size, origin)
 
@@ -189,18 +199,19 @@ def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
 
     Parameters
     ----------
-    name: string
-    h: float
+    name : str
+    h : float
         lattice spacing.
-    size: 3 x int
+    size : 3 x int
         number of lattice nodes (in each axis direction).
-    origin: 3 x float (default value = (0,0,0))
+    origin : 3 x float (default value = (0,0,0))
         lattice origin.
 
     Returns
     -------
     lattice : Lattice
         A reference to a Lattice object.
+
     """
     return Lattice(name, 'Cubic', (h, h, h), size, origin)
 
@@ -210,12 +221,12 @@ def make_orthorombicp_lattice(name, hs, size, origin=(0, 0, 0)):
 
     Parameters
     ----------
-    name: string
-    hs: 3 x float
+    name : str
+    hs : 3 x float
         lattice spacings (in each axis direction).
-    size: 3 x int
+    size : 3 x int
         number of lattice nodes (in each axis direction).
-    origin: 3 x float (default value = (0,0,0))
+    origin : 3 x float (default value = (0,0,0))
         lattice origin.
 
     Returns
