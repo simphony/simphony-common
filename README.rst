@@ -11,8 +11,8 @@ The native implementation of the SimPhoNy cuds objects and io code.
    :target: https://coveralls.io/r/simphony/simphony-common
    :alt: Test coverage
 
-.. image:: https://readthedocs.org/projects/simphony/badge/?version=latest
-   :target: https://readthedocs.org/projects/simphony/?badge=latest
+.. image:: https://readthedocs.org/projects/simphony/badge/?version=master
+   :target: https://readthedocs.org/projects/simphony/?badge=master
    :alt: Documentation Status
 
 Repository
@@ -99,5 +99,6 @@ There are four subpackages:
 - bench -- holds basic benchmarking code
 - examples -- holds SimPhoNy example code
 - doc -- Documentation related files
+
   - source -- Sphinx rst source files
   - build -- Documentation build directory, if documentation has been generated.
