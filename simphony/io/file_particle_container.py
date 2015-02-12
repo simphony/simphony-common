@@ -1,6 +1,3 @@
-"""
-This class illustrates use of a particles container class for files
-"""
 import random
 
 import tables
@@ -15,12 +12,12 @@ MAX_INT = numpy.iinfo(numpy.uint32).max
 
 
 class _ParticleDescription(tables.IsDescription):
-    id = tables.UInt32Col(pos=1)
+    uid = tables.UInt32Col(pos=1)
     coordinates = tables.Float64Col(pos=2, shape=(3,))
 
 
 class _BondDescription(tables.IsDescription):
-    id = tables.UInt32Col(pos=1)
+    uid = tables.UInt32Col(pos=1)
     # storing up to fixed number of particles for each bond
     particle_ids = tables.Int64Col(
         pos=2, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
@@ -28,8 +25,8 @@ class _BondDescription(tables.IsDescription):
 
 
 class FileParticleContainer(ABCParticleContainer):
-    """
-    Responsible class to synchronize operations on particles
+    """ Cuds particle container.
+
     """
     def __init__(self, group, file):
         self._file = file
@@ -42,6 +39,16 @@ class FileParticleContainer(ABCParticleContainer):
             # create table to hold bonds
             self._create_bonds_table()
 
+    @property
+    def name(self):
+        """ The name of the container
+        """
+        return self._group._v_name
+
+    @name.setter
+    def name(self, value):
+        self._group._f_rename(value)
+
     # Particle methods ######################################################
 
     def add_particle(self, particle):
@@ -53,32 +60,32 @@ class FileParticleContainer(ABCParticleContainer):
 
         Returns
         -------
-        int
+        int :
             id of particle
 
         Raises
-        -------
-        ValueError
+        ------
+        ValueError :
            if an id is given which already exists.
 
         """
-        id = particle.id
-        if id is None:
-            id = self._generate_unique_id(self._group.particles)
+        uid = particle.uid
+        if uid is None:
+            uid = self._generate_unique_id(self._group.particles)
         else:
             for _ in self._group.particles.where(
-                    'id == value', condvars={'value': id}):
+                    'uid == value', condvars={'value': uid}):
                 raise ValueError(
-                    'Particle (id={id}) already exists'.format(id=id))
+                    'Particle (id={id}) already exists'.format(uid=uid))
 
         # insert a new particle record
-        self._group.particles.append([(id, particle.coordinates)])
-        return id
+        self._group.particles.append([(uid, particle.coordinates)])
+        return uid
 
     def update_particle(self, particle):
         """Update particle"""
         for row in self._group.particles.where(
-                'id == value', condvars={'value': particle.id}):
+                'uid == value', condvars={'value': particle.uid}):
             row['coordinates'] = list(particle.coordinates)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
@@ -86,22 +93,22 @@ class FileParticleContainer(ABCParticleContainer):
             return
         else:
             raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=particle.id))
+                'Particle (id={id}) does not exist'.format(id=particle.uid))
 
-    def get_particle(self, id):
+    def get_particle(self, uid):
         """Get particle"""
         for row in self._group.particles.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             return Particle(
-                id=id, coordinates=tuple(row['coordinates']))
+                uid=uid, coordinates=tuple(row['coordinates']))
         else:
             raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=id))
+                'Particle (id={id}) does not exist'.format(id=uid))
 
-    def remove_particle(self, id):
+    def remove_particle(self, uid):
         """Remove particle"""
         for row in self._group.particles.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             if self._group.particles.nrows == 1:
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
@@ -114,14 +121,14 @@ class FileParticleContainer(ABCParticleContainer):
             return
         else:
             raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=id))
+                'Particle (id={id}) does not exist'.format(id=uid))
 
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
         if ids is None:
             for row in self._group.particles:
                 yield Particle(
-                    id=row['id'], coordinates=tuple(row['coordinates']))
+                    uid=row['uid'], coordinates=tuple(row['coordinates']))
         else:
             # FIXME: we might want to use an indexed query for these cases.
             for particle_id in ids:
@@ -138,56 +145,56 @@ class FileParticleContainer(ABCParticleContainer):
 
         Returns
         -------
-        int
+        int :
             id of bond
 
         Raises
-        -------
-        ValueError
+        ------
+        ValueError :
            if an id is given which already exists.
 
         """
-        id = bond.id
-        if id is None:
-            id = self._generate_unique_id(self._group.bonds)
+        uid = bond.uid
+        if uid is None:
+            uid = self._generate_unique_id(self._group.bonds)
         else:
             for r in self._group.bonds.where(
-                    'id == value', condvars={'value': id}):
+                    'uid == value', condvars={'value': uid}):
                 raise ValueError(
-                    'Bond (id={id}) already exists'.format(id=id))
+                    'Bond (id={id}) already exists'.format(id=uid))
 
         # insert a new bond record
-        self._group.bonds.append([self._bond_to_row(bond, id)])
-        return id
+        self._group.bonds.append([self._bond_to_row(bond, uid)])
+        return uid
 
     def update_bond(self, bond):
         """Update particle"""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': bond.id}):
+                'uid == value', condvars={'value': bond.uid}):
             _, row['particle_ids'], row['n_particle_ids'] = \
-                self._bond_to_row(bond, bond.id)
+                self._bond_to_row(bond, bond.uid)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
             row._flush_mod_rows()
             return
         else:
             raise ValueError(
-                'Bond (id={id}) does not exist'.format(id=bond.id))
+                'Bond (id={id}) does not exist'.format(id=bond.uid))
 
-    def get_bond(self, id):
+    def get_bond(self, uid):
         """Get bond"""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             particles = row['particle_ids'][:row['n_particle_ids']]
             # FIXME: do we have to convert to a tuple, why not a list?
-            return Bond(id=row['id'], particles=tuple(particles))
+            return Bond(uid=row['uid'], particles=tuple(particles))
         else:
-            raise ValueError('Bond (id={id}) does not exist'.format(id=id))
+            raise ValueError('Bond (id={id}) does not exist'.format(id=uid))
 
-    def remove_bond(self, id):
+    def remove_bond(self, uid):
         """Remove bond"""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             if self._group.bonds.nrows == 1:
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
@@ -208,22 +215,22 @@ class FileParticleContainer(ABCParticleContainer):
             for row in self._group.bonds:
                 n = row['n_particle_ids']
                 particles = row['particle_ids'][:n]
-                yield Bond(id=row['id'], particles=tuple(particles))
+                yield Bond(uid=row['uid'], particles=tuple(particles))
         else:
-            for id in ids:
-                yield self.get_bond(id)
+            for uid in ids:
+                yield self.get_bond(uid)
 
-    def has_particle(self, id):
+    def has_particle(self, uid):
         """Checks if a particle with id "id" exists in the container."""
         for row in self._group.particles.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             return True
         return False
 
-    def has_bond(self, id):
+    def has_bond(self, uid):
         """Checks if a bond with id "id" exists in the container."""
         for row in self._group.bonds.where(
-                'id == value', condvars={'value': id}):
+                'uid == value', condvars={'value': uid}):
             return True
         return False
 
@@ -237,7 +244,7 @@ class FileParticleContainer(ABCParticleContainer):
             self._file.create_table(
                 self._group, "bonds", _BondDescription)
 
-    def _bond_to_row(self, bond, id):
+    def _bond_to_row(self, bond, uid):
         n = len(bond.particles)
         if n > MAX_NUMBER_PARTICLES_IN_BOND:
             raise Exception(
@@ -245,14 +252,14 @@ class FileParticleContainer(ABCParticleContainer):
                     n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
         particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
         particle_ids[:n] = bond.particles
-        return id, particle_ids, n
+        return uid, particle_ids, n
 
     def _generate_unique_id(self, table, number_tries=1000):
         for n in xrange(number_tries):
-            id = random.randint(0, MAX_INT)
-            for _ in table.where('id == value', condvars={'value': id}):
+            uid = random.randint(0, MAX_INT)
+            for _ in table.where('uid == value', condvars={'value': uid}):
                 break
             else:
-                return id
+                return uid
         else:
             raise Exception('Id could not be generated')

@@ -20,9 +20,12 @@ class DataContainerTable(MutableMapping):
 
     @property
     def valid(self):
+        """ A PyTables table is opened/created and the object is valid.
+
+        """
         return self._table is not None
 
-    def __init__(self, root, name='data_containers'):
+    def __init__(self, root, name='data_containers', record=None):
         """ Create a proxy object for an HDF5 backed data container table.
 
         Parameters
@@ -30,7 +33,13 @@ class DataContainerTable(MutableMapping):
         root : tables.Group
             The root node where to add the data container table structures.
         name : string
-            The name of the new group that will be created.
+            The name of the new group that will be created. Default name is
+            'data_containers'
+        record : table.IsDescription
+            The table columns description to use. Default is to use the
+            main data_container record if a new table needs to be created
+            or the already existing record if a table already exists in
+            file.
 
         """
         handle = root._v_file
@@ -39,17 +48,22 @@ class DataContainerTable(MutableMapping):
         if hasattr(parent, name):
             self._table = getattr(parent, name)
         else:
-            self._table = handle.create_table(parent, name, Record)
+            if record is None:
+                record = Record
+            self._table = handle.create_table(parent, name, record)
 
-        # prepare useful mappings
-        columns = Record.columns['Data']._v_colobjects
+        # Prepare useful mappings
+        columns = self._table.cols.data._v_desc._v_colobjects
+
         members = CUBA.__members__
         self._cuba_to_position = {
             cuba: columns[member.lower()]._v_pos
-            for member, cuba in members.items()}
+            for member, cuba in members.items()
+            if member.lower() in columns}
         self._position_to_cuba = {
             columns[member.lower()]._v_pos: cuba
-            for member, cuba in members.items()}
+            for member, cuba in members.items()
+            if member.lower() in columns}
 
     def append(self, data):
         """ Append the data to the end of the table.
@@ -68,7 +82,7 @@ class DataContainerTable(MutableMapping):
         table = self._table
         uid = uuid.uuid4()
         row = table.row
-        row['index'] = uid.bytes
+        row['index'] = uid.hex
         self._populate(row, data)
         row.append()
         table.flush()
@@ -79,10 +93,10 @@ class DataContainerTable(MutableMapping):
 
         """
         for row in self._table.where(
-                'index == value',  condvars={'value': uid.bytes}):
+                'index == value',  condvars={'value': uid.hex}):
             return self._retrieve(row)
         else:
-            raise ValueError(
+            raise KeyError(
                 'Record (id={id}) does not exist'.format(id=uid))
 
     def __setitem__(self, uid, data):
@@ -91,7 +105,7 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             self._populate(row, data)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
@@ -99,7 +113,7 @@ class DataContainerTable(MutableMapping):
             return
         else:
             row = table.row
-            row['index'] = uid.bytes
+            row['index'] = uid.hex
             self._populate(row, data)
             row.append()
             table.flush()
@@ -110,21 +124,22 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             if table.nrows == 1:
                 name = table._v_name
+                record = table.description
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
                 # so we delete the table and
                 # create new empty table in this situation
                 table.remove()
                 parent = self._parent
-                self._table = tables.Table(parent, name, Record)
+                self._table = tables.Table(parent, name, record)
             else:
                 table.remove_row(row.nrow)
             break
         else:
-            raise ValueError(
+            raise KeyError(
                 'Record (id={id}) does not exist'.format(id=uid))
 
     def __len__(self):
@@ -154,12 +169,13 @@ class DataContainerTable(MutableMapping):
         positions = self._cuba_to_position
         mask = numpy.zeros(
             shape=self._table.coldtypes['mask'].shape, dtype=numpy.bool)
-        data = list(row['Data'])
+        data = list(row['data'])
         for key in value:
-            data[positions[key]] = value[key]
-            mask[positions[key]] = True
+            if key in positions:
+                data[positions[key]] = value[key]
+                mask[positions[key]] = True
         row['mask'] = mask
-        row['Data'] = tuple(data)
+        row['data'] = tuple(data)
 
     def _retrieve(self, row):
         """ Return the DataContainer from a table row instance.
@@ -167,7 +183,7 @@ class DataContainerTable(MutableMapping):
         """
         cuba = self._position_to_cuba
         mask = row['mask']
-        data = row['Data']
+        data = row['data']
         return DataContainer({
             cuba[index]: data[index]
             for index, valid in enumerate(mask) if valid})

@@ -1,9 +1,9 @@
-- description: Universal unique id
+- description: Universal unique id represented as a hex string size 32
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: ID
   name: Id
   number: 0
-  shape: [16]
+  shape: [32]
   type: string
 - description: Naming of high-level objects (e.g. solver models)
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
