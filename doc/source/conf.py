@@ -1,4 +1,4 @@
-\# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #
 # SimPhoNy documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb 02 16:26:16 2015.
