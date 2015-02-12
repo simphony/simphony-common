@@ -7,7 +7,7 @@ with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
 # Setup version
-VERSION = '0.0.1.dev2'
+VERSION = '0.0.1'
 
 
 def write_version_py(filename=None):
