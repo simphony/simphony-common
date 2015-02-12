@@ -220,6 +220,12 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertTrue(isinstance(point_ret, Point))
         self.assertEqual(puids[0], point_ret.uid)
+        self.assertItemsEqual(
+            self.points[0].coordinates,
+            point_ret.coordinates
+        )
+        for key, value in self.points[0].data.iteritems():
+            self.assertItemsEqual(point_ret.data[key], value)
 
     def test_get_edge(self):
         """ Check that an edge can be retrieved correctly
@@ -238,6 +244,12 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertTrue(isinstance(edge_ret, Edge))
         self.assertEqual(euids[0], edge_ret.uid)
+        self.assertItemsEqual(
+            edges[0].points,
+            edge_ret.points
+        )
+        for key, value in edges[0].data.iteritems():
+            self.assertItemsEqual(edge_ret.data[key], value)
 
     def test_get_face(self):
         """ Check that a face can be retrieved correctly
@@ -256,6 +268,12 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertTrue(isinstance(face_ret, Face))
         self.assertEqual(fuids[0], face_ret.uid)
+        self.assertItemsEqual(
+            faces[0].points,
+            face_ret.points
+        )
+        for key, value in faces[0].data.iteritems():
+            self.assertItemsEqual(face_ret.data[key], value)
 
     def test_get_cell(self):
         """ Check that a cell can be retrieved correctly
@@ -274,6 +292,12 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertTrue(isinstance(cell_ret, Cell))
         self.assertEqual(cuids[0], cell_ret.uid)
+        self.assertItemsEqual(
+            cells[0].points,
+            cell_ret.points
+        )
+        for key, value in cells[0].data.iteritems():
+            self.assertItemsEqual(cell_ret.data[key], value)
 
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
