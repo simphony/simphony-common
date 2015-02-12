@@ -218,10 +218,10 @@ class H5CUDS(object):
             name of the mesh to delete
         """
 
-        if name in self._meshes:
-            self._meshes[name][1]._f_remove(recursive=True)
-            del self._meshes[name]
-        else:
+        try:
+            m_node = self._file.root.mesh._f_get_child(name)
+            m_node._f_remove(recursive=True)
+        except tables.NoSuchNodeError:
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
 
@@ -245,7 +245,7 @@ class H5CUDS(object):
             for name in names:
                 yield self.get_particle_container(name)
 
-    def iter_mesh(self, names=None):
+    def iter_meshes(self, names=None):
         """Returns an iterator over a subset or all
         of the meshes.
 

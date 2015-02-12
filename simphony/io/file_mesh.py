@@ -141,6 +141,14 @@ class FileMesh(object):
         if "cells" not in self._group:
             self._create_cells_table()
 
+    @property
+    def name(self):
+        return self._group._v_name
+
+    @name.setter
+    def name(self, value):
+        self._group._f_rename(value)
+
     def get_point(self, uid):
         """ Returns a point with a given uid.
 
