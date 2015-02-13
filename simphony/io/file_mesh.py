@@ -101,15 +101,9 @@ class FileMesh(object):
     Attributes
     ----------
     data : Data
-        The X coordinate.
-    points : dictionary of Point
-        Points of the mesh.
-    edges : dictionary of Edge
-        Edges of the mesh.
-    faces : dictionary of Face
-        Faces of the mesh.
-    cells : dictionary of Cell
-        Cells of the mesh.
+        Data relative to the mesh
+    name : String
+        Name of the mesh
 
     See Also
     --------
