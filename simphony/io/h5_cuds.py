@@ -3,6 +3,7 @@ import copy
 import tables
 
 from simphony.io.file_particle_container import FileParticleContainer
+from simphony.io.file_mesh import FileMesh
 
 
 class H5CUDS(object):
@@ -112,6 +113,45 @@ class H5CUDS(object):
         self._file.flush()
         return pc
 
+    def add_mesh(self, mesh):
+        """Add a mesh to the file.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh
+        mesh_container : ABCMesh, optional
+            mesh to be added. If none is give,
+            then an empty mesh is added.
+
+        Returns
+        ----------
+        FileMesh
+            The mesh newly added to the file.
+            See get_mesh for more information.
+
+        """
+        if mesh.name in self._file.root.mesh:
+            raise ValueError(
+                'Mesh \'{n}\` already exists'.format(n=mesh.name))
+
+        group = self._file.create_group('/mesh/', mesh.name)
+        m = FileMesh(group, self._file)
+
+        if mesh:
+            # copy the contents of the mesh to the file
+            for point in mesh.iter_points():
+                m.add_point(point)
+            for edge in mesh.iter_edges():
+                m.add_edge(edge)
+            for face in mesh.iter_faces():
+                m.add_face(face)
+            for cell in mesh.iter_cells():
+                m.add_cell(cell)
+
+        self._file.flush()
+        return m
+
     def get_particle_container(self, name):
         """Get particle container from file.
 
@@ -133,6 +173,27 @@ class H5CUDS(object):
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
 
+    def get_mesh(self, name):
+        """Get mesh from file.
+
+        The returned mesh can be used to query
+        and change the related data stored in the file. If the
+        file has been closed then the mesh should no longer be used.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh to return
+        """
+
+        try:
+            group = self._file.root.mesh._f_get_child(name)
+            m = FileMesh(group, self._file)
+            return m
+        except tables.NoSuchNodeError:
+            raise ValueError(
+                'Mesh \'{n}\` does not exist'.format(n=name))
+
     def delete_particle_container(self, name):
         """Delete particle container from file.
 
@@ -147,6 +208,22 @@ class H5CUDS(object):
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
+
+    def delete_mesh(self, name):
+        """Delete mesh from file.
+
+        Parameters
+        ----------
+        name : str
+            name of the mesh to delete
+        """
+
+        try:
+            m_node = self._file.root.mesh._f_get_child(name)
+            m_node._f_remove(recursive=True)
+        except tables.NoSuchNodeError:
+            raise ValueError(
+                'Mesh \'{n}\` does not exist'.format(n=name))
 
     def iter_particle_containers(self, names=None):
         """Returns an iterator over a subset or all
@@ -167,3 +244,23 @@ class H5CUDS(object):
         else:
             for name in names:
                 yield self.get_particle_container(name)
+
+    def iter_meshes(self, names=None):
+        """Returns an iterator over a subset or all
+        of the meshes.
+
+        Parameters
+        ----------
+        names : list of str
+            names of specific meshes to be iterated over.
+            If names is not given, then all meshes will
+            be iterated over.
+
+        """
+
+        if names is None:
+            for mesh_node in self._file.root.mesh._f_iter_nodes():
+                yield self.get_mesh(mesh_node._v_name)
+        else:
+            for name in names:
+                yield self.get_mesh(name)
