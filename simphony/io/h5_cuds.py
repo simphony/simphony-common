@@ -2,7 +2,7 @@ import copy
 
 import tables
 
-from simphony.io.file_particle_container import FileParticleContainer
+from simphony.io.file_particle_container import H5Particles
 from simphony.io.file_mesh import FileMesh
 
 
@@ -11,7 +11,7 @@ class H5CUDS(object):
 
     """
 
-    def __init__(self, file):
+    def __init__(self, handle):
         """ Create/Open a CUDS file.
 
         Parameters
@@ -20,16 +20,11 @@ class H5CUDS(object):
             file to be used
 
         """
+        if not isinstance(handle, tables.File):
+            raise ValueError("File should be a Pytable file")
+        self._file = handle
+        self._root = handle.root
 
-        if not isinstance(file, tables.File):
-            raise ValueError(
-                "File should be a Pytable file")
-
-        if file.mode is 'r':
-            raise ValueError(
-                "File should not be opened in read-only mode")
-
-        self._file = file
 
     def valid(self):
         """Checks if file is valid (i.e. open)
@@ -59,18 +54,12 @@ class H5CUDS(object):
               is being created
 
         """
-        if mode not in ('a', 'w'):
-            raise ValueError(
-                "Invalid mode string ''%s''. Only "
-                "'a' and 'w' are acceptable modes " % mode)
-
         file = tables.open_file(filename, mode, title=title)
 
         # create the high-level structure of the cuds file
         for group in ('particle_container', 'lattice', 'mesh'):
             if "/" + group not in file:
                 file.create_group('/', group, group)
-
         return cls(file)
 
     def close(self):
@@ -90,17 +79,17 @@ class H5CUDS(object):
         Returns
         -------
         FileParticleContainer
-            The particle container newly added to the file.  See
+            The particle container newly added to the file. See
             get_particle_container for more information.
 
         """
-        if particle_container.name in self._file.root.particle_container:
+        if particle_container.name in self._file.root.particle_containers:
             raise ValueError(
                 'Particle container \'{n}\` already exists'.format(
                     n=particle_container.name))
 
         group = self._file.create_group(
-            '/particle_container/', particle_container.name)
+            '/particle_containers/', particle_container.name)
         pc = FileParticleContainer(group, self._file)
 
         if particle_container:
@@ -166,9 +155,8 @@ class H5CUDS(object):
             name of particle container to return
         """
         try:
-            group = self._file.root.particle_container._f_get_child(name)
-            pc = FileParticleContainer(group, self._file)
-            return pc
+            group = self._file.root.particle_containers._f_get_child(name)
+            return FileParticleContainer(group)
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
@@ -239,8 +227,8 @@ class H5CUDS(object):
         """
         names = copy.deepcopy(names)
         if names is None:
-            for pc_node in self._file.root.particle_container._f_iter_nodes():
-                yield self.get_particle_container(pc_node._v_name)
+            for node in self._file.root.particle_containers._f_iter_nodes():
+                yield self.get_particle_container(node._v_name)
         else:
             for name in names:
                 yield self.get_particle_container(name)
