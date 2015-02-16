@@ -1,42 +1,126 @@
+import abc
 import uuid
+from collections import MutableMapping
+
 import tables
-import numpy
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
 from simphony.cuds.particles import Particle, Bond
-
+from simphony.io.data_container_table import DataContainerTable
+from simphony.io.h5_cuds_item_table import H5CUDSItemTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
-MAX_INT = numpy.iinfo(numpy.uint32).max
 
 
 class _ParticleDescription(tables.IsDescription):
-    uid = tables.UInt32Col(pos=1)
-    coordinates = tables.Float64Col(pos=2, shape=(3,))
+    uid = tables.StringCol(32, pos=0)
+    coordinates = tables.Float64Col(pos=1, shape=(3,))
 
 
 class _BondDescription(tables.IsDescription):
-    uid = tables.UInt32Col(pos=1)
+    uid = tables.StringCol(32, pos=0)
     # storing up to fixed number of particles for each bond
-    particle_ids = tables.Int64Col(
-        pos=2, shape=(MAX_NUMBER_PARTICLES_IN_BOND,))
-    n_particle_ids = tables.Int64Col(pos=3)
+    particles = tables.UInt8Col(
+        shape=(MAX_NUMBER_PARTICLES_IN_BOND, 16), pos=1)
+    n_particles = tables.Int8Col(pos=3)
 
 
-class FileParticleContainer(ABCParticleContainer):
-    """ Cuds particle container.
+class H5ParticleTable(MutableMapping):
+    """ A proxy class to an HDF5 group node with serialised Particles
+
+    The class implements the Mutable-Mapping api where each Particle
+    instance is mapped to uuid.
+
 
     """
-    def __init__(self, group, file):
-        self._file = file
-        self._group = group
-        if "particles" not in self._group:
-            # create table to hold particles
-            self._create_particles_table()
+    def __init__(self, root, name='particles'):
+        """ Create a proxy object for an HDF5 backed particle table.
 
-        if "bonds" not in self._group:
-            # create table to hold bonds
-            self._create_bonds_table()
+        Parameters
+        ----------
+        root : tables.Group
+            The root node where to add the particle table structures.
+        name : string
+            The name of the new group that will be created. Default name is
+            'particles'
+
+        """
+        super(H5ParticleTable, self).__init__(
+            root, name, record=_ParticleDescription)
+
+    def _populate(self, row, item):
+        """ Populate the row from the Particle.
+
+        """
+        uid = row['uid']
+        self._data[uid] = item.data
+        row['coordinates'] = list(item.coordinates)
+
+    def _retrieve(self, row):
+        """ Return the DataContainer from a table row instance.
+
+        """
+        uid = row['uid']
+        return Particle(
+            uid=uid, coordinates=row['coordinates'], data=self._data[uid])
+
+
+class H5BondTable(MutableMapping):
+    """ A proxy class to an HDF5 group node with serialised Bonds
+
+    The class implements the Mutable-Mapping api where each Bond
+    instance is mapped to uuid.
+
+
+    """
+    def __init__(self, root, name='bonds'):
+        """ Create a proxy object for an HDF5 backed bond table.
+
+        Parameters
+        ----------
+        root : tables.Group
+            The root node where to add the bond table.
+        name : string
+            The name of the new group that will be created. Default name is
+            'bonds'
+
+        """
+        super(H5ParticleTable, self).__init__(
+            root, name, record=_BondDescription)
+
+    def _populate(self, row, item):
+        """ Populate the row from the Particle.
+
+        """
+        uid = row['uid']
+        particles = item.particles
+        number_of_items = len(item.particles)
+        row['n_particles'] = number_of_items
+        row['particles'][:number_of_items] = [
+            buffer(uuid.bytes) for uuid in particles]
+        self._data[uid] = item.data
+
+    def _retrieve(self, row):
+        """ Return the DataContainer from a table row instance.
+
+        """
+        uid = row['uid']
+        number_of_items = row['n_particles']
+        particles = [
+            uuid.UUID(bytes=buffer(value), version=4)
+            for value in row['particles'][:number_of_items]]
+        return Bond(
+            uid=uid, particles=particles, data=self._data[uid])
+
+
+class H5Particles(ABCParticleContainer):
+    """ An HDF5 backed particle container.
+
+    """
+    def __init__(self, group):
+        self._group = group
+        self._particles = H5ParticleTable(group, '_particles')
+        self._bonds = H5BondTable(group, '_bonds')
 
     @property
     def name(self):
@@ -48,90 +132,59 @@ class FileParticleContainer(ABCParticleContainer):
     def name(self, value):
         self._group._f_rename(value)
 
+    @property
+    def data(self):
+        raise NotImplementedError()
+
+    @data.setter
+    def data(self, value):
+        raise NotImplementedError()
+
     # Particle methods ######################################################
 
     def add_particle(self, particle):
         """Add particle
 
-        If particle has an id then this is used.  If the
-        particle's id is None then a id is generated for the
+        If particle has a uid set then this is used.  If the
+        particle's uid is None then a new uid is generated for the
         particle.
 
         Returns
         -------
-        int :
-            id of particle
+        uid : uuid.UUID
+            uid of particle.
 
         Raises
         ------
         ValueError :
-           if an id is given which already exists.
+           The particle uid already exists in the container.
 
         """
         uid = particle.uid
         if uid is None:
             uid = uuid.uuid4()
-        else:
-            for _ in self._group.particles.where(
-                    'uid == value', condvars={'value': uid}):
-                raise ValueError(
-                    'Particle (id={id}) already exists'.format(uid=uid))
-
-        # insert a new particle record
-        self._group.particles.append([(uid, particle.coordinates)])
+        self._group.particles[uid] = particle
         return uid
 
     def update_particle(self, particle):
-        """Update particle"""
-        for row in self._group.particles.where(
-                'uid == value', condvars={'value': particle.uid}):
-            row['coordinates'] = list(particle.coordinates)
-            row.update()
-            # see https://github.com/PyTables/PyTables/issues/11
-            row._flush_mod_rows()
-            return
-        else:
-            raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=particle.uid))
+        self._particle[particle.uid] = particle
 
     def get_particle(self, uid):
-        """Get particle"""
-        for row in self._group.particles.where(
-                'uid == value', condvars={'value': uid}):
-            return Particle(
-                uid=uid, coordinates=tuple(row['coordinates']))
-        else:
-            raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=uid))
+        return self._particle[uid]
 
     def remove_particle(self, uid):
-        """Remove particle"""
-        for row in self._group.particles.where(
-                'uid == value', condvars={'value': uid}):
-            if self._group.particles.nrows == 1:
-                # pytables due to hdf5 limitations does
-                # not support removing the last row of table
-                # so we delete the table and
-                # create new empty table in this situation
-                self._group.particles.remove()
-                self._create_particles_table()
-            else:
-                self._group.particles.remove_row(row.nrow)
-            return
-        else:
-            raise ValueError(
-                'Particle (id={id}) does not exist'.format(id=uid))
+        del self._particle[uid]
 
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
         if ids is None:
-            for row in self._group.particles:
-                yield Particle(
-                    uid=row['uid'], coordinates=tuple(row['coordinates']))
+            return iter(self._particles)
         else:
-            # FIXME: we might want to use an indexed query for these cases.
-            for particle_id in ids:
-                yield self.get_particle(particle_id)
+            return self._particles.itersequence(ids)
+
+    def has_particle(self, uid):
+        """Checks if a particle with id "id" exists in the container."""
+        return uid in self._particles
 
     # Bond methods #######################################################
 
@@ -156,101 +209,25 @@ class FileParticleContainer(ABCParticleContainer):
         uid = bond.uid
         if uid is None:
             uid = uuid.uuid4()
-        else:
-            for r in self._group.bonds.where(
-                    'uid == value', condvars={'value': uid}):
-                raise ValueError(
-                    'Bond (id={id}) already exists'.format(id=uid))
-
-        # insert a new bond record
-        self._group.bonds.append([self._bond_to_row(bond, uid)])
+        self._bonds[uid] = bond
         return uid
 
     def update_bond(self, bond):
-        """Update particle"""
-        for row in self._group.bonds.where(
-                'uid == value', condvars={'value': bond.uid}):
-            _, row['particle_ids'], row['n_particle_ids'] = \
-                self._bond_to_row(bond, bond.uid)
-            row.update()
-            # see https://github.com/PyTables/PyTables/issues/11
-            row._flush_mod_rows()
-            return
-        else:
-            raise ValueError(
-                'Bond (id={id}) does not exist'.format(id=bond.uid))
+        self._bonds[bond.uid] = bond
 
     def get_bond(self, uid):
-        """Get bond"""
-        for row in self._group.bonds.where(
-                'uid == value', condvars={'value': uid}):
-            particles = row['particle_ids'][:row['n_particle_ids']]
-            # FIXME: do we have to convert to a tuple, why not a list?
-            return Bond(uid=row['uid'], particles=tuple(particles))
-        else:
-            raise ValueError('Bond (id={id}) does not exist'.format(id=uid))
+        return self._bond[uid]
 
     def remove_bond(self, uid):
-        """Remove bond"""
-        for row in self._group.bonds.where(
-                'uid == value', condvars={'value': uid}):
-            if self._group.bonds.nrows == 1:
-                # pytables due to hdf5 limitations does
-                # not support removing the last row of table
-                # so we delete the table and
-                # create new empty table in this situation
-                self._group.bonds.remove()
-                self._create_bonds_table()
-            else:
-                self._group.bonds.remove_row(row.nrow)
-            return
-        else:
-            raise ValueError(
-                'Bond (id={id}) does not exist'.format(id=id))
+        del self._bond[uid]
 
     def iter_bonds(self, ids=None):
-        """Get iterator over bonds"""
+        """Get iterator over particles"""
         if ids is None:
-            for row in self._group.bonds:
-                n = row['n_particle_ids']
-                particles = row['particle_ids'][:n]
-                yield Bond(uid=row['uid'], particles=tuple(particles))
+            return iter(self._particles)
         else:
-            for uid in ids:
-                yield self.get_bond(uid)
-
-    def has_particle(self, uid):
-        """Checks if a particle with id "id" exists in the container."""
-        for row in self._group.particles.where(
-                'uid == value', condvars={'value': uid}):
-            return True
-        else:
-            return False
+            return self._particles.itersequence(ids)
 
     def has_bond(self, uid):
         """Checks if a bond with id "id" exists in the container."""
-        for row in self._group.bonds.where(
-                'uid == value', condvars={'value': uid}):
-            return True
-        else:
-            return False
-
-    # Private methods #######################################################
-
-    def _create_particles_table(self):
-        self._file.create_table(
-            self._group, "particles", _ParticleDescription)
-
-    def _create_bonds_table(self):
-        self._file.create_table(
-            self._group, "bonds", _BondDescription)
-
-    def _bond_to_row(self, bond, uid):
-        n = len(bond.particles)
-        if n > MAX_NUMBER_PARTICLES_IN_BOND:
-            raise Exception(
-                'Bond has too many particles ({n} > {maxn})'.format(
-                    n=n, maxn=MAX_NUMBER_PARTICLES_IN_BOND))
-        particle_ids = [0] * MAX_NUMBER_PARTICLES_IN_BOND
-        particle_ids[:n] = bond.particles
-        return uid, particle_ids, n
+        return uid in self._bonds
