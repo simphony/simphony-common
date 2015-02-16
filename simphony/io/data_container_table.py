@@ -20,6 +20,9 @@ class DataContainerTable(MutableMapping):
 
     @property
     def valid(self):
+        """ A PyTables table is opened/created and the object is valid.
+
+        """
         return self._table is not None
 
     def __init__(self, root, name='data_containers', record=None):
@@ -50,7 +53,7 @@ class DataContainerTable(MutableMapping):
             self._table = handle.create_table(parent, name, record)
 
         # Prepare useful mappings
-        columns = self._table.cols.Data._v_desc._v_colobjects
+        columns = self._table.cols.data._v_desc._v_colobjects
 
         members = CUBA.__members__
         self._cuba_to_position = {
@@ -79,7 +82,7 @@ class DataContainerTable(MutableMapping):
         table = self._table
         uid = uuid.uuid4()
         row = table.row
-        row['index'] = uid.bytes
+        row['index'] = uid.hex
         self._populate(row, data)
         row.append()
         table.flush()
@@ -90,7 +93,7 @@ class DataContainerTable(MutableMapping):
 
         """
         for row in self._table.where(
-                'index == value',  condvars={'value': uid.bytes}):
+                'index == value',  condvars={'value': uid.hex}):
             return self._retrieve(row)
         else:
             raise KeyError(
@@ -102,7 +105,7 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             self._populate(row, data)
             row.update()
             # see https://github.com/PyTables/PyTables/issues/11
@@ -110,7 +113,7 @@ class DataContainerTable(MutableMapping):
             return
         else:
             row = table.row
-            row['index'] = uid.bytes
+            row['index'] = uid.hex
             self._populate(row, data)
             row.append()
             table.flush()
@@ -121,7 +124,7 @@ class DataContainerTable(MutableMapping):
         """
         table = self._table
         for row in table.where(
-                'index == value', condvars={'value': uid.bytes}):
+                'index == value', condvars={'value': uid.hex}):
             if table.nrows == 1:
                 name = table._v_name
                 record = table.description
@@ -166,13 +169,13 @@ class DataContainerTable(MutableMapping):
         positions = self._cuba_to_position
         mask = numpy.zeros(
             shape=self._table.coldtypes['mask'].shape, dtype=numpy.bool)
-        data = list(row['Data'])
+        data = list(row['data'])
         for key in value:
             if key in positions:
                 data[positions[key]] = value[key]
                 mask[positions[key]] = True
         row['mask'] = mask
-        row['Data'] = tuple(data)
+        row['data'] = tuple(data)
 
     def _retrieve(self, row):
         """ Return the DataContainer from a table row instance.
@@ -180,7 +183,7 @@ class DataContainerTable(MutableMapping):
         """
         cuba = self._position_to_cuba
         mask = row['mask']
-        data = row['Data']
+        data = row['data']
         return DataContainer({
             cuba[index]: data[index]
             for index, valid in enumerate(mask) if valid})

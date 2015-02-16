@@ -11,11 +11,50 @@ The native implementation of the SimPhoNy cuds objects and io code.
    :target: https://coveralls.io/r/simphony/simphony-common
    :alt: Test coverage
 
+.. image:: https://readthedocs.org/projects/simphony/badge/?version=master
+   :target: https://readthedocs.org/projects/simphony/?badge=master
+   :alt: Documentation Status
 
 Repository
 ----------
 
 Simphony-common is hosted on github: https://github.com/simphony/simphony-common
+
+Requirements
+------------
+
+- enum34 >= 1.0.4
+- stevedore >= 1.2.0
+
+Optional requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+To support the cuba-generate script the following packages need to be installed
+prior to installing Simphony:
+
+- click >= 3.3
+- pyyaml >= 3.11
+
+To support the HDF5 based native IO:
+
+- PyTables >= 3.1.1
+
+To support the documentation built you need the following packages:
+
+- sphinx >= 1.2.3
+- sphinxcontrib-napoleon >= 0.2.10
+- mock
+
+.. note::
+
+  Packages that depend on the optional features and use setuptools should
+  append the ``H5IO`` and/or ``CUBAGen`` identifier next to
+  simphony in their ``setup_requires`` configuration option. For example::
+
+    install_requires = ["simphony[H5IO, CUBAGen]"]
+
+  Will make sure that the requirements of H5IO and CUBAGen support
+  are installed. (see `setuptools extras`_ for more information)
 
 Installation
 ------------
@@ -37,6 +76,18 @@ To run the full test-suite run::
 
     python -m unittest discover
 
+Documentation
+-------------
+
+To build the documentation in the doc/build directory run::
+
+    python setup.py build_sphinx
+
+.. note::
+
+   - One can use the --help option with a setup.py command
+     to see all available options.
+   - The documentation will be saved in the ``./build`` directory.
 
 Directory structure
 -------------------
@@ -47,3 +98,13 @@ There are four subpackages:
 - cuds -- to hold all the native cuds implementations
 - io -- to hold the io specific code
 - bench -- holds basic benchmarking code
+- examples -- holds SimPhoNy example code
+- doc -- Documentation related files
+
+  - source -- Sphinx rst source files
+  - build -- Documentation build directory, if documentation has been generated
+    using the ``make`` script in the ``doc`` directory.
+
+
+
+.. _setuptools extras: https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies

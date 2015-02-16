@@ -1,30 +1,32 @@
-"""
-Module for Abstract Mesh class
-
-"""
-
 from abc import ABCMeta, abstractmethod
 
 
 class ABCMesh(object):
-    """Abstract base class for mesh."""
+    """Abstract base class for mesh.
+
+    Attributes
+    ----------
+    name : str
+        name of mesh
+
+    """
 
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get_point(self, uuid):
+    def get_point(self, uid):
         pass
 
     @abstractmethod
-    def get_edge(self, uuid):
+    def get_edge(self, uid):
         pass
 
     @abstractmethod
-    def get_face(self, uuid):
+    def get_face(self, uid):
         pass
 
     @abstractmethod
-    def get_cell(self, uuid):
+    def get_cell(self, uid):
         pass
 
     @abstractmethod
