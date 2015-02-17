@@ -2,7 +2,7 @@ import copy
 
 import tables
 
-from simphony.io.file_particle_container import H5Particles
+from simphony.io.h5_particles import H5Particles
 from simphony.io.file_mesh import FileMesh
 
 
@@ -22,7 +22,7 @@ class H5CUDS(object):
         """
         if not isinstance(handle, tables.File):
             raise ValueError("File should be a Pytable file")
-        self._file = handle
+        self._handle = handle
         self._root = handle.root
 
 
@@ -30,7 +30,7 @@ class H5CUDS(object):
         """Checks if file is valid (i.e. open)
 
         """
-        return self._file is not None and self._file.isopen
+        return self._handle is not None and self._handle.isopen
 
     @classmethod
     def open(cls, filename, mode="a", title=''):
@@ -54,53 +54,50 @@ class H5CUDS(object):
               is being created
 
         """
-        file = tables.open_file(filename, mode, title=title)
+        handle = tables.open_file(filename, mode, title=title)
 
         # create the high-level structure of the cuds file
-        for group in ('particle_container', 'lattice', 'mesh'):
-            if "/" + group not in file:
-                file.create_group('/', group, group)
-        return cls(file)
+        for group in ('particle', 'lattice', 'mesh'):
+            if "/" + group not in handle:
+                handle.create_group('/', group, group)
+        return cls(handle)
 
     def close(self):
         """Closes a file
 
         """
-        self._file.close()
+        self._handle.close()
 
-    def add_particle_container(self, particle_container):
+    def add_particle_container(self, particles):
         """Add particle container to the file.
 
         Parameters
         ----------
-        particle_container : ABCParticleContainer
-            particle container to be added.
+        particles : ABCParticleContainer
+            Particle container to be added.
 
         Returns
         -------
-        FileParticleContainer
-            The particle container newly added to the file. See
-            get_particle_container for more information.
+        particles : H5Particles
+            A newly created container proxying the data in the HDF5 file.
 
         """
-        if particle_container.name in self._file.root.particle_containers:
-            raise ValueError(
-                'Particle container \'{n}\` already exists'.format(
-                    n=particle_container.name))
+        name = particles.name
+        particles_root = self._handle.root.particle
+        if name in particles_root:
+            message = 'Particles container {!r} already exists'
+            raise ValueError(message.format(name))
 
-        group = self._file.create_group(
-            '/particle_containers/', particle_container.name)
-        pc = FileParticleContainer(group, self._file)
+        group = tables.Group(particles_root, name=name, new=True)
+        h5_particles = H5Particles(group)
 
-        if particle_container:
-            # copy the contents of the particle container to the file
-            for particle in particle_container.iter_particles():
-                pc.add_particle(particle)
-            for bond in particle_container.iter_bonds():
-                pc.add_bond(bond)
+        # copy the contents of the particle container to the file
+        for particle in particles.iter_particles():
+            h5_particles.add_particle(particle)
+        for bond in particles.iter_bonds():
+            h5_particles.add_bond(bond)
 
-        self._file.flush()
-        return pc
+        return h5_particles
 
     def add_mesh(self, mesh):
         """Add a mesh to the file.
@@ -120,12 +117,12 @@ class H5CUDS(object):
             See get_mesh for more information.
 
         """
-        if mesh.name in self._file.root.mesh:
+        if mesh.name in self._handle.root.mesh:
             raise ValueError(
                 'Mesh \'{n}\` already exists'.format(n=mesh.name))
 
-        group = self._file.create_group('/mesh/', mesh.name)
-        m = FileMesh(group, self._file)
+        group = self._handle.create_group('/mesh/', mesh.name)
+        m = FileMesh(group, self._handle)
 
         if mesh:
             # copy the contents of the mesh to the file
@@ -138,7 +135,7 @@ class H5CUDS(object):
             for cell in mesh.iter_cells():
                 m.add_cell(cell)
 
-        self._file.flush()
+        self._handle.flush()
         return m
 
     def get_particle_container(self, name):
@@ -155,8 +152,8 @@ class H5CUDS(object):
             name of particle container to return
         """
         try:
-            group = self._file.root.particle_containers._f_get_child(name)
-            return FileParticleContainer(group)
+            group = self._handle.root.particle._f_get_child(name)
+            return H5Particles(group)
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
@@ -175,8 +172,8 @@ class H5CUDS(object):
         """
 
         try:
-            group = self._file.root.mesh._f_get_child(name)
-            m = FileMesh(group, self._file)
+            group = self._handle.root.mesh._f_get_child(name)
+            m = FileMesh(group, self._handle)
             return m
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -191,7 +188,7 @@ class H5CUDS(object):
             name of particle container to delete
         """
         try:
-            pc_node = self._file.root.particle_container._f_get_child(name)
+            pc_node = self._handle.root.particle._f_get_child(name)
             pc_node._f_remove(recursive=True)
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -207,7 +204,7 @@ class H5CUDS(object):
         """
 
         try:
-            m_node = self._file.root.mesh._f_get_child(name)
+            m_node = self._handle.root.mesh._f_get_child(name)
             m_node._f_remove(recursive=True)
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -225,9 +222,8 @@ class H5CUDS(object):
             be iterated over.
 
         """
-        names = copy.deepcopy(names)
         if names is None:
-            for node in self._file.root.particle_containers._f_iter_nodes():
+            for node in self._handle.root.particle._f_iter_nodes():
                 yield self.get_particle_container(node._v_name)
         else:
             for name in names:
@@ -247,7 +243,7 @@ class H5CUDS(object):
         """
 
         if names is None:
-            for mesh_node in self._file.root.mesh._f_iter_nodes():
+            for mesh_node in self._handle.root.mesh._f_iter_nodes():
                 yield self.get_mesh(mesh_node._v_name)
         else:
             for name in names:
