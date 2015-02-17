@@ -1,13 +1,12 @@
-"""
-    Testing for particlesclasses module.
-"""
-
 import unittest
 import uuid
+from functools import partial
 
 from simphony.cuds.particles import Particle, Bond, ParticleContainer
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
+from simphony.io.tests.utils import (
+    compare_particles, create_particles, compare_bonds, create_bonds)
 
 
 class ParticleTestCase(unittest.TestCase):
@@ -30,9 +29,8 @@ class ParticleTestCase(unittest.TestCase):
         self.assertEqual(particle.data, data)
 
     def test_str(self):
-        particle = Particle()
-        total_str = str(particle.uid) + '_' + str(particle.coordinates)
-        self.assertEqual(str(particle), total_str)
+        self.assertEqual(
+            str(Particle()), "uid:None\ncoordinates:(0.0, 0.0, 0.0)\ndata:{}")
 
 
 class BondTestCase(unittest.TestCase):
@@ -59,173 +57,204 @@ class BondTestCase(unittest.TestCase):
         self.assertEqual(str(bond), total_str)
 
 
-class ParticleContainerAddParticlesTestCase(unittest.TestCase):
+class AddParticlesTestCase(unittest.TestCase):
+
     def setUp(self):
-        self.p_list = []
-        for i in xrange(10):
-            self.p_list.append(Particle([i, i*10, i*100]))
-        self.pc = ParticleContainer(name="foo")
+        self.particle_list = create_particles()
+        self.container = self.container_factory('foo')
+        self.ids = [
+            self.container.add_particle(particle)
+            for particle in self.particle_list]
+
+    def container_factory(self, name):
+        return ParticleContainer(name=name)
 
     def test_has_particle(self):
-        uid = self.pc.add_particle(self.p_list[0])
-        self.assertTrue(self.pc.has_particle(uid))
-        self.assertFalse(self.pc.has_particle(uuid.UUID(int=1234)))
+        container = self.container
+        self.assertTrue(container.has_particle(self.ids[6]))
+        self.assertFalse(container.has_particle(uuid.UUID(int=1234)))
 
     def test_add_particle_ok(self):
-        ids = [
-            self.pc.add_particle(particle) for particle in self.p_list]
-        for index, particle in enumerate(self.p_list):
-            self.assertTrue(self.pc.has_particle(particle.uid))
-            self.assertEqual(particle.uid, ids[index])
+        container = self.container
+        for index, particle in enumerate(self.particle_list):
+            self.assertTrue(container.has_particle(particle.uid))
+            self.assertEqual(particle.uid, self.ids[index])
 
     def test_exception_when_adding_particle_twice(self):
-        for particle in self.p_list:
-            self.pc.add_particle(particle)
-        with self.assertRaises(Exception):
-            self.pc.add_particle(self.p_list[0])
+        container = self.container
+        with self.assertRaises(ValueError):
+            container.add_particle(self.particle_list[3])
 
 
-class ParticleContainerManipulatingParticlesTestCase(unittest.TestCase):
+class ManipulatingParticlesTestCase(unittest.TestCase):
+
     def setUp(self):
-        self.p_list = []
-        self.pc = ParticleContainer(name="foo")
-        for i in xrange(10):
-            particle = Particle([i, i*10, i*100], uid=uuid.UUID(int=i))
-            self.p_list.append(particle)
-            self.pc.add_particle(particle)
+        self.addTypeEqualityFunc(
+            Particle, partial(compare_particles, testcase=self))
+        self.maxDiff = None
+        self.particle_list = create_particles()
+        self.container = self.container_factory('foo')
+        self.ids = [
+            self.container.add_particle(particle)
+            for particle in self.particle_list]
+
+    def container_factory(self, name):
+        return ParticleContainer(name=name)
+
+    def test_get_particle(self):
+        container = self.container
+        for uid, particle in map(None, self.ids, self.particle_list):
+            self.assertEqual(container.get_particle(uid), particle)
 
     def test_update_particle(self):
-        particle = self.pc.get_particle(self.p_list[1].uid)
+        container = self.container
+        particle = container.get_particle(self.ids[2])
         particle.coordinates = (123, 456, 789)
-        part_coords = particle.coordinates
-        self.pc.update_particle(particle)
-        new_particle = self.pc.get_particle(particle.uid)
-        self.assertTrue(new_particle is not particle)
-        self.assertEqual(particle.uid, new_particle.uid)
-        self.assertEqual(part_coords, new_particle.coordinates)
-        self.assertEqual(particle.data, new_particle.data)
+        container.update_particle(particle)
+        retrieved = container.get_particle(particle.uid)
+        self.assertEqual(retrieved, particle)
 
     def test_exception_when_update_particle_when_wrong_id(self):
+        container = self.container
+        particle = Particle(uid=uuid.uuid4())
+        with self.assertRaises(ValueError):
+            container.update_particle(particle)
         particle = Particle()
-        with self.assertRaises(KeyError):
-            self.pc.update_particle(particle)
+        with self.assertRaises(ValueError):
+            container.update_particle(particle)
 
     def test_remove_particle(self):
-        particle = self.p_list[0]
-        self.pc.remove_particle(particle.uid)
-        self.assertFalse(self.pc.has_particle(particle.uid))
+        container = self.container
+        particle = self.particle_list[0]
+        container.remove_particle(particle.uid)
+        self.assertFalse(container.has_particle(particle.uid))
 
     def test_exception_when_removing_particle_with_bad_id(self):
+        container = self.container
         with self.assertRaises(KeyError):
-            self.pc.remove_particle(uuid.UUID(int=23325))
+            container.remove_particle(uuid.UUID(int=23325))
+        with self.assertRaises(KeyError):
+            container.remove_particle(None)
 
     def test_iter_particles_when_passing_ids(self):
-        particle_ids = [p.uid for p in self.p_list[::2]]
-        iterated_ids = [
-            particle.uid for particle in self.pc.iter_particles(particle_ids)]
-        self.assertEqual(particle_ids, iterated_ids)
+        particles = [particle for particle in self.particle_list[::2]]
+        ids = [particle.uid for particle in particles]
+        iterated_particles = [
+            particle for particle in self.container.iter_particles(ids)]
+        for particle, reference in map(None, iterated_particles, particles):
+            self.assertEqual(particle, reference)
 
     def test_iter_all_particles(self):
-        particle_ids = [p.uid for p in self.p_list]
-        iterated_ids = [
-            particle.uid for particle in self.pc.iter_particles()]
+        particles = {particle.uid: particle for particle in self.particle_list}
+        iterated_particles = [
+            particle for particle in self.container.iter_particles()]
         # The order of iteration is not important in this case.
-        self.assertItemsEqual(particle_ids, iterated_ids)
+        self.assertEqual(len(particles), len(iterated_particles))
+        for particle in iterated_particles:
+            self.assertEqual(particle, particles[particle.uid])
 
     def test_exception_on_iter_particles_when_passing_wrong_ids(self):
-        ids = [particle.uid for particle in self.p_list]
+        ids = [particle.uid for particle in self.particle_list]
         ids.append(uuid.UUID(int=20))
         with self.assertRaises(KeyError):
-            for particle in self.pc.iter_particles(ids):
-                last_id = particle.uid
-                continue
-        self.assertEqual(last_id, self.p_list[-1].uid)
+            for particle in self.container.iter_particles(ids):
+                pass
+        self.assertEqual(particle.uid, self.particle_list[-1].uid)
 
 
-class ParticleContainerAddBondsTestCase(unittest.TestCase):
+class AddBondsTestCase(unittest.TestCase):
+
     def setUp(self):
-        self.p_list = []
-        self.b_list = []
-        for i in xrange(10):
-            self.b_list.append(
-                Bond([
-                    uuid.UUID(int=i),
-                    uuid.UUID(int=i + 1),
-                    uuid.UUID(int=i+2)]))
-        self.pc = ParticleContainer(name="foo")
+        self.bond_list = create_bonds()
+        self.container = self.container_factory("foo")
+        self.ids = [
+            self.container.add_bond(bond) for bond in self.bond_list]
+
+    def container_factory(self, name):
+        return ParticleContainer(name=name)
 
     def test_has_bond(self):
-        uid = self.pc.add_bond(self.b_list[0])
-        self.assertTrue(self.pc.has_bond(uid))
-        self.assertFalse(self.pc.has_bond(uuid.UUID(int=2122)))
+        container = self.container
+        self.assertTrue(container.has_bond(self.ids[2]))
+        self.assertFalse(container.has_bond(uuid.UUID(int=2122)))
 
     def test_add_bond(self):
-        ids = [self.pc.add_bond(bond) for bond in self.b_list]
-        for index, bond in enumerate(self.p_list):
-            self.assertTrue(self.pc.has_bond(bond.id))
-            self.assertEqual(bond.uid, ids[index])
+        for index, bond in enumerate(self.bond_list):
+            self.assertTrue(self.container.has_bond(bond.uid))
+            self.assertEqual(bond.uid, self.ids[index])
 
     def test_exception_when_adding_bond_twice(self):
-        for bond in self.b_list:
-            self.pc.add_bond(bond)
-        with self.assertRaises(Exception):
-            self.pc.add_bond(self.b_list[0])
+        with self.assertRaises(ValueError):
+            self.container.add_bond(self.bond_list[4])
 
 
-class ParticleContainerManipulatingBondsTestCase(unittest.TestCase):
+class ManipulatedBondsTestCase(unittest.TestCase):
+
     def setUp(self):
-        self.p_list = []
-        self.b_list = []
-        self.pc = ParticleContainer(name="foo")
-        for i in xrange(10):
-            self.p_list.append(Particle([i, i*10, i*100]))
-            self.b_list.append(Bond([1, 2, 3]))
-            self.pc.add_bond(self.b_list[i])
+        self.addTypeEqualityFunc(
+            Bond, partial(compare_bonds, testcase=self))
+        self.bond_list = create_bonds()
+        self.container = self.container_factory("foo")
+        self.ids = [
+            self.container.add_bond(bond) for bond in self.bond_list]
+
+    def container_factory(self, name):
+        return ParticleContainer(name=name)
+
+    def test_get_bond(self):
+        container = self.container
+        for uid, bond in map(None, self.ids, self.bond_list):
+            self.assertEqual(container.get_bond(uid), bond)
 
     def test_update_bond(self):
-        bond = self.pc.get_bond(self.b_list[1].uid)
+        container = self.container
+        bond = container.get_bond(self.ids[1])
         bond.particles = bond.particles[:-1]
-        self.pc.update_bond(bond)
-        new_bond = self.pc.get_bond(bond.uid)
-        self.assertTrue(new_bond is not bond)
-        self.assertEqual(bond.uid, new_bond.uid)
-        self.assertEqual(bond.particles, new_bond.particles)
-        self.assertEqual(bond.data, bond.data)
+        bond.data = DataContainer()
+        container.update_bond(bond)
+        new_bond = container.get_bond(bond.uid)
+        self.assertEqual(new_bond, bond)
+        self.assertNotEqual(new_bond, self.bond_list[1])
 
     def test_exeception_when_updating_bond_with_incorrect_id(self):
         bond = Bond([1, 2])
-        with self.assertRaises(KeyError):
-            self.pc.update_bond(bond)
+        with self.assertRaises(ValueError):
+            self.container.update_bond(bond)
 
     def test_remove_bond(self):
-        bond = self.b_list[0]
-        self.pc.remove_bond(bond.uid)
-        self.assertFalse(self.pc.has_bond(bond.uid))
+        container = self.container
+        uid = self.ids[0]
+        container.remove_bond(uid)
+        self.assertFalse(self.container.has_bond(uid))
 
     def test_exception_removing_bond_with_missing_id(self):
         with self.assertRaises(KeyError):
-            self.pc.remove_bond(uuid.UUID(int=12124124))
+            self.container.remove_bond(uuid.UUID(int=12124124))
 
     def test_iter_bonds_when_passing_ids(self):
-        ids = [b.uid for b in self.b_list[::2]]
-        iterated_ids = [
-            bond.uid for bond in self.pc.iter_bonds(ids)]
-        self.assertEqual(ids, iterated_ids)
+        bonds = [bond for bond in self.bond_list[::2]]
+        ids = [bond.uid for bond in bonds]
+        iterated_bonds = [
+            bond for bond in self.container.iter_bonds(ids)]
+        for bond, reference in map(None, iterated_bonds, bonds):
+            self.assertEqual(bond, reference)
 
     def test_iter_all_bonds(self):
-        bonds_ids = [b.uid for b in self.b_list]
-        iterated_ids = [bond.uid for bond in self.pc.iter_bonds()]
+        bonds = {bonds.uid: bonds for bonds in self.bond_list}
+        iterated_bonds = [
+            bond for bond in self.container.iter_bonds()]
         # The order of iteration is not important in this case.
-        self.assertItemsEqual(bonds_ids, iterated_ids)
+        self.assertEqual(len(bonds), len(bonds))
+        for bond in iterated_bonds:
+            self.assertEqual(bond, bonds[bond.uid])
 
     def test_exception_on_iter_bonds_when_passing_wrong_ids(self):
-        bonds_ids = [bond.uid for bond in self.b_list]
+        bonds_ids = self.ids
         bonds_ids.append(uuid.UUID(int=20))
         with self.assertRaises(KeyError):
-            for bond in self.pc.iter_bonds(bonds_ids):
-                last_id = bond.uid
-                continue
-        self.assertEqual(last_id, self.b_list[-1].uid)
+            for bond in self.container.iter_bonds(bonds_ids):
+                pass
+        self.assertEqual(bond.uid, self.bond_list[-1].uid)
 
 
 if __name__ == '__main__':

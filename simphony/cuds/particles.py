@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
@@ -61,12 +60,12 @@ class ParticleContainer(ABCParticleContainer):
 
         Returns
         -------
-        uid : uuid.UID
+        uid : uuid.UUID
             The id of the added particle.
 
         Raises
         ------
-        Exception when the new particle already exists in the container.
+        ValueError when the new particle already exists in the container.
 
         See Also
         --------
@@ -106,7 +105,7 @@ class ParticleContainer(ABCParticleContainer):
 
         Raises
         ------
-        Exception when the new particle already exists in the container.
+        ValueError when the new particle already exists in the container.
 
         See Also
         --------
@@ -139,7 +138,7 @@ class ParticleContainer(ABCParticleContainer):
 
         Raises
         ------
-        KeyError exception if the particle doesn't exists.
+        ValueError exception if the particle doesn't exists.
 
         See Also
         --------
@@ -176,7 +175,7 @@ class ParticleContainer(ABCParticleContainer):
 
         Raises
         ------
-        KeyError exception if the bond doesn't exists.
+        ValueError exception if the bond doesn't exists.
 
         See Also
         --------
@@ -213,11 +212,7 @@ class ParticleContainer(ABCParticleContainer):
         -------
         A copy of the particle
         """
-        try:
-            particle = self._particles[uid]
-        except KeyError:
-            raise KeyError(
-                'Particle with id {} not found!'.format(uid))
+        particle = self._particles[uid]
         return Particle.from_particle(particle)
 
     def get_bond(self, uid):
@@ -236,11 +231,7 @@ class ParticleContainer(ABCParticleContainer):
         -------
         A copy of the bond
         """
-        try:
-            bond = self._bonds[uid]
-        except KeyError:
-            raise KeyError(
-                'Bond with id {} not found!'.format(uid))
+        bond = self._bonds[uid]
         return Bond.from_bond(bond)
 
     def remove_particle(self, uid):
@@ -274,12 +265,7 @@ class ParticleContainer(ABCParticleContainer):
         or directly
         >>> part_container.remove_particle(uid)
         """
-
-        try:
-            self._remove_element(self._particles, uid)
-        except KeyError:
-            raise KeyError(
-                'Particle with id { } not found!'.format(uid))
+        del self._particles[uid]
 
     def remove_bond(self, uid):
         """Removes the bond with the uid from the container.
@@ -308,12 +294,7 @@ class ParticleContainer(ABCParticleContainer):
         or directly
         >>> part_container.remove_bond(id)
         """
-
-        try:
-            self._remove_element(self._bonds, uid)
-        except KeyError:
-            raise KeyError(
-                'Bond with id { } not found!'.format(uid))
+        del self._bonds[uid]
 
     def iter_particles(self, ids=None):
         """Generator method for iterating over the particles of the container.
@@ -437,10 +418,8 @@ class ParticleContainer(ABCParticleContainer):
 
     def _iter_elements(self, cur_dict, cur_ids, clone):
         for cur_id in cur_ids:
-            try:
-                yield clone(cur_dict[cur_id])
-            except KeyError:
-                raise KeyError('id {} not found!'.format(cur_id))
+            item = cur_dict[cur_id]
+            yield clone(item)
 
     def _iter_all(self, cur_dict, clone):
         for cur_element in cur_dict.itervalues():
@@ -458,28 +437,16 @@ class ParticleContainer(ABCParticleContainer):
                 # Means the element is not in the dict - hence we can add it
                 cur_dict[cur_id] = clone(element)
             else:
-                raise Exception(
-                    pce._PC_errors['ParticleContainer_DuplicatedValue']
-                    + " id: " + str(cur_id))
+                message = "Item with id:{} already exists"
+                raise ValueError(message.format(element))
         return cur_id
 
     def _update_element(self, cur_dict, element, clone):
-        cur_id = element.uid
-        if cur_id in cur_dict:
-            # This means the element IS in the current dictionary
-            # (this should be the standard case...), so we proceed
-            cur_dict[cur_id] = clone(element)
+        uid = element.uid
+        if uid in cur_dict:
+            cur_dict[uid] = clone(element)
         else:
-            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
-                           + " id: " + str(cur_id))
-
-    def _remove_element(self, cur_dict, cur_id):
-        if cur_id in cur_dict:
-            # Element IS in dict, we proceed
-            del cur_dict[cur_id]
-        else:
-            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
-                           + " id: " + str(cur_id))
+            raise ValueError('id: {} does not exist'.format(uid))
 
 
 class Particle(object):
@@ -524,8 +491,8 @@ class Particle(object):
             data=DataContainer(particle.data))
 
     def __str__(self):
-        total_str = "{0}_{1}".format(self.uid, self.coordinates)
-        return total_str
+        template = "uid:{0.uid}\ncoordinates:{0.coordinates}\ndata:{0.data}"
+        return template.format(self)
 
 
 class Bond(object):
