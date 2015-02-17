@@ -25,7 +25,7 @@ class _BondDescription(tables.IsDescription):
     n_particles = tables.Int8Col(pos=3)
 
 
-class H5ParticleTable(MutableMapping):
+class H5ParticleTable(H5CUDSItemTable):
     """ A proxy class to an HDF5 group node with serialised Particles
 
     The class implements the Mutable-Mapping api where each Particle
@@ -46,7 +46,7 @@ class H5ParticleTable(MutableMapping):
 
         """
         super(H5ParticleTable, self).__init__(
-            root, name, record=_ParticleDescription)
+            root, name=name, record=_ParticleDescription)
 
     def _populate(self, row, item):
         """ Populate the row from the Particle.
@@ -65,7 +65,7 @@ class H5ParticleTable(MutableMapping):
             uid=uid, coordinates=row['coordinates'], data=self._data[uid])
 
 
-class H5BondTable(MutableMapping):
+class H5BondTable(H5CUDSItemTable):
     """ A proxy class to an HDF5 group node with serialised Bonds
 
     The class implements the Mutable-Mapping api where each Bond
@@ -85,8 +85,8 @@ class H5BondTable(MutableMapping):
             'bonds'
 
         """
-        super(H5ParticleTable, self).__init__(
-            root, name, record=_BondDescription)
+        super(H5BondTable, self).__init__(
+            root, name=name, record=_BondDescription)
 
     def _populate(self, row, item):
         """ Populate the row from the Particle.
@@ -119,8 +119,8 @@ class H5Particles(ABCParticleContainer):
     """
     def __init__(self, group):
         self._group = group
-        self._particles = H5ParticleTable(group, '_particles')
-        self._bonds = H5BondTable(group, '_bonds')
+        self._particles = H5ParticleTable(group, 'particles')
+        self._bonds = H5BondTable(group, 'bonds')
 
     @property
     def name(self):
@@ -163,17 +163,17 @@ class H5Particles(ABCParticleContainer):
         uid = particle.uid
         if uid is None:
             uid = uuid.uuid4()
-        self._group.particles[uid] = particle
+        self._particles[uid] = particle
         return uid
 
     def update_particle(self, particle):
-        self._particle[particle.uid] = particle
+        self._particles[particle.uid] = particle
 
     def get_particle(self, uid):
-        return self._particle[uid]
+        return self._particles[uid]
 
     def remove_particle(self, uid):
-        del self._particle[uid]
+        del self._particles[uid]
 
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
@@ -216,17 +216,17 @@ class H5Particles(ABCParticleContainer):
         self._bonds[bond.uid] = bond
 
     def get_bond(self, uid):
-        return self._bond[uid]
+        return self._bonds[uid]
 
     def remove_bond(self, uid):
-        del self._bond[uid]
+        del self._bonds[uid]
 
     def iter_bonds(self, ids=None):
         """Get iterator over particles"""
         if ids is None:
-            return iter(self._particles)
+            return iter(self._bonds)
         else:
-            return self._particles.itersequence(ids)
+            return self._bonds.itersequence(ids)
 
     def has_bond(self, uid):
         """Checks if a bond with id "id" exists in the container."""
