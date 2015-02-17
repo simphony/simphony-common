@@ -52,15 +52,14 @@ class H5ParticleTable(H5CUDSItemTable):
         """ Populate the row from the Particle.
 
         """
-        uid = row['uid']
-        self._data[uid] = item.data
+        self._data[item.uid] = item.data
         row['coordinates'] = list(item.coordinates)
 
     def _retrieve(self, row):
         """ Return the DataContainer from a table row instance.
 
         """
-        uid = row['uid']
+        uid = uuid.UUID(hex=row['uid'], version=4)
         return Particle(
             uid=uid, coordinates=row['coordinates'], data=self._data[uid])
 
@@ -163,11 +162,14 @@ class H5Particles(ABCParticleContainer):
         uid = particle.uid
         if uid is None:
             uid = uuid.uuid4()
-        self._particles[uid] = particle
+            particle.uid = uid
+            self._particles.add_unsafe(particle)
+        else:
+            self._particles.add_safe(particle)
         return uid
 
     def update_particle(self, particle):
-        self._particles[particle.uid] = particle
+        self._particles.update_existing(particle)
 
     def get_particle(self, uid):
         return self._particles[uid]

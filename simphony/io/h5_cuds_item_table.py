@@ -45,7 +45,7 @@ class H5CUDSItemTable(MutableMapping):
         """ Return the Particle with the provided id.
 
         """
-        for row in self._table.where(
+        for row in self._items.where(
                 'uid == value',  condvars={'value': uid.hex}):
             return self._retrieve(row)
         else:
@@ -55,8 +55,13 @@ class H5CUDSItemTable(MutableMapping):
     def __setitem__(self, uid, item):
         """ Set the particle in row with item.
 
+        If the uid does not exist in the Table a new row will be appended.
+
         """
-        table = self._table
+        if not hasattr(uid, 'hex'):
+            raise KeyError('{} is not a uuid.UUID'.format(uid))
+
+        table = self._items
         for row in table.where(
                 'uid == value', condvars={'value': uid.hex}):
             self._populate(row, item)
@@ -75,7 +80,10 @@ class H5CUDSItemTable(MutableMapping):
         """ Delete the row.
 
         """
-        table = self._table
+        if not hasattr(uid, 'hex'):
+            raise KeyError('{} is not a uuid.UUID'.format(uid))
+
+        table = self._items
         for row in table.where(
                 'uid == value', condvars={'value': uid.hex}):
             if table.nrows == 1:
@@ -101,7 +109,7 @@ class H5CUDSItemTable(MutableMapping):
         """ The number of rows in the table.
 
         """
-        return self._table.nrows
+        return self._items.nrows
 
     def itersequence(self, sequence):
         """ Iterate over a sequence of row ids.
@@ -114,8 +122,55 @@ class H5CUDSItemTable(MutableMapping):
         """ Iterate over all the rows
 
         """
-        for row in self._table:
+        for row in self._items:
             yield self._retrieve(row)
+
+    def __contains__(self, uid):
+        for row in self._items.where(
+                'uid == value', condvars={'value': uid.hex}):
+            return True
+        else:
+            return False
+
+    def add_unsafe(self, item):
+        """ Add item without checking for a unique uid.
+        """
+        table = self._items
+        row = table.row
+        row['uid'] = item.uid.hex
+        self._populate(row, item)
+        row.append()
+        table.flush()
+
+    def add_safe(self, item):
+        """ Add item while checking for a unique uid.
+        """
+        uid = item.uid
+        table = self._items
+        for row in table.where(
+                'uid == value', condvars={'value': uid.hex}):
+            raise ValueError(
+                'Record (id={id}) already exists'.format(id=uid))
+        else:
+            self.add_unsafe(item)
+
+    def update_existing(self, item):
+        """ Update an item if it already exists.
+        """
+        uid = item.uid
+        if not hasattr(uid, 'hex'):
+            raise ValueError('{} is not a uuid.UUID'.format(uid))
+        table = self._items
+        for row in table.where(
+                'uid == value', condvars={'value': uid.hex}):
+            self._populate(row, item)
+            row.update()
+            # see https://github.com/PyTables/PyTables/issues/11
+            row._flush_mod_rows()
+            return
+        else:
+            message = 'Item with id {} does not exist'
+            raise ValueError(message.format(uid))
 
     @abc.abstractmethod
     def _populate(self, row, item):

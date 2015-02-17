@@ -3,62 +3,107 @@ import os
 import tempfile
 import shutil
 import unittest
+import uuid
 
 from simphony.cuds.particles import ParticleContainer, Particle, Bond
 from simphony.io.h5_cuds import H5CUDS
+from simphony.cuds.tests.abc_check_particle_containers import (
+    ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
+    ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
 
 
-def _convert_to_tuple_list(particle_or_bond_list):
-    converted = []
-    for item in particle_or_bond_list:
-        if isinstance(item, Particle):
-            converted.append((item.uid, item.coordinates))
-        elif isinstance(item, Bond):
-            converted.append((item.uid, item.particles))
-        else:
-            raise Exception('unexpected type: %s' % type(item))
-    return converted
+class TestH5ContainerAddParticles(
+        ContainerAddParticlesCheck, unittest.TestCase):
 
-
-class TestFileParticleContainer(unittest.TestCase):
+    def container_factory(self, name):
+        return self.handle.add_particle_container(
+            ParticleContainer(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-        # configure how equality for bond/particles will be tested
-        self.addTypeEqualityFunc(Particle, self.assertParticleEqual)
-        self.addTypeEqualityFunc(Bond, self.assertBondEqual)
-
-        # create file with empty particle container
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
-        self.file = H5CUDS.open(self.filename)
-        self.pc = self.file.add_particle_container(
-            ParticleContainer(name="test"))
+        self.addCleanup(self.cleanup)
+        self.handle = H5CUDS.open(self.filename)
+        ContainerAddParticlesCheck.setUp(self)
 
-        # create two particles (with unique ids)
-        self.particle_1 = Particle((0.1, 0.4, 5.0), uid=0)
-        self.particle_2 = Particle((0.2, 0.45, 50.0), uid=1)
+    def cleanup(self):
+        if os.path.exists(self.filename):
+            self.handle.close()
+        shutil.rmtree(self.temp_dir)
 
-        # create two bonds (with unique ids)
-        self.bond_1 = Bond((1, 0), uid=0)
-        self.bond_2 = Bond((0, 1), uid=1)
+
+class TestH5ContainerManipulatingParticles(
+        ContainerManipulatingParticlesCheck, unittest.TestCase):
+
+    def container_factory(self, name):
+        return self.handle.add_particle_container(
+            ParticleContainer(name=name))
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        self.handle = H5CUDS.open(self.filename)
+        ContainerManipulatingParticlesCheck.setUp(self)
 
     def tearDown(self):
         if os.path.exists(self.filename):
-            self.file.close()
+            self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def compare_list(self, a, b, order_sensitive=True):
-        # helper method used to tests lists of
-        # particles or bonds
-        a = _convert_to_tuple_list(a)
-        b = _convert_to_tuple_list(b)
-        if order_sensitive:
-            self.assertEqual(a, b)
-        else:
-            self.assertEqual(len(a), len(b))
-            for item in a:
-                self.assertTrue(item in b)
-                b.remove(item)
+
+class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
+
+    def container_factory(self, name):
+        return self.handle.add_particle_container(
+            ParticleContainer(name=name))
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        self.handle = H5CUDS.open(self.filename)
+        ContainerAddBondsCheck.setUp(self)
+
+    def tearDown(self):
+        if os.path.exists(self.filename):
+            self.handle.close()
+        shutil.rmtree(self.temp_dir)
+
+
+class TestH5ContainerManipulatingBonds(
+        ContainerManipulatingBondsCheck):
+
+    def container_factory(self, name):
+        return self.handle.add_particle_container(
+            ParticleContainer(name=name))
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        self.handle = H5CUDS.open(self.filename)
+        ContainerManipulatingBondsCheck.setUp(self)
+
+    def tearDown(self):
+        if os.path.exists(self.filename):
+            self.handle.close()
+        shutil.rmtree(self.temp_dir)
+
+
+class _TestFileParticleContainer(object):
+
+    def setUp(self):
+
+        # create file with empty particle container
+        self.pc = 23
+
+        # create two particles (with unique ids)
+        self.particle_1 = Particle(
+            (0.1, 0.4, 5.0), uid=uuid.UUID(int=0, version=4))
+        self.particle_2 = Particle(
+            (0.2, 0.45, 50.0), uid=uuid.UUID(int=1, version=4))
+
+        # create two bonds (with unique ids)
+        self.bond_1 = Bond((1, 0), uid=uuid.UUID(int=2, version=4))
+        self.bond_2 = Bond((0, 1), uid=uuid.UUID(int=3, version=4))
 
     def test_add_get_particle(self):
         self.pc.add_particle(self.particle_1)
@@ -91,19 +136,23 @@ class TestFileParticleContainer(unittest.TestCase):
         with self.assertRaises(Exception):
             self.pc.get_particle(0)
 
-    def test_update_particle(self):
+    def test_update_particle_throws(self):
         with self.assertRaises(Exception):
             self.pc.update_particle(self.particle_1)
 
-        self.pc.add_particle(self.particle_1)
-        self.pc.add_particle(self.particle_2)
-        p = copy.deepcopy(self.particle_1)
-        p.coordinates = (42, 42, 42)
-        self.pc.update_particle(p)
-        updated_p = self.pc.get_particle(p.uid)
+    def test_update_particle(self):
+        container = self.pc
+        # add particles
+        container.add_particle(self.particle_1)
+        container.add_particle(self.particle_2)
+        particle = Particle.from_particle(self.particle_1)
+        particle.coordinates = (42, 42, 42)
+        particle.data = 5
+        container.update_particle(particle)
+        updated_particle = container.get_particle(particle.uid)
 
-        self.assertEqual(p, updated_p)
-        self.assertNotEqual(p, self.particle_1)
+        self.assertEqual(updated_particle, particle)
+        self.assertNotEqual(particle, self.particle_1)
 
     def test_remove_particle(self):
         with self.assertRaises(ValueError):
@@ -210,28 +259,6 @@ class TestFileParticleContainer(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.pc.get_bond(bond.uid)
 
-    def test_iter_bonds(self):
-        bondsA = [self.bond_1, self.bond_2]
-        for bond in bondsA:
-            self.pc.add_bond(bond)
-
-        # test iterating bonds without giving ids
-        bondsB = list(p for p in self.pc.iter_bonds())
-        self.compare_list(bondsA, bondsB, order_sensitive=False)
-
-        # test iterating bonds by giving ids
-        bondsA = [self.bond_1, self.bond_2]
-        ids1 = list(p.uid for p in bondsA)
-        bondsB = list(p for p in self.pc.iter_bonds(ids1))
-        self.compare_list(bondsA, bondsB)
-
-    def assertParticleEqual(self, a, b, msg=None):
-        self.assertEqual(a.uid, b.uid)
-        self.assertEqual(a.coordinates, b.coordinates)
-
-    def assertBondEqual(self, a, b, msg=None):
-        self.assertEqual(a.uid, b.uid)
-        self.assertEqual(a.particles, b.particles)
 
 if __name__ == '__main__':
     unittest.main()
