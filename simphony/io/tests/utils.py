@@ -6,7 +6,20 @@ from simphony.core.cuba import CUBA
 
 
 def create_data_container(restrict=None):
-    """ Create a data container while respecting the expected data types.
+    """ Create a dummy data container while respecting the expected data types.
+
+    This is a utility function to be used for testing and prototyping.
+
+    Parameters
+    ----------
+    restrict : list
+        The list of CUBA keys to restrict the value population. Default is to
+        use all CUBA keys.
+
+    Returns
+    -------
+    data : DataContainer
+
 
     """
 
