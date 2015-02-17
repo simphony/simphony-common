@@ -3,8 +3,6 @@ import os
 from contextlib import closing
 import shutil
 import tempfile
-
-import tables
 import uuid
 
 from simphony.cuds.particles import Particle, ParticleContainer

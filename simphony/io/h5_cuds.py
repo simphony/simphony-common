@@ -25,7 +25,6 @@ class H5CUDS(object):
         self._handle = handle
         self._root = handle.root
 
-
     def valid(self):
         """Checks if file is valid (i.e. open)
 
@@ -48,14 +47,15 @@ class H5CUDS(object):
               with the same name would be deleted).
             - ``a`` -- Append; an existing file is opened for reading and
               writing, and if the file does not exist it is created.
+            - ``r`` -- ReadOnly; This is a very restrictive mode that
+              will through errors at any attempt to modify the data.
 
         title : str
             Title attribute of root node (only applies to a file which
-              is being created
+              is being created)
 
         """
         handle = tables.open_file(filename, mode, title=title)
-
         # create the high-level structure of the cuds file
         for group in ('particle', 'lattice', 'mesh'):
             if "/" + group not in handle:
@@ -83,7 +83,7 @@ class H5CUDS(object):
 
         """
         name = particles.name
-        particles_root = self._handle.root.particle
+        particles_root = self._root.particle
         if name in particles_root:
             message = 'Particles container {!r} already exists'
             raise ValueError(message.format(name))
@@ -117,7 +117,7 @@ class H5CUDS(object):
             See get_mesh for more information.
 
         """
-        if mesh.name in self._handle.root.mesh:
+        if mesh.name in self._root.mesh:
             raise ValueError(
                 'Mesh \'{n}\` already exists'.format(n=mesh.name))
 
@@ -152,7 +152,7 @@ class H5CUDS(object):
             name of particle container to return
         """
         try:
-            group = self._handle.root.particle._f_get_child(name)
+            group = self._root.particle._f_get_child(name)
             return H5Particles(group)
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -172,7 +172,7 @@ class H5CUDS(object):
         """
 
         try:
-            group = self._handle.root.mesh._f_get_child(name)
+            group = self._root.mesh._f_get_child(name)
             m = FileMesh(group, self._handle)
             return m
         except tables.NoSuchNodeError:
@@ -188,7 +188,7 @@ class H5CUDS(object):
             name of particle container to delete
         """
         try:
-            pc_node = self._handle.root.particle._f_get_child(name)
+            pc_node = self._root.particle._f_get_child(name)
             pc_node._f_remove(recursive=True)
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -204,7 +204,7 @@ class H5CUDS(object):
         """
 
         try:
-            m_node = self._handle.root.mesh._f_get_child(name)
+            m_node = self._root.mesh._f_get_child(name)
             m_node._f_remove(recursive=True)
         except tables.NoSuchNodeError:
             raise ValueError(
@@ -223,7 +223,7 @@ class H5CUDS(object):
 
         """
         if names is None:
-            for node in self._handle.root.particle._f_iter_nodes():
+            for node in self._root.particle._f_iter_nodes():
                 yield self.get_particle_container(node._v_name)
         else:
             for name in names:
@@ -241,9 +241,8 @@ class H5CUDS(object):
             be iterated over.
 
         """
-
         if names is None:
-            for mesh_node in self._handle.root.mesh._f_iter_nodes():
+            for mesh_node in self._root.mesh._f_iter_nodes():
                 yield self.get_mesh(mesh_node._v_name)
         else:
             for name in names:

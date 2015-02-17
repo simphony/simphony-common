@@ -58,7 +58,7 @@ class BondTestCase(unittest.TestCase):
 
 
 class TestNativeContainerAddParticles(
-        ContainerAddParticlesCheck, unittest.TestCase, ):
+        ContainerAddParticlesCheck, unittest.TestCase):
 
     def container_factory(self, name):
         return ParticleContainer(name=name)
