@@ -1,12 +1,10 @@
-import abc
 import uuid
-from collections import MutableMapping
 
 import tables
+import numpy
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
 from simphony.cuds.particles import Particle, Bond
-from simphony.io.data_container_table import DataContainerTable
 from simphony.io.h5_cuds_item_table import H5CUDSItemTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
@@ -92,18 +90,20 @@ class H5BondTable(H5CUDSItemTable):
 
         """
         uid = row['uid']
+        self._data[item.uid] = item.data
         particles = item.particles
         number_of_items = len(item.particles)
         row['n_particles'] = number_of_items
-        row['particles'][:number_of_items] = [
-            buffer(uuid.bytes) for uuid in particles]
-        self._data[uid] = item.data
+        ids = row['particles']
+        for index, uid in enumerate(particles):
+            ids[index] = numpy.frombuffer(uid.bytes, dtype=numpy.uint8)
+        row['particles'] = ids
 
     def _retrieve(self, row):
         """ Return the DataContainer from a table row instance.
 
         """
-        uid = row['uid']
+        uid = uuid.UUID(hex=row['uid'], version=4)
         number_of_items = row['n_particles']
         particles = [
             uuid.UUID(bytes=buffer(value), version=4)
@@ -211,11 +211,14 @@ class H5Particles(ABCParticleContainer):
         uid = bond.uid
         if uid is None:
             uid = uuid.uuid4()
-        self._bonds[uid] = bond
+            bond.uid = uid
+            self._bonds.add_unsafe(bond)
+        else:
+            self._bonds.add_safe(bond)
         return uid
 
     def update_bond(self, bond):
-        self._bonds[bond.uid] = bond
+        self._bonds.update_existing(bond)
 
     def get_bond(self, uid):
         return self._bonds[uid]
