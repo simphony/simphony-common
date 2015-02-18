@@ -1,11 +1,9 @@
-import copy
 import os
 import tempfile
 import shutil
 import unittest
-import uuid
 
-from simphony.cuds.particles import ParticleContainer, Particle, Bond
+from simphony.cuds.particles import ParticleContainer
 from simphony.io.h5_cuds import H5CUDS
 from simphony.cuds.tests.abc_check_particle_containers import (
     ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
@@ -89,6 +87,7 @@ class TestH5ContainerManipulatingBonds(
         if os.path.exists(self.filename):
             self.handle.close()
         shutil.rmtree(self.temp_dir)
+
 
 if __name__ == '__main__':
     unittest.main()

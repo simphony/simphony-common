@@ -1,5 +1,4 @@
 import uuid
-from random import sample
 
 import numpy
 from numpy.testing import assert_equal

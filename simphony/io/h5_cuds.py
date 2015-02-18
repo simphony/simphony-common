@@ -1,5 +1,3 @@
-import copy
-
 import tables
 
 from simphony.io.h5_particles import H5Particles
