@@ -2,7 +2,7 @@ import abc
 import uuid
 from functools import partial
 
-from simphony.io.tests.utils import (
+from simphony.testing.utils import (
     compare_particles, create_particles, compare_bonds, create_bonds,
     create_data_container)
 from simphony.cuds.particles import Particle, Bond
