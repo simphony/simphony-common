@@ -3,7 +3,8 @@ import uuid
 from functools import partial
 
 from simphony.io.tests.utils import (
-    compare_particles, create_particles, compare_bonds, create_bonds)
+    compare_particles, create_particles, compare_bonds, create_bonds,
+    create_data_container)
 from simphony.cuds.particles import Particle, Bond
 from simphony.core.data_container import DataContainer
 
@@ -35,6 +36,17 @@ class ContainerAddParticlesCheck(object):
             self.assertTrue(container.has_particle(particle.uid))
             self.assertEqual(particle.uid, self.ids[index])
 
+    def test_add_particle_with_id(self):
+        container = self.container
+        uid = uuid.uuid4()
+        particle = Particle(
+            uid=uid,
+            coordinates=(1, 2, -3),
+            data=create_data_container())
+        particle_uid = container.add_particle(particle)
+        self.assertEqual(particle_uid, uid)
+        self.assertTrue(container.has_particle(uid))
+
     def test_exception_when_adding_particle_twice(self):
         container = self.container
         with self.assertRaises(ValueError):
@@ -55,6 +67,7 @@ class ContainerManipulatingParticlesCheck(object):
             Particle, partial(compare_particles, testcase=self))
         self.maxDiff = None
         self.particle_list = create_particles()
+        self.particle_list[0].uid = uuid.uuid4()
         self.container = self.container_factory('foo')
         self.ids = [
             self.container.add_particle(particle)
@@ -146,6 +159,17 @@ class ContainerAddBondsCheck(object):
             self.assertTrue(self.container.has_bond(bond.uid))
             self.assertEqual(bond.uid, self.ids[index])
 
+    def test_add_bond_with_id(self):
+        container = self.container
+        uid = uuid.uuid4()
+        bond = Bond(
+            uid=uid,
+            particles=[uuid.uuid4(), uuid.uuid4()],
+            data=create_data_container())
+        bond_uid = container.add_bond(bond)
+        self.assertEqual(bond_uid, uid)
+        self.assertTrue(container.has_bond(uid))
+
     def test_exception_when_adding_bond_twice(self):
         with self.assertRaises(ValueError):
             self.container.add_bond(self.bond_list[4])
@@ -164,6 +188,7 @@ class ContainerManipulatingBondsCheck(object):
         self.addTypeEqualityFunc(
             Bond, partial(compare_bonds, testcase=self))
         self.bond_list = create_bonds()
+        self.bond_list[0].uid = uuid.uuid4()
         self.container = self.container_factory("foo")
         self.ids = [
             self.container.add_bond(bond) for bond in self.bond_list]
