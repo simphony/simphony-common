@@ -13,7 +13,7 @@ def compare_bonds(bond, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(bond.uid, reference.uid)
     self.assertEqual(bond.particles, reference.particles)
-    compare_data_containers(bond.data, bond.data, testcase=self)
+    compare_data_containers(bond.data, reference.data, testcase=self)
 
 
 def compare_particles(particle, reference, msg=None, testcase=None):
