@@ -5,7 +5,7 @@ import numpy
 
 from simphony.cuds.abstractparticles import ABCParticleContainer
 from simphony.cuds.particles import Particle, Bond
-from simphony.io.h5_cuds_item_table import H5CUDSItemTable
+from simphony.io.h5_cuds_items import H5CUDSItems
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
 
@@ -23,7 +23,7 @@ class _BondDescription(tables.IsDescription):
     n_particles = tables.Int8Col(pos=3)
 
 
-class H5ParticleTable(H5CUDSItemTable):
+class H5ParticleItems(H5CUDSItems):
     """ A proxy class to an HDF5 group node with serialised Particles
 
     The class implements the Mutable-Mapping api where each Particle
@@ -43,7 +43,7 @@ class H5ParticleTable(H5CUDSItemTable):
             'particles'
 
         """
-        super(H5ParticleTable, self).__init__(
+        super(H5ParticleItems, self).__init__(
             root, name=name, record=_ParticleDescription)
 
     def _populate(self, row, item):
@@ -62,7 +62,7 @@ class H5ParticleTable(H5CUDSItemTable):
             uid=uid, coordinates=row['coordinates'], data=self._data[uid])
 
 
-class H5BondTable(H5CUDSItemTable):
+class H5BondItems(H5CUDSItems):
     """ A proxy class to an HDF5 group node with serialised Bonds
 
     The class implements the Mutable-Mapping api where each Bond
@@ -82,7 +82,7 @@ class H5BondTable(H5CUDSItemTable):
             'bonds'
 
         """
-        super(H5BondTable, self).__init__(
+        super(H5BondItems, self).__init__(
             root, name=name, record=_BondDescription)
 
     def _populate(self, row, item):
@@ -118,8 +118,8 @@ class H5Particles(ABCParticleContainer):
     """
     def __init__(self, group):
         self._group = group
-        self._particles = H5ParticleTable(group, 'particles')
-        self._bonds = H5BondTable(group, 'bonds')
+        self._particles = H5ParticleItems(group, 'particles')
+        self._bonds = H5BondItems(group, 'bonds')
 
     @property
     def name(self):
