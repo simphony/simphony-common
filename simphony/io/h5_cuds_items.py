@@ -6,7 +6,7 @@ import tables
 from simphony.io.data_container_table import DataContainerTable
 
 
-class H5CUDSItemTable(MutableMapping):
+class H5CUDSItems(MutableMapping):
     """ A proxy class to an HDF5 group node with serialised CUDS items.
 
     The class implements the Mutable-Mapping api where each item instance
@@ -19,27 +19,28 @@ class H5CUDSItemTable(MutableMapping):
         """ A PyTables table is opened/created and the object is valid.
 
         """
-        return self._table is not None
+        return getattr(self, '_items', None) is not None
 
     def __init__(self, root, record, name='items'):
-        """ Create a proxy object for an HDF5 backed particle table.
+        """ Create a proxy object for an HDF5 backed items container.
 
         Parameters
         ----------
         root : tables.Group
-            The root node where to add the particle table structures.
+            The root node where to add the items and data table structures.
         name : string
             The name of the new group that will be created. Default name is
-            'items'
+            'items'.
 
         """
-        handle = root._v_file
-        self._parent = parent = root
-        if hasattr(parent, name):
-            self._items = getattr(parent, name)
+        if hasattr(root, name):
+            self._group = getattr(root, name)
+            self._items = self._group.items
         else:
-            self._items = handle.create_table(parent, name, record)
-        self._data = DataContainerTable(root, name='data')
+            handle = root._v_file
+            self._group = handle.create_group(root, name)
+            self._items = handle.create_table(self._group, 'items', record)
+        self._data = DataContainerTable(self._group, name='data')
 
     def __getitem__(self, uid):
         """ Return the Particle with the provided id.
@@ -55,11 +56,16 @@ class H5CUDSItemTable(MutableMapping):
     def __setitem__(self, uid, item):
         """ Set the particle in row with item.
 
-        If the uid does not exist in the Table a new row will be appended.
+        - If the uid does not exist in the Table a new row will be appended.
+        - If the ``item.uid`` is ``None`` then ``item.uid = uid``.
+
 
         """
         if not hasattr(uid, 'hex'):
             raise KeyError('{} is not a uuid.UUID'.format(uid))
+
+        if item.uid is None:
+            item.uid = uid
 
         table = self._items
         for row in table.where(
@@ -87,17 +93,14 @@ class H5CUDSItemTable(MutableMapping):
         for row in table.where(
                 'uid == value', condvars={'value': uid.hex}):
             if table.nrows == 1:
-                name = table._v_name
                 record = table.description
                 # pytables due to hdf5 limitations does
                 # not support removing the last row of table
                 # so we delete the table and
                 # create new empty table in this situation
                 table.remove()
-                self._data.remove()
-                parent = self._parent
-                self._table = tables.Table(parent, name, record)
-                self._data = DataContainerTable(parent, name='data')
+                self._items = tables.Table(self._group, 'items', record)
+                del self._data[uid]
             else:
                 table.remove_row(row.nrow)
             break
@@ -108,8 +111,17 @@ class H5CUDSItemTable(MutableMapping):
     def __len__(self):
         """ The number of rows in the table.
 
+        A runtime error is raised when the number of rows in the items and data
+        tables is not equal.
+
         """
-        return self._items.nrows
+        nrows = self._items.nrows
+        if len(self._data) != nrows:
+            message = (
+                "internal items and data tables contain different number of "
+                "items:{} != {}")
+            raise RuntimeError(message.format(nrows, len(self._data)))
+        return nrows
 
     def itersequence(self, sequence):
         """ Iterate over a sequence of row ids.
@@ -134,6 +146,10 @@ class H5CUDSItemTable(MutableMapping):
 
     def add_unsafe(self, item):
         """ Add item without checking for a unique uid.
+
+        .. note::
+          The item is expected to already have a uid set.
+
         """
         table = self._items
         row = table.row
@@ -144,6 +160,10 @@ class H5CUDSItemTable(MutableMapping):
 
     def add_safe(self, item):
         """ Add item while checking for a unique uid.
+
+        .. note::
+          The item is expected to already have a uid set.
+
         """
         uid = item.uid
         table = self._items
