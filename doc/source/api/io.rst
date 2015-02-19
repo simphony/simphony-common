@@ -12,7 +12,8 @@ The CUDS to HDF5 file adapters.
    ~h5_cuds.H5CUDS
    ~data_container_table.DataContainerTable
    ~indexed_data_container_table.IndexedDataContainerTable
-   ~file_particle_container.FileParticleContainer
+   ~h5_particles.H5Particles
+   ~h5_cuds_items.H5CUDSItems
 
 .. rubric:: Table descriptions
 
@@ -29,17 +30,22 @@ The CUDS to HDF5 file adapters.
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: simphony.io.h5_particles
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: simphony.io.h5_cuds_items
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 .. automodule:: simphony.io.data_container_table
    :members:
    :undoc-members:
    :show-inheritance:
 
 .. automodule:: simphony.io.indexed_data_container_table
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: simphony.io.file_particle_container
    :members:
    :undoc-members:
    :show-inheritance:
