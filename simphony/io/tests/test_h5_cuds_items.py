@@ -8,13 +8,12 @@ from contextlib import closing, contextmanager
 from collections import OrderedDict
 
 import tables
-from numpy.testing import assert_equal
 
 from simphony.io.h5_cuds_items import H5CUDSItems
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.testing.utils import (
-    create_data_container, dummy_cuba_value, compare_data_containers)
+    create_data_container, compare_data_containers)
 
 
 class _DummyRecord(tables.IsDescription):
