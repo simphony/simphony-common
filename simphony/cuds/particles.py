@@ -459,8 +459,8 @@ class ParticleContainer(ABCParticleContainer):
                 cur_dict[cur_id] = clone(element)
             else:
                 raise Exception(
-                    pce._PC_errors['ParticleContainer_DuplicatedValue']
-                    + " id: " + str(cur_id))
+                    pce._PC_errors['ParticleContainer_DuplicatedValue'] +
+                    " id: " + str(cur_id))
         return cur_id
 
     def _update_element(self, cur_dict, element, clone):
@@ -470,16 +470,16 @@ class ParticleContainer(ABCParticleContainer):
             # (this should be the standard case...), so we proceed
             cur_dict[cur_id] = clone(element)
         else:
-            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
-                           + " id: " + str(cur_id))
+            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue'] +
+                           " id: " + str(cur_id))
 
     def _remove_element(self, cur_dict, cur_id):
         if cur_id in cur_dict:
             # Element IS in dict, we proceed
             del cur_dict[cur_id]
         else:
-            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue']
-                           + " id: " + str(cur_id))
+            raise KeyError(pce._PC_errors['ParticleContainer_UnknownValue'] +
+                           " id: " + str(cur_id))
 
 
 class Particle(object):
