@@ -474,38 +474,3 @@
   number: 67
   shape: [1]
   type: double
-- description: Incompressible
-  domain: [FEM, FVM]
-  key: INCOMPRESSIBLE
-  name: Incompressible
-  number: 68
-  shape: [1]
-  type: string
-- description: Compressible
-  domain: [FEM, FVM]
-  key: COMPRESSIBLE
-  name: Compressible
-  number: 69
-  shape: [1]
-  type: string
-- description: Volume of fluid method
-  domain: [FEM, FVM]
-  key: VOF
-  name: VolumeOfFluid
-  number: 70
-  shape: [1]
-  type: string
-- description: Laminar model
-  domain: [FEM, FVM]
-  key: LAMINAR_MODEL
-  name: LaminarModel
-  number: 71
-  shape: [1]
-  type: string
-- description: GE
-  domain: [DEM, FEM, FVM]
-  key: GE
-  name: GE
-  number: 72
-  shape: [1]
-  type: string
