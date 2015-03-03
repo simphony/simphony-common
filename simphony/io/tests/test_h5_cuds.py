@@ -7,6 +7,7 @@ import uuid
 
 from simphony.cuds.particles import Particle, ParticleContainer
 from simphony.cuds.mesh import Point, Mesh
+from simphony.cuds.lattice import Lattice
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.file_mesh import FileMesh
 from simphony.io.h5_particles import H5Particles
@@ -345,6 +346,40 @@ class TestH5CUDS(unittest.TestCase):
             # and we should be able to use the no-longer used
             # "foo" name when adding another mesh
             m = handle.add_mesh(Mesh(name="foo"))
+
+    def test_add_get_delete_lattice(self):
+        lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename, 'w')) as handle:
+            handle.add_lattice(lat)
+            lat2 = handle.get_lattice('test_lattice')
+
+            self.assertEqual(lat2.name, 'test_lattice')
+
+            for N in lat2.iter_nodes():
+                self.assertItemsEqual(N.data, lat.get_node(N.index).data)
+
+            handle.delete_lattice('test_lattice')
+            numlat = 0
+            for N in handle.iter_lattices():
+                numlat += 1
+            self.assertEqual(numlat, 0)
+
+    def test_iter_lattices(self):
+        lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        lat2 = Lattice('test_lattice2', 'cubic', (1.0, 1.0, 1.0),
+                       (3, 3, 3), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename, 'w')) as handle:
+            handle.add_lattice(lat)
+            handle.add_lattice(lat2)
+            for lat in handle.iter_lattices():
+                self.assertTrue(lat.name in ['test_lattice', 'test_lattice2'])
 
 
 if __name__ == '__main__':

@@ -14,7 +14,6 @@ class LatticeNode:
         Node index coordinate
     data : DataContainer
 
-
     """
     def __init__(self, index, data=None):
         self.index = tuple(index)
@@ -26,22 +25,25 @@ class LatticeNode:
 
 
 class Lattice(ABCLattice):
-    """
-    A Bravais lattice;
-    stores references to data containers (node related data).
+    """A Bravais lattice
 
-    Parameters
-    ----------
-    name : str
-    type : str
+    Stores references to data containers (node related data).
+
+    Attributes:
+    -----------
+    name : string
+        name of the lattice
+    type : string
         Bravais lattice type (should agree with the base_vect below).
     base_vect : D x float
         defines a Bravais lattice (an alternative for primitive vectors).
-    size : tuple of D x size
+    size : tuple of D x int
         number of lattice nodes (in the direction of each axis).
     origin : D x float
+        origin of lattice
 
     """
+
     def __init__(self, name, type, base_vect, size, origin):
         self.name = name
         self._type = type
@@ -50,28 +52,12 @@ class Lattice(ABCLattice):
         self._origin = np.array(origin, dtype=np.float)
         self._dcs = np.empty(size, dtype=object)
 
-    @property
-    def type(self):
-        return self._type
-
-    @property
-    def base_vect(self):
-        return self._base_vect
-
-    @property
-    def size(self):
-        return self._size
-
-    @property
-    def origin(self):
-        return self._origin
-
     def get_node(self, index):
         """Get a copy of the node corresponding to the given index.
 
         Parameters
         ----------
-        index: tuple of D x int (node index coordinate)
+        index : tuple of D x int (node index coordinate)
 
         Returns
         -------
@@ -86,7 +72,7 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        lat_node: reference to a LatticeNode object
+        lat_node : reference to a LatticeNode object
             data copied from the given node
 
         """
@@ -98,7 +84,7 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        indices: iterable set of D x int, optional
+        indices : iterable set of D x int, optional
             node index coordinates
 
         Returns
@@ -127,18 +113,34 @@ class Lattice(ABCLattice):
         """
         return self.origin + self.base_vect*np.array(index)
 
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def base_vect(self):
+        return self._base_vect
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def origin(self):
+        return self._origin
+
 
 def make_hexagonal_lattice(name, h, size, origin=(0, 0)):
     """Create and return a 2D hexagonal lattice.
 
     Parameters
     ----------
-    name: str
-    h: float
+    name : str
+    h : float
         lattice spacing.
-    size: 2 x int
+    size : 2 x int
         number of lattice nodes (in each axis direction).
-    origin: 2 x float (default value = (0,0))
+    origin : 2 x float (default value = (0,0))
         lattice origin.
 
     Returns
@@ -155,12 +157,12 @@ def make_square_lattice(name, h, size, origin=(0, 0)):
 
     Parameters
     ----------
-    name: str
-    h: float
+    name : str
+    h : float
         lattice spacing.
-    size: 2 x int
+    size : 2 x int
         number of lattice nodes (in each axis direction).
-    origin: 2 x float (default value = (0,0))
+    origin : 2 x float (default value = (0,0))
         lattice origin.
 
     Returns
