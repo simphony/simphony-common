@@ -36,7 +36,6 @@ class FileLattice(ABCLattice):
     """
     def __init__(self, file, name, type, base_vect, size, origin,
                  record=None):
-        self.name = name
         self._type = type
         self._base_vect = np.array(base_vect, dtype=np.float)
         self._size = tuple(size)
@@ -46,7 +45,7 @@ class FileLattice(ABCLattice):
         self._record = record
 
         # If Lattice not in file, create a lattice
-        if self.name not in self._file.root.lattice:
+        if name not in self._file.root.lattice:
             if self._record is None:
                 # If record not specified use NoUIDRecord
                 self._record = NoUIDRecord
@@ -64,7 +63,7 @@ class FileLattice(ABCLattice):
 
         # If Lattice already in file, return a reference
         else:
-            self._table = IndexedDataContainerTable(self._group, self.name)
+            self._table = IndexedDataContainerTable(self._group, name)
             lattice = self._group._f_getChild(self.name)
             self._type = lattice.attrs.type
             self._base_vect = lattice.attrs.base_vect
@@ -148,3 +147,11 @@ class FileLattice(ABCLattice):
     @property
     def origin(self):
         return self._origin
+
+    @property
+    def name(self):
+        return self._table._table._v_name
+
+    @name.setter
+    def name(self, value):
+        self._table._table._f_rename(value)

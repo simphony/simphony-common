@@ -381,6 +381,33 @@ class TestH5CUDS(unittest.TestCase):
             for lat in handle.iter_lattices():
                 self.assertTrue(lat.name in ['test_lattice', 'test_lattice2'])
 
+    def test_lattice_rename(self):
+        lat = Lattice('foo', 'cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            m = handle.add_lattice(lat)
+            m.name = "bar"
+            self.assertEqual("bar", m.name)
+
+            # we should not be able to use the old name "foo"
+            with self.assertRaises(ValueError):
+                handle.get_lattice("foo")
+            with self.assertRaises(ValueError):
+                handle.delete_lattice("foo")
+            with self.assertRaises(ValueError):
+                [_ for _ in handle.iter_lattices(names=["foo"])]
+
+            # we should be able to access using the new "bar" name
+            m_bar = handle.get_lattice("bar")
+            self.assertEqual("bar", m_bar.name)
+
+            # and we should be able to use the no-longer used
+            # "foo" name when adding another lattice
+            m = handle.add_lattice(lat)
+
+
 
 if __name__ == '__main__':
     unittest.main()
