@@ -8,6 +8,8 @@ import numpy
 from simphony.cuds.lattice import Lattice
 from simphony.cuds.lattice import LatticeNode
 from simphony.io.file_lattice import FileLattice
+from numpy.testing import assert_array_equal
+from numpy.testing import assert_equal
 
 from simphony.core.cuba import CUBA
 
@@ -71,11 +73,11 @@ class TestFileLattice(unittest.TestCase):
         """
         self.assertEqual(self.filelattice.name, 'test_lattice')
         self.assertEqual(self.filelattice.type, 'cubic')
-        self.assertItemsEqual(self.filelattice.base_vect,
-                              numpy.array((1.0, 1.0, 1.0)))
+        assert_array_equal(self.filelattice.base_vect,
+                           numpy.array((1.0, 1.0, 1.0)))
         self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
-        self.assertItemsEqual(self.filelattice.origin,
-                              numpy.array((0.0, 0.0, 0.0)))
+        assert_array_equal(self.filelattice.origin,
+                           numpy.array((0.0, 0.0, 0.0)))
 
     def test_file_lattice_constructed_from_table_existing_in_file(self):
         """ Checks that FileLattice constructed from a known table already
@@ -87,11 +89,11 @@ class TestFileLattice(unittest.TestCase):
 
         self.assertEqual(self.filelattice.name, 'test_lattice')
         self.assertEqual(self.filelattice.type, 'cubic')
-        self.assertItemsEqual(self.filelattice.base_vect,
-                              numpy.array((1.0, 1.0, 1.0)))
+        assert_array_equal(self.filelattice.base_vect,
+                           numpy.array((1.0, 1.0, 1.0)))
         self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
-        self.assertItemsEqual(self.filelattice.origin,
-                              numpy.array((0.0, 0.0, 0.0)))
+        assert_array_equal(self.filelattice.origin,
+                           numpy.array((0.0, 0.0, 0.0)))
 
     def test_get_node(self):
         """ Check that a LatticeNode can be retrieved correctly
@@ -103,7 +105,7 @@ class TestFileLattice(unittest.TestCase):
         self.assertItemsEqual(N.index, (3, 3, 3))
 
         for key, value in self.lattice.get_node((3, 3, 3)).data.iteritems():
-            self.assertEqual(N.data[key], value)
+            assert_equal(N.data[key], value)
 
     def test_node_iterator(self):
         """ Checks the node iterator
@@ -118,25 +120,29 @@ class TestFileLattice(unittest.TestCase):
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
             self.assertEqual(N.index, M.index)
-            self.assertItemsEqual(N.data, M.data)
+            self.assertEqual(len(N.data), len(M.data))
+            for key in N.data:
+                self.assertIn(key, M.data)
+                assert_equal(N.data[key], M.data[key])
 
     def test_node_iterator_subset(self):
         """ Checks the node iterator on a subset of nodes
 
         """
-
         fl_nodes = self.filelattice.iter_nodes([(0, 0, 0), (0, 1, 2)])
 
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
             self.assertEqual(N.index, M.index)
-            self.assertItemsEqual(N.data, M.data)
+            self.assertEqual(len(N.data), len(M.data))
+            for key in N.data:
+                self.assertIn(key, M.data)
+                assert_equal(N.data[key], M.data[key])
 
     def test_update_node(self):
         """ Check that a node can be updated correctly
 
         """
-
         N = LatticeNode((3, 2, 3),
                         {CUBA.MATERIAL_ID: 2, CUBA.DENSITY: 10.0,
                          CUBA.VELOCITY: (0.0, 0.0, 10.0)})
@@ -147,18 +153,14 @@ class TestFileLattice(unittest.TestCase):
 
         self.assertItemsEqual(N.index, M.index)
 
-        for key, value in M.data.iteritems():
-            if type(value) == numpy.ndarray:
-                self.assertItemsEqual(N.data[key], value)
-            else:
-                self.assertEqual(N.data[key], value)
+        for key in M.data:
+            assert_equal(N.data[key], M.data[key])
 
     def test_update_node_with_extra_keywords(self):
         """ Check that a node can be updated correctly when a list of CUBA-
         keywords is given
 
         """
-
         N = LatticeNode((2, 3, 4),
                         {CUBA.MATERIAL_ID: 2, CUBA.DENSITY: 10.0,
                          CUBA.VELOCITY: (0.0, 0.0, 100.0),
@@ -170,11 +172,8 @@ class TestFileLattice(unittest.TestCase):
 
         self.assertItemsEqual(N.index, M.index)
 
-        for key, value in M.data.iteritems():
-            if type(value) == numpy.ndarray:
-                self.assertItemsEqual(N.data[key], value)
-            else:
-                self.assertEqual(N.data[key], value)
+        for key in M.data:
+            assert_equal(N.data[key], M.data[key])
 
 if __name__ == '__main__':
     unittest.main()

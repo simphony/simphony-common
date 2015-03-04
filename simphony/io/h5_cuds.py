@@ -272,10 +272,10 @@ class H5CUDS(object):
         """
         try:
             filelat = self._handle.root.lattice._f_get_child(name)
-            filelat._f_remove(recursive=True)
         except tables.NoSuchNodeError:
-            raise ValueError(
-                'Lattice \'{n}\` does not exist'.format(n=name))
+            raise ValueError('Lattice \'{n}\` does not exist'.format(n=name))
+        else:
+            filelat._f_remove(recursive=True)
 
     def iter_particle_containers(self, names=None):
         """Returns an iterator over a subset or all
@@ -327,7 +327,6 @@ class H5CUDS(object):
             be iterated over.
 
         """
-
         if names is None:
             for lattice in self._handle.root.lattice._f_iter_nodes():
                 yield self.get_lattice(lattice.name)

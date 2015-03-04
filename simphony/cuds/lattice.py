@@ -11,7 +11,7 @@ class LatticeNode:
     Attributes
     ----------
     index : tuple of D x int
-        Node index coordinate
+        D dimensional node index coordinate
     data : DataContainer
 
     """
@@ -31,14 +31,15 @@ class Lattice(ABCLattice):
 
     Attributes:
     -----------
-    name : string
+    name : str
         name of the lattice
-    type : string
+    type : str
         Bravais lattice type (should agree with the base_vect below).
     base_vect : D x float
-        defines a Bravais lattice (an alternative for primitive vectors).
+        defines a Bravais lattice of dimension D = 2,3
+        (an alternative for primitive vectors).
     size : tuple of D x int
-        number of lattice nodes (in the direction of each axis).
+        number of lattice nodes in the direction of each axis.
     origin : D x float
         origin of lattice
 
