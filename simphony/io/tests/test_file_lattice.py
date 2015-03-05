@@ -10,6 +10,7 @@ from simphony.cuds.lattice import LatticeNode
 from simphony.io.file_lattice import FileLattice
 from numpy.testing import assert_array_equal
 from numpy.testing import assert_equal
+from simphony.testing.utils import compare_data_containers
 
 from simphony.core.cuba import CUBA
 
@@ -120,10 +121,7 @@ class TestFileLattice(unittest.TestCase):
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
             self.assertEqual(N.index, M.index)
-            self.assertEqual(len(N.data), len(M.data))
-            for key in N.data:
-                self.assertIn(key, M.data)
-                assert_equal(N.data[key], M.data[key])
+            compare_data_containers(N.data, M.data, testcase=self)
 
     def test_node_iterator_subset(self):
         """ Checks the node iterator on a subset of nodes
@@ -134,10 +132,7 @@ class TestFileLattice(unittest.TestCase):
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
             self.assertEqual(N.index, M.index)
-            self.assertEqual(len(N.data), len(M.data))
-            for key in N.data:
-                self.assertIn(key, M.data)
-                assert_equal(N.data[key], M.data[key])
+            compare_data_containers(N.data, M.data, testcase=self)
 
     def test_update_node(self):
         """ Check that a node can be updated correctly
@@ -151,14 +146,12 @@ class TestFileLattice(unittest.TestCase):
 
         M = self.filelattice.get_node((3, 2, 3))
 
-        self.assertItemsEqual(N.index, M.index)
-
-        for key in M.data:
-            assert_equal(N.data[key], M.data[key])
+        self.assertEqual(N.index, M.index)
+        compare_data_containers(N.data, M.data, testcase=self)
 
     def test_update_node_with_extra_keywords(self):
-        """ Check that a node can be updated correctly when a list of CUBA-
-        keywords is given
+        """ Check that a node can be updated correctly when a LatticeNode has
+        some CUBA-keys defined that do not exist in the FileLattice.
 
         """
         N = LatticeNode((2, 3, 4),
@@ -170,9 +163,9 @@ class TestFileLattice(unittest.TestCase):
 
         M = self.filelattice.get_node((2, 3, 4))
 
-        self.assertItemsEqual(N.index, M.index)
-
+        self.assertEqual(N.index, M.index)
         for key in M.data:
+            self.assertIn(key, M.data)
             assert_equal(N.data[key], M.data[key])
 
 if __name__ == '__main__':

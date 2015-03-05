@@ -11,6 +11,7 @@ from simphony.cuds.lattice import Lattice
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.file_mesh import FileMesh
 from simphony.io.h5_particles import H5Particles
+from simphony.testing.utils import compare_data_containers
 
 
 class TestH5CUDS(unittest.TestCase):
@@ -357,9 +358,10 @@ class TestH5CUDS(unittest.TestCase):
             lat2 = handle.get_lattice('test_lattice')
 
             self.assertEqual(lat2.name, 'test_lattice')
-
             for N in lat2.iter_nodes():
-                self.assertItemsEqual(N.data, lat.get_node(N.index).data)
+                M = lat.get_node(N.index)
+                self.assertEqual(N.index, M.index)
+                compare_data_containers(N.data, M.data, testcase=self)
 
             handle.delete_lattice('test_lattice')
             numlat = 0
