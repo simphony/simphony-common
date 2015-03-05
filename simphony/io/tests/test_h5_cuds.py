@@ -378,8 +378,9 @@ class TestH5CUDS(unittest.TestCase):
         with closing(H5CUDS.open(filename, 'w')) as handle:
             handle.add_lattice(lat)
             handle.add_lattice(lat2)
-            stored_names = [lattice.name for lattice in handle.iter_lattices()]
-            self.assertItemsEqual(stored_names, ['test_lattice', 'test_lattice2'])
+            stored_names = [l.name for l in handle.iter_lattices()]
+            self.assertItemsEqual(stored_names, ['test_lattice',
+                                                 'test_lattice2'])
 
     def test_lattice_rename(self):
         lat = Lattice('foo', 'cubic', (1.0, 1.0, 1.0),
