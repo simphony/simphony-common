@@ -3,7 +3,7 @@ import uuid
 import tables
 import numpy
 
-from simphony.cuds.abstractparticles import ABCParticleContainer
+from simphony.cuds.abstractparticles import ABCParticles
 from simphony.cuds.particles import Particle, Bond
 from simphony.io.h5_cuds_items import H5CUDSItems
 
@@ -112,7 +112,7 @@ class H5BondItems(H5CUDSItems):
             uid=uid, particles=particles, data=self._data[uid])
 
 
-class H5Particles(ABCParticleContainer):
+class H5Particles(ABCParticles):
     """ An HDF5 backed particle container.
 
     """

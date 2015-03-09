@@ -3,7 +3,7 @@ import tempfile
 import shutil
 import unittest
 
-from simphony.cuds.particles import ParticleContainer
+from simphony.cuds.particles import Particles
 from simphony.io.h5_cuds import H5CUDS
 from simphony.testing.abc_check_particle_containers import (
     ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
@@ -15,7 +15,7 @@ class TestH5ContainerAddParticles(
 
     def container_factory(self, name):
         return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -35,7 +35,7 @@ class TestH5ContainerManipulatingParticles(
 
     def container_factory(self, name):
         return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -54,7 +54,7 @@ class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
 
     def container_factory(self, name):
         return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -74,7 +74,7 @@ class TestH5ContainerManipulatingBonds(
 
     def container_factory(self, name):
         return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()

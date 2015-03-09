@@ -5,7 +5,7 @@ import shutil
 import tempfile
 import uuid
 
-from simphony.cuds.particles import Particle, ParticleContainer
+from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.file_mesh import FileMesh
@@ -67,7 +67,7 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_particle_container_empty(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            pc = handle.add_particle_container(Particles(name="test"))
             self.assertEqual("test", pc.name)
             self.assertEqual(0, sum(1 for _ in pc.iter_particles()))
             self.assertEqual(0, sum(1 for _ in pc.iter_bonds()))
@@ -75,10 +75,10 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            handle.add_particle_container(ParticleContainer(name="test"))
+            handle.add_particle_container(Particles(name="test"))
             with self.assertRaises(ValueError):
                 handle.add_particle_container(
-                    ParticleContainer(name="test"))
+                    Particles(name="test"))
 
     def test_add_get_particle_container(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
@@ -86,7 +86,7 @@ class TestH5CUDS(unittest.TestCase):
         with closing(H5CUDS.open(filename, 'w')) as handle:
             # add particle container and add points to it
             pc_test = handle.add_particle_container(
-                ParticleContainer(name="test"))
+                Particles(name="test"))
             for particle in self.particles:
                 uid = pc_test.add_particle(particle)
                 self.assertEqual(particle.uid, uid)
@@ -128,7 +128,7 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_{}".format(i)
                 pc_names.append(name)
-                handle.add_particle_container(ParticleContainer(name=name))
+                handle.add_particle_container(Particles(name=name))
 
             # test iterating over all
             names = [
@@ -160,7 +160,7 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_" + str(i)
                 pc_names.append(name)
-                handle.add_particle_container(ParticleContainer(name=name))
+                handle.add_particle_container(Particles(name=name))
 
             # delete each of the particle containers
             for pc in handle.iter_particle_containers():
@@ -182,7 +182,7 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             pc = handle.add_particle_container(
-                ParticleContainer(name="foo"))
+                Particles(name="foo"))
             pc.name = "bar"
             self.assertEqual("bar", pc.name)
 
@@ -201,7 +201,7 @@ class TestH5CUDS(unittest.TestCase):
             # and we should be able to use the no-longer used
             # "foo" name when adding another particle container
             pc = handle.add_particle_container(
-                ParticleContainer(name="foo"))
+                Particles(name="foo"))
 
     def test_get_missing_mesh(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
