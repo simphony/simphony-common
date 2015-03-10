@@ -455,10 +455,10 @@ class Particles(ABCParticles):
 
 # ================================================================
     def _get_data(self):
-        return copy.deepcopy(self._data)
+        return DataContainer(self._data)
 
     def _set_data(self, new_data):
-        self._data = copy.deepcopy(new_data)
+        self._data = DataContainer(new_data)
 
     data = property(_get_data, _set_data)
 

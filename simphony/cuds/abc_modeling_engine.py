@@ -69,20 +69,20 @@ class ABCModelingEngine(object):
         pass
 
     @abstractmethod
-    def add_particle_container(self, particle_container):
+    def add_particles(self, particles):
         """Add particle container to the modeling engine
 
         Parameters
         ----------
-        particle_container: ABCParticleContainer
+        particles: ABCParticles
             particle container to be added.
 
         Returns
         -------
-        ABCParticleContainer
+        ABCParticles
             A particle container to be used to update/query the internal
             representation stored inside the modeling-engine. See
-            get_particle_container for more information.
+            get_particles for more information.
 
         """
         pass
@@ -112,7 +112,7 @@ class ABCModelingEngine(object):
         pass
 
     @abstractmethod
-    def delete_particle_container(self, name):
+    def delete_particles(self, name):
         """Delete a particle container
 
         Parameters
@@ -152,7 +152,7 @@ class ABCModelingEngine(object):
         pass
 
     @abstractmethod
-    def get_particle_container(self, name):
+    def get_particles(self, name):
         """ Get particle container
 
         The returned particle container can be used to query and update the
@@ -160,7 +160,7 @@ class ABCModelingEngine(object):
 
         Returns
         -------
-        ABCParticleContainer
+        ABCParticles
 
         """
         pass
@@ -192,7 +192,7 @@ class ABCModelingEngine(object):
         pass
 
     @abstractmethod
-    def iter_particle_containers(self, names=None):
+    def iter_particles(self, names=None):
         """ Returns an iterator over a subset or all of the particle containers.
 
         Parameters
