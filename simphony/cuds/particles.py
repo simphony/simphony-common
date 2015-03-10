@@ -4,6 +4,7 @@ import uuid
 from simphony.cuds.abstractparticles import ABCParticles
 import simphony.cuds.pcexceptions as pce
 from simphony.core.data_container import DataContainer
+import copy
 
 
 class Particles(ABCParticles):
@@ -34,7 +35,7 @@ class Particles(ABCParticles):
         """
         self._particles = {}
         self._bonds = {}
-        self.data = DataContainer()
+        self._data = DataContainer()
         self.name = name
 
 # ================================================================
@@ -447,6 +448,19 @@ class Particles(ABCParticles):
             cur_dict[uid] = clone(element)
         else:
             raise ValueError('id: {} does not exist'.format(uid))
+
+# ================================================================
+
+    # properties
+
+# ================================================================
+    def _get_data(self):
+        return copy.deepcopy(self._data)
+
+    def _set_data(self, new_data):
+        self._data = copy.deepcopy(new_data)
+
+    data = property(_get_data, _set_data)
 
 
 class Particle(object):
