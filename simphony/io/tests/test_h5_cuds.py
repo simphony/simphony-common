@@ -89,7 +89,7 @@ class TestH5CUDS(unittest.TestCase):
             data[CUBA.NAME] = 'somename'
 
             # Since the returned data is always a copy, therefore the pc.data should not have changed
-            self.assertFalse(CUBA.NAME in pc.data)
+            self.assertNotIn(CUBA.NAME, pc.data)
             # And the length should be still zero
             self.assertEqual(0, len(pc.data))
             pc.data = data
@@ -114,7 +114,7 @@ class TestH5CUDS(unittest.TestCase):
         with closing(H5CUDS.open(filename, 'r')) as handle:
             pc = handle.get_particle_container('test')
             self.assertTrue(CUBA.NAME in pc.data)
-            self.assertTrue(pc.data[CUBA.NAME] == 'somename')
+            self.assertEqual(pc.data[CUBA.NAME], 'somename')
 
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')

@@ -140,7 +140,8 @@ class H5Particles(ABCParticleContainer):
     def data(self):
         if len(self._data) == 1:
             return self._data[0]
-        return DataContainer()
+        else:
+            return DataContainer()
 
     @data.setter
     def data(self, value):
