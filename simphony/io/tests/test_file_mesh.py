@@ -388,7 +388,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
-            Edge(puids[0:2],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Edge(puids[0:2], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
         ]
 
         euids = [self.mesh.add_edge(edge) for edge in edges]
@@ -399,7 +399,7 @@ class TestFileMesh(unittest.TestCase):
         first_edge = self.mesh.iter_edges().next()
 
         self.assertItemsEqual(iedges_id, euids)
-        self.assertIsNot(len(first_edge.data),0)
+        self.assertIsNot(len(first_edge.data), 0)
 
         for key, value in first_edge.data.iteritems():
             self.assertItemsEqual(edges[0].data[key], value)
@@ -417,7 +417,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
-            Face(puids[0:3],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Face(puids[0:3], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
         ]
 
         fuids = [self.mesh.add_face(face) for face in faces]
@@ -428,7 +428,7 @@ class TestFileMesh(unittest.TestCase):
         first_face = self.mesh.iter_faces().next()
 
         self.assertItemsEqual(fuids, ifaces_id)
-        self.assertIsNot(len(first_face.data),0)
+        self.assertIsNot(len(first_face.data), 0)
 
         for key, value in first_face.data.iteritems():
             self.assertItemsEqual(faces[0].data[key], value)
@@ -446,7 +446,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
-            Cell(puids[0:4],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Cell(puids[0:4], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
             ]
 
         cuids = [self.mesh.add_cell(cell) for cell in cells]
@@ -457,7 +457,7 @@ class TestFileMesh(unittest.TestCase):
         first_cell = self.mesh.iter_cells().next()
 
         self.assertItemsEqual(icells_id, cuids)
-        self.assertIsNot(len(first_cell.data),0)
+        self.assertIsNot(len(first_cell.data), 0)
 
         for key, value in first_cell.data.iteritems():
             self.assertItemsEqual(cells[0].data[key], value)
