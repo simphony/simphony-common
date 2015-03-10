@@ -375,6 +375,93 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertItemsEqual(icells_id, cuids)
 
+    def test_get_all_edges_iterator_with_data(self):
+        """ Checks the edge iterator
+
+        Checks that an interator over all
+        the edges of the mesh is returned
+        when the function iter_edges is called
+        without arguments
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        edges = [
+            Edge(puids[0:2],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+        ]
+
+        euids = [self.mesh.add_edge(edge) for edge in edges]
+
+        iedges = self.mesh.iter_edges()
+
+        iedges_id = [edge.uid for edge in iedges]
+        first_edge = self.mesh.iter_edges().next()
+
+        self.assertItemsEqual(iedges_id, euids)
+        self.assertIsNot(len(first_edge.data),0)
+
+        for key, value in first_edge.data.iteritems():
+            self.assertItemsEqual(edges[0].data[key], value)
+
+    def test_get_all_faces_iterator_with_data(self):
+        """ Checks the face iterator
+
+        Checks that an interator over all
+        the faces of the mesh is returned
+        when the function iter_faces is called
+        without arguments
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
+
+        faces = [
+            Face(puids[0:3],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+        ]
+
+        fuids = [self.mesh.add_face(face) for face in faces]
+
+        ifaces = self.mesh.iter_faces()
+
+        ifaces_id = [face.uid for face in ifaces]
+        first_face = self.mesh.iter_faces().next()
+
+        self.assertItemsEqual(fuids, ifaces_id)
+        self.assertIsNot(len(first_face.data),0)
+
+        for key, value in first_face.data.iteritems():
+            self.assertItemsEqual(faces[0].data[key], value)
+
+    def test_get_all_cells_iterator_with_data(self):
+        """ Checks the cell iterators
+
+        Checks that an interator over all
+        the cells of the mesh is returned
+        when the function iter_cells is called
+        without arguments
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
+
+        cells = [
+            Cell(puids[0:4],data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            ]
+
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
+
+        icells = self.mesh.iter_cells()
+
+        icells_id = [cell.uid for cell in icells]
+        first_cell = self.mesh.iter_cells().next()
+
+        self.assertItemsEqual(icells_id, cuids)
+        self.assertIsNot(len(first_cell.data),0)
+
+        for key, value in first_cell.data.iteritems():
+            self.assertItemsEqual(cells[0].data[key], value)
+
     def test_get_subset_edges_iterator(self):
         """ Checks the edge iterator
 
