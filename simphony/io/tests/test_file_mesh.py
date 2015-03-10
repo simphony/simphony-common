@@ -381,7 +381,7 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over all
         the edges of the mesh is returned
         when the function iter_edges is called
-        without arguments
+        without arguments and its data is correctly retrieved
 
         """
 
@@ -410,7 +410,7 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over all
         the faces of the mesh is returned
         when the function iter_faces is called
-        without arguments
+        without arguments and its data is correctly retrieved
 
         """
 
@@ -439,7 +439,7 @@ class TestFileMesh(unittest.TestCase):
         Checks that an interator over all
         the cells of the mesh is returned
         when the function iter_cells is called
-        without arguments
+        without arguments and its data is correctly retrieved
 
         """
 
