@@ -62,12 +62,12 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.get_particle_container('foo')
+                handle.get_particles('foo')
 
     def test_add_particle_container_empty(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(Particles(name="test"))
+            pc = handle.add_particles(Particles(name="test"))
             self.assertEqual("test", pc.name)
             self.assertEqual(0, sum(1 for _ in pc.iter_particles()))
             self.assertEqual(0, sum(1 for _ in pc.iter_bonds()))
@@ -75,9 +75,9 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            handle.add_particle_container(Particles(name="test"))
+            handle.add_particles(Particles(name="test"))
             with self.assertRaises(ValueError):
-                handle.add_particle_container(
+                handle.add_particles(
                     Particles(name="test"))
 
     def test_add_get_particle_container(self):
@@ -85,7 +85,7 @@ class TestH5CUDS(unittest.TestCase):
         filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
         with closing(H5CUDS.open(filename, 'w')) as handle:
             # add particle container and add points to it
-            pc_test = handle.add_particle_container(
+            pc_test = handle.add_particles(
                 Particles(name="test"))
             for particle in self.particles:
                 uid = pc_test.add_particle(particle)
@@ -99,7 +99,7 @@ class TestH5CUDS(unittest.TestCase):
             # add the particle container from the first file
             # into the second file
             with closing(H5CUDS.open(filename_copy, 'w')) as handle_copy:
-                pc_copy = handle_copy.add_particle_container(pc_test)
+                pc_copy = handle_copy.add_particles(pc_test)
 
                 for particle in pc_test.iter_particles():
                     particle_copy = pc_copy.get_particle(particle.uid)
@@ -110,11 +110,11 @@ class TestH5CUDS(unittest.TestCase):
         with self.assertRaises(Exception):
             pc_test.delete(self.particles[0].uid)
         with self.assertRaises(Exception):
-            handle.get_particle_container('test')
+            handle.get_particles('test')
 
         # reopen file (in read only mode)
         with closing(H5CUDS.open(filename, 'r')) as handle:
-            pc_test = handle.get_particle_container('test')
+            pc_test = handle.get_particles('test')
             for particles in self.particles:
                 loaded = pc_test.get_particle(particle.uid)
                 self.assertEqual(loaded.uid, particle.uid)
@@ -128,20 +128,20 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_{}".format(i)
                 pc_names.append(name)
-                handle.add_particle_container(Particles(name=name))
+                handle.add_particles(Particles(name=name))
 
             # test iterating over all
             names = [
-                pc.name for pc in handle.iter_particle_containers()]
+                pc.name for pc in handle.iter_particles()]
             self.assertEqual(names, pc_names)
 
             # test iterating over a specific subset
             subset = pc_names[:3]
             names = [
-                pc.name for pc in handle.iter_particle_containers(subset)]
+                pc.name for pc in handle.iter_particles(subset)]
             self.assertEquals(names, subset)
 
-            for pc in handle.iter_particle_containers(pc_names):
+            for pc in handle.iter_particles(pc_names):
                 self.assertTrue(isinstance(pc, H5Particles))
 
     def test_iter_particle_container_wrong(self):
@@ -149,7 +149,7 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                [pc for pc in handle.iter_particle_containers(pc_names)]
+                [pc for pc in handle.iter_particles(pc_names)]
 
     def test_delete_particle_container(self):
         pc_names = []
@@ -160,14 +160,14 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_" + str(i)
                 pc_names.append(name)
-                handle.add_particle_container(Particles(name=name))
+                handle.add_particles(Particles(name=name))
 
             # delete each of the particle containers
-            for pc in handle.iter_particle_containers():
-                handle.delete_particle_container(pc.name)
+            for pc in handle.iter_particles():
+                handle.delete_particles(pc.name)
                 # test that we can't get deleted containers
                 with self.assertRaises(ValueError):
-                    handle.get_particle_container(pc.name)
+                    handle.get_particles(pc.name)
                 # test that we can't use the deleted container
                 with self.assertRaises(Exception):
                     pc.add_particle(self.particles[0])
@@ -176,31 +176,31 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.delete_particle_container("foo")
+                handle.delete_particles("foo")
 
     def test_particle_container_rename(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(
+            pc = handle.add_particles(
                 Particles(name="foo"))
             pc.name = "bar"
             self.assertEqual("bar", pc.name)
 
             # we should not be able to use the old name "foo"
             with self.assertRaises(ValueError):
-                handle.get_particle_container("foo")
+                handle.get_particles("foo")
             with self.assertRaises(ValueError):
-                handle.delete_particle_container("foo")
+                handle.delete_particles("foo")
             with self.assertRaises(ValueError):
-                [_ for _ in handle.iter_particle_containers(names=["foo"])]
+                [_ for _ in handle.iter_particles(names=["foo"])]
 
             # we should be able to access using the new "bar" name
-            pc_bar = handle.get_particle_container("bar")
+            pc_bar = handle.get_particles("bar")
             self.assertEqual("bar", pc_bar.name)
 
             # and we should be able to use the no-longer used
             # "foo" name when adding another particle container
-            pc = handle.add_particle_container(
+            pc = handle.add_particles(
                 Particles(name="foo"))
 
     def test_get_missing_mesh(self):
