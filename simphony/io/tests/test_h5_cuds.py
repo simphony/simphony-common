@@ -102,7 +102,6 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         original_pc = ParticleContainer(name="test")
         # Change data
-        from simphony.core.cuba import CUBA
         data = original_pc.data
         data[CUBA.NAME] = 'somename'
 
