@@ -370,10 +370,10 @@ class TestH5CUDS(unittest.TestCase):
             self.assertEqual(numlat, 0)
 
     def test_iter_lattices(self):
-        lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
+        lat = Lattice('test_lattice', 'Cubic', (1.0, 1.0, 1.0),
                       (2, 3, 4), (0.0, 0.0, 0.0))
 
-        lat2 = Lattice('test_lattice2', 'cubic', (1.0, 1.0, 1.0),
+        lat2 = Lattice('test_lattice2', 'Cubic', (1.0, 1.0, 1.0),
                        (3, 3, 3), (0.0, 0.0, 0.0))
 
         filename = os.path.join(self.temp_dir, 'test.cuds')
@@ -385,7 +385,7 @@ class TestH5CUDS(unittest.TestCase):
                                                  'test_lattice2'])
 
     def test_lattice_rename(self):
-        lat = Lattice('foo', 'cubic', (1.0, 1.0, 1.0),
+        lat = Lattice('foo', 'Cubic', (1.0, 1.0, 1.0),
                       (2, 3, 4), (0.0, 0.0, 0.0))
 
         filename = os.path.join(self.temp_dir, 'test.cuds')

@@ -34,20 +34,29 @@ class FileLattice(ABCLattice):
         The lattice newly added to the file or existing in the file.
 
     """
-    def __init__(self, file, name, type, base_vect, size, origin,
-                 record=None):
-        self._type = type
-        self._base_vect = np.array(base_vect, dtype=np.float)
-        self._size = tuple(size)
-        self._origin = np.array(origin, dtype=np.float)
+    def __init__(self, file, name, type=None, base_vect=None,
+                 size=None, origin=None, record=None):
+
         self._file = file
+        self._name = name
         self._group = file.root.lattice
-        self._record = record
 
         # If Lattice not in file, create a lattice
-        if name not in self._file.root.lattice:
+        if self._name not in self._file.root.lattice:
+            if None in [type, base_vect, size, origin]:
+                error_str = ("Lattice '{}' does not exist in file. "
+                             "Type, base_vect, size and origin must "
+                             "be given proper values.")
+                raise ValueError(error_str.format(name))
+            # Set FileLattice attributes
+            self._type = type
+            self._base_vect = np.array(base_vect, dtype=np.float)
+            self._size = tuple(size)
+            self._origin = np.array(origin, dtype=np.float)
+            self._record = record
+
+            # If record not specified use NoUIDRecord
             if self._record is None:
-                # If record not specified use NoUIDRecord
                 self._record = NoUIDRecord
             self._table = IndexedDataContainerTable(
                 self._group, name, self._record, np.prod(self._size))

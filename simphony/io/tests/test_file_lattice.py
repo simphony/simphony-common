@@ -7,6 +7,8 @@ import numpy
 
 from simphony.cuds.lattice import Lattice
 from simphony.cuds.lattice import LatticeNode
+from simphony.cuds.lattice import make_hexagonal_lattice
+from simphony.cuds.lattice import make_orthorombicp_lattice
 from simphony.io.file_lattice import FileLattice
 from numpy.testing import assert_array_equal
 from numpy.testing import assert_equal
@@ -37,7 +39,7 @@ class TestFileLattice(unittest.TestCase):
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.file = H5CUDS.open(self.filename, mode='w')
 
-        self.lattice = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
+        self.lattice = Lattice('test_lattice', 'Cubic', (1.0, 1.0, 1.0),
                                (4, 5, 6), (0.0, 0.0, 0.0))
 
         for i in xrange(4):
@@ -62,6 +64,12 @@ class TestFileLattice(unittest.TestCase):
         for N in lat.iter_nodes():
             self.filelattice.update_node(N)
 
+        self.ortholat = make_orthorombicp_lattice('ortho', (1.0, 2.0, 3.0),
+                                                  (2, 3, 4))
+        self.orthofilelat = self.file.add_lattice(self.ortholat)
+        self.hexalat = make_hexagonal_lattice('hexa2D', 1.0, (2, 3))
+        self.hexafilelat = self.file.add_lattice(self.hexalat)
+
     def tearDown(self):
         if os.path.exists(self.filename):
             self.file.close()
@@ -73,7 +81,7 @@ class TestFileLattice(unittest.TestCase):
 
         """
         self.assertEqual(self.filelattice.name, 'test_lattice')
-        self.assertEqual(self.filelattice.type, 'cubic')
+        self.assertEqual(self.filelattice.type, 'Cubic')
         assert_array_equal(self.filelattice.base_vect,
                            numpy.array((1.0, 1.0, 1.0)))
         self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
@@ -86,10 +94,10 @@ class TestFileLattice(unittest.TestCase):
         object
 
         """
-        self.filelattice = self.file.get_lattice('test_lattice')
+        self.filelattice = FileLattice(self.file._handle, 'test_lattice')
 
         self.assertEqual(self.filelattice.name, 'test_lattice')
-        self.assertEqual(self.filelattice.type, 'cubic')
+        self.assertEqual(self.filelattice.type, 'Cubic')
         assert_array_equal(self.filelattice.base_vect,
                            numpy.array((1.0, 1.0, 1.0)))
         self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
@@ -167,6 +175,21 @@ class TestFileLattice(unittest.TestCase):
         for key in M.data:
             self.assertIn(key, M.data)
             assert_equal(N.data[key], M.data[key])
+
+    def test_get_coordinate(self):
+        """ Check that node coordinates are returned properly for various
+        lattice types
+
+        """
+        assert_array_equal(self.filelattice.get_coordinate((1, 1, 1)),
+                           numpy.array((1.0, 1.0, 1.0)))
+
+        assert_array_equal(self.orthofilelat.get_coordinate((1, 1, 1)),
+                           numpy.array((1.0, 2.0, 3.0)))
+
+        assert_array_equal(self.hexafilelat.get_coordinate((1, 1)),
+                           numpy.array((0.5, numpy.sqrt(3)/2)))
+
 
 if __name__ == '__main__':
     unittest.main()

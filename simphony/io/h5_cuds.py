@@ -223,9 +223,7 @@ class H5CUDS(object):
             name of lattice to return
         """
         if name in self._handle.root.lattice:
-            F = self._handle.root.lattice._v_leaves[name].attrs
-            lat = FileLattice(self._handle, name, F.type, F.base_vect,
-                              F.size, F.origin)
+            lat = FileLattice(self._handle, name)
             return lat
         else:
             raise ValueError(
