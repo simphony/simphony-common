@@ -88,12 +88,14 @@ class TestH5CUDS(unittest.TestCase):
             data = pc.data
             data[CUBA.NAME] = 'somename'
 
-            # Since the returned data is always a copy, therefore the pc.data should not have changed
+            # Since the returned data is always a copy,
+            #  therefore the pc.data should not have changed
             self.assertNotIn(CUBA.NAME, pc.data)
             # And the length should be still zero
             self.assertEqual(0, len(pc.data))
             pc.data = data
-            # This time we replaced the pc.data, therefore it should have been changed
+            # This time we replaced the pc.data,
+            #  therefore it should have been changed
             self.assertTrue(CUBA.NAME in pc.data)
             # The length also should have been changed
             self.assertEqual(1, len(pc.data))
