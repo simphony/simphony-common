@@ -5,6 +5,8 @@ import shutil
 import tempfile
 import uuid
 
+from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 from simphony.cuds.particles import Particle, ParticleContainer
 from simphony.cuds.mesh import Point, Mesh
 from simphony.io.h5_cuds import H5CUDS
@@ -76,7 +78,6 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             pc = handle.add_particle_container(ParticleContainer(name="test"))
-            from simphony.core.data_container import DataContainer
             self.assertEqual(DataContainer(), pc.data)
             self.assertEqual(0, len(pc.data))
 
@@ -84,7 +85,6 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             pc = handle.add_particle_container(ParticleContainer(name="test"))
-            from simphony.core.cuba import CUBA
             data = pc.data
             data[CUBA.NAME] = 'somename'
 
