@@ -88,6 +88,8 @@ class H5CUDS(object):
 
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
+        # Set the data value of the newly created h5_particles object which will store it to the file
+        h5_particles.data = particles.data
 
         # copy the contents of the particle container to the file
         for particle in particles.iter_particles():
@@ -124,6 +126,7 @@ class H5CUDS(object):
 
         if mesh:
             # copy the contents of the mesh to the file
+            #m.data = mesh.data
             for point in mesh.iter_points():
                 m.add_point(point)
             for edge in mesh.iter_edges():

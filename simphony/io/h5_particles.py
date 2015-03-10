@@ -3,9 +3,13 @@ import uuid
 import tables
 import numpy
 
+from simphony.core.data_container import DataContainer
+
 from simphony.cuds.abstractparticles import ABCParticleContainer
 from simphony.cuds.particles import Particle, Bond
+
 from simphony.io.h5_cuds_items import H5CUDSItems
+from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
 
@@ -118,6 +122,7 @@ class H5Particles(ABCParticleContainer):
     """
     def __init__(self, group):
         self._group = group
+        self._data = IndexedDataContainerTable(group, 'data')
         self._particles = H5ParticleItems(group, 'particles')
         self._bonds = H5BondItems(group, 'bonds')
 
@@ -133,11 +138,16 @@ class H5Particles(ABCParticleContainer):
 
     @property
     def data(self):
-        raise NotImplementedError()
+        if len(self._data) == 1:
+            return self._data[0]
+        return DataContainer()
 
     @data.setter
     def data(self, value):
-        raise NotImplementedError()
+        if len(self._data) == 0:
+            self._data.append(value)
+        else:
+            self._data[0] = value
 
     # Particle methods ######################################################
 

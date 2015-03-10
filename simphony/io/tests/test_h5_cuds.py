@@ -72,6 +72,50 @@ class TestH5CUDS(unittest.TestCase):
             self.assertEqual(0, sum(1 for _ in pc.iter_particles()))
             self.assertEqual(0, sum(1 for _ in pc.iter_bonds()))
 
+    def test_add_particle_container_empty_data(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            from simphony.core.data_container import DataContainer
+            self.assertEqual(DataContainer(), pc.data)
+            self.assertEqual(0, len(pc.data))
+
+    def test_add_particle_container_data_copy(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            from simphony.core.cuba import CUBA
+            data = pc.data
+            data[CUBA.NAME] = 'somename'
+
+            # Since the returned data is always a copy, therefore the pc.data should not have changed
+            self.assertFalse(CUBA.NAME in pc.data)
+            # And the length should be still zero
+            self.assertEqual(0, len(pc.data))
+            pc.data = data
+            # This time we replaced the pc.data, therefore it should have been changed
+            self.assertTrue(CUBA.NAME in pc.data)
+            # The length also should have been changed
+            self.assertEqual(1, len(pc.data))
+
+    def test_add_get_particle_container_data(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        original_pc = ParticleContainer(name="test")
+        # Change data
+        from simphony.core.cuba import CUBA
+        data = original_pc.data
+        data[CUBA.NAME] = 'somename'
+
+        # Store particle container along with its data
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(original_pc)
+
+        # Reopen the file and check the data if it is still there
+        with closing(H5CUDS.open(filename, 'r')) as handle:
+            pc = handle.get_particle_container('test')
+            self.assertTrue(CUBA.NAME in pc.data)
+            self.assertTrue(pc.data[CUBA.NAME] == 'somename')
+
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
