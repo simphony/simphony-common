@@ -126,7 +126,6 @@ class H5CUDS(object):
 
         if mesh:
             # copy the contents of the mesh to the file
-            #m.data = mesh.data
             for point in mesh.iter_points():
                 m.add_point(point)
             for edge in mesh.iter_edges():
