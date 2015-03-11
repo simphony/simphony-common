@@ -114,7 +114,7 @@ class TestH5CUDS(unittest.TestCase):
         # Reopen the file and check the data if it is still there
         with closing(H5CUDS.open(filename, 'r')) as handle:
             pc = handle.get_particle_container('test')
-            self.assertTrue(CUBA.NAME in pc.data)
+            self.assertIn(CUBA.NAME, pc.data)
             self.assertEqual(pc.data[CUBA.NAME], 'somename')
 
     def test_add_particle_container_with_same_name(self):
