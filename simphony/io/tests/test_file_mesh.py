@@ -382,6 +382,28 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertItemsEqual(icells_id, cuids)
 
+    def test_get_all_points_iterator_with_data(self):
+        """ Checks the point iterator
+
+        Checks that an interator over all
+        the points of the mesh is returned
+        when the function iter_points is called
+        without arguments and its data is correctly retrieved
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        ipoints = self.mesh.iter_points()
+
+        ipoints_id = [point.uid for point in ipoints]
+        first_point = self.mesh.iter_points().next()
+
+        self.assertItemsEqual(ipoints_id, puids)
+        self.assertIsNot(len(first_point.data), 0)
+
+        self.assertEqual(first_point.data, DataContainer(VELOCITY=(0, 0, 0)))
+
     def test_get_all_edges_iterator_with_data(self):
         """ Checks the edge iterator
 
