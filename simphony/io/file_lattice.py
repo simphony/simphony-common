@@ -43,7 +43,7 @@ class FileLattice(ABCLattice):
 
         # If Lattice not in file, create a lattice
         if self._name not in self._file.root.lattice:
-            if None in [type, base_vect, size, origin]:
+            if type is None:
                 error_str = ("Lattice '{}' does not exist in file. "
                              "Type, base_vect, size and origin must "
                              "be given proper values.")
