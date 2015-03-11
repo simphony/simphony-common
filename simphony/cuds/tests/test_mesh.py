@@ -6,13 +6,19 @@ mesh module functionalities
 """
 
 import unittest
+
+from functools import partial
+
+from simphony.testing.utils import compare_data_containers
+
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
-# import simphony.core.data_container as dc
-# from simphony.core.cuba import CUBA
+
+from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -679,6 +685,17 @@ class TestSequenceFunctions(unittest.TestCase):
         cell_upd = self.mesh.get_cell(cuuids[0])
 
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
+
+    def test_set_data(self):
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        ret_data = self.mesh.data
+
+        self.assertItemsEqual(org_data,ret_data)
 
 if __name__ == '__main__':
     unittest.main()
