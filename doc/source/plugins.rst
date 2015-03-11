@@ -19,7 +19,7 @@ e.g.::
 
     setup(
        entry_points={
-        'simphony.engine': ['<name> = <module path>'])
+        'simphony.engine': ['<name> = <module_path>'])
 
 Where ``<module_path>`` is a module where the engine class(es) can be
 found like ``my_cool_engine_plugin.cool_engine342`` and ``<name>`` is
