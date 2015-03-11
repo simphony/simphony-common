@@ -40,7 +40,7 @@ Will allow the user to import the new engine from inside the ``simphony`` module
 
    from simphony.engine import cool
    # cool is now a reference to the external module ``my_cool_engine_plugin.cool_engine342``
-   # If the name of the provided engine class is EngFase then the user should be able to do
+   # If the name of the provided engine class is EngFast then the user should be able to do
    engine = cool.EngFast()
 
 
