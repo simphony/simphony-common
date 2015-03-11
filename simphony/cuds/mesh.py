@@ -237,7 +237,7 @@ class Mesh(ABCMesh):
                 + "DataContainer expected."
             raise TypeError(error_str)
         self._data = value
-    
+
     def get_point(self, uuid):
         """ Returns a point with a given uuid.
 

@@ -691,7 +691,7 @@ class TestSequenceFunctions(unittest.TestCase):
         self.mesh.data = org_data
         ret_data = self.mesh.data
 
-        self.assertItemsEqual(org_data,ret_data)
+        self.assertItemsEqual(org_data, ret_data)
 
     def test_modify_data(self):
 
@@ -706,11 +706,10 @@ class TestSequenceFunctions(unittest.TestCase):
 
         ret_data = self.mesh.data
 
-        self.assertItemsEqual(org_data,ret_data)
+        self.assertItemsEqual(org_data, ret_data)
 
     def test_modify_data_incorrect_type(self):
 
-        org_data = "I'm not a DataContainer"
         with self.assertRaises(TypeError):
             self.mesh.data = "I'm not a DataContainer"
 
