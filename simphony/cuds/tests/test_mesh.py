@@ -683,6 +683,9 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
 
     def test_set_data(self):
+        """ Check that data can be retrieved
+
+        """
 
         org_data = DataContainer()
 
@@ -694,6 +697,12 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertItemsEqual(org_data, ret_data)
 
     def test_modify_data(self):
+        """ Check that data is consistent
+
+        Check that the internal data of the mesh cannot be modified
+        outise the mesh class
+
+        """
 
         org_data = DataContainer()
 
@@ -709,6 +718,9 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertItemsEqual(org_data, ret_data)
 
     def test_modify_data_incorrect_type(self):
+        """ Check that only a DataContainer can be assigned to mesh data
+
+        """
 
         with self.assertRaises(TypeError):
             self.mesh.data = "I'm not a DataContainer"
