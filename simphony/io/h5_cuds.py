@@ -88,7 +88,8 @@ class H5CUDS(object):
 
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
-        # Set the data value of the newly created h5_particles object which will store it to the file
+        # Set the data value of the newly created h5_particles object
+        #  which will store it to the file
         h5_particles.data = particles.data
 
         # copy the contents of the particle container to the file

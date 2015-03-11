@@ -96,7 +96,7 @@ class TestH5CUDS(unittest.TestCase):
             pc.data = data
             # This time we replaced the pc.data,
             #  therefore it should have been changed
-            self.assertTrue(CUBA.NAME in pc.data)
+            self.assertIn(CUBA.NAME, pc.data)
             # The length also should have been changed
             self.assertEqual(1, len(pc.data))
 
