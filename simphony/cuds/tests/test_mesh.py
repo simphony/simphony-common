@@ -697,5 +697,26 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.assertItemsEqual(org_data,ret_data)
 
+    def test_modify_data(self):
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        mod_data = self.mesh.data
+
+        mod_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        ret_data = self.mesh.data
+
+        self.assertItemsEqual(org_data,ret_data)
+
+    def test_modify_data_incorrect_type(self):
+
+        org_data = "I'm not a DataContainer"
+        with self.assertRaises(TypeError):
+            self.mesh.data = "I'm not a DataContainer"
+
 if __name__ == '__main__':
     unittest.main()
