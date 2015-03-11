@@ -7,10 +7,6 @@ mesh module functionalities
 
 import unittest
 
-from functools import partial
-
-from simphony.testing.utils import compare_data_containers
-
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
