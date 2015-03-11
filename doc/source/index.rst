@@ -8,6 +8,15 @@ Welcome to SimPhoNy's documentation!
 
 .. include:: ../../README.rst
 
+User Manual
+===========
+
+.. toctree::
+   :maxdepth: 1
+
+   Extending Simphony <plugins>
+
+
 API Reference
 =============
 
