@@ -3,6 +3,10 @@ import tempfile
 import shutil
 import unittest
 
+from functools import partial
+
+from simphony.testing.utils import compare_data_containers
+
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
@@ -18,6 +22,9 @@ from simphony.io.h5_cuds import H5CUDS
 class TestFileMesh(unittest.TestCase):
 
     def setUp(self):
+
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
 
         self.temp_dir = tempfile.mkdtemp()
 
@@ -401,8 +408,7 @@ class TestFileMesh(unittest.TestCase):
         self.assertItemsEqual(iedges_id, euids)
         self.assertIsNot(len(first_edge.data), 0)
 
-        for key, value in first_edge.data.iteritems():
-            self.assertItemsEqual(edges[0].data[key], value)
+        self.assertEqual(first_edge.data, DataContainer(VELOCITY=(0, 0, 0)))
 
     def test_get_all_faces_iterator_with_data(self):
         """ Checks the face iterator
@@ -430,8 +436,7 @@ class TestFileMesh(unittest.TestCase):
         self.assertItemsEqual(fuids, ifaces_id)
         self.assertIsNot(len(first_face.data), 0)
 
-        for key, value in first_face.data.iteritems():
-            self.assertItemsEqual(faces[0].data[key], value)
+        self.assertEqual(first_face.data, DataContainer(VELOCITY=(0, 0, 0)))
 
     def test_get_all_cells_iterator_with_data(self):
         """ Checks the cell iterators
@@ -459,8 +464,7 @@ class TestFileMesh(unittest.TestCase):
         self.assertItemsEqual(icells_id, cuids)
         self.assertIsNot(len(first_cell.data), 0)
 
-        for key, value in first_cell.data.iteritems():
-            self.assertItemsEqual(cells[0].data[key], value)
+        self.assertEqual(first_cell.data, DataContainer(VELOCITY=(0, 0, 0)))
 
     def test_get_subset_edges_iterator(self):
         """ Checks the edge iterator
