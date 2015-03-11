@@ -29,22 +29,22 @@ class TestFileMesh(unittest.TestCase):
         self.points = [
             Point(
                 (0.0, 0.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (1.0, 0.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 1.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 0.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (1.0, 0.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 1.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
         ]
 
     def tearDown(self):
@@ -388,7 +388,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:3]]
 
         edges = [
-            Edge(puids[0:2], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Edge(puids[0:2], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
         ]
 
         euids = [self.mesh.add_edge(edge) for edge in edges]
@@ -417,7 +417,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:4]]
 
         faces = [
-            Face(puids[0:3], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Face(puids[0:3], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
         ]
 
         fuids = [self.mesh.add_face(face) for face in faces]
@@ -446,7 +446,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:5]]
 
         cells = [
-            Cell(puids[0:4], data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+            Cell(puids[0:4], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
             ]
 
         cuids = [self.mesh.add_cell(cell) for cell in cells]
@@ -629,7 +629,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
         point_ret = self.mesh.get_point(puids[0])
-        point_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        point_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_point(point_ret)
 
@@ -653,7 +653,7 @@ class TestFileMesh(unittest.TestCase):
         euids = [self.mesh.add_edge(edge) for edge in edges]
 
         edge_ret = self.mesh.get_edge(euids[0])
-        edge_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        edge_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_edge(edge_ret)
 
@@ -677,7 +677,7 @@ class TestFileMesh(unittest.TestCase):
         fuids = [self.mesh.add_face(face) for face in faces]
 
         face_ret = self.mesh.get_face(fuids[0])
-        face_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        face_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_face(face_ret)
 
@@ -701,7 +701,7 @@ class TestFileMesh(unittest.TestCase):
         cuids = [self.mesh.add_cell(cell) for cell in cells]
 
         cell_ret = self.mesh.get_cell(cuids[0])
-        cell_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        cell_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_cell(cell_ret)
 
