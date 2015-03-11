@@ -232,6 +232,10 @@ class Mesh(ABCMesh):
 
     @data.setter
     def data(self, value):
+        if not isinstance(value, dc.DataContainer):
+            error_str = "Trying to update an object with the wrong type. "\
+                + "DataContainer expected."
+            raise TypeError(error_str)
         self._data = value
     
     def get_point(self, uuid):
