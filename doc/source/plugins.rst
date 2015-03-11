@@ -11,8 +11,9 @@ contributing python modules that container engine and visualization components:
   function to show (visualise the high level CUDS containers)
 
 
-To declare that a package contains a visualization or engine modules for simphony, a developer
-has to add an entry point definition in the ``setup.py`` of the contributing package.
+To declare that a package contains a visualization or engine modules
+for simphony, a developer has to add an entry point definition in the
+``setup.py`` of the contributing package.
 
 e.g.::
 
@@ -20,7 +21,12 @@ e.g.::
        entry_points={
         'simphony.engine': ['<name> = <module path>'])
 
-Where ``<module_path>`` is a module where the engine class(es) can be found like ``my_cool_engine_plugin.cool_engine342`` and ``<name>`` is the user visible name that the ``cool_engine432`` module will have inside the SimPhoNy framework. It is important that <name> is unique and specific to the contributed components (e.g. name == 'default' is probably a very bad choice)
+Where ``<module_path>`` is a module where the engine class(es) can be
+found like ``my_cool_engine_plugin.cool_engine342`` and ``<name>`` is
+the user visible name that the ``cool_engine432`` module will have
+inside the SimPhoNy framework. It is important that <name> is unique
+and specific to the contributed components (e.g. name == 'default' is
+probably a very bad choice)
 
 e.g.::
 
@@ -40,7 +46,8 @@ Will allow the user to import the new engine from inside the ``simphony`` module
 
 .. note::
 
-   The ``examples/plugin`` folder of the simphony-common repository contains a dummy package that contributes python modules to both
+   The ``examples/plugin`` folder of the simphony-common repository
+   contains a dummy package that contributes python modules to both
 
 
 .. _entry points : http://pythonhosted.org/setuptools/pkg_resources.html#entry-points
