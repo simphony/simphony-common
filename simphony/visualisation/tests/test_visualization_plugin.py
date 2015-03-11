@@ -9,12 +9,12 @@ else:
 
 
 @unittest.skipIf(EXAMPLE_NOT_INSTALLED, 'Example plugin not installed')
-class TestVisualizationPlugin(unittest.TestCase):
+class TestVisualisationPlugin(unittest.TestCase):
 
     def test_load_plugin(self):
         try:
-            from simphony.visualization import example
+            from simphony.visualisation import example
         except ImportError:
-            self.fail('Could not import example visualization')
+            self.fail('Could not import example visualisation')
 
         self.assertTrue(hasattr(example, 'A'))
