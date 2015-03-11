@@ -1,11 +1,11 @@
 Plugins
 =======
 
-The Simphony library can extended through two `entry points`_ for
+The SimPhoNy library can extended through two `entry points`_ for
 contributing python modules that container engine and visualization components:
 
 - ``simphony.engine`` -- A python module that provides one or more
-  classes that implement the :class:`ABCEngine` interface.
+  classes that implement the :class:`ABCModelingEngine` interface.
 
 - ``simphony.visualization`` -- A python module that provides a simple
   function to show (visualise the high level CUDS containers)
