@@ -228,11 +228,11 @@ class Mesh(ABCMesh):
 
     @property
     def data(self):
-        return self._data
+        return dc.DataContainer(self._data)
 
     @data.setter
     def data(self, value):
-        self._data = value
+        self._data = dc.DataContainer(value)
 
     def get_point(self, uuid):
         """ Returns a point with a given uuid.
