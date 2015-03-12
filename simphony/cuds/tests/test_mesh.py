@@ -717,13 +717,5 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.assertItemsEqual(org_data, ret_data)
 
-    def test_modify_data_incorrect_type(self):
-        """ Check that only a DataContainer can be assigned to mesh data
-
-        """
-
-        with self.assertRaises(TypeError):
-            self.mesh.data = "I'm not a DataContainer"
-
 if __name__ == '__main__':
     unittest.main()
