@@ -85,5 +85,15 @@ class TestNativeContainerManipulatingBonds(
         return Particles(name=name)
 
 
+class TestParticlesDataContainer(unittest.TestCase):
+
+    def test_data(self):
+        pc = Particles(name='foo')
+        data = pc.data
+        data[CUBA.MASS] = 9
+        pc.data = data
+        ret_data = pc.data
+        self.assertItemsEqual(data, ret_data)
+
 if __name__ == '__main__':
     unittest.main()
