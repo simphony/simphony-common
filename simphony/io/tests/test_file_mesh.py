@@ -3,6 +3,10 @@ import tempfile
 import shutil
 import unittest
 
+from functools import partial
+
+from simphony.testing.utils import compare_data_containers
+
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
@@ -19,6 +23,9 @@ class TestFileMesh(unittest.TestCase):
 
     def setUp(self):
 
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
+
         self.temp_dir = tempfile.mkdtemp()
 
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
@@ -29,22 +36,22 @@ class TestFileMesh(unittest.TestCase):
         self.points = [
             Point(
                 (0.0, 0.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (1.0, 0.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 1.0, 0.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 0.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (1.0, 0.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]})),
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)})),
             Point(
                 (0.0, 1.0, 1.0),
-                data=DataContainer({CUBA.VELOCITY: [0, 0, 0]}))
+                data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
         ]
 
     def tearDown(self):
@@ -375,6 +382,112 @@ class TestFileMesh(unittest.TestCase):
 
         self.assertItemsEqual(icells_id, cuids)
 
+    def test_get_all_points_iterator_with_data(self):
+        """ Checks the point iterator
+
+        Checks that an interator over all
+        the points of the mesh is returned
+        when the function iter_points is called
+        without arguments and its data is correctly retrieved
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        ipoints = self.mesh.iter_points()
+
+        ipoints_id = [point.uid for point in ipoints]
+        first_point = self.mesh.iter_points().next()
+
+        self.assertItemsEqual(ipoints_id, puids)
+        self.assertIsNot(len(first_point.data), 0)
+
+        self.assertEqual(first_point.data, DataContainer(VELOCITY=(0, 0, 0)))
+
+    def test_get_all_edges_iterator_with_data(self):
+        """ Checks the edge iterator
+
+        Checks that an interator over all
+        the edges of the mesh is returned
+        when the function iter_edges is called
+        without arguments and its data is correctly retrieved
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        edges = [
+            Edge(puids[0:2], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
+        ]
+
+        euids = [self.mesh.add_edge(edge) for edge in edges]
+
+        iedges = self.mesh.iter_edges()
+
+        iedges_id = [edge.uid for edge in iedges]
+        first_edge = self.mesh.iter_edges().next()
+
+        self.assertItemsEqual(iedges_id, euids)
+        self.assertIsNot(len(first_edge.data), 0)
+
+        self.assertEqual(first_edge.data, DataContainer(VELOCITY=(0, 0, 0)))
+
+    def test_get_all_faces_iterator_with_data(self):
+        """ Checks the face iterator
+
+        Checks that an interator over all
+        the faces of the mesh is returned
+        when the function iter_faces is called
+        without arguments and its data is correctly retrieved
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:4]]
+
+        faces = [
+            Face(puids[0:3], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
+        ]
+
+        fuids = [self.mesh.add_face(face) for face in faces]
+
+        ifaces = self.mesh.iter_faces()
+
+        ifaces_id = [face.uid for face in ifaces]
+        first_face = self.mesh.iter_faces().next()
+
+        self.assertItemsEqual(fuids, ifaces_id)
+        self.assertIsNot(len(first_face.data), 0)
+
+        self.assertEqual(first_face.data, DataContainer(VELOCITY=(0, 0, 0)))
+
+    def test_get_all_cells_iterator_with_data(self):
+        """ Checks the cell iterators
+
+        Checks that an interator over all
+        the cells of the mesh is returned
+        when the function iter_cells is called
+        without arguments and its data is correctly retrieved
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:5]]
+
+        cells = [
+            Cell(puids[0:4], data=DataContainer({CUBA.VELOCITY: (0, 0, 0)}))
+            ]
+
+        cuids = [self.mesh.add_cell(cell) for cell in cells]
+
+        icells = self.mesh.iter_cells()
+
+        icells_id = [cell.uid for cell in icells]
+        first_cell = self.mesh.iter_cells().next()
+
+        self.assertItemsEqual(icells_id, cuids)
+        self.assertIsNot(len(first_cell.data), 0)
+
+        self.assertEqual(first_cell.data, DataContainer(VELOCITY=(0, 0, 0)))
+
     def test_get_subset_edges_iterator(self):
         """ Checks the edge iterator
 
@@ -542,7 +655,7 @@ class TestFileMesh(unittest.TestCase):
         puids = [self.mesh.add_point(point) for point in self.points[:1]]
 
         point_ret = self.mesh.get_point(puids[0])
-        point_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        point_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_point(point_ret)
 
@@ -566,7 +679,7 @@ class TestFileMesh(unittest.TestCase):
         euids = [self.mesh.add_edge(edge) for edge in edges]
 
         edge_ret = self.mesh.get_edge(euids[0])
-        edge_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        edge_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_edge(edge_ret)
 
@@ -590,7 +703,7 @@ class TestFileMesh(unittest.TestCase):
         fuids = [self.mesh.add_face(face) for face in faces]
 
         face_ret = self.mesh.get_face(fuids[0])
-        face_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        face_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_face(face_ret)
 
@@ -614,7 +727,7 @@ class TestFileMesh(unittest.TestCase):
         cuids = [self.mesh.add_cell(cell) for cell in cells]
 
         cell_ret = self.mesh.get_cell(cuids[0])
-        cell_ret.data[CUBA.VELOCITY] = [42, 42, 42]
+        cell_ret.data[CUBA.VELOCITY] = (42, 42, 42)
 
         self.mesh.update_cell(cell_ret)
 

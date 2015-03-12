@@ -1,15 +1,15 @@
-""" Simphony visualization module
+""" Simphony visualisation module
 
 This module is dynamicaly populated at import with the
 registered plugins modules. Plugins modules need to be
-registered at the 'simphony.visualization' entry point.
+registered at the 'simphony.visualisation' entry point.
 
 
 """
 
 
-def load_visualization_extentions():
-    """ Discover and load visualization extension modules.
+def load_visualisation_extentions():
+    """ Discover and load visualisation extension modules.
 
     """
     from stevedore import extension
@@ -20,7 +20,7 @@ def load_visualization_extentions():
 
 
 # Populate the module namespace
-globals().update(load_visualization_extentions())
+globals().update(load_visualisation_extentions())
 
 # cleanup
-del load_visualization_extentions
+del load_visualisation_extentions

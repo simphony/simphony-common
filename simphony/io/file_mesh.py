@@ -593,7 +593,8 @@ class FileMesh(object):
             for row in self._group.points:
                 yield Point(
                     tuple(row['coordinates']),
-                    uuid.UUID(hex=row['uid'], version=4)
+                    uuid.UUID(hex=row['uid'], version=4),
+                    self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for point_uid in point_uids:
@@ -624,7 +625,8 @@ class FileMesh(object):
             for row in self._group.edges:
                 yield Edge(
                     list(row['points_uids']),
-                    uuid.UUID(hex=row['uid'], version=4)
+                    uuid.UUID(hex=row['uid'], version=4),
+                    self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for edge_uid in edge_uids:
@@ -655,7 +657,8 @@ class FileMesh(object):
             for row in self._group.faces:
                 yield Face(
                     list(row['points_uids']),
-                    uuid.UUID(hex=row['uid'], version=4)
+                    uuid.UUID(hex=row['uid'], version=4),
+                    self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for face_uid in face_uids:
@@ -686,7 +689,8 @@ class FileMesh(object):
             for row in self._group.cells:
                 yield Cell(
                     list(row['points_uids']),
-                    uuid.UUID(hex=row['uid'], version=4)
+                    uuid.UUID(hex=row['uid'], version=4),
+                    self._data[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for cell_uid in cell_uids:

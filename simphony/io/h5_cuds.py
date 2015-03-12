@@ -2,6 +2,7 @@ import tables
 
 from simphony.io.h5_particles import H5Particles
 from simphony.io.file_mesh import FileMesh
+from simphony.io.file_lattice import FileLattice
 
 
 class H5CUDS(object):
@@ -88,6 +89,9 @@ class H5CUDS(object):
 
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
+        # Set the data value of the newly created h5_particles object
+        #  which will store it to the file
+        h5_particles.data = particles.data
 
         # copy the contents of the particle container to the file
         for particle in particles.iter_particles():
@@ -136,9 +140,39 @@ class H5CUDS(object):
         self._handle.flush()
         return m
 
+    def add_lattice(self, lattice):
+        """Add lattice to the file.
+
+        Parameters
+        ----------
+        lattice : Lattice
+            lattice to be added
+
+        Returns
+        ----------
+        FileLattice
+            The lattice newly added to the file.
+
+        """
+        if lattice.name in self._handle.root.lattice:
+            raise ValueError(
+                'Lattice \'{n}\` already exists'.format(n=lattice.name))
+
+        # Create a FileLattice with all CUBA-keys defined
+        filelat = FileLattice(self._handle, lattice.name, lattice.type,
+                              lattice.base_vect, lattice.size,
+                              lattice.origin)
+
+        # Copy the contents of the lattice to the file
+        for node in lattice.iter_nodes():
+            filelat.update_node(node)
+
+        self._handle.flush()
+
+        return filelat
+
     def get_particles(self, name):
         """Get particle container from file.
-
         The returned particle container can be used to query
         and change the related data stored in the file. If the
         file has been closed then the particle container should
@@ -177,6 +211,26 @@ class H5CUDS(object):
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
 
+    def get_lattice(self, name):
+        """Get lattice from file.
+
+        The returned lattice can be used to query
+        and change the related data stored in the file. If the
+        file has been closed then the lattice should
+        no longer be used.
+
+        Parameters
+        ----------
+        name : str
+            name of lattice to return
+        """
+        if name in self._handle.root.lattice:
+            lat = FileLattice(self._handle, name)
+            return lat
+        else:
+            raise ValueError(
+                'Lattice \'{n}\` does not exist'.format(n=name))
+
     def delete_particles(self, name):
         """Delete particle container from file.
 
@@ -208,10 +262,24 @@ class H5CUDS(object):
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
 
+    def delete_lattice(self, name):
+        """Delete lattice from file.
+
+        Parameters
+        ----------
+        name : str
+            name of lattice to delete
+        """
+        try:
+            filelat = self._handle.root.lattice._f_get_child(name)
+        except tables.NoSuchNodeError:
+            raise ValueError('Lattice \'{n}\` does not exist'.format(n=name))
+        else:
+            filelat._f_remove(recursive=True)
+
     def iter_particles(self, names=None):
         """Returns an iterator over a subset or all
         of the particle containers.
-
         Parameters
         ----------
         names : list of str
@@ -245,3 +313,22 @@ class H5CUDS(object):
         else:
             for name in names:
                 yield self.get_mesh(name)
+
+    def iter_lattices(self, names=None):
+        """Returns an iterator over a subset or all
+        of the lattices.
+
+        Parameters
+        ----------
+        names : list of str
+            names of specific lattices to be iterated over.
+            If names is not given, then all lattices will
+            be iterated over.
+
+        """
+        if names is None:
+            for lattice in self._handle.root.lattice._f_iter_nodes():
+                yield self.get_lattice(lattice.name)
+        else:
+            for name in names:
+                yield self.get_lattice(name)

@@ -5,11 +5,15 @@ import shutil
 import tempfile
 import uuid
 
+from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
+from simphony.cuds.lattice import Lattice
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.file_mesh import FileMesh
 from simphony.io.h5_particles import H5Particles
+from simphony.testing.utils import compare_data_containers
 
 
 class TestH5CUDS(unittest.TestCase):
@@ -71,6 +75,49 @@ class TestH5CUDS(unittest.TestCase):
             self.assertEqual("test", pc.name)
             self.assertEqual(0, sum(1 for _ in pc.iter_particles()))
             self.assertEqual(0, sum(1 for _ in pc.iter_bonds()))
+
+    def test_add_particle_container_empty_data(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            self.assertEqual(DataContainer(), pc.data)
+            self.assertEqual(0, len(pc.data))
+
+    def test_add_particle_container_data_copy(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            data = pc.data
+            data[CUBA.NAME] = 'somename'
+
+            # Since the returned data is always a copy,
+            #  therefore the pc.data should not have changed
+            self.assertNotIn(CUBA.NAME, pc.data)
+            # And the length should be still zero
+            self.assertEqual(0, len(pc.data))
+            pc.data = data
+            # This time we replaced the pc.data,
+            #  therefore it should have been changed
+            self.assertIn(CUBA.NAME, pc.data)
+            # The length also should have been changed
+            self.assertEqual(1, len(pc.data))
+
+    def test_add_get_particle_container_data(self):
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        original_pc = ParticleContainer(name="test")
+        # Change data
+        data = original_pc.data
+        data[CUBA.NAME] = 'somename'
+
+        # Store particle container along with its data
+        with closing(H5CUDS.open(filename)) as handle:
+            pc = handle.add_particle_container(original_pc)
+
+        # Reopen the file and check the data if it is still there
+        with closing(H5CUDS.open(filename, 'r')) as handle:
+            pc = handle.get_particle_container('test')
+            self.assertIn(CUBA.NAME, pc.data)
+            self.assertEqual(pc.data[CUBA.NAME], 'somename')
 
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
@@ -346,6 +393,67 @@ class TestH5CUDS(unittest.TestCase):
             # "foo" name when adding another mesh
             m = handle.add_mesh(Mesh(name="foo"))
 
+    def test_add_get_delete_lattice(self):
+        lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename, 'w')) as handle:
+            handle.add_lattice(lat)
+            lat2 = handle.get_lattice('test_lattice')
+
+            self.assertEqual(lat2.name, 'test_lattice')
+            for N in lat2.iter_nodes():
+                M = lat.get_node(N.index)
+                self.assertEqual(N.index, M.index)
+                compare_data_containers(N.data, M.data, testcase=self)
+
+            handle.delete_lattice('test_lattice')
+            numlat = 0
+            for N in handle.iter_lattices():
+                numlat += 1
+            self.assertEqual(numlat, 0)
+
+    def test_iter_lattices(self):
+        lat = Lattice('test_lattice', 'Cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        lat2 = Lattice('test_lattice2', 'Cubic', (1.0, 1.0, 1.0),
+                       (3, 3, 3), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename, 'w')) as handle:
+            handle.add_lattice(lat)
+            handle.add_lattice(lat2)
+            stored_names = [l.name for l in handle.iter_lattices()]
+            self.assertItemsEqual(stored_names, ['test_lattice',
+                                                 'test_lattice2'])
+
+    def test_lattice_rename(self):
+        lat = Lattice('foo', 'Cubic', (1.0, 1.0, 1.0),
+                      (2, 3, 4), (0.0, 0.0, 0.0))
+
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename)) as handle:
+            m = handle.add_lattice(lat)
+            m.name = "bar"
+            self.assertEqual("bar", m.name)
+
+            # we should not be able to use the old name "foo"
+            with self.assertRaises(ValueError):
+                handle.get_lattice("foo")
+            with self.assertRaises(ValueError):
+                handle.delete_lattice("foo")
+            with self.assertRaises(ValueError):
+                [_ for _ in handle.iter_lattices(names=["foo"])]
+
+            # we should be able to access using the new "bar" name
+            m_bar = handle.get_lattice("bar")
+            self.assertEqual("bar", m_bar.name)
+
+            # and we should be able to use the no-longer used
+            # "foo" name when adding another lattice
+            m = handle.add_lattice(lat)
 
 if __name__ == '__main__':
     unittest.main()
