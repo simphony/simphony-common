@@ -4,7 +4,6 @@ import uuid
 from simphony.cuds.abstractparticles import ABCParticles
 import simphony.cuds.pcexceptions as pce
 from simphony.core.data_container import DataContainer
-import copy
 
 
 class Particles(ABCParticles):
