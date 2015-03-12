@@ -1,9 +1,11 @@
 import unittest
 import uuid
+from functools import partial
 
 from simphony.cuds.particles import Particle, Bond, Particles
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
+from simphony.testing.utils import compare_data_containers
 from simphony.testing.abc_check_particles import (
     ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
     ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
@@ -86,6 +88,9 @@ class TestNativeContainerManipulatingBonds(
 
 
 class TestParticlesDataContainer(unittest.TestCase):
+    def setUp(self):
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
 
     def test_data(self):
         pc = Particles(name='foo')
@@ -93,7 +98,13 @@ class TestParticlesDataContainer(unittest.TestCase):
         data[CUBA.MASS] = 9
         pc.data = data
         ret_data = pc.data
-        self.assertItemsEqual(data, ret_data)
+        self.assertEqual(data, ret_data)
+        self.assertIsNot(data, ret_data)
+        cur_data = pc.data
+        cur_data[CUBA.MASS] = 10
+        ret_data = pc.data
+        self.assertEqual(data, ret_data)
+        self.assertIsNot(data, ret_data)
 
 if __name__ == '__main__':
     unittest.main()
