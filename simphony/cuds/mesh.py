@@ -218,12 +218,21 @@ class Mesh(ABCMesh):
 
     def __init__(self, name):
         self.name = name
-        self.data = 0
 
         self._points = {}
         self._edges = {}
         self._faces = {}
         self._cells = {}
+
+        self._data = dc.DataContainer()
+
+    @property
+    def data(self):
+        return dc.DataContainer(self._data)
+
+    @data.setter
+    def data(self, value):
+        self._data = dc.DataContainer(value)
 
     def get_point(self, uuid):
         """ Returns a point with a given uuid.

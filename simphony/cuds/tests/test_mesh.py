@@ -6,13 +6,19 @@ mesh module functionalities
 """
 
 import unittest
+
+from functools import partial
+
+from simphony.testing.utils import compare_data_containers
+
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
-# import simphony.core.data_container as dc
-# from simphony.core.cuba import CUBA
+
+from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 
 
 class TestSequenceFunctions(unittest.TestCase):
@@ -24,6 +30,9 @@ class TestSequenceFunctions(unittest.TestCase):
         to tests all the mesh methods
 
         """
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
+
         self.mesh = Mesh(name="foo")
         self.points = [
             Point((0.0, 0.0, 0.0)),
@@ -679,6 +688,43 @@ class TestSequenceFunctions(unittest.TestCase):
         cell_upd = self.mesh.get_cell(cuuids[0])
 
         self.assertItemsEqual(cell_upd.points, cell_ret.points)
+
+    def test_set_data(self):
+        """ Check that data can be retrieved
+
+        """
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        ret_data = self.mesh.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
+
+    def test_modify_data(self):
+        """ Check that data is consistent
+
+        Check that the internal data of the mesh cannot be modified
+        outise the mesh class
+
+        """
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        mod_data = self.mesh.data
+
+        mod_data[CUBA.VELOCITY] = (1, 1, 1)
+
+        ret_data = self.mesh.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
 
 if __name__ == '__main__':
     unittest.main()
