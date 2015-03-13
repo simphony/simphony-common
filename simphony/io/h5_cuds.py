@@ -67,12 +67,12 @@ class H5CUDS(object):
         """
         self._handle.close()
 
-    def add_particle_container(self, particles):
+    def add_particles(self, particles):
         """Add particle container to the file.
 
         Parameters
         ----------
-        particles : ABCParticleContainer
+        particles : ABCParticles
             Particle container to be added.
 
         Returns
@@ -171,9 +171,8 @@ class H5CUDS(object):
 
         return filelat
 
-    def get_particle_container(self, name):
+    def get_particles(self, name):
         """Get particle container from file.
-
         The returned particle container can be used to query
         and change the related data stored in the file. If the
         file has been closed then the particle container should
@@ -232,7 +231,7 @@ class H5CUDS(object):
             raise ValueError(
                 'Lattice \'{n}\` does not exist'.format(n=name))
 
-    def delete_particle_container(self, name):
+    def delete_particles(self, name):
         """Delete particle container from file.
 
         Parameters
@@ -278,10 +277,9 @@ class H5CUDS(object):
         else:
             filelat._f_remove(recursive=True)
 
-    def iter_particle_containers(self, names=None):
+    def iter_particles(self, names=None):
         """Returns an iterator over a subset or all
         of the particle containers.
-
         Parameters
         ----------
         names : list of str
@@ -292,10 +290,10 @@ class H5CUDS(object):
         """
         if names is None:
             for node in self._root.particle._f_iter_nodes():
-                yield self.get_particle_container(node._v_name)
+                yield self.get_particles(node._v_name)
         else:
             for name in names:
-                yield self.get_particle_container(name)
+                yield self.get_particles(name)
 
     def iter_meshes(self, names=None):
         """Returns an iterator over a subset or all

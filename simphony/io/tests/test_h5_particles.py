@@ -3,9 +3,9 @@ import tempfile
 import shutil
 import unittest
 
-from simphony.cuds.particles import ParticleContainer
+from simphony.cuds.particles import Particles
 from simphony.io.h5_cuds import H5CUDS
-from simphony.testing.abc_check_particle_containers import (
+from simphony.testing.abc_check_particles import (
     ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
     ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
 
@@ -14,8 +14,8 @@ class TestH5ContainerAddParticles(
         ContainerAddParticlesCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+        return self.handle.add_particles(
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -34,8 +34,8 @@ class TestH5ContainerManipulatingParticles(
         ContainerManipulatingParticlesCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+        return self.handle.add_particles(
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -53,8 +53,8 @@ class TestH5ContainerManipulatingParticles(
 class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+        return self.handle.add_particles(
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -73,8 +73,8 @@ class TestH5ContainerManipulatingBonds(
         ContainerManipulatingBondsCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particle_container(
-            ParticleContainer(name=name))
+        return self.handle.add_particles(
+            Particles(name=name))
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()

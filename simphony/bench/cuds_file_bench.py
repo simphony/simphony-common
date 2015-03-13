@@ -54,7 +54,7 @@ class Container(object):
 
     def __enter__(self):
         self._file = CudsFile.open(self._filename)
-        pc = self._file.add_particle_container("test")
+        pc = self._file.add_particles("test")
         return pc
 
     def __exit__(self, type, value, tb):

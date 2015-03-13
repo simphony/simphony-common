@@ -3,13 +3,13 @@ from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 
 
-class ABCParticleContainer(object):
-    """Abstract base class for a ParticleContainer item.
+class ABCParticles(object):
+    """Abstract base class for a Particles item.
 
     Attributes
     ----------
     name : str
-        name of particle container
+        name of particles item.
     """
     __metaclass__ = ABCMeta
 

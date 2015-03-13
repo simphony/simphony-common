@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from simphony.cuds.abstractparticles import ABCParticleContainer
+from simphony.cuds.abstractparticles import ABCParticles
 import simphony.cuds.pcexceptions as pce
 from simphony.core.data_container import DataContainer
 
 
-class ParticleContainer(ABCParticleContainer):
+class Particles(ABCParticles):
     """Class that represents a container of particles and bonds.
 
     Class provides methods to add particles and bonds, remove them and update
@@ -34,7 +34,7 @@ class ParticleContainer(ABCParticleContainer):
         """
         self._particles = {}
         self._bonds = {}
-        self.data = DataContainer()
+        self._data = DataContainer()
         self.name = name
 
 # ================================================================
@@ -77,7 +77,7 @@ class ParticleContainer(ABCParticleContainer):
         passing the Particle as parameter.
 
         >>> part = Particle()
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> part_container.add_particle(part)
         """
         return self._add_element(
@@ -117,7 +117,7 @@ class ParticleContainer(ABCParticleContainer):
         passing the Bond as parameter.
 
         >>> bond = Bond()
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> part_container.add_bond(bond)
         """
         return self._add_element(self._bonds, bond, Bond.from_bond)
@@ -138,7 +138,7 @@ class ParticleContainer(ABCParticleContainer):
 
         Raises
         ------
-        ValueError exception if the particle doesn't exists.
+        ValueError exception if the particle does not exists.
 
         See Also
         --------
@@ -150,7 +150,7 @@ class ParticleContainer(ABCParticleContainer):
         'get_particle' method for example) and a ParticleContainer just call
         the function passing the Particle as parameter.
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> part = part_container.get_particle(uid)
         >>> ... #do whatever you want with the particle
@@ -184,10 +184,10 @@ class ParticleContainer(ABCParticleContainer):
         Examples
         --------
         Having a Bond that already exists in the container (taken with the
-        'get_bond' method for example) and a ParticleContainer just call the
+        'get_bond' method for example) and a Particles just call the
         function passing the Bond as parameter.
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> bond = part_container.get_bond(uid)
         >>> ... #do whatever you want with the bond
@@ -257,7 +257,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         Having an id of an existing particle, pass it to the function.
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> part = part_container.get_particle(uid)
         >>> ...
@@ -286,7 +286,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         Having an id of an existing bond, pass it to the function.
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> bond = part_container.get_bond(id)
         >>> ...
@@ -328,7 +328,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         It can be used with a sequence as parameter or withouth it:
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> for particle in part_container.iter_particles([id1, id2, id3]):
                 ...  #do stuff
@@ -379,7 +379,7 @@ class ParticleContainer(ABCParticleContainer):
         --------
         It can be used with a sequence as parameter or withouth it:
 
-        >>> part_container = ParticleContainer(name="foo")
+        >>> part_container = Particles(name="foo")
         >>> ...
         >>> for bond in part_container.iter_bonds([id1, id2, id3]):
                 ...  #do stuff
@@ -447,6 +447,19 @@ class ParticleContainer(ABCParticleContainer):
             cur_dict[uid] = clone(element)
         else:
             raise ValueError('id: {} does not exist'.format(uid))
+
+# ================================================================
+
+    # properties
+
+# ================================================================
+    def _get_data(self):
+        return DataContainer(self._data)
+
+    def _set_data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    data = property(_get_data, _set_data)
 
 
 class Particle(object):
