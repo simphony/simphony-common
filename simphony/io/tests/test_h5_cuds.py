@@ -79,14 +79,14 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_particle_container_empty_data(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            pc = handle.add_particles(Particles(name="test"))
             self.assertEqual(DataContainer(), pc.data)
             self.assertEqual(0, len(pc.data))
 
     def test_add_particle_container_data_copy(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(ParticleContainer(name="test"))
+            pc = handle.add_particles(Particles(name="test"))
             data = pc.data
             data[CUBA.NAME] = 'somename'
 
@@ -104,18 +104,19 @@ class TestH5CUDS(unittest.TestCase):
 
     def test_add_get_particle_container_data(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
-        original_pc = ParticleContainer(name="test")
+        original_pc = Particles(name="test")
         # Change data
         data = original_pc.data
         data[CUBA.NAME] = 'somename'
+        original_pc.data = data
 
         # Store particle container along with its data
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particle_container(original_pc)
+            pc = handle.add_particles(original_pc)
 
         # Reopen the file and check the data if it is still there
         with closing(H5CUDS.open(filename, 'r')) as handle:
-            pc = handle.get_particle_container('test')
+            pc = handle.get_particles('test')
             self.assertIn(CUBA.NAME, pc.data)
             self.assertEqual(pc.data[CUBA.NAME], 'somename')
 
