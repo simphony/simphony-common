@@ -187,9 +187,5 @@ class TestFileLattice(unittest.TestCase):
         assert_array_equal(self.orthofilelat.get_coordinate((1, 1, 1)),
                            numpy.array((1.0, 2.0, 3.0)))
 
-        assert_array_equal(self.hexafilelat.get_coordinate((1, 1)),
-                           numpy.array((0.5, numpy.sqrt(3)/2)))
-
-
 if __name__ == '__main__':
     unittest.main()

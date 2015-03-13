@@ -112,6 +112,10 @@ class Lattice(ABCLattice):
         D x float
 
         """
+        if self._type == 'Hexagonal':
+            raise NotImplementedError("""Get_coordinate for
+                Hexagonal system not implemented!""")
+
         return self.origin + self.base_vect*np.array(index)
 
     @property
