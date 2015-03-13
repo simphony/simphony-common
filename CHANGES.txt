@@ -1,0 +1,21 @@
+SimPhoNy CHANGELOG
+======================
+
+Release 0.1.0
+-------------
+
+* Implemented Lattice and FileLattice (#22,#23)
+* Fixed mesh iterator bug (#92)
+* Fixed inconsistent behaviour while adding low-level objects (#28)
+* Added Data attribute to Particle, Mesh and Lattice (#83,#84,#85)
+* Added 'name' attribute to high-level cuds objects (#38)
+* Added support for uuid in all the adapters (#19)
+* Fixed element point storage in FILE/IO (#35)
+* Added support for uuid in Particle and Boinds (#26)
+* Added documentation for adding visualization plugins (#65)
+* Added documentation for adding engine plugins (#64)
+* New documentation has been automatically build using readthedoc.org (#41)
+* Renamed ABCParticleContainer to ABCParticles (#63)
+* Integrated DataContainer into FileParticleContainer (#13)
+* Moved CUBA info from the wiki to cuba.yml (#8)
+* Achieved consistent identification for parameters and attribures in all the entities (#20)
