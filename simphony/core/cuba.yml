@@ -50,7 +50,7 @@
 - description: Chemical Specie
   domain: [ATM, VIS]
   key: CHEMICAL_SPECIE
-  name: Chemical Specie
+  name: ChemicalSpecie
   number: 7
   shape: [20]
   type: string
