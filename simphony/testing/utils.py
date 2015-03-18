@@ -87,22 +87,21 @@ def dummy_cuba_value(cuba):
     # get the data type
 
     if numpy.issubdtype(keyword.dtype, str):
-        value = keyword.name
-    elif numpy.issubdtype(keyword.dtype, numpy.float):
-        value = float(cuba + 3)
-    elif numpy.issubdtype(keyword.dtype, numpy.integer):
-        value = int(cuba + 3)
+        return keyword.name
     else:
         shape = keyword.shape
-        data = numpy.arange(numpy.prod(shape)) * cuba
-        data = numpy.reshape(data, shape)
-        if keyword.dtype.kind == 'float':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.float64) * data
-        elif keyword.dtype.kind == 'int':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.int32) * data
+        if shape == [1]:
+            if numpy.issubdtype(keyword.dtype, 'float'):
+                return float(cuba + 3)
+            if numpy.issubdtype(keyword.dtype, 'int'):
+                return int(cuba + 3)
         else:
-            raise RuntimeError(
-                'cannot create value for {}'.format(keyword.dtype))
-    return value
+            data = numpy.arange(numpy.prod(shape)) * cuba
+            data = numpy.reshape(data, shape)
+            if numpy.issubdtype(keyword.dtype, 'float'):
+                return numpy.ones(shape=shape, dtype=numpy.float64) * data
+            if numpy.issubdtype(keyword.dtype, 'int'):
+                return numpy.ones(shape=shape, dtype=numpy.int32) * data
+
+    raise RuntimeError(
+        'cannot create value for {}'.format(keyword.dtype))
