@@ -3,7 +3,7 @@ import uuid
 import numpy
 from numpy.testing import assert_equal
 
-from simphony.io.data_container_description import Data
+from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
@@ -76,30 +76,26 @@ def create_data_container(restrict=None):
 
 
 def dummy_cuba_value(cuba):
-    column = CUBA(cuba).name.lower()
-    # get the column type
-    try:
-        column_type = Data.columns[column]
-    except AttributeError:
-        column_type = Data._v_colobjects[column]
+    keyword = KEYWORDS[CUBA(cuba).name]
+    # get the data type
 
-    if numpy.issubdtype(column_type, str):
-        value = column.upper()
-    elif numpy.issubdtype(column_type, numpy.float):
+    if numpy.issubdtype(keyword.dtype, str):
+        value = keyword.name
+    elif numpy.issubdtype(keyword.dtype, numpy.float):
         value = float(cuba + 3)
-    elif numpy.issubdtype(column_type, numpy.integer):
+    elif numpy.issubdtype(keyword.dtype, numpy.integer):
         value = int(cuba + 3)
     else:
-        shape = column_type.shape
+        shape = keyword.shape
         data = numpy.arange(numpy.prod(shape)) * cuba
         data = numpy.reshape(data, shape)
-        if column_type.kind == 'float':
+        if keyword.dtype.kind == 'float':
             value = numpy.ones(
                 shape=shape, dtype=numpy.float64) * data
-        elif column_type.kind == 'int':
+        elif keyword.dtype.kind == 'int':
             value = numpy.ones(
                 shape=shape, dtype=numpy.int32) * data
         else:
             raise RuntimeError(
-                'cannot create value for {}'.format(column_type))
+                'cannot create value for {}'.format(keyword.dtype))
     return value
