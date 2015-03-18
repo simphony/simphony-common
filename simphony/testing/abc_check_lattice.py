@@ -48,6 +48,23 @@ class ABCCheckLattice(object):
         indexes = {node.index for node in container.iter_nodes()}
         self.assertEqual(indexes, expected)
 
+    def test_iter_nodes_subset(self):
+        container = self.container
+
+        x, y, z = numpy.meshgrid(
+            range(2, self.size[0]),
+            range(self.size[1]-4),
+            range(3, self.size[2], 2))
+        expected = set(zip(x.flat, y.flat, z.flat))
+
+        # data
+        for node in container.iter_nodes(expected):
+            self.assertEqual(node.data, DataContainer())
+
+        # indexes
+        indexes = {node.index for node in container.iter_nodes(expected)}
+        self.assertEqual(indexes, expected)
+
     def test_get_node(self):
         container = self.container
 
