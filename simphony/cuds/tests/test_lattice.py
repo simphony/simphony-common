@@ -56,9 +56,9 @@ class TestLattice(ABCCheckLattice, unittest.TestCase):
         rectang_lat = make_rectangular_lattice(
             'Lattice3', (0.3, 0.35), (13, 23))
         cubic_lat = make_cubic_lattice(
-            'Lattice4', 0.4, (14, 24), (4, 5, 6))
+            'Lattice4', 0.4, (14, 24, 34), (4, 5, 6))
         orthop_lat = make_orthorombicp_lattice(
-            'Lattice5', (0.5, 0.54, 0.58), (15, 25), (7, 8, 9))
+            'Lattice5', (0.5, 0.54, 0.58), (15, 25, 35), (7, 8, 9))
 
         self.assertIsInstance(hexag_lat, Lattice, "Error: not a Lattice!")
         self.assertIsInstance(square_lat, Lattice, "Error: not a Lattice!")
@@ -81,8 +81,8 @@ class TestLattice(ABCCheckLattice, unittest.TestCase):
         assert_array_equal(hexag_lat.size, (11, 21))
         assert_array_equal(square_lat.size, (12, 22))
         assert_array_equal(rectang_lat.size, (13, 23))
-        assert_array_equal(cubic_lat.size, (14, 24))
-        assert_array_equal(orthop_lat.size, (15, 25))
+        assert_array_equal(cubic_lat.size, (14, 24, 34))
+        assert_array_equal(orthop_lat.size, (15, 25, 35))
 
         assert_array_equal(hexag_lat.origin, (0, 0))
         assert_array_equal(square_lat.origin, (0, 0))
