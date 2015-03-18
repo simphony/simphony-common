@@ -85,7 +85,6 @@ class TestFileLatticeCustom(ABCCheckLattice, unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def container_factory(self, name, type_, base_vect, size, origin):
-        print base_vect
         return FileLattice(
             self.handle._handle, 'foo', type_, base_vect,
             size, origin, record=CustomRecord)
