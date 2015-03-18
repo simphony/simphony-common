@@ -2,7 +2,6 @@
     Testing module for lattice data classes.
 """
 import unittest
-import numpy as np
 from numpy.testing import assert_array_equal
 from math import sqrt
 
@@ -43,6 +42,9 @@ class TestLattice(ABCCheckLattice, unittest.TestCase):
 
     def container_factory(self, name, type_, base_vect, size, origin):
         return Lattice(name, type_, base_vect, size, origin)
+
+    def supported_cuba(self):
+        return set(CUBA)
 
     def test_construct_lattice_make(self):
         """ Test creation of lattices using the factory functions.

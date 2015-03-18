@@ -30,6 +30,12 @@ class ABCCheckLattice(object):
         """ Create and return a lattice.
         """
 
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+
+        """
+
     def test_iter_nodes(self):
         container = self.container
 
@@ -93,11 +99,29 @@ class ABCCheckLattice(object):
 
         index = 2, 3, 4
         node = container.get_node(index)
-        node.data = create_data_container()
+        node.data = create_data_container(restrict=self.supported_cuba())
         container.update_node(node)
 
         new_node = container.get_node(index)
         self.assertEqual(new_node, node)
+        # Check that `new_node` is not the same instance as `node`
+        self.assertIsNot(new_node, node)
+
+    def test_update_node_with_extra_keywords(self):
+        container = self.container
+
+        index = 2, 3, 4
+        node = container.get_node(index)
+        # Update with full DataContainer.
+        node.data = create_data_container()
+        container.update_node(node)
+
+        new_node = container.get_node(index)
+        # We expect only the supported CUBA to be stored.
+        expected = LatticeNode(
+            index=node.index,
+            data=create_data_container(restrict=self.supported_cuba()))
+        self.assertEqual(new_node, expected)
         # Check that `new_node` is not the same instance as `node`
         self.assertIsNot(new_node, node)
 
