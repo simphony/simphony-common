@@ -34,6 +34,7 @@ def compare_data_containers(data, reference, msg=None, testcase=None):
     self.assertEqual(len(data), len(reference))
     for key in data:
         self.assertIn(key, reference)
+        self.assertIsInstance(key, CUBA)
         assert_equal(data[key], reference[key])
 
 
