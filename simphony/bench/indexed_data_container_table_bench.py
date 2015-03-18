@@ -13,7 +13,7 @@ from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 from simphony.io.indexed_data_container_table import (
     IndexedDataContainerTable)
-from simphony.io.tests.utils import create_data_container
+from simphony.testing.utils import create_data_container
 
 
 temp_dir = tempfile.mkdtemp()
@@ -75,44 +75,50 @@ def create_table(filename):
         uids = append(handle, 1000, data_container)
     return uids
 
-try:
-    print("""
-    Benchmarking various operations on the IndexDataContainerTable.
 
-    """)
-    with closing(tables.open_file(filename, mode='w')) as handle:
-        root = handle.root
-        table = IndexedDataContainerTable(root, 'my_data_table')
-        print(
-            "Append {}:".format(n),
-            bench(lambda: append(handle, 1000, data_container)))
+def main():
+    try:
+        print("""
+        Benchmarking various operations on the IndexDataContainerTable.
 
-    with closing(tables.open_file(filename, mode='w')) as handle:
-        root = handle.root
-        table = IndexedDataContainerTable(
-            root, 'my_data_table', expected_number=n)
-        print(
-            "Append {} masked:".format(n),
-            bench(lambda: append(handle, 1000, data_container_half)))
+        """)
+        with closing(tables.open_file(filename, mode='w')) as handle:
+            root = handle.root
+            table = IndexedDataContainerTable(root, 'my_data_table')
+            print(
+                "Append {}:".format(n),
+                bench(lambda: append(handle, 1000, data_container)))
 
-    uids = create_table(filename)
-    sample = random.sample(uids, 300)
+        with closing(tables.open_file(filename, mode='w')) as handle:
+            root = handle.root
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
+            print(
+                "Append {} masked:".format(n),
+                bench(lambda: append(handle, 1000, data_container_half)))
 
-    with closing(tables.open_file(filename, mode='r')) as handle:
-        root = handle.root
-        table = IndexedDataContainerTable(
-            root, 'my_data_table', expected_number=n)
-        print("Iterate {}:".format(n), bench(lambda: iteration(table)))
-        print(
-            'Getitem sample of 300:',
-            bench(lambda: getitem_access(table, sample)))
+        uids = create_table(filename)
+        sample = random.sample(uids, 300)
 
-    with closing(tables.open_file(filename, mode='a')) as handle:
-        root = handle.root
-        table = IndexedDataContainerTable(
-            root, 'my_data_table', expected_number=n)
-        print(
-            "Update item of 300 sample:",
-            bench(lambda: setitem(table, data_container_half, sample)))
-finally:
-    shutil.rmtree(temp_dir)
+        with closing(tables.open_file(filename, mode='r')) as handle:
+            root = handle.root
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
+            print("Iterate {}:".format(n), bench(lambda: iteration(table)))
+            print(
+                'Getitem sample of 300:',
+                bench(lambda: getitem_access(table, sample)))
+
+        with closing(tables.open_file(filename, mode='a')) as handle:
+            root = handle.root
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
+            print(
+                "Update item of 300 sample:",
+                bench(lambda: setitem(table, data_container_half, sample)))
+    finally:
+        shutil.rmtree(temp_dir)
+
+
+if __name__ == '__main__':
+    main()
