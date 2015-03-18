@@ -23,6 +23,12 @@ def compare_particles(particle, reference, msg=None, testcase=None):
     compare_data_containers(particle.data, reference.data, testcase=self)
 
 
+def compare_lattice_nodes(node, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(node.index, reference.index)
+    compare_data_containers(node.data, reference.data, testcase=self)
+
+
 def compare_data_containers(data, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(len(data), len(reference))
