@@ -4,7 +4,7 @@ from simphony.cuds.abstractlattice import ABCLattice
 from simphony.core.data_container import DataContainer
 
 
-class LatticeNode:
+class LatticeNode(object):
     """
     A single node of a lattice.
 
