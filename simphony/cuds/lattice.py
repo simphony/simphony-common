@@ -29,8 +29,8 @@ class Lattice(ABCLattice):
 
     Stores references to data containers (node related data).
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     name : str
         name of the lattice
     type : str

@@ -77,12 +77,12 @@ class H5Lattice(ABCLattice):
     def get_node(self, index):
         """ Get a copy of the node corresponding to the given index.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         index : tuple of D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         A reference to a LatticeNode object
 
         """
@@ -95,7 +95,8 @@ class H5Lattice(ABCLattice):
     def update_node(self, node):
         """ Updates FileLattice data for a LatticeNode
 
-        Parameters:
+        Parameters
+        ----------
             node : LatticeNode
                 reference to LatticeNode object
 
@@ -107,13 +108,13 @@ class H5Lattice(ABCLattice):
     def iter_nodes(self, indices=None):
         """ Get an iterator over the LatticeNodes described by the ids.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         indices : iterable set of D x int, optional
             node index coordinates
 
-        Returns:
-        -----------
+        Returns
+        -------
         A generator for LatticeNode objects
 
         """
@@ -128,12 +129,12 @@ class H5Lattice(ABCLattice):
     def get_coordinate(self, index):
         """ Get coordinate of the given index coordinate.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         index : D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         D x float
 
         """
