@@ -1,18 +1,19 @@
-from __future__ import print_function
-
 import os
 import shutil
 import tempfile
+import uuid
 
 from simphony.bench.util import bench
-from simphony.io.cuds_file import CudsFile
-from simphony.cuds.particle import Particle
+from simphony.io.h5_cuds import H5CUDS
+from simphony.cuds.particles import Particle
 
 particles = [
     Particle(coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
 
 id_particles = [
-    Particle(id=i, coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
+    Particle(
+        uid=uuid.uuid4(),
+        coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
 
 
 def create_file_with_particles():
@@ -53,7 +54,7 @@ class Container(object):
             print('exists')
 
     def __enter__(self):
-        self._file = CudsFile.open(self._filename)
+        self._file = H5CUDS.open(self._filename)
         pc = self._file.add_particles("test")
         return pc
 

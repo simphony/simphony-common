@@ -3,18 +3,10 @@ import tempfile
 import shutil
 import unittest
 import tables
-import numpy
 
-from simphony.cuds.lattice import Lattice
-from simphony.cuds.lattice import LatticeNode
-from simphony.cuds.lattice import make_hexagonal_lattice
-from simphony.cuds.lattice import make_orthorombicp_lattice
-from simphony.io.file_lattice import FileLattice
+from simphony.io.h5_lattice import H5Lattice
 from numpy.testing import assert_array_equal
-from numpy.testing import assert_equal
-from simphony.testing.utils import compare_data_containers
 from simphony.core.cuba import CUBA
-from simphony.io.h5_cuds import H5CUDS
 from simphony.testing.abc_check_lattice import ABCCheckLattice
 
 
@@ -29,15 +21,15 @@ class CustomRecord(tables.IsDescription):
     mask = tables.BoolCol(pos=1, shape=(3,))
 
 
-class TestFileLattice(ABCCheckLattice, unittest.TestCase):
-    """ Basic testing of the FileLattice.
+class TestH5Lattice(ABCCheckLattice, unittest.TestCase):
+    """ Basic testing of the H5Lattice.
     """
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
-        self.handle = H5CUDS.open(self.filename)
+        self.handle = tables.open_file(self.filename, mode='w')
         ABCCheckLattice.setUp(self)
 
     def cleanup(self):
@@ -46,20 +38,17 @@ class TestFileLattice(ABCCheckLattice, unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def container_factory(self, name, type_, base_vect, size, origin):
-        lattice = Lattice(name, type_, base_vect, size, origin)
-        self.handle.add_lattice(lattice)
-        return self.handle.get_lattice(name)
+        return H5Lattice.create_new(
+            self.handle.root, name, type_, base_vect, size, origin)
 
     def supported_cuba(self):
         return set(CUBA)
 
     def test_initialization_from_existing_lattice_in_file(self):
-        """ Checks that FileLattice constructed from a known table already
-        existing in H5CUDS-file provides correct attributes for FileLattice
-        object
-
+        """ Checks that H5Lattice constructed from Lattice with a
+        CustomRecord column description has correct attributes
         """
-        lattice = FileLattice(self.handle._handle, 'foo')
+        lattice = H5Lattice(self.handle.root, 'foo')
         self.assertEqual(lattice.name, 'foo')
         self.assertEqual(lattice.type, 'Cubic')
         assert_array_equal(lattice.base_vect, self.base_vect)
@@ -68,15 +57,14 @@ class TestFileLattice(ABCCheckLattice, unittest.TestCase):
 
 
 class TestFileLatticeCustom(ABCCheckLattice, unittest.TestCase):
-    """ TestFileLattice using a custom record.
-
+    """ Test H5Lattice using a custom record.
     """
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
-        self.handle = H5CUDS.open(self.filename)
+        self.handle = tables.open_file(self.filename, 'w')
         ABCCheckLattice.setUp(self)
 
     def cleanup(self):
@@ -85,8 +73,8 @@ class TestFileLatticeCustom(ABCCheckLattice, unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def container_factory(self, name, type_, base_vect, size, origin):
-        return FileLattice(
-            self.handle._handle, 'foo', type_, base_vect,
+        return H5Lattice.create_new(
+            self.handle.root, 'foo', type_, base_vect,
             size, origin, record=CustomRecord)
 
     def supported_cuba(self):
