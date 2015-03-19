@@ -1,7 +1,7 @@
 Simphony-common
 ===============
 
-The native implementation of the SimPhoNy cuds objects and io code.
+The native implementation of the SimPhoNy cuds objects and io code (http://http://www.simphony-project.eu/).
 
 .. image:: https://travis-ci.org/simphony/simphony-common.svg?branch=master
    :target: https://travis-ci.org/simphony/simphony-common
