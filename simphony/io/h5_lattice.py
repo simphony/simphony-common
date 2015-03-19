@@ -12,7 +12,7 @@ class H5Lattice(ABCLattice):
 
     """
     def __init__(self, group, name):
-        """ Return a reference to existing lattice in a H5CUDS lattice group
+        """ Return a reference to existing lattice in a H5CUDS lattice group.
 
         Parameters
         ----------
@@ -36,7 +36,8 @@ class H5Lattice(ABCLattice):
     @classmethod
     def create_new(cls, group, name, type, base_vect, size, origin,
                    record=None):
-        """
+        """ Create a new lattice in H5CUDS file.
+
         Parameters
         ----------
         group : HDF5 group in PyTables file
@@ -58,7 +59,8 @@ class H5Lattice(ABCLattice):
         """
         # If record not specified use NoUIDRecord in table initialization
         table = IndexedDataContainerTable(group, name,
-            record if record is not None else NoUIDRecord, np.prod(size))
+                                          record if record is not None
+                                          else NoUIDRecord, np.prod(size))
 
         for i in xrange(np.prod(size)):
             table.append(DataContainer())
@@ -73,7 +75,7 @@ class H5Lattice(ABCLattice):
         return cls(group, name)
 
     def get_node(self, index):
-        """Get a copy of the node corresponding to the given index.
+        """ Get a copy of the node corresponding to the given index.
 
         Parameters:
         -----------
@@ -100,7 +102,7 @@ class H5Lattice(ABCLattice):
         self._table[n] = node.data
 
     def iter_nodes(self, indices=None):
-        """Get an iterator over the LatticeNodes described by the ids.
+        """ Get an iterator over the LatticeNodes described by the ids.
 
         Parameters:
         -----------
@@ -121,7 +123,7 @@ class H5Lattice(ABCLattice):
                 yield self.get_node(index)
 
     def get_coordinate(self, index):
-        """Get coordinate of the given index coordinate.
+        """ Get coordinate of the given index coordinate.
 
         Parameters:
         -----------

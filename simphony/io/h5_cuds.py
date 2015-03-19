@@ -160,8 +160,8 @@ class H5CUDS(object):
 
         # Create a h5lattice with all CUBA-keys defined
         h5lat = H5Lattice.create_new(self._root.lattice, lattice.name,
-                                       lattice.type, lattice.base_vect,
-                                       lattice.size, lattice.origin)
+                                     lattice.type, lattice.base_vect,
+                                     lattice.size, lattice.origin)
 
         # Copy the contents of the lattice to the file
         for node in lattice.iter_nodes():
