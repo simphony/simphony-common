@@ -19,7 +19,7 @@ from simphony.core.data_container import DataContainer
 from simphony.io.h5_cuds import H5CUDS
 
 
-class TestFileMesh(unittest.TestCase):
+class TestH5Mesh(unittest.TestCase):
 
     def setUp(self):
 
