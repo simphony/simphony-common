@@ -28,7 +28,7 @@ write_version_py()
 setup(
     name='simphony',
     version=VERSION,
-    author='SimPhoNy FP7 European Project',
+    author='SimPhoNy, EU FP7 Project (Nr. 604005) www.simphony-project.eu',
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
