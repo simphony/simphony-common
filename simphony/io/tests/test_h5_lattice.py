@@ -9,7 +9,7 @@ from simphony.cuds.lattice import Lattice
 from simphony.cuds.lattice import LatticeNode
 from simphony.cuds.lattice import make_hexagonal_lattice
 from simphony.cuds.lattice import make_orthorombicp_lattice
-from simphony.io.file_lattice import FileLattice
+from simphony.io.h5_lattice import H5Lattice
 from numpy.testing import assert_array_equal
 from numpy.testing import assert_equal
 from simphony.testing.utils import compare_data_containers
@@ -30,7 +30,7 @@ class CustomRecord(tables.IsDescription):
     mask = tables.BoolCol(pos=1, shape=(3,))
 
 
-class TestFileLattice(unittest.TestCase):
+class TestH5Lattice(unittest.TestCase):
 
     def setUp(self):
 
@@ -58,11 +58,12 @@ class TestFileLattice(unittest.TestCase):
                     self.lattice.update_node(N)
 
         lat = self.lattice
-        self.filelattice = FileLattice(self.file._handle, lat.name, lat.type,
-                                       lat.base_vect, lat.size, lat.origin,
-                                       CustomRecord)
+        self.h5lat = H5Lattice.create_new(self.file._root.lattice,
+                                          lat.name, lat.type, lat.base_vect,
+                                          lat.size, lat.origin,
+                                          CustomRecord)
         for N in lat.iter_nodes():
-            self.filelattice.update_node(N)
+            self.h5lat.update_node(N)
 
         self.ortholat = make_orthorombicp_lattice('ortho', (1.0, 2.0, 3.0),
                                                   (2, 3, 4))
@@ -76,39 +77,39 @@ class TestFileLattice(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def test_file_lattice_constructed_from_Lattice(self):
-        """ Checks that FileLattice constructed from Lattice with a
+        """ Checks that H5Lattice constructed from Lattice with a
         CustomRecord column description has correct attributes
 
         """
-        self.assertEqual(self.filelattice.name, 'test_lattice')
-        self.assertEqual(self.filelattice.type, 'Cubic')
-        assert_array_equal(self.filelattice.base_vect,
+        self.assertEqual(self.h5lat.name, 'test_lattice')
+        self.assertEqual(self.h5lat.type, 'Cubic')
+        assert_array_equal(self.h5lat.base_vect,
                            numpy.array((1.0, 1.0, 1.0)))
-        self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
-        assert_array_equal(self.filelattice.origin,
+        self.assertItemsEqual(self.h5lat.size, (4, 5, 6))
+        assert_array_equal(self.h5lat.origin,
                            numpy.array((0.0, 0.0, 0.0)))
 
     def test_file_lattice_constructed_from_table_existing_in_file(self):
-        """ Checks that FileLattice constructed from a known table already
-        existing in H5CUDS-file provides correct attributes for FileLattice
+        """ Checks that H5Lattice constructed from a known table already
+        existing in H5CUDS-file provides correct attributes for H5Lattice
         object
 
         """
-        self.filelattice = FileLattice(self.file._handle, 'test_lattice')
+        self.h5lat = H5Lattice(self.file._root.lattice, 'test_lattice')
 
-        self.assertEqual(self.filelattice.name, 'test_lattice')
-        self.assertEqual(self.filelattice.type, 'Cubic')
-        assert_array_equal(self.filelattice.base_vect,
+        self.assertEqual(self.h5lat.name, 'test_lattice')
+        self.assertEqual(self.h5lat.type, 'Cubic')
+        assert_array_equal(self.h5lat.base_vect,
                            numpy.array((1.0, 1.0, 1.0)))
-        self.assertItemsEqual(self.filelattice.size, (4, 5, 6))
-        assert_array_equal(self.filelattice.origin,
+        self.assertItemsEqual(self.h5lat.size, (4, 5, 6))
+        assert_array_equal(self.h5lat.origin,
                            numpy.array((0.0, 0.0, 0.0)))
 
     def test_get_node(self):
         """ Check that a LatticeNode can be retrieved correctly
 
         """
-        N = self.filelattice.get_node((3, 3, 3))
+        N = self.h5lat.get_node((3, 3, 3))
 
         self.assertTrue(isinstance(N, LatticeNode))
         self.assertItemsEqual(N.index, (3, 3, 3))
@@ -124,7 +125,7 @@ class TestFileLattice(unittest.TestCase):
         without arguments
 
         """
-        fl_nodes = self.filelattice.iter_nodes()
+        fl_nodes = self.h5lat.iter_nodes()
 
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
@@ -135,7 +136,7 @@ class TestFileLattice(unittest.TestCase):
         """ Checks the node iterator on a subset of nodes
 
         """
-        fl_nodes = self.filelattice.iter_nodes([(0, 0, 0), (0, 1, 2)])
+        fl_nodes = self.h5lat.iter_nodes([(0, 0, 0), (0, 1, 2)])
 
         for M in fl_nodes:
             N = self.lattice.get_node(M.index)
@@ -150,16 +151,16 @@ class TestFileLattice(unittest.TestCase):
                         {CUBA.MATERIAL_ID: 2, CUBA.DENSITY: 10.0,
                          CUBA.VELOCITY: (0.0, 0.0, 10.0)})
 
-        self.filelattice.update_node(N)
+        self.h5lat.update_node(N)
 
-        M = self.filelattice.get_node((3, 2, 3))
+        M = self.h5lat.get_node((3, 2, 3))
 
         self.assertEqual(N.index, M.index)
         compare_data_containers(N.data, M.data, testcase=self)
 
     def test_update_node_with_extra_keywords(self):
         """ Check that a node can be updated correctly when a LatticeNode has
-        some CUBA-keys defined that do not exist in the FileLattice.
+        some CUBA-keys defined that do not exist in the h5lat.
 
         """
         N = LatticeNode((2, 3, 4),
@@ -167,9 +168,9 @@ class TestFileLattice(unittest.TestCase):
                          CUBA.VELOCITY: (0.0, 0.0, 100.0),
                          CUBA.DISTRIBUTION: (1.0, 1.1, 1.2, 1.3, 1.4)})
 
-        self.filelattice.update_node(N)
+        self.h5lat.update_node(N)
 
-        M = self.filelattice.get_node((2, 3, 4))
+        M = self.h5lat.get_node((2, 3, 4))
 
         self.assertEqual(N.index, M.index)
         for key in M.data:
@@ -181,7 +182,7 @@ class TestFileLattice(unittest.TestCase):
         lattice types
 
         """
-        assert_array_equal(self.filelattice.get_coordinate((1, 1, 1)),
+        assert_array_equal(self.h5lat.get_coordinate((1, 1, 1)),
                            numpy.array((1.0, 1.0, 1.0)))
 
         assert_array_equal(self.orthofilelat.get_coordinate((1, 1, 1)),

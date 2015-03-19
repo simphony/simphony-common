@@ -2,7 +2,7 @@ import tables
 
 from simphony.io.h5_particles import H5Particles
 from simphony.io.file_mesh import FileMesh
-from simphony.io.file_lattice import FileLattice
+from simphony.io.h5_lattice import H5Lattice
 
 
 class H5CUDS(object):
@@ -150,26 +150,26 @@ class H5CUDS(object):
 
         Returns
         ----------
-        FileLattice
+        H5Lattice
             The lattice newly added to the file.
 
         """
-        if lattice.name in self._handle.root.lattice:
+        if lattice.name in self._root.lattice:
             raise ValueError(
                 'Lattice \'{n}\` already exists'.format(n=lattice.name))
 
-        # Create a FileLattice with all CUBA-keys defined
-        filelat = FileLattice(self._handle, lattice.name, lattice.type,
-                              lattice.base_vect, lattice.size,
-                              lattice.origin)
+        # Create a h5lattice with all CUBA-keys defined
+        h5lat = H5Lattice.create_new(self._root.lattice, lattice.name,
+                                     lattice.type, lattice.base_vect,
+                                     lattice.size, lattice.origin)
 
         # Copy the contents of the lattice to the file
         for node in lattice.iter_nodes():
-            filelat.update_node(node)
+            h5lat.update_node(node)
 
         self._handle.flush()
 
-        return filelat
+        return h5lat
 
     def get_particles(self, name):
         """Get particle container from file.
@@ -224,8 +224,8 @@ class H5CUDS(object):
         name : str
             name of lattice to return
         """
-        if name in self._handle.root.lattice:
-            lat = FileLattice(self._handle, name)
+        if name in self._root.lattice:
+            lat = H5Lattice(self._root.lattice, name)
             return lat
         else:
             raise ValueError(
@@ -271,11 +271,11 @@ class H5CUDS(object):
             name of lattice to delete
         """
         try:
-            filelat = self._handle.root.lattice._f_get_child(name)
+            h5lat = self._root.lattice._f_get_child(name)
         except tables.NoSuchNodeError:
             raise ValueError('Lattice \'{n}\` does not exist'.format(n=name))
         else:
-            filelat._f_remove(recursive=True)
+            h5lat._f_remove(recursive=True)
 
     def iter_particles(self, names=None):
         """Returns an iterator over a subset or all
@@ -327,7 +327,7 @@ class H5CUDS(object):
 
         """
         if names is None:
-            for lattice in self._handle.root.lattice._f_iter_nodes():
+            for lattice in self._root.lattice._f_iter_nodes():
                 yield self.get_lattice(lattice.name)
         else:
             for name in names:
