@@ -82,8 +82,8 @@ class _CellDescriptor(tables.IsDescription):
     n_points = tables.UInt32Col(pos=3)
 
 
-class FileMesh(object):
-    """ FileMesh.
+class H5Mesh(object):
+    """ H5Mesh.
 
     Interface of the mesh file driver.
     Stores general mesh information Points and Elements

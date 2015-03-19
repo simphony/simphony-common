@@ -1,7 +1,7 @@
 import tables
 
 from simphony.io.h5_particles import H5Particles
-from simphony.io.file_mesh import FileMesh
+from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
 
 
@@ -114,7 +114,7 @@ class H5CUDS(object):
 
         Returns
         ----------
-        FileMesh
+        H5Mesh
             The mesh newly added to the file.
             See get_mesh for more information.
 
@@ -124,21 +124,21 @@ class H5CUDS(object):
                 'Mesh \'{n}\` already exists'.format(n=mesh.name))
 
         group = self._handle.create_group('/mesh/', mesh.name)
-        m = FileMesh(group, self._handle)
+        h5_mesh = H5Mesh(group, self._handle)
 
         if mesh:
             # copy the contents of the mesh to the file
             for point in mesh.iter_points():
-                m.add_point(point)
+                h5_mesh.add_point(point)
             for edge in mesh.iter_edges():
-                m.add_edge(edge)
+                h5_mesh.add_edge(edge)
             for face in mesh.iter_faces():
-                m.add_face(face)
+                h5_mesh.add_face(face)
             for cell in mesh.iter_cells():
-                m.add_cell(cell)
+                h5_mesh.add_cell(cell)
 
         self._handle.flush()
-        return m
+        return h5_mesh
 
     def add_lattice(self, lattice):
         """Add lattice to the file.
@@ -205,7 +205,7 @@ class H5CUDS(object):
 
         try:
             group = self._root.mesh._f_get_child(name)
-            m = FileMesh(group, self._handle)
+            m = H5Mesh(group, self._handle)
             return m
         except tables.NoSuchNodeError:
             raise ValueError(

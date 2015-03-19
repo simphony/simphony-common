@@ -11,7 +11,7 @@ from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
 from simphony.cuds.lattice import Lattice
 from simphony.io.h5_cuds import H5CUDS
-from simphony.io.file_mesh import FileMesh
+from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_particles import H5Particles
 from simphony.testing.utils import compare_data_containers
 
@@ -333,7 +333,7 @@ class TestH5CUDS(unittest.TestCase):
             self.assertEqual(names, subset)
 
             for m in handle.iter_meshes():
-                self.assertTrue(isinstance(m, FileMesh))
+                self.assertTrue(isinstance(m, H5Mesh))
 
     def test_iter_mesh_wrong(self):
         m_names = ["wrong1", "wrong"]
