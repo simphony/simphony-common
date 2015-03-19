@@ -80,6 +80,17 @@ class TestFileLatticeCustom(ABCCheckLattice, unittest.TestCase):
     def supported_cuba(self):
         return [CUBA.VELOCITY, CUBA.MATERIAL_ID, CUBA.DENSITY]
 
+    def test_initialization_from_existing_lattice_in_file(self):
+        """ Checks that H5Lattice constructed from Lattice with a
+        CustomRecord column description has correct attributes
+        """
+        lattice = H5Lattice(self.handle.root, 'foo')
+        self.assertEqual(lattice.name, 'foo')
+        self.assertEqual(lattice.type, 'Cubic')
+        assert_array_equal(lattice.base_vect, self.base_vect)
+        self.assertItemsEqual(lattice.size, self.size)
+        assert_array_equal(lattice.origin, self.origin)
+
 
 if __name__ == '__main__':
     unittest.main()
