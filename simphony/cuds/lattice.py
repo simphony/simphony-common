@@ -66,6 +66,8 @@ class Lattice(ABCLattice):
 
         """
         tuple_index = tuple(index)
+        if any(value < 0 for value in tuple_index):
+            raise IndexError('invalid index: {}'.format(tuple_index))
         return LatticeNode(tuple_index, self._dcs[tuple_index])
 
     def update_node(self, lat_node):
@@ -115,7 +117,6 @@ class Lattice(ABCLattice):
         if self._type == 'Hexagonal':
             raise NotImplementedError("""Get_coordinate for
                 Hexagonal system not implemented!""")
-
         return self.origin + self.base_vect*np.array(index)
 
     @property

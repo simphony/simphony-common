@@ -86,7 +86,10 @@ class H5Lattice(ABCLattice):
         A reference to a LatticeNode object
 
         """
-        n = np.ravel_multi_index(index, self._size)
+        try:
+            n = np.ravel_multi_index(index, self._size)
+        except ValueError:
+            raise IndexError('invalid index: {}'.format(index))
         return LatticeNode(index, self._table[n])
 
     def update_node(self, node):
