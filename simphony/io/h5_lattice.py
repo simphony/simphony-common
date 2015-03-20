@@ -77,40 +77,48 @@ class H5Lattice(ABCLattice):
     def get_node(self, index):
         """ Get a copy of the node corresponding to the given index.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         index : tuple of D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         A reference to a LatticeNode object
 
         """
-        n = np.ravel_multi_index(index, self._size)
+        try:
+            n = np.ravel_multi_index(index, self._size)
+        except ValueError:
+            raise IndexError('invalid index: {}'.format(index))
         return LatticeNode(index, self._table[n])
 
     def update_node(self, node):
         """ Updates FileLattice data for a LatticeNode
 
-        Parameters:
+        Parameters
+        ----------
             node : LatticeNode
                 reference to LatticeNode object
 
         """
         # Find correct row for node
-        n = np.ravel_multi_index(node.index, self._size)
+        index = node.index
+        try:
+            n = np.ravel_multi_index(index, self._size)
+        except ValueError:
+            raise IndexError('invalid index: {}'.format(index))
         self._table[n] = node.data
 
     def iter_nodes(self, indices=None):
         """ Get an iterator over the LatticeNodes described by the ids.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         indices : iterable set of D x int, optional
             node index coordinates
 
-        Returns:
-        -----------
+        Returns
+        -------
         A generator for LatticeNode objects
 
         """
@@ -125,12 +133,12 @@ class H5Lattice(ABCLattice):
     def get_coordinate(self, index):
         """ Get coordinate of the given index coordinate.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         index : D x int (node index coordinate)
 
-        Returns:
-        -----------
+        Returns
+        -------
         D x float
 
         """

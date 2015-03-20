@@ -4,7 +4,7 @@ from simphony.cuds.abstractlattice import ABCLattice
 from simphony.core.data_container import DataContainer
 
 
-class LatticeNode:
+class LatticeNode(object):
     """
     A single node of a lattice.
 
@@ -29,8 +29,8 @@ class Lattice(ABCLattice):
 
     Stores references to data containers (node related data).
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     name : str
         name of the lattice
     type : str
@@ -66,6 +66,8 @@ class Lattice(ABCLattice):
 
         """
         tuple_index = tuple(index)
+        if any(value < 0 for value in tuple_index):
+            raise IndexError('invalid index: {}'.format(tuple_index))
         return LatticeNode(tuple_index, self._dcs[tuple_index])
 
     def update_node(self, lat_node):
@@ -78,6 +80,8 @@ class Lattice(ABCLattice):
 
         """
         index = lat_node.index
+        if any(value < 0 for value in index):
+            raise IndexError('invalid index: {}'.format(index))
         self._dcs[index] = DataContainer(lat_node.data)
 
     def iter_nodes(self, indices=None):
@@ -115,7 +119,6 @@ class Lattice(ABCLattice):
         if self._type == 'Hexagonal':
             raise NotImplementedError("""Get_coordinate for
                 Hexagonal system not implemented!""")
-
         return self.origin + self.base_vect*np.array(index)
 
     @property

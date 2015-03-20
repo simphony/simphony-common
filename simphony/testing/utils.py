@@ -3,7 +3,7 @@ import uuid
 import numpy
 from numpy.testing import assert_equal
 
-from simphony.io.data_container_description import Data
+from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
@@ -23,11 +23,18 @@ def compare_particles(particle, reference, msg=None, testcase=None):
     compare_data_containers(particle.data, reference.data, testcase=self)
 
 
+def compare_lattice_nodes(node, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(node.index, reference.index)
+    compare_data_containers(node.data, reference.data, testcase=self)
+
+
 def compare_data_containers(data, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(len(data), len(reference))
     for key in data:
         self.assertIn(key, reference)
+        self.assertIsInstance(key, CUBA)
         assert_equal(data[key], reference[key])
 
 
@@ -76,30 +83,25 @@ def create_data_container(restrict=None):
 
 
 def dummy_cuba_value(cuba):
-    column = CUBA(cuba).name.lower()
-    # get the column type
-    try:
-        column_type = Data.columns[column]
-    except AttributeError:
-        column_type = Data._v_colobjects[column]
+    keyword = KEYWORDS[CUBA(cuba).name]
+    # get the data type
 
-    if numpy.issubdtype(column_type, str):
-        value = column.upper()
-    elif numpy.issubdtype(column_type, numpy.float):
-        value = float(cuba + 3)
-    elif numpy.issubdtype(column_type, numpy.integer):
-        value = int(cuba + 3)
+    if numpy.issubdtype(keyword.dtype, str):
+        return keyword.name
     else:
-        shape = column_type.shape
-        data = numpy.arange(numpy.prod(shape)) * cuba
-        data = numpy.reshape(data, shape)
-        if column_type.kind == 'float':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.float64) * data
-        elif column_type.kind == 'int':
-            value = numpy.ones(
-                shape=shape, dtype=numpy.int32) * data
+        shape = keyword.shape
+        if shape == [1]:
+            if numpy.issubdtype(keyword.dtype, 'float'):
+                return float(cuba + 3)
+            if numpy.issubdtype(keyword.dtype, 'int'):
+                return int(cuba + 3)
         else:
-            raise RuntimeError(
-                'cannot create value for {}'.format(column_type))
-    return value
+            data = numpy.arange(numpy.prod(shape)) * cuba
+            data = numpy.reshape(data, shape)
+            if numpy.issubdtype(keyword.dtype, 'float'):
+                return numpy.ones(shape=shape, dtype=numpy.float64) * data
+            if numpy.issubdtype(keyword.dtype, 'int'):
+                return numpy.ones(shape=shape, dtype=numpy.int32) * data
+
+    raise RuntimeError(
+        'cannot create value for {}'.format(keyword.dtype))
