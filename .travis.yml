@@ -1,15 +1,14 @@
 language: python
 python:
   - "2.7"
+virtualenv:
+  system_site_packages: true
 before_install:
+  - sudo add-apt-repository ppa:cython-dev/master-ppa -y
   - sudo apt-get update -qq
-  - sudo apt-get install libhdf5-serial-dev
+  - sudo apt-get install libhdf5-serial-dev cython
 install:
-  # (1) Install cython and numexpr externally because the requirements does
-  #     work with them
-  # (2) Pytables breaks with latest Cython
-  #     see https://github.com/PyTables/PyTables/issues/388
-  - pip install numexpr cython==0.20
+  - pip install numexpr
   - pip install -r dev_requirements.txt
   - pip install coveralls
   - python setup.py develop
