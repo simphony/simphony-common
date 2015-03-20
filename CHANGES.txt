@@ -1,6 +1,18 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.1.1
+-------------
+
+* Added testing template for ABCLattice (#76)
+* Added missing import in bench module (#81)
+* Added SimPhoNy logo in the documentation (#82)
+* Updated project name and url (#73)
+* Updated module names for FileMesh and FileLattice (#88)
+* Corrected ABCLattice tests not setting the size attribute correctly(#79)
+* Corrected various documentation mistakes in Mesh and H5_mesh (#86)
+* ABCCheckParticles no longer requiere pytables (#101)
+
 Release 0.1.0
 -------------
 
