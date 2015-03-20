@@ -18,7 +18,7 @@ class Point(object):
     Parameters
     ----------
     uid :
-        uuid of the point.
+        uid of the point.
     coordinates : list of double
         set of coordinates (x,y,z) describing the point position.
     data : DataContainer
@@ -61,20 +61,20 @@ class Element(object):
     Parameters
     ----------
     uid :
-        uuid of the edge.
-    points : list of Point
-        list of points defining the edge.
+        uid of the edge.
+    points : list of uid
+        list of points uids defining the edge.
     data : DataContainer
         object to store data relative to the element
 
     Attributes
     ----------
+    points : list of uid
+        list of points uids defining the element.
     uid :
         uuid of the element
     data : DataContainer
         Element data
-    points : list of Point
-        list of points defining the element.
 
     """
 
@@ -103,10 +103,10 @@ class Edge(Element):
 
     Parameters
     ----------
-    uuid :
-        uuid of the edge.
-    points : list of Point
-        list of points defining the edge.
+    points : list of uid
+        list of points uids defining the edge.
+    uid :
+        uid of the edge.
     data : DataContainer
         object to store data relative to the edge
 
@@ -128,11 +128,11 @@ class Face(Element):
 
     Parameters
     ----------
-    uuid :
-        uuid of the face.
-    points: list of Point
-        list of points defining the face.
-    data: DataContainer
+    points : list of uid
+        list of points uids defining the face.
+    uid :
+        uid of the face.
+    data : DataContainer
         object to store data relative to the face
 
     """
@@ -153,11 +153,11 @@ class Cell(Element):
 
     Parameters
     ----------
-    uuid :
-        uuid of the cell.
-    points: list of Point
-        list of points defining the cell.
-    data: DataContainer
+    points : list of uid
+        list of points uids defining the cell.
+    uid :
+        uid of the cell.
+    data : DataContainer
         object to store data relative to the cell
 
     """
@@ -196,7 +196,7 @@ class Mesh(ABCMesh):
     name : str
         name of mesh
     data : Data
-        The X coordinate.
+        Data relative to the mesh.
     points : dictionary of Point
         Points of the mesh.
     edges : dictionary of Edge
@@ -234,7 +234,7 @@ class Mesh(ABCMesh):
     def data(self, value):
         self._data = dc.DataContainer(value)
 
-    def get_point(self, uuid):
+    def get_point(self, uid):
         """ Returns a point with a given uuid.
 
         Returns the point stored in the mesh
@@ -243,8 +243,8 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid
-            uuid of the desired point.
+        uid
+            uid of the desired point.
 
         Returns
         -------
@@ -259,12 +259,12 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Point.from_point(self._points[uuid])
+            return Point.from_point(self._points[uid])
         except KeyError:
             error_str = "Trying to get an non-existing point with uuid: {}"
-            raise ValueError(error_str.format(uuid))
+            raise ValueError(error_str.format(uid))
 
-    def get_edge(self, uuid):
+    def get_edge(self, uid):
         """ Returns an edge with a given uuid.
 
         Returns the edge stored in the mesh
@@ -273,13 +273,13 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid
-            uuid of the desired edge.
+        uid
+            uid of the desired edge.
 
         Returns
         -------
         Edge
-            Edge identified by uuid
+            Edge identified by uid
 
         Raises
         ------
@@ -289,27 +289,27 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Edge.from_edge(self._edges[uuid])
+            return Edge.from_edge(self._edges[uid])
         except KeyError:
-            error_str = "Trying to get an non-existing edge with uuid: {}"
-            raise ValueError(error_str.format(uuid))
+            error_str = "Trying to get an non-existing edge with uid: {}"
+            raise ValueError(error_str.format(uid))
 
-    def get_face(self, uuid):
-        """ Returns a face with a given uuid.
+    def get_face(self, uid):
+        """ Returns a face with a given uid.
 
         Returns the face stored in the mesh
-        identified by uuid. If such face do not
+        identified by uid. If such face do not
         exists an exception is raised.
 
         Parameters
         ----------
-        uuid
-            uuid of the desired face.
+        uid
+            uid of the desired face.
 
         Returns
         -------
         Face
-            Face identified by uuid
+            Face identified by uid
 
         Raises
         ------
@@ -319,13 +319,13 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Face.from_face(self._faces[uuid])
+            return Face.from_face(self._faces[uid])
         except KeyError:
-            error_str = "Trying to get an non-existing face with uuid: {}"
-            raise ValueError(error_str.format(uuid))
+            error_str = "Trying to get an non-existing face with uid: {}"
+            raise ValueError(error_str.format(uid))
 
-    def get_cell(self, uuid):
-        """ Returns a cell with a given uuid.
+    def get_cell(self, uid):
+        """ Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
         identified by uuid . If such cell do not
@@ -333,13 +333,13 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uuid
-            uuid of the desired cell.
+        uid
+            uid of the desired cell.
 
         Returns
         -------
         Cell
-            Cell with id identified by uuid
+            Cell with id identified by uid
 
         Raises
         ------
@@ -349,10 +349,10 @@ class Mesh(ABCMesh):
         """
 
         try:
-            return Cell.from_cell(self._cells[uuid])
+            return Cell.from_cell(self._cells[uid])
         except KeyError:
-            error_str = "Trying to get an non-existing cell with uuid: {}"
-            raise ValueError(error_str.format(uuid))
+            error_str = "Trying to get an non-existing cell with uid: {}"
+            raise ValueError(error_str.format(uid))
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
@@ -365,7 +365,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError
-            If other point with the same uuid was already
+            If other point with the same uid was already
             in the mesh
 
         TypeError
@@ -396,7 +396,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError
-            If other edge with the same uuid was already
+            If other edge with the same uid was already
             in the mesh
 
         TypeError
@@ -427,7 +427,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError
-            If other face with the same uuid was already
+            If other face with the same uid was already
             in the mesh
 
         TypeError
@@ -458,7 +458,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError
-            If other cell with the same uuid was already
+            If other cell with the same uid was already
             in the mesh
 
         TypeError
@@ -501,7 +501,7 @@ class Mesh(ABCMesh):
         """
 
         if point.uid not in self._points:
-            error_str = "Trying to update a non-existing point with uuid: "\
+            error_str = "Trying to update a non-existing point with uid: "\
                 + str(point.uid)
             raise KeyError(error_str)
 
@@ -538,7 +538,7 @@ class Mesh(ABCMesh):
         """
 
         if edge.uid not in self._edges:
-            error_str = "Trying to update a non-existing edge with uuid: "\
+            error_str = "Trying to update a non-existing edge with uid: "\
                 + str(edge.uid)
             raise KeyError(error_str)
 
@@ -575,7 +575,7 @@ class Mesh(ABCMesh):
         """
 
         if face.uid not in self._faces:
-            error_str = "Trying to update a non-existing face with uuid: "\
+            error_str = "Trying to update a non-existing face with uid: "\
                 + str(face.uid)
             raise KeyError(error_str)
 
@@ -612,7 +612,7 @@ class Mesh(ABCMesh):
         """
 
         if cell.uid not in self._cells:
-            error_str = "Trying to update a non-existing cell with uuid: "\
+            error_str = "Trying to update a non-existing cell with uid: "\
                 + str(cell.uid)
             raise KeyError(error_str)
 
@@ -626,19 +626,19 @@ class Mesh(ABCMesh):
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
 
-    def iter_points(self, point_uuids=None):
+    def iter_points(self, point_uids=None):
         """ Returns an iterator over the selected points.
 
-        Returns an iterator over the points with uuid in
-        point_ids. If none of the ids in point_ids exists,
+        Returns an iterator over the points with uid in
+        point_uids. If none of the ids in point_uids exists,
         an empty iterator is returned. If there is no ids
-        inside point_ids, a iterator over all points of
+        inside point_uids, a iterator over all points of
         the mesh is returned instead.
 
         Parameters
         ----------
-        point_uuids : list of uuids, optional
-            uuids of the desired points, default empty
+        point_uids : list of uid, optional
+            uids of the desired points, default empty
 
         Returns
         -------
@@ -647,26 +647,26 @@ class Mesh(ABCMesh):
 
         """
 
-        if point_uuids is None:
+        if point_uids is None:
             for point in self._points.values():
                 yield Point.from_point(point)
         else:
-            for point_uuid in point_uuids:
-                yield Point.from_point(self._points[point_uuid])
+            for point_uid in point_uids:
+                yield Point.from_point(self._points[point_uid])
 
-    def iter_edges(self, edge_uuids=None):
+    def iter_edges(self, edge_uids=None):
         """ Returns an iterator over the selected edges.
 
-        Returns an iterator over the edged with uuid in
-        edge_uuid. If none of the uuids in edge_uuids exists,
-        an empty iterator is returned. If there is no uuids
-        inside edge_uuids, a iterator over all edges of
+        Returns an iterator over the edged with uid in
+        edge_uid. If none of the uids in edge_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside edge_uids, a iterator over all edges of
         the mesh is returned instead.
 
         Parameters
         ----------
-        edge_uuids : list of uuids, optional
-            Uuids of the desired edges, default empty
+        edge_uids : list of uid, optional
+            uids of the desired edges, default empty
 
         Returns
         -------
@@ -675,26 +675,26 @@ class Mesh(ABCMesh):
 
         """
 
-        if edge_uuids is None:
+        if edge_uids is None:
             for edge in self._edges.values():
                 yield Edge.from_edge(edge)
         else:
-            for edge_uuid in edge_uuids:
-                yield Edge.from_edge(self._edges[edge_uuid])
+            for edge_uid in edge_uids:
+                yield Edge.from_edge(self._edges[edge_uid])
 
-    def iter_faces(self, face_uuids=None):
+    def iter_faces(self, face_uids=None):
         """ Returns an iterator over the selected faces.
 
-        Returns an iterator over the faces with uuid in
-        face_uuids. If none of the uuids in face_uuids exists,
-        an empty iterator is returned. If there is no uuids
-        inside face_uuids, a iterator over all faces of
+        Returns an iterator over the faces with uid in
+        face_uids. If none of the uuids in face_uids exists,
+        an empty iterator is returned. If there is no uids
+        inside face_uids, a iterator over all faces of
         the mesh is returned instead.
 
         Parameters
         ----------
-        face_uuids : list of uuids, optional
-            Uuids of the desired faces, default empty
+        face_uids : list of uid, optional
+            uids of the desired faces, default empty
 
         Returns
         -------
@@ -703,26 +703,26 @@ class Mesh(ABCMesh):
 
         """
 
-        if face_uuids is None:
+        if face_uids is None:
             for face in self._faces.values():
                 yield Face.from_face(face)
         else:
-            for face_uuid in face_uuids:
-                yield Face.from_face(self._faces[face_uuid])
+            for face_uid in face_uids:
+                yield Face.from_face(self._faces[face_uid])
 
-    def iter_cells(self, cell_uuids=None):
+    def iter_cells(self, cell_uids=None):
         """ Returns an iterator over the selected cells.
 
-        Returns an iterator over the cells with uuid in
-        cell_uuids. If none of the uuids in cell_uuids exists,
+        Returns an iterator over the cells with uid in
+        cell_uids. If none of the uids in cell_uids exists,
         an empty iterator is returned. If there is no uuids
         inside cell_uuids, a iterator over all cells of
         the mesh is returned instead.
 
         Parameters
         ----------
-        cell_uuids : list of uuids, optional
-            Uuids of the desired cell, default empty
+        cell_uids : list of uid, optional
+            uids of the desired cell, default empty
 
         Returns
         -------
@@ -731,12 +731,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if cell_uuids is None:
+        if cell_uids is None:
             for cell in self._cells.values():
                 yield Cell.from_cell(cell)
         else:
-            for cell_uuid in cell_uuids:
-                yield Cell.from_cell(self._cells[cell_uuid])
+            for cell_uid in cell_uids:
+                yield Cell.from_cell(self._cells[cell_uid])
 
     def has_edges(self):
         """ Check if the mesh has edges
