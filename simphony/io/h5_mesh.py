@@ -575,11 +575,11 @@ class H5Mesh(object):
         point_uids. If non of the uids in point_uids exists,
         an empty iterator is returned. If there is no uids
         inside point_uids, a iterator over all points of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
-        point_uids : list of UUID, optional
+        point_uids : list of uid, optional
             uids of the desired points, default empty
 
         Returns
@@ -607,11 +607,11 @@ class H5Mesh(object):
         edge_uid. If non of the uids in edge_uids exists,
         an empty iterator is returned. If there is no uids
         inside edge_uids, a iterator over all edges of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
-        edge_uids : list of UUID, optional
+        edge_uids : list of uid, optional
             uids of the desired edges, default empty
 
         Returns
@@ -639,11 +639,11 @@ class H5Mesh(object):
         face_uids. If non of the ids in face_uids exists,
         an empty iterator is returned. If there is no uids
         inside face_uids, a iterator over all faces of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
-        face_uids : list of UUID, optional
+        face_uids : list of uid, optional
             uids of the desired faces, default empty
 
         Returns
@@ -671,7 +671,7 @@ class H5Mesh(object):
         cell_uids. If non of the ids in cell_uids exists,
         an empty iterator is returned. If there is no uids
         inside cell_uids, a iterator over all cells of
-        the mesh is returned insted.
+        the mesh is returned instead.
 
         Parameters
         ----------
