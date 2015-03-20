@@ -85,7 +85,7 @@ copyright = u'2015, SimPhoNy, EU FP7 Project (Nr. 604005)'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-version = '0.1.0'
+version = '0.1.1'
 # The full version, including alpha/beta/rc tags.
 release = '0.1.1'
 
