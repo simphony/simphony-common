@@ -96,6 +96,20 @@ class ABCCheckLattice(object):
         with self.assertRaises(IndexError):
             container.get_node(index)
 
+    def test_update_node_with_invalid_index(self):
+        container = self.container
+
+        index = 2, 3, 4
+        node = container.get_node(index)
+
+        node.index = 2, 300, 4
+        with self.assertRaises(IndexError):
+            container.update_node(node)
+
+        node.index = 2, 3, -4
+        with self.assertRaises(IndexError):
+            container.update_node(node)
+
     def test_update_node(self):
         container = self.container
 

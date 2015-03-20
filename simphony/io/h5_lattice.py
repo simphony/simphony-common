@@ -102,7 +102,11 @@ class H5Lattice(ABCLattice):
 
         """
         # Find correct row for node
-        n = np.ravel_multi_index(node.index, self._size)
+        index = node.index
+        try:
+            n = np.ravel_multi_index(index, self._size)
+        except ValueError:
+            raise IndexError('invalid index: {}'.format(index))
         self._table[n] = node.data
 
     def iter_nodes(self, indices=None):

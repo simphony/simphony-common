@@ -80,6 +80,8 @@ class Lattice(ABCLattice):
 
         """
         index = lat_node.index
+        if any(value < 0 for value in index):
+            raise IndexError('invalid index: {}'.format(index))
         self._dcs[index] = DataContainer(lat_node.data)
 
     def iter_nodes(self, indices=None):
