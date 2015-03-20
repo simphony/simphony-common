@@ -4,7 +4,7 @@ python:
 virtualenv:
   system_site_packages: true
 before_install:
-  - sudo add-apt-repository ppa:cython-dev/master-ppa
+  - sudo add-apt-repository ppa:cython-dev/master-ppa -y
   - sudo apt-get update -qq
   - sudo apt-get install libhdf5-serial-dev cython
 install:
