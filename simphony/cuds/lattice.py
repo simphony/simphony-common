@@ -52,6 +52,7 @@ class Lattice(ABCLattice):
         self._size = tuple(size)
         self._origin = np.array(origin, dtype=np.float)
         self._dcs = np.empty(size, dtype=object)
+        self._data = DataContainer()
 
     def get_node(self, index):
         """Get a copy of the node corresponding to the given index.
@@ -136,6 +137,14 @@ class Lattice(ABCLattice):
     @property
     def origin(self):
         return self._origin
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, value):
+        self._data = DataContainer(value)
 
 
 def make_hexagonal_lattice(name, h, size, origin=(0, 0)):

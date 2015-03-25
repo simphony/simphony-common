@@ -10,6 +10,7 @@ from simphony.testing.abc_check_lattice import ABCCheckLattice
 from simphony.cuds.lattice import (
     Lattice, LatticeNode, make_cubic_lattice, make_rectangular_lattice,
     make_square_lattice, make_orthorombicp_lattice, make_hexagonal_lattice)
+from simphony.core.data_container import DataContainer
 
 
 class LatticeNodeTestCase(unittest.TestCase):
@@ -95,6 +96,38 @@ class TestLattice(ABCCheckLattice, unittest.TestCase):
         assert_array_equal(rectang_lat.base_vect, (0.3, 0.35))
         assert_array_equal(cubic_lat.base_vect, (0.4, 0.4, 0.4))
         assert_array_equal(orthop_lat.base_vect, (0.5, 0.54, 0.58))
+
+    def test_set_modify_data(self):
+        """ Check that data can be retrieved and is consistent. Check that
+        the internal data of the lattice cannot be modified outside the
+        lattice class
+        """
+        lattice = self.container_factory('test_lat', 'Cubic',
+                                         (1.0, 1.0, 1.0), (4, 3, 2),
+                                         (0, 0, 0))
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        lattice.data = org_data
+        ret_data = lattice.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        lattice.data = org_data
+        mod_data = lattice.data
+
+        mod_data[CUBA.VELOCITY] = (1, 1, 1)
+
+        ret_data = lattice.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
 
 
 if __name__ == '__main__':
