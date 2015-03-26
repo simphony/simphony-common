@@ -15,7 +15,7 @@ User Manual
    :maxdepth: 1
 
    Extending Simphony <plugins>
-
+   CUBA <cuba_information>
 
 API Reference
 =============

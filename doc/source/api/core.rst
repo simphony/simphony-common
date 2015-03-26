@@ -3,6 +3,8 @@ Core
 
 Core components and objects of the simphony package.
 
+For a list of the CUBA-keywords, see :doc:`../cuba_information`
+
 .. rubric:: Classes
 
 .. currentmodule:: simphony.core
