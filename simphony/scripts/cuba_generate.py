@@ -1,5 +1,8 @@
 import click
 import yaml
+from tabulate import tabulate
+from collections import namedtuple
+
 
 # Cuba keywords that are excludes from DataContainers
 CUBA_DATA_CONTAINER_EXLCUDE = ['Id', 'Position']
@@ -142,6 +145,37 @@ def keywords(input, output):
     lines.append('}\n')
 
     output.writelines(lines)
+
+
+_Column = namedtuple('_Column', ["key", "header"])
+
+
+@cli.command()
+@click.argument('input', type=click.File('rb'))
+@click.argument('output', type=click.File('wb'))
+def rst(input, output):
+    """ Create an rst document with table describing CUDS keywords.
+    """
+    keywords = yaml.safe_load(input)
+
+    columns = [_Column("name", "Name"),
+               _Column("description", "Description"),
+               _Column("domain", "Domain"),
+               _Column("key", "Key"),
+               _Column("number", "Number"),
+               _Column("shape", "Shape"),
+               _Column("type", "Type")]
+
+    table_header = [col.header for col in columns]
+
+    table_data = []
+
+    for keyword in keywords:
+        # keyword['serialized_type'] = data_types[keyword['type']]
+        row = [keyword[col.key] for col in columns]
+        table_data.append(row)
+    rst = tabulate(table_data, table_header, tablefmt="rst")
+    output.write(rst)
 
 
 if __name__ == '__main__':
