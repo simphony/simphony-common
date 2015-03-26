@@ -398,6 +398,8 @@ class TestH5CUDS(unittest.TestCase):
         lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
                       (2, 3, 4), (0.0, 0.0, 0.0))
 
+        lat.data = {CUBA.VELOCITY: (1.0, -1.0, 0.0), CUBA.DENSITY: 9231}
+
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename, 'w')) as handle:
             handle.add_lattice(lat)
@@ -408,6 +410,9 @@ class TestH5CUDS(unittest.TestCase):
                 M = lat.get_node(N.index)
                 self.assertEqual(N.index, M.index)
                 compare_data_containers(N.data, M.data, testcase=self)
+
+            # Compare high level data of lattices
+            compare_data_containers(lat.data, lat2.data, testcase=self)
 
             handle.delete_lattice('test_lattice')
             numlat = 0
