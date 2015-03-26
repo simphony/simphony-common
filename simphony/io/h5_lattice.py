@@ -11,41 +11,35 @@ class H5Lattice(ABCLattice):
     """ H5Lattice object to use H5CUDS lattices.
 
     """
-    def __init__(self, group, name):
-        """ Return a reference to existing lattice in a H5CUDS lattice group.
+    def __init__(self, group):
+        """ Return a reference to existing lattice in a H5CUDS group.
 
         Parameters
         ----------
         group : HDF5 group in PyTables file
-            reference to a group (folder) in PyTables file where the lattice is
-            located
-        name : str
-            name of the lattice
+            reference to a group (folder) in PyTables file where the tables
+            for lattice and data are located
 
         """
         self._group = group
-        self._name = name
-        self._table = IndexedDataContainerTable(self._group, name)
+        self._type = group.lattice.attrs.type
+        self._base_vect = group.lattice.attrs.base_vect
+        self._size = group.lattice.attrs.size
+        self._origin = group.lattice.attrs.origin
 
-        lat = self._group._f_getChild(self.name)
-        self._type = lat.attrs.type
-        self._base_vect = lat.attrs.base_vect
-        self._size = lat.attrs.size
-        self._origin = lat.attrs.origin
+        self._table = IndexedDataContainerTable(group, 'lattice')
+        self._data = IndexedDataContainerTable(group, 'data')
 
     @classmethod
-    def create_new(cls, group, name, type, base_vect, size, origin,
-                   record=None):
+    def create_new(cls, group, type, base_vect, size, origin, record=None):
         """ Create a new lattice in H5CUDS file.
 
         Parameters
         ----------
         group : HDF5 group in PyTables file
-            reference to a group (folder) in PyTables file where the lattice
-            will be located
-        name : str
-            name of the lattice
-        type : string
+            reference to a group (folder) in PyTables file where the tables
+            for lattice and data will be located
+        type : str
             Bravais lattice type (should agree with the _base_vect below).
         base_vect : D x float
             defines a Bravais lattice (an alternative for primitive vectors).
@@ -58,21 +52,20 @@ class H5Lattice(ABCLattice):
 
         """
         # If record not specified use NoUIDRecord in table initialization
-        table = IndexedDataContainerTable(group, name,
-                                          record if record is not None
-                                          else NoUIDRecord, np.prod(size))
-
+        lattice = IndexedDataContainerTable(group, 'lattice',
+                                            record if record is not None
+                                            else NoUIDRecord, np.prod(size))
         for i in xrange(np.prod(size)):
-            table.append(DataContainer())
+            lattice.append(DataContainer())
 
-        # Set table attributes
-        lattice = group._f_getChild(name)
-        lattice.attrs.type = type
-        lattice.attrs.base_vect = base_vect
-        lattice.attrs.size = size
-        lattice.attrs.origin = origin
+        lattice._table.attrs.type = type
+        lattice._table.attrs.base_vect = base_vect
+        lattice._table.attrs.size = size
+        lattice._table.attrs.origin = origin
 
-        return cls(group, name)
+        IndexedDataContainerTable(group, 'data', NoUIDRecord, 1)
+
+        return cls(group)
 
     def get_node(self, index):
         """ Get a copy of the node corresponding to the given index.
@@ -166,8 +159,22 @@ class H5Lattice(ABCLattice):
 
     @property
     def name(self):
-        return self._table._table._v_name
+        return self._group._v_name
 
     @name.setter
     def name(self, value):
-        self._table._table._f_rename(value)
+        self._group._f_rename(value)
+
+    @property
+    def data(self):
+        if len(self._data) == 1:
+            return self._data[0]
+        else:
+            return DataContainer()
+
+    @data.setter
+    def data(self, value):
+        if len(self._data) == 0:
+            self._data.append(value)
+        else:
+            self._data[0] = value

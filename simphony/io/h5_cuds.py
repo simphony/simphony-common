@@ -158,15 +158,18 @@ class H5CUDS(object):
             raise ValueError(
                 'Lattice \'{n}\` already exists'.format(n=lattice.name))
 
-        # Create a h5lattice with all CUBA-keys defined
-        h5lat = H5Lattice.create_new(self._root.lattice, lattice.name,
-                                     lattice.type, lattice.base_vect,
+        group = self._handle.create_group('/lattice/', lattice.name)
+
+        # Create a h5_lattice with all CUBA-keys defined
+        h5lat = H5Lattice.create_new(group, lattice.type, lattice.base_vect,
                                      lattice.size, lattice.origin)
 
         # Copy the contents of the lattice to the file
         for node in lattice.iter_nodes():
             h5lat.update_node(node)
 
+        # Copy lattice high level data to the file
+        h5lat.data = lattice.data
         self._handle.flush()
 
         return h5lat
@@ -224,10 +227,11 @@ class H5CUDS(object):
         name : str
             name of lattice to return
         """
-        if name in self._root.lattice:
-            lat = H5Lattice(self._root.lattice, name)
-            return lat
-        else:
+        try:
+            group = self._root.lattice._f_get_child(name)
+            h5lat = H5Lattice(group)
+            return h5lat
+        except tables.NoSuchNodeError:
             raise ValueError(
                 'Lattice \'{n}\` does not exist'.format(n=name))
 
@@ -328,7 +332,7 @@ class H5CUDS(object):
         """
         if names is None:
             for lattice in self._root.lattice._f_iter_nodes():
-                yield self.get_lattice(lattice.name)
+                yield self.get_lattice(lattice._v_name)
         else:
             for name in names:
                 yield self.get_lattice(name)

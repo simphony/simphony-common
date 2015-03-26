@@ -16,6 +16,8 @@ class ABCLattice(object):
         lattice dimensions
     origin : D x float
         lattice origin
+    data : DataContainer
+        high level CUBA data assigned to lattice
 
     """
     __metaclass__ = ABCMeta
@@ -26,7 +28,7 @@ class ABCLattice(object):
 
         Parameters
         ----------
-        index: tuple of D x int
+        index : tuple of D x int
             node index coordinate
 
         Returns
