@@ -169,7 +169,7 @@ class H5CUDS(object):
             h5lat.update_node(node)
 
         # Copy lattice high level data to the file
-        h5lat.data = {k: lattice.data[k] for k in lattice.data}
+        h5lat.data = lattice.data
         self._handle.flush()
 
         return h5lat
