@@ -34,6 +34,7 @@ prior to installing Simphony:
 
 - click >= 3.3
 - pyyaml >= 3.11
+- tabulate >= 0.7.4
 
 To support the HDF5 based native IO:
 
