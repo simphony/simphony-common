@@ -5,7 +5,7 @@ from collections import namedtuple
 
 
 # Cuba keywords that are excludes from DataContainers
-CUBA_DATA_CONTAINER_EXLCUDE = ['Id', 'Position']
+CUBA_DATA_CONTAINER_EXCLUDE = ['Id', 'Position']
 
 
 @click.group()
@@ -31,7 +31,7 @@ def python(input, output):
         '\n']
     template = "    {} = {}\n"
     for keyword in keywords:
-        if keyword['name'] in CUBA_DATA_CONTAINER_EXLCUDE:
+        if keyword['name'] in CUBA_DATA_CONTAINER_EXCLUDE:
             continue
         lines.append(template.format(keyword['key'], keyword['number']))
     output.writelines(lines)
@@ -61,7 +61,7 @@ def table(input, output):
         'integer': 'Int32'}
     position = 0
     for keyword in keywords:
-        if keyword['name'] in CUBA_DATA_CONTAINER_EXLCUDE:
+        if keyword['name'] in CUBA_DATA_CONTAINER_EXCLUDE:
             continue
         if keyword['type'] == 'string':
             template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
