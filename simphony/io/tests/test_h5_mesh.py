@@ -737,5 +737,42 @@ class TestH5Mesh(unittest.TestCase):
             cell_upd.data[CUBA.VELOCITY],
             cell_ret.data[CUBA.VELOCITY])
 
+    def test_set_data(self):
+        """ Check that data can be retrieved
+
+        """
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        ret_data = self.mesh.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
+
+    def test_modify_data(self):
+        """ Check that data is consistent
+
+        Check that the internal data of the mesh cannot be modified
+        outise the mesh class
+
+        """
+
+        org_data = DataContainer()
+
+        org_data[CUBA.VELOCITY] = (0, 0, 0)
+
+        self.mesh.data = org_data
+        mod_data = self.mesh.data
+
+        mod_data[CUBA.VELOCITY] = (1, 1, 1)
+
+        ret_data = self.mesh.data
+
+        self.assertEqual(org_data, ret_data)
+        self.assertIsNot(org_data, ret_data)
+
 if __name__ == '__main__':
     unittest.main()
