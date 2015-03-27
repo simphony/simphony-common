@@ -1,6 +1,14 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.1.2
+-------------
+
+* Added data attribute to H5Lattice class (#85,#15)
+* Added data attribute to H5Mesh class (#122,#15)
+* Fixed inconsistent values of uid in H5Mesh (#98)
+* Updated documentation with a table of the current CUDS Keywords (#96)
+
 Release 0.1.1
 -------------
 
