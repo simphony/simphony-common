@@ -12,7 +12,10 @@ from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
+from simphony.core.data_container import DataContainer
+
 from simphony.io.data_container_table import DataContainerTable
+from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 
 MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
@@ -122,6 +125,7 @@ class H5Mesh(object):
         self._file = meshFile
         self._group = group
         self._create_data_table()
+        self._data = IndexedDataContainerTable(group, 'data')
 
         if "points" not in self._group:
             self._create_points_table()
@@ -142,6 +146,20 @@ class H5Mesh(object):
     @name.setter
     def name(self, value):
         self._group._f_rename(value)
+
+    @property
+    def data(self):
+        if len(self._data) == 1:
+            return self._data[0]
+        else:
+            return DataContainer()
+
+    @data.setter
+    def data(self, value):
+        if len(self._data) == 0:
+            self._data.append(value)
+        else:
+            self._data[0] = value
 
     def get_point(self, uid):
         """ Returns a point with a given uid.
@@ -172,7 +190,7 @@ class H5Mesh(object):
             return Point(
                 tuple(row['coordinates']),
                 uuid.UUID(hex=row['uid'], version=4),
-                self._data[uuid.UUID(hex=row['data'], version=4)]
+                self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             error_str = "Trying to get an non existing point with uid: {}"
@@ -208,7 +226,7 @@ class H5Mesh(object):
                 list(uuid.UUID(hex=pb) for pb in
                      row['points_uids'][0:row['n_points']]),
                 uuid.UUID(hex=row['uid'], version=4),
-                self._data[uuid.UUID(hex=row['data'], version=4)]
+                self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             error_str = "Trying to get an non existing edge with uid: {}"
@@ -244,7 +262,7 @@ class H5Mesh(object):
                 list(uuid.UUID(hex=pb, version=4) for pb in
                      row['points_uids'][0:row['n_points']]),
                 uuid.UUID(hex=row['uid'], version=4),
-                self._data[uuid.UUID(hex=row['data'], version=4)]
+                self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             error_str = "Trying to get an non existing face with uid: {}"
@@ -280,7 +298,7 @@ class H5Mesh(object):
                 list(uuid.UUID(hex=pb, version=4) for pb in
                      row['points_uids'][0:row['n_points']]),
                 uuid.UUID(hex=row['uid'], version=4),
-                self._data[uuid.UUID(hex=row['data'], version=4)]
+                self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             error_str = "Trying to get an non existing cell with id: {}"
@@ -314,7 +332,7 @@ class H5Mesh(object):
         row = self._group.points.row
 
         row['uid'] = point.uid.hex
-        row['data'] = self._data.append(point.data).hex
+        row['data'] = self._uidData.append(point.data).hex
         row['coordinates'] = point.coordinates
 
         row.append()
@@ -352,7 +370,7 @@ class H5Mesh(object):
         row = self._group.edges.row
 
         row['uid'] = edge.uid.hex
-        row['data'] = self._data.append(edge.data).hex
+        row['data'] = self._uidData.append(edge.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
                               edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
@@ -392,7 +410,7 @@ class H5Mesh(object):
         row = self._group.faces.row
 
         row['uid'] = face.uid.hex
-        row['data'] = self._data.append(face.data).hex
+        row['data'] = self._uidData.append(face.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
                               face.points] + [0] * (MAX_POINTS_IN_FACE-n)
@@ -432,7 +450,7 @@ class H5Mesh(object):
         row = self._group.cells.row
 
         row['uid'] = cell.uid.hex
-        row['data'] = self._data.append(cell.data).hex
+        row['data'] = self._uidData.append(cell.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
                               cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
@@ -463,7 +481,7 @@ class H5Mesh(object):
         for row in self._group.points.where(
                 'uid == value', condvars={'value': point.uid.hex}):
             row['coordinates'] = list(point.coordinates)
-            self._data[uuid.UUID(hex=row['data'], version=4)] = point.data
+            self._uidData[uuid.UUID(hex=row['data'], version=4)] = point.data
             row.update()
             row._flush_mod_rows()
             return
@@ -495,7 +513,7 @@ class H5Mesh(object):
             n = len(edge.points)
             row['points_uids'] = [puid.hex for puid in
                                   edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
-            self._data[uuid.UUID(hex=row['data'], version=4)] = edge.data
+            self._uidData[uuid.UUID(hex=row['data'], version=4)] = edge.data
             row.update()
             row._flush_mod_rows()
             return
@@ -527,7 +545,7 @@ class H5Mesh(object):
             n = len(face.points)
             row['points_uids'] = [puid.hex for puid in
                                   face.points] + [0] * (MAX_POINTS_IN_FACE-n)
-            self._data[uuid.UUID(hex=row['data'], version=4)] = face.data
+            self._uidData[uuid.UUID(hex=row['data'], version=4)] = face.data
             row.update()
             row._flush_mod_rows()
             return
@@ -559,7 +577,7 @@ class H5Mesh(object):
             n = len(cell.points)
             row['points_uids'] = [puid.hex for puid in
                                   cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
-            self._data[uuid.UUID(hex=row['data'], version=4)] = cell.data
+            self._uidData[uuid.UUID(hex=row['data'], version=4)] = cell.data
             row.update()
             row._flush_mod_rows()
             return
@@ -594,7 +612,7 @@ class H5Mesh(object):
                 yield Point(
                     tuple(row['coordinates']),
                     uuid.UUID(hex=row['uid'], version=4),
-                    self._data[uuid.UUID(hex=row['data'], version=4)]
+                    self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for point_uid in point_uids:
@@ -626,7 +644,7 @@ class H5Mesh(object):
                 yield Edge(
                     list(row['points_uids']),
                     uuid.UUID(hex=row['uid'], version=4),
-                    self._data[uuid.UUID(hex=row['data'], version=4)]
+                    self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for edge_uid in edge_uids:
@@ -658,7 +676,7 @@ class H5Mesh(object):
                 yield Face(
                     list(row['points_uids']),
                     uuid.UUID(hex=row['uid'], version=4),
-                    self._data[uuid.UUID(hex=row['data'], version=4)]
+                    self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for face_uid in face_uids:
@@ -690,7 +708,7 @@ class H5Mesh(object):
                 yield Cell(
                     list(row['points_uids']),
                     uuid.UUID(hex=row['uid'], version=4),
-                    self._data[uuid.UUID(hex=row['data'], version=4)]
+                    self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
             for cell_uid in cell_uids:
@@ -773,4 +791,4 @@ class H5Mesh(object):
 
         """
 
-        self._data = DataContainerTable(self._group, 'data')
+        self._uidData = DataContainerTable(self._group, 'data')

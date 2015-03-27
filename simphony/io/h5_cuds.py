@@ -125,17 +125,17 @@ class H5CUDS(object):
 
         group = self._handle.create_group('/mesh/', mesh.name)
         h5_mesh = H5Mesh(group, self._handle)
+        h5_mesh.data = mesh.data
 
-        if mesh:
-            # copy the contents of the mesh to the file
-            for point in mesh.iter_points():
-                h5_mesh.add_point(point)
-            for edge in mesh.iter_edges():
-                h5_mesh.add_edge(edge)
-            for face in mesh.iter_faces():
-                h5_mesh.add_face(face)
-            for cell in mesh.iter_cells():
-                h5_mesh.add_cell(cell)
+        # copy the contents of the mesh to the file
+        for point in mesh.iter_points():
+            h5_mesh.add_point(point)
+        for edge in mesh.iter_edges():
+            h5_mesh.add_edge(edge)
+        for face in mesh.iter_faces():
+            h5_mesh.add_face(face)
+        for cell in mesh.iter_cells():
+            h5_mesh.add_cell(cell)
 
         self._handle.flush()
         return h5_mesh
