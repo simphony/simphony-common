@@ -642,7 +642,8 @@ class H5Mesh(object):
         if edge_uids is None:
             for row in self._group.edges:
                 yield Edge(
-                    list(row['points_uids']),
+                    list(uuid.UUID(hex=pb, version=4) for pb in
+                         row['points_uids'][0:row['n_points']]),
                     uuid.UUID(hex=row['uid'], version=4),
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
@@ -674,7 +675,8 @@ class H5Mesh(object):
         if face_uids is None:
             for row in self._group.faces:
                 yield Face(
-                    list(row['points_uids']),
+                    list(uuid.UUID(hex=pb, version=4) for pb in
+                         row['points_uids'][0:row['n_points']]),
                     uuid.UUID(hex=row['uid'], version=4),
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
@@ -706,7 +708,8 @@ class H5Mesh(object):
         if cell_uids is None:
             for row in self._group.cells:
                 yield Cell(
-                    list(row['points_uids']),
+                    list(uuid.UUID(hex=pb, version=4) for pb in
+                         row['points_uids'][0:row['n_points']]),
                     uuid.UUID(hex=row['uid'], version=4),
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
