@@ -307,6 +307,24 @@ class TestH5Mesh(unittest.TestCase):
         for key, value in cells[0].data.iteritems():
             self.assertItemsEqual(cell_ret.data[key], value)
 
+    def test_get_all_points_iterator(self):
+        """ Checks the point iterator
+
+        Checks that an interator over all
+        the edges of the mesh is returned
+        when the function iter_edges is called
+        without arguments
+
+        """
+
+        puids = [self.mesh.add_point(point) for point in self.points[:3]]
+
+        ipoints = self.mesh.iter_points()
+
+        ipoints_id = [point.uid for point in ipoints]
+
+        self.assertItemsEqual(ipoints_id, puids)
+
     def test_get_all_edges_iterator(self):
         """ Checks the edge iterator
 
@@ -331,6 +349,15 @@ class TestH5Mesh(unittest.TestCase):
         iedges_id = [edge.uid for edge in iedges]
 
         self.assertItemsEqual(iedges_id, euids)
+
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        edge_points = []
+
+        for edge in self.mesh.iter_edges():
+            for p in edge.points:
+                edge_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(edge_points))
 
     def test_get_all_faces_iterator(self):
         """ Checks the face iterator
@@ -357,6 +384,15 @@ class TestH5Mesh(unittest.TestCase):
 
         self.assertItemsEqual(fuids, ifaces_id)
 
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        face_points = []
+
+        for face in self.mesh.iter_faces():
+            for p in face.points:
+                face_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(face_points))
+
     def test_get_all_cells_iterator(self):
         """ Checks the cell iterators
 
@@ -381,6 +417,15 @@ class TestH5Mesh(unittest.TestCase):
         icells_id = [cell.uid for cell in icells]
 
         self.assertItemsEqual(icells_id, cuids)
+
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        cell_points = []
+
+        for cell in self.mesh.iter_cells():
+            for p in cell.points:
+                cell_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(cell_points))
 
     def test_get_all_points_iterator_with_data(self):
         """ Checks the point iterator
@@ -515,6 +560,15 @@ class TestH5Mesh(unittest.TestCase):
 
         self.assertItemsEqual(source_id, iedges_id)
 
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        edge_points = []
+
+        for edge in self.mesh.iter_edges():
+            for p in edge.points:
+                edge_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(edge_points))
+
     def test_get_subset_faces_iterator(self):
         """ Checks the face iterator
 
@@ -542,6 +596,15 @@ class TestH5Mesh(unittest.TestCase):
 
         self.assertItemsEqual(source_id, ifaces_id)
 
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        face_points = []
+
+        for face in self.mesh.iter_faces():
+            for p in face.points:
+                face_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(face_points))
+
     def test_get_subset_cells_iterator(self):
         """ Checks the cell iterator
 
@@ -568,6 +631,15 @@ class TestH5Mesh(unittest.TestCase):
         icells_id = [cell.uid for cell in icells]
 
         self.assertItemsEqual(source_id, icells_id)
+
+        mesh_points = [p.uid for p in self.mesh.iter_points()]
+        cell_points = []
+
+        for cell in self.mesh.iter_cells():
+            for p in cell.points:
+                cell_points.append(p)
+
+        self.assertItemsEqual(set(mesh_points), set(cell_points))
 
     def test_update_point(self):
         """ Check that a point can be updated correctly
