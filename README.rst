@@ -84,11 +84,21 @@ To build the documentation in the doc/build directory run::
 
     python setup.py build_sphinx
 
+
+If you recreate the uml diagrams you need to have java and xdot installed::
+
+   sudo apt-get install defautl-jre xdot
+
+The running ``make uml`` inside the :file:`doc/` directory will
+recreate all the UML diagrams.
+
+
 .. note::
 
    - One can use the --help option with a setup.py command
      to see all available options.
-   - The documentation will be saved in the ``./build`` directory.
+   - The documentation will be saved in the :file:`./build` directory.
+   - Not all the png files of the UML diagrams are used.
 
 Directory structure
 -------------------
