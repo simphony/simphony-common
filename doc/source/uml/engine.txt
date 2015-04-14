@@ -1,8 +1,8 @@
 @startuml
 abstract class ABCModelingEngine {
   BC : DataContainer
-  BC : DataContainer
-  BD : DataContainer
+  SM : DataContainer
+  SB : DataContainer
   --
   {abstract} run()
   ..
