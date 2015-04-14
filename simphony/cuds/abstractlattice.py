@@ -36,18 +36,16 @@ class ABCLattice(object):
         node : LatticeNode
 
         """
-        pass
 
     @abstractmethod
-    def update_node(self, lat_node):
+    def update_node(self, node):
         """Update the corresponding lattice node.
 
         Parameters
         ----------
-        lat_node : LatticeNode
+        node : LatticeNode
 
         """
-        pass
 
     @abstractmethod
     def iter_nodes(self, indices=None):
@@ -64,7 +62,6 @@ class ABCLattice(object):
             An iterator over LatticeNode objects
 
         """
-        pass
 
     @abstractmethod
     def get_coordinate(self, index):
@@ -80,4 +77,3 @@ class ABCLattice(object):
         coordinates : D x float
 
         """
-        pass

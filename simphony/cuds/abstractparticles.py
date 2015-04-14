@@ -1,24 +1,26 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 
 
 class ABCParticles(object):
-    """Abstract base class for a Particles item.
+    """Abstract base class for a container of particles items.
 
     Attributes
     ----------
     name : str
         name of particles item.
+    data : DataContainer
+        The data associated with the container
+
     """
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def add_particle(self, new_particle):
+    def add_particle(self, particle):
         pass
 
     @abstractmethod
-    def add_bond(self, new_bond):
+    def add_bond(self, bond):
         pass
 
     @abstractmethod
