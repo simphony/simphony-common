@@ -1,0 +1,9 @@
+@startuml
+class Bond {
+   uid: uuid.UUID
+   data: DataContainer
+   particles : uuid.UUID[]
+   -- classmethods --
+   from_bond(bond: Bond): Bond {copy}
+}
+@enduml
