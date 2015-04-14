@@ -1,0 +1,24 @@
+@startuml
+abstract class ABCModelingEngine {
+  BC : DataContainer
+  BC : DataContainer
+  BD : DataContainer
+  --
+  {abstract} run()
+  ..
+  {abstract} add_lattice(lattice: ABCLattice)
+  {abstract} get_lattice(name: str): ABCLattice
+  {abstract} delete_lattice(name: str)
+  {abstract} iter_lattices(names: iterable of str {optional}): iterator {unordered}
+  ..
+  {abstract} add_mesh(mesh: ABCMesh)
+  {abstract} get_mesh(name: str): ABCMesh
+  {abstract} delete_mesh(name: str)
+  {abstract} iter_meshes(names: iterable of str {optional}): iterator {unordered}
+  ..
+  {abstract} add_particles(particles: ABCParticles)
+  {abstract} get_particles(name: str): ABCParticles
+  {abstract} delete_particles(name: str)
+  {abstract} iter_particles(names: iterable of str {optional}): iterator {unordered}
+}
+@enduml
