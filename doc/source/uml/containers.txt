@@ -1,0 +1,5 @@
+@startuml
+!include particles.txt
+!include lattice.txt
+!include mesh.txt
+@enduml
