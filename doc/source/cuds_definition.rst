@@ -52,7 +52,7 @@ following operations are currently supported:
 
 .. note::
 
-   - For Lattice items do not have a ``uid`` but are accessed based on
+   - Lattice items do not have a ``uid`` but are accessed based on
      ``(i,j,k)`` index tuples.
    - For Mesh and Lattice containers the description does not define
      remove operations.
