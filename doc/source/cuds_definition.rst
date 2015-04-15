@@ -61,13 +61,12 @@ following operations are currently supported:
 .. rubric:: Snapshot principle
 
 All CUDS containers (native or proxy based) are owners of their data
-and will always return cuds components that container copy (snapshot)
-of the internal data representation. As a result running comparing the
-information of an item extracted with a ``get`` operation before
-and after a simulation run is not expected to hold the information.
-The snapshot principle also means that the returned CUDS items
-do not depend anymore on the container instance they where extracted
-from.
+and will always return components that contain a copy (snapshot) of
+the internal data representation. As a result, the information of an
+item extracted with a ``get`` operation before and after a
+simulation run is not expected to be the same. The snapshot principle
+also means that the returned CUDS items do not depend anymore on the
+container instance they where extracted from.
 
 CUDS Items
 ----------
