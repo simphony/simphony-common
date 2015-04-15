@@ -6,28 +6,24 @@ abstract class ABCMesh {
   {abstract} add_point(point: Point): uuid.UUID
   {abstract} get_point(uid: uuid.UUID): Point
   {abstract} update_point(point: Point)
-  {abstract} remove_point(uid: uuid.UUID)
   {abstract} iter_point(uids: iterable of uuid.UUID {optional}): iterator of Point {unordered}
   {abstract} has_point(uid: uuid.UUID): boolean
   ..
   {abstract} add_edge(edge: Edge): uuid.UUID
   {abstract} get_edge(uid: uuid.UUID): Edge
   {abstract} update_edge(edge: Edge)
-  {abstract} remove_edge(uid: uuid.UUID)
   {abstract} iter_edge(uids: iterable of uuid.UUID {optional}): iterator of Edge {unordered}
   {abstract} has_edge(uid: uuid.UUID): boolean
   ..
   {abstract} add_face(face: Face): uuid.UUID
   {abstract} get_edge(uid: uuid.UUID): Face
   {abstract} update_face(face: Face)
-  {abstract} remove_face(uid: uuid.UUID)
   {abstract} iter_faces(uids: iterable of uuid.UUID {optional}): iterator of Face {unordered}
   {abstract} has_face(uid: uuid.UUID): boolean
   ..
   {abstract} add_cell(cell: Cell): uuid.UUID
   {abstract} get_edge(uid: uuid.UUID): cell
   {abstract} update_cell(cell: Cell)
-  {abstract} remove_cell(uid: uuid.UUID)
   {abstract} iter_cells(uids: iterable of uuid.UUID {optional}): iterator of Cell {unordered}
   {abstract} has_cell(uid: uuid.UUID): boolean
 }
