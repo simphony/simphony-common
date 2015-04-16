@@ -25,6 +25,7 @@ Requirements
 
 - enum34 >= 1.0.4
 - stevedore >= 1.2.0
+- numpy >= 1.4.1
 
 Optional requirements
 ~~~~~~~~~~~~~~~~~~~~~
