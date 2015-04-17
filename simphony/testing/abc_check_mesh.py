@@ -3,8 +3,10 @@ import uuid
 from functools import partial
 
 from simphony.testing.utils import (
-    create_data_container, create_points, compare_points)
-from simphony.cuds.mesh import Point, Element
+    create_data_container, create_points, compare_points, compare_elements,
+    grouper)
+from simphony.cuds.mesh import Point, Element, Edge, Cell, Face
+from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
@@ -12,7 +14,12 @@ class MeshItemOperationsCheck(object):
 
     __metaclass__ = abc.ABCMeta
 
-    supported_cuba = CUBA
+    supported_cuba = list(CUBA)
+    operation_mapping = {
+        'get item': 'none',
+        'add item': 'none',
+        'update item': 'none',
+        'iter items': 'none'}
 
     def setUp(self):
         self.item_list = self.create_items()
@@ -34,83 +41,170 @@ class MeshItemOperationsCheck(object):
         """ Create and return the container object
         """
 
+    def get_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['get item'])
+        return method(*args, **kwrds)
+
+    def add_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['add item'])
+        return method(*args, **kwrds)
+
+    def update_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['update item'])
+        return method(*args, **kwrds)
+
+    def iter_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['iter items'])
+        return method(*args, **kwrds)
+
     def _add_items(self, container, items=None):
-        items = items if items is not None else self._item_list
-        return [container.add_item(item) for item in items]
-
-    def test_has_item(self):
-        container = self.container
-
-        # container without items
-        self.assertFalse(container.has_items())
-
-        # container with items
-        container.add_item(self.item_list[0])
-        self.assertTrue(container.has_items())
+        items = items if items is not None else self.item_list
+        return [self.add_operation(container, item) for item in items]
 
     def test_adding_and_getting_items(self):
         container = self.container
 
         # add items
         uids = self._add_items(container)
-        self.assertTrue(container.has_items())
 
         # get items
         for index, expected in enumerate(self.item_list):
-            self.assertEqual(container.get_item(uids[index]), expected)
+            self.assertEqual(
+                self.get_operation(container, uids[index]), expected)
+
+    def test_exception_on_get_items_with_invalid_uid(self):
+        # given
+        container = self.container
+        invalid_uuid = uuid.uuid4()
+
+        # when/then
+        with self.assertRaises(KeyError):
+            self.get_operation(container, invalid_uuid)
 
     def test_add_item_with_uid(self):
+        # given
         container = self.container
         uid = uuid.uuid4()
         expected = self.create_item(uid)
-        item_uid = container.add_item(expected)
+
+        # when
+        item_uid = self.add_operation(container, expected)
+
+        # then
         self.assertEqual(item_uid, uid)
-        self.assertEqual(container.get_item(uid))
+        self.assertEqual(self.get_operation(container, uid), expected)
 
     def test_exception_when_adding_item_twice(self):
+        # given
         container = self.container
+        self._add_items(container)
+
+        # when/then
         with self.assertRaises(ValueError):
-            container.add_item(self.item_list[3])
+            self.add_operation(container, self.item_list[3])
 
     def test_update_item_data(self):
+        # given
         container = self.container
-        item = container.get_item(self.ids[2])
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
         item.data = create_data_container(restrict=self.supported_cuba)
-        container.update_item(item)
-        retrieved = container.get_item(item.uid)
-        self.assertEqual(retrieved, item)
 
-    def test_exception_when_update_item_when_wrong_id(self):
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_exception_when_update_item_with_wrong_id(self):
+        # given
         container = self.container
-        item = self.create_itme(uuid.uuid4())
+        item = self.create_item(uuid.uuid4())
+
+        # when/then
         with self.assertRaises(ValueError):
-            container.update_item(item)
+            self.update_operation(container, item)
+
+    def test_exception_when_invalid_id(self):
+        # given
+        container = self.container
         item = self.create_item(None)
+
+        # when/then
         with self.assertRaises(ValueError):
-            container.update_item(item)
+            self.update_operation(container, item)
+
+    def test_snapshot_principle(self):
+        # given
+        container = self.container
+        uid = uuid.uuid4()
+        item = self.create_item(uid)
+        self.add_operation(container, item)
+
+        # when
+        item.data = DataContainer()
+
+        # then
+        retrieved = self.get_operation(container, uid)
+        self.assertNotEqual(retrieved, item)
+        self.assertNotEqual(retrieved.data, item.data)
+
+    def test_snapshot_principle_on_iteration(self):
+        # given
+        container = self.container
+        uid = uuid.uuid4()
+        item = self.create_item(uid)
+        self.add_operation(container, item)
+
+        # when
+        item.data = DataContainer()
+
+        # then
+        retrieved = tuple(self.iter_operation(container))[0]
+        self.assertNotEqual(retrieved, item)
+        self.assertNotEqual(retrieved.data, item.data)
 
     def test_iterate_items_when_passing_ids(self):
+        # given
+        container = self.container
+        self._add_items(container)
         items = [item for item in self.item_list[::2]]
         ids = [item.uid for item in items]
+
+        # when
         iterated_items = [
-            item for item in self.container.iter_items(ids)]
+            item for item in self.iter_operation(container, ids)]
+
+        # then
         for item, reference in map(None, iterated_items, items):
             self.assertEqual(item, reference)
 
     def test_iterate_all_items(self):
+        # given
+        container = self.container
+        self._add_items(container)
         items = {item.uid: item for item in self.item_list}
+
+        # when
         iterated_items = [
-            item for item in self.container.iter_items()]
+            item for item in self.iter_operation(container)]
+
+        # then
         # The order of iteration is not important in this case.
         self.assertEqual(len(items), len(iterated_items))
         for item in iterated_items:
             self.assertEqual(item, items[item.uid])
 
     def test_exception_on_iter_items_when_passing_wrong_ids(self):
+        container = self.container
+        self._add_items(container)
         ids = [item.uid for item in self.item_list]
         ids.append(uuid.UUID(int=20))
         with self.assertRaises(KeyError):
-            for item in self.container.iter_items(ids):
+            for item in self.iter_operation(container, ids):
                 pass
         self.assertEqual(item.uid, self.item_list[-1].uid)
 
@@ -118,7 +212,7 @@ class MeshItemOperationsCheck(object):
 class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
     def setUp(self):
-        MeshItemOperationsCheck.setup(self)
+        MeshItemOperationsCheck.setUp(self)
         self.addTypeEqualityFunc(
             Point, partial(compare_points, testcase=self))
 
@@ -131,26 +225,148 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
             coordinates=(0.1, -3.5, 44),
             data=create_data_container(restrict=self.supported_cuba))
 
-    def test_update_item_coordinates(self):
+    operation_mapping = {
+        'get item': 'get_point',
+        'add item': 'add_point',
+        'update item': 'update_point',
+        'iter items': 'iter_points'}
+
+    def test_update_item_data(self):
+        # given
         container = self.container
-        item = container.get_item(self.ids[2])
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
         item.coordinates = (123, 456, 789)
-        container.update_item(item)
-        retrieved = container.get_item(item.uid)
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
         self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
-    def setUp(self):
-        MeshItemOperationsCheck.setup(self)
-        self.addTypeEqualityFunc(
-            Element, partial(compare_element, testcase=self))
+    operation_mapping = {
+        'get item': 'none',
+        'add item': 'none',
+        'update item': 'none',
+        'iter items': 'none',
+        'has items': 'none'}
 
-    def test_update_item_connections(self):
+    def has_items_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['has items'])
+        return method(*args, **kwrds)
+
+    def test_has_items(self):
         container = self.container
-        item = container.get_item(self.ids[2])
-        item.points = self.create_item().points
-        container.update_item(item)
-        retrieved = container.get_item(item.uid)
+
+        # container without items
+        self.assertFalse(self.has_items_operation(container))
+
+        # container with items
+        self.add_operation(container, self.item_list[0])
+        self.assertTrue(self.has_items_operation(container))
+
+    def test_update_item_data(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.points = self.create_item(None).points
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
         self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
+
+
+class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
+
+    def setUp(self):
+        MeshItemOperationsCheck.setUp(self)
+        self.addTypeEqualityFunc(
+            Edge, partial(compare_elements, testcase=self))
+
+    operation_mapping = {
+        'get item': 'get_edge',
+        'add item': 'add_edge',
+        'update item': 'update_edge',
+        'iter items': 'iter_edges',
+        'has items': 'has_edges'}
+
+    def create_items(self):
+        uids = [uuid.uuid4() for _ in range(12)]
+        return [Edge(
+            points=puids,
+            data=create_data_container(restrict=self.supported_cuba))
+            for puids in grouper(uids, 2)]
+
+    def create_item(self, uid):
+        return Edge(
+            uid=uid,
+            points=[uuid.uuid4(), uuid.uuid4()],
+            data=create_data_container(restrict=self.supported_cuba))
+
+
+class MeshFaceOperationsCheck(MeshElementOperationsCheck):
+
+    def setUp(self):
+        MeshItemOperationsCheck.setUp(self)
+        self.addTypeEqualityFunc(
+            Face, partial(compare_elements, testcase=self))
+
+    operation_mapping = {
+        'get item': 'get_face',
+        'add item': 'add_face',
+        'update item': 'update_face',
+        'iter items': 'iter_faces',
+        'has items': 'has_faces'}
+
+    def create_items(self):
+        uids = [uuid.uuid4() for _ in range(32)]
+        return [Face(
+            points=puids,
+            data=create_data_container(restrict=self.supported_cuba))
+            for puids in grouper(uids, 3)]
+
+    def create_item(self, uid):
+        return Face(
+            uid=uid,
+            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
+            data=create_data_container(restrict=self.supported_cuba))
+
+
+class MeshCellOperationsCheck(MeshElementOperationsCheck):
+
+    def setUp(self):
+        MeshItemOperationsCheck.setUp(self)
+        self.addTypeEqualityFunc(
+            Cell, partial(compare_elements, testcase=self))
+
+    operation_mapping = {
+        'get item': 'get_cell',
+        'add item': 'add_cell',
+        'update item': 'update_cell',
+        'iter items': 'iter_cells',
+        'has items': 'has_cells'}
+
+    def create_items(self):
+        uids = [uuid.uuid4() for _ in range(32)]
+        return [Cell(
+            points=puids,
+            data=create_data_container(restrict=self.supported_cuba))
+            for puids in grouper(uids, 4)]
+
+    def create_item(self, uid):
+        return Cell(
+            uid=uid,
+            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
+            data=create_data_container(restrict=self.supported_cuba))
