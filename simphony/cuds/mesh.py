@@ -640,13 +640,11 @@ class Mesh(ABCMesh):
         point_uids : list of uid, optional
             uids of the desired points, default empty
 
-        Returns
-        -------
-        iter
-            Iterator over the selected points
+        Yields
+        ------
+        cell : Cell
 
         """
-
         if point_uids is None:
             for point in self._points.values():
                 yield Point.from_point(point)
@@ -668,10 +666,9 @@ class Mesh(ABCMesh):
         edge_uids : list of uid, optional
             uids of the desired edges, default empty
 
-        Returns
-        -------
-        iter
-            Iterator over the selected edges
+        Yields
+        ------
+        edge : Edge
 
         """
 
@@ -696,13 +693,11 @@ class Mesh(ABCMesh):
         face_uids : list of uid, optional
             uids of the desired faces, default empty
 
-        Returns
-        -------
-        iter
-            Iterator over the selected faces
+        Yields
+        ------
+        face : Face
 
         """
-
         if face_uids is None:
             for face in self._faces.values():
                 yield Face.from_face(face)
@@ -724,13 +719,11 @@ class Mesh(ABCMesh):
         cell_uids : list of uid, optional
             uids of the desired cell, default empty
 
-        Returns
-        -------
-        iter
-            Iterator over the selected cells
+        Yields
+        ------
+        cell : Cell
 
         """
-
         if cell_uids is None:
             for cell in self._cells.values():
                 yield Cell.from_cell(cell)
