@@ -12,7 +12,7 @@ Abstract CUDS interfaces
 .. autosummary::
 
    ~abstractmesh.ABCMesh
-   ~abstractparticles.ABCParticleContainer
+   ~abstractparticles.ABCParticle
    ~abstractlattice.ABCLattice
 
 .. rubric:: Description
@@ -38,11 +38,11 @@ Pure Python implementation
 
 .. autosummary::
 
-   ~lattice.LatticeNode
    ~lattice.Lattice
-   ~particles.Particle
+   ~lattice.LatticeNode
+   ~particles.Particles
    ~particles.Bond
-   ~particles.ParticleContainer
+   ~particles.Particle
    ~mesh.Mesh
    ~mesh.Point
    ~mesh.Face
