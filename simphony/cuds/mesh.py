@@ -372,14 +372,11 @@ class Mesh(ABCMesh):
             If the object provided is not a point
 
         """
-
         if point.uid is None:
             point.uid = self._generate_uuid()
-
-        if point.uid in self._points:
-            error_str = "Trying to add an already existing point with uuid: "\
-                + str(point.uid)
-            raise KeyError(error_str)
+        elif point.uid in self._points:
+            error_str = "Trying to add an already existing point with uuid: {}"
+            raise ValueError(error_str.format(point.uid))
 
         self._points[point.uid] = Point.from_point(point)
 
@@ -406,11 +403,9 @@ class Mesh(ABCMesh):
 
         if edge.uid is None:
             edge.uid = self._generate_uuid()
-
-        if edge.uid in self._edges:
-            error_str = "Trying to add an already existing edge with uuid: "\
-                + str(edge.uid)
-            raise KeyError(error_str)
+        elif edge.uid in self._edges:
+            error_str = "Trying to add an already existing edge with uuid: {}"
+            raise ValueError(error_str.format(edge.uid))
 
         self._edges[edge.uid] = Edge.from_edge(edge)
 
@@ -434,14 +429,11 @@ class Mesh(ABCMesh):
             If the object provided is not a face
 
         """
-
         if face.uid is None:
             face.uid = self._generate_uuid()
-
-        if face.uid in self._faces:
-            error_str = "Trying to add an already existing face with uuid: "\
-                + str(face.uid)
-            raise KeyError(error_str)
+        elif face.uid in self._faces:
+            error_str = "Trying to add an already existing face with uuid: {}"
+            raise ValueError(error_str.format(face.uid))
 
         self._faces[face.uid] = Face.from_face(face)
 
@@ -468,14 +460,10 @@ class Mesh(ABCMesh):
 
         if cell.uid is None:
             cell.uid = self._generate_uuid()
-
-        if cell.uid in self._cells:
-            error_str = "Trying to add an already existing cell with uuid: "\
-                + str(cell.uid)
-            raise KeyError(error_str)
-
+        elif cell.uid in self._cells:
+            error_str = "Trying to add an already existing cell with uuid: {}"
+            raise ValueError(error_str.format(cell.uid))
         self._cells[cell.uid] = Cell.from_cell(cell)
-
         return cell.uid
 
     def update_point(self, point):
@@ -499,16 +487,9 @@ class Mesh(ABCMesh):
             If the object provided is not a point
 
         """
-
         if point.uid not in self._points:
-            error_str = "Trying to update a non-existing point with uid: "\
-                + str(point.uid)
-            raise KeyError(error_str)
-
-        if not isinstance(point, Point):
-            error_str = "Trying to update an object with the wrong type. "\
-                + "Point expected."
-            raise TypeError(error_str)
+            error_str = "Trying to update a non-existing point with uid: {}"
+            raise ValueError(error_str.format(point.uid))
 
         point_to_update = self._points[point.uid]
 
@@ -536,19 +517,11 @@ class Mesh(ABCMesh):
             If the object provided is not an edge
 
         """
-
         if edge.uid not in self._edges:
-            error_str = "Trying to update a non-existing edge with uid: "\
-                + str(edge.uid)
-            raise KeyError(error_str)
-
-        if not isinstance(edge, Edge):
-            error_str = "Trying to update an object with the wrong type. "\
-                + "Edge expected."
-            raise TypeError(error_str)
+            error_str = "Trying to update a non-existing edge with uid: {}"
+            raise ValueError(error_str.format(edge.uid))
 
         edge_to_update = self._edges[edge.uid]
-
         edge_to_update.data = edge.data
         edge_to_update.points = edge.points
 
@@ -575,14 +548,8 @@ class Mesh(ABCMesh):
         """
 
         if face.uid not in self._faces:
-            error_str = "Trying to update a non-existing face with uid: "\
-                + str(face.uid)
-            raise KeyError(error_str)
-
-        if not isinstance(face, Face):
-            error_str = "Trying to update an object with the wrong type. "\
-                + "Face expected."
-            raise TypeError(error_str)
+            error_str = "Trying to update a non-existing face with uid: {}"
+            raise ValueError(error_str.format(face.uid))
 
         face_to_update = self._faces[face.uid]
 
@@ -610,19 +577,11 @@ class Mesh(ABCMesh):
             If the object provided is not a cell
 
         """
-
         if cell.uid not in self._cells:
-            error_str = "Trying to update a non-existing cell with uid: "\
-                + str(cell.uid)
-            raise KeyError(error_str)
-
-        if not isinstance(cell, Cell):
-            error_str = "Trying to update an object with the wrong type. "\
-                + "Cell expected."
-            raise TypeError(error_str)
+            error_str = "Trying to update a non-existing cell with uid: {}"
+            raise ValueError(error_str.format(cell.uid))
 
         cell_to_update = self._cells[cell.uid]
-
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
 
