@@ -253,7 +253,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        Exception
+        KeyError :
             If the point identified by uuid was not found
 
         """
@@ -278,7 +278,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        Exception
+        KeyError :
             If the edge identified by uuid was not found
 
         """
@@ -293,17 +293,17 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid :
             uid of the desired face.
 
         Returns
         -------
-        Face
+        Face :
             Face identified by uid
 
         Raises
         ------
-        Exception
+        KeyError :
             If the face identified by uuid was not found
 
         """
@@ -318,17 +318,17 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid :
             uid of the desired cell.
 
         Returns
         -------
-        Cell
+        Cell :
             Cell with id identified by uid
 
         Raises
         ------
-        Exception
+        KeyError :
             If the cell identified by uuid was not found
 
         """
@@ -344,12 +344,9 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        KeyError :
             If other point with the same uid was already
             in the mesh
-
-        TypeError
-            If the object provided is not a point
 
         """
         if point.uid is None:
@@ -372,12 +369,9 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        KeyError :
             If other edge with the same uid was already
             in the mesh
-
-        TypeError
-            If the object provided is not an edge
 
         """
 
@@ -472,7 +466,6 @@ class Mesh(ABCMesh):
             raise ValueError(error_str.format(point.uid))
 
         point_to_update = self._points[point.uid]
-
         point_to_update.data = point.data
         point_to_update.coordinates = point.coordinates
 
@@ -522,9 +515,6 @@ class Mesh(ABCMesh):
         KeyError
             If the face was not found in the mesh
 
-        TypeError
-            If the object provided is not a face
-
         """
 
         if face.uid not in self._faces:
@@ -550,11 +540,8 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        KeyError :
             If the cell was not found in the mesh
-
-        TypeError
-            If the object provided is not a cell
 
         """
         if cell.uid not in self._cells:
