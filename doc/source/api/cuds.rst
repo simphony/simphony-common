@@ -45,6 +45,7 @@ Pure Python implementation
    ~particles.Particle
    ~mesh.Mesh
    ~mesh.Point
+   ~mesh.Edge
    ~mesh.Face
    ~mesh.Cell
 
