@@ -257,12 +257,7 @@ class Mesh(ABCMesh):
             If the point identified by uuid was not found
 
         """
-
-        try:
-            return Point.from_point(self._points[uid])
-        except KeyError:
-            error_str = "Trying to get an non-existing point with uuid: {}"
-            raise ValueError(error_str.format(uid))
+        return Point.from_point(self._points[uid])
 
     def get_edge(self, uid):
         """ Returns an edge with a given uuid.
@@ -287,12 +282,7 @@ class Mesh(ABCMesh):
             If the edge identified by uuid was not found
 
         """
-
-        try:
-            return Edge.from_edge(self._edges[uid])
-        except KeyError:
-            error_str = "Trying to get an non-existing edge with uid: {}"
-            raise ValueError(error_str.format(uid))
+        return Edge.from_edge(self._edges[uid])
 
     def get_face(self, uid):
         """ Returns a face with a given uid.
@@ -317,12 +307,7 @@ class Mesh(ABCMesh):
             If the face identified by uuid was not found
 
         """
-
-        try:
-            return Face.from_face(self._faces[uid])
-        except KeyError:
-            error_str = "Trying to get an non-existing face with uid: {}"
-            raise ValueError(error_str.format(uid))
+        return Face.from_face(self._faces[uid])
 
     def get_cell(self, uid):
         """ Returns a cell with a given uid.
@@ -347,12 +332,7 @@ class Mesh(ABCMesh):
             If the cell identified by uuid was not found
 
         """
-
-        try:
-            return Cell.from_cell(self._cells[uid])
-        except KeyError:
-            error_str = "Trying to get an non-existing cell with uid: {}"
-            raise ValueError(error_str.format(uid))
+        return Cell.from_cell(self._cells[uid])
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
