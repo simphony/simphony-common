@@ -130,3 +130,12 @@ def dummy_cuba_value(cuba):
 
     raise RuntimeError(
         'cannot create value for {}'.format(keyword.dtype))
+
+
+def grouper(iterable, n):
+    """ Collect data into fixed-length chunks or blocks
+
+    """
+    iterator = iter(iterable)
+    while True:
+        yield [next(iterator) for _ in range(n)]
