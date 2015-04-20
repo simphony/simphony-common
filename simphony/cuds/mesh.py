@@ -243,18 +243,20 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired point.
 
         Returns
         -------
-        Point
+        point : Point
             Mesh point identified by uuid
 
         Raises
         ------
         KeyError :
             If the point identified by uuid was not found
+        TypeError :
+            When ``uid`` is not uuid.UUID
 
         """
         if isinstance(uid, uuid.UUID):
@@ -273,18 +275,20 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired edge.
 
         Returns
         -------
-        Edge
+        edge : Edge
             Edge identified by uid
 
         Raises
         ------
         KeyError :
             If the edge identified by uuid was not found
+        TypeError :
+            When ``uid`` is not uuid.UUID
 
         """
         if isinstance(uid, uuid.UUID):
@@ -302,18 +306,20 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid :
+        uid : uuid.UUID
             uid of the desired face.
 
         Returns
         -------
-        Face :
+        face : Face
             Face identified by uid
 
         Raises
         ------
         KeyError :
             If the face identified by uuid was not found
+        TypeError :
+            When ``uid`` is not uuid.UUID
 
         """
         if isinstance(uid, uuid.UUID):
@@ -331,18 +337,20 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid :
+        uid : uuid.UUID
             uid of the desired cell.
 
         Returns
         -------
-        Cell :
+        cell : Cell
             Cell with id identified by uid
 
         Raises
         ------
         KeyError :
             If the cell identified by uuid was not found
+        TypeError :
+            When ``uid`` is not uuid.UUID
 
         """
         if isinstance(uid, uuid.UUID):
@@ -412,12 +420,9 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        ValueError
             If other face with the same uid was already
             in the mesh
-
-        TypeError
-            If the object provided is not a face
 
         """
         if face.uid is None:
@@ -474,9 +479,6 @@ class Mesh(ABCMesh):
         KeyError
             If the point was not found in the mesh
 
-        TypeError
-            If the object provided is not a point
-
         """
         if point.uid not in self._points:
             error_str = "Trying to update a non-existing point with uid: {}"
@@ -502,9 +504,6 @@ class Mesh(ABCMesh):
         ------
         KeyError
             If the edge was not found in the mesh
-
-        TypeError
-            If the object provided is not an edge
 
         """
         if edge.uid not in self._edges:
@@ -679,7 +678,7 @@ class Mesh(ABCMesh):
 
         Returns
         -------
-        bool
+        result  : bool
             True of there are edges inside the mesh,
             False otherwise
 
@@ -692,7 +691,7 @@ class Mesh(ABCMesh):
 
         Returns
         -------
-        bool
+        result : bool
             True of there are faces inside the mesh,
             False otherwise
 
@@ -704,7 +703,7 @@ class Mesh(ABCMesh):
 
         Returns
         -------
-        bool
+        result : bool
             True of there are cells inside the mesh,
             False otherwise
 
@@ -716,5 +715,4 @@ class Mesh(ABCMesh):
 
         Provides san uuid as defined in the standard RFC 4122
         """
-
         return uuid.uuid4()
