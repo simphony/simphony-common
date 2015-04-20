@@ -621,11 +621,8 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            try:
-                for point_uid in point_uids:
-                    yield self.get_point(point_uid)
-            except ValueError as exception:
-                raise KeyError(exception.args[0])
+            for point_uid in point_uids:
+                yield self.get_point(point_uid)
 
     def iter_edges(self, edge_uids=None):
         """ Returns an iterator over the selected edges.
@@ -657,11 +654,8 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            try:
-                for edge_uid in edge_uids:
-                    yield self.get_edge(edge_uid)
-            except ValueError as exception:
-                raise KeyError(exception.args[0])
+            for edge_uid in edge_uids:
+                yield self.get_edge(edge_uid)
 
     def iter_faces(self, face_uids=None):
         """ Returns an iterator over the selected faces.
@@ -693,11 +687,8 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            try:
-                for face_uid in face_uids:
-                    yield self.get_face(face_uid)
-            except ValueError as exception:
-                raise KeyError(exception.args[0])
+            for face_uid in face_uids:
+                yield self.get_face(face_uid)
 
     def iter_cells(self, cell_uids=None):
         """ Returns an iterator over the selected cells.
@@ -729,11 +720,8 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            try:
-                for cell_uid in cell_uids:
-                    yield self.get_cell(cell_uid)
-            except ValueError as exception:
-                raise KeyError(exception.args[0])
+            for cell_uid in cell_uids:
+                yield self.get_cell(cell_uid)
 
     def has_edges(self):
         """ Check if the mesh container has edges
