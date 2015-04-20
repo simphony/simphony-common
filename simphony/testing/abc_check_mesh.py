@@ -4,10 +4,60 @@ from functools import partial
 
 from simphony.testing.utils import (
     create_data_container, create_points, compare_points, compare_elements,
-    grouper)
+    grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
+
+
+class MeshAttributesCheck(object):
+
+    __metaclass__ = abc.ABCMeta
+
+    supported_cuba = list(CUBA)
+
+    def setUp(self):
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
+
+    @abc.abstractmethod
+    def container_factory(self, name):
+        """ Create and return the container object
+        """
+
+    def test_container_name(self):
+        # when
+        container = self.container_factory('my_name')
+        # then
+        self.assertEqual(container.name, 'my_name')
+
+    def test_container_name_update(self):
+        # given
+        container = self.container_factory('my_name')
+
+        # when
+        container.name = 'new'
+
+        # then
+        self.assertEqual(container.name, 'new')
+
+    def test_container_data(self):
+        # when
+        container = self.container_factory('my_name')
+        # then
+        self.assertEqual(container.data, DataContainer())
+
+    def test_container_data_update(self):
+        # given
+        container = self.container_factory('my_name')
+        data = create_data_container(restrict=self.supported_cuba)
+
+        # when
+        container.data = data
+
+        # then
+        self.assertEqual(container.data, data)
+        self.assertIsNot(container.data, data)
 
 
 class MeshItemOperationsCheck(object):

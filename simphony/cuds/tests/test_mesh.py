@@ -3,7 +3,8 @@ import unittest
 from simphony.cuds.mesh import Mesh
 from simphony.testing.abc_check_mesh import (
     MeshPointOperationsCheck, MeshEdgeOperationsCheck,
-    MeshFaceOperationsCheck, MeshCellOperationsCheck)
+    MeshFaceOperationsCheck, MeshCellOperationsCheck,
+    MeshAttributesCheck)
 
 
 class TestMeshPointOperations(MeshPointOperationsCheck, unittest.TestCase):
@@ -25,6 +26,12 @@ class TestMeshFaceOperations(MeshFaceOperationsCheck, unittest.TestCase):
 
 
 class TestMeshCellOperations(MeshCellOperationsCheck, unittest.TestCase):
+
+    def container_factory(self, name):
+        return Mesh(name=name)
+
+
+class TestMeshAttributes(MeshAttributesCheck, unittest.TestCase):
 
     def container_factory(self, name):
         return Mesh(name=name)
