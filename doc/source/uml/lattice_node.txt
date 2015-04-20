@@ -1,0 +1,8 @@
+@startuml
+class LatticeNode {
+   data: DataContainer
+   index : int[3]
+   -- classmethods --
+   from_node(node: LatticeNode): LatticeNode {copy}
+}
+@enduml

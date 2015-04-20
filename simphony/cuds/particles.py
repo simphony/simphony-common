@@ -37,11 +37,13 @@ class Particles(ABCParticles):
         self._data = DataContainer()
         self.name = name
 
-# ================================================================
+    @property
+    def data(self):
+        return DataContainer(self._data)
 
-    # overriden methods of the ABC
-
-# ================================================================
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     def add_particle(self, particle):
         """Adds the particle to the container.
@@ -67,10 +69,6 @@ class Particles(ABCParticles):
         ------
         ValueError when the new particle already exists in the container.
 
-        See Also
-        --------
-        update_particle, remove_particle
-
         Examples
         --------
         Having a Particle and a ParticleContainer just call the function
@@ -94,7 +92,6 @@ class Particles(ABCParticles):
 
         Parameters
         ----------
-
         new_bond : Bond
             the new bond that will be included in the container.
 
@@ -106,10 +103,6 @@ class Particles(ABCParticles):
         Raises
         ------
         ValueError when the new particle already exists in the container.
-
-        See Also
-        --------
-        update_bond, remove_bond
 
         Examples
         --------
@@ -139,10 +132,6 @@ class Particles(ABCParticles):
         Raises
         ------
         ValueError exception if the particle does not exists.
-
-        See Also
-        --------
-        add_particle, remove_particle
 
         Examples
         --------
@@ -177,10 +166,6 @@ class Particles(ABCParticles):
         ------
         ValueError exception if the bond doesn't exists.
 
-        See Also
-        --------
-        add_bond, remove_bond
-
         Examples
         --------
         Having a Bond that already exists in the container (taken with the
@@ -206,7 +191,8 @@ class Particles(ABCParticles):
 
         Raises
         ------
-        KeyError when the particle is not in the container.
+        KeyError :
+           when the particle is not in the container.
 
         Returns
         -------
@@ -225,7 +211,8 @@ class Particles(ABCParticles):
 
         Raises
         ------
-        KeyError when the bond is not in the container.
+        KeyError :
+           when the bond is not in the container.
 
         Returns
         -------
@@ -249,9 +236,6 @@ class Particles(ABCParticles):
         ------
         KeyError exception if the particle doesn't exist.
 
-        See Also
-        --------
-        add_particle, update_particle
 
         Examples
         --------
@@ -277,10 +261,6 @@ class Particles(ABCParticles):
         ----------
         uid : uuid.UUID
             the id of the bond to be removed.
-
-        See Also
-        --------
-        add_bond, update_bond
 
         Examples
         --------
@@ -320,10 +300,6 @@ class Particles(ABCParticles):
         KeyError exception if any of the ids passed as parameters are not
         in the container.
 
-        See Also
-        --------
-        iter_bonds, add_particle, remove_particle, update_particle
-
         Examples
         --------
         It can be used with a sequence as parameter or withouth it:
@@ -342,12 +318,12 @@ class Particles(ABCParticles):
                 #in case we need it
                 part_container.update_particle(particle)
         """
-        if ids is not None:
-            return self._iter_elements(
-                self._particles, ids, clone=Particle.from_particle)
-        else:
+        if ids is None:
             return self._iter_all(
                 self._particles, clone=Particle.from_particle)
+        else:
+            return self._iter_elements(
+                self._particles, ids, clone=Particle.from_particle)
 
     def iter_bonds(self, ids=None):
         """Generator method for iterating over the bonds of the container.
@@ -371,10 +347,6 @@ class Particles(ABCParticles):
         KeyError exception if any of the ids passed as parameters are not
         in the container.
 
-        See Also
-        --------
-        iter_particles, add_bond, remove_bond, update_bond
-
         Examples
         --------
         It can be used with a sequence as parameter or withouth it:
@@ -394,11 +366,11 @@ class Particles(ABCParticles):
                 part_container.update_bond(bond)
         """
 
-        if ids is not None:
+        if ids is None:
+            return self._iter_all(self._bonds, clone=Bond.from_bond)
+        else:
             return self._iter_elements(
                 self._bonds, ids, clone=Bond.from_bond)
-        else:
-            return self._iter_all(self._bonds, clone=Bond.from_bond)
 
     def has_particle(self, uid):
         """Checks if a particle with the given id already exists
@@ -410,11 +382,7 @@ class Particles(ABCParticles):
         in the container."""
         return uid in self._bonds
 
-# ================================================================
-
-    # private methods to make the code more readable and compact
-
-# ================================================================
+    # Utility methods ########################################################
 
     def _iter_elements(self, cur_dict, cur_ids, clone):
         for cur_id in cur_ids:
@@ -447,19 +415,6 @@ class Particles(ABCParticles):
             cur_dict[uid] = clone(element)
         else:
             raise ValueError('id: {} does not exist'.format(uid))
-
-# ================================================================
-
-    # properties
-
-# ================================================================
-    def _get_data(self):
-        return DataContainer(self._data)
-
-    def _set_data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    data = property(_get_data, _set_data)
 
 
 class Particle(object):

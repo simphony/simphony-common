@@ -87,14 +87,6 @@ class Element(object):
         else:
             self.data = dc.DataContainer()
 
-    @classmethod
-    def from_element(cls, element):
-        return cls(
-            element.points,
-            element.uid,
-            element.data
-        )
-
 
 class Edge(Element):
     """ Edge element

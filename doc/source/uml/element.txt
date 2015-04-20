@@ -1,0 +1,7 @@
+@startuml
+class Element {
+   uid: uuid.UUID
+   data: DataContainer
+   points : uuid.UUID[]
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class Point {
+   uid: uuid.UUID
+   data: DataContainer
+   coordinates : double[3]
+   -- classmethods --
+   from_point(point: Point): Point {copy}
+}
+@enduml

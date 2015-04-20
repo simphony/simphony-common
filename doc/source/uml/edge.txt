@@ -1,0 +1,6 @@
+@startuml
+class Edge {
+   -- classmethods --
+   from_edge(edge: Edge): Edge {copy}
+}
+@enduml
