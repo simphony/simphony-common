@@ -89,8 +89,10 @@ If you recreate the uml diagrams you need to have java and xdot installed::
 
    sudo apt-get install defautl-jre xdot
 
-The running ``make uml`` inside the :file:`doc/` directory will
-recreate all the UML diagrams.
+A copy of the `plantuml.jar
+<http://plantuml.sourceforge.net/download.html>`_ needs also to be
+available in the :file:`doc/` folder. Running ``make uml`` inside
+the :file:`doc/` directory will recreate all the UML diagrams.
 
 
 .. note::
