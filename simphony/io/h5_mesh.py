@@ -382,7 +382,7 @@ class H5Mesh(object):
         row['data'] = self._uidData.append(edge.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                              edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
+                              edge.points] + [''] * (MAX_POINTS_IN_EDGE-n)
 
         row.append()
         self._group.edges.flush()
@@ -421,7 +421,7 @@ class H5Mesh(object):
         row['data'] = self._uidData.append(face.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                              face.points] + [0] * (MAX_POINTS_IN_FACE-n)
+                              face.points] + [''] * (MAX_POINTS_IN_FACE-n)
 
         row.append()
         self._group.faces.flush()
@@ -460,7 +460,7 @@ class H5Mesh(object):
         row['data'] = self._uidData.append(cell.data).hex
         row['n_points'] = n
         row['points_uids'] = [puid.hex for puid in
-                              cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+                              cell.points] + [''] * (MAX_POINTS_IN_CELL-n)
 
         row.append()
         self._group.cells.flush()
@@ -517,6 +517,7 @@ class H5Mesh(object):
         for row in self._group.edges.where(
                 'uid == value', condvars={'value': edge.uid.hex}):
             n = len(edge.points)
+            row['n_points'] = n
             row['points_uids'] = [puid.hex for puid in
                                   edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
             self._uidData[uuid.UUID(hex=row['data'], version=4)] = edge.data
@@ -548,6 +549,7 @@ class H5Mesh(object):
         for row in self._group.faces.where(
                 'uid == value', condvars={'value': face.uid.hex}):
             n = len(face.points)
+            row['n_points'] = n
             row['points_uids'] = [puid.hex for puid in
                                   face.points] + [0] * (MAX_POINTS_IN_FACE-n)
             self._uidData[uuid.UUID(hex=row['data'], version=4)] = face.data
@@ -579,6 +581,7 @@ class H5Mesh(object):
         for row in self._group.cells.where(
                 'uid == value', condvars={'value': cell.uid.hex}):
             n = len(cell.points)
+            row['n_points'] = n
             row['points_uids'] = [puid.hex for puid in
                                   cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
             self._uidData[uuid.UUID(hex=row['data'], version=4)] = cell.data
