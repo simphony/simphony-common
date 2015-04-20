@@ -206,14 +206,6 @@ class Mesh(ABCMesh):
     cells : dictionary of Cell
         Cells of the mesh.
 
-    See Also
-    --------
-    get_point, get_edge, get_face, get_cell
-    add_point, add_edge, add_face, add_cell
-    update_point, update_edge, update_face, update_cell
-    iter_points, iter_edges, iter_faces, iter_cells
-    has_edges, has_faces, has_cells
-
     """
 
     def __init__(self, name):
@@ -368,9 +360,9 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError :
+        ValueError :
             If other point with the same uid was already
-            in the mesh
+            in the mesh.
 
         """
         if point.uid is None:
@@ -393,7 +385,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError :
+        ValueError :
             If other edge with the same uid was already
             in the mesh
 
@@ -419,7 +411,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        ValueError
+        ValueError :
             If other face with the same uid was already
             in the mesh
 
@@ -444,12 +436,9 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        ValueError :
             If other cell with the same uid was already
             in the mesh
-
-        TypeError
-            If the object provided is not a cell
 
         """
 
@@ -475,7 +464,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        ValueError :
             If the point was not found in the mesh
 
         """
@@ -501,7 +490,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        ValueError :
             If the edge was not found in the mesh
 
         """
@@ -527,7 +516,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError
+        ValueError :
             If the face was not found in the mesh
 
         """
@@ -555,7 +544,7 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        KeyError :
+        ValueError :
             If the cell was not found in the mesh
 
         """
@@ -682,7 +671,6 @@ class Mesh(ABCMesh):
             False otherwise
 
         """
-
         return len(self._edges) > 0
 
     def has_faces(self):
