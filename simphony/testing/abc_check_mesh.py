@@ -258,6 +258,8 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         'iter items': 'none',
         'has items': 'none'}
 
+    points_range = None
+
     def has_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['has items'])
         return method(*args, **kwrds)
@@ -277,16 +279,30 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        item.points = self.create_item(None).points
 
-        # when
-        self.update_operation(container, item)
+        # increasing
+        for n in self.points_range:
+            # when
+            item.points = tuple(uuid.uuid4() for _ in range(n))
+            self.update_operation(container, item)
 
-        # then
-        retrieved = self.get_operation(container, item.uid)
-        self.assertEqual(retrieved, item)
-        self.assertNotEqual(item, self.item_list[2])
-        self.assertNotEqual(retrieved, self.item_list[2])
+            # then
+            retrieved = self.get_operation(container, item.uid)
+            self.assertEqual(retrieved, item)
+            self.assertNotEqual(item, self.item_list[2])
+            self.assertNotEqual(retrieved, self.item_list[2])
+
+        # decreasing
+        for n in self.points_range[::-1]:
+            # when
+            item.points = tuple(uuid.uuid4() for _ in range(n))
+            self.update_operation(container, item)
+
+            # then
+            retrieved = self.get_operation(container, item.uid)
+            self.assertEqual(retrieved, item)
+            self.assertNotEqual(item, self.item_list[2])
+            self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
@@ -302,6 +318,8 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
         'update item': 'update_edge',
         'iter items': 'iter_edges',
         'has items': 'has_edges'}
+
+    points_range = [2]
 
     def create_items(self):
         uids = [uuid.uuid4() for _ in range(12)]
@@ -331,6 +349,8 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
         'iter items': 'iter_faces',
         'has items': 'has_faces'}
 
+    points_range = [3, 4]
+
     def create_items(self):
         uids = [uuid.uuid4() for _ in range(32)]
         return [Face(
@@ -343,38 +363,6 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
             uid=uid,
             points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
             data=create_data_container(restrict=self.supported_cuba))
-
-    def test_update_item_points_reduce(self):
-        # given
-        container = self.container
-        uids = self._add_items(container)
-        item = self.get_operation(container, uids[2])
-        item.points = self.create_item(None).points[:-1]
-
-        # when
-        self.update_operation(container, item)
-
-        # then
-        retrieved = self.get_operation(container, item.uid)
-        self.assertEqual(retrieved, item)
-        self.assertNotEqual(item, self.item_list[2])
-        self.assertNotEqual(retrieved, self.item_list[2])
-
-    def test_update_item_points_increase(self):
-        # given
-        container = self.container
-        uids = self._add_items(container)
-        item = self.get_operation(container, uids[2])
-        item.points = self.create_item(None).points + [uuid.uuid4()]
-
-        # when
-        self.update_operation(container, item)
-
-        # then
-        retrieved = self.get_operation(container, item.uid)
-        self.assertEqual(retrieved, item)
-        self.assertNotEqual(item, self.item_list[2])
-        self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshCellOperationsCheck(MeshElementOperationsCheck):
@@ -391,6 +379,8 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
         'iter items': 'iter_cells',
         'has items': 'has_cells'}
 
+    points_range = range(4, 8)
+
     def create_items(self):
         uids = [uuid.uuid4() for _ in range(32)]
         return [Cell(
@@ -403,35 +393,3 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
             uid=uid,
             points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
             data=create_data_container(restrict=self.supported_cuba))
-
-    def test_update_item_points_reduce(self):
-        # given
-        container = self.container
-        uids = self._add_items(container)
-        item = self.get_operation(container, uids[2])
-        item.points = self.create_item(None).points[:-1]
-
-        # when
-        self.update_operation(container, item)
-
-        # then
-        retrieved = self.get_operation(container, item.uid)
-        self.assertEqual(retrieved, item)
-        self.assertNotEqual(item, self.item_list[2])
-        self.assertNotEqual(retrieved, self.item_list[2])
-
-    def test_update_item_points_increase(self):
-        # given
-        container = self.container
-        uids = self._add_items(container)
-        item = self.get_operation(container, uids[2])
-        item.points = self.create_item(None).points + [uuid.uuid4()]
-
-        # when
-        self.update_operation(container, item)
-
-        # then
-        retrieved = self.get_operation(container, item.uid)
-        self.assertEqual(retrieved, item)
-        self.assertNotEqual(item, self.item_list[2])
-        self.assertNotEqual(retrieved, self.item_list[2])
