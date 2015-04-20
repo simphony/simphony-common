@@ -1,4 +1,5 @@
 import uuid
+import collections
 
 import numpy
 from numpy.testing import assert_equal
@@ -34,7 +35,19 @@ def compare_points(point, reference, msg=None, testcase=None):
 def compare_elements(element, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(element.uid, reference.uid)
-    self.assertEqual(element.points, reference.points)
+    points = collections.deque(reference.points)
+    for _ in range(len(points)):
+        points.rotate(1)
+        try:
+            self.assertSequenceEqual(element.points, points)
+        except AssertionError:
+            continue
+        else:
+            break
+    else:
+        message = 'Point uid sequences are not equivalent: {} !~ {}'
+        raise AssertionError(message.format(element.points, reference.points))
+
     compare_data_containers(element.data, reference.data, testcase=self)
 
 
