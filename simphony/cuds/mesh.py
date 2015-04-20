@@ -257,7 +257,12 @@ class Mesh(ABCMesh):
             If the point identified by uuid was not found
 
         """
-        return Point.from_point(self._points[uid])
+        if isinstance(uid, uuid.UUID):
+            return Point.from_point(self._points[uid])
+        else:
+            message = 'Expected type for `uid` is uuid.UUID but received {!r}'
+            raise TypeError(message.format(type(uid)))
+
 
     def get_edge(self, uid):
         """ Returns an edge with a given uuid.
@@ -282,7 +287,11 @@ class Mesh(ABCMesh):
             If the edge identified by uuid was not found
 
         """
-        return Edge.from_edge(self._edges[uid])
+        if isinstance(uid, uuid.UUID):
+            return Edge.from_edge(self._edges[uid])
+        else:
+            message = 'Expected type for `uid` is uuid.UUID but received {!r}'
+            raise TypeError(message.format(type(uid)))
 
     def get_face(self, uid):
         """ Returns a face with a given uid.
@@ -307,7 +316,11 @@ class Mesh(ABCMesh):
             If the face identified by uuid was not found
 
         """
-        return Face.from_face(self._faces[uid])
+        if isinstance(uid, uuid.UUID):
+            return Face.from_face(self._faces[uid])
+        else:
+            message = 'Expected type for `uid` is uuid.UUID but received {!r}'
+            raise TypeError(message.format(type(uid)))
 
     def get_cell(self, uid):
         """ Returns a cell with a given uid.
@@ -332,7 +345,11 @@ class Mesh(ABCMesh):
             If the cell identified by uuid was not found
 
         """
-        return Cell.from_cell(self._cells[uid])
+        if isinstance(uid, uuid.UUID):
+            return Cell.from_cell(self._cells[uid])
+        else:
+            message = 'Expected type for `uid` is uuid.UUID but received {!r}'
+            raise TypeError(message.format(type(uid)))
 
     def add_point(self, point):
         """ Adds a new point to the mesh.
