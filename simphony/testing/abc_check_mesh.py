@@ -1,5 +1,6 @@
 import abc
 import uuid
+import unittest
 from functools import partial
 
 from simphony.testing.utils import (
@@ -231,7 +232,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         'update item': 'update_point',
         'iter items': 'iter_points'}
 
-    def test_update_item_data(self):
+    def test_update_item_coordniates_(self):
         # given
         container = self.container
         uids = self._add_items(container)
@@ -271,7 +272,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         self.add_operation(container, self.item_list[0])
         self.assertTrue(self.has_items_operation(container))
 
-    def test_update_item_data(self):
+    def test_update_item_points(self):
         # given
         container = self.container
         uids = self._add_items(container)
@@ -340,8 +341,40 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
     def create_item(self, uid):
         return Face(
             uid=uid,
-            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
+            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
             data=create_data_container(restrict=self.supported_cuba))
+
+    def test_update_item_points_reduce(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.points = self.create_item(None).points[:-1]
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_item_points_increase(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.points = self.create_item(None).points + [uuid.uuid4()]
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshCellOperationsCheck(MeshElementOperationsCheck):
@@ -370,3 +403,35 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
             uid=uid,
             points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
             data=create_data_container(restrict=self.supported_cuba))
+
+    def test_update_item_points_reduce(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.points = self.create_item(None).points[:-1]
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_item_points_increase(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.points = self.create_item(None).points + [uuid.uuid4()]
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        self.assertEqual(retrieved, item)
+        self.assertNotEqual(item, self.item_list[2])
+        self.assertNotEqual(retrieved, self.item_list[2])
