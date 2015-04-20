@@ -5,8 +5,7 @@ from simphony.core.data_container import DataContainer
 
 
 class LatticeNode(object):
-    """
-    A single node of a lattice.
+    """A single node of a lattice.
 
     Attributes
     ----------
@@ -25,9 +24,8 @@ class LatticeNode(object):
 
 
 class Lattice(ABCLattice):
-    """A Bravais lattice
-
-    Stores references to data containers (node related data).
+    """A Bravais lattice. Stores references to data
+    containers (node related data).
 
     Attributes
     ----------
