@@ -1,12 +1,11 @@
 import abc
 import uuid
-import unittest
 from functools import partial
 
 from simphony.testing.utils import (
     create_data_container, create_points, compare_points, compare_elements,
     grouper)
-from simphony.cuds.mesh import Point, Element, Edge, Cell, Face
+from simphony.cuds.mesh import Point, Edge, Cell, Face
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 

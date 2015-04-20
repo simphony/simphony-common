@@ -265,7 +265,6 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-
     def get_edge(self, uid):
         """ Returns an edge with a given uuid.
 

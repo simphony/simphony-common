@@ -4,7 +4,6 @@ import shutil
 import unittest
 import tables
 
-from simphony.cuds.mesh import Mesh
 from simphony.testing.abc_check_mesh import (
     MeshPointOperationsCheck, MeshEdgeOperationsCheck,
     MeshFaceOperationsCheck, MeshCellOperationsCheck)
