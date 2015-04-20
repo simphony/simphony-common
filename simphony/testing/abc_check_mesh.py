@@ -72,13 +72,22 @@ class MeshItemOperationsCheck(object):
             self.assertEqual(
                 self.get_operation(container, uids[index]), expected)
 
-    def test_exception_on_get_items_with_invalid_uid(self):
+    def test_exception_on_get_item_with_wrong_uid(self):
         # given
         container = self.container
         invalid_uuid = uuid.uuid4()
 
         # when/then
         with self.assertRaises(KeyError):
+            self.get_operation(container, invalid_uuid)
+
+    def test_exception_on_get_item_with_invalid_uid(self):
+        # given
+        container = self.container
+        invalid_uuid = None
+
+        # when/then
+        with self.assertRaises(TypeError):
             self.get_operation(container, invalid_uuid)
 
     def test_add_item_with_uid(self):
@@ -123,15 +132,6 @@ class MeshItemOperationsCheck(object):
         # given
         container = self.container
         item = self.create_item(uuid.uuid4())
-
-        # when/then
-        with self.assertRaises(ValueError):
-            self.update_operation(container, item)
-
-    def test_exception_when_invalid_id(self):
-        # given
-        container = self.container
-        item = self.create_item(None)
 
         # when/then
         with self.assertRaises(ValueError):
