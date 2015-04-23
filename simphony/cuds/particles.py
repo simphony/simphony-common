@@ -276,19 +276,22 @@ class Particles(ABCParticles):
         """
         del self._bonds[uid]
 
-    def iter_particles(self, ids=None):
+    def iter_particles(self, uids=None):
         """Generator method for iterating over the particles of the container.
 
-        It can receive any kind of sequence of particle ids to iterate over
+        It can receive any kind of sequence of particle uids to iterate over
         those concrete particles. If nothing is passed as parameter, it will
         iterate over all the particles.
 
         Parameters
         ----------
 
-        ids : iterable
-            sequence containing the id's of the particles that will be
-            iterated.
+        uids : iterable of uuid.UUID, optional
+            sequence containing the uids of the particles that will be
+            iterated. When the uids are provided, then the particles are
+            returned in the same order the uids are returned by the iterable.
+            If uids is None, then all particles are returned by the interable
+            and there is no restriction on the order that they are returned.
 
         Yields
         ------
@@ -318,14 +321,14 @@ class Particles(ABCParticles):
                 #in case we need it
                 part_container.update_particle(particle)
         """
-        if ids is None:
+        if uids is None:
             return self._iter_all(
                 self._particles, clone=Particle.from_particle)
         else:
             return self._iter_elements(
-                self._particles, ids, clone=Particle.from_particle)
+                self._particles, uids, clone=Particle.from_particle)
 
-    def iter_bonds(self, ids=None):
+    def iter_bonds(self, uids=None):
         """Generator method for iterating over the bonds of the container.
 
         It can receive any kind of sequence of bond ids to iterate over
@@ -335,8 +338,12 @@ class Particles(ABCParticles):
         Parameters
         ----------
 
-        bond_ids : array_like
+        uids : iterable of uuid.UUID, optional
             sequence containing the id's of the bond that will be iterated.
+            When the uids are provided, then the bonds are returned in
+            the same order the uids are returned by the iterable. If uids is
+            None, then all bonds are returned by the interable and there
+            is no restriction on the order that they are returned.
 
         Yields
         ------
@@ -366,11 +373,11 @@ class Particles(ABCParticles):
                 part_container.update_bond(bond)
         """
 
-        if ids is None:
+        if uids is None:
             return self._iter_all(self._bonds, clone=Bond.from_bond)
         else:
             return self._iter_elements(
-                self._bonds, ids, clone=Bond.from_bond)
+                self._bonds, uids, clone=Bond.from_bond)
 
     def has_particle(self, uid):
         """Checks if a particle with the given id already exists
