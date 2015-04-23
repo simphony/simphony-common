@@ -170,7 +170,7 @@ class H5Mesh(object):
 
         Parameters
         ----------
-        uid : int
+        uid : UUID
             uid of the desired point.
 
         Returns

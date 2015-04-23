@@ -48,10 +48,10 @@ class Particles(ABCParticles):
     def add_particle(self, particle):
         """Adds the particle to the container.
 
-        If the new particle has no id, the particle container
+        If the new particle has no uid, the particle container
         will generate a new unique id for it. If the particle has
-        already an id (user set), it won't add the particle if a particle
-        with the same id already exists. If the user wants to replace
+        already an uid, it won't add the particle if a particle
+        with the same uid already exists. If the user wants to replace
         an existing particle in the container there is an 'update_particle'
         method for that purpose.
 
@@ -63,7 +63,7 @@ class Particles(ABCParticles):
         Returns
         -------
         uid : uuid.UUID
-            The id of the added particle.
+            The uid of the added particle.
 
         Raises
         ------
@@ -84,10 +84,10 @@ class Particles(ABCParticles):
     def add_bond(self, bond):
         """Adds the bond to the container.
 
-        Also like with particles, if the bond has an user defined id,
-        it won't add the bond if a bond with the same id already exists, and
-        if the bond has no id the particle container will generate an
-        unique id. If the user wants to replace an existing bond in the
+        Also like with particles, if the bond has a defined uid,
+        it won't add the bond if a bond with the same uid already exists, and
+        if the bond has no uid the particle container will generate an
+        unique uid. If the user wants to replace an existing bond in the
         container there is an 'update_bond' method for that purpose.
 
         Parameters
@@ -98,7 +98,7 @@ class Particles(ABCParticles):
         Returns
         -------
         uid : uuid.UID
-            The id of the added bond.
+            The uid of the added bond.
 
         Raises
         ------
@@ -118,7 +118,7 @@ class Particles(ABCParticles):
     def update_particle(self, particle):
         """Replaces an existing particle.
 
-        Takes the id of 'particle' and searchs inside the container for
+        Takes the uid of 'particle' and searches inside the container for
         that particle. If the particle exists, it is replaced with the new
         particle passed as parameter. If the particle doesn't exist, it will
         raise an exception.
@@ -187,7 +187,7 @@ class Particles(ABCParticles):
         ----------
 
         uid : uuid.UUID
-            the id of the particle
+            the uid of the particle
 
         Raises
         ------
@@ -207,7 +207,7 @@ class Particles(ABCParticles):
         Parameters
         ----------
         uid : uuid.UUID
-            the id of the bond
+            the uid of the bond
 
         Raises
         ------
@@ -230,7 +230,7 @@ class Particles(ABCParticles):
         Parameters
         ----------
         uid : uuid.UUID
-            the id of the particle to be removed.
+            the uid of the particle to be removed.
 
         Raises
         ------
@@ -260,7 +260,7 @@ class Particles(ABCParticles):
         Parameters
         ----------
         uid : uuid.UUID
-            the id of the bond to be removed.
+            the uid of the bond to be removed.
 
         Examples
         --------
@@ -380,12 +380,12 @@ class Particles(ABCParticles):
                 self._bonds, uids, clone=Bond.from_bond)
 
     def has_particle(self, uid):
-        """Checks if a particle with the given id already exists
+        """Checks if a particle with the given uid already exists
         in the container."""
         return uid in self._particles
 
     def has_bond(self, uid):
-        """Checks if a bond with the given id already exists
+        """Checks if a bond with the given uid already exists
         in the container."""
         return uid in self._bonds
 
@@ -430,7 +430,7 @@ class Particle(object):
     Attributes
     ----------
     uid : uuid.UUID
-        the unique id of the particle
+        the unique uid of the particle
     coordinates : list / tuple
         x,y,z coordinates of the particle
     data : DataContainer
@@ -471,7 +471,7 @@ class Particle(object):
 
 
 class Bond(object):
-    """Class reprensenting a bond.
+    """Class representing a bond.
 
     Attributes
     ----------

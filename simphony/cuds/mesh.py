@@ -17,7 +17,7 @@ class Point(object):
 
     Parameters
     ----------
-    uid :
+    uid : uuid.UUID
         uid of the point.
     coordinates : list of double
         set of coordinates (x,y,z) describing the point position.
@@ -26,8 +26,8 @@ class Point(object):
 
     Attributes
     ----------
-    uid :
-        uuid of the point.
+    uid : uuid.UUID
+        uid of the point.
     data : DataContainer
         object to store point data
     coordinates : list of double
@@ -71,8 +71,8 @@ class Element(object):
     ----------
     points : list of uid
         list of points uids defining the element.
-    uid :
-        uuid of the element
+    uid : uuid.UUID
+        uid of the element
     data : DataContainer
         Element data
 
@@ -97,7 +97,7 @@ class Edge(Element):
     ----------
     points : list of uid
         list of points uids defining the edge.
-    uid :
+    uid : uuid.UUID
         uid of the edge.
     data : DataContainer
         object to store data relative to the edge
@@ -122,7 +122,7 @@ class Face(Element):
     ----------
     points : list of uid
         list of points uids defining the face.
-    uid :
+    uid : uuid.UUID
         uid of the face.
     data : DataContainer
         object to store data relative to the face
@@ -147,7 +147,7 @@ class Cell(Element):
     ----------
     points : list of uid
         list of points uids defining the cell.
-    uid :
+    uid : uuid.UUID
         uid of the cell.
     data : DataContainer
         object to store data relative to the cell
@@ -235,7 +235,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired point.
 
         Returns
@@ -265,7 +265,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired edge.
 
         Returns
@@ -295,7 +295,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired face.
 
         Returns
@@ -325,7 +325,7 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        uid
+        uid : uuid.UUID
             uid of the desired cell.
 
         Returns
@@ -474,7 +474,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
-        id as the provided point and updates its information
+        uid as the provided point and updates its information
         with the one provided with the new point.
 
         Parameters
@@ -511,7 +511,7 @@ class Mesh(ABCMesh):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
-        id as the provided edge and updates its information
+        uid as the provided edge and updates its information
         with the one provided with the new edge.
 
         Parameters
