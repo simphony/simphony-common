@@ -279,7 +279,7 @@ class Particles(ABCParticles):
     def iter_particles(self, ids=None):
         """Generator method for iterating over the particles of the container.
 
-        It can recieve any kind of sequence of particle ids to iterate over
+        It can receive any kind of sequence of particle ids to iterate over
         those concrete particles. If nothing is passed as parameter, it will
         iterate over all the particles.
 
@@ -302,7 +302,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        It can be used with a sequence as parameter or withouth it:
+        It can be used with a sequence as parameter or without it:
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -328,7 +328,7 @@ class Particles(ABCParticles):
     def iter_bonds(self, ids=None):
         """Generator method for iterating over the bonds of the container.
 
-        It can recieve any kind of sequence of bond ids to iterate over
+        It can receive any kind of sequence of bond ids to iterate over
         those concrete bond. If nothing is passed as parameter, it will
         iterate over all the bonds.
 
