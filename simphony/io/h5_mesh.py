@@ -283,7 +283,7 @@ class H5Mesh(object):
         Returns
         -------
         Cell
-            Cell with id identified by uid
+            Cell by uid
 
         Raises
         ------

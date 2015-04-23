@@ -49,7 +49,7 @@ class Particles(ABCParticles):
         """Adds the particle to the container.
 
         If the new particle has no uid, the particle container
-        will generate a new unique id for it. If the particle has
+        will generate a new uid for it. If the particle has
         already an uid, it won't add the particle if a particle
         with the same uid already exists. If the user wants to replace
         an existing particle in the container there is an 'update_particle'
@@ -87,7 +87,7 @@ class Particles(ABCParticles):
         Also like with particles, if the bond has a defined uid,
         it won't add the bond if a bond with the same uid already exists, and
         if the bond has no uid the particle container will generate an
-        unique uid. If the user wants to replace an existing bond in the
+        uid. If the user wants to replace an existing bond in the
         container there is an 'update_bond' method for that purpose.
 
         Parameters
@@ -151,7 +151,7 @@ class Particles(ABCParticles):
     def update_bond(self, bond):
         """Replaces an existing bond.
 
-        Takes the id of 'bond' and searchs inside the container for
+        Takes the uid of 'bond' and searchs inside the container for
         that bond. If the bond exists, it is replaced with the new
         bond passed as parameter. If the bond doesn't exist, it will
         raise an exception.
@@ -224,7 +224,7 @@ class Particles(ABCParticles):
     def remove_particle(self, uid):
         """Removes the particle with uid from the container.
 
-        The id passed as parameter should exists in the container. Otherwise
+        The uid passed as parameter should exists in the container. Otherwise
         an expcetion will be raised.
 
         Parameters
@@ -239,7 +239,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        Having an id of an existing particle, pass it to the function.
+        Having an uid of an existing particle, pass it to the function.
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -254,7 +254,7 @@ class Particles(ABCParticles):
     def remove_bond(self, uid):
         """Removes the bond with the uid from the container.
 
-        The id passed as parameter should exists in the container. If
+        The uid passed as parameter should exists in the container. If
         it doesn't exists, nothing will happen.
 
         Parameters
@@ -264,7 +264,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        Having an id of an existing bond, pass it to the function.
+        Having an uid of an existing bond, pass it to the function.
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -430,7 +430,7 @@ class Particle(object):
     Attributes
     ----------
     uid : uuid.UUID
-        the unique uid of the particle
+        the uid of the particle
     coordinates : list / tuple
         x,y,z coordinates of the particle
     data : DataContainer
@@ -476,7 +476,7 @@ class Bond(object):
     Attributes
     ----------
     uid : uuid.UUID
-        the unique id of the bond
+        the uid of the bond
     particles : tuple
         tuple of uids of the particles that are participating in the bond.
     data : DataContainer

@@ -196,7 +196,7 @@ class H5Particles(ABCParticles):
             return self._particles.itersequence(ids)
 
     def has_particle(self, uid):
-        """Checks if a particle with id "id" exists in the container."""
+        """Checks if a particle with uid "uid" exists in the container."""
         return uid in self._particles
 
     # Bond methods #######################################################
@@ -245,5 +245,5 @@ class H5Particles(ABCParticles):
             return self._bonds.itersequence(ids)
 
     def has_bond(self, uid):
-        """Checks if a bond with id "id" exists in the container."""
+        """Checks if a bond with uid "uid" exists in the container."""
         return uid in self._bonds

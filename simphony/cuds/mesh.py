@@ -331,7 +331,7 @@ class Mesh(ABCMesh):
         Returns
         -------
         Cell
-            Cell with id identified by uid
+            Cell identified by uid
 
         Raises
         ------
