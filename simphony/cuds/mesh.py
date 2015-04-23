@@ -618,47 +618,41 @@ class Mesh(ABCMesh):
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
 
-    def iter_points(self, point_uids=None):
-        """ Returns an iterator over the selected points.
-
-        Returns an iterator over the points with uid in
-        point_uids. If none of the ids in point_uids exists,
-        an empty iterator is returned. If there is no ids
-        inside point_uids, a iterator over all points of
-        the mesh is returned instead.
+    def iter_points(self, uids=None):
+        """ Returns an iterator over points.
 
         Parameters
         ----------
-        point_uids : list of uid, optional
-            uids of the desired points, default empty
+        uids : iterable of uuid.UUID or None
+            When the uids are provided, then the points are returned in
+            the same order the uids are returned by the iterable. If uids is
+            None, then all points are returned by the interable and there
+            is no restriction on the order that they are returned.
 
         Returns
         -------
         iter
-            Iterator over the selected points
+            Iterator over the points
 
         """
 
-        if point_uids is None:
+        if uids is None:
             for point in self._points.values():
                 yield Point.from_point(point)
         else:
-            for point_uid in point_uids:
+            for point_uid in uids:
                 yield Point.from_point(self._points[point_uid])
 
-    def iter_edges(self, edge_uids=None):
-        """ Returns an iterator over the selected edges.
-
-        Returns an iterator over the edged with uid in
-        edge_uid. If none of the uids in edge_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside edge_uids, a iterator over all edges of
-        the mesh is returned instead.
+    def iter_edges(self, uids=None):
+        """ Returns an iterator over edges.
 
         Parameters
         ----------
-        edge_uids : list of uid, optional
-            uids of the desired edges, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the edges are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all edges are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Returns
         -------
@@ -667,54 +661,48 @@ class Mesh(ABCMesh):
 
         """
 
-        if edge_uids is None:
+        if uids is None:
             for edge in self._edges.values():
                 yield Edge.from_edge(edge)
         else:
-            for edge_uid in edge_uids:
-                yield Edge.from_edge(self._edges[edge_uid])
+            for uid in uids:
+                yield Edge.from_edge(self._edges[uid])
 
-    def iter_faces(self, face_uids=None):
-        """ Returns an iterator over the selected faces.
-
-        Returns an iterator over the faces with uid in
-        face_uids. If none of the uuids in face_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside face_uids, a iterator over all faces of
-        the mesh is returned instead.
+    def iter_faces(self, uids=None):
+        """ Returns an iterator over faces.
 
         Parameters
         ----------
-        face_uids : list of uid, optional
-            uids of the desired faces, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the faces are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all faces are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Returns
         -------
         iter
-            Iterator over the selected faces
+            Iterator over the faces
 
         """
 
-        if face_uids is None:
+        if uids is None:
             for face in self._faces.values():
                 yield Face.from_face(face)
         else:
-            for face_uid in face_uids:
-                yield Face.from_face(self._faces[face_uid])
+            for uid in uids:
+                yield Face.from_face(self._faces[uid])
 
-    def iter_cells(self, cell_uids=None):
-        """ Returns an iterator over the selected cells.
-
-        Returns an iterator over the cells with uid in
-        cell_uids. If none of the uids in cell_uids exists,
-        an empty iterator is returned. If there is no uuids
-        inside cell_uuids, a iterator over all cells of
-        the mesh is returned instead.
+    def iter_cells(self, uids=None):
+        """ Returns an iterator over cells.
 
         Parameters
         ----------
-        cell_uids : list of uid, optional
-            uids of the desired cell, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the cells are returned in the same
+            order the uids are returned by the iterable. If uids is None, then
+            all cells are returned by the interable and there is no restriction
+            on the order that they are returned.
 
         Returns
         -------
@@ -723,12 +711,12 @@ class Mesh(ABCMesh):
 
         """
 
-        if cell_uids is None:
+        if uids is None:
             for cell in self._cells.values():
                 yield Cell.from_cell(cell)
         else:
-            for cell_uid in cell_uids:
-                yield Cell.from_cell(self._cells[cell_uid])
+            for uid in uids:
+                yield Cell.from_cell(self._cells[uid])
 
     def has_edges(self):
         """ Check if the mesh has edges

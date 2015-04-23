@@ -62,19 +62,19 @@ class ABCMesh(object):
         pass
 
     @abstractmethod
-    def iter_points(self, point_uids=None):
+    def iter_points(self, uids=None):
         pass
 
     @abstractmethod
-    def iter_edges(self, edge_uids=None):
+    def iter_edges(self, uids=None):
         pass
 
     @abstractmethod
-    def iter_faces(self, face_uids=None):
+    def iter_faces(self, uids=None):
         pass
 
     @abstractmethod
-    def iter_cells(self, cell_uids=None):
+    def iter_cells(self, uids=None):
         pass
 
     @abstractmethod
