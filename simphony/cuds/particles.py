@@ -306,7 +306,7 @@ class Particles(ABCParticles):
 
         >>> part_container = Particles(name="foo")
         >>> ...
-        >>> for particle in part_container.iter_particles([id1, id2, id3]):
+        >>> for particle in part_container.iter_particles([uid1, uid2, uid3]):
                 ...  #do stuff
                 #take the particle back to the container so it will be updated
                 #in case we need it
@@ -349,7 +349,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        It can be used with a sequence as parameter or withouth it:
+        It can be used with a sequence as parameter or without it:
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -471,7 +471,7 @@ class Bond(object):
     uid : uuid.UUID
         the unique id of the bond
     particles : tuple
-        tuple of uuids of the particles that are participating in the bond.
+        tuple of uids of the particles that are participating in the bond.
     data : DataContainer
         DataContainer to store the attributes of the bond
 

@@ -12,7 +12,7 @@ import simphony.core.data_container as dc
 class Point(object):
     """ Coordinates describing a point in the space
 
-    Set of coordinates(x,y,z) describing a point in
+    Set of coordinates (x,y,z) describing a point in
     the space and data about that point
 
     Parameters
@@ -171,7 +171,7 @@ class Mesh(ABCMesh):
     methods to interact with them. The methods are
     divided in four different blocks:
 
-    (1) methods to get the related item with the provided uuid;
+    (1) methods to get the related item with the provided uid;
     (2) methods to add a new item or replace;
     (3) generator methods that return iterators
         over all or some of the mesh items and;
@@ -227,10 +227,10 @@ class Mesh(ABCMesh):
         self._data = dc.DataContainer(value)
 
     def get_point(self, uid):
-        """ Returns a point with a given uuid.
+        """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
-        identified by uuid. If such point do not
+        identified by uid. If such point do not
         exists an exception is raised.
 
         Parameters
@@ -241,26 +241,26 @@ class Mesh(ABCMesh):
         Returns
         -------
         Point
-            Mesh point identified by uuid
+            Mesh point identified by uid
 
         Raises
         ------
-        Exception
-            If the point identified by uuid was not found
+        KeyError
+            If the point identified by uid was not found
 
         """
 
         try:
             return Point.from_point(self._points[uid])
         except KeyError:
-            error_str = "Trying to get an non-existing point with uuid: {}"
+            error_str = "Trying to get an non-existing point with uid: {}"
             raise ValueError(error_str.format(uid))
 
     def get_edge(self, uid):
-        """ Returns an edge with a given uuid.
+        """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
-        identified by uuid. If such edge do not
+        identified by uid. If such edge do not
         exists an exception is raised.
 
         Parameters
@@ -275,8 +275,8 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        Exception
-            If the edge identified by uuid was not found
+        KeyError
+            If the edge identified by uid was not found
 
         """
 
@@ -290,8 +290,8 @@ class Mesh(ABCMesh):
         """ Returns a face with a given uid.
 
         Returns the face stored in the mesh
-        identified by uid. If such face do not
-        exists an exception is raised.
+        identified by uid. If such a face does
+        not exists an exception is raised.
 
         Parameters
         ----------
@@ -305,8 +305,8 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        Exception
-            If the face identified by uuid was not found
+        KeyError
+            If the face identified by uid was not found
 
         """
 
@@ -320,7 +320,7 @@ class Mesh(ABCMesh):
         """ Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
-        identified by uuid . If such cell do not
+        identified by uid. If such a cell does not
         exists an exception is raised.
 
         Parameters
@@ -335,8 +335,8 @@ class Mesh(ABCMesh):
 
         Raises
         ------
-        Exception
-            If the cell identified by uuid was not found
+        KeyError
+            If the cell identified by uid was not found
 
         """
 
@@ -369,7 +369,7 @@ class Mesh(ABCMesh):
             point.uid = self._generate_uuid()
 
         if point.uid in self._points:
-            error_str = "Trying to add an already existing point with uuid: "\
+            error_str = "Trying to add an already existing point with uid: "\
                 + str(point.uid)
             raise KeyError(error_str)
 
@@ -400,7 +400,7 @@ class Mesh(ABCMesh):
             edge.uid = self._generate_uuid()
 
         if edge.uid in self._edges:
-            error_str = "Trying to add an already existing edge with uuid: "\
+            error_str = "Trying to add an already existing edge with uid: "\
                 + str(edge.uid)
             raise KeyError(error_str)
 
@@ -431,7 +431,7 @@ class Mesh(ABCMesh):
             face.uid = self._generate_uuid()
 
         if face.uid in self._faces:
-            error_str = "Trying to add an already existing face with uuid: "\
+            error_str = "Trying to add an already existing face with uid: "\
                 + str(face.uid)
             raise KeyError(error_str)
 
@@ -462,7 +462,7 @@ class Mesh(ABCMesh):
             cell.uid = self._generate_uuid()
 
         if cell.uid in self._cells:
-            error_str = "Trying to add an already existing cell with uuid: "\
+            error_str = "Trying to add an already existing cell with uid: "\
                 + str(cell.uid)
             raise KeyError(error_str)
 
@@ -548,7 +548,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
-        uuid as the provided face and updates its information
+        uid as the provided face and updates its information
         with the one provided with the new face.
 
         Parameters
@@ -585,7 +585,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same
-        uuid as the provided cell and updates its information
+        uid as the provided cell and updates its information
         with the one provided with the new cell.
 
         Parameters
@@ -768,9 +768,9 @@ class Mesh(ABCMesh):
         return len(self._cells) > 0
 
     def _generate_uuid(self):
-        """ Provides and uuid for the object
+        """ Provides a uuid for the object
 
-        Provides san uuid as defined in the standard RFC 4122
+        Provides a uuid as defined in the standard RFC 4122
         """
 
         return uuid.uuid4()
