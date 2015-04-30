@@ -14,7 +14,7 @@ class ContainerAddParticlesCheck(object):
     __metaclass__ = abc.ABCMeta
 
     def setUp(self):
-        self.particle_list = create_particles()
+        self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory('foo')
         self.ids = [
             self.container.add_particle(particle)
@@ -23,6 +23,12 @@ class ContainerAddParticlesCheck(object):
     @abc.abstractmethod
     def container_factory(self, name):
         """ Create and return the container object
+        """
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+
         """
 
     def test_has_particle(self):
@@ -42,7 +48,7 @@ class ContainerAddParticlesCheck(object):
         particle = Particle(
             uid=uid,
             coordinates=(1, 2, -3),
-            data=create_data_container())
+            data=create_data_container(restrict=self.supported_cuba()))
         particle_uid = container.add_particle(particle)
         self.assertEqual(particle_uid, uid)
         self.assertTrue(container.has_particle(uid))
@@ -62,11 +68,17 @@ class ContainerManipulatingParticlesCheck(object):
         """ Create and return the container object
         """
 
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+
+        """
+
     def setUp(self):
         self.addTypeEqualityFunc(
             Particle, partial(compare_particles, testcase=self))
         self.maxDiff = None
-        self.particle_list = create_particles()
+        self.particle_list = create_particles(restrict=self.supported_cuba())
         self.particle_list[0].uid = uuid.uuid4()
         self.container = self.container_factory('foo')
         self.ids = [
@@ -143,9 +155,19 @@ class ContainerAddBondsCheck(object):
         """ Create and return the container object
         """
 
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+
+        """
+
     def setUp(self):
-        self.bond_list = create_bonds()
+        self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory("foo")
+        for particle in self.particle_list:
+            self.container.add_particle(particle)
+        self.bond_list = create_bonds(
+            restrict=self.supported_cuba(), particles=self.particle_list)
         self.ids = [
             self.container.add_bond(bond) for bond in self.bond_list]
 
