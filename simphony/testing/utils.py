@@ -35,7 +35,11 @@ def compare_data_containers(data, reference, msg=None, testcase=None):
     for key in data:
         self.assertIn(key, reference)
         self.assertIsInstance(key, CUBA)
-        assert_equal(data[key], reference[key])
+        message = "Values for {} are not equal\n ACTUAL: {}\n DESIRED: {}"
+        assert_equal(
+            data[key], reference[key],
+            err_msg=message.format(key.name, data[key], reference[key]),
+            verbose=False)
 
 
 def create_particles(n=10, restrict=None):
