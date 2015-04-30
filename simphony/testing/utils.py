@@ -52,12 +52,18 @@ def create_particles(n=10, restrict=None):
     return particle_list
 
 
-def create_bonds(n=5, restrict=None):
+def create_bonds(n=5, restrict=None, particles=None):
     bond_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict)
-        data[CUBA.VELOCITY] = i
-        ids = [uuid.uuid4() for x in xrange(n)]
+        # FIXME: This is not right since CUBA.VELOCITY might not be part of the
+        #        Of the restricted keywords.
+        data[CUBA.VELOCITY] = [i, -i, 4 * i]
+        if particles is None:
+            ids = [uuid.uuid4() for x in xrange(n)]
+        else:
+            uids = [particle.uid for particle in particles]
+            ids = random.sample(uids, n)
         bond_list.append(Bond(particles=ids, data=data))
     return bond_list
 
