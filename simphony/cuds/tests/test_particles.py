@@ -62,6 +62,9 @@ class BondTestCase(unittest.TestCase):
 class TestNativeContainerAddParticles(
         ContainerAddParticlesCheck, unittest.TestCase):
 
+    def supported_cuba(self):
+        return set(CUBA)
+
     def container_factory(self, name):
         return Particles(name=name)
 

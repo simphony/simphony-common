@@ -5,6 +5,7 @@ import unittest
 
 from simphony.cuds.particles import Particles
 from simphony.io.h5_cuds import H5CUDS
+from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_particles import (
     ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
     ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
@@ -16,6 +17,9 @@ class TestH5ContainerAddParticles(
     def container_factory(self, name):
         return self.handle.add_particles(
             Particles(name=name))
+
+    def supported_cuba(self):
+        return set(CUBA)
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
