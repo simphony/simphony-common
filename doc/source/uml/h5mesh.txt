@@ -1,0 +1,66 @@
+@startuml
+class Mesh as "H5Mesh::Group" {
+  _v_name: String = "File"
+  points: Table
+  edges: Edge
+  faces: Face
+  cells: Cell
+}
+
+class Point as "Point::Group" {
+  _v_name : string = "Points"
+  row: Row
+}
+
+class Edge as "Edge::Group" {
+  _v_name : string = "Edges"
+  row: Row
+}
+
+class Face as "Face::Group" {
+  _v_name : string = "Faces"
+  row: Row
+}
+
+class Cell as "Cell::Group" {
+  _v_name : string = "Cells"
+ row: Row
+}
+
+class PointRow as "Point::Row" {
+  uid = String
+  data = String
+  coordinates = Float64[3]
+}
+
+class EdgeRow as "Edge::Row" {
+  uid: String
+  data: String
+  points_uids: Table
+  n_points: Integer[MAX_POINTS_IN_EDGE]
+}
+
+class FaceRow as "Face::Row" {
+  uid: String
+  data: String
+  points_uids: Table
+  n_points: Integer[MAX_POINTS_IN_FACE]
+}
+
+class CellRow as "Cell::Row" {
+  uid: String
+  data: String
+  points_uids: Table
+  n_points: Integer[MAX_POINTS_IN_CELL]
+}
+
+Mesh <-- Point
+Mesh <-- Edge
+Mesh <-- Face
+Mesh <-- Cell
+
+Point <- PointRow
+Edge <--EdgeRow
+Face <--FaceRow
+Cell <--CellRow
+@enduml
