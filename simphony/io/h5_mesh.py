@@ -170,7 +170,7 @@ class H5Mesh(object):
 
         Parameters
         ----------
-        uid : int
+        uid : UUID
             uid of the desired point.
 
         Returns
@@ -283,7 +283,7 @@ class H5Mesh(object):
         Returns
         -------
         Cell
-            Cell with id identified by uid
+            Cell identified by uid
 
         Raises
         ------
@@ -586,28 +586,25 @@ class H5Mesh(object):
                 existing cell with uid: " + str(cell.uid)
             raise KeyError(error_str)
 
-    def iter_points(self, point_uids=None):
-        """ Returns an iterator over the selected points.
-
-        Returns an interator over the points with uid in
-        point_uids. If non of the uids in point_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside point_uids, a iterator over all points of
-        the mesh is returned instead.
+    def iter_points(self, uids=None):
+        """ Returns an iterator over points.
 
         Parameters
         ----------
-        point_uids : list of uid, optional
-            uids of the desired points, default empty
+        uids : iterable of uuid.UUID or None
+            When the uids are provided, then the points are returned in
+            the same order the uids are returned by the iterable. If uids is
+            None, then all points are returned by the interable and there
+            is no restriction on the order that they are returned.
 
         Returns
         -------
         iter
-            Iterator over the selected points
+            Iterator over the points
 
         """
 
-        if point_uids is None:
+        if uids is None:
             for row in self._group.points:
                 yield Point(
                     tuple(row['coordinates']),
@@ -615,22 +612,19 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            for point_uid in point_uids:
-                yield self.get_point(point_uid)
+            for uid in uids:
+                yield self.get_point(uid)
 
-    def iter_edges(self, edge_uids=None):
-        """ Returns an iterator over the selected edges.
-
-        Returns an interator over the edged with uid in
-        edge_uid. If non of the uids in edge_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside edge_uids, a iterator over all edges of
-        the mesh is returned instead.
+    def iter_edges(self, uids=None):
+        """ Returns an iterator over edges.
 
         Parameters
         ----------
-        edge_uids : list of uid, optional
-            uids of the desired edges, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the edges are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all edges are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Returns
         -------
@@ -639,7 +633,7 @@ class H5Mesh(object):
 
         """
 
-        if edge_uids is None:
+        if uids is None:
             for row in self._group.edges:
                 yield Edge(
                     list(uuid.UUID(hex=pb, version=4) for pb in
@@ -648,31 +642,28 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            for edge_uid in edge_uids:
-                yield self.get_edge(edge_uid)
+            for uid in uids:
+                yield self.get_edge(uid)
 
-    def iter_faces(self, face_uids=None):
-        """ Returns an iterator over the selected faces.
-
-        Returns an interator over the faces with uid in
-        face_uids. If non of the ids in face_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside face_uids, a iterator over all faces of
-        the mesh is returned instead.
+    def iter_faces(self, uids=None):
+        """ Returns an iterator over faces.
 
         Parameters
         ----------
-        face_uids : list of uid, optional
-            uids of the desired faces, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the faces are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all faces are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Returns
         -------
         iter
-            Iterator over the selected faces
+            Iterator over the faces
 
         """
 
-        if face_uids is None:
+        if uids is None:
             for row in self._group.faces:
                 yield Face(
                     list(uuid.UUID(hex=pb, version=4) for pb in
@@ -681,22 +672,19 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            for face_uid in face_uids:
-                yield self.get_face(face_uid)
+            for uid in uids:
+                yield self.get_face(uid)
 
-    def iter_cells(self, cell_uids=None):
-        """ Returns an iterator over the selected cells.
-
-        Returns an interator over the cells with uid in
-        cell_uids. If non of the ids in cell_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside cell_uids, a iterator over all cells of
-        the mesh is returned instead.
+    def iter_cells(self, uids=None):
+        """ Returns an iterator over cells.
 
         Parameters
         ----------
-        cell_uids : list of UUID, optional
-            Uuds of the desired cell, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the cells are returned in the same
+            order the uids are returned by the iterable. If uids is None, then
+            all cells are returned by the interable and there is no restriction
+            on the order that they are returned.
 
         Returns
         -------
@@ -705,7 +693,7 @@ class H5Mesh(object):
 
         """
 
-        if cell_uids is None:
+        if uids is None:
             for row in self._group.cells:
                 yield Cell(
                     list(uuid.UUID(hex=pb, version=4) for pb in
@@ -714,8 +702,8 @@ class H5Mesh(object):
                     self._uidData[uuid.UUID(hex=row['data'], version=4)]
                 )
         else:
-            for cell_uid in cell_uids:
-                yield self.get_cell(cell_uid)
+            for uid in uids:
+                yield self.get_cell(uid)
 
     def has_edges(self):
         """ Check if the mesh container has edges

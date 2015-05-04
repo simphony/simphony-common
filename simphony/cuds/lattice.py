@@ -5,8 +5,7 @@ from simphony.core.data_container import DataContainer
 
 
 class LatticeNode(object):
-    """
-    A single node of a lattice.
+    """A single node of a lattice.
 
     Attributes
     ----------
@@ -25,9 +24,8 @@ class LatticeNode(object):
 
 
 class Lattice(ABCLattice):
-    """A Bravais lattice
-
-    Stores references to data containers (node related data).
+    """A Bravais lattice. Stores references to data
+    containers (node related data).
 
     Attributes
     ----------
@@ -91,7 +89,10 @@ class Lattice(ABCLattice):
         Parameters
         ----------
         indices : iterable set of D x int, optional
-            node index coordinates
+            When indices (i.e. node index coordinates) are provided, then nodes
+            are returned in the same order of the provided indices. If indices
+            is None, there is no restriction on the order the nodes that are
+            are returned.
 
         Returns
         -------

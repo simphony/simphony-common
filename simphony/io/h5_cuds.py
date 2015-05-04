@@ -284,6 +284,7 @@ class H5CUDS(object):
     def iter_particles(self, names=None):
         """Returns an iterator over a subset or all
         of the particle containers.
+
         Parameters
         ----------
         names : list of str

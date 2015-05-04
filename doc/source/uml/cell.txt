@@ -1,0 +1,6 @@
+@startuml
+class Cell {
+   -- classmethods --
+   from_cell(cell: Cell): Cell {copy}
+}
+@enduml

@@ -31,7 +31,7 @@ class H5ParticleItems(H5CUDSItems):
     """ A proxy class to an HDF5 group node with serialised Particles
 
     The class implements the Mutable-Mapping api where each Particle
-    instance is mapped to uuid.
+    instance is mapped to uid.
 
 
     """
@@ -70,7 +70,7 @@ class H5BondItems(H5CUDSItems):
     """ A proxy class to an HDF5 group node with serialised Bonds
 
     The class implements the Mutable-Mapping api where each Bond
-    instance is mapped to uuid.
+    instance is mapped to uid.
 
 
     """
@@ -196,7 +196,7 @@ class H5Particles(ABCParticles):
             return self._particles.itersequence(ids)
 
     def has_particle(self, uid):
-        """Checks if a particle with id "id" exists in the container."""
+        """Checks if a particle with uid "uid" exists in the container."""
         return uid in self._particles
 
     # Bond methods #######################################################
@@ -204,19 +204,19 @@ class H5Particles(ABCParticles):
     def add_bond(self, bond):
         """Add bond
 
-        If bond has an id then this is used.  If the
-        bond's id is None then a id is generated for the
+        If bond has an uid then this is used.  If the
+        bond's uid is None then a uid is generated for the
         bond.
 
         Returns
         -------
-        int :
-            id of bond
+        uid : uuid.UUID
+            uid of bond
 
         Raises
         ------
         ValueError :
-           if an id is given which already exists.
+           if an uid is given which already exists.
 
         """
         uid = bond.uid
@@ -245,5 +245,5 @@ class H5Particles(ABCParticles):
             return self._bonds.itersequence(ids)
 
     def has_bond(self, uid):
-        """Checks if a bond with id "id" exists in the container."""
+        """Checks if a bond with uid "uid" exists in the container."""
         return uid in self._bonds

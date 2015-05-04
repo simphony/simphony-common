@@ -1,0 +1,13 @@
+@startuml
+class DataContainer {
+   -- special methods --
+   __init__(data: DataContainer): DataContainer
+   __init__(**CUBAKeywords): DataContainer
+   __getitem__(key: CUBA): object
+   __setitem__(key: CUBA, value: object)
+   __delitem__(key: CUBA)
+   __iter__(): iterator of contained keys
+   __len__(): int
+   __contains__(key: CUBA): boolean
+}
+@enduml

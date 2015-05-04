@@ -16,6 +16,7 @@ User Manual
 
    Extending Simphony <plugins>
    CUBA <cuba_information>
+   CUDS <cuds_definition>
 
 API Reference
 =============
