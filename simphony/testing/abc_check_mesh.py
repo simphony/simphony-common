@@ -59,6 +59,19 @@ class MeshAttributesCheck(object):
         self.assertEqual(container.data, data)
         self.assertIsNot(container.data, data)
 
+    def test_container_data_update_with_unsupported_cuba(self):
+        # given
+        container = self.container_factory('my_name')
+        data = create_data_container()
+        expected_data = create_data_container(restrict=self.supported_cuba)
+
+        # when
+        container.data = data
+
+        # then
+        self.assertEqual(container.data, expected_data)
+        self.assertIsNot(container.data, expected_data)
+
 
 class MeshItemOperationsCheck(object):
 
@@ -153,6 +166,20 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(item_uid, uid)
         self.assertEqual(self.get_operation(container, uid), expected)
 
+    def test_add_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        expected = self.create_item(None)
+        expected.data = create_data_container()
+
+        # when
+        uid = self.add_operation(container, expected)
+
+        # then
+        retrieved = self.get_operation(container, uid)
+        expected.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrieved, expected)
+
     def test_exception_when_adding_item_twice(self):
         # given
         container = self.container
@@ -177,6 +204,21 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(retrieved, item)
         self.assertNotEqual(item, self.item_list[2])
         self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        item = self.get_operation(container, uids[2])
+        item.data = create_data_container()
+
+        # when
+        self.update_operation(container, item)
+
+        # then
+        retrieved = self.get_operation(container, item.uid)
+        item.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrieved, item)
 
     def test_exception_when_update_item_with_wrong_id(self):
         # given
