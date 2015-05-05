@@ -1,4 +1,5 @@
 import uuid
+import collections
 
 import numpy
 from numpy.testing import assert_equal
@@ -7,6 +8,7 @@ from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
+from simphony.cuds.mesh import Point
 
 
 def compare_bonds(bond, reference, msg=None, testcase=None):
@@ -21,6 +23,32 @@ def compare_particles(particle, reference, msg=None, testcase=None):
     self.assertEqual(particle.uid, reference.uid)
     self.assertEqual(particle.coordinates, reference.coordinates)
     compare_data_containers(particle.data, reference.data, testcase=self)
+
+
+def compare_points(point, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(point.uid, reference.uid)
+    self.assertEqual(point.coordinates, point.coordinates)
+    compare_data_containers(point.data, point.data, testcase=self)
+
+
+def compare_elements(element, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(element.uid, reference.uid)
+    points = collections.deque(reference.points)
+    for _ in range(len(points)):
+        points.rotate(1)
+        try:
+            self.assertSequenceEqual(element.points, points)
+        except AssertionError:
+            continue
+        else:
+            break
+    else:
+        message = 'Point uid sequences are not equivalent: {} !~ {}'
+        raise AssertionError(message.format(element.points, reference.points))
+
+    compare_data_containers(element.data, reference.data, testcase=self)
 
 
 def compare_lattice_nodes(node, reference, msg=None, testcase=None):
@@ -46,6 +74,16 @@ def create_particles(n=10, restrict=None):
         particle_list.append(
             Particle([i, i*10, i*100], data=data))
     return particle_list
+
+
+def create_points():
+    return [
+        Point((0.0, 0.0, 0.0)),
+        Point((1.0, 0.0, 0.0)),
+        Point((0.0, 1.0, 0.0)),
+        Point((0.0, 0.0, 1.0)),
+        Point((1.0, 0.0, 1.0)),
+        Point((0.0, 1.0, 1.0))]
 
 
 def create_bonds(n=5, restrict=None):
@@ -105,3 +143,12 @@ def dummy_cuba_value(cuba):
 
     raise RuntimeError(
         'cannot create value for {}'.format(keyword.dtype))
+
+
+def grouper(iterable, n):
+    """ Collect data into fixed-length chunks or blocks
+
+    """
+    iterator = iter(iterable)
+    while True:
+        yield [next(iterator) for _ in range(n)]
