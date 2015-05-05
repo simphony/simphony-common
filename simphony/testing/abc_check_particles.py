@@ -184,10 +184,11 @@ class ContainerAddBondsCheck(object):
     def test_add_bond_with_id(self):
         container = self.container
         uid = uuid.uuid4()
+        particles = self.particle_list[0].uid, self.particle_list[-1].uid
         bond = Bond(
             uid=uid,
-            particles=[uuid.uuid4(), uuid.uuid4()],
-            data=create_data_container())
+            particles=particles,
+            data=create_data_container(restrict=self.supported_cuba()))
         bond_uid = container.add_bond(bond)
         self.assertEqual(bond_uid, uid)
         self.assertTrue(container.has_bond(uid))
