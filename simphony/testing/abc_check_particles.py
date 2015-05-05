@@ -36,11 +36,26 @@ class ContainerAddParticlesCheck(object):
         self.assertTrue(container.has_particle(self.ids[6]))
         self.assertFalse(container.has_particle(uuid.UUID(int=1234)))
 
-    def test_add_particle_ok(self):
+    def test_add_particle(self):
         container = self.container
         for index, particle in enumerate(self.particle_list):
             self.assertTrue(container.has_particle(particle.uid))
             self.assertEqual(particle.uid, self.ids[index])
+
+    def test_add_particle_with_unsupported_cuba(self):
+        # given
+        container = self.container
+        particle = Particle(
+            coordinates=(1, 2, -3),
+            data=create_data_container())
+
+        # when
+        uid = container.add_particle(particle)
+
+        # then
+        particle.data = create_data_container(restrict=self.supported_cuba())
+        self.assertTrue(container.has_particle(uid))
+        self.assertEqual(container.get_particle(uid), particle)
 
     def test_add_particle_with_id(self):
         container = self.container
@@ -180,6 +195,22 @@ class ContainerAddBondsCheck(object):
         for index, bond in enumerate(self.bond_list):
             self.assertTrue(self.container.has_bond(bond.uid))
             self.assertEqual(bond.uid, self.ids[index])
+
+    def test_add_bond_with_unsupported_cuba(self):
+        # given
+        container = self.container
+        particles = self.particle_list[0].uid, self.particle_list[-1].uid
+        bond = Bond(
+            particles=particles,
+            data=create_data_container())
+
+        # when
+        uid = container.add_bond(bond)
+
+        # then
+        bond.data = create_data_container()
+        self.assertTrue(container.has_bond(uid))
+        self.assertEqual(container.get_bond(uid), bond)
 
     def test_add_bond_with_id(self):
         container = self.container
