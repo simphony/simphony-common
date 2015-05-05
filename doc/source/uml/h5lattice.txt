@@ -15,5 +15,19 @@ class Data as "Data::Group" {
   Row: row
 }
 
+class LatticeRow as "Lattice::Row" {
+  record: NoUIDRecord
+}
+
+class DataRow as "Data::Row" {
+  record: NoUIDRecord
+}
+
+
+H5Lattice <-- Lattice
+H5Lattice <-- Data
+
+Lattice <-- LatticeRow
+Data <-- DataRow
 
 @enduml
