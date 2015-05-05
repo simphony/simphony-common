@@ -72,12 +72,18 @@ class TestNativeContainerAddParticles(
 class TestNativeContainerManipulatingParticles(
         ContainerManipulatingParticlesCheck, unittest.TestCase):
 
+    def supported_cuba(self):
+        return set(CUBA)
+
     def container_factory(self, name):
         return Particles(name=name)
 
 
 class TestNativeContainerAddBonds(
         ContainerAddBondsCheck, unittest.TestCase):
+
+    def supported_cuba(self):
+        return set(CUBA)
 
     def container_factory(self, name):
         return Particles(name=name)
@@ -86,11 +92,18 @@ class TestNativeContainerAddBonds(
 class TestNativeContainerManipulatingBonds(
         ContainerManipulatingBondsCheck, unittest.TestCase):
 
+    def supported_cuba(self):
+        return set(CUBA)
+
     def container_factory(self, name):
         return Particles(name=name)
 
 
 class TestParticlesDataContainer(unittest.TestCase):
+
+    def supported_cuba(self):
+        return set(CUBA)
+
     def setUp(self):
         self.addTypeEqualityFunc(
             DataContainer, partial(compare_data_containers, testcase=self))

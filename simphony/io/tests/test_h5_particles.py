@@ -41,6 +41,9 @@ class TestH5ContainerManipulatingParticles(
         return self.handle.add_particles(
             Particles(name=name))
 
+    def supported_cuba(self):
+        return set(CUBA)
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
@@ -59,6 +62,9 @@ class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
     def container_factory(self, name):
         return self.handle.add_particles(
             Particles(name=name))
+
+    def supported_cuba(self):
+        return set(CUBA)
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
