@@ -301,6 +301,7 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(item.uid, self.item_list[-1].uid)
 
 
+
 class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
     def setUp(self):
@@ -323,7 +324,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         'update item': 'update_point',
         'iter items': 'iter_points'}
 
-    def test_update_item_coordniates_(self):
+    def test_update_item_coordniates(self):
         # given
         container = self.container
         uids = self._add_items(container)
