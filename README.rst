@@ -119,6 +119,12 @@ There are four subpackages:
   - build -- Documentation build directory, if documentation has been generated
     using the ``make`` script in the ``doc`` directory.
 
+SimPhoNy Framework
+------------------
+
+The ``simphony`` library is the core component of the SimPhoNy
+Framework, infromation on setting up the framework are provided on a
+separate repository https://github.com/simphony/simphony-framework.
 
 
 .. _setuptools extras: https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
