@@ -14,6 +14,8 @@ class ContainerAddParticlesCheck(object):
     __metaclass__ = abc.ABCMeta
 
     def setUp(self):
+        self.addTypeEqualityFunc(
+            Particle, partial(compare_particles, testcase=self))
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory('foo')
         self.ids = [
@@ -67,6 +69,7 @@ class ContainerAddParticlesCheck(object):
         particle_uid = container.add_particle(particle)
         self.assertEqual(particle_uid, uid)
         self.assertTrue(container.has_particle(uid))
+        self.assertEqual(container.get_particle(uid), particle)
 
     def test_exception_when_adding_particle_twice(self):
         container = self.container
@@ -177,6 +180,8 @@ class ContainerAddBondsCheck(object):
         """
 
     def setUp(self):
+        self.addTypeEqualityFunc(
+            Bond, partial(compare_bonds, testcase=self))
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory("foo")
         for particle in self.particle_list:
