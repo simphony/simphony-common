@@ -1,24 +1,19 @@
 @startuml
-class H5_Lattice {
-   name(): str
-   type(): str
-   base_vect(): tuple of double[2..3]
-   size(): tuple of int[2..3]
-   origin(): tuple of double[2..3]
-   data(): simphony.io.indexed_data_container_table.IndexedDataContainerTable(_group, 'data')
-   _group: tables.group
-   _table: simphony.io.indexed_data_container_table.IndexedDataContainerTable(_group, 'lattice')
-   -- classmethods --
-   create_new(group: tables.group,
-              type: str,
-              base_vect: tuple of double[2..3],
-              size: tuple of int[2..3],
-              origin: tuple of double[2..3],
-              record: tables.IsDescription {optional}): tables.group
-   --
-   get_node(index: tuple of int[2..3]): LatticeNode
-   update_node(node: LatticeNode)
-   iter_nodes(indices: iterable of tuple of int[2..3] {optional}): generator of LatticeNode {ordered}
-   get_coordinate(index: tuple of int[2..3]): float[2..3]
+class H5Lattice as "H5Lattice::Group" {
+  _v_name: String = "File"
+  lattice: Table
+  data: Table
 }
+
+class Lattice as "Lattice::Group" {
+  _v_name: String = "Lattice"
+  Row: row
+}
+
+class Data as "Data::Group" {
+  _v_name: String = "Data"
+  Row: row
+}
+
+
 @enduml
