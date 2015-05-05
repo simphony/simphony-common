@@ -301,7 +301,6 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(item.uid, self.item_list[-1].uid)
 
 
-
 class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
     def setUp(self):
