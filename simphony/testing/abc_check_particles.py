@@ -197,6 +197,10 @@ class ContainerAddBondsCheck(object):
         with self.assertRaises(ValueError):
             self.container.add_bond(self.bond_list[4])
 
+    def test_exception_when_adding_bond_with_invalid_id(self):
+        with self.assertRaises(ValueError):
+            self.container.add_bond(Bond(uid=object(), particles=[]))
+
 
 class ContainerManipulatingBondsCheck(object):
 
