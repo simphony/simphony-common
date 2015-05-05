@@ -9,17 +9,14 @@ class H5Particles as "H5Particles : Group" {
 class H5ParticleItems as "H5ParticleItems : Group" {
    _v_name : string = "particles"
    items : Table
-   data : DataCountainerTable
+   data : DataContainerTable
 }
 
 class H5BondItems as "H5BondItems : Group" {
    _v_name : string = "bonds"
    items : Table
-   data : DataCountainerTable
+   data : DataContainerTable
 }
-
-H5Particles *- H5ParticleItems
-H5Particles *- H5BondItems
 
 class ParticleTable as "items : Table" {
    _v_name : string = "items"
@@ -31,21 +28,23 @@ class BondsTable as "items : Table" {
    row : Row
 }
 
+class ParticleTableRow as "particle_row : Row" {
+   uid : StringCol(32, pos=0)
+   coordinates : float64(3)
+}
+
+class BondTableRow as "bond_row : Row" {
+   uid : StringCol(32, pos=0)
+   particles = "tables.UInt8Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND, 16), pos=1)"
+   n_particles : int8
+}
+
+H5Particles *- H5ParticleItems
+H5Particles *- H5BondItems
 H5ParticleItems *- ParticleTable
 H5BondItems *- BondsTable
 
-
-class ParticleTableRow as "particle_row : Row" {
-   uid : StringCol(32, pos=0)
-   coordinates : Float64(3)
-}
-
-class ParticleTableRow as "particle_row : Row" {
-   uid : StringCol(32, pos=0)
-   particles = "tables.UInt8Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND, 16), pos=1)"
-   n_particles : Int8
-}
-
 ParticleTable <- ParticleTableRow
-BondsTable <- BondsTableRow
+BondsTable <- BondTableRow
+
 @enduml
