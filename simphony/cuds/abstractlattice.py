@@ -36,18 +36,16 @@ class ABCLattice(object):
         node : LatticeNode
 
         """
-        pass
 
     @abstractmethod
-    def update_node(self, lat_node):
+    def update_node(self, node):
         """Update the corresponding lattice node.
 
         Parameters
         ----------
-        lat_node : LatticeNode
+        node : LatticeNode
 
         """
-        pass
 
     @abstractmethod
     def iter_nodes(self, indices=None):
@@ -56,7 +54,10 @@ class ABCLattice(object):
         Parameters
         ----------
         indices : iterable set of D x int, optional
-            node index coordinates
+            When indices (i.e. node index coordinates) are provided, then nodes
+            are returned in the same order of the provided indices. If indices
+            is None, there is no restriction on the order the nodes that are
+            are returned.
 
         Returns
         -------
@@ -64,7 +65,6 @@ class ABCLattice(object):
             An iterator over LatticeNode objects
 
         """
-        pass
 
     @abstractmethod
     def get_coordinate(self, index):
@@ -80,4 +80,3 @@ class ABCLattice(object):
         coordinates : D x float
 
         """
-        pass

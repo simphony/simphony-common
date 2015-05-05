@@ -1,0 +1,15 @@
+@startuml
+!include particle.txt
+!include bond.txt
+!include lattice_node.txt
+!include point.txt
+!include element.txt
+!include edge.txt
+!include face.txt
+!include cell.txt
+
+Edge --|> Element
+Face --|> Element
+Cell --|> Element
+
+@enduml

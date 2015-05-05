@@ -1,0 +1,9 @@
+@startuml
+class Particle {
+   uid: uuid.UUID
+   data: DataContainer
+   coordinates : double[3]
+   -- classmethods --
+   from_particle(particle: Particle): Particle {copy}
+}
+@enduml

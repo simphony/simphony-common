@@ -5,19 +5,19 @@ and modify a mesh
 
 """
 import uuid
-from abstractmesh import ABCMesh
+from simphony.cuds.abstractmesh import ABCMesh
 import simphony.core.data_container as dc
 
 
 class Point(object):
     """ Coordinates describing a point in the space
 
-    Set of coordinates(x,y,z) describing a point in
+    Set of coordinates (x,y,z) describing a point in
     the space and data about that point
 
     Parameters
     ----------
-    uid :
+    uid : uuid.UUID
         uid of the point.
     coordinates : list of double
         set of coordinates (x,y,z) describing the point position.
@@ -26,8 +26,8 @@ class Point(object):
 
     Attributes
     ----------
-    uid :
-        uuid of the point.
+    uid : uuid.UUID
+        uid of the point.
     data : DataContainer
         object to store point data
     coordinates : list of double
@@ -71,8 +71,8 @@ class Element(object):
     ----------
     points : list of uid
         list of points uids defining the element.
-    uid :
-        uuid of the element
+    uid : uuid.UUID
+        uid of the element
     data : DataContainer
         Element data
 
@@ -87,14 +87,6 @@ class Element(object):
         else:
             self.data = dc.DataContainer()
 
-    @classmethod
-    def from_element(cls, element):
-        return cls(
-            element.points,
-            element.uid,
-            element.data
-        )
-
 
 class Edge(Element):
     """ Edge element
@@ -105,7 +97,7 @@ class Edge(Element):
     ----------
     points : list of uid
         list of points uids defining the edge.
-    uid :
+    uid : uuid.UUID
         uid of the edge.
     data : DataContainer
         object to store data relative to the edge
@@ -130,7 +122,7 @@ class Face(Element):
     ----------
     points : list of uid
         list of points uids defining the face.
-    uid :
+    uid : uuid.UUID
         uid of the face.
     data : DataContainer
         object to store data relative to the face
@@ -155,7 +147,7 @@ class Cell(Element):
     ----------
     points : list of uid
         list of points uids defining the cell.
-    uid :
+    uid : uuid.UUID
         uid of the cell.
     data : DataContainer
         object to store data relative to the cell
@@ -179,7 +171,7 @@ class Mesh(ABCMesh):
     methods to interact with them. The methods are
     divided in four different blocks:
 
-    (1) methods to get the related item with the provided uuid;
+    (1) methods to get the related item with the provided uid;
     (2) methods to add a new item or replace;
     (3) generator methods that return iterators
         over all or some of the mesh items and;
@@ -227,10 +219,10 @@ class Mesh(ABCMesh):
         self._data = dc.DataContainer(value)
 
     def get_point(self, uid):
-        """ Returns a point with a given uuid.
+        """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
-        identified by uuid. If such point do not
+        identified by uid. If such point do not
         exists an exception is raised.
 
         Parameters
@@ -246,7 +238,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError :
-            If the point identified by uuid was not found
+            If the point identified by uid was not found
         TypeError :
             When ``uid`` is not uuid.UUID
 
@@ -258,10 +250,10 @@ class Mesh(ABCMesh):
             raise TypeError(message.format(type(uid)))
 
     def get_edge(self, uid):
-        """ Returns an edge with a given uuid.
+        """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
-        identified by uuid. If such edge do not
+        identified by uid. If such edge do not
         exists an exception is raised.
 
         Parameters
@@ -277,7 +269,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError :
-            If the edge identified by uuid was not found
+            If the edge identified by uid was not found
         TypeError :
             When ``uid`` is not uuid.UUID
 
@@ -292,8 +284,8 @@ class Mesh(ABCMesh):
         """ Returns a face with a given uid.
 
         Returns the face stored in the mesh
-        identified by uid. If such face do not
-        exists an exception is raised.
+        identified by uid. If such a face does
+        not exists an exception is raised.
 
         Parameters
         ----------
@@ -308,7 +300,7 @@ class Mesh(ABCMesh):
         Raises
         ------
         KeyError :
-            If the face identified by uuid was not found
+            If the face identified by uid was not found
         TypeError :
             When ``uid`` is not uuid.UUID
 
@@ -323,7 +315,7 @@ class Mesh(ABCMesh):
         """ Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
-        identified by uuid . If such cell do not
+        identified by uid. If such a cell does not
         exists an exception is raised.
 
         Parameters
@@ -334,7 +326,7 @@ class Mesh(ABCMesh):
         Returns
         -------
         cell : Cell
-            Cell with id identified by uid
+            Cell identified by uid
 
         Raises
         ------
@@ -398,7 +390,6 @@ class Mesh(ABCMesh):
             raise ValueError(error_str.format(edge.uid))
 
         self._edges[edge.uid] = Edge.from_edge(edge)
-
         return edge.uid
 
     def add_face(self, face):
@@ -423,7 +414,6 @@ class Mesh(ABCMesh):
             raise ValueError(error_str.format(face.uid))
 
         self._faces[face.uid] = Face.from_face(face)
-
         return face.uid
 
     def add_cell(self, cell):
@@ -447,6 +437,7 @@ class Mesh(ABCMesh):
         elif cell.uid in self._cells:
             error_str = "Trying to add an already existing cell with uuid: {}"
             raise ValueError(error_str.format(cell.uid))
+
         self._cells[cell.uid] = Cell.from_cell(cell)
         return cell.uid
 
@@ -454,7 +445,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
-        id as the provided point and updates its information
+        uid as the provided point and updates its information
         with the one provided with the new point.
 
         Parameters
@@ -480,7 +471,7 @@ class Mesh(ABCMesh):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
-        id as the provided edge and updates its information
+        uid as the provided edge and updates its information
         with the one provided with the new edge.
 
         Parameters
@@ -506,7 +497,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
-        uuid as the provided face and updates its information
+        uid as the provided face and updates its information
         with the one provided with the new face.
 
         Parameters
@@ -534,7 +525,7 @@ class Mesh(ABCMesh):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same
-        uuid as the provided cell and updates its information
+        uid as the provided cell and updates its information
         with the one provided with the new cell.
 
         Parameters
@@ -556,45 +547,39 @@ class Mesh(ABCMesh):
         cell_to_update.data = cell.data
         cell_to_update.points = cell.points
 
-    def iter_points(self, point_uids=None):
-        """ Returns an iterator over the selected points.
-
-        Returns an iterator over the points with uid in
-        point_uids. If none of the ids in point_uids exists,
-        an empty iterator is returned. If there is no ids
-        inside point_uids, a iterator over all points of
-        the mesh is returned instead.
+    def iter_points(self, uids=None):
+        """ Returns an iterator over points.
 
         Parameters
         ----------
-        point_uids : list of uid, optional
-            uids of the desired points, default empty
+        uids : iterable of uuid.UUID or None
+            When the uids are provided, then the points are returned in
+            the same order the uids are returned by the iterable. If uids is
+            None, then all points are returned by the interable and there
+            is no restriction on the order that they are returned.
 
         Yields
         ------
         cell : Cell
 
         """
-        if point_uids is None:
+        if uids is None:
             for point in self._points.values():
                 yield Point.from_point(point)
         else:
-            for point_uid in point_uids:
+            for point_uid in uids:
                 yield Point.from_point(self._points[point_uid])
 
-    def iter_edges(self, edge_uids=None):
-        """ Returns an iterator over the selected edges.
-
-        Returns an iterator over the edged with uid in
-        edge_uid. If none of the uids in edge_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside edge_uids, a iterator over all edges of
-        the mesh is returned instead.
+    def iter_edges(self, uids=None):
+        """ Returns an iterator over edges.
 
         Parameters
         ----------
-        edge_uids : list of uid, optional
-            uids of the desired edges, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the edges are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all edges are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Yields
         ------
@@ -602,64 +587,58 @@ class Mesh(ABCMesh):
 
         """
 
-        if edge_uids is None:
+        if uids is None:
             for edge in self._edges.values():
                 yield Edge.from_edge(edge)
         else:
-            for edge_uid in edge_uids:
-                yield Edge.from_edge(self._edges[edge_uid])
+            for uid in uids:
+                yield Edge.from_edge(self._edges[uid])
 
-    def iter_faces(self, face_uids=None):
-        """ Returns an iterator over the selected faces.
-
-        Returns an iterator over the faces with uid in
-        face_uids. If none of the uuids in face_uids exists,
-        an empty iterator is returned. If there is no uids
-        inside face_uids, a iterator over all faces of
-        the mesh is returned instead.
+    def iter_faces(self, uids=None):
+        """ Returns an iterator over faces.
 
         Parameters
         ----------
-        face_uids : list of uid, optional
-            uids of the desired faces, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the faces are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all faces are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Yields
         ------
         face : Face
 
         """
-        if face_uids is None:
+        if uids is None:
             for face in self._faces.values():
                 yield Face.from_face(face)
         else:
-            for face_uid in face_uids:
-                yield Face.from_face(self._faces[face_uid])
+            for uid in uids:
+                yield Face.from_face(self._faces[uid])
 
-    def iter_cells(self, cell_uids=None):
-        """ Returns an iterator over the selected cells.
-
-        Returns an iterator over the cells with uid in
-        cell_uids. If none of the uids in cell_uids exists,
-        an empty iterator is returned. If there is no uuids
-        inside cell_uuids, a iterator over all cells of
-        the mesh is returned instead.
+    def iter_cells(self, uids=None):
+        """ Returns an iterator over cells.
 
         Parameters
         ----------
-        cell_uids : list of uid, optional
-            uids of the desired cell, default empty
+        uids : iterable of uuid.UUID  or None
+            When the uids are provided, then the cells are returned in the same
+            order the uids are returned by the iterable. If uids is None, then
+            all cells are returned by the interable and there is no restriction
+            on the order that they are returned.
 
         Yields
         ------
         cell : Cell
 
         """
-        if cell_uids is None:
+        if uids is None:
             for cell in self._cells.values():
                 yield Cell.from_cell(cell)
         else:
-            for cell_uid in cell_uids:
-                yield Cell.from_cell(self._cells[cell_uid])
+            for uid in uids:
+                yield Cell.from_cell(self._cells[uid])
 
     def has_edges(self):
         """ Check if the mesh has edges
@@ -698,8 +677,8 @@ class Mesh(ABCMesh):
         return len(self._cells) > 0
 
     def _generate_uuid(self):
-        """ Provides and uuid for the object
+        """ Provides a uuid for the object
 
-        Provides san uuid as defined in the standard RFC 4122
+        Provides a uuid as defined in the standard RFC 4122
         """
         return uuid.uuid4()

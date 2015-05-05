@@ -1,0 +1,6 @@
+@startuml
+class Face {
+   -- classmethods --
+   from_face(face: Face): Face {copy}
+}
+@enduml
