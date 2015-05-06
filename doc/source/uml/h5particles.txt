@@ -1,50 +1,64 @@
 @startuml
-class H5Particles as "H5Particles : Group" {
-   _v_name : string
-   particles : ParticleItems
-   bonds : Bonds
-   data : IndexedDataContainer
+class H5Particles as "H5Particles(Group)" {
+   _v_name : String
+   particles : Group = ParticleItems
+   bonds : Group = BondItems
+   data : Table = Data
 }
 
-class H5ParticleItems as "H5ParticleItems : Group" {
+class ParticleItems as "ParticleItems(Group)" {
    _v_name : string = "particles"
-   items : Table
-   data : DataContainerTable
+   items : Table = ParticleTable
+   data : Table = Data
 }
 
-class H5BondItems as "H5BondItems : Group" {
+class BondItems as "BondItems(Group)" {
    _v_name : string = "bonds"
-   items : Table
-   data : DataContainerTable
+   items : Table = BondsTable
+   data : Table = Data
 }
 
-class ParticleTable as "items : Table" {
-   _v_name : string = "items"
-   row : Row
+class ParticleTable as "ParticleTable(Table)" {
+   _v_name : String = "Particles"
+   row : ParticleTableRow
 }
 
-class BondsTable as "items : Table" {
-   _v_name : string = "items"
-   row : Row
+class BondsTable as "BondsTable(Table)" {
+   _v_name : String = "Bonds"
+   row : BondsTableRow
 }
 
-class ParticleTableRow as "particle_row : Row" {
-   uid : StringCol(32, pos=0)
-   coordinates : float64(3)
+class Data as "Data(Table)" {
+   _v_name: String = "Data"
+   row : DataRow
 }
 
-class BondTableRow as "bond_row : Row" {
-   uid : StringCol(32, pos=0)
-   particles = "tables.UInt8Col(shape=(MAX_NUMBER_PARTICLES_IN_BOND, 16), pos=1)"
-   n_particles : int8
+class ParticleTableRow as "Particle(Row)" {
+   [ uid ] : String[32]
+   [ coordinates ] : Float64[3]
 }
 
-H5Particles *- H5ParticleItems
-H5Particles *- H5BondItems
-H5ParticleItems *- ParticleTable
-H5BondItems *- BondsTable
+class BondTableRow as "Bond(Row)" {
+   [ uid ] : String[32]
+   [ particles ] : Integer
+   [ n_particles ] : Integer = MAX_NUMBER_PARTICLES_IN_BOND
+}
 
-ParticleTable <- ParticleTableRow
-BondsTable <- BondTableRow
+class DataRow as "Data(Row)" {
+  [ uid ]: String[32]
+  [ data ]: CUBARow
+  [ mask ]: Bool[size of CUBARow]    
+}
+
+H5Particles -- ParticleItems
+H5Particles -- BondItems
+H5Particles -- Data
+
+ParticleItems -- ParticleTable
+BondItems -- BondsTable
+
+ParticleTable -- ParticleTableRow
+BondsTable -- BondTableRow
+Data -- DataRow
 
 @enduml
