@@ -1,67 +1,81 @@
 @startuml
-class Mesh as "H5Mesh::Group" {
+class Mesh as "H5Mesh(Group)" {
   _v_name: String = "File"
-  points : Array of String[32]
-  edges : Edge
-  faces : Face
-  cells : Cell
-  data : IndexedDataContainer
+  points : Table = Points
+  edges : Table = Edges
+  faces : Table = Faces
+  cells : Table = Cells
+  data : Table = Data
 }
 
-class Point as "Point::Group" {
+class Points as "Points(Table)" {
   _v_name : string = "Points"
-  row: Row
+  row: PointRow
 }
 
-class Edge as "Edge::Group" {
+class Edges as "Edges(Table)" {
   _v_name : string = "Edges"
-  row: Row
+  row: EdgeRow
 }
 
-class Face as "Face::Group" {
+class Faces as "Faces(Table)" {
   _v_name : string = "Faces"
-  row: Row
+  row: FaceRow
 }
 
-class Cell as "Cell::Group" {
+class Cells as "Cells(Table)" {
   _v_name : string = "Cells"
- row: Row
+ row: CellRow
 }
 
-class PointRow as "Point::Row" {
-  uid : String[32]
-  data : String[32]
-  coordinates : Float64[3]
+class Data as "Data(Table)" {
+  _v_name: String = "Data"
+  row : DataRow
 }
 
-class EdgeRow as "Edge::Row" {
-  uid : String[32]
-  data : String[32]
-  point_uids : Array of String[32]
-  n_points : Integer[MAX_POINTS_IN_EDGE]
+class PointRow as "Points(Row)" {
+  [ uid ] : String[32]
+  [ data ] : String[32]
+  [ coordinates ] : Float64[3]
 }
 
-class FaceRow as "Face::Row" {
-  uid : String[32]
-  data : String[32]
-  point_uids : Array of String[32]
-  n_points : Integer[MAX_POINTS_IN_FACE]
+class EdgeRow as "Edge(Row)" {
+  [ uid ] : String[32]
+  [ data ] : String[32]
+  [ point_uids ] : Array of String[32]
+  [ n_points ] : Integer[MAX_POINTS_IN_EDGE]
 }
 
-class CellRow as "Cell::Row" {
-  uid : String[32]
-  data : String[32]
-  point_uids : Array of String[32]
-  n_points : Integer[MAX_POINTS_IN_CELL]
+class FaceRow as "Face(Row)" {
+  [ uid ] : String[32]
+  [ data ] : String[32]
+  [ point_uids ] : Array of String[32]
+  [ n_points ] : Integer[MAX_POINTS_IN_FACE]
 }
 
-Mesh <-- Point
-Mesh <-- Edge
-Mesh <-- Face
-Mesh <-- Cell
+class CellRow as "Cell(Row)" {
+  [ uid ] : String[32]
+  [ data ] : String[32]
+  [ point_uids ] : Array of String[32]
+  [ n_points ] : Integer[MAX_POINTS_IN_CELL]
+}
 
-Point <- PointRow
-Edge <--EdgeRow
-Face <--FaceRow
-Cell <--CellRow
+class DataRow as "Data(Row)" {
+  [ uid ]: String[32]
+  [ data ]: CUBARow
+  [ mask ]: Bool[size of CUBARow]    
+}
+
+Mesh -- Data
+Mesh -- Points
+Mesh -- Edges
+Mesh -- Faces
+Mesh -- Cells
+
+Points -- PointRow
+Edges --EdgeRow
+Faces --FaceRow
+Cells --CellRow
+Data -- DataRow
+
 @enduml
