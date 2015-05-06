@@ -1,22 +1,26 @@
 @startuml
 class H5Lattice as "H5Lattice::Group" {
-  _v_name: String = "File"
-  lattice: Table
-  data: Table
+  _v_name: String = name
+  _lattice: Table
+  _data: Table
 }
 
-class Lattice as "Lattice::Group" {
-  _v_name: String = "Lattice"
+class Lattice as "_table::Table" {
+  _v_name: String = "lattice"
+  attrs.type: String = type
+  attrs.base_vect: Double[2..3] = base_vect
+  attrs.size: Int[2..3] = size
+  attrs.origin: Double[2..3] = origin
   Row: row
 }
 
-class Data as "Data::Group" {
-  _v_name: String = "Data"
+class Data as "_data::Table" {
+  _v_name: String = "data"
   Row: row
 }
 
 class LatticeRow as "Lattice::Row" {
-  record: NoUIDRecord
+  record: IsDescription = NoUIDRecord
 }
 
 class DataRow as "Data::Row" {
