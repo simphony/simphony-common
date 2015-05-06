@@ -1,6 +1,6 @@
 @startuml
 class H5Particles as "H5Particles(Group)" {
-   _v_name : String
+   _v_name : String = <name>
    particles : Group = ParticleItems
    bonds : Group = BondItems
    data : Table = Data

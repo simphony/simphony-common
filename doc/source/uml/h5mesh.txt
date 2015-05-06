@@ -1,6 +1,6 @@
 @startuml
 class Mesh as "H5Mesh(Group)" {
-  _v_name: String = "File"
+  _v_name: String = <name>
   points : Table = Points
   edges : Table = Edges
   faces : Table = Faces
