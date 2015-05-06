@@ -1,10 +1,11 @@
 @startuml
 class Mesh as "H5Mesh::Group" {
   _v_name: String = "File"
-  points: Table
-  edges: Edge
-  faces: Face
-  cells: Cell
+  points : Array of String[32]
+  edges : Edge
+  faces : Face
+  cells : Cell
+  data : IndexedDataContainer
 }
 
 class Point as "Point::Group" {
@@ -28,30 +29,30 @@ class Cell as "Cell::Group" {
 }
 
 class PointRow as "Point::Row" {
-  uid = String
-  data = String
-  coordinates = Float64[3]
+  uid : String[32]
+  data : String[32]
+  coordinates : Float64[3]
 }
 
 class EdgeRow as "Edge::Row" {
-  uid: String
-  data: String
-  points_uids: Table
-  n_points: Integer[MAX_POINTS_IN_EDGE]
+  uid : String[32]
+  data : String[32]
+  point_uids : Array of String[32]
+  n_points : Integer[MAX_POINTS_IN_EDGE]
 }
 
 class FaceRow as "Face::Row" {
-  uid: String
-  data: String
-  points_uids: Table
-  n_points: Integer[MAX_POINTS_IN_FACE]
+  uid : String[32]
+  data : String[32]
+  point_uids : Array of String[32]
+  n_points : Integer[MAX_POINTS_IN_FACE]
 }
 
 class CellRow as "Cell::Row" {
-  uid: String
-  data: String
-  points_uids: Table
-  n_points: Integer[MAX_POINTS_IN_CELL]
+  uid : String[32]
+  data : String[32]
+  point_uids : Array of String[32]
+  n_points : Integer[MAX_POINTS_IN_CELL]
 }
 
 Mesh <-- Point
