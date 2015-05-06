@@ -1,37 +1,45 @@
 @startuml
-class H5Lattice as "H5Lattice::Group" {
-  _v_name: String = name
-  _lattice: Table
-  _data: Table
+
+class H5Lattice as "H5Lattice(Group)" {
+  _v_name: String = <name>
+  lattice : Table = Nodes
+  data : Table = Data
+  -- Node Attributes --
+  type: String[20]  
+  base_vect : Double[2..3]
+  size : Int[2..3]
+  origin: Double[2..3]
 }
 
-class Lattice as "_table::Table" {
+class Nodes as "Nodes(Table)" {
   _v_name: String = "lattice"
-  attrs.type: String = type
-  attrs.base_vect: Double[2..3] = base_vect
-  attrs.size: Int[2..3] = size
-  attrs.origin: Double[2..3] = origin
-  Row: row
+  row : Record
 }
+note left : index into the lattice node table is calculated using numpy....
 
-class Data as "_data::Table" {
+class Data as "Data(Table)" {
   _v_name: String = "data"
-  Row: row
+  row : NoUidRecord
 }
 
-class LatticeRow as "Lattice::Row" {
-  record: IsDescription = NoUIDRecord
+class Record {
+  [ uid ]: String[32]
+  [ data ]: DataRow
+  [ mask ]: Bool[size of CUBARow]    
 }
 
-class DataRow as "Data::Row" {
-  record: NoUIDRecord
+class NoUidRecord {
+  [ data ]: DataRow
+  [ mask ]: Bool[size of CUBARow]    
 }
 
+class DataRow
+note left: DataRow is a Row where the columns are CUBA key names.
 
-H5Lattice <-- Lattice
-H5Lattice <-- Data
-
-Lattice <-- LatticeRow
-Data <-- DataRow
+H5Lattice -- Data
+Data -- Record
+Nodes -- NoUidRecord
+Record -- DataRow
+NoUidRecord -- DataRow
 
 @enduml
