@@ -1,6 +1,7 @@
 @startuml
 !include cuba_data.txt
 !include record.txt
+!include no_uid_record.txt
 !include h5_container_data.txt
 
 class H5Particles as "H5Particles(Group)" {
@@ -44,7 +45,7 @@ class Particle as "Particle(Row)" {
 
 class Bond as "Bond(Row)" {
    [ uid ] : String[32] = UUID.hex
-   [ particles ] : UINT8 Array[MAX_NUMBER_PARTICLES_IN_BOND, 12]
+   [ particles ] : UInt8[MAX_NUMBER_PARTICLES_IN_BOND, 12]
    [ n_particles ] : 0 <= Integer <= MAX_NUMBER_PARTICLES_IN_BOND
 }
 
@@ -56,13 +57,16 @@ H5Particles -- ContainerData
 Particles -- ParticleItems
 Bonds -- BondItems
 
-Particles -- Record
-Bonds -- Record
+Particles -- Data
+Bonds -- Data
 
 ParticleItems -- Particle
 BondItems -- Bond
 
+Data -- Record
+ContainerData -- NoUidRecord
 
-Record -- Data
+Record -- CUBAData
+NoUidRecord -- CUBAData
 
 @enduml

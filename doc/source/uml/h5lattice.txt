@@ -23,5 +23,5 @@ H5Lattice -- Nodes
 H5Lattice -- ContainerData
 ContainerData -- NoUidRecord
 Nodes -- NoUidRecord
-NoUidRecord -- Data
+NoUidRecord -- CUBAData
 @enduml
