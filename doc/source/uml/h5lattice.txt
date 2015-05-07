@@ -1,11 +1,14 @@
 @startuml
+!include cuba_data.txt
+!include no_uid_record.txt
+!include h5_container_data.txt
 
 class H5Lattice as "H5Lattice(Group)" {
   _v_name: String = <name>
   lattice : Table = Nodes
-  data : Table = Data
+  data : Table = ContainerData
   -- Node Attributes --
-  type: String[20]  
+  type: String
   base_vect : Double[2..3]
   size : Int[2..3]
   origin: Double[2..3]
@@ -13,33 +16,12 @@ class H5Lattice as "H5Lattice(Group)" {
 
 class Nodes as "Nodes(Table)" {
   _v_name: String = "lattice"
-  row : Record
-}
-note left : index into the lattice node table is calculated using numpy....
-
-class Data as "Data(Table)" {
-  _v_name: String = "data"
   row : NoUidRecord
 }
 
-class Record {
-  [ uid ]: String[32]
-  [ data ]: DataRow
-  [ mask ]: Bool[size of CUBARow]    
-}
-
-class NoUidRecord {
-  [ data ]: DataRow
-  [ mask ]: Bool[size of CUBARow]    
-}
-
-class DataRow
-note left: DataRow is a Row where the columns are CUBA key names.
-
-H5Lattice -- Data
-Data -- Record
+H5Lattice -- Nodes
+H5Lattice -- ContainerData
+ContainerData -- NoUidRecord
 Nodes -- NoUidRecord
-Record -- DataRow
-NoUidRecord -- DataRow
-
+NoUidRecord -- Data
 @enduml
