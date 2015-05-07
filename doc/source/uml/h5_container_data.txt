@@ -1,5 +1,5 @@
 @startuml
-class ContainerData as "Data(Table)" {
+class ContainerData as "ContainerData(Table)" {
   _v_name: String = "data"
   row : NoUidRecord
 }

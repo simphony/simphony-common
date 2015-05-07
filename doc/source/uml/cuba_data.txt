@@ -1,4 +1,4 @@
 @startuml
-class Data as "Data(Row)"
-note right: "Row with CUBA keys as columns"
+class CUBAData as "Data(Row)"
+note bottom: Row with CUBA keys as columns
 @enduml
