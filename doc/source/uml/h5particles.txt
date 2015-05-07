@@ -1,64 +1,68 @@
 @startuml
+!include cuba_data.txt
+!include record.txt
+!include h5_container_data.txt
+
 class H5Particles as "H5Particles(Group)" {
    _v_name : String = <name>
-   particles : Group = ParticleItems
-   bonds : Group = BondItems
-   data : Table = Data
+   particles : Group = Particles
+   bonds : Group = Bonds
+   data : Table = ContainerData
 }
 
-class ParticleItems as "ParticleItems(Group)" {
+class Particles as "Particles(Group)" {
    _v_name : string = "particles"
-   items : Table = ParticleTable
+   items : Table = Particles
    data : Table = Data
 }
 
-class BondItems as "BondItems(Group)" {
+class Bonds as "Bonds(Group)" {
    _v_name : string = "bonds"
-   items : Table = BondsTable
+   items : Table = BondItems
    data : Table = Data
 }
 
-class ParticleTable as "ParticleTable(Table)" {
+class ParticleItems as "ParticleItems(Table)" {
    _v_name : String = "Particles"
-   row : ParticleTableRow
+   row : Particle
 }
 
-class BondsTable as "BondsTable(Table)" {
+class BondItems as "BondItems(Table)" {
    _v_name : String = "Bonds"
-   row : BondsTableRow
+   row : Bond
 }
 
 class Data as "Data(Table)" {
-   _v_name: String = "Data"
-   row : DataRow
+  _v_name: String = "data"
+  row : Record
 }
 
-class ParticleTableRow as "Particle(Row)" {
-   [ uid ] : String[32]
+class Particle as "Particle(Row)" {
+   [ uid ] : String[32] = UUID.hex
    [ coordinates ] : Float64[3]
 }
 
-class BondTableRow as "Bond(Row)" {
-   [ uid ] : String[32]
-   [ particles ] : Integer
-   [ n_particles ] : Integer = MAX_NUMBER_PARTICLES_IN_BOND
+class Bond as "Bond(Row)" {
+   [ uid ] : String[32] = UUID.hex
+   [ particles ] : UINT8 Array[MAX_NUMBER_PARTICLES_IN_BOND, 12]
+   [ n_particles ] : 0 <= Integer <= MAX_NUMBER_PARTICLES_IN_BOND
 }
 
-class DataRow as "Data(Row)" {
-  [ uid ]: String[32]
-  [ data ]: CUBARow
-  [ mask ]: Bool[size of CUBARow]    
-}
 
-H5Particles -- ParticleItems
-H5Particles -- BondItems
-H5Particles -- Data
+H5Particles -- Particles
+H5Particles -- Bonds
+H5Particles -- ContainerData
 
-ParticleItems -- ParticleTable
-BondItems -- BondsTable
+Particles -- ParticleItems
+Bonds -- BondItems
 
-ParticleTable -- ParticleTableRow
-BondsTable -- BondTableRow
-Data -- DataRow
+Particles -- Record
+Bonds -- Record
+
+ParticleItems -- Particle
+BondItems -- Bond
+
+
+Record -- Data
 
 @enduml
