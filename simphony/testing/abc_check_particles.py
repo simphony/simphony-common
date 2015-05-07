@@ -250,9 +250,12 @@ class ContainerManipulatingBondsCheck(object):
     def setUp(self):
         self.addTypeEqualityFunc(
             Bond, partial(compare_bonds, testcase=self))
-        self.bond_list = create_bonds()
-        self.bond_list[0].uid = uuid.uuid4()
+        self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory("foo")
+        for particle in self.particle_list:
+            self.container.add_particle(particle)
+        self.bond_list = create_bonds(
+            restrict=self.supported_cuba(), particles=self.particle_list)
         self.ids = [
             self.container.add_bond(bond) for bond in self.bond_list]
 
