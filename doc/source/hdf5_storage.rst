@@ -24,11 +24,20 @@ data stored in the files.
    development. Backwards compatibility is not expected to be
    supported before version 1.0.0 of the simphony-common library.
 
+.. rubric:: File
+
+.. figure:: ./images/h5cuds.png
+
+   **Figure 1:** Diagram of the top level layout of the HDF5 based files.
+
+   Each type of CUDS container is stored under the related section as an
+   independent group.
+
 .. rubric:: Lattice
 
 .. figure:: ./images/h5lattice.png
 
-   **Figure 1:** Diagram of the Lattice based storage.
+   **Figure 2:** Diagram of the Lattice based storage.
 
    The Lattice is stored using two table nodes, one for the container
    `data` attribute and one for the lattice nodes data
@@ -40,7 +49,7 @@ data stored in the files.
 
 .. figure:: ./images/h5particles.png
 
-   **Figure 2:** Diagram of the Particles based storage.
+   **Figure 3:** Diagram of the Particles based storage.
 
    The Particles container is stored using one table for the container
    `data` attribute and two groups to holding the particle and bond
@@ -53,7 +62,7 @@ data stored in the files.
 
 .. figure:: ./images/h5mesh.png
 
-   **Figure 3:** Diagram of the Mesh based storage.
+   **Figure 4:** Diagram of the Mesh based storage.
 
    The Mesh container is stored using 6 tables, one for the container
    `data` attribute, one for all the item data information, one for
