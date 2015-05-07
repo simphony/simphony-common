@@ -213,7 +213,7 @@ class ContainerAddBondsCheck(object):
         uid = container.add_bond(bond)
 
         # then
-        bond.data = create_data_container()
+        bond.data = create_data_container(restrict=self.supported_cuba())
         self.assertTrue(container.has_bond(uid))
         self.assertEqual(container.get_bond(uid), bond)
 
