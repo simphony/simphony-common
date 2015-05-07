@@ -1,25 +1,28 @@
 HDF5 Storage
 ============
 
-Cuds containers can be stored in HDF5 files using the :class:`~.H5File` class. The provided
-api is a currently a reduced version of the Modeling Engine api and supports adding and
-manipulating CUDS containers. Please also note that returned containers from the get
-methods are live proxy objects on top of the HDF5 storage (in contrast to the common
-offline save and read operations).
+Cuds containers can be stored in HDF5 files using the
+:class:`~.H5CUDS` class. The provided api is currently a reduced
+version of the Modelling Engine api and supports adding and
+manipulating CUDS containers. Please also note that returned
+containers from the get methods are live proxy objects on top of the
+HDF5 storage (in contrast to the common offline save and read
+operations).
 
 
 HDF5 Stored Layout
 ------------------
 
-Data are stored in HDF5 files using a separate layout for each type of CUDS container.
-The stored layout of the containers is provided bellow using a pseudo-uml description
-for the HDF5 based layout of the data stored in the files.
+Data are stored in HDF5 files using a separate layout for each type of
+CUDS container.  The stored layout of the containers is provided
+below using a pseudo-uml description for the HDF5 based layout of the
+data stored in the files.
 
 .. warning::
 
-   This is the provisional storage layout and is under continues development. Backwards
-   compatibility is not expected to be supported before version 1.0.0 of the
-   simphony-common library.
+   This is the provisional storage layout and is under continuous
+   development. Backwards compatibility is not expected to be
+   supported before version 1.0.0 of the simphony-common library.
 
 .. rubric:: Lattice
 
@@ -41,7 +44,7 @@ for the HDF5 based layout of the data stored in the files.
 
    The Particles container is stored using one table for the container
    `data` attribute and two groups to holding the particle and bond
-   items saperatly. Each item group has two tables one for the item
+   items separately. Each item group has two tables one for the item
    information (i.e. particle or bond) and one for the item
    `data`. Indexing into the item and data tables takes place by using
    the same uid hex for both.
