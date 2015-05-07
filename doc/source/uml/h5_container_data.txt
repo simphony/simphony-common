@@ -1,0 +1,7 @@
+@startuml
+class ContainerData as "Data(Table)" {
+  _v_name: String = "data"
+  row : NoUidRecord
+}
+note left : A single row Table
+@enduml
