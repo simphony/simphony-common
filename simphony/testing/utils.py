@@ -60,7 +60,7 @@ def compare_lattice_nodes(node, reference, msg=None, testcase=None):
 
 def compare_data_containers(data, reference, msg=None, testcase=None):
     self = testcase
-    self.assertEqual(len(data), len(reference))
+    self.assertEqual(set(data), set(reference))
     for key in data:
         self.assertIn(key, reference)
         self.assertIsInstance(key, CUBA)
