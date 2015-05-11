@@ -1,0 +1,6 @@
+@startuml
+class NoUidRecord as "NoUidRecord(Row)" {
+  [ data ]: Data
+  [ mask ]: Bool[number of columns in Data]
+}
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+!include cuba_data.txt
+!include record.txt
+!include no_uid_record.txt
+!include h5_container_data.txt
+
+class H5Particles as "H5Particles(Group)" {
+   _v_name : String = <name>
+   particles : Group = Particles
+   bonds : Group = Bonds
+   data : Table = ContainerData
+}
+
+class Particles as "Particles(Group)" {
+   _v_name : string = "particles"
+   items : Table = Particles
+   data : Table = Data
+}
+
+class Bonds as "Bonds(Group)" {
+   _v_name : string = "bonds"
+   items : Table = BondItems
+   data : Table = Data
+}
+
+class ParticleItems as "ParticleItems(Table)" {
+   _v_name : String = "Particles"
+   row : Particle
+}
+
+class BondItems as "BondItems(Table)" {
+   _v_name : String = "Bonds"
+   row : Bond
+}
+
+class Data as "Data(Table)" {
+  _v_name: String = "data"
+  row : Record
+}
+
+class Particle as "Particle(Row)" {
+   [ uid ] : String[32] = UUID.hex
+   [ coordinates ] : Float64[3]
+}
+
+class Bond as "Bond(Row)" {
+   [ uid ] : String[32] = UUID.hex
+   [ particles ] : UInt8[MAX_NUMBER_PARTICLES_IN_BOND, 12]
+   [ n_particles ] : 0 <= Integer <= MAX_NUMBER_PARTICLES_IN_BOND
+}
+
+
+H5Particles -- Particles
+H5Particles -- Bonds
+H5Particles -- ContainerData
+
+Particles -- ParticleItems
+Bonds -- BondItems
+
+Particles -- Data
+Bonds -- Data
+
+ParticleItems -- Particle
+BondItems -- Bond
+
+Data -- Record
+ContainerData -- NoUidRecord
+
+Record -- CUBAData
+NoUidRecord -- CUBAData
+
+@enduml

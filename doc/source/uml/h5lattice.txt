@@ -1,0 +1,27 @@
+@startuml
+!include cuba_data.txt
+!include no_uid_record.txt
+!include h5_container_data.txt
+
+class H5Lattice as "H5Lattice(Group)" {
+  _v_name: String = <name>
+  lattice : Table = Nodes
+  data : Table = ContainerData
+  -- Node Attributes --
+  type: String
+  base_vect : Double[2..3]
+  size : Int[2..3]
+  origin: Double[2..3]
+}
+
+class Nodes as "Nodes(Table)" {
+  _v_name: String = "lattice"
+  row : NoUidRecord
+}
+
+H5Lattice -- Nodes
+H5Lattice -- ContainerData
+ContainerData -- NoUidRecord
+Nodes -- NoUidRecord
+NoUidRecord -- CUBAData
+@enduml
