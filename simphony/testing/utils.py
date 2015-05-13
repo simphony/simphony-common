@@ -75,8 +75,6 @@ def create_particles(n=10, restrict=None):
     particle_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict, constant=i)
-        # FIXME: This is not right since CUBA.VELOCITY might not be part of the
-        #        Of the restricted keywords.
         particle_list.append(
             Particle([i, i*10, i*100], data=data))
     return particle_list
