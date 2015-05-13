@@ -1,0 +1,87 @@
+@startuml
+!include cuba_data.txt
+!include record.txt
+!include no_uid_record.txt
+!include h5_container_data.txt
+
+class Mesh as "H5Mesh(Group)" {
+  _v_name: String = <name>
+  points : Table = Points
+  edges : Table = Edges
+  faces : Table = Faces
+  cells : Table = Cells
+  itemsdata : Table = Data
+  data : Table = ContainerData
+}
+
+class Points as "Points(Table)" {
+  _v_name : string = "Points"
+  row: Point
+}
+
+class Edges as "Edges(Table)" {
+  _v_name : string = "Edges"
+  row: Edge
+}
+
+class Faces as "Faces(Table)" {
+  _v_name : string = "Faces"
+  row: Face
+}
+
+class Cells as "Cells(Table)" {
+  _v_name : string = "Cells"
+ row: Cell
+}
+
+class Data as "Data(Table)" {
+  _v_name: String = "data"
+  row : Record
+}
+
+class Point as "Points(Row)" {
+  [ uid ] : String[32] = UUID.hex
+  [ data ] : String[32] = UUID.hex
+  [ coordinates ] : Float64[3]
+}
+
+class Edge as "Edge(Row)" {
+  [ uid ] : String[32] = UUID.hex
+  [ data ] : String[32] = UUID.hex
+  [ point_uids ] : String[32, MAX_POINTS_IN_EDGE]
+  [ n_points ] : 2 <= Integer <= MAX_POINTS_IN_EDGE
+}
+
+class Face as "Face(Row)" {
+  [ uid ] : String[32] = UUID.hex
+  [ data ] : String[32] = UUID.hex
+  [ point_uids ] : String[32, MAX_POINTS_IN_FACE]
+  [ n_points ] : 3 <= Integer <= MAX_POINTS_IN_FACE
+}
+
+class Cell as "Cell(Row)" {
+  [ uid ] : String[32] = UUID.hex
+  [ data ] : String[32] = UUID.hex
+  [ point_uids ] : String[32, MAX_POINTS_IN_CELL]
+  [ n_points ] : 4 <= Integer <= MAX_POINTS_IN_CELL
+}
+
+Mesh -- Data
+Mesh -- Points
+Mesh -- Edges
+Mesh -- Faces
+Mesh -- Cells
+Mesh -- ContainerData
+
+Points -- Point
+Edges --Edge
+Faces --Face
+Cells --Cell
+
+Data -- Record
+ContainerData -- NoUidRecord
+
+Record -- CUBAData
+NoUidRecord -- CUBAData
+
+@enduml

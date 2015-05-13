@@ -1,0 +1,33 @@
+@startuml
+
+class H5CUDS as "H5CUDS(Group)" {
+   particle : Group = Particle
+   mesh : Group = Bond
+   lattice : Group = Lattice
+
+}
+
+class Particle as "Particle(Group)" {
+   _v_name : string = "particle"
+   children of type H5Partilces
+}
+
+class Mesh as "Mesh(Group)" {
+   _v_name : string = "mesh"
+   children of type H5Mesh
+}
+
+class Lattice as "Lattice(Group)" {
+   _v_name : string = "lattice"
+   children of type H5Lattice
+}
+
+H5CUDS -- Lattice
+H5CUDS -- Particle
+H5CUDS -- Mesh
+
+Lattice "0..*" -- H5Lattice
+Mesh "0..*" -- H5Mesh
+Particle "0..*" -- H5Particles
+
+@enduml

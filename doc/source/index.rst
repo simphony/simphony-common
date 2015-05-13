@@ -17,6 +17,7 @@ User Manual
    Extending Simphony <plugins>
    CUBA <cuba_information>
    CUDS <cuds_definition>
+   HDF5 Storage <hdf5_storage>
 
 API Reference
 =============

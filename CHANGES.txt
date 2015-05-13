@@ -1,6 +1,18 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.1.3
+-------------
+
+* Added missing reference to the simhony framework in the documentation (#131)
+* Added pseudo UML with HDF5 serialization layout (#124)
+* Added missing reference to numpy in the requirements (#118)
+* Added UML diagrams for the current CUDS api (#95)
+* Added ABCMeshContainer testing template (#77)
+* Updated docstring of CUDS items iterators to reflect the expected order of the returned items (#127)
+* Updated wrong class names in the documentation (#119)
+* Fixed warning while compiling the documentation (#103)
+
 Release 0.1.2
 -------------
 

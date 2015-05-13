@@ -1,0 +1,7 @@
+@startuml
+class Record as "Record(Row)" {
+  [ uid ]: String[32] = UUID.hex
+  [ data ]: Data
+  [ mask ]: Bool[number of columns in Data]
+}
+@enduml
