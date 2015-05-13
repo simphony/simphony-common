@@ -2,7 +2,6 @@
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
-import simphony.cuds.pcexceptions as pce
 from simphony.core.data_container import DataContainer
 
 
@@ -501,7 +500,8 @@ class Bond(object):
         if particles is not None and len(particles) > 0:
             self.particles = tuple(particles)
         else:
-            raise Exception(pce._PC_errors['IncorrectParticlesTuple'])
+            message = 'particles list {} is not valid'
+            raise ValueError(message.format(particles))
 
         if data is None:
             self.data = DataContainer()
