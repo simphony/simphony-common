@@ -397,7 +397,13 @@ class ContainerManipulatingBondsCheck(object):
         container.remove_bond(uid)
 
         # then
+        bonds = self.bond_list[:]
+        ids = self.ids
+        del bonds[0]
+        del ids[0]
         self.assertFalse(self.container.has_bond(uid))
+        for uid, bond in map(None, ids, bonds):
+            self.assertEqual(container.get_bond(uid), bond)
 
     def test_exception_removing_bond_with_missing_id(self):
         # then
