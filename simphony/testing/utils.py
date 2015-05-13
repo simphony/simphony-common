@@ -74,10 +74,9 @@ def compare_data_containers(data, reference, msg=None, testcase=None):
 def create_particles(n=10, restrict=None):
     particle_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict)
+        data = create_data_container(restrict=restrict, constant=i)
         # FIXME: This is not right since CUBA.VELOCITY might not be part of the
         #        Of the restricted keywords.
-        data[CUBA.VELOCITY] = [i, -i, 2 * i]
         particle_list.append(
             Particle([i, i*10, i*100], data=data))
     return particle_list
@@ -96,10 +95,7 @@ def create_points():
 def create_bonds(n=5, restrict=None, particles=None):
     bond_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict)
-        # FIXME: This is not right since CUBA.VELOCITY might not be part of the
-        #        Of the restricted keywords.
-        data[CUBA.VELOCITY] = [i, -i, 4 * i]
+        data = create_data_container(restrict=restrict, constant=i)
         if particles is None:
             ids = [uuid.uuid4() for x in xrange(n)]
         else:
@@ -109,7 +105,7 @@ def create_bonds(n=5, restrict=None, particles=None):
     return bond_list
 
 
-def create_data_container(restrict=None):
+def create_data_container(restrict=None, constant=None):
     """ Create a dummy data container while respecting the expected data types.
 
     This is a utility function to be used for testing and prototyping.
@@ -120,34 +116,53 @@ def create_data_container(restrict=None):
         The list of CUBA keys to restrict the value population. Default is to
         use all CUBA keys.
 
+    constant : int
+        A numerical constant to create the dummy value. Default is None.
+
     Returns
     -------
     data : DataContainer
 
 
-    """
 
+    """
     if restrict is None:
         restrict = CUBA
     data = {cuba: dummy_cuba_value(cuba) for cuba in restrict}
     return DataContainer(data)
 
 
-def dummy_cuba_value(cuba):
-    keyword = KEYWORDS[CUBA(cuba).name]
-    # get the data type
+def dummy_cuba_value(cuba, constant=None):
+    """ Create a dummy value for the CUBA keyword.
 
+    Parameters
+    ----------
+    cuba : CUBA
+        The cuba key to get a dummy value back
+
+    constant : int
+        A numerical constant to create the dummy value. Default is 3.
+
+    Returns
+    -------
+    value :
+        A dummy value following the dtype description of the CUBA keyword.
+
+    """
+    if constant is None:
+        constant = 3
+    keyword = KEYWORDS[CUBA(cuba).name]
     if numpy.issubdtype(keyword.dtype, str):
-        return keyword.name
+        return keyword.name + str(constant)
     else:
         shape = keyword.shape
         if shape == [1]:
             if numpy.issubdtype(keyword.dtype, 'float'):
-                return float(cuba + 3)
+                return float(cuba + constant)
             if numpy.issubdtype(keyword.dtype, 'int'):
-                return int(cuba + 3)
+                return int(cuba + constant)
         else:
-            data = numpy.arange(numpy.prod(shape)) * cuba
+            data = numpy.arange(numpy.prod(shape)) * (cuba + constant)
             data = numpy.reshape(data, shape)
             if numpy.issubdtype(keyword.dtype, 'float'):
                 return numpy.ones(shape=shape, dtype=numpy.float64) * data
