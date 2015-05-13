@@ -160,13 +160,20 @@ class ContainerManipulatingParticlesCheck(object):
     def test_remove_particle(self):
         # given
         container = self.container
-        particle = self.particle_list[0]
+        particle = self.particle_list[1]
+        uid = particle.uid
 
         # when
         container.remove_particle(particle.uid)
 
         # then
-        self.assertFalse(container.has_particle(particle.uid))
+        particles = self.particle_list[:]
+        ids = self.ids
+        del particles[1]
+        del ids[1]
+        self.assertFalse(self.container.has_particle(uid))
+        for uid, particle in map(None, ids, particles):
+            self.assertEqual(container.get_particle(uid), particle)
 
     def test_exception_when_removing_particle_with_bad_id(self):
         # given
@@ -391,7 +398,7 @@ class ContainerManipulatingBondsCheck(object):
     def test_remove_bond(self):
         # given
         container = self.container
-        uid = self.ids[0]
+        uid = self.ids[1]
 
         # when
         container.remove_bond(uid)
@@ -399,8 +406,8 @@ class ContainerManipulatingBondsCheck(object):
         # then
         bonds = self.bond_list[:]
         ids = self.ids
-        del bonds[0]
-        del ids[0]
+        del bonds[1]
+        del ids[1]
         self.assertFalse(self.container.has_bond(uid))
         for uid, bond in map(None, ids, bonds):
             self.assertEqual(container.get_bond(uid), bond)
