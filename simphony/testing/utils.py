@@ -126,7 +126,7 @@ def create_data_container(restrict=None, constant=None):
     """
     if restrict is None:
         restrict = CUBA
-    data = {cuba: dummy_cuba_value(cuba) for cuba in restrict}
+    data = {cuba: dummy_cuba_value(cuba, constant) for cuba in restrict}
     return DataContainer(data)
 
 
