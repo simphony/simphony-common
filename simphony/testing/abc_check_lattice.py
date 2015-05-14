@@ -163,12 +163,15 @@ class ABCCheckLattice(object):
             default.base_vect,
             default.size,
             default.origin)
-        xspace, yspace = default.base_vect
-        x, y = numpy.meshgrid(range(default.size[0]), range(default.size[1]))
-        indexes = zip(x.flat, y.flat)
+        xspace, yspace, zspace = default.base_vect
+        x, y, z = numpy.meshgrid(range(default.size[0]),
+                                 range(default.size[1]),
+                                 range(default.size[2]))
+        indexes = zip(x.flat, y.flat, z.flat)
         expected = zip(
             x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1])
+            y.ravel() * yspace + default.origin[1],
+            z.ravel() * zspace + default.origin[2])
 
         for i, index in enumerate(indexes):
             assert_array_equal(container.get_coordinate(index), expected[i])
@@ -182,12 +185,15 @@ class ABCCheckLattice(object):
             default.base_vect,
             default.size,
             default.origin)
-        xspace, yspace = default.base_vect
-        x, y = numpy.meshgrid(range(default.size[0]), range(default.size[1]))
-        indexes = zip(x.flat, y.flat)
+        xspace, yspace, zspace = default.base_vect
+        x, y, z = numpy.meshgrid(range(default.size[0]),
+                                 range(default.size[1]),
+                                 range(default.size[2]))
+        indexes = zip(x.flat, y.flat, z.flat)
         expected = zip(
             x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1])
+            y.ravel() * yspace + default.origin[1],
+            z.ravel() * zspace + default.origin[2])
 
         for i, index in enumerate(indexes):
             assert_array_equal(container.get_coordinate(index), expected[i])

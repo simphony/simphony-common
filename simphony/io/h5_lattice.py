@@ -41,11 +41,11 @@ class H5Lattice(ABCLattice):
             for lattice and data will be located
         type : str
             Bravais lattice type (should agree with the _base_vect below).
-        base_vect : D x float
+        base_vect : float[3]
             defines a Bravais lattice (an alternative for primitive vectors).
-        size : D x size
+        size : int[3]
             number of lattice nodes (in the direction of each axis).
-        origin : D x float
+        origin : float[3]
             origin of lattice
         record : tables.IsDescription
             A class that describes column types for PyTables table.
@@ -60,7 +60,7 @@ class H5Lattice(ABCLattice):
 
         lattice._table.attrs.type = type
         lattice._table.attrs.base_vect = base_vect
-        lattice._table.attrs.size = size
+        lattice._table.attrs.size = tuple(size)
         lattice._table.attrs.origin = origin
 
         IndexedDataContainerTable(group, 'data', NoUIDRecord, 1)
@@ -72,7 +72,8 @@ class H5Lattice(ABCLattice):
 
         Parameters
         ----------
-        index : tuple of D x int (node index coordinate)
+        index : int[3]
+            node index coordinate
 
         Returns
         -------
@@ -86,12 +87,12 @@ class H5Lattice(ABCLattice):
         return LatticeNode(index, self._table[n])
 
     def update_node(self, node):
-        """ Updates FileLattice data for a LatticeNode
+        """ Updates H5Lattice data for a LatticeNode
 
         Parameters
         ----------
-            node : LatticeNode
-                reference to LatticeNode object
+        node : LatticeNode
+            reference to LatticeNode object
 
         """
         # Find correct row for node
@@ -107,7 +108,7 @@ class H5Lattice(ABCLattice):
 
         Parameters
         ----------
-        indices : iterable set of D x int, optional
+        indices : iterable set of int[3], optional
             node index coordinates
 
         Returns
@@ -128,11 +129,12 @@ class H5Lattice(ABCLattice):
 
         Parameters
         ----------
-        index : D x int (node index coordinate)
+        index : int[3]
+            node index coordinate
 
         Returns
         -------
-        D x float
+        float[3]
 
         """
         if self._type == 'Hexagonal':

@@ -10,11 +10,11 @@ class ABCLattice(object):
         name of lattice
     type : str
         type of lattice
-    base_vect : D x float
+    base_vect : float[3]
         base vector of lattice
-    size : tuple of D x int
+    size : tuple of int[3]
         lattice dimensions
-    origin : D x float
+    origin : float[3]
         lattice origin
     data : DataContainer
         high level CUBA data assigned to lattice
@@ -28,7 +28,7 @@ class ABCLattice(object):
 
         Parameters
         ----------
-        index : tuple of D x int
+        index : int[3]
             node index coordinate
 
         Returns
@@ -53,11 +53,11 @@ class ABCLattice(object):
 
         Parameters
         ----------
-        indices : iterable set of D x int, optional
+        indices : iterable set of int[3], optional
             When indices (i.e. node index coordinates) are provided, then nodes
             are returned in the same order of the provided indices. If indices
             is None, there is no restriction on the order the nodes that are
-            are returned.
+            returned.
 
         Returns
         -------
@@ -72,11 +72,11 @@ class ABCLattice(object):
 
         Parameters
         ----------
-        index : D x int
+        index : int[3]
             node index coordinate
 
         Returns
         -------
-        coordinates : D x float
+        coordinates : float[3]
 
         """

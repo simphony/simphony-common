@@ -18,25 +18,25 @@ class LatticeNodeTestCase(unittest.TestCase):
 
     def test_construct_lattice_node_default(self):
         """Creation of a lattice node."""
-        node = LatticeNode((0, 0))
+        node = LatticeNode((0, 0, 0))
 
         self.assertIsInstance(node, LatticeNode,
                               "Error: not a LatticeNode!")
-        self.assertEqual(node.index, (0, 0))
+        self.assertEqual(node.index, (0, 0, 0))
 
     def test_construct_lattice_node_copy(self):
         """Creation of a lattice node (copy constructor)."""
-        node_org = LatticeNode((0, 1))
+        node_org = LatticeNode((0, 0, 1))
         node_org.data[CUBA.DENSITY] = 1.5
-        node_org.data[CUBA.VELOCITY] = (0.2, -0.1)
+        node_org.data[CUBA.VELOCITY] = (0.2, -0.1, 0.0)
 
-        node_new = LatticeNode((2, 3), node_org.data)
+        node_new = LatticeNode((2, 3, 1), node_org.data)
 
         self.assertIsInstance(node_new, LatticeNode,
                               "Error: not a LatticeNode!")
-        self.assertEqual(node_new.index, (2, 3))
+        self.assertEqual(node_new.index, (2, 3, 1))
         self.assertEqual(node_new.data[CUBA.DENSITY], 1.5)
-        self.assertEqual(node_new.data[CUBA.VELOCITY], (0.2, -0.1))
+        self.assertEqual(node_new.data[CUBA.VELOCITY], (0.2, -0.1, 0.0))
 
 
 class TestLattice(ABCCheckLattice, unittest.TestCase):
@@ -79,21 +79,22 @@ class TestLattice(ABCCheckLattice, unittest.TestCase):
         self.assertEqual(cubic_lat.type, 'Cubic')
         self.assertEqual(orthop_lat.type, 'OrthorombicP')
 
-        assert_array_equal(hexag_lat.size, (11, 21))
-        assert_array_equal(square_lat.size, (12, 22))
-        assert_array_equal(rectang_lat.size, (13, 23))
+        assert_array_equal(hexag_lat.size, (11, 21, 1))
+        assert_array_equal(square_lat.size, (12, 22, 1))
+        assert_array_equal(rectang_lat.size, (13, 23, 1))
         assert_array_equal(cubic_lat.size, (14, 24, 34))
         assert_array_equal(orthop_lat.size, (15, 25, 35))
 
-        assert_array_equal(hexag_lat.origin, (0, 0))
-        assert_array_equal(square_lat.origin, (0, 0))
-        assert_array_equal(rectang_lat.origin, (0, 0))
+        assert_array_equal(hexag_lat.origin, (0, 0, 0))
+        assert_array_equal(square_lat.origin, (0, 0, 0))
+        assert_array_equal(rectang_lat.origin, (0, 0, 0))
         assert_array_equal(cubic_lat.origin, (4, 5, 6))
         assert_array_equal(orthop_lat.origin, (7, 8, 9))
 
-        assert_array_equal(hexag_lat.base_vect, (0.5*0.1, 0.5*sqrt(3)*0.1))
-        assert_array_equal(square_lat.base_vect, (0.2, 0.2))
-        assert_array_equal(rectang_lat.base_vect, (0.3, 0.35))
+        assert_array_equal(hexag_lat.base_vect,
+                           (0.5*0.1, 0.5*sqrt(3)*0.1, 0))
+        assert_array_equal(square_lat.base_vect, (0.2, 0.2, 0))
+        assert_array_equal(rectang_lat.base_vect, (0.3, 0.35, 0))
         assert_array_equal(cubic_lat.base_vect, (0.4, 0.4, 0.4))
         assert_array_equal(orthop_lat.base_vect, (0.5, 0.54, 0.58))
 
