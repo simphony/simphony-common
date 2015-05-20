@@ -137,11 +137,11 @@ class TestH5MeshStoredLayout(unittest.TestCase):
         self.assertIsInstance(group.item_data, tables.Table)
 
     def test_mesh_layout_with_new_proxy(self):
-        # then
+        # when
         group = self.handle.create_group(self.handle.root, 'test')
 
-        # when
-        H5Mesh(group, self.handle)
+        # when creating a proxy mesh twice
+        H5Mesh(group, self.handle)  # this will create the layout
         H5Mesh(group, self.handle)
 
         # then
