@@ -306,14 +306,13 @@ class MeshItemOperationsCheck(object):
         uids = self._add_items(container)
 
         # when
-        container.data = data
+        container.data = DataContainer()
 
         # then
         for index, expected in enumerate(self.item_list):
             self.assertEqual(
                 self.get_operation(container, uids[index]), expected)
-        expected_data = create_data_container(restrict=self.supported_cuba)
-
+        self.assertEqual(container.data, DataContainer())
 
 
 class MeshPointOperationsCheck(MeshItemOperationsCheck):
