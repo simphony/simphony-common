@@ -124,8 +124,8 @@ class H5Mesh(object):
 
         self._file = meshFile
         self._group = group
-        self._create_data_table()
         self._data = IndexedDataContainerTable(group, 'data')
+        self._uidData = DataContainerTable(self._group, 'item_data')
 
         if "points" not in self._group:
             self._create_points_table()
@@ -779,13 +779,3 @@ class H5Mesh(object):
 
         self._file.create_table(
             self._group, "cells", _CellDescriptor)
-
-    def _create_data_table(self):
-        """ Generates the table to sotre data
-
-        This table stores the uuid asociated to a given
-        data record.
-
-        """
-
-        self._uidData = DataContainerTable(self._group, 'data')
