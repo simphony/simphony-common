@@ -10,7 +10,7 @@ class Mesh as "H5Mesh(Group)" {
   edges : Table = Edges
   faces : Table = Faces
   cells : Table = Cells
-  itemsdata : Table = Data
+  item_data : Table = Data
   data : Table = ContainerData
 }
 
