@@ -300,6 +300,21 @@ class MeshItemOperationsCheck(object):
                 pass
         self.assertEqual(item.uid, self.item_list[-1].uid)
 
+    def test_container_data_and_item_data_conflict(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+
+        # when
+        container.data = data
+
+        # then
+        for index, expected in enumerate(self.item_list):
+            self.assertEqual(
+                self.get_operation(container, uids[index]), expected)
+        expected_data = create_data_container(restrict=self.supported_cuba)
+
+
 
 class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
