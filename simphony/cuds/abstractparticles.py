@@ -355,10 +355,8 @@ class ABCParticles(object):
     def has_particle(self, uid):
         """Checks if a particle with the given uid already exists
         in the container."""
-        pass
 
     @abstractmethod
     def has_bond(self, uid):
         """Checks if a bond with the given uid already exists
         in the container."""
-        pass
