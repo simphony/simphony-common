@@ -38,7 +38,8 @@ class ABCParticles(object):
 
         Raises
         ------
-        ValueError when the new particle already exists in the container.
+        ValueError :
+            when the new particle already exists in the container.
 
         Examples
         --------
@@ -48,8 +49,8 @@ class ABCParticles(object):
         >>> part = Particle()
         >>> part_container = Particles(name="foo")
         >>> part_container.add_particle(part)
+
         """
-        pass
 
     @abstractmethod
     def add_bond(self, bond):
@@ -73,7 +74,8 @@ class ABCParticles(object):
 
         Raises
         ------
-        ValueError when the new particle already exists in the container.
+        ValueError :
+            When the new particle already exists in the container.
 
         Examples
         --------
@@ -83,8 +85,8 @@ class ABCParticles(object):
         >>> bond = Bond()
         >>> part_container = Particles(name="foo")
         >>> part_container.add_bond(bond)
+
         """
-        pass
 
     @abstractmethod
     def update_particle(self, particle):
@@ -103,7 +105,8 @@ class ABCParticles(object):
 
         Raises
         ------
-        ValueError exception if the particle does not exists.
+        ValueError :
+            If the particle does not exist.
 
         Examples
         --------
@@ -116,8 +119,8 @@ class ABCParticles(object):
         >>> part = part_container.get_particle(uid)
         >>> ... #do whatever you want with the particle
         >>> part_container.update_particle(part)
+
         """
-        pass
 
     @abstractmethod
     def update_bond(self, bond):
@@ -130,13 +133,13 @@ class ABCParticles(object):
 
         Parameters
         ----------
-
         bond : Bond
             the bond that will be replaced.
 
         Raises
         ------
-        ValueError exception if the bond doesn't exists.
+        ValueError :
+            If the bond doesn't exist.
 
         Examples
         --------
@@ -149,8 +152,8 @@ class ABCParticles(object):
         >>> bond = part_container.get_bond(uid)
         >>> ... #do whatever you want with the bond
         >>> part_container.update_bond(bond)
+
         """
-        pass
 
     @abstractmethod
     def get_particle(self, uid):
@@ -169,9 +172,10 @@ class ABCParticles(object):
 
         Returns
         -------
-        A copy of the particle
+        particle : Particle
+            A copy of the internally stored particle info.
+
         """
-        pass
 
     @abstractmethod
     def get_bond(self, uid):
@@ -189,9 +193,10 @@ class ABCParticles(object):
 
         Returns
         -------
-        A copy of the bond
+        bond : Bond
+            A copy of the internally stored bond info.
+
         """
-        pass
 
     @abstractmethod
     def remove_particle(self, uid):
@@ -207,7 +212,8 @@ class ABCParticles(object):
 
         Raises
         ------
-        KeyError exception if the particle doesn't exist.
+        KeyError :
+           If the particle doesn't exist.
 
 
         Examples
@@ -221,8 +227,8 @@ class ABCParticles(object):
         >>> part_container.remove_particle(part.uid)
         or directly
         >>> part_container.remove_particle(uid)
+
         """
-        pass
 
     @abstractmethod
     def remove_bond(self, uid):
@@ -247,8 +253,8 @@ class ABCParticles(object):
         >>> part_container.remove_bond(bond.uid)
         or directly
         >>> part_container.remove_bond(id)
+
         """
-        pass
 
     @abstractmethod
     def iter_particles(self, uids=None):
@@ -260,7 +266,6 @@ class ABCParticles(object):
 
         Parameters
         ----------
-
         uids : iterable of uuid.UUID, optional
             sequence containing the uids of the particles that will be
             iterated. When the uids are provided, then the particles are
@@ -271,12 +276,12 @@ class ABCParticles(object):
         Yields
         ------
         particle : Particle
-            Yields each particle to be used.
+            The Particle item.
 
         Raises
         ------
-        KeyError exception if any of the ids passed as parameters are not
-        in the container.
+        KeyError :
+            if any of the ids passed as parameters are not in the container.
 
         Examples
         --------
@@ -295,8 +300,8 @@ class ABCParticles(object):
                 #take the particle back to the container so it will be updated
                 #in case we need it
                 part_container.update_particle(particle)
+
         """
-        pass
 
     @abstractmethod
     def iter_bonds(self, uids=None):
@@ -318,12 +323,13 @@ class ABCParticles(object):
 
         Yields
         ------
-        Yields each bond to be used.
+        bond : Bond
+           The next Bond item
 
         Raises
         ------
-        KeyError exception if any of the ids passed as parameters are not
-        in the container.
+        KeyError :
+            if any of the ids passed as parameters are not in the container.
 
         Examples
         --------
@@ -342,8 +348,8 @@ class ABCParticles(object):
                 #take the bond back to the container so it will be updated
                 #in case we need it
                 part_container.update_bond(bond)
+
         """
-        pass
 
     @abstractmethod
     def has_particle(self, uid):
