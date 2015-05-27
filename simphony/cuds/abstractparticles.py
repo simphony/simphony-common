@@ -64,7 +64,7 @@ class ABCParticles(object):
 
         Parameters
         ----------
-        new_bond : Bond
+        bond : Bond
             the new bond that will be included in the container.
 
         Returns
@@ -79,7 +79,7 @@ class ABCParticles(object):
 
         Examples
         --------
-        Having a Bond and a ParticleContainer just call the function
+        Having a Bond and a ParticleContainer, just call the function
         passing the Bond as parameter.
 
         >>> bond = Bond()
@@ -111,7 +111,7 @@ class ABCParticles(object):
         Examples
         --------
         Having a Particle that already exists in the container (taken with the
-        'get_particle' method for example) and a ParticleContainer just call
+        'get_particle' method for example) and a ParticleContainer, just call
         the function passing the Particle as parameter.
 
         >>> part_container = Particles(name="foo")
@@ -126,7 +126,7 @@ class ABCParticles(object):
     def update_bond(self, bond):
         """Replaces an existing bond.
 
-        Takes the uid of 'bond' and searchs inside the container for
+        Takes the uid of 'bond' and searches inside the container for
         that bond. If the bond exists, it is replaced with the new
         bond passed as parameter. If the bond doesn't exist, it will
         raise an exception.
@@ -203,7 +203,7 @@ class ABCParticles(object):
         """Removes the particle with uid from the container.
 
         The uid passed as parameter should exists in the container. Otherwise
-        an expcetion will be raised.
+        an exception will be raised.
 
         Parameters
         ----------
