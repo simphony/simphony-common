@@ -88,7 +88,7 @@ To build the documentation in the doc/build directory run::
 
 If you recreate the uml diagrams you need to have java and xdot installed::
 
-   sudo apt-get install defautl-jre xdot
+   sudo apt-get install default-jre xdot
 
 A copy of the `plantuml.jar
 <http://plantuml.sourceforge.net/download.html>`_ needs also to be
