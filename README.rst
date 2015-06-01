@@ -123,7 +123,7 @@ SimPhoNy Framework
 ------------------
 
 The ``simphony`` library is the core component of the SimPhoNy
-Framework, information on setting up the framework are provided on a
+Framework; information on setting up the framework is provided on a
 separate repository https://github.com/simphony/simphony-framework.
 
 
