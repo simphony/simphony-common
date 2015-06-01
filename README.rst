@@ -88,7 +88,7 @@ To build the documentation in the doc/build directory run::
 
 If you recreate the uml diagrams you need to have java and xdot installed::
 
-   sudo apt-get install defautl-jre xdot
+   sudo apt-get install default-jre xdot
 
 A copy of the `plantuml.jar
 <http://plantuml.sourceforge.net/download.html>`_ needs also to be
@@ -123,7 +123,7 @@ SimPhoNy Framework
 ------------------
 
 The ``simphony`` library is the core component of the SimPhoNy
-Framework, infromation on setting up the framework are provided on a
+Framework; information on setting up the framework is provided on a
 separate repository https://github.com/simphony/simphony-framework.
 
 
