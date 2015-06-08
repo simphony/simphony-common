@@ -108,9 +108,9 @@ class ABCParticles(object):
 
         Examples
         --------
-        Given a Particle that already exists in the Particles container (taken with the
-        'get_particle' method for example), just call the function passing the Particle 
-        as parameter.
+        Given a Particle that already exists in the Particles container
+        (taken with the 'get_particle' method for example), just call the
+        function passing the Particle as parameter.
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -141,9 +141,9 @@ class ABCParticles(object):
 
         Examples
         --------
-        Given a Bond that already exists in the Particles container (taken with the
-        'get_bond' method for example) just call the function passing the Bond as 
-        parameter.
+        Given a Bond that already exists in the Particles container
+        (taken with the 'get_bond' method for example) just call the
+        function passing the Bond as parameter.
 
         >>> particles = Particles(name="foo")
         >>> ...
@@ -249,7 +249,7 @@ class ABCParticles(object):
         >>> bond = particles.get_bond(uid)
         >>> ...
         >>> particles.remove_bond(bond.uid)
-        or 
+        or
         >>> particles.remove_bond(uid)
 
         """
