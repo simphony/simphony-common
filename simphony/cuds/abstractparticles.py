@@ -43,12 +43,11 @@ class ABCParticles(object):
 
         Examples
         --------
-        Having a Particle and a ParticleContainer just call the function
-        passing the Particle as parameter.
+        Add a particle to a Particles container.
 
-        >>> part = Particle()
-        >>> part_container = Particles(name="foo")
-        >>> part_container.add_particle(part)
+        >>> particle = Particle()
+        >>> particles = Particles(name="foo")
+        >>> particles.add_particle(part)
 
         """
 
@@ -79,12 +78,11 @@ class ABCParticles(object):
 
         Examples
         --------
-        Having a Bond and a ParticleContainer, just call the function
-        passing the Bond as parameter.
+        Add a bond to a Particles container.
 
         >>> bond = Bond()
-        >>> part_container = Particles(name="foo")
-        >>> part_container.add_bond(bond)
+        >>> particles = Particles(name="foo")
+        >>> particles.add_bond(bond)
 
         """
 
@@ -110,9 +108,9 @@ class ABCParticles(object):
 
         Examples
         --------
-        Having a Particle that already exists in the container (taken with the
-        'get_particle' method for example) and a ParticleContainer, just call
-        the function passing the Particle as parameter.
+        Given a Particle that already exists in the Particles container (taken with the
+        'get_particle' method for example), just call the function passing the Particle 
+        as parameter.
 
         >>> part_container = Particles(name="foo")
         >>> ...
@@ -143,15 +141,15 @@ class ABCParticles(object):
 
         Examples
         --------
-        Having a Bond that already exists in the container (taken with the
-        'get_bond' method for example) and a Particles just call the
-        function passing the Bond as parameter.
+        Given a Bond that already exists in the Particles container (taken with the
+        'get_bond' method for example) just call the function passing the Bond as 
+        parameter.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond = part_container.get_bond(uid)
+        >>> bond = particles.get_bond(uid)
         >>> ... #do whatever you want with the bond
-        >>> part_container.update_bond(bond)
+        >>> particles.update_bond(bond)
 
         """
 
@@ -220,13 +218,13 @@ class ABCParticles(object):
         --------
         Having an uid of an existing particle, pass it to the function.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> part = part_container.get_particle(uid)
+        >>> particle = particles.get_particle(uid)
         >>> ...
-        >>> part_container.remove_particle(part.uid)
+        >>> particles.remove_particle(part.uid)
         or directly
-        >>> part_container.remove_particle(uid)
+        >>> particles.remove_particle(uid)
 
         """
 
@@ -246,13 +244,13 @@ class ABCParticles(object):
         --------
         Having an uid of an existing bond, pass it to the function.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond = part_container.get_bond(id)
+        >>> bond = particles.get_bond(uid)
         >>> ...
-        >>> part_container.remove_bond(bond.uid)
-        or directly
-        >>> part_container.remove_bond(id)
+        >>> particles.remove_bond(bond.uid)
+        or 
+        >>> particles.remove_bond(uid)
 
         """
 
@@ -287,19 +285,19 @@ class ABCParticles(object):
         --------
         It can be used with a sequence as parameter or without it:
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> for particle in part_container.iter_particles([uid1, uid2, uid3]):
+        >>> for particle in particles.iter_particles([uid1, uid2, uid3]):
                 ...  #do stuff
                 #take the particle back to the container so it will be updated
                 #in case we need it
                 part_container.update_particle(particle)
 
-        >>> for particle in part_container.iter_particles():
+        >>> for particle in particles.iter_particles():
                 ...  #do stuff; it will iterate over all the particles
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particle(particle)
+                particles.update_particle(particle)
 
         """
 
@@ -335,19 +333,19 @@ class ABCParticles(object):
         --------
         It can be used with a sequence as parameter or without it:
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> for bond in part_container.iter_bonds([id1, id2, id3]):
+        >>> for bond in particles.iter_bonds([id1, id2, id3]):
                 ...  #do stuff
                 #take the bond back to the container so it will be updated
                 #in case we need it
-                part_container.update_bond(bond)
+                particles.update_bond(bond)
 
-        >>> for bond in part_container.iter_bond():
+        >>> for bond in particles.iter_bond():
                 ...  #do stuff; it will iterate over all the bond
                 #take the bond back to the container so it will be updated
                 #in case we need it
-                part_container.update_bond(bond)
+                particles.update_bond(bond)
 
         """
 
