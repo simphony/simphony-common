@@ -4,18 +4,18 @@
 !include h5_container_data.txt
 
 class H5Lattice as "H5Lattice(Group)" {
-  _v_name: String = <name>
+  _v_name: str = <name>
   lattice : Table = Nodes
   data : Table = ContainerData
   -- Node Attributes --
-  type: String
-  base_vect : Double[2..3]
-  size : Int[2..3]
-  origin: Double[2..3]
+  type: str
+  base_vect : float[3]
+  size : int[3]
+  origin: float[3]
 }
 
 class Nodes as "Nodes(Table)" {
-  _v_name: String = "lattice"
+  _v_name: str = "lattice"
   row : NoUidRecord
 }
 

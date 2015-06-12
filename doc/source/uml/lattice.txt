@@ -2,13 +2,13 @@
 abstract class ABCLattice {
   name: str
   type: str
-  base_vect: tuple of double[2..3]
-  size: tuple of double[2..3]
-  origin: tuple of double[2..3]
+  base_vect: float[3]
+  size: tuple of int[3]
+  origin: float[3]
   data: DataContainer
-  {abstract} get_node(index: tuple of int[2..3]) LatticeNode
+  {abstract} get_node(index: int[3]) LatticeNode
   {abstract} update_node(lat_node: LatticeNode)
-  {abstract} iter_nodes(indices: iterable of int[2..3] {optional}): iterator of LatticeNode
-  {abstract} get_coordinate((index: tuple of int[2..3]): int[2..3]
+  {abstract} iter_nodes(indices: iterable of int[3] {optional}): iterator of LatticeNode
+  {abstract} get_coordinate((index: int[3]): float[3]
 }
 @enduml
