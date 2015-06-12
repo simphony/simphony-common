@@ -12,7 +12,7 @@ class ABCLattice(object):
         type of lattice
     base_vect : float[3]
         base vector of lattice
-    size : tuple of int[3]
+    size : int[3]
         lattice dimensions
     origin : float[3]
         lattice origin

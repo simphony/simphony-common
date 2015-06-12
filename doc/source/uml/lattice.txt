@@ -3,7 +3,7 @@ abstract class ABCLattice {
   name: str
   type: str
   base_vect: float[3]
-  size: tuple of int[3]
+  size: int[3]
   origin: float[3]
   data: DataContainer
   {abstract} get_node(index: int[3]) LatticeNode
