@@ -36,7 +36,7 @@ class Lattice(ABCLattice):
     base_vect : float[3]
         defines a Bravais lattice
         (an alternative for primitive vectors).
-    size : tuple of int[3]
+    size : int[3]
         number of lattice nodes in the direction of each axis.
     origin : float[3]
         origin of lattice
