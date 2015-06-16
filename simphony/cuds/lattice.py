@@ -123,9 +123,14 @@ class Lattice(ABCLattice):
 
         """
         if self._type == 'Hexagonal':
-            raise NotImplementedError("""Get_coordinate for
-                Hexagonal system not implemented!""")
-        return self.origin + self.base_vect*np.array(index)
+            xorigin, yorigin, zorigin = self.origin
+            xspace, yspace, zspace = self.base_vect
+            x = xorigin + index[0] * xspace * 0.5 * xspace * index[1] % 2
+            y = yorigin + index[1] * yspace
+            z = zorigin
+            return x, y, z
+        else:
+            return self.origin + self.base_vect*np.array(index)
 
     @property
     def type(self):
