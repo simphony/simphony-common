@@ -246,8 +246,7 @@ class CheckLatticeNodeCoordinates(object):
             assert_array_equal(container.get_coordinate(index), expected[i])
 
     def test_get_coordinate_hexagonal(self):
-        default = make_hexagonal_lattice(
-            'Lattice4', (0.5, 0.54, 0.58), (15, 25, 35), (7, 9, 8))
+        default = make_hexagonal_lattice('Lattice4', 0.1, (5, 4))
         container = self.container_factory(
             default.name,
             default.type,
