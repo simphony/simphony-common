@@ -82,6 +82,7 @@ class TestH5LatticeNodeCoordinates(
     def test_get_coordinate_hexagonal(self):
         pass
 
+
 class TestH5LatticeNodeOperations(
         CheckLatticeNodeOperations, unittest.TestCase):
 
