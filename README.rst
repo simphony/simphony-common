@@ -76,7 +76,7 @@ Testing
 
 To run the full test-suite run::
 
-    python -m unittest discover
+    python -m unittest discover -p test*
 
 Documentation
 -------------
