@@ -125,7 +125,7 @@ class Lattice(ABCLattice):
         if self._type == 'Hexagonal':
             xorigin, yorigin, zorigin = self.origin
             xspace, yspace, zspace = self.base_vect
-            x = xorigin + index[0] * xspace * 0.5 * xspace * index[1] % 2
+            x = xorigin + index[0] * xspace + 0.5 * xspace * index[1]
             y = yorigin + index[1] * yspace
             z = zorigin
             return x, y, z

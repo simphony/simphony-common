@@ -78,10 +78,6 @@ class TestH5LatticeNodeCoordinates(
     def supported_cuba(self):
         return set(CUBA)
 
-    @unittest.skip('Hexagonal coordinates are not supported yet')
-    def test_get_coordinate_hexagonal(self):
-        pass
-
 
 class TestH5LatticeNodeOperations(
         CheckLatticeNodeOperations, unittest.TestCase):
@@ -130,10 +126,6 @@ class TestH5LatticeNodeCustomCoordinates(
 
     def supported_cuba(self):
         return [CUBA.VELOCITY, CUBA.MATERIAL_ID, CUBA.DENSITY]
-
-    @unittest.skip('Hexagonal coordinates are not supported yet')
-    def test_get_coordinate_hexagonal(self):
-        pass
 
 
 class TestH5LatticeCustomNodeOperations(

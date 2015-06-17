@@ -56,10 +56,6 @@ class TestLatticeNodeCoordinates(
     def supported_cuba(self):
         return set(CUBA)
 
-    @unittest.skip('Hexagonal coordinates are not supported yet')
-    def test_get_coordinate_hexagonal(self):
-        pass
-
 
 class TestLatticeProperties(CheckLatticeProperties, unittest.TestCase):
 

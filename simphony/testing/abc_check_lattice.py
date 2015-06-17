@@ -256,11 +256,12 @@ class CheckLatticeNodeCoordinates(object):
         xspace, yspace, zspace = default.base_vect
 
         for node in container.iter_nodes():
+            index = node.index
             position = (
-                node.index[0] * xspace + 0.5 * xspace * (node.index[1] % 2),
-                node.index[1] * yspace,
+                index[0] * xspace + 0.5 * xspace * index[1],
+                index[1] * yspace,
                 container.origin[2])
-            assert_array_equal(container.get_coordinates[node.index], position)
+            assert_array_equal(container.get_coordinate(index), position)
 
 
 class CheckLatticeProperties(object):
