@@ -1,6 +1,16 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.1.4
+-------------
+
+* Added docstrings for ABCParticles (#153)
+* Fixed mispelled strings in ABCModelEngine diagrams (#152)
+* Fixed lattice documentation to show that lattice attributes are always 3D (#150)
+* Updated Latticle size, origin and base_vectors so there are always 3D (#80)
+* Updated PyTables related tests to be executed only when PyTables are present (#143)
+* ABCParticlesCheck now support tests using a subset of CUBA keys (#139)
+
 Release 0.1.3
 -------------
 
