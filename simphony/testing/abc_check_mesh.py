@@ -369,6 +369,8 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
         MeshItemOperationsCheck.setUp(self)
+        for point in self.points:
+            self.container.add_point(point)
 
     operation_mapping = {
         'get item': 'none',
