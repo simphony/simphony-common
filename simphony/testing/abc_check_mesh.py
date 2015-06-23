@@ -1,5 +1,6 @@
 import abc
 import uuid
+import random
 from functools import partial
 
 from simphony.testing.utils import (
@@ -356,6 +357,21 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
 class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
+    def setUp(self):
+        self.points = []
+        for multiplier in self.point_groups:
+            points = create_points()
+            for point in points:
+                point.coordinates = [
+                    value * multiplier for value in point.coordinates]
+            self.points += points
+        self.uids = [uuid.uuid4() for _ in self.points]
+        for uid, point in zip(self.uids, self.points):
+            point.uid = uid
+        MeshItemOperationsCheck.setUp(self)
+        for point in self.points:
+            self.container.add_point(point)
+
     operation_mapping = {
         'get item': 'none',
         'add item': 'none',
@@ -364,6 +380,8 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         'has items': 'none'}
 
     points_range = None
+
+    point_groups = [1]
 
     def has_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['has items'])
@@ -384,11 +402,14 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
+        point_uids = [
+            container.add_point(Point((1.0 * i, 1.0 * i, 1.0 * i)))
+            for i in range(self.points_range[-1])]
 
         # increasing
         for n in self.points_range:
             # when
-            item.points = tuple(uuid.uuid4() for _ in range(n))
+            item.points = tuple(point_uids[:n])
             self.update_operation(container, item)
 
             # then
@@ -400,7 +421,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         # decreasing
         for n in self.points_range[::-1]:
             # when
-            item.points = tuple(uuid.uuid4() for _ in range(n))
+            item.points = tuple(point_uids[:n])
             self.update_operation(container, item)
 
             # then
@@ -413,7 +434,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
 class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
 
     def setUp(self):
-        MeshItemOperationsCheck.setUp(self)
+        MeshElementOperationsCheck.setUp(self)
         self.addTypeEqualityFunc(
             Edge, partial(compare_elements, testcase=self))
 
@@ -426,24 +447,27 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
 
     points_range = [2]
 
+    point_groups = [1, 2]
+
     def create_items(self):
-        uids = [uuid.uuid4() for _ in range(12)]
+        uids = self.uids
         return [Edge(
             points=puids,
             data=create_data_container(restrict=self.supported_cuba))
             for puids in grouper(uids, 2)]
 
     def create_item(self, uid):
+        uids = self.uids
         return Edge(
             uid=uid,
-            points=[uuid.uuid4(), uuid.uuid4()],
+            points=random.sample(uids, 2),
             data=create_data_container(restrict=self.supported_cuba))
 
 
 class MeshFaceOperationsCheck(MeshElementOperationsCheck):
 
     def setUp(self):
-        MeshItemOperationsCheck.setUp(self)
+        MeshElementOperationsCheck.setUp(self)
         self.addTypeEqualityFunc(
             Face, partial(compare_elements, testcase=self))
 
@@ -456,24 +480,27 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
 
     points_range = [3, 4]
 
+    point_groups = [1, 2, 3, 4]
+
     def create_items(self):
-        uids = [uuid.uuid4() for _ in range(32)]
+        uids = self.uids
         return [Face(
             points=puids,
             data=create_data_container(restrict=self.supported_cuba))
             for puids in grouper(uids, 3)]
 
     def create_item(self, uid):
+        uids = self.uids
         return Face(
             uid=uid,
-            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
+            points=random.sample(uids, 3),
             data=create_data_container(restrict=self.supported_cuba))
 
 
 class MeshCellOperationsCheck(MeshElementOperationsCheck):
 
     def setUp(self):
-        MeshItemOperationsCheck.setUp(self)
+        MeshElementOperationsCheck.setUp(self)
         self.addTypeEqualityFunc(
             Cell, partial(compare_elements, testcase=self))
 
@@ -486,15 +513,18 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
 
     points_range = range(4, 8)
 
+    point_groups = [1, 2, 3, 4]
+
     def create_items(self):
-        uids = [uuid.uuid4() for _ in range(32)]
+        uids = self.uids
         return [Cell(
             points=puids,
             data=create_data_container(restrict=self.supported_cuba))
             for puids in grouper(uids, 4)]
 
     def create_item(self, uid):
+        uids = self.uids
         return Cell(
             uid=uid,
-            points=[uuid.uuid4(), uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
+            points=random.sample(uids, 4),
             data=create_data_container(restrict=self.supported_cuba))
