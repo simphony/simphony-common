@@ -55,7 +55,6 @@ class H5CUDS(object):
 
         """
         handle = tables.open_file(filename, mode, title=title)
-        # create the high-level structure of the cuds file
         for group in ('particle', 'lattice', 'mesh'):
             if "/" + group not in handle:
                 handle.create_group('/', group, group)
