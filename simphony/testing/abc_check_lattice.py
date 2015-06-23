@@ -25,7 +25,7 @@ class CheckLatticeNodeOperations(object):
         self.base_vect = (0.2, 0.2, 0.2)
         self.origin = (-2.0, 0.0, 1.0)
         self.container = self.container_factory(
-            'foo', 'Cubic', self.base_vect, self.size, self.origin)
+            'my_name', 'Cubic', self.base_vect, self.size, self.origin)
 
     @abc.abstractmethod
     def container_factory(self, name, type_, base_vect, size, origin):
