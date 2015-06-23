@@ -7,9 +7,9 @@ The native implementation of the SimPhoNy cuds objects and io code (http://www.s
    :target: https://travis-ci.org/simphony/simphony-common
    :alt: Build status
 
-.. image:: https://coveralls.io/repos/simphony/simphony-common/badge.svg
-   :target: https://coveralls.io/r/simphony/simphony-common
-   :alt: Test coverage
+.. image:: http://codecov.io/github/simphony/simphony-common/coverage.svg?branch=master
+   :target: http://codecov.io/github/simphony/simphony-common?branch=master
+   :alt: Coverage status
 
 .. image:: https://readthedocs.org/projects/simphony/badge/?version=master
    :target: https://readthedocs.org/projects/simphony/?badge=master

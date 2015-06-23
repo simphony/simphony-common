@@ -55,7 +55,6 @@ class H5CUDS(object):
 
         """
         handle = tables.open_file(filename, mode, title=title)
-        # create the high-level structure of the cuds file
         for group in ('particle', 'lattice', 'mesh'):
             if "/" + group not in handle:
                 handle.create_group('/', group, group)
@@ -89,11 +88,7 @@ class H5CUDS(object):
 
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
-        # Set the data value of the newly created h5_particles object
-        #  which will store it to the file
         h5_particles.data = particles.data
-
-        # copy the contents of the particle container to the file
         for particle in particles.iter_particles():
             h5_particles.add_particle(particle)
         for bond in particles.iter_bonds():
@@ -126,8 +121,6 @@ class H5CUDS(object):
         group = self._handle.create_group('/mesh/', mesh.name)
         h5_mesh = H5Mesh(group, self._handle)
         h5_mesh.data = mesh.data
-
-        # copy the contents of the mesh to the file
         for point in mesh.iter_points():
             h5_mesh.add_point(point)
         for edge in mesh.iter_edges():
@@ -137,7 +130,6 @@ class H5CUDS(object):
         for cell in mesh.iter_cells():
             h5_mesh.add_cell(cell)
 
-        self._handle.flush()
         return h5_mesh
 
     def add_lattice(self, lattice):
@@ -159,20 +151,14 @@ class H5CUDS(object):
                 'Lattice \'{n}\` already exists'.format(n=lattice.name))
 
         group = self._handle.create_group('/lattice/', lattice.name)
-
-        # Create a h5_lattice with all CUBA-keys defined
-        h5lat = H5Lattice.create_new(group, lattice.type, lattice.base_vect,
-                                     lattice.size, lattice.origin)
-
-        # Copy the contents of the lattice to the file
+        h5_lattice = H5Lattice.create_new(
+            group, lattice.type, lattice.base_vect,
+            lattice.size, lattice.origin)
+        h5_lattice.data = lattice.data
         for node in lattice.iter_nodes():
-            h5lat.update_node(node)
+            h5_lattice.update_node(node)
 
-        # Copy lattice high level data to the file
-        h5lat.data = lattice.data
-        self._handle.flush()
-
-        return h5lat
+        return h5_lattice
 
     def get_particles(self, name):
         """Get particle container from file.
@@ -188,10 +174,11 @@ class H5CUDS(object):
         """
         try:
             group = self._root.particle._f_get_child(name)
-            return H5Particles(group)
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
+        else:
+            return H5Particles(group)
 
     def get_mesh(self, name):
         """Get mesh from file.
@@ -208,11 +195,11 @@ class H5CUDS(object):
 
         try:
             group = self._root.mesh._f_get_child(name)
-            m = H5Mesh(group, self._handle)
-            return m
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
+        else:
+            return H5Mesh(group, self._handle)
 
     def get_lattice(self, name):
         """Get lattice from file.
@@ -229,11 +216,11 @@ class H5CUDS(object):
         """
         try:
             group = self._root.lattice._f_get_child(name)
-            h5lat = H5Lattice(group)
-            return h5lat
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Lattice \'{n}\` does not exist'.format(n=name))
+        else:
+            return H5Lattice(group)
 
     def delete_particles(self, name):
         """Delete particle container from file.
@@ -244,11 +231,12 @@ class H5CUDS(object):
             name of particle container to delete
         """
         try:
-            pc_node = self._root.particle._f_get_child(name)
-            pc_node._f_remove(recursive=True)
+            node = self._root.particle._f_get_child(name)
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Particle container \'{n}\` does not exist'.format(n=name))
+        else:
+            node._f_remove(recursive=True)
 
     def delete_mesh(self, name):
         """Delete mesh from file.
@@ -260,11 +248,12 @@ class H5CUDS(object):
         """
 
         try:
-            m_node = self._root.mesh._f_get_child(name)
-            m_node._f_remove(recursive=True)
+            node = self._root.mesh._f_get_child(name)
         except tables.NoSuchNodeError:
             raise ValueError(
                 'Mesh \'{n}\` does not exist'.format(n=name))
+        else:
+            node._f_remove(recursive=True)
 
     def delete_lattice(self, name):
         """Delete lattice from file.
@@ -275,11 +264,11 @@ class H5CUDS(object):
             name of lattice to delete
         """
         try:
-            h5lat = self._root.lattice._f_get_child(name)
+            node = self._root.lattice._f_get_child(name)
         except tables.NoSuchNodeError:
             raise ValueError('Lattice \'{n}\` does not exist'.format(n=name))
         else:
-            h5lat._f_remove(recursive=True)
+            node._f_remove(recursive=True)
 
     def iter_particles(self, names=None):
         """Returns an iterator over a subset or all

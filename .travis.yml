@@ -10,7 +10,7 @@ before_install:
 install:
   - pip install numexpr
   - pip install -r dev_requirements.txt
-  - pip install coveralls
+  - pip install codecov
   - python setup.py develop
   - pushd examples/plugin
   - python setup.py develop
@@ -20,4 +20,4 @@ script:
   - coverage run -m unittest discover -p test*
   - python setup.py build_sphinx
 after_success:
-  - coveralls
+  codecov
