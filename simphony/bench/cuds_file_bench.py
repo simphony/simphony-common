@@ -5,7 +5,7 @@ import uuid
 
 from simphony.bench.util import bench
 from simphony.io.h5_cuds import H5CUDS
-from simphony.cuds.particles import Particle
+from simphony.cuds.particles import Particle, Particles
 
 particles = [
     Particle(coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
@@ -55,8 +55,7 @@ class Container(object):
 
     def __enter__(self):
         self._file = H5CUDS.open(self._filename)
-        pc = self._file.add_particles("test")
-        return pc
+        return self._file.add_particles(Particles("test"))
 
     def __exit__(self, type, value, tb):
         if os.path.exists(self._filename):
