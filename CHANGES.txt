@@ -1,6 +1,15 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.1.5
+-------------
+
+* Added hexagonal lattice type to latticle template tests (#160)
+* Feixed bug while getting coordinates of hexagonal lattices (#94)
+* Updated benchmark files to work with the current library version (#151)
+* Fixed bug with duplicated groups in CUDS containers (#148)
+* Fixed bug with duplicated tables in H5Mesh (#144)
+
 Release 0.1.4
 -------------
 
