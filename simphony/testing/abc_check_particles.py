@@ -18,9 +18,7 @@ class ContainerAddParticlesCheck(object):
             Particle, partial(compare_particles, testcase=self))
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory('foo')
-        self.ids = [
-            self.container.add_particle(particle)
-            for particle in self.particle_list]
+        self.ids = self.container.add_particles(self.particle_list)
 
     @abc.abstractmethod
     def container_factory(self, name):
@@ -58,7 +56,8 @@ class ContainerAddParticlesCheck(object):
             data=create_data_container())
 
         # when
-        uid = container.add_particle(particle)
+        uids = container.add_particles([particle])
+        uid = uids[0]
 
         # then
         particle.data = create_data_container(restrict=self.supported_cuba())
@@ -75,7 +74,8 @@ class ContainerAddParticlesCheck(object):
             data=create_data_container(restrict=self.supported_cuba()))
 
         # when
-        particle_uid = container.add_particle(particle)
+        uids = container.add_particles([particle])
+        particle_uid = uids[0]
 
         # then
         self.assertEqual(particle_uid, uid)
@@ -89,7 +89,7 @@ class ContainerAddParticlesCheck(object):
         # then
         with self.assertRaises(ValueError):
             # when
-            container.add_particle(self.particle_list[3])
+            container.add_particles([self.particle_list[3]])
 
 
 class ContainerManipulatingParticlesCheck(object):
@@ -114,9 +114,7 @@ class ContainerManipulatingParticlesCheck(object):
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.particle_list[0].uid = uuid.uuid4()
         self.container = self.container_factory('foo')
-        self.ids = [
-            self.container.add_particle(particle)
-            for particle in self.particle_list]
+        self.ids = self.container.add_particles(self.particle_list)
 
     def test_get_particle(self):
         # given
@@ -133,7 +131,7 @@ class ContainerManipulatingParticlesCheck(object):
         particle.coordinates = (123, 456, 789)
 
         # when
-        container.update_particle(particle)
+        container.update_particles([particle])
 
         # then
         retrieved = container.get_particle(particle.uid)
@@ -147,7 +145,7 @@ class ContainerManipulatingParticlesCheck(object):
         # then
         with self.assertRaises(ValueError):
             # when
-            container.update_particle(particle)
+            container.update_particles([particle])
 
         # given
         particle = Particle()
@@ -155,7 +153,7 @@ class ContainerManipulatingParticlesCheck(object):
         # then
         with self.assertRaises(ValueError):
             # when
-            container.update_particle(particle)
+            container.update_particles([particle])
 
     def test_remove_particle(self):
         # given
@@ -164,7 +162,7 @@ class ContainerManipulatingParticlesCheck(object):
         uid = particle.uid
 
         # when
-        container.remove_particle(particle.uid)
+        container.remove_particles([particle.uid])
 
         # then
         particles = self.particle_list[:]
@@ -182,12 +180,12 @@ class ContainerManipulatingParticlesCheck(object):
         # then
         with self.assertRaises(KeyError):
             # when
-            container.remove_particle(uuid.UUID(int=23325))
+            container.remove_particles([uuid.UUID(int=23325)])
 
         # then
         with self.assertRaises(KeyError):
             # when
-            container.remove_particle(None)
+            container.remove_particles([None])
 
     def test_iter_particles_when_passing_ids(self):
         # given
@@ -250,12 +248,10 @@ class ContainerAddBondsCheck(object):
             Bond, partial(compare_bonds, testcase=self))
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory("foo")
-        for particle in self.particle_list:
-            self.container.add_particle(particle)
+        self.container.add_particles(self.particle_list)
         self.bond_list = create_bonds(
             restrict=self.supported_cuba(), particles=self.particle_list)
-        self.ids = [
-            self.container.add_bond(bond) for bond in self.bond_list]
+        self.ids = self.container.add_bonds(self.bond_list)
 
     def test_has_bond(self):
         # given and setUp
@@ -283,7 +279,8 @@ class ContainerAddBondsCheck(object):
             data=create_data_container())
 
         # when
-        uid = container.add_bond(bond)
+        uids = container.add_bonds([bond])
+        uid = uids[0]
 
         # then
         bond.data = create_data_container(restrict=self.supported_cuba())
@@ -301,7 +298,8 @@ class ContainerAddBondsCheck(object):
             data=create_data_container(restrict=self.supported_cuba()))
 
         # when
-        bond_uid = container.add_bond(bond)
+        uids = container.add_bonds([bond])
+        bond_uid = uids[0]
 
         # then
         self.assertEqual(bond_uid, uid)
@@ -311,13 +309,13 @@ class ContainerAddBondsCheck(object):
         # then
         with self.assertRaises(ValueError):
             # when
-            self.container.add_bond(self.bond_list[4])
+            self.container.add_bonds([self.bond_list[4]])
 
     def test_exception_when_adding_bond_with_invalid_id(self):
         # then
         with self.assertRaises(ValueError):
             # when
-            self.container.add_bond(Bond(uid=object(), particles=[]))
+            self.container.add_bonds(Bond(uid=object(), particles=[]))
 
 
 class ContainerManipulatingBondsCheck(object):
@@ -340,12 +338,10 @@ class ContainerManipulatingBondsCheck(object):
             Bond, partial(compare_bonds, testcase=self))
         self.particle_list = create_particles(restrict=self.supported_cuba())
         self.container = self.container_factory("foo")
-        for particle in self.particle_list:
-            self.container.add_particle(particle)
+        self.container.add_particles(self.particle_list)
         self.bond_list = create_bonds(
             restrict=self.supported_cuba(), particles=self.particle_list)
-        self.ids = [
-            self.container.add_bond(bond) for bond in self.bond_list]
+        self.ids = self.container.add_bonds(self.bond_list)
 
     def test_get_bond(self):
         # given
@@ -363,7 +359,7 @@ class ContainerManipulatingBondsCheck(object):
         bond.data = DataContainer()
 
         # when
-        container.update_bond(bond)
+        container.update_bonds([bond])
 
         # then
         new_bond = container.get_bond(bond.uid)
@@ -378,7 +374,7 @@ class ContainerManipulatingBondsCheck(object):
         bond.data = create_data_container()
 
         # when
-        container.update_bond(bond)
+        container.update_bonds([bond])
 
         # then
         bond.data = create_data_container(restrict=self.supported_cuba())
@@ -393,7 +389,7 @@ class ContainerManipulatingBondsCheck(object):
         # then
         with self.assertRaises(ValueError):
             # when
-            self.container.update_bond(bond)
+            self.container.update_bonds([bond])
 
     def test_remove_bond(self):
         # given
@@ -401,7 +397,7 @@ class ContainerManipulatingBondsCheck(object):
         uid = self.ids[1]
 
         # when
-        container.remove_bond(uid)
+        container.remove_bonds([uid])
 
         # then
         bonds = self.bond_list[:]
@@ -416,7 +412,7 @@ class ContainerManipulatingBondsCheck(object):
         # then
         with self.assertRaises(KeyError):
             # when
-            self.container.remove_bond(uuid.UUID(int=12124124))
+            self.container.remove_bonds([uuid.UUID(int=12124124)])
 
     def test_iter_bonds_when_passing_ids(self):
         # given
