@@ -336,7 +336,31 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         'get item': 'get_point',
         'add item': 'add_point',
         'update item': 'update_point',
-        'iter items': 'iter_points'}
+        'iter items': 'iter_points',
+        'count items': 'count_of'}
+
+    def count_items_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['count items'])
+        return method(*args, **kwrds)
+
+    def test_count_items(self):
+        container = self.container
+
+        # container without items
+        self.assertEqual(
+            self.count_items_operation(container, CUBA.POINT),
+            0
+        )
+
+        # container with items
+        num_items = len(self.item_list)
+        for item in self.item_list:
+            self.add_operation(container, item)
+
+        self.assertEqual(
+            self.count_items_operation(container, CUBA.POINT),
+            num_items
+        )    
 
     def test_update_item_coordniates(self):
         # given
@@ -377,14 +401,21 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         'add item': 'none',
         'update item': 'none',
         'iter items': 'none',
-        'has items': 'none'}
+        'has items': 'none',
+        'count items': 'none'}
 
     points_range = None
 
     point_groups = [1]
 
+    item_type = None
+
     def has_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['has items'])
+        return method(*args, **kwrds)
+
+    def count_items_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['count items'])
         return method(*args, **kwrds)
 
     def test_has_items(self):
@@ -396,6 +427,25 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         # container with items
         self.add_operation(container, self.item_list[0])
         self.assertTrue(self.has_items_operation(container))
+
+    def test_count_items(self):
+        container = self.container
+
+        # container without items
+        self.assertEqual(
+            self.count_items_operation(container, self.item_type),
+            0
+        )
+
+        # container with items
+        num_items = len(self.item_list)
+        for item in self.item_list:
+            self.add_operation(container, item)
+
+        self.assertEqual(
+            self.count_items_operation(container, self.item_type),
+            num_items
+        )  
 
     def test_update_item_points(self):
         # given
@@ -443,11 +493,14 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_edge',
         'update item': 'update_edge',
         'iter items': 'iter_edges',
-        'has items': 'has_edges'}
+        'has items': 'has_edges',
+        'count items': 'count_of'}
 
     points_range = [2]
 
     point_groups = [1, 2]
+
+    item_type = CUBA.EDGE
 
     def create_items(self):
         uids = self.uids
@@ -476,11 +529,14 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_face',
         'update item': 'update_face',
         'iter items': 'iter_faces',
-        'has items': 'has_faces'}
+        'has items': 'has_faces',
+        'count items': 'count_of'}
 
     points_range = [3, 4]
 
     point_groups = [1, 2, 3, 4]
+
+    item_type = CUBA.FACE
 
     def create_items(self):
         uids = self.uids
@@ -509,11 +565,14 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_cell',
         'update item': 'update_cell',
         'iter items': 'iter_cells',
-        'has items': 'has_cells'}
+        'has items': 'has_cells',
+        'count items': 'count_of'}
 
     points_range = range(4, 8)
 
     point_groups = [1, 2, 3, 4]
+
+    item_type = CUBA.CELL
 
     def create_items(self):
         uids = self.uids
