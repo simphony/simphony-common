@@ -276,10 +276,10 @@ class ABCMesh(object):
         Parameters
         ----------
         uids : iterable of uuid.UUID  or None
-            When the uids are provided, then the points are returned in the same
-            order the uids are returned by the iterable. If uids is None, then
-            all points are returned by the interable and there is no restriction
-            on the order that they are returned.
+            When the uids are provided, then the points are returned in the
+            same order the uids are returned by the iterable. If uids is None,
+            then all points are returned by the interable and there is no
+            restriction on the order that they are returned.
 
         Yields
         ------
