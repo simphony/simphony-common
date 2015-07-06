@@ -358,3 +358,25 @@ class ABCParticles(object):
     def has_bond(self, uid):
         """Checks if a bond with the given uid already exists
         in the container."""
+
+    @abstractmethod
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """

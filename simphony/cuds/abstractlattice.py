@@ -80,3 +80,7 @@ class ABCLattice(object):
         coordinates : float[3]
 
         """
+
+    @abstractmethod
+    def count_of(self, item_type):
+        pass
