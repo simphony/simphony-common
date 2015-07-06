@@ -3,6 +3,7 @@ from simphony.cuds.lattice import LatticeNode
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 
 import numpy as np
 
@@ -29,6 +30,10 @@ class H5Lattice(ABCLattice):
 
         self._table = IndexedDataContainerTable(group, 'lattice')
         self._data = IndexedDataContainerTable(group, 'data')
+
+        self._allowed_item_types = [
+            CUBA.NODE
+        ]
 
     @classmethod
     def create_new(cls, group, type, base_vect, size, origin, record=None):
@@ -123,6 +128,34 @@ class H5Lattice(ABCLattice):
         else:
             for index in indices:
                 yield self.get_node(index)
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        if item_type in self._allowed_item_types:
+            if item_type == CUBA.NODE:
+                return self._table.nrows
+        else:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def get_coordinate(self, index):
         """ Get coordinate of the given index coordinate.

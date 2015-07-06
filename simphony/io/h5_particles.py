@@ -4,6 +4,7 @@ import tables
 import numpy
 
 from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.cuds.particles import Particle, Bond
@@ -126,6 +127,11 @@ class H5Particles(ABCParticles):
         self._particles = H5ParticleItems(group, 'particles')
         self._bonds = H5BondItems(group, 'bonds')
 
+        self._allowed_item_types = [
+            CUBA.PARTICLE,
+            CUBA.BOND
+        ]
+
     @property
     def name(self):
         """ The name of the container
@@ -247,3 +253,33 @@ class H5Particles(ABCParticles):
     def has_bond(self, uid):
         """Checks if a bond with uid "uid" exists in the container."""
         return uid in self._bonds
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        if item_type in self._allowed_item_types:
+            if item_type == CUBA.PARTICLE:
+                return self._particles.nrows
+            if item_type == CUBA.BOND:
+                return self._bonds.nrows
+        else:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
