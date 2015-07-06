@@ -9,6 +9,7 @@ from simphony.testing.utils import (
 from simphony.cuds.lattice import (
     LatticeNode, make_square_lattice, make_rectangular_lattice,
     make_orthorombicp_lattice, make_hexagonal_lattice, make_cubic_lattice)
+from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 

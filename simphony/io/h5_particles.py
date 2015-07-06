@@ -277,9 +277,9 @@ class H5Particles(ABCParticles):
 
         if item_type in self._allowed_item_types:
             if item_type == CUBA.PARTICLE:
-                return self._particles.nrows
+                return len(self._particles)
             if item_type == CUBA.BOND:
-                return self._bonds.nrows
+                return len(self._bonds)
         else:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))

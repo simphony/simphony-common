@@ -6,6 +6,7 @@ from simphony.testing.utils import (
     compare_particles, create_particles, compare_bonds, create_bonds,
     create_data_container)
 from simphony.cuds.particles import Particle, Bond
+from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
@@ -228,6 +229,26 @@ class ContainerManipulatingParticlesCheck(object):
 
         # then
         self.assertEqual(particle.uid, self.particle_list[-1].uid)
+
+    def test_count_of_particles(self):
+        # given
+        container = self.container
+        particle_list = self.particle_list
+
+        # then
+        # The order of iteration is not important in this case.
+        count_original = len(particle_list)
+        count_container = container.count_of(CUBA.PARTICLE)
+        self.assertEqual(count_original, count_container)
+
+    def test_count_of_particles_passing_unsupported_type(self):
+        # given
+        container = self.container
+
+        # then
+        # The order of iteration is not important in this case.
+        with self.assertRaises(ValueError):
+            count_container = container.count_of(CUBA.EDGE)
 
 
 class ContainerAddBondsCheck(object):
@@ -457,3 +478,23 @@ class ContainerManipulatingBondsCheck(object):
 
         # then
         self.assertEqual(bond.uid, self.bond_list[-1].uid)
+
+    def test_count_of_bonds(self):
+        # given
+        container = self.container
+        bond_list = self.bond_list
+
+        # then
+        # The order of iteration is not important in this case.
+        count_original = len(bond_list)
+        count_container = container.count_of(CUBA.BOND)
+        self.assertEqual(count_original, count_container)
+
+    def test_count_of_bonds_passing_unsupported_type(self):
+        # given
+        container = self.container
+
+        # then
+        # The order of iteration is not important in this case.
+        with self.assertRaises(ValueError):
+            count_container = container.count_of(CUBA.EDGE)
