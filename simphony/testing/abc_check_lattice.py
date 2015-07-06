@@ -142,6 +142,25 @@ class CheckLatticeNodeOperations(object):
         # Check that `new_node` is not the same instance as `node`
         self.assertIsNot(new_node, node)
 
+    def test_count_of_nodes(self):
+        # given
+        container = self.container
+
+        # then
+        # The order of iteration is not important in this case.
+        count_original = reduce(lambda x,y: x*y, self.size)
+        count_container = container.count_of(CUBA.NODE)
+        self.assertEqual(count_original, count_container)
+
+    def test_count_of_nodes_passing_unsupported_type(self):
+        # given
+        container = self.container
+
+        # then
+        # The order of iteration is not important in this case.
+        with self.assertRaises(ValueError):
+            count_container = container.count_of(CUBA.EDGE)
+
 
 class CheckLatticeNodeCoordinates(object):
 

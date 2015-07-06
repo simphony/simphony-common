@@ -152,7 +152,7 @@ class H5Lattice(ABCLattice):
 
         if item_type in self._allowed_item_types:
             if item_type == CUBA.NODE:
-                return self._table.nrows
+                return len(self._table)
         else:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
