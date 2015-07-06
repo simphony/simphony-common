@@ -360,7 +360,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         self.assertEqual(
             self.count_items_operation(container, CUBA.POINT),
             num_items
-        )    
+        )
 
     def test_update_item_coordniates(self):
         # given
@@ -445,7 +445,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         self.assertEqual(
             self.count_items_operation(container, self.item_type),
             num_items
-        )  
+        )
 
     def test_update_item_points(self):
         # given

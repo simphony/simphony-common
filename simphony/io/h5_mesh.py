@@ -762,7 +762,7 @@ class H5Mesh(object):
         Parameter
         ---------
         item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.         
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------
@@ -772,7 +772,8 @@ class H5Mesh(object):
         Raises
         ------
         ValueError :
-            If the type of the item is not supported in the current container. 
+            If the type of the item is not supported in the current
+            container.
 
         """
 
@@ -786,8 +787,8 @@ class H5Mesh(object):
             if item_type == CUBA.CELL:
                 return self._group.cells.nrows
         else:
-            error_str = "Trying to obtain count a of non-supported item-type: {}"
-            raise ValueError(error_str.format(cell.uid))
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def _generate_uid(self):
         """ Provides and uid for the object

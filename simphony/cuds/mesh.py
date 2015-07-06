@@ -690,7 +690,7 @@ class Mesh(ABCMesh):
         Parameter
         ---------
         item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.         
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------
@@ -700,7 +700,8 @@ class Mesh(ABCMesh):
         Raises
         ------
         ValueError :
-            If the type of the item is not supported in the current container. 
+            If the type of the item is not supported in the current
+            container.
 
         """
 
@@ -714,8 +715,8 @@ class Mesh(ABCMesh):
             if item_type == CUBA.CELL:
                 return len(self._cells)
         else:
-            error_str = "Trying to obtain count a of non-supported item-type: {}"
-            raise ValueError(error_str.format(cell.uid))
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def _generate_uuid(self):
         """ Provides a uuid for the object
