@@ -54,6 +54,10 @@ class Lattice(ABCLattice):
         self._dcs = np.empty(size, dtype=object)
         self._data = DataContainer()
 
+        self._allowed_item_types = [
+            CUBA.NODE
+        ]
+
     def get_node(self, index):
         """Get a copy of the node corresponding to the given index.
 
@@ -131,6 +135,34 @@ class Lattice(ABCLattice):
             return x, y, z
         else:
             return self.origin + self.base_vect*np.array(index)
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        if item_type in self._allowed_item_types:
+            if item_type == CUBA.NODE:
+                return len(self._dcs)
+        else:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     @property
     def type(self):

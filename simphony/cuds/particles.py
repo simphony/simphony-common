@@ -36,6 +36,11 @@ class Particles(ABCParticles):
         self._data = DataContainer()
         self.name = name
 
+        self._allowed_item_types = [
+            CUBA.PARTICLE,
+            CUBA.BOND
+        ]
+
     @property
     def data(self):
         return DataContainer(self._data)
@@ -402,6 +407,36 @@ class Particles(ABCParticles):
         """Checks if a bond with the given uid already exists
         in the container."""
         return uid in self._bonds
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        if item_type in self._allowed_item_types:
+            if item_type == CUBA.PARTICLE:
+                return len(self._points)
+            if item_type == CUBA.BOND:
+                return len(self._edges)
+        else:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     # Utility methods ########################################################
 
