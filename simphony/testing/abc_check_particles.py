@@ -248,7 +248,7 @@ class ContainerManipulatingParticlesCheck(object):
         # then
         # The order of iteration is not important in this case.
         with self.assertRaises(ValueError):
-            count_container = container.count_of(CUBA.EDGE)
+            container.count_of(CUBA.EDGE)
 
 
 class ContainerAddBondsCheck(object):
@@ -497,4 +497,4 @@ class ContainerManipulatingBondsCheck(object):
         # then
         # The order of iteration is not important in this case.
         with self.assertRaises(ValueError):
-            count_container = container.count_of(CUBA.EDGE)
+            container.count_of(CUBA.EDGE)

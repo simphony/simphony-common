@@ -148,7 +148,7 @@ class CheckLatticeNodeOperations(object):
 
         # then
         # The order of iteration is not important in this case.
-        count_original = reduce(lambda x,y: x*y, self.size)
+        count_original = reduce(lambda x, y: x*y, self.size)
         count_container = container.count_of(CUBA.NODE)
         self.assertEqual(count_original, count_container)
 
@@ -159,7 +159,7 @@ class CheckLatticeNodeOperations(object):
         # then
         # The order of iteration is not important in this case.
         with self.assertRaises(ValueError):
-            count_container = container.count_of(CUBA.EDGE)
+            container.count_of(CUBA.EDGE)
 
 
 class CheckLatticeNodeCoordinates(object):

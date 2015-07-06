@@ -367,7 +367,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
         # container without items
         with self.assertRaises(ValueError):
-            count = self.count_items_operation(container, CUBA.NODE)
+            self.count_items_operation(container, CUBA.NODE)
 
     def test_update_item_coordniates(self):
         # given
@@ -459,7 +459,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
         # container without items
         with self.assertRaises(ValueError):
-            count = self.count_items_operation(container, CUBA.NODE)
+            self.count_items_operation(container, CUBA.NODE)
 
     def test_update_item_points(self):
         # given
