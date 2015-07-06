@@ -71,3 +71,10 @@ class CUBA(IntEnum):
     LN_OF_RESTITUTION_COEFFICIENT = 65
     ROLLING_FRICTION = 66
     VOLUME_FRACTION = 67
+    POINT = 68
+    PARTICLE = 69
+    BOND = 70
+    EDGE = 71
+    FACE = 72
+    CELL = 73
+    NODE = 74

@@ -554,4 +554,60 @@ KEYWORDS = {
         number=67,
         shape=[1],
         dtype=numpy.float64),
+    'POINT': Keyword(
+        name='Point',
+        description='Point entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='POINT',
+        number=68,
+        shape=[1],
+        dtype=numpy.int32),
+    'PARTICLE': Keyword(
+        name='Particle',
+        description='Particle entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='PARTICLE',
+        number=69,
+        shape=[1],
+        dtype=numpy.int32),
+    'BOND': Keyword(
+        name='Bond',
+        description='Bond entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='BOND',
+        number=70,
+        shape=[1],
+        dtype=numpy.int32),
+    'EDGE': Keyword(
+        name='Edge',
+        description='Edge entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='EDGE',
+        number=71,
+        shape=[1],
+        dtype=numpy.int32),
+    'FACE': Keyword(
+        name='Face',
+        description='Face entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='FACE',
+        number=72,
+        shape=[1],
+        dtype=numpy.int32),
+    'CELL': Keyword(
+        name='Cell',
+        description='Cell entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='CELL',
+        number=73,
+        shape=[1],
+        dtype=numpy.int32),
+    'NODE': Keyword(
+        name='Node',
+        description='Nod entity identifier',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='NODE',
+        number=74,
+        shape=[1],
+        dtype=numpy.int32),
 }
