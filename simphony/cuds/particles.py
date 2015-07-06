@@ -68,7 +68,8 @@ class Particles(ABCParticles):
         Raises
         ------
         ValueError :
-            when there is a particle with an uids that already exists in the container.
+            when there is a particle with an uids that already exists
+            in the container.
 
         Examples
         --------
@@ -108,7 +109,8 @@ class Particles(ABCParticles):
         Raises
         ------
         ValueError :
-            when there is a bond with an uuid that already exists in the container.
+            when there is a bond with an uuid that already exists
+            in the container.
 
         Examples
         --------
@@ -129,8 +131,8 @@ class Particles(ABCParticles):
         """Updates a set of particles from the provided iterable.
 
         Takes the uids of the particles and searches inside the container for
-        those particles. If the particles exists, they are replaced in the container.
-        If any particle doesn't exist, it will raise an exception.
+        those particles. If the particles exists, they are replaced in the
+        container. If any particle doesn't exist, it will raise an exception.
 
         Parameters
         ----------
@@ -145,7 +147,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        Given a set of Particle objects that already exists in the Particles container
+        Given a set of Particle objects that already exists in the container
         (taken with the 'get_particle' method for example), just call the
         function passing the Particle items as parameter.
 
@@ -180,7 +182,7 @@ class Particles(ABCParticles):
 
         Examples
         --------
-        Given a set of Bond objects that already exists in the Particles container
+        Given a set of Bond objects that already exists in the container
         (taken with the 'get_bond' method for example) just call the
         function passing the set of Bond as parameter.
 
