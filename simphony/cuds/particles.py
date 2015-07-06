@@ -2,6 +2,7 @@
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
+from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
@@ -431,9 +432,9 @@ class Particles(ABCParticles):
 
         if item_type in self._allowed_item_types:
             if item_type == CUBA.PARTICLE:
-                return len(self._points)
+                return len(self._particles)
             if item_type == CUBA.BOND:
-                return len(self._edges)
+                return len(self._bonds)
         else:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
