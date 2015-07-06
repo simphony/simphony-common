@@ -474,49 +474,49 @@
   number: 67
   shape: [1]
   type: double
-- description: Point entity identifier
+- description: Point item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: POINT
   name: Point
   number: 68
   shape: [1]
   type: integer
-- description: Particle entity identifier
+- description: Particle item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: PARTICLE
   name: Particle
   number: 69
   shape: [1]
   type: integer
-- description: Bond entity identifier
+- description: Bond item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: BOND
   name: Bond
   number: 70
   shape: [1]
   type: integer
-- description: Edge entity identifier
+- description: Edge item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: EDGE
   name: Edge
   number: 71
   shape: [1]
   type: integer
-- description: Face entity identifier
+- description: Face item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: FACE
   name: Face
   number: 72
   shape: [1]
   type: integer
-- description: Cell entity identifier
+- description: Cell item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: CELL
   name: Cell
   number: 73
   shape: [1]
   type: integer
-- description: Nod entity identifier
+- description: Nod item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: NODE
   name: Node

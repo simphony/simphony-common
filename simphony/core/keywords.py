@@ -556,7 +556,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'POINT': Keyword(
         name='Point',
-        description='Point entity identifier',  # noqa
+        description='Point item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='POINT',
         number=68,
@@ -564,7 +564,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'PARTICLE': Keyword(
         name='Particle',
-        description='Particle entity identifier',  # noqa
+        description='Particle item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='PARTICLE',
         number=69,
@@ -572,7 +572,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'BOND': Keyword(
         name='Bond',
-        description='Bond entity identifier',  # noqa
+        description='Bond item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='BOND',
         number=70,
@@ -580,7 +580,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'EDGE': Keyword(
         name='Edge',
-        description='Edge entity identifier',  # noqa
+        description='Edge item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='EDGE',
         number=71,
@@ -588,7 +588,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'FACE': Keyword(
         name='Face',
-        description='Face entity identifier',  # noqa
+        description='Face item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='FACE',
         number=72,
@@ -596,7 +596,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'CELL': Keyword(
         name='Cell',
-        description='Cell entity identifier',  # noqa
+        description='Cell item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='CELL',
         number=73,
@@ -604,7 +604,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'NODE': Keyword(
         name='Node',
-        description='Nod entity identifier',  # noqa
+        description='Nod item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='NODE',
         number=74,
