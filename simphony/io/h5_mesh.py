@@ -13,6 +13,7 @@ from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
 from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 
 from simphony.io.data_container_table import DataContainerTable
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
@@ -138,6 +139,13 @@ class H5Mesh(object):
 
         if "cells" not in self._group:
             self._create_cells_table()
+
+        self._allowed_item_types = [
+            CUBA.POINT,
+            CUBA.EDGE,
+            CUBA.FACE,
+            CUBA.CELL
+        ]
 
     @property
     def name(self):
@@ -747,6 +755,39 @@ class H5Mesh(object):
 
         """
         return self._group.cells.nrows != 0
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.         
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current container. 
+
+        """
+
+        if item_type in self._allowed_item_types:
+            if item_type == CUBA.POINT:
+                return self._group.points.nrows
+            if item_type == CUBA.EDGE:
+                return self._group.edges.nrows
+            if item_type == CUBA.FACE:
+                return self._group.faces.nrows
+            if item_type == CUBA.CELL:
+                return self._group.cells.nrows
+        else:
+            error_str = "Trying to obtain count a of non-supported item-type: {}"
+            raise ValueError(error_str.format(cell.uid))
 
     def _generate_uid(self):
         """ Provides and uid for the object

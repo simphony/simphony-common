@@ -88,3 +88,7 @@ class ABCMesh(object):
     @abstractmethod
     def has_cells(self):
         pass
+
+    @abstractmethod
+    def count_of(self, item_type):
+        pass
