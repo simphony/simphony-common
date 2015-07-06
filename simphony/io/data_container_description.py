@@ -70,16 +70,23 @@ class Data(tables.IsDescription):
     ln_of_restitution_coefficient = tables.Float64Col(pos=63)
     rolling_friction = tables.Float64Col(pos=64)
     volume_fraction = tables.Float64Col(pos=65)
+    point = tables.Int32Col(pos=66)
+    particle = tables.Int32Col(pos=67)
+    bond = tables.Int32Col(pos=68)
+    edge = tables.Int32Col(pos=69)
+    face = tables.Int32Col(pos=70)
+    cell = tables.Int32Col(pos=71)
+    node = tables.Int32Col(pos=72)
 
 
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(66,))
+    mask = tables.BoolCol(pos=1, shape=(73,))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(66,))
+    mask = tables.BoolCol(pos=1, shape=(73,))
