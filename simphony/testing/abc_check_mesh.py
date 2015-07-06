@@ -362,6 +362,13 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
             num_items
         )
 
+    def test_count_items_with_unsupported_item(self):
+        container = self.container
+
+        # container without items
+        with self.assertRaises(ValueError):
+            count = self.count_items_operation(container, CUBA.NODE)
+
     def test_update_item_coordniates(self):
         # given
         container = self.container
@@ -446,6 +453,13 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
             self.count_items_operation(container, self.item_type),
             num_items
         )
+
+    def test_count_items_with_unsupported_item(self):
+        container = self.container
+
+        # container without items
+        with self.assertRaises(ValueError):
+            count = self.count_items_operation(container, CUBA.NODE)
 
     def test_update_item_points(self):
         # given
