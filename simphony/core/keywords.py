@@ -604,7 +604,7 @@ KEYWORDS = {
         dtype=numpy.int32),
     'NODE': Keyword(
         name='Node',
-        description='Nod item identifier',  # noqa
+        description='Node item identifier',  # noqa
         domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
         key='NODE',
         number=74,

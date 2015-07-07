@@ -516,7 +516,7 @@
   number: 73
   shape: [1]
   type: integer
-- description: Nod item identifier
+- description: Node item identifier
   domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
   key: NODE
   name: Node
