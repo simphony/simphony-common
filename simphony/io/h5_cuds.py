@@ -17,7 +17,7 @@ class H5CUDS(object):
 
         Parameters
         ----------
-        file : table.file
+        handle : table.file
             file to be used
 
         """
