@@ -113,7 +113,7 @@ class CheckLatticeNodeOperations(object):
     def test_update_nodes(self):
         container = self.container
 
-        indices = ((2,3,4), (1,2,3))
+        indices = ((2, 3, 4), (1, 2, 3))
         nodes = [container.get_node(index) for index in indices]
         for node in nodes:
             node.data = create_data_container(restrict=self.supported_cuba())
@@ -129,7 +129,7 @@ class CheckLatticeNodeOperations(object):
     def test_update_nodes_with_extra_keywords(self):
         container = self.container
 
-        indices = ((2,3,4), (1,2,3))
+        indices = ((2, 3, 4), (1, 2, 3))
         nodes = [container.get_node(index) for index in indices]
         # Update with full DataContainer.
         for node in nodes:
