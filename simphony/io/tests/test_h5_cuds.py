@@ -486,7 +486,7 @@ class TestH5CUDSVersions(unittest.TestCase):
             h5file.root._v_attrs.cuds_version = -1
 
         with self.assertRaises(ValueError):
-            H5CUDS.open(self.filename)
+            H5CUDS.open(self.existing_filename)
 
 if __name__ == '__main__':
     unittest.main()
