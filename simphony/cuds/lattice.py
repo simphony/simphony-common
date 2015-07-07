@@ -77,7 +77,7 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        nodes : iterable to LatticeNode objects
+        nodes : iterable of LatticeNode objects
             reference to LatticeNode objects from where the data is copied
             to the Lattice
 
