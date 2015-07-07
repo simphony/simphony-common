@@ -160,7 +160,7 @@ class Lattice(ABCLattice):
 
         if item_type in self._allowed_item_types:
             if item_type == CUBA.NODE:
-                return reduce(lambda x, y: x*y, self._size)
+                return np.prod(self._size)
         else:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
