@@ -16,5 +16,7 @@ abstract class ABCParticles {
   {abstract} remove_bond(uid: uuid.UUID)
   {abstract} iter_bonds(uids: iterable of uuid.UUID {optional}): iterator of Bond {unordered}
   {abstract} has_bond(uid: uuid.UUID): boolean
+
+  {abstract} count_of(): integer
 }
 @enduml
