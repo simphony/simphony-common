@@ -236,7 +236,6 @@ class ContainerManipulatingParticlesCheck(object):
         particle_list = self.particle_list
 
         # then
-        # The order of iteration is not important in this case.
         count_original = len(particle_list)
         count_container = container.count_of(CUBA.PARTICLE)
         self.assertEqual(count_original, count_container)
@@ -246,7 +245,6 @@ class ContainerManipulatingParticlesCheck(object):
         container = self.container
 
         # then
-        # The order of iteration is not important in this case.
         with self.assertRaises(ValueError):
             container.count_of(CUBA.EDGE)
 
@@ -485,7 +483,6 @@ class ContainerManipulatingBondsCheck(object):
         bond_list = self.bond_list
 
         # then
-        # The order of iteration is not important in this case.
         count_original = len(bond_list)
         count_container = container.count_of(CUBA.BOND)
         self.assertEqual(count_original, count_container)
@@ -495,6 +492,5 @@ class ContainerManipulatingBondsCheck(object):
         container = self.container
 
         # then
-        # The order of iteration is not important in this case.
         with self.assertRaises(ValueError):
             container.count_of(CUBA.EDGE)
