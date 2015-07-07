@@ -4,7 +4,8 @@ class H5CUDS as "H5CUDS(Group)" {
    particle : Group = Particle
    mesh : Group = Bond
    lattice : Group = Lattice
-
+  -- Node Attributes --
+  cuds_version: int
 }
 
 class Particle as "Particle(Group)" {
