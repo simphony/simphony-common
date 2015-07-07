@@ -211,12 +211,12 @@ class Mesh(ABCMesh):
 
         self._data = dc.DataContainer()
 
-        self._allowed_item_types = [
-            CUBA.POINT,
-            CUBA.EDGE,
-            CUBA.FACE,
-            CUBA.CELL
-        ]
+        self._items_count = {
+            CUBA.POINT: lambda: self._points,
+            CUBA.EDGE: lambda: self._edges,
+            CUBA.FACE: lambda: self._faces,
+            CUBA.CELL: lambda: self._cells
+        }
 
     @property
     def data(self):
@@ -705,16 +705,9 @@ class Mesh(ABCMesh):
 
         """
 
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.POINT:
-                return len(self._points)
-            if item_type == CUBA.EDGE:
-                return len(self._edges)
-            if item_type == CUBA.FACE:
-                return len(self._faces)
-            if item_type == CUBA.CELL:
-                return len(self._cells)
-        else:
+        try:
+            return len(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 

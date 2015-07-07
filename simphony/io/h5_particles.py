@@ -127,10 +127,10 @@ class H5Particles(ABCParticles):
         self._particles = H5ParticleItems(group, 'particles')
         self._bonds = H5BondItems(group, 'bonds')
 
-        self._allowed_item_types = [
-            CUBA.PARTICLE,
-            CUBA.BOND
-        ]
+        self._items_count = {
+            CUBA.PARTICLE: lambda: self._particles,
+            CUBA.BOND: lambda: self._bonds
+        }
 
     @property
     def name(self):
@@ -274,12 +274,8 @@ class H5Particles(ABCParticles):
             container.
 
         """
-
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.PARTICLE:
-                return len(self._particles)
-            if item_type == CUBA.BOND:
-                return len(self._bonds)
-        else:
+        try:
+            return len(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))

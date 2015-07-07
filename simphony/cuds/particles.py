@@ -37,10 +37,10 @@ class Particles(ABCParticles):
         self._data = DataContainer()
         self.name = name
 
-        self._allowed_item_types = [
-            CUBA.PARTICLE,
-            CUBA.BOND
-        ]
+        self._items_count = {
+            CUBA.PARTICLE: lambda: self._particles,
+            CUBA.BOND: lambda: self._bonds
+        }
 
     @property
     def data(self):
@@ -429,13 +429,9 @@ class Particles(ABCParticles):
             container.
 
         """
-
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.PARTICLE:
-                return len(self._particles)
-            if item_type == CUBA.BOND:
-                return len(self._bonds)
-        else:
+        try:
+            return len(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 

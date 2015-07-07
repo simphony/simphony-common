@@ -122,7 +122,6 @@ class H5Mesh(object):
     """
 
     def __init__(self, group, meshFile):
-
         self._file = meshFile
         self._group = group
         self._data = IndexedDataContainerTable(group, 'data')
@@ -140,12 +139,12 @@ class H5Mesh(object):
         if "cells" not in self._group:
             self._create_cells_table()
 
-        self._allowed_item_types = [
-            CUBA.POINT,
-            CUBA.EDGE,
-            CUBA.FACE,
-            CUBA.CELL
-        ]
+        self._items_count = {
+            CUBA.POINT: lambda: self._group.points,
+            CUBA.EDGE: lambda: self._group.edges,
+            CUBA.FACE: lambda: self._group.faces,
+            CUBA.CELL: lambda: self._group.cells
+        }
 
     @property
     def name(self):
@@ -338,7 +337,6 @@ class H5Mesh(object):
             in the mesh
 
         """
-
         if point.uid is None:
             point.uid = self._generate_uid()
 
@@ -373,7 +371,6 @@ class H5Mesh(object):
             in the mesh
 
         """
-
         if edge.uid is None:
             edge.uid = self._generate_uid()
         else:
@@ -412,7 +409,6 @@ class H5Mesh(object):
             in the mesh
 
         """
-
         if face.uid is None:
             face.uid = self._generate_uid()
         else:
@@ -451,7 +447,6 @@ class H5Mesh(object):
             in the mesh
 
         """
-
         if cell.uid is None:
             cell.uid = self._generate_uid()
         else:
@@ -492,7 +487,6 @@ class H5Mesh(object):
             If the point was not found in the mesh container.
 
         """
-
         for row in self._group.points.where(
                 'uid == value', condvars={'value': point.uid.hex}):
             row['coordinates'] = list(point.coordinates)
@@ -521,7 +515,6 @@ class H5Mesh(object):
             If the edge was not found in the mesh container.
 
         """
-
         for row in self._group.edges.where(
                 'uid == value', condvars={'value': edge.uid.hex}):
             n = len(edge.points)
@@ -553,7 +546,6 @@ class H5Mesh(object):
             If the face was not found in the mesh container.
 
         """
-
         for row in self._group.faces.where(
                 'uid == value', condvars={'value': face.uid.hex}):
             n = len(face.points)
@@ -585,7 +577,6 @@ class H5Mesh(object):
             If the cell was not found in the mesh container.
 
         """
-
         for row in self._group.cells.where(
                 'uid == value', condvars={'value': cell.uid.hex}):
             n = len(cell.points)
@@ -617,7 +608,6 @@ class H5Mesh(object):
             Iterator over the points
 
         """
-
         if uids is None:
             for row in self._group.points:
                 yield Point(
@@ -646,7 +636,6 @@ class H5Mesh(object):
             Iterator over the selected edges
 
         """
-
         if uids is None:
             for row in self._group.edges:
                 yield Edge(
@@ -676,7 +665,6 @@ class H5Mesh(object):
             Iterator over the faces
 
         """
-
         if uids is None:
             for row in self._group.faces:
                 yield Face(
@@ -706,7 +694,6 @@ class H5Mesh(object):
             Iterator over the selected cells
 
         """
-
         if uids is None:
             for row in self._group.cells:
                 yield Cell(
@@ -729,7 +716,6 @@ class H5Mesh(object):
             False otherwise
 
         """
-
         return self._group.edges.nrows != 0
 
     def has_faces(self):
@@ -776,17 +762,9 @@ class H5Mesh(object):
             container.
 
         """
-
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.POINT:
-                return self._group.points.nrows
-            if item_type == CUBA.EDGE:
-                return self._group.edges.nrows
-            if item_type == CUBA.FACE:
-                return self._group.faces.nrows
-            if item_type == CUBA.CELL:
-                return self._group.cells.nrows
-        else:
+        try:
+            return len(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 

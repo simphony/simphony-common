@@ -31,9 +31,9 @@ class H5Lattice(ABCLattice):
         self._table = IndexedDataContainerTable(group, 'lattice')
         self._data = IndexedDataContainerTable(group, 'data')
 
-        self._allowed_item_types = [
-            CUBA.NODE
-        ]
+        self._items_count = {
+            CUBA.NODE: lambda: self._table
+        }
 
     @classmethod
     def create_new(cls, group, type, base_vect, size, origin, record=None):
@@ -149,11 +149,9 @@ class H5Lattice(ABCLattice):
             container.
 
         """
-
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.NODE:
-                return len(self._table)
-        else:
+        try:
+            return len(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 

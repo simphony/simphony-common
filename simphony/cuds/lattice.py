@@ -55,9 +55,9 @@ class Lattice(ABCLattice):
         self._dcs = np.empty(size, dtype=object)
         self._data = DataContainer()
 
-        self._allowed_item_types = [
-            CUBA.NODE
-        ]
+        self._items_count = {
+            CUBA.NODE: lambda: self._size
+        }
 
     def get_node(self, index):
         """Get a copy of the node corresponding to the given index.
@@ -157,11 +157,9 @@ class Lattice(ABCLattice):
             container.
 
         """
-
-        if item_type in self._allowed_item_types:
-            if item_type == CUBA.NODE:
-                return np.prod(self._size)
-        else:
+        try:
+            return np.prod(self._items_count[item_type]())
+        except:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 
