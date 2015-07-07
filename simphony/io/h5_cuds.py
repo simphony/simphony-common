@@ -155,8 +155,7 @@ class H5CUDS(object):
             group, lattice.type, lattice.base_vect,
             lattice.size, lattice.origin)
         h5_lattice.data = lattice.data
-        for node in lattice.iter_nodes():
-            h5_lattice.update_node(node)
+        h5_lattice.update_nodes(lattice.iter_nodes())
 
         return h5_lattice
 
