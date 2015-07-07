@@ -91,7 +91,7 @@ class H5Lattice(ABCLattice):
 
         Parameters
         ----------
-        nodes : iterator of LatticeNodes
+        nodes : iterable of LatticeNode objects
             reference to LatticeNode objects
 
         """
