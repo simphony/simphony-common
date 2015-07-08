@@ -281,10 +281,10 @@ class TestH5CUDS(unittest.TestCase):
         with closing(H5CUDS.open(filename)) as handle:
             m_test = handle.add_mesh(Mesh(name="test"))
             for p in self.points:
-                uid = m_test.add_point(p)
-                self.assertEqual(p.uid, uid)
+                uid = m_test.add_points([p])
+                self.assertEqual(p.uid, uid[0])
                 self.assertEqual(
-                    p.coordinates, m_test.get_point(uid).coordinates)
+                    p.coordinates, m_test.get_point(uid[0]).coordinates)
 
             num_points = sum(1 for _ in m_test.iter_points())
             self.assertEqual(num_points, len(self.points))
