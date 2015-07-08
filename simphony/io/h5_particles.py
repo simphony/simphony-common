@@ -13,6 +13,8 @@ from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
 
+PARTICLES_CUDS_VERSION = 1
+
 
 class _ParticleDescription(tables.IsDescription):
     uid = tables.StringCol(32, pos=0)
@@ -121,6 +123,13 @@ class H5Particles(ABCParticles):
 
     """
     def __init__(self, group):
+        if not ("cuds_version" in group._v_attrs):
+            group._v_attrs.cuds_version = PARTICLES_CUDS_VERSION
+        else:
+            if group._v_attrs.cuds_version != PARTICLES_CUDS_VERSION:
+                raise ValueError(
+                    "Particles file layout has an incompatible version")
+
         self._group = group
         self._data = IndexedDataContainerTable(group, 'data')
         self._particles = H5ParticleItems(group, 'particles')

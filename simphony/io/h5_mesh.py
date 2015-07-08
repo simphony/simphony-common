@@ -21,6 +21,8 @@ MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
 MAX_POINTS_IN_CELL = 8
 
+MESH_CUDS_VERSION = 1
+
 
 class _PointDescriptor(tables.IsDescription):
     """ Descriptor for storing Point information
@@ -121,6 +123,13 @@ class H5Mesh(object):
     """
 
     def __init__(self, group, meshFile):
+
+        if not ("cuds_version" in group._v_attrs):
+            group._v_attrs.cuds_version = MESH_CUDS_VERSION
+        else:
+            if group._v_attrs.cuds_version != MESH_CUDS_VERSION:
+                raise ValueError(
+                    "Mesh file layout has an incompatible version")
 
         self._file = meshFile
         self._group = group

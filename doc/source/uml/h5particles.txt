@@ -9,6 +9,8 @@ class H5Particles as "H5Particles(Group)" {
    particles : Group = Particles
    bonds : Group = Bonds
    data : Table = ContainerData
+   -- Node Attributes --
+   cuds_version: int
 }
 
 class Particles as "Particles(Group)" {
