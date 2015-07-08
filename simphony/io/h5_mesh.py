@@ -316,12 +316,12 @@ class H5Mesh(object):
             raise KeyError(error_str.format(uid))
 
     def add_points(self, points):
-        """ Adds a new point to the mesh container.
+        """ Adds a new set of points to the mesh container.
 
         Parameters
         ----------
-        point : Point
-            Point to be added to the mesh container
+        points : iterable of Point
+            Points to be added to the mesh container
 
         Raises
         ------
@@ -351,12 +351,12 @@ class H5Mesh(object):
         self._group.points.flush()
 
     def add_edges(self, edges):
-        """ Adds a new edge to the mesh container.
+        """ Adds a new set of edges to the mesh container.
 
         Parameters
         ----------
-        edge : Edge
-            Edge to be added to the mesh container
+        edges : iterable of Edge
+            Edges to be added to the mesh container
 
         Raises
         ------
@@ -390,12 +390,12 @@ class H5Mesh(object):
         self._group.edges.flush()
 
     def add_faces(self, faces):
-        """ Adds a new face to the mesh container.
+        """ Adds a new set of faces to the mesh container.
 
         Parameters
         ----------
-        face : Face
-            Face to be added to the mesh container
+        faces : iterable of Face
+            Faces to be added to the mesh container
 
         Raises
         ------
@@ -429,12 +429,12 @@ class H5Mesh(object):
         self._group.faces.flush()
 
     def add_cells(self, cells):
-        """ Adds a new cell to the mesh container.
+        """ Adds a new set of cells to the mesh container.
 
         Parameters
         ----------
-        cell : Cell
-            Cell to be added to the mesh container
+        cells : iterable of Cell
+            Cells to be added to the mesh container
 
         Raises
         ------
@@ -472,18 +472,18 @@ class H5Mesh(object):
     def update_points(self, points):
         """ Updates the information of a point.
 
-        Gets the mesh point identified by the same
-        uid as the provided point and updates its information.
+        Gets the mesh points identified by the same
+        uids as the ones provided points and updates their information.
 
         Parameters
         ----------
-        point : Point
-            Point to be updated
+        points : iterable of Point
+            Points to be updated
 
         Raises
         ------
         KeyError
-            If the point was not found in the mesh container.
+            If any point was not found in the mesh container.
 
         """
         for point in points:
@@ -500,18 +500,18 @@ class H5Mesh(object):
     def update_edges(self, edges):
         """ Updates the information of an edge.
 
-        Gets the mesh edge identified by the same
-        uid as the provided edge and updates its information.
+        Gets the mesh edges identified by the same
+        uids as the ones provided edges and updates their information.
 
         Parameters
         ----------
-        edge : Edge
-            Edge to be updated.
+        edges : iterable of Edge
+            Edges to be updated.
 
         Raises
         ------
         KeyError
-            If the edge was not found in the mesh container.
+            If any edge was not found in the mesh container.
 
         """
         for edge in edges:
@@ -531,18 +531,18 @@ class H5Mesh(object):
     def update_faces(self, faces):
         """ Updates the information of a face.
 
-        Gets the mesh face identified by the same
-        uid as the provided face and updates their information.
+        Gets the mesh faces identified by the same
+        uids as the ones provided in faces and updates their information.
 
         Parameters
         ----------
-        face : Face
-            Face to be updated.
+        faces : iterable of Face
+            Faces to be updated.
 
         Raises
         ------
         KeyError
-            If the face was not found in the mesh container.
+            If any face was not found in the mesh container.
 
         """
         for face in faces:
@@ -560,20 +560,20 @@ class H5Mesh(object):
         row._flush_mod_rows()
 
     def update_cells(self, cells):
-        """ Updates the information of a cell.
+        """ Updates the information of every cell in cells.
 
         Gets the mesh cells identified by the same
-        uids as the provided cells and updates their information.
+        uids as the ones provided in cells and updates their information.
 
         Parameters
         ----------
-        cells : iterable of Cell
+        cellss : iterable of Cell
             Cells to be updated.
 
         Raises
         ------
         KeyError
-            If the cell was not found in the mesh container.
+            If any cell was not found in the mesh container.
 
         """
 
