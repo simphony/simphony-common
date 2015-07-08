@@ -396,7 +396,7 @@ class Mesh(ABCMesh):
                 raise ValueError(err_str.format(edge.uid))
 
             self._edges[edge.uid] = Edge.from_edge(edge)
-            
+
             redges.append(edge.uid)
         return redges
 

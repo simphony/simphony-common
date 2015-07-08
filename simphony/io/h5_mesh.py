@@ -21,6 +21,9 @@ MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
 MAX_POINTS_IN_CELL = 8
 
+err_add = "Trying to add an already existing {} with uid: {}"
+err_upd = "Trying to update an non existing {} with uid: {}"
+
 
 class _PointDescriptor(tables.IsDescription):
     """ Descriptor for storing Point information
@@ -337,8 +340,7 @@ class H5Mesh(object):
 
             for row in self._group.points.where(
                     'uid == value', condvars={'value': point.uid.hex}):
-                error_str = "Trying to add an already existing point with uid {}"
-                raise ValueError(error_str.format(point.uid))
+                raise ValueError(err_add.format('point', point.uid))
 
             row = self._group.points.row
 
@@ -374,8 +376,7 @@ class H5Mesh(object):
             else:
                 for row in self._group.edges.where(
                         'uid == value', condvars={'value': edge.uid.hex}):
-                    message = "Trying to add an already existing edge with uid {}"
-                    raise ValueError(message.format(edge.uid))
+                    raise ValueError(err_add.format('edge', edge.uid))
 
             n = len(edge.points)
 
@@ -415,8 +416,7 @@ class H5Mesh(object):
             else:
                 for row in self._group.faces.where(
                         'uid == value', condvars={'value': face.uid.hex}):
-                    message = "Trying to add an already existing face with uid {}"
-                    raise ValueError(message.format(face.uid))
+                    raise ValueError(err_add.format('face', face.uid))
 
             n = len(face.points)
 
@@ -456,8 +456,7 @@ class H5Mesh(object):
             else:
                 for row in self._group.cells.where(
                         'uid == value', condvars={'value': cell.uid.hex}):
-                    message = "Trying to add an already existing cell with uid"
-                    raise ValueError(message.format(cell.uid))
+                    raise ValueError(err_add.format('cell', cell.uid))
 
             n = len(cell.points)
 
@@ -496,12 +495,13 @@ class H5Mesh(object):
             for row in self._group.points.where(
                     'uid == value', condvars={'value': point.uid.hex}):
                 row['coordinates'] = list(point.coordinates)
-                self._uidData[uuid.UUID(hex=row['data'], version=4)] = point.data
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = point.data
                 row.update()
                 break
             else:
-                err_str = "Trying to update a non existing point with uid: {}"
-                raise ValueError(err_str.format(point.uid))
+                raise ValueError(err_upd.format('point', point.uid))
         row._flush_mod_rows()
 
     def update_edges(self, edges):
@@ -526,14 +526,16 @@ class H5Mesh(object):
                     'uid == value', condvars={'value': edge.uid.hex}):
                 n = len(edge.points)
                 row['n_points'] = n
-                row['points_uids'] = [puid.hex for puid in
-                                      edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
-                self._uidData[uuid.UUID(hex=row['data'], version=4)] = edge.data
+                row['points_uids'] = [
+                    puid.hex for puid in edge.points
+                    ] + [0] * (MAX_POINTS_IN_EDGE-n)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = edge.data
                 row.update()
                 break
             else:
-                err_str = "Trying to update a non existing edge with uid: {}"
-                raise ValueError(err_str.format(edge.uid))
+                raise ValueError(err_upd.format('edge', edge.uid))
         row._flush_mod_rows()
 
     def update_faces(self, faces):
@@ -558,14 +560,16 @@ class H5Mesh(object):
                     'uid == value', condvars={'value': face.uid.hex}):
                 n = len(face.points)
                 row['n_points'] = n
-                row['points_uids'] = [puid.hex for puid in
-                                      face.points] + [0] * (MAX_POINTS_IN_FACE-n)
-                self._uidData[uuid.UUID(hex=row['data'], version=4)] = face.data
+                row['points_uids'] = [
+                    puid.hex for puid in face.points
+                    ] + [0] * (MAX_POINTS_IN_FACE-n)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = face.data
                 row.update()
                 break
             else:
-                err_str = "Trying to update a none existing face with uid: {}"
-                raise ValueError(err_str.format(face.uid))
+                raise ValueError(err_upd.format('face', face.uid))
         row._flush_mod_rows()
 
     def update_cells(self, cells):
@@ -592,15 +596,15 @@ class H5Mesh(object):
                 n = len(cell.points)
                 row['n_points'] = n
                 row['points_uids'] = [
-                    puid.hex for puid in
-                    cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
+                    puid.hex for puid in cell.points
+                    ] + [0] * (MAX_POINTS_IN_CELL-n)
                 self._uidData[
-                    uuid.UUID(hex=row['data'], version=4)] = cell.data
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = cell.data
                 row.update()
                 break
             else:
-                err_str = "Trying to update an non existing cell with uid: {}"
-                raise ValueError(err_str.format(cell.uid))
+                raise ValueError(err_upd.format('cell', cell.uid))
         row._flush_mod_rows()
 
     def iter_points(self, uids=None):

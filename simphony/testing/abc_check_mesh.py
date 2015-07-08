@@ -401,10 +401,10 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        point_uids = container.add_points(
-            [Point((1.0 * i, 1.0 * i, 1.0 * i))
-            for i in range(self.points_range[-1])]
-            )
+        point_uids = container.add_points([
+            Point((1.0 * i, 1.0 * i, 1.0 * i))
+            for i in range(self.points_range[-1])
+            ])
 
         # increasing
         for n in self.points_range:
