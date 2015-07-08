@@ -39,7 +39,7 @@ class ContainerAddParticlesCheck(object):
         self.assertTrue(container.has_particle(self.ids[6]))
         self.assertFalse(container.has_particle(uuid.UUID(int=1234)))
 
-    def test_add_particle(self):
+    def test_add_particles(self):
         # given and the setUp
         container = self.container
 
@@ -48,7 +48,7 @@ class ContainerAddParticlesCheck(object):
             self.assertTrue(container.has_particle(particle.uid))
             self.assertEqual(particle.uid, self.ids[index])
 
-    def test_add_particle_with_unsupported_cuba(self):
+    def test_add_particles_with_unsupported_cuba(self):
         # given
         container = self.container
         particle = Particle(
@@ -64,7 +64,7 @@ class ContainerAddParticlesCheck(object):
         self.assertTrue(container.has_particle(uid))
         self.assertEqual(container.get_particle(uid), particle)
 
-    def test_add_particle_with_id(self):
+    def test_add_particles_with_id(self):
         # given
         container = self.container
         uid = uuid.uuid4()
@@ -124,7 +124,7 @@ class ContainerManipulatingParticlesCheck(object):
         for uid, particle in map(None, self.ids, self.particle_list):
             self.assertEqual(container.get_particle(uid), particle)
 
-    def test_update_particle(self):
+    def test_update_particles(self):
         # given
         container = self.container
         particle = container.get_particle(self.ids[2])
@@ -137,7 +137,7 @@ class ContainerManipulatingParticlesCheck(object):
         retrieved = container.get_particle(particle.uid)
         self.assertEqual(retrieved, particle)
 
-    def test_exception_when_update_particle_when_wrong_id(self):
+    def test_exception_when_update_particles_when_wrong_id(self):
         # given
         container = self.container
         particle = Particle(uid=uuid.uuid4())
@@ -155,7 +155,7 @@ class ContainerManipulatingParticlesCheck(object):
             # when
             container.update_particles([particle])
 
-    def test_remove_particle(self):
+    def test_remove_particles(self):
         # given
         container = self.container
         particle = self.particle_list[1]
@@ -261,7 +261,7 @@ class ContainerAddBondsCheck(object):
         self.assertTrue(container.has_bond(self.ids[2]))
         self.assertFalse(container.has_bond(uuid.UUID(int=2122)))
 
-    def test_add_bond(self):
+    def test_add_bonds(self):
         # given and setUp
         container = self.container
 
@@ -270,7 +270,7 @@ class ContainerAddBondsCheck(object):
             self.assertTrue(container.has_bond(bond.uid))
             self.assertEqual(bond.uid, self.ids[index])
 
-    def test_add_bond_with_unsupported_cuba(self):
+    def test_add_bonds_with_unsupported_cuba(self):
         # given
         container = self.container
         particles = self.particle_list[0].uid, self.particle_list[-1].uid
@@ -287,7 +287,7 @@ class ContainerAddBondsCheck(object):
         self.assertTrue(container.has_bond(uid))
         self.assertEqual(container.get_bond(uid), bond)
 
-    def test_add_bond_with_id(self):
+    def test_add_bonds_with_id(self):
         # given
         container = self.container
         uid = uuid.uuid4()
@@ -351,7 +351,7 @@ class ContainerManipulatingBondsCheck(object):
         for uid, bond in map(None, self.ids, self.bond_list):
             self.assertEqual(container.get_bond(uid), bond)
 
-    def test_update_bond(self):
+    def test_update_bonds(self):
         # given
         container = self.container
         bond = container.get_bond(self.ids[1])
@@ -366,7 +366,7 @@ class ContainerManipulatingBondsCheck(object):
         self.assertEqual(new_bond, bond)
         self.assertNotEqual(new_bond, self.bond_list[1])
 
-    def test_update_bond_with_unsupported_cuba(self):
+    def test_update_bonds_with_unsupported_cuba(self):
         # given
         container = self.container
         bond = container.get_bond(self.ids[1])
@@ -391,7 +391,7 @@ class ContainerManipulatingBondsCheck(object):
             # when
             self.container.update_bonds([bond])
 
-    def test_remove_bond(self):
+    def test_remove_bonds(self):
         # given
         container = self.container
         uid = self.ids[1]

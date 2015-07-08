@@ -152,7 +152,63 @@ class H5Particles(ABCParticles):
 
     # Particle methods ######################################################
 
-    def add_particle(self, particle):
+    def add_particles(self, iterable):
+        for particle in iterable:
+            self._add_particle(particle)
+
+    def update_particles(self, iterable):
+        for particle in iterable:
+            self._update_particle(particle)
+
+    def get_particle(self, uid):
+        return self._particles[uid]
+
+    def remove_particles(self, uids):
+        for uid in uids:
+            self._remove_particle(uid)
+
+    def iter_particles(self, ids=None):
+        """Get iterator over particles"""
+        if ids is None:
+            return iter(self._particles)
+        else:
+            return self._particles.itersequence(ids)
+
+    def has_particle(self, uid):
+        """Checks if a particle with uid "uid" exists in the container."""
+        return uid in self._particles
+
+    # Bond methods #######################################################
+
+    def add_bonds(self, iterable):
+        for bond in iterable:
+            self._add_bond(bond)
+
+    def update_bonds(self, iterable):
+        for bond in iterable:
+            self._update_bond(bond)
+
+    def get_bond(self, uid):
+        return self._bonds[uid]
+
+    def remove_bonds(self, uids):
+        for uid in uids:
+            self._remove_bond(uid)
+
+    def iter_bonds(self, ids=None):
+        """Get iterator over particles"""
+        if ids is None:
+            return iter(self._bonds)
+        else:
+            return self._bonds.itersequence(ids)
+
+    def has_bond(self, uid):
+        """Checks if a bond with uid "uid" exists in the container."""
+        return uid in self._bonds
+
+    # Private methods --- these are temporary till we optimize things
+
+    def _add_particle(self, particle):
         """Add particle
 
         If particle has a uid set then this is used.  If the
@@ -179,29 +235,13 @@ class H5Particles(ABCParticles):
             self._particles.add_safe(particle)
         return uid
 
-    def update_particle(self, particle):
+    def _update_particle(self, particle):
         self._particles.update_existing(particle)
 
-    def get_particle(self, uid):
-        return self._particles[uid]
-
-    def remove_particle(self, uid):
+    def _remove_particle(self, uid):
         del self._particles[uid]
 
-    def iter_particles(self, ids=None):
-        """Get iterator over particles"""
-        if ids is None:
-            return iter(self._particles)
-        else:
-            return self._particles.itersequence(ids)
-
-    def has_particle(self, uid):
-        """Checks if a particle with uid "uid" exists in the container."""
-        return uid in self._particles
-
-    # Bond methods #######################################################
-
-    def add_bond(self, bond):
+    def _add_bond(self, bond):
         """Add bond
 
         If bond has an uid then this is used.  If the
@@ -228,22 +268,8 @@ class H5Particles(ABCParticles):
             self._bonds.add_safe(bond)
         return uid
 
-    def update_bond(self, bond):
+    def _update_bond(self, bond):
         self._bonds.update_existing(bond)
 
-    def get_bond(self, uid):
-        return self._bonds[uid]
-
-    def remove_bond(self, uid):
+    def _remove_bond(self, uid):
         del self._bonds[uid]
-
-    def iter_bonds(self, ids=None):
-        """Get iterator over particles"""
-        if ids is None:
-            return iter(self._bonds)
-        else:
-            return self._bonds.itersequence(ids)
-
-    def has_bond(self, uid):
-        """Checks if a bond with uid "uid" exists in the container."""
-        return uid in self._bonds

@@ -152,7 +152,7 @@ class ABCParticles(object):
         >>> bond1 = particles.get_bond(uid1)
         >>> bond2 = particles.get_bond(uid2)
         >>> ... #do whatever you want with the bonds
-        >>> particles.update_bond([bond1, bond2])
+        >>> particles.update_bonds([bond1, bond2])
 
         """
 
@@ -342,16 +342,9 @@ class ABCParticles(object):
         >>> ...
         >>> for bond in particles.iter_bonds([id1, id2, id3]):
                 ...  #do stuff
-                #take the bond back to the container so it will be updated
-                #in case we need it
-                particles.update_bond(bond)
 
         >>> for bond in particles.iter_bond():
                 ...  #do stuff; it will iterate over all the bond
-                #take the bond back to the container so it will be updated
-                #in case we need it
-                particles.update_bond(bond)
-
         """
 
     @abstractmethod
