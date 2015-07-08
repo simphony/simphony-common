@@ -766,25 +766,25 @@ class H5Mesh(object):
         return uuid.uuid4()
 
     def _create_points_table(self):
-        """ Generates the table to sotre points """
+        """ Generates the table to store points """
 
         self._file.create_table(
             self._group, "points", _PointDescriptor)
 
     def _create_edges_table(self):
-        """ Generates the table to sotre edges """
+        """ Generates the table to store edges """
 
         self._file.create_table(
             self._group, "edges", _EdgeDescriptor)
 
     def _create_faces_table(self):
-        """ Generates the table to sotre faces """
+        """ Generates the table to store faces """
 
         self._file.create_table(
             self._group, "faces", _FaceDescriptor)
 
     def _create_cells_table(self):
-        """ Generates the table to sotre cells """
+        """ Generates the table to store cells """
 
         self._file.create_table(
             self._group, "cells", _CellDescriptor)
