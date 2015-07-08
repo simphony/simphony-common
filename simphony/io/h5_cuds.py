@@ -121,14 +121,10 @@ class H5CUDS(object):
         group = self._handle.create_group('/mesh/', mesh.name)
         h5_mesh = H5Mesh(group, self._handle)
         h5_mesh.data = mesh.data
-        for point in mesh.iter_points():
-            h5_mesh.add_point(point)
-        for edge in mesh.iter_edges():
-            h5_mesh.add_edge(edge)
-        for face in mesh.iter_faces():
-            h5_mesh.add_face(face)
-        for cell in mesh.iter_cells():
-            h5_mesh.add_cell(cell)
+        h5_mesh.add_points(mesh.iter_points())
+        h5_mesh.add_edges(mesh.iter_edges())
+        h5_mesh.add_faces(mesh.iter_faces())
+        h5_mesh.add_cells(mesh.iter_cells())
 
         return h5_mesh
 
