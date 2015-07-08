@@ -357,17 +357,19 @@ class Mesh(ABCMesh):
             in the mesh.
 
         """
+        rpoints = []
         for point in points:
             if point.uid is None:
                 point.uid = self._generate_uuid()
             elif point.uid in self._points:
                 err_str = "Trying to add an already existing \
                     point with uuid: {}"
-                raise ValueError(error_str.format(point.uid))
+                raise ValueError(err_str.format(point.uid))
 
             self._points[point.uid] = Point.from_point(point)
 
-            yield point.uid
+            rpoints.append(point.uid)
+        return rpoints
 
     def add_edges(self, edges):
         """ Adds a set of new edges to the mesh.
@@ -384,17 +386,19 @@ class Mesh(ABCMesh):
             in the mesh
 
         """
+        redges = []
         for edge in edges:
             if edge.uid is None:
                 edge.uid = self._generate_uuid()
             elif edge.uid in self._edges:
                 err_str = "Trying to add an already existing \
                     edge with uuid: {}"
-                raise ValueError(error_str.format(edge.uid))
+                raise ValueError(err_str.format(edge.uid))
 
             self._edges[edge.uid] = Edge.from_edge(edge)
             
-            yield edge.uid
+            redges.append(edge.uid)
+        return redges
 
     def add_faces(self, faces):
         """ Adds a set of new faces to the mesh.
@@ -411,17 +415,19 @@ class Mesh(ABCMesh):
             in the mesh
 
         """
+        rfaces = []
         for face in faces:
             if face.uid is None:
                 face.uid = self._generate_uuid()
             elif face.uid in self._faces:
                 err_str = "Trying to add an already existing \
                     face with uuid: {}"
-                raise ValueError(error_str.format(face.uid))
+                raise ValueError(err_str.format(face.uid))
 
             self._faces[face.uid] = Face.from_face(face)
 
-            yield face.uid
+            rfaces.append(face.uid)
+        return rfaces
 
     def add_cells(self, cells):
         """ Adds a set of new cells to the mesh.
@@ -438,17 +444,18 @@ class Mesh(ABCMesh):
             in the mesh
 
         """
+        rcells = []
         for cell in cells:
             if cell.uid is None:
                 cell.uid = self._generate_uuid()
             elif cell.uid in self._cells:
                 err_str = "Trying to add an already existing \
                     cell with uuid: {}"
-                raise ValueError(error_str.format(cell.uid))
+                raise ValueError(err_str.format(cell.uid))
 
             self._cells[cell.uid] = Cell.from_cell(cell)
-
-            yield cell.uid
+            rcells.append(cell.uid)
+        return rcells
 
     def update_points(self, points):
         """ Updates the information of a set of points.
@@ -471,7 +478,7 @@ class Mesh(ABCMesh):
         for point in points:
             if point.uid not in self._points:
                 err_str = "Trying to update a non-existing point with uid: {}"
-                raise ValueError(error_str.format(point.uid))
+                raise ValueError(err_str.format(point.uid))
 
             point_to_update = self._points[point.uid]
             point_to_update.data = point.data
@@ -498,7 +505,7 @@ class Mesh(ABCMesh):
         for edge in edges:
             if edge.uid not in self._edges:
                 err_str = "Trying to update a non-existing edge with uid: {}"
-                raise ValueError(error_str.format(edge.uid))
+                raise ValueError(err_str.format(edge.uid))
 
             edge_to_update = self._edges[edge.uid]
             edge_to_update.data = edge.data
@@ -525,7 +532,7 @@ class Mesh(ABCMesh):
         for face in faces:
             if face.uid not in self._faces:
                 err_str = "Trying to update a non-existing face with uid: {}"
-                raise ValueError(error_str.format(face.uid))
+                raise ValueError(err_str.format(face.uid))
 
             face_to_update = self._faces[face.uid]
             face_to_update.data = face.data
@@ -552,7 +559,7 @@ class Mesh(ABCMesh):
         for cell in cells:
             if cell.uid not in self._cells:
                 err_str = "Trying to update a non-existing cell with uid: {}"
-                raise ValueError(error_str.format(cell.uid))
+                raise ValueError(err_str.format(cell.uid))
 
         cell_to_update = self._cells[cell.uid]
         cell_to_update.data = cell.data

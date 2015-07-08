@@ -330,6 +330,7 @@ class H5Mesh(object):
             in the mesh
 
         """
+        rpoints = []
         for point in points:
             if point.uid is None:
                 point.uid = self._generate_uid()
@@ -346,9 +347,10 @@ class H5Mesh(object):
             row['coordinates'] = point.coordinates
 
             row.append()
-            yield point.uid
+            rpoints.append(point.uid)
 
         self._group.points.flush()
+        return rpoints
 
     def add_edges(self, edges):
         """ Adds a new set of edges to the mesh container.
@@ -365,6 +367,7 @@ class H5Mesh(object):
             in the mesh
 
         """
+        redges = []
         for edge in edges:
             if edge.uid is None:
                 edge.uid = self._generate_uid()
@@ -385,9 +388,10 @@ class H5Mesh(object):
                                   edge.points] + [''] * (MAX_POINTS_IN_EDGE-n)
 
             row.append()
-            yield edge.uid
+            redges.append(edge.uid)
 
         self._group.edges.flush()
+        return redges
 
     def add_faces(self, faces):
         """ Adds a new set of faces to the mesh container.
@@ -404,6 +408,7 @@ class H5Mesh(object):
             in the mesh
 
         """
+        rfaces = []
         for face in faces:
             if face.uid is None:
                 face.uid = self._generate_uid()
@@ -424,9 +429,10 @@ class H5Mesh(object):
                                   face.points] + [''] * (MAX_POINTS_IN_FACE-n)
 
             row.append()
-            yield face.uid
+            rfaces.append(face.uid)
 
         self._group.faces.flush()
+        return rfaces
 
     def add_cells(self, cells):
         """ Adds a new set of cells to the mesh container.
@@ -443,6 +449,7 @@ class H5Mesh(object):
             in the mesh
 
         """
+        rcells = []
         for cell in cells:
             if cell.uid is None:
                 cell.uid = self._generate_uid()
@@ -463,11 +470,10 @@ class H5Mesh(object):
                                   cell.points] + [''] * (MAX_POINTS_IN_CELL-n)
 
             row.append()
-            self._group.cells.flush()
-
-            yield cell.uid
+            rcells.append(cell.uid)
 
         self._group.cells.flush()
+        return rcells
 
     def update_points(self, points):
         """ Updates the information of a point.
@@ -492,9 +498,10 @@ class H5Mesh(object):
                 row['coordinates'] = list(point.coordinates)
                 self._uidData[uuid.UUID(hex=row['data'], version=4)] = point.data
                 row.update()
+                break
             else:
-                error_str = "Trying to update a non existing point with uid: {}"
-                raise ValueError(error_str.format(point.uid))
+                err_str = "Trying to update a non existing point with uid: {}"
+                raise ValueError(err_str.format(point.uid))
         row._flush_mod_rows()
 
     def update_edges(self, edges):
@@ -523,9 +530,10 @@ class H5Mesh(object):
                                       edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
                 self._uidData[uuid.UUID(hex=row['data'], version=4)] = edge.data
                 row.update()
+                break
             else:
-                error_str = "Trying to update a non existing edge with uid: "
-                raise ValueError(error_str.format(edge.uid))
+                err_str = "Trying to update a non existing edge with uid: {}"
+                raise ValueError(err_str.format(edge.uid))
         row._flush_mod_rows()
 
     def update_faces(self, faces):
@@ -554,9 +562,10 @@ class H5Mesh(object):
                                       face.points] + [0] * (MAX_POINTS_IN_FACE-n)
                 self._uidData[uuid.UUID(hex=row['data'], version=4)] = face.data
                 row.update()
+                break
             else:
-                error_str = "Trying to update a none existing face with uid: {}"
-                raise ValueError(error_str.format(face.uid))
+                err_str = "Trying to update a none existing face with uid: {}"
+                raise ValueError(err_str.format(face.uid))
         row._flush_mod_rows()
 
     def update_cells(self, cells):
@@ -588,10 +597,10 @@ class H5Mesh(object):
                 self._uidData[
                     uuid.UUID(hex=row['data'], version=4)] = cell.data
                 row.update()
+                break
             else:
-                error_str = "Trying to update an non existing \
-                    cell with uid: {}"
-                raise ValueError(error_str.format(cell.uid))
+                err_str = "Trying to update an non existing cell with uid: {}"
+                raise ValueError(err_str.format(cell.uid))
         row._flush_mod_rows()
 
     def iter_points(self, uids=None):
