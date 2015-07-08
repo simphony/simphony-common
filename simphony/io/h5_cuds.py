@@ -89,10 +89,8 @@ class H5CUDS(object):
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
         h5_particles.data = particles.data
-        for particle in particles.iter_particles():
-            h5_particles.add_particle(particle)
-        for bond in particles.iter_bonds():
-            h5_particles.add_bond(bond)
+        h5_particles.add_particles(particles.iter_particles())
+        h5_particles.add_bonds(particles.iter_bonds())
 
         return h5_particles
 

@@ -135,12 +135,19 @@ class TestH5CUDS(unittest.TestCase):
             # add particle container and add points to it
             pc_test = handle.add_particles(
                 Particles(name="test"))
+            uids = pc_test.add_particles(self.particles)
             for particle in self.particles:
-                uid = pc_test.add_particle(particle)
-                self.assertEqual(particle.uid, uid)
+                uid = particle.uid
+                self.assertIn(uid, uids)
                 self.assertEqual(
                     particle.coordinates,
                     pc_test.get_particle(uid).coordinates)
+            # for particle in self.particles:
+                # uid = pc_test.add_particle(particle)
+                # self.assertEqual(particle.uid, uid)
+                # self.assertEqual(
+                    # particle.coordinates,
+                    # pc_test.get_particle(uid).coordinates)
             self.assertEqual(
                 len(self.particles), sum(1 for _ in pc_test.iter_particles()))
 

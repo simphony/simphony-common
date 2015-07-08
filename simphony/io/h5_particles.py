@@ -153,8 +153,10 @@ class H5Particles(ABCParticles):
     # Particle methods ######################################################
 
     def add_particles(self, iterable):
+        uids = []
         for particle in iterable:
-            self._add_particle(particle)
+            uids.append(self._add_particle(particle))
+        return uids
 
     def update_particles(self, iterable):
         for particle in iterable:
@@ -181,8 +183,10 @@ class H5Particles(ABCParticles):
     # Bond methods #######################################################
 
     def add_bonds(self, iterable):
+        uids = []
         for bond in iterable:
-            self._add_bond(bond)
+            uids.append(self._add_bond(bond))
+        return uids
 
     def update_bonds(self, iterable):
         for bond in iterable:
