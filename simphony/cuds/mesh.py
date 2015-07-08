@@ -342,7 +342,7 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def add_point(self, point):
+    def add_points(self, point):
         """ Adds a new point to the mesh.
 
         Parameters
@@ -367,7 +367,7 @@ class Mesh(ABCMesh):
 
         return point.uid
 
-    def add_edge(self, edge):
+    def add_edges(self, edge):
         """ Adds a new edge to the mesh.
 
         Parameters
@@ -392,7 +392,7 @@ class Mesh(ABCMesh):
         self._edges[edge.uid] = Edge.from_edge(edge)
         return edge.uid
 
-    def add_face(self, face):
+    def add_faces(self, face):
         """ Adds a new face to the mesh.
 
         Parameters
@@ -416,7 +416,7 @@ class Mesh(ABCMesh):
         self._faces[face.uid] = Face.from_face(face)
         return face.uid
 
-    def add_cell(self, cell):
+    def add_cells(self, cell):
         """ Adds a new cell to the mesh.
 
         Parameters
@@ -441,7 +441,7 @@ class Mesh(ABCMesh):
         self._cells[cell.uid] = Cell.from_cell(cell)
         return cell.uid
 
-    def update_point(self, point):
+    def update_points(self, point):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
@@ -467,7 +467,7 @@ class Mesh(ABCMesh):
         point_to_update.data = point.data
         point_to_update.coordinates = point.coordinates
 
-    def update_edge(self, edge):
+    def update_edges(self, edge):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
@@ -493,7 +493,7 @@ class Mesh(ABCMesh):
         edge_to_update.data = edge.data
         edge_to_update.points = edge.points
 
-    def update_face(self, face):
+    def update_faces(self, face):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
@@ -521,7 +521,7 @@ class Mesh(ABCMesh):
         face_to_update.data = face.data
         face_to_update.points = face.points
 
-    def update_cell(self, cell):
+    def update_cells(self, cell):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same

@@ -315,7 +315,7 @@ class H5Mesh(object):
             error_str = "Trying to get an non existing cell with id: {}"
             raise KeyError(error_str.format(uid))
 
-    def add_point(self, point):
+    def add_points(self, point):
         """ Adds a new point to the mesh container.
 
         Parameters
@@ -350,7 +350,7 @@ class H5Mesh(object):
 
         return point.uid
 
-    def add_edge(self, edge):
+    def add_edges(self, edge):
         """ Adds a new edge to the mesh container.
 
         Parameters
@@ -389,7 +389,7 @@ class H5Mesh(object):
 
         return edge.uid
 
-    def add_face(self, face):
+    def add_faces(self, face):
         """ Adds a new face to the mesh container.
 
         Parameters
@@ -428,7 +428,7 @@ class H5Mesh(object):
 
         return face.uid
 
-    def add_cell(self, cell):
+    def add_cells(self, cell):
         """ Adds a new cell to the mesh container.
 
         Parameters
@@ -467,7 +467,7 @@ class H5Mesh(object):
 
         return cell.uid
 
-    def update_point(self, point):
+    def update_points(self, point):
         """ Updates the information of a point.
 
         Gets the mesh point identified by the same
@@ -496,7 +496,7 @@ class H5Mesh(object):
             error_str = "Trying to update a non existing point with uid: {}"
             raise ValueError(error_str.format(point.uid))
 
-    def update_edge(self, edge):
+    def update_edges(self, edge):
         """ Updates the information of an edge.
 
         Gets the mesh edge identified by the same
@@ -528,7 +528,7 @@ class H5Mesh(object):
             error_str = "Trying to update a non existing edge with uid: "
             raise ValueError(error_str.format(edge.uid))
 
-    def update_face(self, face):
+    def update_faces(self, face):
         """ Updates the information of a face.
 
         Gets the mesh face identified by the same
@@ -560,7 +560,7 @@ class H5Mesh(object):
             error_str = "Trying to update a none existing face with uid: {}"
             raise ValueError(error_str.format(face.uid))
 
-    def update_cell(self, cell):
+    def update_cells(self, cell):
         """ Updates the information of a cell.
 
         Gets the mesh cell identified by the same

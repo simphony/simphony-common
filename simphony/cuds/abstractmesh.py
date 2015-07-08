@@ -30,35 +30,35 @@ class ABCMesh(object):
         pass
 
     @abstractmethod
-    def add_point(self, point):
+    def add_points(self, point):
         pass
 
     @abstractmethod
-    def add_edge(self, edge):
+    def add_edges(self, edge):
         pass
 
     @abstractmethod
-    def add_face(self, face):
+    def add_faces(self, face):
         pass
 
     @abstractmethod
-    def add_cell(self, cell):
+    def add_cells(self, cell):
         pass
 
     @abstractmethod
-    def update_point(self, point):
+    def update_points(self, point):
         pass
 
     @abstractmethod
-    def update_edge(self, edge):
+    def update_edges(self, edge):
         pass
 
     @abstractmethod
-    def update_face(self, face):
+    def update_faces(self, face):
         pass
 
     @abstractmethod
-    def update_cell(self, cell):
+    def update_cells(self, cell):
         pass
 
     @abstractmethod
