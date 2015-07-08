@@ -146,8 +146,8 @@ class TestH5CUDS(unittest.TestCase):
                 # uid = pc_test.add_particle(particle)
                 # self.assertEqual(particle.uid, uid)
                 # self.assertEqual(
-                    # particle.coordinates,
-                    # pc_test.get_particle(uid).coordinates)
+                #     particle.coordinates,
+                #     pc_test.get_particle(uid).coordinates)
             self.assertEqual(
                 len(self.particles), sum(1 for _ in pc_test.iter_particles()))
 
