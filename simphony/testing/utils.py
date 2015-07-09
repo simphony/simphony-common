@@ -114,6 +114,7 @@ def create_bonds(n=5, restrict=None, particles=None):
         bond_list.append(Bond(particles=ids, data=data))
     return bond_list
 
+
 def create_bonds_with_id(n=5, restrict=None, particles=None):
     bond_list = []
     for i in xrange(n):
