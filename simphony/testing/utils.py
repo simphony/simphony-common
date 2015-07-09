@@ -29,8 +29,8 @@ def compare_particles(particle, reference, msg=None, testcase=None):
 def compare_points(point, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(point.uid, reference.uid)
-    self.assertEqual(point.coordinates, point.coordinates)
-    compare_data_containers(point.data, point.data, testcase=self)
+    self.assertEqual(point.coordinates, reference.coordinates)
+    compare_data_containers(point.data, reference.data, testcase=self)
 
 
 def compare_elements(element, reference, msg=None, testcase=None):
