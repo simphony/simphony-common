@@ -36,12 +36,12 @@ class ABCModelingEngine(object):
 
         Parameters
         ----------
-        container : {ABCMesh, ABCParticles, ABCLattice} 
+        container : {ABCMesh, ABCParticles, ABCLattice}
             The CUDS container to add to the engine.
 
         Raises
         ------
-        TypeError: 
+        TypeError:
             If the container type is not supported by the engine.
         ValueError:
             If there is already a dataset with the given name.
@@ -51,7 +51,7 @@ class ABCModelingEngine(object):
 
     @abstractmethod
     def remove_dataset(self, name):
-        """ Remove a dataset from the internal 
+        """ Remove a dataset from the internal
 
         Parameters
         ----------
@@ -77,8 +77,9 @@ class ABCModelingEngine(object):
 
         Returns
         -------
-        container : 
-            A proxy of the dataset named ``name`` that is stored internally in the Engine.
+        container :
+            A proxy of the dataset named ``name`` that is stored
+            internally in the Engine.
 
         Raises
         ------

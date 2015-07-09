@@ -77,12 +77,12 @@ class H5CUDS(object):
 
         Parameters
         ----------
-        container : {ABCMesh, ABCParticles, ABCLattice} 
+        container : {ABCMesh, ABCParticles, ABCLattice}
             The CUDS container to add to the engine.
 
         Raises
         ------
-        TypeError: 
+        TypeError:
             If the container type is not supported by the engine.
         ValueError:
             If there is already a dataset with the given name.
@@ -92,17 +92,17 @@ class H5CUDS(object):
         message = '{} container {!r} already exists'
 
         if name in self._root.particle:
-            raise ValueError(message.format('Particles',name))
+            raise ValueError(message.format('Particles', name))
         if name in self._root.mesh:
-            raise ValueError(message.format('Mesh',name))
+            raise ValueError(message.format('Mesh', name))
         if name in self._root.lattice:
-            raise ValueError(message.format('Lattice',name))
+            raise ValueError(message.format('Lattice', name))
 
-        if isinstance(container,ABCParticles):
+        if isinstance(container, ABCParticles):
             self._add_particles(container)
-        elif isinstance(container,ABCMesh):
+        elif isinstance(container, ABCMesh):
             self._add_mesh(container)
-        elif isinstance(container,ABCLattice):
+        elif isinstance(container, ABCLattice):
             self._add_lattice(container)
         else:
             print(type(container))
@@ -110,7 +110,7 @@ class H5CUDS(object):
                 "The type of the container is not supported")
 
     def remove_dataset(self, name):
-        """ Remove a dataset from the internal 
+        """ Remove a dataset from the internal
 
         Parameters
         ----------
@@ -143,8 +143,9 @@ class H5CUDS(object):
 
         Returns
         -------
-        container : 
-            A proxy of the dataset named ``name`` that is stored internally in the Engine.
+        container :
+            A proxy of the dataset named ``name`` that is stored
+            internally in the Engine.
 
         Raises
         ------
@@ -177,11 +178,10 @@ class H5CUDS(object):
         im = self._iter_meshes(names)
         il = self._iter_lattices(names)
 
-        return chain(ip,im,il)
+        return chain(ip, im, il)
 
     def _get_child_names(self, node):
         return [n._v_name for n in node._f_iter_nodes()]
-
 
     def _add_particles(self, particles):
         """Add particle container to the file.
