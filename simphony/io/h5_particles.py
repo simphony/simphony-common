@@ -153,6 +153,23 @@ class H5Particles(ABCParticles):
     # Particle methods ######################################################
 
     def add_particles(self, iterable):
+        """Add a set of particles.
+
+        If the particles have a uid set then they are used. If any of the
+        particle's uid is None then a new uid is generated for the
+        particle.
+
+        Returns
+        -------
+        uid : uuid.UUID
+            uid of particle.
+
+        Raises
+        ------
+        ValueError :
+           Any particle uid already exists in the container.
+
+        """
         uids = []
         for particle in iterable:
             uids.append(self._add_particle(particle))
@@ -183,6 +200,23 @@ class H5Particles(ABCParticles):
     # Bond methods #######################################################
 
     def add_bonds(self, iterable):
+        """Add a set of bonds.
+
+        If the bonds have an uid then they are used. If any of the
+        bond's uid is None then a uid is generated for the
+        bond.
+
+        Returns
+        -------
+        uid : uuid.UUID
+            uid of bond
+
+        Raises
+        ------
+        ValueError :
+           if an uid is given which already exists.
+
+        """
         uids = []
         for bond in iterable:
             uids.append(self._add_bond(bond))
@@ -213,23 +247,6 @@ class H5Particles(ABCParticles):
     # Private methods --- these are temporary till we optimize things
 
     def _add_particle(self, particle):
-        """Add particle
-
-        If particle has a uid set then this is used.  If the
-        particle's uid is None then a new uid is generated for the
-        particle.
-
-        Returns
-        -------
-        uid : uuid.UUID
-            uid of particle.
-
-        Raises
-        ------
-        ValueError :
-           The particle uid already exists in the container.
-
-        """
         uid = particle.uid
         if uid is None:
             uid = uuid.uuid4()
@@ -246,23 +263,6 @@ class H5Particles(ABCParticles):
         del self._particles[uid]
 
     def _add_bond(self, bond):
-        """Add bond
-
-        If bond has an uid then this is used.  If the
-        bond's uid is None then a uid is generated for the
-        bond.
-
-        Returns
-        -------
-        uid : uuid.UUID
-            uid of bond
-
-        Raises
-        ------
-        ValueError :
-           if an uid is given which already exists.
-
-        """
         uid = bond.uid
         if uid is None:
             uid = uuid.uuid4()
