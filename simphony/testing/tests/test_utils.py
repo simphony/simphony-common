@@ -334,7 +334,6 @@ class TestDataContainers(unittest.TestCase):
             compare_data_containers(data, expected, testcase=self)
 
 
-
 class TestCreateFactories(unittest.TestCase):
 
     def test_create_points(self):
