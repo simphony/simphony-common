@@ -66,12 +66,13 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.get_particles('foo')
+                handle.get_dataset('foo')
 
     def test_add_particle_container_empty(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particles(Particles(name="test"))
+            handle.add_dataset(Particles(name="test"))
+            pc = handle.get_dataset("test")
             self.assertEqual("test", pc.name)
             self.assertEqual(0, sum(1 for _ in pc.iter_particles()))
             self.assertEqual(0, sum(1 for _ in pc.iter_bonds()))
@@ -79,14 +80,16 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_particle_container_empty_data(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particles(Particles(name="test"))
+            handle.add_dataset(Particles(name="test"))
+            pc = handle.get_dataset("test")
             self.assertEqual(DataContainer(), pc.data)
             self.assertEqual(0, len(pc.data))
 
     def test_add_particle_container_data_copy(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particles(Particles(name="test"))
+            handle.add_dataset(Particles(name="test"))
+            pc = handle.get_dataset("test")
             data = pc.data
             data[CUBA.NAME] = 'somename'
 
@@ -112,20 +115,20 @@ class TestH5CUDS(unittest.TestCase):
 
         # Store particle container along with its data
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particles(original_pc)
+            pc = handle.add_dataset(original_pc)
 
         # Reopen the file and check the data if it is still there
         with closing(H5CUDS.open(filename, 'r')) as handle:
-            pc = handle.get_particles('test')
+            pc = handle.get_dataset('test')
             self.assertIn(CUBA.NAME, pc.data)
             self.assertEqual(pc.data[CUBA.NAME], 'somename')
 
     def test_add_particle_container_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            handle.add_particles(Particles(name="test"))
+            handle.add_dataset(Particles(name="test"))
             with self.assertRaises(ValueError):
-                handle.add_particles(
+                handle.add_dataset(
                     Particles(name="test"))
 
     def test_add_get_particle_container(self):
@@ -133,8 +136,8 @@ class TestH5CUDS(unittest.TestCase):
         filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
         with closing(H5CUDS.open(filename, 'w')) as handle:
             # add particle container and add points to it
-            pc_test = handle.add_particles(
-                Particles(name="test"))
+            handle.add_dataset(Particles(name="test"))
+            pc_test = handle.get_dataset('test')
             for particle in self.particles:
                 uid = pc_test.add_particle(particle)
                 self.assertEqual(particle.uid, uid)
@@ -147,7 +150,8 @@ class TestH5CUDS(unittest.TestCase):
             # add the particle container from the first file
             # into the second file
             with closing(H5CUDS.open(filename_copy, 'w')) as handle_copy:
-                pc_copy = handle_copy.add_particles(pc_test)
+                handle_copy.add_dataset(pc_test)
+                pc_copy = handle_copy.get_dataset('test')
 
                 for particle in pc_test.iter_particles():
                     particle_copy = pc_copy.get_particle(particle.uid)
@@ -158,11 +162,11 @@ class TestH5CUDS(unittest.TestCase):
         with self.assertRaises(Exception):
             pc_test.delete(self.particles[0].uid)
         with self.assertRaises(Exception):
-            handle.get_particles('test')
+            handle.get_dataset('test')
 
         # reopen file (in read only mode)
         with closing(H5CUDS.open(filename, 'r')) as handle:
-            pc_test = handle.get_particles('test')
+            pc_test = handle.get_dataset('test')
             for particles in self.particles:
                 loaded = pc_test.get_particle(particle.uid)
                 self.assertEqual(loaded.uid, particle.uid)
@@ -176,20 +180,20 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_{}".format(i)
                 pc_names.append(name)
-                handle.add_particles(Particles(name=name))
+                handle.add_dataset(Particles(name=name))
 
             # test iterating over all
             names = [
-                pc.name for pc in handle.iter_particles()]
+                pc.name for pc in handle.iter_datasets()]
             self.assertEqual(names, pc_names)
 
             # test iterating over a specific subset
             subset = pc_names[:3]
             names = [
-                pc.name for pc in handle.iter_particles(subset)]
+                pc.name for pc in handle.iter_datasets(subset)]
             self.assertEquals(names, subset)
 
-            for pc in handle.iter_particles(pc_names):
+            for pc in handle.iter_datasets(pc_names):
                 self.assertTrue(isinstance(pc, H5Particles))
 
     def test_iter_particle_container_wrong(self):
@@ -197,7 +201,7 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                [pc for pc in handle.iter_particles(pc_names)]
+                [pc for pc in handle.iter_datasets(pc_names)]
 
     def test_delete_particle_container(self):
         pc_names = []
@@ -208,14 +212,14 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_" + str(i)
                 pc_names.append(name)
-                handle.add_particles(Particles(name=name))
+                handle.add_dataset(Particles(name=name))
 
             # delete each of the particle containers
-            for pc in handle.iter_particles():
-                handle.delete_particles(pc.name)
+            for pc in handle.iter_datasets():
+                handle.remove_dataset(pc.name)
                 # test that we can't get deleted containers
                 with self.assertRaises(ValueError):
-                    handle.get_particles(pc.name)
+                    handle.get_dataset(pc.name)
                 # test that we can't use the deleted container
                 with self.assertRaises(Exception):
                     pc.add_particle(self.particles[0])
@@ -224,43 +228,45 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.delete_particles("foo")
+                handle.remove_dataset("foo")
 
     def test_particle_container_rename(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_particles(
+            handle.add_dataset(
                 Particles(name="foo"))
+            pc = handle.get_dataset("foo")
             pc.name = "bar"
             self.assertEqual("bar", pc.name)
 
             # we should not be able to use the old name "foo"
             with self.assertRaises(ValueError):
-                handle.get_particles("foo")
+                handle.get_dataset("foo")
             with self.assertRaises(ValueError):
-                handle.delete_particles("foo")
+                handle.remove_dataset("foo")
             with self.assertRaises(ValueError):
-                [_ for _ in handle.iter_particles(names=["foo"])]
+                [_ for _ in handle.iter_datasets(names=["foo"])]
 
             # we should be able to access using the new "bar" name
-            pc_bar = handle.get_particles("bar")
+            pc_bar = handle.get_dataset("bar")
             self.assertEqual("bar", pc_bar.name)
 
             # and we should be able to use the no-longer used
             # "foo" name when adding another particle container
-            pc = handle.add_particles(
+            pc = handle.add_dataset(
                 Particles(name="foo"))
 
     def test_get_missing_mesh(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.get_mesh('foo')
+                handle.get_dataset('foo')
 
     def test_add_mesh_empty(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            m = handle.add_mesh(Mesh(name="test"))
+            handle.add_dataset(Mesh(name="test"))
+            m = handle.get_dataset('test')
             self.assertEqual("test", m.name)
             self.assertEqual(0, len(list(p for p in m.iter_points())))
             self.assertEqual(0, len(list(e for e in m.iter_edges())))
@@ -270,16 +276,17 @@ class TestH5CUDS(unittest.TestCase):
     def test_add_mesh_with_same_name(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            handle.add_mesh(Mesh(name="test"))
+            handle.add_dataset(Mesh(name="test"))
             with self.assertRaises(ValueError):
-                handle.add_mesh(Mesh(name="test"))
+                handle.add_dataset(Mesh(name="test"))
 
     def test_add_get_mesh(self):
         # add mesh and add points to it
         filename = os.path.join(self.temp_dir, 'test.cuds')
         filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            m_test = handle.add_mesh(Mesh(name="test"))
+            handle.add_dataset(Mesh(name="test"))
+            m_test = handle.get_dataset('test')
             for p in self.points:
                 uid = m_test.add_point(p)
                 self.assertEqual(p.uid, uid)
@@ -291,7 +298,8 @@ class TestH5CUDS(unittest.TestCase):
 
             # add the mesh from the first file into the second file
             with closing(H5CUDS.open(filename_copy)) as handle_copy:
-                m_copy = handle_copy.add_mesh(m_test)
+                handle_copy.add_dataset(m_test)
+                m_copy = handle.get_dataset('test')
 
                 for p in m_test.iter_points():
                     p1 = m_copy.get_point(p.uid)
@@ -301,11 +309,11 @@ class TestH5CUDS(unittest.TestCase):
         with self.assertRaises(Exception):
             m_test.delete(self.points[0].uid)
         with self.assertRaises(Exception):
-            handle.get_mesh('test')
+            handle.get_dataset('test')
 
         # reopen file (in read only mode)
         with closing(H5CUDS.open(filename, 'r')) as handle:
-            m_test = handle.get_mesh('test')
+            m_test = handle.get_dataset('test')
             for p in self.points:
                 p1 = m_test.get_point(p.uid)
                 self.assertEqual(p1.uid, p.uid)
@@ -319,20 +327,20 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_{}".format(i)
                 m_names.append(name)
-                handle.add_mesh(Mesh(name=name))
+                handle.add_dataset(Mesh(name=name))
 
             # test iterating over all
             names = [
-                m.name for m in handle.iter_meshes()]
+                m.name for m in handle.iter_datasets()]
             self.assertEqual(names, m_names)
 
             # test iterating over a specific subset
             subset = m_names[:3]
             names = [
-                m.name for m in handle.iter_meshes(subset)]
+                m.name for m in handle.iter_datasets(subset)]
             self.assertEqual(names, subset)
 
-            for m in handle.iter_meshes():
+            for m in handle.iter_datasets():
                 self.assertTrue(isinstance(m, H5Mesh))
 
     def test_iter_mesh_wrong(self):
@@ -340,9 +348,9 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                [m for m in handle.iter_meshes(m_names)]
+                [m for m in handle.iter_datasets(m_names)]
 
-    def test_delete_mesh(self):
+    def test_remove_dataset(self):
         m_names = []
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
@@ -351,15 +359,15 @@ class TestH5CUDS(unittest.TestCase):
             for i in xrange(5):
                 name = "test_" + str(i)
                 m_names.append(name)
-                handle.add_mesh(Mesh(name=name))
+                handle.add_dataset(Mesh(name=name))
 
             # delete each of the mesh
-            for m in handle.iter_meshes():
-                handle.delete_mesh(m.name)
+            for m in handle.iter_datasets():
+                handle.remove_dataset(m.name)
 
             # test that we can't get deleted mesh
             with self.assertRaises(ValueError):
-                handle.get_mesh(m.name)
+                handle.get_dataset(m.name)
 
             # test that we can't use the deleted mesh
             with self.assertRaises(Exception):
@@ -369,32 +377,33 @@ class TestH5CUDS(unittest.TestCase):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
             with self.assertRaises(ValueError):
-                handle.delete_mesh("foo")
+                handle.remove_dataset("foo")
 
     def test_mesh_rename(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            m = handle.add_mesh(Mesh(name="foo"))
+            handle.add_dataset(Mesh(name="foo"))
+            m = handle.get_dataset("foo")
             m.name = "bar"
             self.assertEqual("bar", m.name)
 
             # we should not be able to use the old name "foo"
             with self.assertRaises(ValueError):
-                handle.get_mesh("foo")
+                handle.get_dataset("foo")
             with self.assertRaises(ValueError):
-                handle.delete_mesh("foo")
+                handle.remove_dataset("foo")
             with self.assertRaises(ValueError):
-                [_ for _ in handle.iter_meshes(names=["foo"])]
+                [_ for _ in handle.iter_datasets(names=["foo"])]
 
             # we should be able to access using the new "bar" name
-            m_bar = handle.get_mesh("bar")
+            m_bar = handle.get_dataset("bar")
             self.assertEqual("bar", m_bar.name)
 
             # and we should be able to use the no-longer used
             # "foo" name when adding another mesh
-            m = handle.add_mesh(Mesh(name="foo"))
+            m = handle.add_dataset(Mesh(name="foo"))
 
-    def test_add_get_delete_lattice(self):
+    def test_add_get_remove_dataset(self):
         lat = Lattice('test_lattice', 'cubic', (1.0, 1.0, 1.0),
                       (2, 3, 4), (0.0, 0.0, 0.0))
 
@@ -402,8 +411,8 @@ class TestH5CUDS(unittest.TestCase):
 
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename, 'w')) as handle:
-            handle.add_lattice(lat)
-            lat2 = handle.get_lattice('test_lattice')
+            handle.add_dataset(lat)
+            lat2 = handle.get_dataset('test_lattice')
 
             self.assertEqual(lat2.name, 'test_lattice')
             for N in lat2.iter_nodes():
@@ -414,13 +423,13 @@ class TestH5CUDS(unittest.TestCase):
             # Compare high level data of lattices
             compare_data_containers(lat.data, lat2.data, testcase=self)
 
-            handle.delete_lattice('test_lattice')
+            handle.remove_dataset('test_lattice')
             numlat = 0
-            for N in handle.iter_lattices():
+            for N in handle.iter_datasets():
                 numlat += 1
             self.assertEqual(numlat, 0)
 
-    def test_iter_lattices(self):
+    def test_iter_datasets(self):
         lat = Lattice('test_lattice', 'Cubic', (1.0, 1.0, 1.0),
                       (2, 3, 4), (0.0, 0.0, 0.0))
 
@@ -429,9 +438,9 @@ class TestH5CUDS(unittest.TestCase):
 
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename, 'w')) as handle:
-            handle.add_lattice(lat)
-            handle.add_lattice(lat2)
-            stored_names = [l.name for l in handle.iter_lattices()]
+            handle.add_dataset(lat)
+            handle.add_dataset(lat2)
+            stored_names = [l.name for l in handle.iter_datasets()]
             self.assertItemsEqual(stored_names, ['test_lattice',
                                                  'test_lattice2'])
 
@@ -441,25 +450,26 @@ class TestH5CUDS(unittest.TestCase):
 
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
-            m = handle.add_lattice(lat)
+            handle.add_dataset(lat)
+            m = handle.get_dataset('foo')
             m.name = "bar"
             self.assertEqual("bar", m.name)
 
             # we should not be able to use the old name "foo"
             with self.assertRaises(ValueError):
-                handle.get_lattice("foo")
+                handle.get_dataset("foo")
             with self.assertRaises(ValueError):
-                handle.delete_lattice("foo")
+                handle.remove_dataset("foo")
             with self.assertRaises(ValueError):
-                [_ for _ in handle.iter_lattices(names=["foo"])]
+                [_ for _ in handle.iter_datasets(names=["foo"])]
 
             # we should be able to access using the new "bar" name
-            m_bar = handle.get_lattice("bar")
+            m_bar = handle.get_dataset("bar")
             self.assertEqual("bar", m_bar.name)
 
             # and we should be able to use the no-longer used
             # "foo" name when adding another lattice
-            m = handle.add_lattice(lat)
+            m = handle.add_dataset(lat)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,14 @@
 import tables
 
+from simphony.cuds.abstractparticles import ABCParticles
+from simphony.cuds.abstractmesh import ABCMesh
+from simphony.cuds.abstractlattice import ABCLattice
+
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
+
+from itertools import chain
 
 
 class H5CUDS(object):
@@ -66,7 +72,118 @@ class H5CUDS(object):
         """
         self._handle.close()
 
-    def add_particles(self, particles):
+    def add_dataset(self, container):
+        """Add a CUDS container
+
+        Parameters
+        ----------
+        container : {ABCMesh, ABCParticles, ABCLattice} 
+            The CUDS container to add to the engine.
+
+        Raises
+        ------
+        TypeError: 
+            If the container type is not supported by the engine.
+        ValueError:
+            If there is already a dataset with the given name.
+
+        """
+        name = container.name
+        message = '{} container {!r} already exists'
+
+        if name in self._root.particle:
+            raise ValueError(message.format('Particles',name))
+        if name in self._root.mesh:
+            raise ValueError(message.format('Mesh',name))
+        if name in self._root.lattice:
+            raise ValueError(message.format('Lattice',name))
+
+        if isinstance(container,ABCParticles):
+            self._add_particles(container)
+        elif isinstance(container,ABCMesh):
+            self._add_mesh(container)
+        elif isinstance(container,ABCLattice):
+            self._add_lattice(container)
+        else:
+            print(type(container))
+            raise TypeError(
+                "The type of the container is not supported")
+
+    def remove_dataset(self, name):
+        """ Remove a dataset from the internal 
+
+        Parameters
+        ----------
+        name: str
+            name of CUDS container to be deleted
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
+
+        """
+        if name in self._get_child_names(self._root.particle):
+            self._remove_particles(name)
+        elif name in self._get_child_names(self._root.mesh):
+            self._remove_mesh(name)
+        elif name in self._get_child_names(self._root.lattice):
+            self._remove_lattice(name)
+        else:
+            raise ValueError(
+                'Container \'{n}\` does not exist'.format(n=name))
+
+    def get_dataset(self, name):
+        """ Get the dataset
+
+        Parameters
+        ----------
+        name: str
+            name of CUDS container to be retrieved.
+
+        Returns
+        -------
+        container : 
+            A proxy of the dataset named ``name`` that is stored internally in the Engine.
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
+
+        """
+        if name in self._get_child_names(self._root.particle):
+            return self._get_particles(name)
+        elif name in self._get_child_names(self._root.mesh):
+            return self._get_mesh(name)
+        elif name in self._get_child_names(self._root.lattice):
+            return self._get_lattice(name)
+        else:
+            raise ValueError(
+                'Container \'{n}\` does not exist'.format(n=name))
+
+    def iter_datasets(self, names=None):
+        """ Returns an iterator over a subset or all of the containers.
+
+        Parameters
+        ----------
+        names : sequence of str, optional
+            names of specific containers to be iterated over. If names is not
+            given, then all containers will be iterated over.
+
+        """
+
+        ip = self._iter_particles(names)
+        im = self._iter_meshes(names)
+        il = self._iter_lattices(names)
+
+        return chain(ip,im,il)
+
+    def _get_child_names(self, node):
+        return [n._v_name for n in node._f_iter_nodes()]
+
+
+    def _add_particles(self, particles):
         """Add particle container to the file.
 
         Parameters
@@ -82,9 +199,6 @@ class H5CUDS(object):
         """
         name = particles.name
         particles_root = self._root.particle
-        if name in particles_root:
-            message = 'Particles container {!r} already exists'
-            raise ValueError(message.format(name))
 
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
@@ -96,7 +210,7 @@ class H5CUDS(object):
 
         return h5_particles
 
-    def add_mesh(self, mesh):
+    def _add_mesh(self, mesh):
         """Add a mesh to the file.
 
         Parameters
@@ -114,10 +228,6 @@ class H5CUDS(object):
             See get_mesh for more information.
 
         """
-        if mesh.name in self._root.mesh:
-            raise ValueError(
-                'Mesh \'{n}\` already exists'.format(n=mesh.name))
-
         group = self._handle.create_group('/mesh/', mesh.name)
         h5_mesh = H5Mesh(group, self._handle)
         h5_mesh.data = mesh.data
@@ -132,7 +242,7 @@ class H5CUDS(object):
 
         return h5_mesh
 
-    def add_lattice(self, lattice):
+    def _add_lattice(self, lattice):
         """Add lattice to the file.
 
         Parameters
@@ -146,10 +256,6 @@ class H5CUDS(object):
             The lattice newly added to the file.
 
         """
-        if lattice.name in self._root.lattice:
-            raise ValueError(
-                'Lattice \'{n}\` already exists'.format(n=lattice.name))
-
         group = self._handle.create_group('/lattice/', lattice.name)
         h5_lattice = H5Lattice.create_new(
             group, lattice.type, lattice.base_vect,
@@ -160,7 +266,7 @@ class H5CUDS(object):
 
         return h5_lattice
 
-    def get_particles(self, name):
+    def _get_particles(self, name):
         """Get particle container from file.
         The returned particle container can be used to query
         and change the related data stored in the file. If the
@@ -172,15 +278,10 @@ class H5CUDS(object):
         name : str
             name of particle container to return
         """
-        try:
-            group = self._root.particle._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError(
-                'Particle container \'{n}\` does not exist'.format(n=name))
-        else:
-            return H5Particles(group)
+        group = self._root.particle._f_get_child(name)
+        return H5Particles(group)
 
-    def get_mesh(self, name):
+    def _get_mesh(self, name):
         """Get mesh from file.
 
         The returned mesh can be used to query
@@ -192,16 +293,10 @@ class H5CUDS(object):
         name : str
             name of the mesh to return
         """
+        group = self._root.mesh._f_get_child(name)
+        return H5Mesh(group, self._handle)
 
-        try:
-            group = self._root.mesh._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError(
-                'Mesh \'{n}\` does not exist'.format(n=name))
-        else:
-            return H5Mesh(group, self._handle)
-
-    def get_lattice(self, name):
+    def _get_lattice(self, name):
         """Get lattice from file.
 
         The returned lattice can be used to query
@@ -214,15 +309,10 @@ class H5CUDS(object):
         name : str
             name of lattice to return
         """
-        try:
-            group = self._root.lattice._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError(
-                'Lattice \'{n}\` does not exist'.format(n=name))
-        else:
-            return H5Lattice(group)
+        group = self._root.lattice._f_get_child(name)
+        return H5Lattice(group)
 
-    def delete_particles(self, name):
+    def _remove_particles(self, name):
         """Delete particle container from file.
 
         Parameters
@@ -230,15 +320,10 @@ class H5CUDS(object):
         name : str
             name of particle container to delete
         """
-        try:
-            node = self._root.particle._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError(
-                'Particle container \'{n}\` does not exist'.format(n=name))
-        else:
-            node._f_remove(recursive=True)
+        node = self._root.particle._f_get_child(name)
+        node._f_remove(recursive=True)
 
-    def delete_mesh(self, name):
+    def _remove_mesh(self, name):
         """Delete mesh from file.
 
         Parameters
@@ -246,16 +331,10 @@ class H5CUDS(object):
         name : str
             name of the mesh to delete
         """
+        node = self._root.mesh._f_get_child(name)
+        node._f_remove(recursive=True)
 
-        try:
-            node = self._root.mesh._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError(
-                'Mesh \'{n}\` does not exist'.format(n=name))
-        else:
-            node._f_remove(recursive=True)
-
-    def delete_lattice(self, name):
+    def _remove_lattice(self, name):
         """Delete lattice from file.
 
         Parameters
@@ -263,14 +342,10 @@ class H5CUDS(object):
         name : str
             name of lattice to delete
         """
-        try:
-            node = self._root.lattice._f_get_child(name)
-        except tables.NoSuchNodeError:
-            raise ValueError('Lattice \'{n}\` does not exist'.format(n=name))
-        else:
-            node._f_remove(recursive=True)
+        node = self._root.lattice._f_get_child(name)
+        node._f_remove(recursive=True)
 
-    def iter_particles(self, names=None):
+    def _iter_particles(self, names=None):
         """Returns an iterator over a subset or all
         of the particle containers.
 
@@ -284,12 +359,13 @@ class H5CUDS(object):
         """
         if names is None:
             for node in self._root.particle._f_iter_nodes():
-                yield self.get_particles(node._v_name)
+                yield self._get_particles(node._v_name)
         else:
             for name in names:
-                yield self.get_particles(name)
+                if name in self._get_child_names(self._root.particle):
+                    yield self._get_particles(name)
 
-    def iter_meshes(self, names=None):
+    def _iter_meshes(self, names=None):
         """Returns an iterator over a subset or all
         of the meshes.
 
@@ -303,12 +379,13 @@ class H5CUDS(object):
         """
         if names is None:
             for mesh_node in self._root.mesh._f_iter_nodes():
-                yield self.get_mesh(mesh_node._v_name)
+                yield self._get_mesh(mesh_node._v_name)
         else:
             for name in names:
-                yield self.get_mesh(name)
+                if name in self._get_child_names(self._root.mesh):
+                    yield self._get_mesh(name)
 
-    def iter_lattices(self, names=None):
+    def _iter_lattices(self, names=None):
         """Returns an iterator over a subset or all
         of the lattices.
 
@@ -322,7 +399,8 @@ class H5CUDS(object):
         """
         if names is None:
             for lattice in self._root.lattice._f_iter_nodes():
-                yield self.get_lattice(lattice._v_name)
+                yield self._get_lattice(lattice._v_name)
         else:
             for name in names:
-                yield self.get_lattice(name)
+                if name in self._get_child_names(self._root.lattice):
+                    yield self._get_lattice(name)
