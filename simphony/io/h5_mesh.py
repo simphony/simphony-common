@@ -7,6 +7,8 @@ and modify a file storing mesh data
 import tables
 import uuid
 
+from simphony.cuds.mesh import ABCMesh
+
 from simphony.cuds.mesh import Point
 from simphony.cuds.mesh import Edge
 from simphony.cuds.mesh import Face
@@ -85,7 +87,7 @@ class _CellDescriptor(tables.IsDescription):
     n_points = tables.UInt32Col(pos=3)
 
 
-class H5Mesh(object):
+class H5Mesh(ABCMesh):
     """ H5Mesh.
 
     Interface of the mesh file driver.
