@@ -121,8 +121,6 @@ def create_data_container(restrict=None, constant=None):
     -------
     data : DataContainer
 
-
-
     """
     if restrict is None:
         restrict = CUBA
@@ -173,6 +171,11 @@ def dummy_cuba_value(cuba, constant=None):
 
 def grouper(iterable, n):
     """ Collect data into fixed-length chunks or blocks
+
+    .. note::
+
+       If the iterable is exhausted before a valid chuck is collected
+       then the last chuck is ignored and the iteration ends.
 
     """
     iterator = iter(iterable)
