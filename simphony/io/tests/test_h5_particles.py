@@ -15,8 +15,8 @@ class TestH5ContainerAddParticles(
         ContainerAddParticlesCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -38,8 +38,8 @@ class TestH5ContainerManipulatingParticles(
         ContainerManipulatingParticlesCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -60,8 +60,8 @@ class TestH5ContainerManipulatingParticles(
 class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -83,8 +83,8 @@ class TestH5ContainerManipulatingBonds(
         ContainerManipulatingBondsCheck, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
