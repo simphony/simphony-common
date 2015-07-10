@@ -4,7 +4,7 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
 
-_file_version = 1
+H5_FILE_VERSION = 1
 
 
 class H5CUDS(object):
@@ -65,10 +65,10 @@ class H5CUDS(object):
 
         if handle.list_nodes("/"):
             if not ("cuds_version" in handle.root._v_attrs
-                    and handle.root._v_attrs.cuds_version == _file_version):
+                    and handle.root._v_attrs.cuds_version == H5_FILE_VERSION):
                 raise ValueError("File version is incompatible")
         else:
-            handle.root._v_attrs.cuds_version = _file_version
+            handle.root._v_attrs.cuds_version = H5_FILE_VERSION
             for group in ('particle', 'lattice', 'mesh'):
                 if "/" + group not in handle:
                     handle.create_group('/', group, group)
