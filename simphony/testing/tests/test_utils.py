@@ -198,7 +198,7 @@ class TestCompareBonds(unittest.TestCase):
 
 class TestCompareElements(unittest.TestCase):
 
-    def test_compare_bonds_equal(self):
+    def test_compare_elements_equal(self):
         # given
         points = [uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
         element = Element(
@@ -222,7 +222,7 @@ class TestCompareElements(unittest.TestCase):
         # this should pass without problems
         compare_elements(element, reference, testcase=self)
 
-    def test_compare_bonds_not_equal(self):
+    def test_compare_elements_not_equal(self):
         # given
         points = [uuid.uuid4(), uuid.uuid4(), uuid.uuid4()],
         element = Element(
@@ -310,9 +310,9 @@ class TestCompareLatticeNodes(unittest.TestCase):
             compare_lattice_nodes(node, reference, testcase=self)
 
 
-class TestDataContainers(unittest.TestCase):
+class TestCompareDataContainers(unittest.TestCase):
 
-    def test_data_containers_equal(self):
+    def test_compare_data_containers_equal(self):
         data = create_data_container()
         expected = create_data_container()
 
@@ -322,7 +322,7 @@ class TestDataContainers(unittest.TestCase):
             DataContainer(), DataContainer(), testcase=self)
         compare_data_containers({}, DataContainer(), testcase=self)
 
-    def test_data_containers_not_equal(self):
+    def test_compare_data_containers_not_equal(self):
         expected = create_data_container()
 
         data = create_data_container(constant=1)
