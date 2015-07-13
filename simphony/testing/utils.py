@@ -80,6 +80,18 @@ def create_particles(n=10, restrict=None):
     return particle_list
 
 
+def create_particles_with_id(n=10, restrict=None):
+    particle_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict)
+        uid = uuid.uuid4()
+        particle_list.append(
+            Particle(uid=uid,
+                     coordinates=[i, i*10, i*100],
+                     data=data))
+    return particle_list
+
+
 def create_points():
     return [
         Point((0.0, 0.0, 0.0)),
@@ -100,6 +112,20 @@ def create_bonds(n=5, restrict=None, particles=None):
             uids = [particle.uid for particle in particles]
             ids = random.sample(uids, n)
         bond_list.append(Bond(particles=ids, data=data))
+    return bond_list
+
+
+def create_bonds_with_id(n=5, restrict=None, particles=None):
+    bond_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict)
+        uid = uuid.uuid4()
+        if particles is None:
+            ids = [uuid.uuid4() for x in xrange(n)]
+        else:
+            uids = [particle.uid for particle in particles]
+            ids = random.sample(uids, n)
+        bond_list.append(Bond(uid=uid, particles=ids, data=data))
     return bond_list
 
 
