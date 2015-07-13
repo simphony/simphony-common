@@ -8,7 +8,7 @@ from simphony.io.h5_lattice import H5Lattice
 from numpy.testing import assert_array_equal
 from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_lattice import (
-    CheckLatticeProperties, CheckLatticeNodeOperations,
+    CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)
 
 
@@ -23,14 +23,14 @@ class CustomRecord(tables.IsDescription):
     mask = tables.BoolCol(pos=1, shape=(3,))
 
 
-class TestH5LatticeProperties(CheckLatticeProperties, unittest.TestCase):
+class TestH5LatticeProperties(CheckLatticeContainer, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        CheckLatticeProperties.setUp(self)
+        CheckLatticeContainer.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
