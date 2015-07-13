@@ -4,12 +4,87 @@ from functools import partial
 
 from simphony.testing.utils import (
     compare_particles, create_particles, compare_bonds, create_bonds,
-    create_data_container)
+    create_data_container, compare_data_containers)
 from simphony.cuds.particles import Particle, Bond
 from simphony.core.data_container import DataContainer
 
 
-class ContainerAddParticlesCheck(object):
+class CheckParticlesContainer(object):
+
+    __metaclass__ = abc.ABCMeta
+
+    def setUp(self):
+        self.addTypeEqualityFunc(
+            DataContainer, partial(compare_data_containers, testcase=self))
+        self.addTypeEqualityFunc(
+            Particle, partial(compare_particles, testcase=self))
+        self.size = (5, 10, 15)
+        self.base_vect = (0.2, 0.2, 0.2)
+        self.origin = (-2.0, 0.0, 1.0)
+        self.container = self.container_factory(
+            'my_name', 'Cubic', self.base_vect, self.size, self.origin)
+
+    @abc.abstractmethod
+    def container_factory(self, name, type_, base_vect, size, origin):
+        """ Create and return a lattice.
+        """
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+        """
+
+    def test_container_name(self):
+        # given/when
+        container = self.container
+
+        # then
+        self.assertEqual(container.name, 'my_name')
+
+    def test_container_name_update(self):
+        # given
+        container = self.container
+
+        # when
+        container.name = 'new'
+
+        # then
+        self.assertEqual(container.name, 'new')
+
+    def test_container_data(self):
+        # when
+        container = self.container
+
+        # then
+        self.assertEqual(container.data, DataContainer())
+
+    def test_container_data_update(self):
+        # given
+        container = self.container
+        data = create_data_container(restrict=self.supported_cuba())
+
+        # when
+        container.data = data
+
+        # then
+        self.assertEqual(container.data, data)
+        self.assertIsNot(container.data, data)
+
+    def test_container_data_update_with_unsupported_cuba(self):
+        # given
+        container = self.container
+        data = create_data_container()
+        expected_data = create_data_container(restrict=self.supported_cuba())
+
+        # when
+        container.data = data
+
+        # then
+        self.assertEqual(container.data, expected_data)
+        self.assertIsNot(container.data, expected_data)
+
+
+class CheckAddingParticles(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -92,7 +167,7 @@ class ContainerAddParticlesCheck(object):
             container.add_particle(self.particle_list[3])
 
 
-class ContainerManipulatingParticlesCheck(object):
+class CheckManipulatingParticles(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -230,7 +305,7 @@ class ContainerManipulatingParticlesCheck(object):
         self.assertEqual(particle.uid, self.particle_list[-1].uid)
 
 
-class ContainerAddBondsCheck(object):
+class CheckAddingBonds(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -320,7 +395,7 @@ class ContainerAddBondsCheck(object):
             self.container.add_bond(Bond(uid=object(), particles=[]))
 
 
-class ContainerManipulatingBondsCheck(object):
+class CheckManipulatingBonds(object):
 
     __metaclass__ = abc.ABCMeta
 

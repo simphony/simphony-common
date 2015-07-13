@@ -7,15 +7,12 @@ from simphony.testing.utils import (
     create_data_container, create_points, compare_points, compare_elements,
     grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
-from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
 
-class MeshAttributesCheck(object):
+class CheckMeshContainer(object):
 
     __metaclass__ = abc.ABCMeta
-
-    supported_cuba = list(CUBA)
 
     def setUp(self):
         self.addTypeEqualityFunc(
@@ -24,6 +21,11 @@ class MeshAttributesCheck(object):
     @abc.abstractmethod
     def container_factory(self, name):
         """ Create and return the container object
+        """
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
         """
 
     def test_container_name(self):
@@ -74,11 +76,10 @@ class MeshAttributesCheck(object):
         self.assertIsNot(container.data, expected_data)
 
 
-class MeshItemOperationsCheck(object):
+class CheckMeshItemOperations(object):
 
     __metaclass__ = abc.ABCMeta
 
-    supported_cuba = list(CUBA)
     operation_mapping = {
         'get item': 'none',
         'add item': 'none',
@@ -88,6 +89,11 @@ class MeshItemOperationsCheck(object):
     def setUp(self):
         self.item_list = self.create_items()
         self.container = self.container_factory('foo')
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+        """
 
     @abc.abstractmethod
     def create_items(self):
@@ -316,10 +322,10 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(container.data, DataContainer())
 
 
-class MeshPointOperationsCheck(MeshItemOperationsCheck):
+class CheckMeshPointOperations(CheckMeshItemOperations):
 
     def setUp(self):
-        MeshItemOperationsCheck.setUp(self)
+        CheckMeshItemOperations.setUp(self)
         self.addTypeEqualityFunc(
             Point, partial(compare_points, testcase=self))
 
@@ -355,7 +361,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         self.assertNotEqual(retrieved, self.item_list[2])
 
 
-class MeshElementOperationsCheck(MeshItemOperationsCheck):
+class CheckMeshElementOperations(CheckMeshItemOperations):
 
     def setUp(self):
         self.points = []
@@ -368,7 +374,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         self.uids = [uuid.uuid4() for _ in self.points]
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
-        MeshItemOperationsCheck.setUp(self)
+        CheckMeshItemOperations.setUp(self)
         for point in self.points:
             self.container.add_point(point)
 
@@ -431,10 +437,10 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
             self.assertNotEqual(retrieved, self.item_list[2])
 
 
-class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshEdgeOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Edge, partial(compare_elements, testcase=self))
 
@@ -464,10 +470,10 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
             data=create_data_container(restrict=self.supported_cuba))
 
 
-class MeshFaceOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshFaceOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Face, partial(compare_elements, testcase=self))
 
@@ -497,10 +503,10 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
             data=create_data_container(restrict=self.supported_cuba))
 
 
-class MeshCellOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshCellOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Cell, partial(compare_elements, testcase=self))
 
