@@ -18,15 +18,11 @@ class CheckParticlesContainer(object):
             DataContainer, partial(compare_data_containers, testcase=self))
         self.addTypeEqualityFunc(
             Particle, partial(compare_particles, testcase=self))
-        self.size = (5, 10, 15)
-        self.base_vect = (0.2, 0.2, 0.2)
-        self.origin = (-2.0, 0.0, 1.0)
-        self.container = self.container_factory(
-            'my_name', 'Cubic', self.base_vect, self.size, self.origin)
+        self.container = self.container_factory('my_name')
 
     @abc.abstractmethod
-    def container_factory(self, name, type_, base_vect, size, origin):
-        """ Create and return a lattice.
+    def container_factory(self, name):
+        """ Create and return a Particles container.
         """
 
     @abc.abstractmethod
