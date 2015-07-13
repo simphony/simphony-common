@@ -499,10 +499,10 @@ class H5Mesh(object):
                     uuid.UUID(hex=row['data'], version=4)
                     ] = point.data
                 row.update()
+                row._flush_mod_rows()
                 break
             else:
                 raise ValueError(err_upd.format('point', point.uid))
-        row._flush_mod_rows()
 
     def update_edges(self, edges):
         """ Updates the information of an edge.
@@ -533,10 +533,10 @@ class H5Mesh(object):
                     uuid.UUID(hex=row['data'], version=4)
                     ] = edge.data
                 row.update()
+                row._flush_mod_rows()
                 break
             else:
                 raise ValueError(err_upd.format('edge', edge.uid))
-        row._flush_mod_rows()
 
     def update_faces(self, faces):
         """ Updates the information of a face.
@@ -567,10 +567,10 @@ class H5Mesh(object):
                     uuid.UUID(hex=row['data'], version=4)
                     ] = face.data
                 row.update()
+                row._flush_mod_rows()
                 break
             else:
                 raise ValueError(err_upd.format('face', face.uid))
-        row._flush_mod_rows()
 
     def update_cells(self, cells):
         """ Updates the information of every cell in cells.
@@ -602,10 +602,10 @@ class H5Mesh(object):
                     uuid.UUID(hex=row['data'], version=4)
                     ] = cell.data
                 row.update()
+                row._flush_mod_rows()
                 break
             else:
                 raise ValueError(err_upd.format('cell', cell.uid))
-        row._flush_mod_rows()
 
     def iter_points(self, uids=None):
         """ Returns an iterator over points.
