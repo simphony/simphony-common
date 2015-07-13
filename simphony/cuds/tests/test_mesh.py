@@ -1,40 +1,56 @@
 import unittest
 
+from simphony.core.cuba import CUBA
 from simphony.cuds.mesh import Mesh
 from simphony.testing.abc_check_mesh import (
-    MeshPointOperationsCheck, MeshEdgeOperationsCheck,
-    MeshFaceOperationsCheck, MeshCellOperationsCheck,
-    MeshAttributesCheck)
+    CheckMeshPointOperations, CheckMeshEdgeOperations,
+    CheckMeshFaceOperations, CheckMeshCellOperations,
+    CheckMeshContainer)
 
 
-class TestMeshPointOperations(MeshPointOperationsCheck, unittest.TestCase):
-
-    def container_factory(self, name):
-        return Mesh(name=name)
-
-
-class TestMeshEdgeOperations(MeshEdgeOperationsCheck, unittest.TestCase):
+class TestMeshPointOperations(CheckMeshPointOperations, unittest.TestCase):
 
     def container_factory(self, name):
         return Mesh(name=name)
 
-
-class TestMeshFaceOperations(MeshFaceOperationsCheck, unittest.TestCase):
-
-    def container_factory(self, name):
-        return Mesh(name=name)
+    def supported_cuba(self):
+        return set(CUBA)
 
 
-class TestMeshCellOperations(MeshCellOperationsCheck, unittest.TestCase):
+class TestMeshEdgeOperations(CheckMeshEdgeOperations, unittest.TestCase):
 
     def container_factory(self, name):
         return Mesh(name=name)
 
+    def supported_cuba(self):
+        return set(CUBA)
 
-class TestMeshAttributes(MeshAttributesCheck, unittest.TestCase):
+
+class TestMeshFaceOperations(CheckMeshFaceOperations, unittest.TestCase):
 
     def container_factory(self, name):
         return Mesh(name=name)
+
+    def supported_cuba(self):
+        return set(CUBA)
+
+
+class TestMeshCellOperations(CheckMeshCellOperations, unittest.TestCase):
+
+    def container_factory(self, name):
+        return Mesh(name=name)
+
+    def supported_cuba(self):
+        return set(CUBA)
+
+
+class TestMeshContainer(CheckMeshContainer, unittest.TestCase):
+
+    def container_factory(self, name):
+        return Mesh(name=name)
+
+    def supported_cuba(self):
+        return set(CUBA)
 
 
 if __name__ == '__main__':
