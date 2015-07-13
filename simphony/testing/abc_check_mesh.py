@@ -354,6 +354,28 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         self.assertNotEqual(item, self.item_list[2])
         self.assertNotEqual(retrieved, self.item_list[2])
 
+    def test_update_multiple_item_coordniates(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        itema = self.get_operation(container, uids[1])
+        itemb = self.get_operation(container, uids[2])
+        itema.coordinates = (123, 456, 789)
+        itemb.coordinates = (147, 258, 369)
+
+        # when
+        self.update_operation(container, [itema, itemb])
+
+        # then
+        retrieveda = self.get_operation(container, itema.uid)
+        retrievedb = self.get_operation(container, itemb.uid)
+        self.assertEqual(retrieveda, itema)
+        self.assertEqual(retrievedb, itemb)
+        self.assertNotEqual(itema, self.item_list[1])
+        self.assertNotEqual(retrieveda, self.item_list[1])
+        self.assertNotEqual(itemb, self.item_list[2])
+        self.assertNotEqual(retrievedb, self.item_list[2])
+
 
 class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
@@ -429,6 +451,46 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
             self.assertEqual(retrieved, item)
             self.assertNotEqual(item, self.item_list[2])
             self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_multiple_items_points(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        items = [
+            i for i in self.iter_operation(container)] 
+
+        point_uids = container.add_points([
+            Point((1.0 * i, 1.0 * i, 1.0 * i))
+            for i in range(self.points_range[-1])
+            ])
+
+        # increasing
+        for n in self.points_range:
+            # when
+            for item in items:
+                item.points = tuple(point_uids[:n])
+            self.update_operation(container, items)
+
+            # then
+            for item in items:
+                retrieved = self.get_operation(container, item.uid)
+                self.assertEqual(retrieved, item)
+                self.assertNotEqual(item, self.item_list[2])
+                self.assertNotEqual(retrieved, self.item_list[2])
+
+        # decreasing
+        for n in self.points_range[::-1]:
+            # when
+            for item in items:
+                item.points = tuple(point_uids[:n])
+            self.update_operation(container, items)
+
+            # then
+            for item in items:
+                retrieved = self.get_operation(container, item.uid)
+                self.assertEqual(retrieved, item)
+                self.assertNotEqual(item, self.item_list[2])
+                self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshEdgeOperationsCheck(MeshElementOperationsCheck):

@@ -561,9 +561,10 @@ class Mesh(ABCMesh):
                 err_str = "Trying to update a non-existing cell with uid: {}"
                 raise ValueError(err_str.format(cell.uid))
 
-        cell_to_update = self._cells[cell.uid]
-        cell_to_update.data = cell.data
-        cell_to_update.points = cell.points
+            cell_to_update = self._cells[cell.uid]
+            cell_to_update.data = cell.data
+            cell_to_update.points = cell.points
+
 
     def iter_points(self, uids=None):
         """ Returns an iterator over points.
