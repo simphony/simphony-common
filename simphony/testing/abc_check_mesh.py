@@ -53,7 +53,7 @@ class CheckMeshContainer(object):
     def test_container_data_update(self):
         # given
         container = self.container_factory('my_name')
-        data = create_data_container(restrict=self.supported_cuba)
+        data = create_data_container(restrict=self.supported_cuba())
 
         # when
         container.data = data
@@ -66,7 +66,7 @@ class CheckMeshContainer(object):
         # given
         container = self.container_factory('my_name')
         data = create_data_container()
-        expected_data = create_data_container(restrict=self.supported_cuba)
+        expected_data = create_data_container(restrict=self.supported_cuba())
 
         # when
         container.data = data
@@ -184,7 +184,7 @@ class CheckMeshItemOperations(object):
 
         # then
         retrieved = self.get_operation(container, uid)
-        expected.data = create_data_container(restrict=self.supported_cuba)
+        expected.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieved, expected)
 
     def test_exception_when_adding_item_twice(self):
@@ -201,7 +201,7 @@ class CheckMeshItemOperations(object):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        item.data = create_data_container(restrict=self.supported_cuba)
+        item.data = create_data_container(restrict=self.supported_cuba())
 
         # when
         self.update_operation(container, item)
@@ -224,7 +224,7 @@ class CheckMeshItemOperations(object):
 
         # then
         retrieved = self.get_operation(container, item.uid)
-        item.data = create_data_container(restrict=self.supported_cuba)
+        item.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieved, item)
 
     def test_exception_when_update_item_with_wrong_id(self):
@@ -336,7 +336,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
         return Point(
             uid=uid,
             coordinates=(0.1, -3.5, 44),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
     operation_mapping = {
         'get item': 'get_point',
@@ -459,7 +459,7 @@ class CheckMeshEdgeOperations(CheckMeshElementOperations):
         uids = self.uids
         return [Edge(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 2)]
 
     def create_item(self, uid):
@@ -467,7 +467,7 @@ class CheckMeshEdgeOperations(CheckMeshElementOperations):
         return Edge(
             uid=uid,
             points=random.sample(uids, 2),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
 
 class CheckMeshFaceOperations(CheckMeshElementOperations):
@@ -492,7 +492,7 @@ class CheckMeshFaceOperations(CheckMeshElementOperations):
         uids = self.uids
         return [Face(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 3)]
 
     def create_item(self, uid):
@@ -500,7 +500,7 @@ class CheckMeshFaceOperations(CheckMeshElementOperations):
         return Face(
             uid=uid,
             points=random.sample(uids, 3),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
 
 class CheckMeshCellOperations(CheckMeshElementOperations):
@@ -525,7 +525,7 @@ class CheckMeshCellOperations(CheckMeshElementOperations):
         uids = self.uids
         return [Cell(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 4)]
 
     def create_item(self, uid):
@@ -533,4 +533,4 @@ class CheckMeshCellOperations(CheckMeshElementOperations):
         return Cell(
             uid=uid,
             points=random.sample(uids, 4),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
