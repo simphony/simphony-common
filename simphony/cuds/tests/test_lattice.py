@@ -53,7 +53,7 @@ class TestLatticeNodeCoordinates(
     def container_factory(self, name, type_, base_vect, size, origin):
         return Lattice(name, type_, base_vect, size, origin)
 
-b    def supported_cuba(self):
+    def supported_cuba(self):
         return set(CUBA)
 
 
