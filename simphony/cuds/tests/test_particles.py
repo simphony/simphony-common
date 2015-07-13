@@ -1,11 +1,9 @@
 import unittest
 import uuid
-from functools import partial
 
 from simphony.cuds.particles import Particle, Bond, Particles
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simphony.testing.utils import compare_data_containers
 from simphony.testing.abc_check_particles import (
     CheckManipulatingBonds, CheckAddingParticles,
     CheckAddingBonds, CheckManipulatingParticles,
