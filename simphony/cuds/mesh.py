@@ -565,7 +565,6 @@ class Mesh(ABCMesh):
             cell_to_update.data = cell.data
             cell_to_update.points = cell.points
 
-
     def iter_points(self, uids=None):
         """ Returns an iterator over points.
 

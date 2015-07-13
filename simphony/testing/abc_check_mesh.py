@@ -455,9 +455,8 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
     def test_update_multiple_items_points(self):
         # given
         container = self.container
-        uids = self._add_items(container)
         items = [
-            i for i in self.iter_operation(container)] 
+            i for i in self.iter_operation(container)]
 
         point_uids = container.add_points([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
