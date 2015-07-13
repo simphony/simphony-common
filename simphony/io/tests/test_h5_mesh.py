@@ -154,5 +154,35 @@ class TestH5MeshStoredLayout(unittest.TestCase):
         self.assertIsInstance(group.item_data, tables.Table)
 
 
+class TestH5MeshVersions(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def test_version(self):
+        filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        group_name = "dummy_component_name"
+        with tables.open_file(filename, 'w') as handle:
+            group = handle.create_group(handle.root, group_name)
+
+            # given/when
+            H5Mesh(group, handle)
+
+            # then
+            self.assertTrue(isinstance(group._v_attrs.cuds_version, int))
+
+        # when
+        with tables.open_file(filename, 'a') as handle:
+            handle.get_node("/" + group_name)._v_attrs.cuds_version = -1
+
+        # then
+        with tables.open_file(filename, 'a') as handle:
+            with self.assertRaises(ValueError):
+                H5Mesh(handle.get_node("/" + group_name), handle)
+
+
 if __name__ == '__main__':
     unittest.main()

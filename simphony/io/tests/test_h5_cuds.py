@@ -5,6 +5,8 @@ import shutil
 import tempfile
 import uuid
 
+import tables
+
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 from simphony.cuds.particles import Particle, Particles
@@ -460,6 +462,31 @@ class TestH5CUDS(unittest.TestCase):
             # and we should be able to use the no-longer used
             # "foo" name when adding another lattice
             m = handle.add_lattice(lat)
+
+
+class TestH5CUDSVersions(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.existing_filename = os.path.join(self.temp_dir, 'test.cuds')
+        handle = H5CUDS.open(self.existing_filename)
+        handle.close()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def test_version(self):
+        with closing(tables.open_file(
+                     self.existing_filename, mode="r")) as h5file:
+            self.assertTrue(isinstance(h5file.root._v_attrs.cuds_version, int))
+
+    def test_incorrect_version(self):
+        with closing(tables.open_file(
+                     self.existing_filename, mode="a")) as h5file:
+            h5file.root._v_attrs.cuds_version = -1
+
+        with self.assertRaises(ValueError):
+            H5CUDS.open(self.existing_filename)
 
 if __name__ == '__main__':
     unittest.main()
