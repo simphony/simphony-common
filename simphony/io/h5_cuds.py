@@ -8,8 +8,6 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
 
-from itertools import chain
-
 
 class H5CUDS(object):
     """ Access to CUDS-hdf5 formatted files.
@@ -105,7 +103,6 @@ class H5CUDS(object):
         elif isinstance(container, ABCLattice):
             self._add_lattice(container)
         else:
-            print(type(container))
             raise TypeError(
                 "The type of the container is not supported")
 
@@ -178,7 +175,15 @@ class H5CUDS(object):
         im = self._iter_meshes(names)
         il = self._iter_lattices(names)
 
-        return chain(ip, im, il)
+        iter_list = [i for i in ip] + [i for i in im] + [i for i in il]
+
+        if names is not None:
+            for name in names:
+                if name not in [i.name for i in iter_list]:
+                    raise ValueError(
+                        'Container \'{n}\` does not exist'.format(n=name))
+        for i in iter_list:
+            yield i
 
     def _get_child_names(self, node):
         return [n._v_name for n in node._f_iter_nodes()]
@@ -208,8 +213,6 @@ class H5CUDS(object):
         for bond in particles.iter_bonds():
             h5_particles.add_bond(bond)
 
-        return h5_particles
-
     def _add_mesh(self, mesh):
         """Add a mesh to the file.
 
@@ -228,7 +231,10 @@ class H5CUDS(object):
             See get_mesh for more information.
 
         """
-        group = self._handle.create_group('/mesh/', mesh.name)
+        name = mesh.name
+        mesh_root = self._root.mesh
+
+        group = tables.Group(mesh_root, name=name, new=True)
         h5_mesh = H5Mesh(group, self._handle)
         h5_mesh.data = mesh.data
         for point in mesh.iter_points():
@@ -239,8 +245,6 @@ class H5CUDS(object):
             h5_mesh.add_face(face)
         for cell in mesh.iter_cells():
             h5_mesh.add_cell(cell)
-
-        return h5_mesh
 
     def _add_lattice(self, lattice):
         """Add lattice to the file.
@@ -256,15 +260,16 @@ class H5CUDS(object):
             The lattice newly added to the file.
 
         """
-        group = self._handle.create_group('/lattice/', lattice.name)
+        name = lattice.name
+        lattice_root = self._root.lattice
+
+        group = tables.Group(lattice_root, name=name, new=True)
         h5_lattice = H5Lattice.create_new(
             group, lattice.type, lattice.base_vect,
             lattice.size, lattice.origin)
         h5_lattice.data = lattice.data
         for node in lattice.iter_nodes():
             h5_lattice.update_node(node)
-
-        return h5_lattice
 
     def _get_particles(self, name):
         """Get particle container from file.

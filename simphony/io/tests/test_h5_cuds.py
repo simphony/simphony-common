@@ -365,13 +365,13 @@ class TestH5CUDS(unittest.TestCase):
             for m in handle.iter_datasets():
                 handle.remove_dataset(m.name)
 
-            # test that we can't get deleted mesh
-            with self.assertRaises(ValueError):
-                handle.get_dataset(m.name)
+                # test that we can't get deleted mesh
+                with self.assertRaises(ValueError):
+                    handle.get_dataset(m.name)
 
-            # test that we can't use the deleted mesh
-            with self.assertRaises(Exception):
-                m.add_point(self.points[0])
+                # test that we can't use the deleted mesh
+                with self.assertRaises(Exception):
+                    m.add_point(self.points[0])
 
     def test_delete_non_existing_mesh(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
