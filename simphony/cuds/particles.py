@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from simphony.cuds.abstractparticles import ABCParticles
+from simphony.cuds.abc_particles import ABCParticles
 from simphony.core.data_container import DataContainer
 
 

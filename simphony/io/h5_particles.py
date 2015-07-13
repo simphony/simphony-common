@@ -4,10 +4,7 @@ import tables
 import numpy
 
 from simphony.core.data_container import DataContainer
-
-from simphony.cuds.abstractparticles import ABCParticles
-from simphony.cuds.particles import Particle, Bond
-
+from simphony.cuds import ABCParticles, Particle, Bond
 from simphony.io.h5_cuds_items import H5CUDSItems
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 

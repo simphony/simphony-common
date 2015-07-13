@@ -1,5 +1,4 @@
-from simphony.cuds.lattice import ABCLattice
-from simphony.cuds.lattice import LatticeNode
+from simphony.cuds import ABCLattice, LatticeNode
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer

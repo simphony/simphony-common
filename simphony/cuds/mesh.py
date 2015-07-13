@@ -5,7 +5,7 @@ and modify a mesh
 
 """
 import uuid
-from simphony.cuds.abstractmesh import ABCMesh
+from simphony.cuds.abc_mesh import ABCMesh
 import simphony.core.data_container as dc
 
 
