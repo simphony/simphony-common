@@ -167,6 +167,22 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(item_uid, [uid])
         self.assertEqual(self.get_operation(container, uid), expected)
 
+    def test_add_multiple_item_with_uid(self):
+        # given
+        container = self.container
+        uida = uuid.uuid4()
+        uidb = uuid.uuid4()
+        expecteda = self.create_item(uida)
+        expectedb = self.create_item(uidb)
+
+        # when
+        item_uid = self.add_operation(container, [expecteda, expectedb])
+
+        # then
+        self.assertEqual(item_uid, [uida, uidb])
+        self.assertEqual(self.get_operation(container, uida), expecteda)
+        self.assertEqual(self.get_operation(container, uidb), expectedb)
+
     def test_add_item_with_unsuported_cuba(self):
         # given
         container = self.container
@@ -180,6 +196,25 @@ class MeshItemOperationsCheck(object):
         retrieved = self.get_operation(container, uid[0])
         expected.data = create_data_container(restrict=self.supported_cuba)
         self.assertEqual(retrieved, expected)
+
+    def test_add_multiple_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        expecteda = self.create_item(None)
+        expectedb = self.create_item(None)
+        expecteda.data = create_data_container()
+        expectedb.data = create_data_container()
+
+        # when
+        uid = self.add_operation(container, [expecteda, expectedb])
+
+        # then
+        retrieveda = self.get_operation(container, uid[0])
+        expecteda.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrieveda, expecteda)
+        retrievedb = self.get_operation(container, uid[1])
+        expectedb.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrievedb, expectedb)
 
     def test_exception_when_adding_item_twice(self):
         # given
@@ -206,6 +241,21 @@ class MeshItemOperationsCheck(object):
         self.assertNotEqual(item, self.item_list[2])
         self.assertNotEqual(retrieved, self.item_list[2])
 
+    def test_update_multiple_item_data(self):
+        # given
+        container = self.container
+        items = self.iter_operation(container)
+        for item in items:
+            item.data = create_data_container(restrict=self.supported_cuba)
+
+        # when
+        self.update_operation(container, items)
+
+        # then
+        for item in items:
+            retrieved = self.get_operation(container, item.uid)
+            self.assertEqual(retrieved, item)
+
     def test_update_item_with_unsuported_cuba(self):
         # given
         container = self.container
@@ -221,6 +271,22 @@ class MeshItemOperationsCheck(object):
         item.data = create_data_container(restrict=self.supported_cuba)
         self.assertEqual(retrieved, item)
 
+    def test_update_multiple_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        items = self.iter_operation(container)
+        for item in items:
+            item.data = create_data_container()
+
+        # when
+        self.update_operation(container, items)
+
+        # then
+        for item in items:
+            retrieved = self.get_operation(container, item.uid)
+            item.data = create_data_container(restrict=self.supported_cuba)
+            self.assertEqual(retrieved, item)
+
     def test_exception_when_update_item_with_wrong_id(self):
         # given
         container = self.container
@@ -229,6 +295,18 @@ class MeshItemOperationsCheck(object):
         # when/then
         with self.assertRaises(ValueError):
             self.update_operation(container, [item])
+
+    def test_exception_when_update_multiple_item_with_wrong_id(self):
+        # given
+        container = self.container
+        items = [
+            self.create_item(uuid.uuid4()),
+            self.create_item(uuid.uuid4())
+            ]
+
+        # when/then
+        with self.assertRaises(ValueError):
+            self.update_operation(container, items)
 
     def test_snapshot_principle(self):
         # given
