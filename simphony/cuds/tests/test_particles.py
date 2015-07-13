@@ -49,7 +49,7 @@ class BondTestCase(unittest.TestCase):
         self.assertEqual(bond.particles, tuple(uuids))
         self.assertEqual(bond.data, data)
 
-    def test_expection_when_initializing_with_empty_tuple(self):
+    def test_exception_when_initializing_with_empty_tuple(self):
         with self.assertRaises(Exception):
             Bond(())
 
