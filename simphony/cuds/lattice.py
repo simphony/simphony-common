@@ -1,7 +1,7 @@
 import numpy as np
 from math import sqrt
 from simphony.cuds.abstractlattice import ABCLattice
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -56,7 +56,7 @@ class Lattice(ABCLattice):
         self._data = DataContainer()
 
         self._items_count = {
-            CUBA.NODE: lambda: self._size
+            CUDSItem.NODE: lambda: self._size
         }
 
     def get_node(self, index):

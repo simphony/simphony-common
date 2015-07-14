@@ -8,7 +8,7 @@ from simphony.testing.utils import (
     grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -349,7 +349,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
         # container without items
         self.assertEqual(
-            self.count_items_operation(container, CUBA.POINT),
+            self.count_items_operation(container, CUDSItem.POINT),
             0
         )
 
@@ -359,7 +359,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
             self.add_operation(container, item)
 
         self.assertEqual(
-            self.count_items_operation(container, CUBA.POINT),
+            self.count_items_operation(container, CUDSItem.POINT),
             num_items
         )
 
@@ -368,7 +368,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
         # container without items
         with self.assertRaises(ValueError):
-            self.count_items_operation(container, CUBA.NODE)
+            self.count_items_operation(container, CUDSItem.NODE)
 
     def test_update_item_coordniates(self):
         # given
@@ -460,7 +460,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
         # container without items
         with self.assertRaises(ValueError):
-            self.count_items_operation(container, CUBA.NODE)
+            self.count_items_operation(container, CUDSItem.NODE)
 
     def test_update_item_points(self):
         # given
@@ -515,7 +515,7 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
 
     point_groups = [1, 2]
 
-    item_type = CUBA.EDGE
+    item_type = CUDSItem.EDGE
 
     def create_items(self):
         uids = self.uids
@@ -551,7 +551,7 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUBA.FACE
+    item_type = CUDSItem.FACE
 
     def create_items(self):
         uids = self.uids
@@ -587,7 +587,7 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUBA.CELL
+    item_type = CUDSItem.CELL
 
     def create_items(self):
         uids = self.uids

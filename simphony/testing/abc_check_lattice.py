@@ -9,8 +9,7 @@ from simphony.testing.utils import (
 from simphony.cuds.lattice import (
     LatticeNode, make_square_lattice, make_rectangular_lattice,
     make_orthorombicp_lattice, make_hexagonal_lattice, make_cubic_lattice)
-from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -149,7 +148,7 @@ class CheckLatticeNodeOperations(object):
 
         # then
         count_original = reduce(lambda x, y: x*y, self.size)
-        count_container = container.count_of(CUBA.NODE)
+        count_container = container.count_of(CUDSItem.NODE)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_nodes_passing_unsupported_type(self):
@@ -158,7 +157,7 @@ class CheckLatticeNodeOperations(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUBA.EDGE)
+            container.count_of(CUDSItem.EDGE)
 
 
 class CheckLatticeNodeCoordinates(object):

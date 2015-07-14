@@ -13,7 +13,7 @@ from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
 from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 
 from simphony.io.data_container_table import DataContainerTable
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
@@ -140,10 +140,10 @@ class H5Mesh(object):
             self._create_cells_table()
 
         self._items_count = {
-            CUBA.POINT: lambda: self._group.points,
-            CUBA.EDGE: lambda: self._group.edges,
-            CUBA.FACE: lambda: self._group.faces,
-            CUBA.CELL: lambda: self._group.cells
+            CUDSItem.POINT: lambda: self._group.points,
+            CUDSItem.EDGE: lambda: self._group.edges,
+            CUDSItem.FACE: lambda: self._group.faces,
+            CUDSItem.CELL: lambda: self._group.cells
         }
 
     @property

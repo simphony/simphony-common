@@ -6,8 +6,7 @@ from simphony.testing.utils import (
     compare_particles, create_particles, compare_bonds, create_bonds,
     create_data_container)
 from simphony.cuds.particles import Particle, Bond
-from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -238,7 +237,7 @@ class ContainerManipulatingParticlesCheck(object):
 
         # then
         count_original = len(particle_list)
-        count_container = container.count_of(CUBA.PARTICLE)
+        count_container = container.count_of(CUDSItem.PARTICLE)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_particles_passing_unsupported_type(self):
@@ -247,7 +246,7 @@ class ContainerManipulatingParticlesCheck(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUBA.EDGE)
+            container.count_of(CUDSItem.EDGE)
 
 
 class ContainerAddBondsCheck(object):
@@ -485,7 +484,7 @@ class ContainerManipulatingBondsCheck(object):
 
         # then
         count_original = len(bond_list)
-        count_container = container.count_of(CUBA.BOND)
+        count_container = container.count_of(CUDSItem.BOND)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_bonds_passing_unsupported_type(self):
@@ -494,4 +493,4 @@ class ContainerManipulatingBondsCheck(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUBA.EDGE)
+            container.count_of(CUDSItem.EDGE)

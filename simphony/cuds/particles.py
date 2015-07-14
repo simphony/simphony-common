@@ -2,7 +2,7 @@
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -38,8 +38,8 @@ class Particles(ABCParticles):
         self.name = name
 
         self._items_count = {
-            CUBA.PARTICLE: lambda: self._particles,
-            CUBA.BOND: lambda: self._bonds
+            CUDSItem.PARTICLE: lambda: self._particles,
+            CUDSItem.BOND: lambda: self._bonds
         }
 
     @property

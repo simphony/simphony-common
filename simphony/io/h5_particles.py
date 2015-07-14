@@ -4,7 +4,7 @@ import tables
 import numpy
 
 from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.cuds.particles import Particle, Bond
@@ -128,8 +128,8 @@ class H5Particles(ABCParticles):
         self._bonds = H5BondItems(group, 'bonds')
 
         self._items_count = {
-            CUBA.PARTICLE: lambda: self._particles,
-            CUBA.BOND: lambda: self._bonds
+            CUDSItem.PARTICLE: lambda: self._particles,
+            CUDSItem.BOND: lambda: self._bonds
         }
 
     @property

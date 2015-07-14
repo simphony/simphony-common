@@ -6,7 +6,7 @@ and modify a mesh
 """
 import uuid
 from simphony.cuds.abstractmesh import ABCMesh
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 import simphony.core.data_container as dc
 
 
@@ -212,10 +212,10 @@ class Mesh(ABCMesh):
         self._data = dc.DataContainer()
 
         self._items_count = {
-            CUBA.POINT: lambda: self._points,
-            CUBA.EDGE: lambda: self._edges,
-            CUBA.FACE: lambda: self._faces,
-            CUBA.CELL: lambda: self._cells
+            CUDSItem.POINT: lambda: self._points,
+            CUDSItem.EDGE: lambda: self._edges,
+            CUDSItem.FACE: lambda: self._faces,
+            CUDSItem.CELL: lambda: self._cells
         }
 
     @property
