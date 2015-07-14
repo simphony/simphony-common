@@ -76,7 +76,7 @@ class H5CUDS(object):
         Parameters
         ----------
         container : {ABCMesh, ABCParticles, ABCLattice}
-            The CUDS container to add to the engine.
+            The CUDS container to be added.
 
         Raises
         ------
@@ -107,7 +107,7 @@ class H5CUDS(object):
                 "The type of the container is not supported")
 
     def remove_dataset(self, name):
-        """ Remove a dataset from the internal
+        """ Remove a dataset from the engine
 
         Parameters
         ----------
@@ -142,7 +142,7 @@ class H5CUDS(object):
         -------
         container :
             A proxy of the dataset named ``name`` that is stored
-            internally in the Engine.
+            internally in the File.
 
         Raises
         ------
