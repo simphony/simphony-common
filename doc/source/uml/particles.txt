@@ -3,17 +3,17 @@ abstract class ABCParticles {
   name: str
   data: DataContainer
   --
-  {abstract} add_particle(particle: Particle): uuid.UUID
+  {abstract} add_particles(iterable: iterable of Particle): uuid.UUID
   {abstract} get_particle(uid: uuid.UUID): Particle
-  {abstract} update_particle(particle: Particle)
-  {abstract} remove_particle(uid: uuid.UUID)
+  {abstract} update_particles(iterable: iterable of Particle)
+  {abstract} remove_particles(uids: iterable of uuid.UUID)
   {abstract} iter_particles(uids: iterable of uuid.UUID {optional}): iterator of Particle {unordered}
   {abstract} has_particle(uid: uuid.UUID): boolean
   ..
-  {abstract} add_bond(bond: Bond): uuid.UUID
+  {abstract} add_bonds(iterable: iterable of Bond): uuid.UUID
   {abstract} get_bond(uid: uuid.UUID): Bond
-  {abstract} update_bond(bond: Bond)
-  {abstract} remove_bond(uid: uuid.UUID)
+  {abstract} update_bonds(iterable: iterable of Bond)
+  {abstract} remove_bonds(uids: iterable of uuid.UUID)
   {abstract} iter_bonds(uids: iterable of uuid.UUID {optional}): iterator of Bond {unordered}
   {abstract} has_bond(uid: uuid.UUID): boolean
 }

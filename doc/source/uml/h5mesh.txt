@@ -12,6 +12,8 @@ class Mesh as "H5Mesh(Group)" {
   cells : Table = Cells
   item_data : Table = Data
   data : Table = ContainerData
+  -- Node Attributes --
+  cuds_version: int
 }
 
 class Points as "Points(Table)" {

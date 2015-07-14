@@ -23,6 +23,8 @@ MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
 MAX_POINTS_IN_CELL = 8
 
+MESH_CUDS_VERSION = 1
+
 
 class _PointDescriptor(tables.IsDescription):
     """ Descriptor for storing Point information
@@ -123,6 +125,13 @@ class H5Mesh(ABCMesh):
     """
 
     def __init__(self, group, meshFile):
+
+        if not ("cuds_version" in group._v_attrs):
+            group._v_attrs.cuds_version = MESH_CUDS_VERSION
+        else:
+            if group._v_attrs.cuds_version != MESH_CUDS_VERSION:
+                raise ValueError(
+                    "Mesh file layout has an incompatible version")
 
         self._file = meshFile
         self._group = group
@@ -759,25 +768,25 @@ class H5Mesh(ABCMesh):
         return uuid.uuid4()
 
     def _create_points_table(self):
-        """ Generates the table to sotre points """
+        """ Generates the table to store points """
 
         self._file.create_table(
             self._group, "points", _PointDescriptor)
 
     def _create_edges_table(self):
-        """ Generates the table to sotre edges """
+        """ Generates the table to store edges """
 
         self._file.create_table(
             self._group, "edges", _EdgeDescriptor)
 
     def _create_faces_table(self):
-        """ Generates the table to sotre faces """
+        """ Generates the table to store faces """
 
         self._file.create_table(
             self._group, "faces", _FaceDescriptor)
 
     def _create_cells_table(self):
-        """ Generates the table to sotre cells """
+        """ Generates the table to store cells """
 
         self._file.create_table(
             self._group, "cells", _CellDescriptor)

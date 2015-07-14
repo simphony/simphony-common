@@ -153,5 +153,36 @@ class TestH5LatticeCustomNodeOperations(
         return [CUBA.VELOCITY, CUBA.MATERIAL_ID, CUBA.DENSITY]
 
 
+class TestH5LatticeVersions(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def test_version(self):
+        filename = os.path.join(self.temp_dir, 'test_file.cuds')
+        group_name = "dummy_component_name"
+        with tables.open_file(filename, 'w') as handle:
+            group = handle.create_group(handle.root, group_name)
+
+            # given/when
+            H5Lattice.create_new(group, 'Cubic', base_vect=(0.2, 0.2, 0.2),
+                                 size=(5, 10, 15), origin=(-2.0, 0.0, 1.0))
+
+            # then
+            self.assertTrue(isinstance(group._v_attrs.cuds_version, int))
+
+        # when
+        with tables.open_file(filename, 'a') as handle:
+            handle.get_node(
+                "/{}".format(group_name))._v_attrs.cuds_version = -1
+
+        # then
+        with tables.open_file(filename, 'a') as handle:
+            with self.assertRaises(ValueError):
+                H5Lattice(handle.get_node("/" + group_name))
+
 if __name__ == '__main__':
     unittest.main()

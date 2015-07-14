@@ -29,8 +29,8 @@ def compare_particles(particle, reference, msg=None, testcase=None):
 def compare_points(point, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(point.uid, reference.uid)
-    self.assertEqual(point.coordinates, point.coordinates)
-    compare_data_containers(point.data, point.data, testcase=self)
+    self.assertEqual(point.coordinates, reference.coordinates)
+    compare_data_containers(point.data, reference.data, testcase=self)
 
 
 def compare_elements(element, reference, msg=None, testcase=None):
@@ -80,6 +80,18 @@ def create_particles(n=10, restrict=None):
     return particle_list
 
 
+def create_particles_with_id(n=10, restrict=None):
+    particle_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict)
+        uid = uuid.uuid4()
+        particle_list.append(
+            Particle(uid=uid,
+                     coordinates=[i, i*10, i*100],
+                     data=data))
+    return particle_list
+
+
 def create_points():
     return [
         Point((0.0, 0.0, 0.0)),
@@ -103,6 +115,20 @@ def create_bonds(n=5, restrict=None, particles=None):
     return bond_list
 
 
+def create_bonds_with_id(n=5, restrict=None, particles=None):
+    bond_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict)
+        uid = uuid.uuid4()
+        if particles is None:
+            ids = [uuid.uuid4() for x in xrange(n)]
+        else:
+            uids = [particle.uid for particle in particles]
+            ids = random.sample(uids, n)
+        bond_list.append(Bond(uid=uid, particles=ids, data=data))
+    return bond_list
+
+
 def create_data_container(restrict=None, constant=None):
     """ Create a dummy data container while respecting the expected data types.
 
@@ -120,8 +146,6 @@ def create_data_container(restrict=None, constant=None):
     Returns
     -------
     data : DataContainer
-
-
 
     """
     if restrict is None:
@@ -173,6 +197,11 @@ def dummy_cuba_value(cuba, constant=None):
 
 def grouper(iterable, n):
     """ Collect data into fixed-length chunks or blocks
+
+    .. note::
+
+       If the iterable is exhausted before a valid chuck is collected
+       then the last chuck is ignored and the iteration ends.
 
     """
     iterator = iter(iterable)

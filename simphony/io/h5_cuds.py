@@ -8,6 +8,8 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
 
+H5_FILE_VERSION = 1
+
 
 class H5CUDS(object):
     """ Access to CUDS-hdf5 formatted files.
@@ -19,7 +21,7 @@ class H5CUDS(object):
 
         Parameters
         ----------
-        file : table.file
+        handle : table.file
             file to be used
 
         """
@@ -57,11 +59,23 @@ class H5CUDS(object):
             Title attribute of root node (only applies to a file which
               is being created)
 
+        Raises              Raises
+        ------
+        ValueError :
+            If the file has an incompatible version
+
         """
         handle = tables.open_file(filename, mode, title=title)
-        for group in ('particle', 'lattice', 'mesh'):
-            if "/" + group not in handle:
-                handle.create_group('/', group, group)
+
+        if handle.list_nodes("/"):
+            if not ("cuds_version" in handle.root._v_attrs
+                    and handle.root._v_attrs.cuds_version == H5_FILE_VERSION):
+                raise ValueError("File version is incompatible")
+        else:
+            handle.root._v_attrs.cuds_version = H5_FILE_VERSION
+            for group in ('particle', 'lattice', 'mesh'):
+                if "/" + group not in handle:
+                    handle.create_group('/', group, group)
         return cls(handle)
 
     def close(self):
@@ -208,10 +222,8 @@ class H5CUDS(object):
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
         h5_particles.data = particles.data
-        for particle in particles.iter_particles():
-            h5_particles.add_particle(particle)
-        for bond in particles.iter_bonds():
-            h5_particles.add_bond(bond)
+        h5_particles.add_particles(particles.iter_particles())
+        h5_particles.add_bonds(particles.iter_bonds())
 
     def _add_mesh(self, mesh):
         """Add a mesh to the file.

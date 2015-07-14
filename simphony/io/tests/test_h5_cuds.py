@@ -51,6 +51,31 @@ class TestH5CUDS(unittest.TestCase):
         self.assertFalse(handle.valid())
 
 
+class TestH5CUDSVersions(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.existing_filename = os.path.join(self.temp_dir, 'test.cuds')
+        handle = H5CUDS.open(self.existing_filename)
+        handle.close()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def test_version(self):
+        with closing(tables.open_file(
+                     self.existing_filename, mode="r")) as h5file:
+            self.assertTrue(isinstance(h5file.root._v_attrs.cuds_version, int))
+
+    def test_incorrect_version(self):
+        with closing(tables.open_file(
+                     self.existing_filename, mode="a")) as h5file:
+            h5file.root._v_attrs.cuds_version = -1
+
+        with self.assertRaises(ValueError):
+            H5CUDS.open(self.existing_filename)
+
+
 class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
     pass
 
