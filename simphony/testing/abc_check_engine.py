@@ -49,22 +49,6 @@ class DatasetCudsCheck(object):
         """ Check if a dataset is usable
         """
 
-    def add_operation(self, container, *args, **kwrds):
-        method = getattr(container, self.operation_mapping['add dataset'])
-        return method(*args, **kwrds)
-
-    def remove_operation(self, container, *args, **kwrds):
-        method = getattr(container, self.operation_mapping['remove dataset'])
-        return method(*args, **kwrds)
-
-    def get_operation(self, container, *args, **kwrds):
-        method = getattr(container, self.operation_mapping['get dataset'])
-        return method(*args, **kwrds)
-
-    def iter_operation(self, container, *args, **kwrds):
-        method = getattr(container, self.operation_mapping['iter dataset'])
-        return method(*args, **kwrds)
-
     def test_get_missing_dataset(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
         with closing(H5CUDS.open(filename)) as handle:
