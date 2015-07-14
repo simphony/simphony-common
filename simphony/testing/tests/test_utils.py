@@ -30,11 +30,14 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         reference = Particles(name="test")
 
         particle_list = create_particles_with_id()
+        bond_list = create_bonds()
+        data = DataContainer()
 
         particles.add_particles(particle_list)
         reference.add_particles(particle_list)
 
-        data = DataContainer()
+        particles.add_bonds(bond_list)
+        reference.add_bonds(bond_list)
 
         particles.data = data
         reference.data = data
@@ -48,12 +51,16 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         reference = Particles(name="test_ref")
 
         particle_list = create_particles_with_id()
+        bond_list = create_bonds()
         data = create_data_container()
 
         particles.add_particles(particle_list)
-        particles.data = data
-        
         reference.add_particles(particle_list)
+
+        particles.add_bonds(bond_list)
+        reference.add_bonds(bond_list)
+        
+        particles.data = data
         reference.data = data
 
         # when/then
@@ -61,8 +68,23 @@ class TestCompareParticlesDatasets(unittest.TestCase):
             compare_particles_datasets(particles, reference, testcase=self)
 
         # given
+        test_particles = create_particles_with_id()
+
         particles = Particles(name=reference.name)
-        particles.add_particles(create_particles_with_id())
+        particles.add_particles(test_particles)
+        particles.add_bonds(bond_list)
+        particles.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_particles_datasets(particles, reference, testcase=self)
+
+        # given
+        test_bonds = create_bonds()
+
+        particles = Particles(name=reference.name)
+        particles.add_particles(particle_list)
+        particles.add_bonds(test_bonds)
         particles.data = data
 
         # when/then
@@ -74,6 +96,7 @@ class TestCompareParticlesDatasets(unittest.TestCase):
 
         particles = Particles(name=reference.name)
         particles.add_particles(particle_list)
+        particles.add_bonds(bond_list)
         particles.data = test_data
 
         # when/then
@@ -89,12 +112,24 @@ class TestCompareMeshDatasets(unittest.TestCase):
         reference = Mesh(name="test")
 
         point_list = create_particles_with_id()
+        edge_list = create_edges()
+        face_list = create_faces()
+        cell_list = create_cells()
+
+        data = DataContainer()
 
         for point in point_list:
             mesh.add_point(point)
             reference.add_point(point)
-
-        data = DataContainer()
+        for edge in edge_list:
+            mesh.add_edge(edge)
+            reference.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+            reference.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
+            reference.add_cell(cell)
 
         mesh.data = data
         reference.data = data
@@ -107,15 +142,27 @@ class TestCompareMeshDatasets(unittest.TestCase):
         mesh = Mesh(name="test")
         reference = Mesh(name="test_ref")
 
-        point_list = create_points_with_id()
+        point_list = create_particles_with_id()
+        edge_list = create_edges()
+        face_list = create_faces()
+        cell_list = create_cells()
+
         data = create_data_container()
 
         for point in point_list:
             mesh.add_point(point)
-        mesh.data = data
-        
-        for point in point_list:
             reference.add_point(point)
+        for edge in edge_list:
+            mesh.add_edge(edge)
+            reference.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+            reference.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
+            reference.add_cell(cell)
+
+        mesh.data = data
         reference.data = data
 
         # when/then
@@ -123,9 +170,72 @@ class TestCompareMeshDatasets(unittest.TestCase):
             compare_mesh_datasets(mesh, reference, testcase=self)
 
         # given
+        test_points = create_points_with_id()
+
         mesh = Mesh(name=reference.name)
-        for point in create_points_with_id():
+        for point in test_points:
             mesh.add_point(point)
+        for edge in edge_list:
+            mesh.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
+        mesh.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
+
+        # given
+        test_edges = create_edges()
+
+        mesh = Mesh(name=reference.name)
+        for point in point_list:
+            mesh.add_point(point)
+        for edge in test_edges:
+            mesh.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
+        mesh.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
+
+        # given
+        test_faces = create_faces()
+
+        mesh = Mesh(name=reference.name)
+        for point in point_list:
+            mesh.add_point(point)
+        for edge in edge_list:
+            mesh.add_edge(edge)
+        for face in test_faces:
+            mesh.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
+        mesh.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
+
+
+        # given
+        test_cells = create_cells()
+
+        mesh = Mesh(name=reference.name)
+        for point in point_list:
+            mesh.add_point(point)
+        for edge in edge_list:
+            mesh.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+        for cell in test_cells:
+            mesh.add_cell(cell)
         mesh.data = data
 
         # when/then
@@ -138,6 +248,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         mesh = Mesh(name=reference.name)
         for point in point_list:
             mesh.add_point(point)
+        for edge in edge_list:
+            mesh.add_edge(edge)
+        for face in face_list:
+            mesh.add_face(face)
+        for cell in cell_list:
+            mesh.add_cell(cell)
         mesh.data = test_data
 
         # when/then
@@ -149,10 +265,10 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_equal(self):
         # given
-        lattice = Lattice(name="test")
-        reference = Lattice(name="test")
-
-        point_list = create_particles_with_id()
+        lattice = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
+        reference = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
 
         data = DataContainer()
 
@@ -164,11 +280,15 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_not_equal(self):
         # given
-        lattice = Lattice(name="test")
-        reference = Lattice(name="test_ref")
+        lattice = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
+        reference = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
 
-        point_list = create_points_with_id()
         data = create_data_container()
+
+        lattice.data = data
+        reference.data = data
 
         # when/then
         with self.assertRaises(AssertionError):
@@ -177,10 +297,36 @@ class TestCompareLatticeDatasets(unittest.TestCase):
         # given
         test_data = DataContainer()
 
-        lattice = Lattice(name=reference.name)
-        for point in point_list:
-            lattice.add_point(point)
+        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
         lattice.data = test_data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_lattice_datasets(lattice, reference, testcase=self)
+
+        # given
+        lattice = Lattice('test_ref', 'cubic', (2.0, 2.0, 2.0),
+            (2, 3, 4), (0.0, 0.0, 0.0))
+        lattice.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_lattice_datasets(lattice, reference, testcase=self)
+
+        # given
+        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+            (4, 6, 8), (0.0, 0.0, 0.0))
+        lattice.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_lattice_datasets(lattice, reference, testcase=self)
+
+        # given
+        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+            (2, 3, 4), (2.0, 2.0, 2.0))
+        lattice.data = data
 
         # when/then
         with self.assertRaises(AssertionError):

@@ -42,6 +42,10 @@ def compare_lattice_datasets(lattice, reference, msg=None, testcase=None):
     for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
         compare_lattice_nodes(l, r, testcase=self)
     compare_data_containers(lattice.data, reference.data, testcase=self)
+    self.assertEqual(lattice.type, reference.type)
+    numpy.testing.assert_array_equal(lattice.base_vect, reference.base_vect)
+    self.assertEqual(lattice.size, reference.size)
+    numpy.testing.assert_array_equal(lattice.origin, reference.origin)
 
 
 def compare_bonds(bond, reference, msg=None, testcase=None):
