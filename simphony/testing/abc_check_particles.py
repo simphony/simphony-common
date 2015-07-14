@@ -7,6 +7,7 @@ from simphony.testing.utils import (
     create_data_container)
 from simphony.cuds.particles import Particle, Bond
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 from simphony.core.data_container import DataContainer
 
 

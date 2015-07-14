@@ -8,6 +8,7 @@ from simphony.testing.utils import (
     grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 from simphony.core.data_container import DataContainer
 
 

@@ -71,11 +71,4 @@ PoissonRatio                Poisson Ratio                                       
 LnOfRestitutionCoefficient  Natural Logarithm of the Restitution Coefficient                      ['DEM']                                            LN_OF_RESTITUTION_COEFFICIENT        65  [1]      double
 RollingFriction             Rolling Friction coefficient                                          ['DEM']                                            ROLLING_FRICTION                     66  [1]      double
 VolumeFraction              Volume fraction                                                       ['FEM', 'FVM']                                     VOLUME_FRACTION                      67  [1]      double
-Point                       Point item identifier                                                 ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  POINT                                68  [1]      integer
-Particle                    Particle item identifier                                              ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  PARTICLE                             69  [1]      integer
-Bond                        Bond item identifier                                                  ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  BOND                                 70  [1]      integer
-Edge                        Edge item identifier                                                  ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  EDGE                                 71  [1]      integer
-Face                        Face item identifier                                                  ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  FACE                                 72  [1]      integer
-Cell                        Cell item identifier                                                  ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  CELL                                 73  [1]      integer
-Node                        Node item identifier                                                  ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  NODE                                 74  [1]      integer
 ==========================  ====================================================================  =================================================  =============================  ========  =======  =======
