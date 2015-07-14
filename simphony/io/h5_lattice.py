@@ -4,7 +4,6 @@ from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
 
 import numpy as np
 

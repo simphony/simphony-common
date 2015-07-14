@@ -5,7 +5,6 @@ import numpy
 
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.cuds.particles import Particle, Bond

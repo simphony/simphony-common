@@ -3,7 +3,6 @@ import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
 from simphony.core.data_container import DataContainer
 
 

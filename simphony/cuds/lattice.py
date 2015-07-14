@@ -2,7 +2,6 @@ import numpy as np
 from math import sqrt
 from simphony.cuds.abstractlattice import ABCLattice
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
 from simphony.core.data_container import DataContainer
 
 

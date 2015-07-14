@@ -7,7 +7,6 @@ and modify a mesh
 import uuid
 from simphony.cuds.abstractmesh import ABCMesh
 from simphony.core.cuba import CUBA
-from simphony.core.cuds_items import CUDSItem
 import simphony.core.data_container as dc
 
 
