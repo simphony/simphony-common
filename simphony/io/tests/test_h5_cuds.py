@@ -3,6 +3,7 @@ import os
 from contextlib import closing
 import shutil
 import tempfile
+import tables
 
 from simphony.io.h5_cuds import H5CUDS
 

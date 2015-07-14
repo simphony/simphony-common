@@ -241,11 +241,11 @@ class ParticlesCudsCheck(DatasetCudsCheck):
             handle.add_dataset(self.create_dataset(name='test'))
             ds_test = handle.get_dataset('test')
             for particle in self.items:
-                uid = ds_test.add_particle(particle)
-                self.assertEqual(particle.uid, uid)
+                uid = ds_test.add_particles([particle])
+                self.assertEqual(particle.uid, uid[0])
                 self.assertEqual(
                     particle.coordinates,
-                    ds_test.get_particle(uid).coordinates)
+                    ds_test.get_particle(uid[0]).coordinates)
             self.assertEqual(
                 len(self.items), sum(1 for _ in ds_test.iter_particles()))
 
