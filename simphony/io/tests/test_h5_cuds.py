@@ -78,15 +78,24 @@ class TestH5CUDSVersions(unittest.TestCase):
 
 
 class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
-    pass
+
+    def container_factory(self, name, mode='w'):
+        filename = os.path.join(self.temp_dir, name)
+        return H5CUDS.open(filename, mode)
 
 
 class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
-    pass
+
+    def container_factory(self, name, mode='w'):
+        filename = os.path.join(self.temp_dir, name)
+        return H5CUDS.open(filename, mode)
 
 
 class TestLatticeCudsOperations(LatticeCudsCheck, unittest.TestCase):
-    pass
+
+    def container_factory(self, name, mode='w'):
+        filename = os.path.join(self.temp_dir, name)
+        return H5CUDS.open(filename, mode)
 
 
 if __name__ == '__main__':

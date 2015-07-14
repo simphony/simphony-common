@@ -12,6 +12,38 @@ from simphony.cuds.particles import Particle, Bond
 from simphony.cuds.mesh import Point
 
 
+def compare_particles_datasets(particles, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(particles.name, reference.name)
+    for b, r in zip(particles.iter_bonds(), reference.iter_bonds()):
+        compare_particles(b, r, testcase=self)
+    for p, r in zip(particles.iter_particles(), reference.iter_particles()):
+        compare_bonds(p, r, testcase=self)
+    compare_data_containers(particles.data, reference.data, testcase=self)
+
+
+def compare_mesh_datasets(mesh, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(mesh.name, reference.name)
+    for p, r in zip(mesh.iter_points(), reference.iter_points()):
+        compare_points(p, r, testcase=self)
+    for e, r in zip(mesh.iter_edges(), reference.iter_edges()):
+        compare_elements(e, r, testcase=self)
+    for f, r in zip(mesh.iter_faces(), reference.iter_faces()):
+        compare_elements(f, r, testcase=self)
+    for c, r in zip(mesh.iter_cells(), reference.iter_cells()):
+        compare_elements(c, r, testcase=self)
+    compare_data_containers(mesh.data, reference.data, testcase=self)
+
+
+def compare_lattice_datasets(lattice, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(lattice.name, reference.name)
+    for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
+        compare_lattice_nodes(l, r, testcase=self)
+    compare_data_containers(lattice.data, reference.data, testcase=self)
+
+
 def compare_bonds(bond, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(bond.uid, reference.uid)

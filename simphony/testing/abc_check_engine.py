@@ -1,8 +1,13 @@
 import abc
 import uuid
 import os
+import sys
 from contextlib import closing
 import tempfile
+
+from simphony.testing.utils import (  # noqa
+    compare_particles_datasets, compare_mesh_datasets,
+    compare_lattice_datasets)
 
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
@@ -15,7 +20,7 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_lattice import H5Lattice
 
 
-class DatasetCudsCheck(object):
+class CheckEngine(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -23,6 +28,11 @@ class DatasetCudsCheck(object):
         self.temp_dir = tempfile.mkdtemp()
         self.maxDiff = None
         self.items = self.create_dataset_items()
+
+    @abc.abstractmethod
+    def container_factory(self, name, mode='w'):
+        """ Create and return the container object
+        """
 
     @abc.abstractmethod
     def create_dataset(self, name):
@@ -35,46 +45,48 @@ class DatasetCudsCheck(object):
         """
 
     @abc.abstractmethod
-    def check_emtpy_dataset(self, ds):
-        """ Check if a dataset is empty
-        """
-
-    @abc.abstractmethod
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
         """
 
-    @abc.abstractmethod
-    def check_is_usable_dataset(self, ds, items):
-        """ Check if a dataset is usable
-        """
+    operation_mapping = {
+        'compare datasets': 'none',
+        'add item': 'none'}
+
+    def compare_operation(self, *args, **kwrds):
+        method = getattr(
+            sys.modules[__name__],
+            self.operation_mapping['compare datasets'])
+        return method(*args, **kwrds)
+
+    def add_operation(self, container, *args, **kwrds):
+        method = getattr(
+            sys.modules[__name__],
+            self.operation_mapping['add item'])
+        return method(*args, **kwrds)
 
     def test_get_missing_dataset(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             with self.assertRaises(ValueError):
                 handle.get_dataset('foo')
 
     def test_add_dataset_empty(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
-            handle.add_dataset(self.create_dataset(name='test'))
+        with closing(self.container_factory('test.cuds')) as handle:
+            reference = self.create_dataset(name='test')
+            handle.add_dataset(reference)
             ds = handle.get_dataset("test")
 
-            self.assertEqual("test", ds.name)
-            self.check_emtpy_dataset(ds)
+            self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_empty_data(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             pc = handle.get_dataset("test")
             self.assertEqual(DataContainer(), pc.data)
             self.assertEqual(0, len(pc.data))
 
     def test_add_dataset_data_copy(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             pc = handle.get_dataset("test")
             data = pc.data
@@ -93,7 +105,6 @@ class DatasetCudsCheck(object):
             self.assertEqual(1, len(pc.data))
 
     def test_add_get_dataset_data(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
         original_ds = self.create_dataset(name='test')
         # Change data
         data = original_ds.data
@@ -101,11 +112,11 @@ class DatasetCudsCheck(object):
         original_ds.data = data
 
         # Store particle container along with its data
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             ds = handle.add_dataset(original_ds)
 
         # Reopen the file and check the data if it is still there
-        with closing(H5CUDS.open(filename, 'r')) as handle:
+        with closing(self.container_factory('test.cuds', 'r')) as handle:
             ds = handle.get_dataset('test')
             self.assertIn(CUBA.NAME, ds.data)
             self.assertEqual(ds.data[CUBA.NAME], 'somename')
@@ -121,8 +132,7 @@ class DatasetCudsCheck(object):
     def test_iter_dataset(self):
         # add a few empty particle containers
         ds_names = []
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             for i in xrange(5):
                 name = "test_{}".format(i)
                 ds_names.append(name)
@@ -144,14 +154,12 @@ class DatasetCudsCheck(object):
 
     def test_iter_dataset_wrong(self):
         ds_names = ["wrong1", "wrong"]
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             with self.assertRaises(ValueError):
                 [ds for ds in handle.iter_datasets(ds_names)]
 
     def test_delete_dataset(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             # add a few empty particle containers
             for i in xrange(5):
                 name = "test_" + str(i)
@@ -165,17 +173,15 @@ class DatasetCudsCheck(object):
                     handle.get_dataset(ds.name)
                 # test that we can't use the deleted container
                 with self.assertRaises(Exception):
-                    self.check_is_usable_dataset(ds, self.items)
+                    self.compare_operation(ds, self.items[0])
 
     def test_delete_non_existing_dataset(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             with self.assertRaises(ValueError):
                 handle.remove_dataset("foo")
 
     def test_dataset_rename(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             handle.add_dataset(self.create_dataset(name='foo'))
             ds = handle.get_dataset("foo")
             ds.name = "bar"
@@ -198,10 +204,15 @@ class DatasetCudsCheck(object):
             ds = handle.add_dataset(self.create_dataset(name='foo'))
 
 
-class ParticlesCudsCheck(DatasetCudsCheck):
+class ParticlesCudsCheck(CheckEngine):
+
+    operation_mapping = {
+        'compare datasets': 'compare_particles_datasets',
+        'add item': 'add_particle'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
+
         """
         return Particles(name=name)
 
@@ -214,29 +225,14 @@ class ParticlesCudsCheck(DatasetCudsCheck):
                 Particle((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def check_emtpy_dataset(self, ds):
-        """ Check if a dataset is empty
-        """
-
-        self.assertEqual(0, sum(1 for _ in ds.iter_particles()))
-        self.assertEqual(0, sum(1 for _ in ds.iter_bonds()))
-
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
         """
 
         self.assertTrue(isinstance(ds, H5Particles))
 
-    def check_is_usable_dataset(self, ds, items):
-        """ Check if a dataset is usable
-        """
-
-        ds.add_particle(items[0])
-
     def test_add_get_dataset(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
-        with closing(H5CUDS.open(filename, 'w')) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             # add particle container and add points to it
             handle.add_dataset(self.create_dataset(name='test'))
             ds_test = handle.get_dataset('test')
@@ -251,7 +247,8 @@ class ParticlesCudsCheck(DatasetCudsCheck):
 
             # add the particle container from the first file
             # into the second file
-            with closing(H5CUDS.open(filename_copy, 'w')) as handle_copy:
+            with closing(
+                    self.container_factory('test-copy.cuds')) as handle_copy:
                 handle_copy.add_dataset(ds_test)
                 ds_copy = handle_copy.get_dataset('test')
 
@@ -267,7 +264,7 @@ class ParticlesCudsCheck(DatasetCudsCheck):
             handle.get_dataset('test')
 
         # reopen file (in read only mode)
-        with closing(H5CUDS.open(filename, 'r')) as handle:
+        with closing(self.container_factory('test.cuds', 'r')) as handle:
             ds_test = handle.get_dataset('test')
             for particles in self.items:
                 loaded = ds_test.get_particle(particle.uid)
@@ -275,7 +272,11 @@ class ParticlesCudsCheck(DatasetCudsCheck):
                 self.assertEqual(loaded.coordinates, particle.coordinates)
 
 
-class MeshCudsCheck(DatasetCudsCheck):
+class MeshCudsCheck(CheckEngine):
+
+    operation_mapping = {
+        'compare datasets': 'compare_mesh_datasets',
+        'add item': 'add_point'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -292,32 +293,15 @@ class MeshCudsCheck(DatasetCudsCheck):
                 Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def check_emtpy_dataset(self, ds):
-        """ Check if a dataset is empty
-        """
-
-        self.assertEqual(0, len(list(p for p in ds.iter_points())))
-        self.assertEqual(0, len(list(e for e in ds.iter_edges())))
-        self.assertEqual(0, len(list(f for f in ds.iter_faces())))
-        self.assertEqual(0, len(list(c for c in ds.iter_cells())))
-
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
         """
 
         self.assertTrue(isinstance(ds, H5Mesh))
 
-    def check_is_usable_dataset(self, ds, items):
-        """ Check if a dataset is usable
-        """
-
-        ds.add_point(items[0])
-
     def test_add_get_mesh(self):
         # add mesh and add points to it
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             handle.add_dataset(Mesh(name="test"))
             ds_test = handle.get_dataset("test")
             for p in self.items:
@@ -330,7 +314,8 @@ class MeshCudsCheck(DatasetCudsCheck):
             self.assertEqual(num_points, len(self.items))
 
             # add the mesh from the first file into the second file
-            with closing(H5CUDS.open(filename_copy)) as handle_copy:
+            with closing(
+                    self.container_factory('test-copy.cuds')) as handle_copy:
                 handle_copy.add_dataset(ds_test)
                 ds_copy = handle.get_dataset("test")
 
@@ -345,7 +330,7 @@ class MeshCudsCheck(DatasetCudsCheck):
             handle.get_dataset('test')
 
         # reopen file (in read only mode)
-        with closing(H5CUDS.open(filename, 'r')) as handle:
+        with closing(self.container_factory('test.cuds', 'r')) as handle:
             ds_test = handle.get_dataset('test')
             for p in self.items:
                 p1 = ds_test.get_point(p.uid)
@@ -353,7 +338,11 @@ class MeshCudsCheck(DatasetCudsCheck):
                 self.assertEqual(p1.coordinates, p.coordinates)
 
 
-class LatticeCudsCheck(DatasetCudsCheck):
+class LatticeCudsCheck(CheckEngine):
+
+    operation_mapping = {
+        'compare datasets': 'compare_lattice_datasets',
+        'add item': 'add'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -372,21 +361,8 @@ class LatticeCudsCheck(DatasetCudsCheck):
                 Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def check_emtpy_dataset(self, ds):
-        """ Check if a dataset is empty
-        """
-
-        # Lattice always have nodes
-        pass
-
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
         """
 
         self.assertTrue(isinstance(ds, H5Lattice))
-
-    def check_is_usable_dataset(self, ds):
-        """ Check if a dataset is usable
-        """
-
-        ds.add_node(Particle([0, 0, 0]))
