@@ -132,7 +132,6 @@ def create_points(n=10, restrict=None):
     point_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict, constant=i)
-        uid = uuid.uuid4()
         point_list.append(
             Point(uid=None,
                   coordinates=[i, i*10, i*100],
@@ -178,11 +177,11 @@ def create_bonds_with_id(n=5, restrict=None, particles=None):
         bond_list.append(Bond(uid=uid, particles=ids, data=data))
     return bond_list
 
+
 def create_edges(n=5, restrict=None, points=None):
     edge_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict, constant=i)
-        uid = uuid.uuid4()
         if points is None:
             ids = [uuid.uuid4() for x in xrange(2)]
         else:
@@ -193,6 +192,7 @@ def create_edges(n=5, restrict=None, points=None):
                  points=ids,
                  data=data))
     return edge_list
+
 
 def create_edges_with_id(n=5, restrict=None, points=None):
     edge_list = []
@@ -205,16 +205,16 @@ def create_edges_with_id(n=5, restrict=None, points=None):
             uids = [point.uid for point in points]
             ids = random.sample(uids, 2)
         edge_list.append(
-            Edge(uid=None,
+            Edge(uid=uid,
                  points=ids,
                  data=data))
     return edge_list
+
 
 def create_faces(n=5, restrict=None, points=None):
     face_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict, constant=i)
-        uid = uuid.uuid4()
         if points is None:
             ids = [uuid.uuid4() for x in xrange(3)]
         else:
@@ -225,6 +225,7 @@ def create_faces(n=5, restrict=None, points=None):
                  points=ids,
                  data=data))
     return face_list
+
 
 def create_faces_with_id(n=5, restrict=None, points=None):
     face_list = []
@@ -237,16 +238,16 @@ def create_faces_with_id(n=5, restrict=None, points=None):
             uids = [point.uid for point in points]
             ids = random.sample(uids, 3)
         face_list.append(
-            Face(uid=None,
+            Face(uid=uid,
                  points=ids,
                  data=data))
     return face_list
+
 
 def create_cells(n=5, restrict=None, points=None):
     cell_list = []
     for i in xrange(n):
         data = create_data_container(restrict=restrict, constant=i)
-        uid = uuid.uuid4()
         if points is None:
             ids = [uuid.uuid4() for x in xrange(4)]
         else:
@@ -257,6 +258,7 @@ def create_cells(n=5, restrict=None, points=None):
                  points=ids,
                  data=data))
     return cell_list
+
 
 def create_cells_with_id(n=5, restrict=None, points=None):
     cell_list = []
@@ -269,7 +271,7 @@ def create_cells_with_id(n=5, restrict=None, points=None):
             uids = [point.uid for point in points]
             ids = random.sample(uids, 4)
         cell_list.append(
-            Cell(uid=None,
+            Cell(uid=uid,
                  points=ids,
                  data=data))
     return cell_list
