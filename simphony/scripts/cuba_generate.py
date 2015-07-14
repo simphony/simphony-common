@@ -41,7 +41,7 @@ def python(input, output):
 @cli.command()
 @click.argument('input', type=click.File('rb'))
 @click.argument('output', type=click.File('wb'))
-def pythonItems(input, output):
+def items(input, output):
     """ Create the CUDSItem Enum.
     """
     keywords = yaml.safe_load(input)
