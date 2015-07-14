@@ -55,7 +55,8 @@ class Container(object):
 
     def __enter__(self):
         self._file = H5CUDS.open(self._filename)
-        return self._file.add_particles(Particles("test"))
+        self._file.add_dataset(Particles("test"))
+        return self._file.get_dataset("test")
 
     def __exit__(self, type, value, tb):
         if os.path.exists(self._filename):
