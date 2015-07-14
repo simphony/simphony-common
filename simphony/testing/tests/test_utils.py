@@ -22,6 +22,7 @@ from simphony.testing.utils import (
     create_cells, create_edges_with_id, create_faces_with_id,
     create_cells_with_id)
 
+
 class TestCompareParticlesDatasets(unittest.TestCase):
 
     def test_compare_particles_datasets_equal(self):
@@ -59,7 +60,7 @@ class TestCompareParticlesDatasets(unittest.TestCase):
 
         particles.add_bonds(bond_list)
         reference.add_bonds(bond_list)
-        
+
         particles.data = data
         reference.data = data
 
@@ -223,7 +224,6 @@ class TestCompareMeshDatasets(unittest.TestCase):
         with self.assertRaises(AssertionError):
             compare_mesh_datasets(mesh, reference, testcase=self)
 
-
         # given
         test_cells = create_cells()
 
@@ -265,9 +265,11 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_equal(self):
         # given
-        lattice = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+        lattice = Lattice(
+            'test', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
-        reference = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+        reference = Lattice(
+            'test', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
 
         data = DataContainer()
@@ -280,9 +282,11 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_not_equal(self):
         # given
-        lattice = Lattice('test', 'cubic', (1.0, 1.0, 1.0),
+        lattice = Lattice(
+            'test', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
-        reference = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+        reference = Lattice(
+            'test_ref', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
 
         data = create_data_container()
@@ -297,7 +301,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
         # given
         test_data = DataContainer()
 
-        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+        lattice = Lattice(
+            'test_ref', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
         lattice.data = test_data
 
@@ -306,7 +311,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice('test_ref', 'cubic', (2.0, 2.0, 2.0),
+        lattice = Lattice(
+            'test_ref', 'cubic', (2.0, 2.0, 2.0),
             (2, 3, 4), (0.0, 0.0, 0.0))
         lattice.data = data
 
@@ -315,7 +321,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+        lattice = Lattice(
+            'test_ref', 'cubic', (1.0, 1.0, 1.0),
             (4, 6, 8), (0.0, 0.0, 0.0))
         lattice.data = data
 
@@ -324,13 +331,15 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice('test_ref', 'cubic', (1.0, 1.0, 1.0),
+        lattice = Lattice(
+            'test_ref', 'cubic', (1.0, 1.0, 1.0),
             (2, 3, 4), (2.0, 2.0, 2.0))
         lattice.data = data
 
         # when/then
         with self.assertRaises(AssertionError):
             compare_lattice_datasets(lattice, reference, testcase=self)
+
 
 class TestCompareParticles(unittest.TestCase):
 
@@ -669,7 +678,7 @@ class CreateElementsFactory(object):
     def test_create_factory(self):
         n_containers = 7
         n_items = self.itemsPerContainer
-        containers = self.container_factory(n=n_containers,items=None)
+        containers = self.container_factory(n=n_containers, items=None)
         self.assertEqual(len(containers), n_containers)
         uids = set()
         for index, container in enumerate(containers):
@@ -698,7 +707,7 @@ class CreateElementsFactory(object):
         self.assertLessEqual(len(uids), n_containers*n_items)
 
 
-class TestCreateEdgesFactory(CreateElementsFactory,unittest.TestCase):
+class TestCreateEdgesFactory(CreateElementsFactory, unittest.TestCase):
 
     classtype = Edge
     itemsPerContainer = 2
@@ -706,7 +715,7 @@ class TestCreateEdgesFactory(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_edges(n=n,points=items)
+        return create_edges(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
@@ -714,7 +723,7 @@ class TestCreateEdgesFactory(CreateElementsFactory,unittest.TestCase):
         return create_points(n=n)
 
 
-class TestCreateEdgesFactoryWithId(CreateElementsFactory,unittest.TestCase):
+class TestCreateEdgesFactoryWithId(CreateElementsFactory, unittest.TestCase):
 
     classtype = Edge
     itemsPerContainer = 2
@@ -722,7 +731,7 @@ class TestCreateEdgesFactoryWithId(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_edges(n=n,points=items)
+        return create_edges_with_id(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
@@ -730,7 +739,7 @@ class TestCreateEdgesFactoryWithId(CreateElementsFactory,unittest.TestCase):
         return create_points_with_id(n=n)
 
 
-class TestCreateFacesFactory(CreateElementsFactory,unittest.TestCase):
+class TestCreateFacesFactory(CreateElementsFactory, unittest.TestCase):
 
     classtype = Face
     itemsPerContainer = 3
@@ -738,7 +747,7 @@ class TestCreateFacesFactory(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_faces(n=n,points=items)
+        return create_faces(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
@@ -746,7 +755,7 @@ class TestCreateFacesFactory(CreateElementsFactory,unittest.TestCase):
         return create_points(n=n)
 
 
-class TestCreateFacesFactoryWithId(CreateElementsFactory,unittest.TestCase):
+class TestCreateFacesFactoryWithId(CreateElementsFactory, unittest.TestCase):
 
     classtype = Face
     itemsPerContainer = 3
@@ -754,7 +763,7 @@ class TestCreateFacesFactoryWithId(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_faces(n=n,points=items)
+        return create_faces_with_id(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
@@ -762,7 +771,7 @@ class TestCreateFacesFactoryWithId(CreateElementsFactory,unittest.TestCase):
         return create_points_with_id(n=n)
 
 
-class TestCreateCellsFactory(CreateElementsFactory,unittest.TestCase):
+class TestCreateCellsFactory(CreateElementsFactory, unittest.TestCase):
 
     classtype = Cell
     itemsPerContainer = 4
@@ -770,7 +779,7 @@ class TestCreateCellsFactory(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_cells(n=n,points=items)
+        return create_cells(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
@@ -778,7 +787,7 @@ class TestCreateCellsFactory(CreateElementsFactory,unittest.TestCase):
         return create_points(n=n)
 
 
-class TestCreateCellsFactoryWithId(CreateElementsFactory,unittest.TestCase):
+class TestCreateCellsFactoryWithId(CreateElementsFactory, unittest.TestCase):
 
     classtype = Cell
     itemsPerContainer = 4
@@ -786,7 +795,7 @@ class TestCreateCellsFactoryWithId(CreateElementsFactory,unittest.TestCase):
     def container_factory(self, n, items):
         """ Create and return the container object
         """
-        return create_cells(n=n,points=items)
+        return create_cells_with_id(n=n, points=items)
 
     def item_factory(self, n):
         """ Create and return the container object
