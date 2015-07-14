@@ -16,9 +16,9 @@ def compare_particles_datasets(particles, reference, msg=None, testcase=None):
     self = testcase
     self.assertEqual(particles.name, reference.name)
     for b, r in zip(particles.iter_bonds(), reference.iter_bonds()):
-        compare_particles(b, r, testcase=self)
+        compare_bonds(b, r, testcase=self)
     for p, r in zip(particles.iter_particles(), reference.iter_particles()):
-        compare_bonds(p, r, testcase=self)
+        compare_particles(p, r, testcase=self)
     compare_data_containers(particles.data, reference.data, testcase=self)
 
 
@@ -115,7 +115,7 @@ def create_particles(n=10, restrict=None):
 def create_particles_with_id(n=10, restrict=None):
     particle_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict)
+        data = create_data_container(restrict=restrict, constant=i)
         uid = uuid.uuid4()
         particle_list.append(
             Particle(uid=uid,
@@ -124,14 +124,28 @@ def create_particles_with_id(n=10, restrict=None):
     return particle_list
 
 
-def create_points():
-    return [
-        Point((0.0, 0.0, 0.0)),
-        Point((1.0, 0.0, 0.0)),
-        Point((0.0, 1.0, 0.0)),
-        Point((0.0, 0.0, 1.0)),
-        Point((1.0, 0.0, 1.0)),
-        Point((0.0, 1.0, 1.0))]
+def create_points(n=10, restrict=None):
+    point_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        point_list.append(
+            Point(uid=None,
+                  coordinates=[i, i*10, i*100],
+                  data=data))
+    return point_list
+
+
+def create_points_with_id(n=10, restrict=None):
+    point_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        point_list.append(
+            Point(uid=uid,
+                  coordinates=[i, i*10, i*100],
+                  data=data))
+    return point_list
 
 
 def create_bonds(n=5, restrict=None, particles=None):

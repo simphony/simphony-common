@@ -4,9 +4,9 @@ import uuid
 import numpy
 from numpy.testing import assert_array_equal
 
-from simphony.cuds.particles import Particle, Bond
-from simphony.cuds.lattice import LatticeNode
-from simphony.cuds.mesh import Point, Element
+from simphony.cuds.particles import Particles, Particle, Bond
+from simphony.cuds.lattice import Lattice, LatticeNode
+from simphony.cuds.mesh import Mesh, Point, Element
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.core.keywords import KEYWORDS
@@ -14,8 +14,130 @@ from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,
     compare_lattice_nodes, compare_points, compare_elements,
     create_points, create_bonds, compare_data_containers,
-    create_particles, dummy_cuba_value, grouper)
+    create_particles, dummy_cuba_value, grouper,
+    compare_particles_datasets, compare_mesh_datasets,
+    compare_lattice_datasets, create_particles_with_id,
+    create_points_with_id)
 
+class TestCompareParticlesDatasets(unittest.TestCase):
+
+    def test_compare_particles_datasets_equal(self):
+        # given
+        particles = Particles(name="test")
+        reference = Particles(name="test")
+
+        particle_list = create_particles_with_id()
+
+        particles.add_particles(particle_list)
+        reference.add_particles(particle_list)
+
+        data = DataContainer()
+
+        particles.data = data
+        reference.data = data
+
+        # this should pass without problems
+        compare_particles_datasets(particles, reference, testcase=self)
+
+    def test_compare_particles_datasets_not_equal(self):
+        # given
+        particles = Particles(name="test")
+        reference = Particles(name="test_ref")
+
+        particle_list = create_particles_with_id()
+        data = create_data_container()
+
+        particles.add_particles(particle_list)
+        particles.data = data
+        
+        reference.add_particles(particle_list)
+        reference.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_particles_datasets(particles, reference, testcase=self)
+
+        # given
+        particles = Particles(name=reference.name)
+        particles.add_particles(create_particles_with_id())
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_particles_datasets(particles, reference, testcase=self)
+
+        # given
+        test_data = DataContainer()
+
+        particles = Particles(name=reference.name)
+        particles.add_particles(particle_list)
+        particles.data = test_data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_particles_datasets(particles, reference, testcase=self)
+
+
+class TestCompareMeshDatasets(unittest.TestCase):
+
+    def test_compare_mesh_datasets_equal(self):
+        # given
+        mesh = Mesh(name="test")
+        reference = Mesh(name="test")
+
+        point_list = create_particles_with_id()
+
+        for point in point_list:
+            mesh.add_point(point)
+            reference.add_point(point)
+
+        data = DataContainer()
+
+        mesh.data = data
+        reference.data = data
+
+        # this should pass without problems
+        compare_mesh_datasets(mesh, reference, testcase=self)
+
+    def test_compare_mesh_datasets_not_equal(self):
+        # given
+        mesh = Mesh(name="test")
+        reference = Mesh(name="test_ref")
+
+        point_list = create_points_with_id()
+        data = create_data_container()
+
+        for point in point_list:
+            mesh.add_point(point)
+        mesh.data = data
+        
+        for point in point_list:
+            reference.add_point(point)
+        reference.data = data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
+
+        # given
+        mesh = Mesh(name=reference.name)
+        for point in create_points_with_id():
+            mesh.add_point(point)
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
+
+        # given
+        test_data = DataContainer()
+
+        mesh = Mesh(name=reference.name)
+        for point in point_list:
+            mesh.add_point(point)
+        mesh.data = test_data
+
+        # when/then
+        with self.assertRaises(AssertionError):
+            compare_mesh_datasets(mesh, reference, testcase=self)
 
 class TestCompareParticles(unittest.TestCase):
 
@@ -337,19 +459,47 @@ class TestCompareDataContainers(unittest.TestCase):
 class TestCreateFactories(unittest.TestCase):
 
     def test_create_points(self):
-        points = create_points()
-        self.assertEqual(len(points), 6)
-        for point in points:
+        points = create_points(n=10)
+        self.assertEqual(len(points), 10)
+        for index, point in enumerate(points):
             self.assertIsInstance(point, Point)
             self.assertIsNone(point.uid)
+            self.assertEqual(
+                point.coordinates, (index, index*10, index*100))
             compare_data_containers(
-                point.data, DataContainer(), testcase=self)
+                point.data, create_data_container(constant=index),
+                testcase=self)
+
+    def test_create_points_with_id(self):
+        points = create_points_with_id(n=10)
+        self.assertEqual(len(points), 10)
+        for index, point in enumerate(points):
+            self.assertIsInstance(point, Point)
+            self.assertIsNotNone(point.uid)
+            self.assertEqual(
+                point.coordinates, (index, index*10, index*100))
+            compare_data_containers(
+                point.data, create_data_container(constant=index),
+                testcase=self)
 
     def test_create_particles(self):
         particles = create_particles(n=10)
         self.assertEqual(len(particles), 10)
         for index, particle in enumerate(particles):
+            self.assertIsInstance(particle, Particle)
             self.assertIsNone(particle.uid)
+            self.assertEqual(
+                particle.coordinates, (index, index*10, index*100))
+            compare_data_containers(
+                particle.data, create_data_container(constant=index),
+                testcase=self)
+
+    def test_create_particles_with_id(self):
+        particles = create_particles_with_id(n=10)
+        self.assertEqual(len(particles), 10)
+        for index, particle in enumerate(particles):
+            self.assertIsInstance(particle, Particle)
+            self.assertIsNotNone(particle.uid)
             self.assertEqual(
                 particle.coordinates, (index, index*10, index*100))
             compare_data_containers(
@@ -462,3 +612,7 @@ class TestGrouper(unittest.TestCase):
 
         groups = [group for group in grouper(iterable, 3)]
         self.assertEqual(groups, [])
+
+
+if __name__ == '__main__':
+    unittest.main()
