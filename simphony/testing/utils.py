@@ -9,7 +9,7 @@ from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
-from simphony.cuds.mesh import Point
+from simphony.cuds.mesh import Point, Edge, Face, Cell
 
 
 def compare_particles_datasets(particles, reference, msg=None, testcase=None):
@@ -173,6 +173,102 @@ def create_bonds_with_id(n=5, restrict=None, particles=None):
             ids = random.sample(uids, n)
         bond_list.append(Bond(uid=uid, particles=ids, data=data))
     return bond_list
+
+def create_edges(n=5, restrict=None, points=None):
+    edge_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(2)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 2)
+        edge_list.append(
+            Edge(uid=None,
+                 points=ids,
+                 data=data))
+    return edge_list
+
+def create_edges_with_id(n=5, restrict=None, points=None):
+    edge_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(2)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 2)
+        edge_list.append(
+            Edge(uid=None,
+                 points=ids,
+                 data=data))
+    return edge_list
+
+def create_faces(n=5, restrict=None, points=None):
+    face_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(3)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 3)
+        face_list.append(
+            Face(uid=None,
+                 points=ids,
+                 data=data))
+    return face_list
+
+def create_faces_with_id(n=5, restrict=None, points=None):
+    face_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(3)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 3)
+        face_list.append(
+            Face(uid=None,
+                 points=ids,
+                 data=data))
+    return face_list
+
+def create_cells(n=5, restrict=None, points=None):
+    cell_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(4)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 4)
+        cell_list.append(
+            Cell(uid=None,
+                 points=ids,
+                 data=data))
+    return cell_list
+
+def create_cells_with_id(n=5, restrict=None, points=None):
+    cell_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(4)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 4)
+        cell_list.append(
+            Cell(uid=None,
+                 points=ids,
+                 data=data))
+    return cell_list
 
 
 def create_data_container(restrict=None, constant=None):
