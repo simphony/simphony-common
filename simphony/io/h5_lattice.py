@@ -4,6 +4,7 @@ from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 
 import numpy as np
 
@@ -134,8 +135,8 @@ class H5Lattice(ABCLattice):
 
         Parameter
         ---------
-        item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
 
         Returns
         -------

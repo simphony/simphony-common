@@ -5,6 +5,7 @@ import numpy
 
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.cuds.particles import Particle, Bond
@@ -259,8 +260,8 @@ class H5Particles(ABCParticles):
 
         Parameter
         ---------
-        item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
 
         Returns
         -------

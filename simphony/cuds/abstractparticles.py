@@ -365,8 +365,8 @@ class ABCParticles(object):
 
         Parameter
         ---------
-        item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
 
         Returns
         -------

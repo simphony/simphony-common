@@ -7,6 +7,7 @@ and modify a mesh
 import uuid
 from simphony.cuds.abstractmesh import ABCMesh
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 import simphony.core.data_container as dc
 
 
@@ -689,8 +690,8 @@ class Mesh(ABCMesh):
 
         Parameter
         ---------
-        item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
 
         Returns
         -------

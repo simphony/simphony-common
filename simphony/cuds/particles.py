@@ -3,6 +3,7 @@ import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_items import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -414,8 +415,8 @@ class Particles(ABCParticles):
 
         Parameter
         ---------
-        item_type : CUBA
-            The CUBA enum of the type of the items to return the count of.
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
 
         Returns
         -------
