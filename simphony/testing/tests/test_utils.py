@@ -14,7 +14,6 @@ from simphony.core.keywords import KEYWORDS
 from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,
     compare_lattice_nodes, compare_points, compare_elements,
-<<<<<<< HEAD
     create_points, create_bonds, compare_data_containers,
     create_particles, dummy_cuba_value, grouper,
     compare_particles_datasets, compare_mesh_datasets,
@@ -340,11 +339,6 @@ class TestCompareLatticeDatasets(unittest.TestCase):
         # when/then
         with self.assertRaises(AssertionError):
             compare_lattice_datasets(lattice, reference, testcase=self)
-=======
-    create_points, create_bonds, create_particles_with_id,
-    compare_data_containers, create_particles,
-    create_bonds_with_id, dummy_cuba_value, grouper)
->>>>>>> a575d99291bd1915d6457ceda71a47a4e76db872
 
 
 class TestCompareParticles(unittest.TestCase):
@@ -832,7 +826,7 @@ class TestCreateFactories(unittest.TestCase):
             self.assertEqual(
                 point.coordinates, (index, index*10, index*100))
             compare_data_containers(
-                point.data, create_data_container(constant=index),
+                point.data, create_data_container(),
                 testcase=self)
 
     def test_create_particles(self):

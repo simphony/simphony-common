@@ -119,7 +119,7 @@ def create_particles(n=10, restrict=None):
 def create_particles_with_id(n=10, restrict=None):
     particle_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict, constant=i)
+        data = create_data_container(restrict=restrict)
         uid = uuid.uuid4()
         particle_list.append(
             Particle(uid=uid,
@@ -142,7 +142,7 @@ def create_points(n=10, restrict=None):
 def create_points_with_id(n=10, restrict=None):
     point_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict, constant=i)
+        data = create_data_container(restrict=restrict)
         uid = uuid.uuid4()
         point_list.append(
             Point(uid=uid,
