@@ -1,6 +1,5 @@
 import abc
 import uuid
-import os
 import sys
 from contextlib import closing
 import tempfile
@@ -14,10 +13,6 @@ from simphony.core.data_container import DataContainer
 from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
 from simphony.cuds.lattice import Lattice
-from simphony.io.h5_cuds import H5CUDS
-from simphony.io.h5_mesh import H5Mesh
-from simphony.io.h5_particles import H5Particles
-from simphony.io.h5_lattice import H5Lattice
 
 
 class CheckEngine(object):
@@ -224,12 +219,6 @@ class ParticlesCudsCheck(CheckEngine):
                 Particle((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def check_instance_of_dataset(self, ds):
-        """ Check if a dataset is instance of a class
-        """
-
-        self.assertTrue(isinstance(ds, H5Particles))
-
     def test_add_get_dataset(self):
         with closing(self.container_factory('test.cuds')) as handle:
             # add particle container and add points to it
@@ -292,12 +281,6 @@ class MeshCudsCheck(CheckEngine):
                 Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def check_instance_of_dataset(self, ds):
-        """ Check if a dataset is instance of a class
-        """
-
-        self.assertTrue(isinstance(ds, H5Mesh))
-
     def test_add_get_mesh(self):
         # add mesh and add points to it
         with closing(self.container_factory('test.cuds')) as handle:
@@ -359,9 +342,3 @@ class LatticeCudsCheck(CheckEngine):
             items.append(
                 Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
-
-    def check_instance_of_dataset(self, ds):
-        """ Check if a dataset is instance of a class
-        """
-
-        self.assertTrue(isinstance(ds, H5Lattice))

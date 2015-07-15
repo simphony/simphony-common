@@ -6,6 +6,9 @@ import tempfile
 import tables
 
 from simphony.io.h5_cuds import H5CUDS
+from simphony.io.h5_mesh import H5Mesh
+from simphony.io.h5_particles import H5Particles
+from simphony.io.h5_lattice import H5Lattice
 
 from simphony.testing.abc_check_engine import (
     ParticlesCudsCheck, MeshCudsCheck,
@@ -83,6 +86,12 @@ class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
         filename = os.path.join(self.temp_dir, name)
         return H5CUDS.open(filename, mode)
 
+    def check_instance_of_dataset(self, ds):
+        """ Check if a dataset is instance of a class
+        """
+
+        self.assertTrue(isinstance(ds, H5Particles))
+
 
 class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
 
@@ -90,12 +99,24 @@ class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
         filename = os.path.join(self.temp_dir, name)
         return H5CUDS.open(filename, mode)
 
+    def check_instance_of_dataset(self, ds):
+        """ Check if a dataset is instance of a class
+        """
+
+        self.assertTrue(isinstance(ds, H5Mesh))
+
 
 class TestLatticeCudsOperations(LatticeCudsCheck, unittest.TestCase):
 
     def container_factory(self, name, mode='w'):
         filename = os.path.join(self.temp_dir, name)
         return H5CUDS.open(filename, mode)
+
+    def check_instance_of_dataset(self, ds):
+        """ Check if a dataset is instance of a class
+        """
+
+        self.assertTrue(isinstance(ds, H5Lattice))
 
 
 if __name__ == '__main__':
