@@ -14,9 +14,9 @@ from simphony.core.keywords import KEYWORDS
 from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,
     compare_lattice_nodes, compare_points, compare_elements,
-    create_points, create_bonds, compare_data_containers,
-    create_particles, dummy_cuba_value, grouper,
-    compare_particles_datasets, compare_mesh_datasets,
+    create_points, create_bonds, create_bonds_with_id,
+    compare_data_containers, create_particles, dummy_cuba_value, 
+    grouper, compare_particles_datasets, compare_mesh_datasets,
     compare_lattice_datasets, create_particles_with_id,
     create_points_with_id, create_edges, create_faces,
     create_cells, create_edges_with_id, create_faces_with_id,
