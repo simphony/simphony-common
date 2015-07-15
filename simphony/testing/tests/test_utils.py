@@ -15,7 +15,7 @@ from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,
     compare_lattice_nodes, compare_points, compare_elements,
     create_points, create_bonds, create_bonds_with_id,
-    compare_data_containers, create_particles, dummy_cuba_value, 
+    compare_data_containers, create_particles, dummy_cuba_value,
     grouper, compare_particles_datasets, compare_mesh_datasets,
     compare_lattice_datasets, create_particles_with_id,
     create_points_with_id, create_edges, create_faces,
