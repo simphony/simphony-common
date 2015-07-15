@@ -1,7 +1,6 @@
 import abc
 import uuid
 import sys
-from contextlib import closing
 import tempfile
 
 from simphony.testing.utils import (  # noqa
@@ -61,55 +60,57 @@ class CheckEngine(object):
         return method(*args, **kwrds)
 
     def test_get_missing_dataset(self):
-        with closing(self.engine_factory()) as handle:
-            with self.assertRaises(ValueError):
-                handle.get_dataset('foo')
+        handle = self.engine_factory()
+        with self.assertRaises(ValueError):
+            handle.get_dataset('foo')
 
     def test_add_dataset_empty(self):
-        with closing(self.engine_factory()) as handle:
-            reference = self.create_dataset(name='test')
-            handle.add_dataset(reference)
-            ds = handle.get_dataset("test")
+        handle = self.engine_factory()
+        reference = self.create_dataset(name='test')
+        handle.add_dataset(reference)
+        ds = handle.get_dataset("test")
 
-            self.compare_operation(reference, ds, testcase=self)
+        self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_empty_data(self):
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(self.create_dataset(name='test'))
-            pc = handle.get_dataset("test")
-            self.assertEqual(DataContainer(), pc.data)
-            self.assertEqual(0, len(pc.data))
+        handle = self.engine_factory()
+        handle.add_dataset(self.create_dataset(name='test'))
+        ds = handle.get_dataset("test")
+        self.assertEqual(DataContainer(), ds.data)
+        self.assertEqual(0, len(ds.data))
 
     def test_add_dataset_data_copy(self):
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(self.create_dataset(name='test'))
-            pc = handle.get_dataset("test")
-            data = pc.data
-            data[CUBA.NAME] = 'somename'
+        handle = self.engine_factory()
+        handle.add_dataset(self.create_dataset(name='test'))
+        ds = handle.get_dataset("test")
+        data = ds.data
+        data[CUBA.NAME] = 'somename'
 
-            # Since the returned data is always a copy,
-            #  therefore the pc.data should not have changed
-            self.assertNotIn(CUBA.NAME, pc.data)
-            # And the length should be still zero
-            self.assertEqual(0, len(pc.data))
-            pc.data = data
-            # This time we replaced the pc.data,
-            #  therefore it should have been changed
-            self.assertIn(CUBA.NAME, pc.data)
-            # The length also should have been changed
-            self.assertEqual(1, len(pc.data))
+        # Since the returned data is always a copy,
+        #  therefore the ds.data should not have changed
+        self.assertNotIn(CUBA.NAME, ds.data)
+        # And the length should be still zero
+        self.assertEqual(0, len(ds.data))
+        ds.data = data
+        # This time we replaced the ds.data,
+        #  therefore it should have been changed
+        self.assertIn(CUBA.NAME, ds.data)
+        # The length also should have been changed
+        self.assertEqual(1, len(ds.data))
 
     def test_add_get_dataset(self):
+        handle = self.engine_factory()
         reference = self.create_dataset(name='test')
 
         # Store dataset container along with its data
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(reference)
-            ds = handle.get_dataset('test')
+        handle.add_dataset(reference)
+        ds = handle.get_dataset('test')
 
-            self.compare_operation(reference, ds, testcase=self)
+        self.compare_operation(reference, ds, testcase=self)
 
     def test_add_get_dataset_data(self):
+        handle = self.engine_factory()
+
         reference = self.create_dataset(name='test')
         # Change data
         data = reference.data
@@ -117,95 +118,99 @@ class CheckEngine(object):
         reference.data = data
 
         # Store dataset container along with its data
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(reference)
-            ds = handle.get_dataset('test')
+        handle.add_dataset(reference)
+        ds = handle.get_dataset('test')
 
-            self.compare_operation(reference, ds, testcase=self)
+        self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_with_same_name(self):
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(self.create_dataset(name='test'))
-            with self.assertRaises(ValueError):
-                handle.add_dataset(
-                    self.create_dataset(name='test'))
+        handle = self.engine_factory()
+        handle.add_dataset(self.create_dataset(name='test'))
+        with self.assertRaises(ValueError):
+            handle.add_dataset(
+                self.create_dataset(name='test'))
 
     def test_iter_dataset(self):
+        handle = self.engine_factory()
         # add a few empty particle containers
         ds_names = []
-        with closing(self.engine_factory()) as handle:
-            for i in xrange(5):
-                name = "test_{}".format(i)
-                ds_names.append(name)
-                handle.add_dataset(self.create_dataset(name=name))
 
-            # test iterating over all
-            names = [
-                ds.name for ds in handle.iter_datasets()]
-            self.assertEqual(names, ds_names)
+        for i in xrange(5):
+            name = "test_{}".format(i)
+            ds_names.append(name)
+            handle.add_dataset(self.create_dataset(name=name))
 
-            # test iterating over a specific subset
-            subset = ds_names[:3]
-            names = [
-                ds.name for ds in handle.iter_datasets(subset)]
-            self.assertEquals(names, subset)
+        # test iterating over all
+        names = [
+            ds.name for ds in handle.iter_datasets()]
+        self.assertEqual(names, ds_names)
 
-            for ds in handle.iter_datasets(ds_names):
-                self.check_instance_of_dataset(ds)
+        # test iterating over a specific subset
+        subset = ds_names[:3]
+        names = [
+            ds.name for ds in handle.iter_datasets(subset)]
+        self.assertEquals(names, subset)
+
+        for ds in handle.iter_datasets(ds_names):
+            self.check_instance_of_dataset(ds)
 
     def test_iter_dataset_wrong(self):
+        handle = self.engine_factory()
         ds_names = ["wrong1", "wrong"]
-        with closing(self.engine_factory()) as handle:
-            with self.assertRaises(ValueError):
-                [ds for ds in handle.iter_datasets(ds_names)]
+
+        with self.assertRaises(ValueError):
+            [ds for ds in handle.iter_datasets(ds_names)]
 
     def test_delete_dataset(self):
-        with closing(self.engine_factory()) as handle:
-            # add a few empty particle containers
-            for i in xrange(5):
-                name = "test_" + str(i)
-                handle.add_dataset(Particles(name=name))
+        handle = self.engine_factory()
+        # add a few empty particle containers
+        for i in xrange(5):
+            name = "test_" + str(i)
+            handle.add_dataset(Particles(name=name))
 
-            # delete each of the particle containers
-            for ds in handle.iter_datasets():
-                handle.remove_dataset(ds.name)
-                # test that we can't get deleted containers
-                with self.assertRaises(ValueError):
-                    handle.get_dataset(ds.name)
-                # test that we can't use the deleted container
-                with self.assertRaises(Exception):
-                    self.compare_operation(ds, self.items[0])
+        # delete each of the particle containers
+        for ds in handle.iter_datasets():
+            handle.remove_dataset(ds.name)
+            # test that we can't get deleted containers
+            with self.assertRaises(ValueError):
+                handle.get_dataset(ds.name)
+            # test that we can't use the deleted container
+            with self.assertRaises(Exception):
+                self.compare_operation(ds, self.items[0])
 
     def test_delete_non_existing_dataset(self):
-        with closing(self.engine_factory()) as handle:
-            with self.assertRaises(ValueError):
-                handle.remove_dataset("foo")
+        handle = self.engine_factory()
+        with self.assertRaises(ValueError):
+            handle.remove_dataset("foo")
 
     def test_dataset_rename(self):
-        with closing(self.engine_factory()) as handle:
-            handle.add_dataset(self.create_dataset(name='foo'))
-            ds = handle.get_dataset("foo")
-            ds.name = "bar"
-            self.assertEqual("bar", ds.name)
+        handle = self.engine_factory()
+        handle.add_dataset(self.create_dataset(name='foo'))
+        ds = handle.get_dataset("foo")
+        ds.name = "bar"
+        self.assertEqual("bar", ds.name)
 
-            # we should not be able to use the old name "foo"
-            with self.assertRaises(ValueError):
-                handle.get_dataset("foo")
-            with self.assertRaises(ValueError):
-                handle.remove_dataset("foo")
-            with self.assertRaises(ValueError):
-                [_ for _ in handle.iter_datasets(names=["foo"])]
+        # we should not be able to use the old name "foo"
+        with self.assertRaises(ValueError):
+            handle.get_dataset("foo")
+        with self.assertRaises(ValueError):
+            handle.remove_dataset("foo")
+        with self.assertRaises(ValueError):
+            [_ for _ in handle.iter_datasets(names=["foo"])]
 
-            # we should be able to access using the new "bar" name
-            ds_bar = handle.get_dataset("bar")
-            self.assertEqual("bar", ds_bar.name)
+        # we should be able to access using the new "bar" name
+        ds_bar = handle.get_dataset("bar")
+        self.assertEqual("bar", ds_bar.name)
 
-            # and we should be able to use the no-longer used
-            # "foo" name when adding another particle container
-            ds = handle.add_dataset(self.create_dataset(name='foo'))
+        # and we should be able to use the no-longer used
+        # "foo" name when adding another particle container
+        ds = handle.add_dataset(self.create_dataset(name='foo'))
 
 
 class ParticlesCudsCheck(CheckEngine):
+
+    def setUp(self):
+        CheckEngine.setUp(self)
 
     operation_mapping = {
         'compare datasets': 'compare_particles_datasets',
@@ -229,6 +234,9 @@ class ParticlesCudsCheck(CheckEngine):
 
 class MeshCudsCheck(CheckEngine):
 
+    def setUp(self):
+        CheckEngine.setUp(self)
+
     operation_mapping = {
         'compare datasets': 'compare_mesh_datasets',
         'add item': 'add_point'}
@@ -250,6 +258,9 @@ class MeshCudsCheck(CheckEngine):
 
 
 class LatticeCudsCheck(CheckEngine):
+
+    def setUp(self):
+        CheckEngine.setUp(self)
 
     operation_mapping = {
         'compare datasets': 'compare_lattice_datasets',

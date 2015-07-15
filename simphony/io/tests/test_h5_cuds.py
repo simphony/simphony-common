@@ -179,9 +179,15 @@ class TestH5CUDSVersions(unittest.TestCase):
 
 class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
 
+    def setUp(self):
+        ParticlesCudsCheck.setUp(self)
+        self.engines = []
+
     def engine_factory(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
-        return H5CUDS.open(filename)
+        engine = H5CUDS.open(filename)
+        self.engines.append(engine)
+        return engine
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
@@ -189,12 +195,22 @@ class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
 
         self.assertTrue(isinstance(ds, H5Particles))
 
+    def tearDown(self):
+        for engine in self.engines:
+            engine.close()
+
 
 class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
 
+    def setUp(self):
+        MeshCudsCheck.setUp(self)
+        self.engines = []
+
     def engine_factory(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
-        return H5CUDS.open(filename)
+        engine = H5CUDS.open(filename)
+        self.engines.append(engine)
+        return engine
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
@@ -202,18 +218,32 @@ class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
 
         self.assertTrue(isinstance(ds, H5Mesh))
 
+    def tearDown(self):
+        for engine in self.engines:
+            engine.close()
+
 
 class TestLatticeCudsOperations(LatticeCudsCheck, unittest.TestCase):
 
+    def setUp(self):
+        LatticeCudsCheck.setUp(self)
+        self.engines = []
+
     def engine_factory(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
-        return H5CUDS.open(filename)
+        engine = H5CUDS.open(filename)
+        self.engines.append(engine)
+        return engine
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
         """
 
         self.assertTrue(isinstance(ds, H5Lattice))
+
+    def tearDown(self):
+        for engine in self.engines:
+            engine.close()
 
 
 if __name__ == '__main__':
