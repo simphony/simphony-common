@@ -25,7 +25,7 @@ class CheckEngine(object):
         self.items = self.create_dataset_items()
 
     @abc.abstractmethod
-    def container_factory(self, name, mode='w'):
+    def engine_factory(self):
         """ Create and return the container object
         """
 
@@ -61,12 +61,12 @@ class CheckEngine(object):
         return method(*args, **kwrds)
 
     def test_get_missing_dataset(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             with self.assertRaises(ValueError):
                 handle.get_dataset('foo')
 
     def test_add_dataset_empty(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             reference = self.create_dataset(name='test')
             handle.add_dataset(reference)
             ds = handle.get_dataset("test")
@@ -74,14 +74,14 @@ class CheckEngine(object):
             self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_empty_data(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             pc = handle.get_dataset("test")
             self.assertEqual(DataContainer(), pc.data)
             self.assertEqual(0, len(pc.data))
 
     def test_add_dataset_data_copy(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             pc = handle.get_dataset("test")
             data = pc.data
@@ -99,25 +99,32 @@ class CheckEngine(object):
             # The length also should have been changed
             self.assertEqual(1, len(pc.data))
 
-    def test_add_get_dataset_data(self):
-        original_ds = self.create_dataset(name='test')
-        # Change data
-        data = original_ds.data
-        data[CUBA.NAME] = 'somename'
-        original_ds.data = data
+    def test_add_get_dataset(self):
+        reference = self.create_dataset(name='test')
 
-        # Store particle container along with its data
-        with closing(self.container_factory('test.cuds')) as handle:
-            ds = handle.add_dataset(original_ds)
-
-        # Reopen the file and check the data if it is still there
-        with closing(self.container_factory('test.cuds', 'r')) as handle:
+        # Store dataset container along with its data
+        with closing(self.engine_factory()) as handle:
+            handle.add_dataset(reference)
             ds = handle.get_dataset('test')
-            self.assertIn(CUBA.NAME, ds.data)
-            self.assertEqual(ds.data[CUBA.NAME], 'somename')
+
+            self.compare_operation(reference, ds, testcase=self)
+
+    def test_add_get_dataset_data(self):
+        reference = self.create_dataset(name='test')
+        # Change data
+        data = reference.data
+        data[CUBA.NAME] = 'somename'
+        reference.data = data
+
+        # Store dataset container along with its data
+        with closing(self.engine_factory()) as handle:
+            handle.add_dataset(reference)
+            ds = handle.get_dataset('test')
+
+            self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_with_same_name(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             with self.assertRaises(ValueError):
                 handle.add_dataset(
@@ -126,7 +133,7 @@ class CheckEngine(object):
     def test_iter_dataset(self):
         # add a few empty particle containers
         ds_names = []
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             for i in xrange(5):
                 name = "test_{}".format(i)
                 ds_names.append(name)
@@ -148,12 +155,12 @@ class CheckEngine(object):
 
     def test_iter_dataset_wrong(self):
         ds_names = ["wrong1", "wrong"]
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             with self.assertRaises(ValueError):
                 [ds for ds in handle.iter_datasets(ds_names)]
 
     def test_delete_dataset(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             # add a few empty particle containers
             for i in xrange(5):
                 name = "test_" + str(i)
@@ -170,12 +177,12 @@ class CheckEngine(object):
                     self.compare_operation(ds, self.items[0])
 
     def test_delete_non_existing_dataset(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             with self.assertRaises(ValueError):
                 handle.remove_dataset("foo")
 
     def test_dataset_rename(self):
-        with closing(self.container_factory('test.cuds')) as handle:
+        with closing(self.engine_factory()) as handle:
             handle.add_dataset(self.create_dataset(name='foo'))
             ds = handle.get_dataset("foo")
             ds.name = "bar"
@@ -219,46 +226,6 @@ class ParticlesCudsCheck(CheckEngine):
                 Particle((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
 
-    def test_add_get_dataset(self):
-        with closing(self.container_factory('test.cuds')) as handle:
-            # add particle container and add points to it
-            handle.add_dataset(self.create_dataset(name='test'))
-            ds_test = handle.get_dataset('test')
-            for particle in self.items:
-                uid = ds_test.add_particles([particle])
-                self.assertEqual(particle.uid, uid[0])
-                self.assertEqual(
-                    particle.coordinates,
-                    ds_test.get_particle(uid[0]).coordinates)
-            self.assertEqual(
-                len(self.items), sum(1 for _ in ds_test.iter_particles()))
-
-            # add the particle container from the first file
-            # into the second file
-            with closing(
-                    self.container_factory('test-copy.cuds')) as handle_copy:
-                handle_copy.add_dataset(ds_test)
-                ds_copy = handle_copy.get_dataset('test')
-
-                for particle in ds_test.iter_particles():
-                    particle_copy = ds_copy.get_particle(particle.uid)
-                    self.assertEqual(particle_copy.uid, particle.uid)
-                    self.assertEqual(
-                        particle_copy.coordinates, particle.coordinates)
-
-        with self.assertRaises(Exception):
-            ds_test.delete(self.items[0].uid)
-        with self.assertRaises(Exception):
-            handle.get_dataset('test')
-
-        # reopen file (in read only mode)
-        with closing(self.container_factory('test.cuds', 'r')) as handle:
-            ds_test = handle.get_dataset('test')
-            for particles in self.items:
-                loaded = ds_test.get_particle(particle.uid)
-                self.assertEqual(loaded.uid, particle.uid)
-                self.assertEqual(loaded.coordinates, particle.coordinates)
-
 
 class MeshCudsCheck(CheckEngine):
 
@@ -280,44 +247,6 @@ class MeshCudsCheck(CheckEngine):
             items.append(
                 Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
         return items
-
-    def test_add_get_mesh(self):
-        # add mesh and add points to it
-        with closing(self.container_factory('test.cuds')) as handle:
-            handle.add_dataset(Mesh(name="test"))
-            ds_test = handle.get_dataset("test")
-            for p in self.items:
-                uid = ds_test.add_point(p)
-                self.assertEqual(p.uid, uid)
-                self.assertEqual(
-                    p.coordinates, ds_test.get_point(uid).coordinates)
-
-            num_points = sum(1 for _ in ds_test.iter_points())
-            self.assertEqual(num_points, len(self.items))
-
-            # add the mesh from the first file into the second file
-            with closing(
-                    self.container_factory('test-copy.cuds')) as handle_copy:
-                handle_copy.add_dataset(ds_test)
-                ds_copy = handle.get_dataset("test")
-
-                for p in ds_test.iter_points():
-                    p1 = ds_copy.get_point(p.uid)
-                    self.assertEqual(p1.uid, p.uid)
-                    self.assertEqual(p1.coordinates, p.coordinates)
-
-        with self.assertRaises(Exception):
-            ds_test.delete(self.items[0].uid)
-        with self.assertRaises(Exception):
-            handle.get_dataset('test')
-
-        # reopen file (in read only mode)
-        with closing(self.container_factory('test.cuds', 'r')) as handle:
-            ds_test = handle.get_dataset('test')
-            for p in self.items:
-                p1 = ds_test.get_point(p.uid)
-                self.assertEqual(p1.uid, p.uid)
-                self.assertEqual(p1.coordinates, p.coordinates)
 
 
 class LatticeCudsCheck(CheckEngine):
