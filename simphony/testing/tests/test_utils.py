@@ -14,6 +14,7 @@ from simphony.core.keywords import KEYWORDS
 from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,
     compare_lattice_nodes, compare_points, compare_elements,
+<<<<<<< HEAD
     create_points, create_bonds, compare_data_containers,
     create_particles, dummy_cuba_value, grouper,
     compare_particles_datasets, compare_mesh_datasets,
@@ -339,6 +340,11 @@ class TestCompareLatticeDatasets(unittest.TestCase):
         # when/then
         with self.assertRaises(AssertionError):
             compare_lattice_datasets(lattice, reference, testcase=self)
+=======
+    create_points, create_bonds, create_particles_with_id,
+    compare_data_containers, create_particles,
+    create_bonds_with_id, dummy_cuba_value, grouper)
+>>>>>>> a575d99291bd1915d6457ceda71a47a4e76db872
 
 
 class TestCompareParticles(unittest.TestCase):
@@ -842,15 +848,15 @@ class TestCreateFactories(unittest.TestCase):
                 testcase=self)
 
     def test_create_particles_with_id(self):
-        particles = create_particles_with_id(n=10)
-        self.assertEqual(len(particles), 10)
+        particles = create_particles_with_id(n=9)
+        self.assertEqual(len(particles), 9)
         for index, particle in enumerate(particles):
             self.assertIsInstance(particle, Particle)
             self.assertIsNotNone(particle.uid)
             self.assertEqual(
                 particle.coordinates, (index, index*10, index*100))
             compare_data_containers(
-                particle.data, create_data_container(constant=index),
+                particle.data, create_data_container(),
                 testcase=self)
 
     def test_create_bonds(self):
@@ -862,6 +868,21 @@ class TestCreateFactories(unittest.TestCase):
             self.assertIsInstance(bond, Bond)
             compare_data_containers(
                 bond.data, create_data_container(constant=index),
+                testcase=self)
+            self.assertEqual(len(bond.particles), n)
+            uids.update(bond.particles)
+        self.assertEqual(len(uids), n*n)
+
+    def test_create_bonds_with_id(self):
+        n = 9
+        bonds = create_bonds_with_id(n=n)
+        self.assertEqual(len(bonds), n)
+        uids = set()
+        for index, bond in enumerate(bonds):
+            self.assertIsInstance(bond, Bond)
+            self.assertIsNotNone(bond.uid)
+            compare_data_containers(
+                bond.data, create_data_container(),
                 testcase=self)
             self.assertEqual(len(bond.particles), n)
             uids.update(bond.particles)
