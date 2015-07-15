@@ -122,8 +122,7 @@ class CheckEngine(object):
             self.assertEqual(ds.data[CUBA.NAME], 'somename')
 
     def test_add_dataset_with_same_name(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
+        with closing(self.container_factory('test.cuds')) as handle:
             handle.add_dataset(self.create_dataset(name='test'))
             with self.assertRaises(ValueError):
                 handle.add_dataset(
