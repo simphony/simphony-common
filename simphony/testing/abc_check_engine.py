@@ -1,7 +1,6 @@
 import abc
 import uuid
 import sys
-import tempfile
 
 from simphony.testing.utils import (  # noqa
     compare_particles_datasets, compare_mesh_datasets,
@@ -19,7 +18,6 @@ class CheckEngine(object):
     __metaclass__ = abc.ABCMeta
 
     def setUp(self):
-        self.temp_dir = tempfile.mkdtemp()
         self.maxDiff = None
         self.items = self.create_dataset_items()
 
