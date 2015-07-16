@@ -61,20 +61,13 @@ class CheckEngine(object):
         with self.assertRaises(ValueError):
             handle.get_dataset('foo')
 
-    def test_add_dataset_empty(self):
+    def test_add_dataset(self):
         handle = self.engine_factory()
         reference = self.create_dataset(name='test')
         handle.add_dataset(reference)
         ds = handle.get_dataset("test")
 
         self.compare_operation(reference, ds, testcase=self)
-
-    def test_add_dataset_empty_data(self):
-        handle = self.engine_factory()
-        handle.add_dataset(self.create_dataset(name='test'))
-        ds = handle.get_dataset("test")
-        self.assertEqual(DataContainer(), ds.data)
-        self.assertEqual(0, len(ds.data))
 
     def test_add_dataset_data_copy(self):
         handle = self.engine_factory()
