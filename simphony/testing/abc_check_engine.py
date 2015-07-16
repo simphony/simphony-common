@@ -84,22 +84,16 @@ class CheckEngine(object):
 
         data = ds.data
         data[CUBA.NAME] = 'somename'
-        data[CUBA.MATERIAL_ID] = 0
 
         # Since the returned data is always a copy,
         #  therefore the ds.data should not have changed
         self.assertNotEqual(data[CUBA.NAME], ds.data[CUBA.NAME])
-        self.assertNotIn(CUBA.MATERIAL_ID, ds.data)
-        # And the length should be still one
-        self.assertEqual(1, len(ds.data))
 
+        # if
         ds.data = data
-        # This time we replaced the ds.data,
-        #  therefore it should have been changed
+
+        # then
         self.assertEqual(data[CUBA.NAME], ds.data[CUBA.NAME])
-        self.assertIn(CUBA.MATERIAL_ID, ds.data)
-        # The length also should have been changed
-        self.assertEqual(2, len(ds.data))
 
     def test_add_get_dataset(self):
         handle = self.engine_factory()
