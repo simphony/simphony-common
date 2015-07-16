@@ -135,7 +135,7 @@ class CheckEngine(object):
 
     def test_iter_dataset(self):
         handle = self.engine_factory()
-        # add a few empty particle containers
+        # add a few empty datasets
         ds_names = []
 
         for i in xrange(5):
@@ -166,12 +166,12 @@ class CheckEngine(object):
 
     def test_delete_dataset(self):
         handle = self.engine_factory()
-        # add a few empty particle containers
+        # add a few empty datasets
         for i in xrange(5):
             name = "test_" + str(i)
             handle.add_dataset(Particles(name=name))
 
-        # delete each of the particle containers
+        # delete each of the datasets
         for ds in handle.iter_datasets():
             handle.remove_dataset(ds.name)
             # test that we can't get deleted containers
@@ -206,7 +206,7 @@ class CheckEngine(object):
         self.assertEqual("bar", ds_bar.name)
 
         # and we should be able to use the no-longer used
-        # "foo" name when adding another particle container
+        # "foo" name when adding another dataset
         ds = handle.add_dataset(self.create_dataset(name='foo'))
 
 
