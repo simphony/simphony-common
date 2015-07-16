@@ -7,7 +7,6 @@ from simphony.testing.utils import (  # noqa
     compare_lattice_datasets)
 
 from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer
 from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
 from simphony.cuds.lattice import Lattice
@@ -81,7 +80,7 @@ class CheckEngine(object):
         handle.add_dataset(reference)
 
         ds = handle.get_dataset('test')
-        
+
         data = ds.data
         data[CUBA.NAME] = 'somename'
         data[CUBA.MATERIAL_ID] = 0

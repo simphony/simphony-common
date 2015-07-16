@@ -16,8 +16,8 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_lattice import H5Lattice
 
 from simphony.testing.abc_check_engine import (
-    ParticlesCudsCheck, MeshCudsCheck,
-    LatticeCudsCheck)
+    ParticlesEngineCheck, MeshEngineCheck,
+    LatticeEngineCheck)
 
 
 class TestH5CUDS(unittest.TestCase):
@@ -177,10 +177,10 @@ class TestH5CUDSVersions(unittest.TestCase):
             H5CUDS.open(self.existing_filename)
 
 
-class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
+class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
 
     def setUp(self):
-        ParticlesCudsCheck.setUp(self)
+        ParticlesEngineCheck.setUp(self)
         self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
@@ -201,10 +201,10 @@ class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
             engine.close()
 
 
-class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
+class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
 
     def setUp(self):
-        MeshCudsCheck.setUp(self)
+        MeshEngineCheck.setUp(self)
         self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
@@ -225,10 +225,10 @@ class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
             engine.close()
 
 
-class TestLatticeCudsOperations(LatticeCudsCheck, unittest.TestCase):
+class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
 
     def setUp(self):
-        LatticeCudsCheck.setUp(self)
+        LatticeEngineCheck.setUp(self)
         self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
