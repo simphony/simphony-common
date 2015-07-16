@@ -210,8 +210,7 @@ class ParticlesCudsCheck(CheckEngine):
         CheckEngine.setUp(self)
 
     operation_mapping = {
-        'compare datasets': 'compare_particles_datasets',
-        'add item': 'add_particle'}
+        'compare datasets': 'compare_particles_datasets'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -235,8 +234,7 @@ class MeshCudsCheck(CheckEngine):
         CheckEngine.setUp(self)
 
     operation_mapping = {
-        'compare datasets': 'compare_mesh_datasets',
-        'add item': 'add_point'}
+        'compare datasets': 'compare_mesh_datasets'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -260,8 +258,7 @@ class LatticeCudsCheck(CheckEngine):
         CheckEngine.setUp(self)
 
     operation_mapping = {
-        'compare datasets': 'compare_lattice_datasets',
-        'add item': 'add'}
+        'compare datasets': 'compare_lattice_datasets'}
 
     def create_dataset(self, name):
         """ Create and return a cuds object
