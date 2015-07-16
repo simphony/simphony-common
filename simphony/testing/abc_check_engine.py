@@ -76,7 +76,7 @@ class CheckEngine(object):
 
         reference_data = reference.data
         reference_data[CUBA.NAME] = 'foo_name'
-        reference.data = data
+        reference.data = reference_data
 
         handle.add_dataset(reference)
 
@@ -84,20 +84,20 @@ class CheckEngine(object):
         
         data = ds.data
         data[CUBA.NAME] = 'somename'
-        data[CUBA.MATERIAL] = 'foo_mat'
+        data[CUBA.MATERIAL_ID] = 0
 
         # Since the returned data is always a copy,
         #  therefore the ds.data should not have changed
-        self.assertNotEqual(reference,data[CUBA.NAME], ds.data[CUBA.NAME])
-        self.assertNotIn(CUBA.MATERIAL, ds.data)
+        self.assertNotEqual(data[CUBA.NAME], ds.data[CUBA.NAME])
+        self.assertNotIn(CUBA.MATERIAL_ID, ds.data)
         # And the length should be still one
         self.assertEqual(1, len(ds.data))
 
         ds.data = data
         # This time we replaced the ds.data,
         #  therefore it should have been changed
-        self.assertEqual(reference,data[CUBA.NAME], ds.data[CUBA.NAME])
-        self.assertIn(CUBA.MATERIAL, ds.data)
+        self.assertEqual(data[CUBA.NAME], ds.data[CUBA.NAME])
+        self.assertIn(CUBA.MATERIAL_ID, ds.data)
         # The length also should have been changed
         self.assertEqual(2, len(ds.data))
 
