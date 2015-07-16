@@ -210,7 +210,7 @@ class CheckEngine(object):
         ds = handle.add_dataset(self.create_dataset(name='foo'))
 
 
-class ParticlesCudsCheck(CheckEngine):
+class ParticlesEngineCheck(CheckEngine):
 
     def setUp(self):
         CheckEngine.setUp(self)
@@ -234,7 +234,7 @@ class ParticlesCudsCheck(CheckEngine):
         return items
 
 
-class MeshCudsCheck(CheckEngine):
+class MeshEngineCheck(CheckEngine):
 
     def setUp(self):
         CheckEngine.setUp(self)
@@ -258,7 +258,7 @@ class MeshCudsCheck(CheckEngine):
         return items
 
 
-class LatticeCudsCheck(CheckEngine):
+class LatticeEngineCheck(CheckEngine):
 
     def setUp(self):
         CheckEngine.setUp(self)
