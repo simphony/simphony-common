@@ -12,7 +12,7 @@ from simphony.cuds.particles import Particle, Bond
 from simphony.cuds.mesh import Point, Edge, Face, Cell
 
 
-def compare_particles_datasets(particles, reference, msg=None, testcase=None):
+def compare_particles_datasets(particles, reference, testcase=None):
     self = testcase
     self.assertEqual(particles.name, reference.name)
     for b, r in zip(particles.iter_bonds(), reference.iter_bonds()):
@@ -22,7 +22,7 @@ def compare_particles_datasets(particles, reference, msg=None, testcase=None):
     compare_data_containers(particles.data, reference.data, testcase=self)
 
 
-def compare_mesh_datasets(mesh, reference, msg=None, testcase=None):
+def compare_mesh_datasets(mesh, reference, testcase=None):
     self = testcase
     self.assertEqual(mesh.name, reference.name)
     for p, r in zip(mesh.iter_points(), reference.iter_points()):
@@ -36,7 +36,7 @@ def compare_mesh_datasets(mesh, reference, msg=None, testcase=None):
     compare_data_containers(mesh.data, reference.data, testcase=self)
 
 
-def compare_lattice_datasets(lattice, reference, msg=None, testcase=None):
+def compare_lattice_datasets(lattice, reference, testcase=None):
     self = testcase
     self.assertEqual(lattice.name, reference.name)
     for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
