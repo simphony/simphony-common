@@ -181,6 +181,7 @@ class TestParticlesCudsOperations(ParticlesCudsCheck, unittest.TestCase):
 
     def setUp(self):
         ParticlesCudsCheck.setUp(self)
+        self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
     def engine_factory(self):
@@ -204,6 +205,7 @@ class TestMeshCudsOperations(MeshCudsCheck, unittest.TestCase):
 
     def setUp(self):
         MeshCudsCheck.setUp(self)
+        self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
     def engine_factory(self):
@@ -227,6 +229,7 @@ class TestLatticeCudsOperations(LatticeCudsCheck, unittest.TestCase):
 
     def setUp(self):
         LatticeCudsCheck.setUp(self)
+        self.temp_dir = tempfile.mkdtemp()
         self.engines = []
 
     def engine_factory(self):
