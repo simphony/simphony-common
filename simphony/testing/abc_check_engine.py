@@ -105,7 +105,7 @@ class CheckEngine(object):
         handle = self.engine_factory()
         reference = self.create_dataset(name='test')
 
-        # Store dataset container along with its data
+        # Store dataset along with its data
         handle.add_dataset(reference)
         ds = handle.get_dataset('test')
 
@@ -120,7 +120,7 @@ class CheckEngine(object):
         data[CUBA.NAME] = 'somename'
         reference.data = data
 
-        # Store dataset container along with its data
+        # Store dataset along with its data
         handle.add_dataset(reference)
         ds = handle.get_dataset('test')
 
@@ -174,10 +174,10 @@ class CheckEngine(object):
         # delete each of the datasets
         for ds in handle.iter_datasets():
             handle.remove_dataset(ds.name)
-            # test that we can't get deleted containers
+            # test that we can't get deleted datasets
             with self.assertRaises(ValueError):
                 handle.get_dataset(ds.name)
-            # test that we can't use the deleted container
+            # test that we can't use the deleted datasets
             with self.assertRaises(Exception):
                 self.compare_operation(ds, self.items[0])
 
