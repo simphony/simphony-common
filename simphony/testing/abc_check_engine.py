@@ -18,7 +18,6 @@ class CheckEngine(object):
     __metaclass__ = abc.ABCMeta
 
     def setUp(self):
-        self.maxDiff = None
         self.items = self.create_dataset_items()
 
     @abc.abstractmethod
