@@ -71,22 +71,35 @@ class CheckEngine(object):
 
     def test_add_dataset_data_copy(self):
         handle = self.engine_factory()
-        handle.add_dataset(self.create_dataset(name='test'))
-        ds = handle.get_dataset("test")
+
+        reference = self.create_dataset(name='test')
+
+        reference_data = reference.data
+        reference_data[CUBA.NAME] = 'foo_name'
+        reference.data = data
+
+        handle.add_dataset(reference)
+
+        ds = handle.get_dataset('test')
+        
         data = ds.data
         data[CUBA.NAME] = 'somename'
+        data[CUBA.MATERIAL] = 'foo_mat'
 
         # Since the returned data is always a copy,
         #  therefore the ds.data should not have changed
-        self.assertNotIn(CUBA.NAME, ds.data)
-        # And the length should be still zero
-        self.assertEqual(0, len(ds.data))
+        self.assertNotEqual(reference,data[CUBA.NAME], ds.data[CUBA.NAME])
+        self.assertNotIn(CUBA.MATERIAL, ds.data)
+        # And the length should be still one
+        self.assertEqual(1, len(ds.data))
+
         ds.data = data
         # This time we replaced the ds.data,
         #  therefore it should have been changed
-        self.assertIn(CUBA.NAME, ds.data)
+        self.assertEqual(reference,data[CUBA.NAME], ds.data[CUBA.NAME])
+        self.assertIn(CUBA.MATERIAL, ds.data)
         # The length also should have been changed
-        self.assertEqual(1, len(ds.data))
+        self.assertEqual(2, len(ds.data))
 
     def test_add_get_dataset(self):
         handle = self.engine_factory()
