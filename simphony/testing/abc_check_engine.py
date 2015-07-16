@@ -169,7 +169,7 @@ class CheckEngine(object):
         # add a few empty datasets
         for i in xrange(5):
             name = "test_" + str(i)
-            handle.add_dataset(Particles(name=name))
+            handle.add_dataset(self.create_dataset(name=name))
 
         # delete each of the datasets
         for ds in handle.iter_datasets():
