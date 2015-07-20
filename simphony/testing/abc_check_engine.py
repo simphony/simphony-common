@@ -57,20 +57,20 @@ class CheckEngine(object):
         return method(*args, **kwrds)
 
     def test_get_missing_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         with self.assertRaises(ValueError):
-            handle.get_dataset('foo')
+            engine.get_dataset('foo')
 
     def test_add_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         reference = self.create_dataset(name='test')
-        handle.add_dataset(reference)
-        ds = handle.get_dataset("test")
+        engine.add_dataset(reference)
+        ds = engine.get_dataset("test")
 
         self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_invalid(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
 
         class Invalid(object):
 
@@ -78,10 +78,10 @@ class CheckEngine(object):
                 self.name = 'invalid'
 
         with self.assertRaises(TypeError):
-            handle.add_dataset(Invalid())
+            engine.add_dataset(Invalid())
 
     def test_add_dataset_data_copy(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
 
         reference = self.create_dataset(name='test')
 
@@ -89,9 +89,9 @@ class CheckEngine(object):
         reference_data[CUBA.NAME] = 'foo_name'
         reference.data = reference_data
 
-        handle.add_dataset(reference)
+        engine.add_dataset(reference)
 
-        ds = handle.get_dataset('test')
+        ds = engine.get_dataset('test')
 
         data = ds.data
         data[CUBA.NAME] = 'somename'
@@ -107,17 +107,17 @@ class CheckEngine(object):
         self.assertEqual(data[CUBA.NAME], ds.data[CUBA.NAME])
 
     def test_add_get_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         reference = self.create_dataset(name='test')
 
         # Store dataset along with its data
-        handle.add_dataset(reference)
-        ds = handle.get_dataset('test')
+        engine.add_dataset(reference)
+        ds = engine.get_dataset('test')
 
         self.compare_operation(reference, ds, testcase=self)
 
     def test_add_get_dataset_data(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
 
         reference = self.create_dataset(name='test')
         # Change data
@@ -126,93 +126,93 @@ class CheckEngine(object):
         reference.data = data
 
         # Store dataset along with its data
-        handle.add_dataset(reference)
-        ds = handle.get_dataset('test')
+        engine.add_dataset(reference)
+        ds = engine.get_dataset('test')
 
         self.compare_operation(reference, ds, testcase=self)
 
     def test_add_dataset_with_same_name(self):
-        handle = self.engine_factory()
-        handle.add_dataset(self.create_dataset(name='test'))
+        engine = self.engine_factory()
+        engine.add_dataset(self.create_dataset(name='test'))
         with self.assertRaises(ValueError):
-            handle.add_dataset(
+            engine.add_dataset(
                 self.create_dataset(name='test'))
 
     def test_iter_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         # add a few empty datasets
         ds_names = []
 
         for i in xrange(5):
             name = "test_{}".format(i)
             ds_names.append(name)
-            handle.add_dataset(self.create_dataset(name=name))
+            engine.add_dataset(self.create_dataset(name=name))
 
         # test iterating over all
         names = [
-            ds.name for ds in handle.iter_datasets()]
+            ds.name for ds in engine.iter_datasets()]
         self.assertEqual(names, ds_names)
 
         # test iterating over a specific subset
         subset = ds_names[:3]
         names = [
-            ds.name for ds in handle.iter_datasets(subset)]
+            ds.name for ds in engine.iter_datasets(subset)]
         self.assertEquals(names, subset)
 
-        for ds in handle.iter_datasets(ds_names):
+        for ds in engine.iter_datasets(ds_names):
             self.check_instance_of_dataset(ds)
 
     def test_iter_dataset_wrong(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         ds_names = ["wrong1", "wrong"]
 
         with self.assertRaises(ValueError):
-            [ds for ds in handle.iter_datasets(ds_names)]
+            [ds for ds in engine.iter_datasets(ds_names)]
 
     def test_delete_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         # add a few empty datasets
         for i in xrange(5):
             name = "test_" + str(i)
-            handle.add_dataset(self.create_dataset(name=name))
+            engine.add_dataset(self.create_dataset(name=name))
 
         # delete each of the datasets
-        for ds in handle.iter_datasets():
-            handle.remove_dataset(ds.name)
+        for ds in engine.iter_datasets():
+            engine.remove_dataset(ds.name)
             # test that we can't get deleted datasets
             with self.assertRaises(ValueError):
-                handle.get_dataset(ds.name)
+                engine.get_dataset(ds.name)
             # test that we can't use the deleted datasets
             with self.assertRaises(Exception):
                 self.compare_operation(ds, self.items[0])
 
     def test_delete_non_existing_dataset(self):
-        handle = self.engine_factory()
+        engine = self.engine_factory()
         with self.assertRaises(ValueError):
-            handle.remove_dataset("foo")
+            engine.remove_dataset("foo")
 
     def test_dataset_rename(self):
-        handle = self.engine_factory()
-        handle.add_dataset(self.create_dataset(name='foo'))
-        ds = handle.get_dataset("foo")
+        engine = self.engine_factory()
+        engine.add_dataset(self.create_dataset(name='foo'))
+        ds = engine.get_dataset("foo")
         ds.name = "bar"
         self.assertEqual("bar", ds.name)
 
         # we should not be able to use the old name "foo"
         with self.assertRaises(ValueError):
-            handle.get_dataset("foo")
+            engine.get_dataset("foo")
         with self.assertRaises(ValueError):
-            handle.remove_dataset("foo")
+            engine.remove_dataset("foo")
         with self.assertRaises(ValueError):
-            [_ for _ in handle.iter_datasets(names=["foo"])]
+            [_ for _ in engine.iter_datasets(names=["foo"])]
 
         # we should be able to access using the new "bar" name
-        ds_bar = handle.get_dataset("bar")
+        ds_bar = engine.get_dataset("bar")
         self.assertEqual("bar", ds_bar.name)
 
         # and we should be able to use the no-longer used
         # "foo" name when adding another dataset
-        ds = handle.add_dataset(self.create_dataset(name='foo'))
+        ds = engine.add_dataset(self.create_dataset(name='foo'))
 
 
 class ParticlesEngineCheck(CheckEngine):
