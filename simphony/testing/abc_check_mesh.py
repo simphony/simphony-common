@@ -123,7 +123,7 @@ class MeshItemOperationsCheck(object):
 
     def _add_items(self, container, items=None):
         items = items if items is not None else self.item_list
-        return [self.add_operation(container, item) for item in items]
+        return self.add_operation(container, items)
 
     def test_adding_and_getting_items(self):
         container = self.container
@@ -161,11 +161,27 @@ class MeshItemOperationsCheck(object):
         expected = self.create_item(uid)
 
         # when
-        item_uid = self.add_operation(container, expected)
+        item_uid = self.add_operation(container, [expected])
 
         # then
-        self.assertEqual(item_uid, uid)
+        self.assertEqual(item_uid, [uid])
         self.assertEqual(self.get_operation(container, uid), expected)
+
+    def test_add_multiple_item_with_uid(self):
+        # given
+        container = self.container
+        uida = uuid.uuid4()
+        uidb = uuid.uuid4()
+        expecteda = self.create_item(uida)
+        expectedb = self.create_item(uidb)
+
+        # when
+        item_uid = self.add_operation(container, [expecteda, expectedb])
+
+        # then
+        self.assertEqual(item_uid, [uida, uidb])
+        self.assertEqual(self.get_operation(container, uida), expecteda)
+        self.assertEqual(self.get_operation(container, uidb), expectedb)
 
     def test_add_item_with_unsuported_cuba(self):
         # given
@@ -174,12 +190,31 @@ class MeshItemOperationsCheck(object):
         expected.data = create_data_container()
 
         # when
-        uid = self.add_operation(container, expected)
+        uid = self.add_operation(container, [expected])
 
         # then
-        retrieved = self.get_operation(container, uid)
+        retrieved = self.get_operation(container, uid[0])
         expected.data = create_data_container(restrict=self.supported_cuba)
         self.assertEqual(retrieved, expected)
+
+    def test_add_multiple_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        expecteda = self.create_item(None)
+        expectedb = self.create_item(None)
+        expecteda.data = create_data_container()
+        expectedb.data = create_data_container()
+
+        # when
+        uid = self.add_operation(container, [expecteda, expectedb])
+
+        # then
+        retrieveda = self.get_operation(container, uid[0])
+        expecteda.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrieveda, expecteda)
+        retrievedb = self.get_operation(container, uid[1])
+        expectedb.data = create_data_container(restrict=self.supported_cuba)
+        self.assertEqual(retrievedb, expectedb)
 
     def test_exception_when_adding_item_twice(self):
         # given
@@ -188,7 +223,7 @@ class MeshItemOperationsCheck(object):
 
         # when/then
         with self.assertRaises(ValueError):
-            self.add_operation(container, self.item_list[3])
+            self.add_operation(container, [self.item_list[3]])
 
     def test_update_item_data(self):
         # given
@@ -198,13 +233,28 @@ class MeshItemOperationsCheck(object):
         item.data = create_data_container(restrict=self.supported_cuba)
 
         # when
-        self.update_operation(container, item)
+        self.update_operation(container, [item])
 
         # then
         retrieved = self.get_operation(container, item.uid)
         self.assertEqual(retrieved, item)
         self.assertNotEqual(item, self.item_list[2])
         self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_multiple_item_data(self):
+        # given
+        container = self.container
+        items = self.iter_operation(container)
+        for item in items:
+            item.data = create_data_container(restrict=self.supported_cuba)
+
+        # when
+        self.update_operation(container, items)
+
+        # then
+        for item in items:
+            retrieved = self.get_operation(container, item.uid)
+            self.assertEqual(retrieved, item)
 
     def test_update_item_with_unsuported_cuba(self):
         # given
@@ -214,12 +264,28 @@ class MeshItemOperationsCheck(object):
         item.data = create_data_container()
 
         # when
-        self.update_operation(container, item)
+        self.update_operation(container, [item])
 
         # then
         retrieved = self.get_operation(container, item.uid)
         item.data = create_data_container(restrict=self.supported_cuba)
         self.assertEqual(retrieved, item)
+
+    def test_update_multiple_item_with_unsuported_cuba(self):
+        # given
+        container = self.container
+        items = self.iter_operation(container)
+        for item in items:
+            item.data = create_data_container()
+
+        # when
+        self.update_operation(container, items)
+
+        # then
+        for item in items:
+            retrieved = self.get_operation(container, item.uid)
+            item.data = create_data_container(restrict=self.supported_cuba)
+            self.assertEqual(retrieved, item)
 
     def test_exception_when_update_item_with_wrong_id(self):
         # given
@@ -228,14 +294,26 @@ class MeshItemOperationsCheck(object):
 
         # when/then
         with self.assertRaises(ValueError):
-            self.update_operation(container, item)
+            self.update_operation(container, [item])
+
+    def test_exception_when_update_multiple_item_with_wrong_id(self):
+        # given
+        container = self.container
+        items = [
+            self.create_item(uuid.uuid4()),
+            self.create_item(uuid.uuid4())
+            ]
+
+        # when/then
+        with self.assertRaises(ValueError):
+            self.update_operation(container, items)
 
     def test_snapshot_principle(self):
         # given
         container = self.container
         uid = uuid.uuid4()
         item = self.create_item(uid)
-        self.add_operation(container, item)
+        self.add_operation(container, [item])
 
         # when
         item.data = DataContainer()
@@ -250,7 +328,7 @@ class MeshItemOperationsCheck(object):
         container = self.container
         uid = uuid.uuid4()
         item = self.create_item(uid)
-        self.add_operation(container, item)
+        self.add_operation(container, [item])
 
         # when
         item.data = DataContainer()
@@ -334,8 +412,8 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
     operation_mapping = {
         'get item': 'get_point',
-        'add item': 'add_point',
-        'update item': 'update_point',
+        'add item': 'add_points',
+        'update item': 'update_points',
         'iter items': 'iter_points'}
 
     def test_update_item_coordniates(self):
@@ -346,13 +424,35 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         item.coordinates = (123, 456, 789)
 
         # when
-        self.update_operation(container, item)
+        self.update_operation(container, [item])
 
         # then
         retrieved = self.get_operation(container, item.uid)
         self.assertEqual(retrieved, item)
         self.assertNotEqual(item, self.item_list[2])
         self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_multiple_item_coordniates(self):
+        # given
+        container = self.container
+        uids = self._add_items(container)
+        itema = self.get_operation(container, uids[1])
+        itemb = self.get_operation(container, uids[2])
+        itema.coordinates = (123, 456, 789)
+        itemb.coordinates = (147, 258, 369)
+
+        # when
+        self.update_operation(container, [itema, itemb])
+
+        # then
+        retrieveda = self.get_operation(container, itema.uid)
+        retrievedb = self.get_operation(container, itemb.uid)
+        self.assertEqual(retrieveda, itema)
+        self.assertEqual(retrievedb, itemb)
+        self.assertNotEqual(itema, self.item_list[1])
+        self.assertNotEqual(retrieveda, self.item_list[1])
+        self.assertNotEqual(itemb, self.item_list[2])
+        self.assertNotEqual(retrievedb, self.item_list[2])
 
 
 class MeshElementOperationsCheck(MeshItemOperationsCheck):
@@ -369,8 +469,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
         MeshItemOperationsCheck.setUp(self)
-        for point in self.points:
-            self.container.add_point(point)
+        self.container.add_points(self.points)
 
     operation_mapping = {
         'get item': 'none',
@@ -394,7 +493,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         self.assertFalse(self.has_items_operation(container))
 
         # container with items
-        self.add_operation(container, self.item_list[0])
+        self.add_operation(container, [self.item_list[0]])
         self.assertTrue(self.has_items_operation(container))
 
     def test_update_item_points(self):
@@ -402,15 +501,16 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        point_uids = [
-            container.add_point(Point((1.0 * i, 1.0 * i, 1.0 * i)))
-            for i in range(self.points_range[-1])]
+        point_uids = container.add_points([
+            Point((1.0 * i, 1.0 * i, 1.0 * i))
+            for i in range(self.points_range[-1])
+            ])
 
         # increasing
         for n in self.points_range:
             # when
             item.points = tuple(point_uids[:n])
-            self.update_operation(container, item)
+            self.update_operation(container, [item])
 
             # then
             retrieved = self.get_operation(container, item.uid)
@@ -422,13 +522,52 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         for n in self.points_range[::-1]:
             # when
             item.points = tuple(point_uids[:n])
-            self.update_operation(container, item)
+            self.update_operation(container, [item])
 
             # then
             retrieved = self.get_operation(container, item.uid)
             self.assertEqual(retrieved, item)
             self.assertNotEqual(item, self.item_list[2])
             self.assertNotEqual(retrieved, self.item_list[2])
+
+    def test_update_multiple_items_points(self):
+        # given
+        container = self.container
+        items = [
+            i for i in self.iter_operation(container)]
+
+        point_uids = container.add_points([
+            Point((1.0 * i, 1.0 * i, 1.0 * i))
+            for i in range(self.points_range[-1])
+            ])
+
+        # increasing
+        for n in self.points_range:
+            # when
+            for item in items:
+                item.points = tuple(point_uids[:n])
+            self.update_operation(container, items)
+
+            # then
+            for item in items:
+                retrieved = self.get_operation(container, item.uid)
+                self.assertEqual(retrieved, item)
+                self.assertNotEqual(item, self.item_list[2])
+                self.assertNotEqual(retrieved, self.item_list[2])
+
+        # decreasing
+        for n in self.points_range[::-1]:
+            # when
+            for item in items:
+                item.points = tuple(point_uids[:n])
+            self.update_operation(container, items)
+
+            # then
+            for item in items:
+                retrieved = self.get_operation(container, item.uid)
+                self.assertEqual(retrieved, item)
+                self.assertNotEqual(item, self.item_list[2])
+                self.assertNotEqual(retrieved, self.item_list[2])
 
 
 class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
@@ -440,8 +579,8 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
 
     operation_mapping = {
         'get item': 'get_edge',
-        'add item': 'add_edge',
-        'update item': 'update_edge',
+        'add item': 'add_edges',
+        'update item': 'update_edges',
         'iter items': 'iter_edges',
         'has items': 'has_edges'}
 
@@ -473,8 +612,8 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
 
     operation_mapping = {
         'get item': 'get_face',
-        'add item': 'add_face',
-        'update item': 'update_face',
+        'add item': 'add_faces',
+        'update item': 'update_faces',
         'iter items': 'iter_faces',
         'has items': 'has_faces'}
 
@@ -506,8 +645,8 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
 
     operation_mapping = {
         'get item': 'get_cell',
-        'add item': 'add_cell',
-        'update item': 'update_cell',
+        'add item': 'add_cells',
+        'update item': 'update_cells',
         'iter items': 'iter_cells',
         'has items': 'has_cells'}
 

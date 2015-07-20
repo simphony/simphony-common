@@ -25,6 +25,9 @@ MAX_POINTS_IN_CELL = 8
 
 MESH_CUDS_VERSION = 1
 
+err_add = "Trying to add an already existing {} with uid: {}"
+err_upd = "Trying to update an non existing {} with uid: {}"
+
 
 class _PointDescriptor(tables.IsDescription):
     """ Descriptor for storing Point information
@@ -326,13 +329,13 @@ class H5Mesh(ABCMesh):
             error_str = "Trying to get an non existing cell with id: {}"
             raise KeyError(error_str.format(uid))
 
-    def add_point(self, point):
-        """ Adds a new point to the mesh container.
+    def add_points(self, points):
+        """ Adds a new set of points to the mesh container.
 
         Parameters
         ----------
-        point : Point
-            Point to be added to the mesh container
+        points : iterable of Point
+            Points to be added to the mesh container
 
         Raises
         ------
@@ -341,33 +344,34 @@ class H5Mesh(ABCMesh):
             in the mesh
 
         """
+        rpoints = []
+        for point in points:
+            if point.uid is None:
+                point.uid = self._generate_uid()
 
-        if point.uid is None:
-            point.uid = self._generate_uid()
+            for row in self._group.points.where(
+                    'uid == value', condvars={'value': point.uid.hex}):
+                raise ValueError(err_add.format('point', point.uid))
 
-        for row in self._group.points.where(
-                'uid == value', condvars={'value': point.uid.hex}):
-            error_str = "Trying to add an already existing point with uid {}"
-            raise ValueError(error_str.format(point.uid))
+            row = self._group.points.row
 
-        row = self._group.points.row
+            row['uid'] = point.uid.hex
+            row['data'] = self._uidData.append(point.data).hex
+            row['coordinates'] = point.coordinates
 
-        row['uid'] = point.uid.hex
-        row['data'] = self._uidData.append(point.data).hex
-        row['coordinates'] = point.coordinates
+            row.append()
+            rpoints.append(point.uid)
 
-        row.append()
         self._group.points.flush()
+        return rpoints
 
-        return point.uid
-
-    def add_edge(self, edge):
-        """ Adds a new edge to the mesh container.
+    def add_edges(self, edges):
+        """ Adds a new set of edges to the mesh container.
 
         Parameters
         ----------
-        edge : Edge
-            Edge to be added to the mesh container
+        edges : iterable of Edge
+            Edges to be added to the mesh container
 
         Raises
         ------
@@ -376,37 +380,38 @@ class H5Mesh(ABCMesh):
             in the mesh
 
         """
+        redges = []
+        for edge in edges:
+            if edge.uid is None:
+                edge.uid = self._generate_uid()
+            else:
+                for row in self._group.edges.where(
+                        'uid == value', condvars={'value': edge.uid.hex}):
+                    raise ValueError(err_add.format('edge', edge.uid))
 
-        if edge.uid is None:
-            edge.uid = self._generate_uid()
-        else:
-            for row in self._group.edges.where(
-                    'uid == value', condvars={'value': edge.uid.hex}):
-                message = "Trying to add an already existing edge with uid {}"
-                raise ValueError(message.format(edge.uid))
+            n = len(edge.points)
 
-        n = len(edge.points)
+            row = self._group.edges.row
 
-        row = self._group.edges.row
+            row['uid'] = edge.uid.hex
+            row['data'] = self._uidData.append(edge.data).hex
+            row['n_points'] = n
+            row['points_uids'] = [puid.hex for puid in
+                                  edge.points] + [''] * (MAX_POINTS_IN_EDGE-n)
 
-        row['uid'] = edge.uid.hex
-        row['data'] = self._uidData.append(edge.data).hex
-        row['n_points'] = n
-        row['points_uids'] = [puid.hex for puid in
-                              edge.points] + [''] * (MAX_POINTS_IN_EDGE-n)
+            row.append()
+            redges.append(edge.uid)
 
-        row.append()
         self._group.edges.flush()
+        return redges
 
-        return edge.uid
-
-    def add_face(self, face):
-        """ Adds a new face to the mesh container.
+    def add_faces(self, faces):
+        """ Adds a new set of faces to the mesh container.
 
         Parameters
         ----------
-        face : Face
-            Face to be added to the mesh container
+        faces : iterable of Face
+            Faces to be added to the mesh container
 
         Raises
         ------
@@ -415,37 +420,38 @@ class H5Mesh(ABCMesh):
             in the mesh
 
         """
+        rfaces = []
+        for face in faces:
+            if face.uid is None:
+                face.uid = self._generate_uid()
+            else:
+                for row in self._group.faces.where(
+                        'uid == value', condvars={'value': face.uid.hex}):
+                    raise ValueError(err_add.format('face', face.uid))
 
-        if face.uid is None:
-            face.uid = self._generate_uid()
-        else:
-            for row in self._group.faces.where(
-                    'uid == value', condvars={'value': face.uid.hex}):
-                message = "Trying to add an already existing face with uid {}"
-                raise ValueError(message.format(face.uid))
+            n = len(face.points)
 
-        n = len(face.points)
+            row = self._group.faces.row
 
-        row = self._group.faces.row
+            row['uid'] = face.uid.hex
+            row['data'] = self._uidData.append(face.data).hex
+            row['n_points'] = n
+            row['points_uids'] = [puid.hex for puid in
+                                  face.points] + [''] * (MAX_POINTS_IN_FACE-n)
 
-        row['uid'] = face.uid.hex
-        row['data'] = self._uidData.append(face.data).hex
-        row['n_points'] = n
-        row['points_uids'] = [puid.hex for puid in
-                              face.points] + [''] * (MAX_POINTS_IN_FACE-n)
+            row.append()
+            rfaces.append(face.uid)
 
-        row.append()
         self._group.faces.flush()
+        return rfaces
 
-        return face.uid
-
-    def add_cell(self, cell):
-        """ Adds a new cell to the mesh container.
+    def add_cells(self, cells):
+        """ Adds a new set of cells to the mesh container.
 
         Parameters
         ----------
-        cell : Cell
-            Cell to be added to the mesh container
+        cells : iterable of Cell
+            Cells to be added to the mesh container
 
         Raises
         ------
@@ -454,154 +460,163 @@ class H5Mesh(ABCMesh):
             in the mesh
 
         """
+        rcells = []
+        for cell in cells:
+            if cell.uid is None:
+                cell.uid = self._generate_uid()
+            else:
+                for row in self._group.cells.where(
+                        'uid == value', condvars={'value': cell.uid.hex}):
+                    raise ValueError(err_add.format('cell', cell.uid))
 
-        if cell.uid is None:
-            cell.uid = self._generate_uid()
-        else:
-            for row in self._group.cells.where(
-                    'uid == value', condvars={'value': cell.uid.hex}):
-                message = "Trying to add an already existing cell with uid"
-                raise ValueError(message.format(cell.uid))
+            n = len(cell.points)
 
-        n = len(cell.points)
+            row = self._group.cells.row
 
-        row = self._group.cells.row
+            row['uid'] = cell.uid.hex
+            row['data'] = self._uidData.append(cell.data).hex
+            row['n_points'] = n
+            row['points_uids'] = [puid.hex for puid in
+                                  cell.points] + [''] * (MAX_POINTS_IN_CELL-n)
 
-        row['uid'] = cell.uid.hex
-        row['data'] = self._uidData.append(cell.data).hex
-        row['n_points'] = n
-        row['points_uids'] = [puid.hex for puid in
-                              cell.points] + [''] * (MAX_POINTS_IN_CELL-n)
+            row.append()
+            rcells.append(cell.uid)
 
-        row.append()
         self._group.cells.flush()
+        return rcells
 
-        return cell.uid
-
-    def update_point(self, point):
+    def update_points(self, points):
         """ Updates the information of a point.
 
-        Gets the mesh point identified by the same
-        uid as the provided point and updates its information.
+        Gets the mesh points identified by the same
+        uids as the ones provided points and updates their information.
 
         Parameters
         ----------
-        point : Point
-            Point to be updated
+        points : iterable of Point
+            Points to be updated
 
         Raises
         ------
         KeyError
-            If the point was not found in the mesh container.
+            If any point was not found in the mesh container.
 
         """
+        for point in points:
+            for row in self._group.points.where(
+                    'uid == value', condvars={'value': point.uid.hex}):
+                row['coordinates'] = list(point.coordinates)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = point.data
+                row.update()
+                row._flush_mod_rows()
+                break
+            else:
+                raise ValueError(err_upd.format('point', point.uid))
 
-        for row in self._group.points.where(
-                'uid == value', condvars={'value': point.uid.hex}):
-            row['coordinates'] = list(point.coordinates)
-            self._uidData[uuid.UUID(hex=row['data'], version=4)] = point.data
-            row.update()
-            row._flush_mod_rows()
-            return
-        else:
-            error_str = "Trying to update a non existing point with uid: {}"
-            raise ValueError(error_str.format(point.uid))
-
-    def update_edge(self, edge):
+    def update_edges(self, edges):
         """ Updates the information of an edge.
 
-        Gets the mesh edge identified by the same
-        uid as the provided edge and updates its information.
+        Gets the mesh edges identified by the same
+        uids as the ones provided edges and updates their information.
 
         Parameters
         ----------
-        edge : Edge
-            Edge to be updated.
+        edges : iterable of Edge
+            Edges to be updated.
 
         Raises
         ------
         KeyError
-            If the edge was not found in the mesh container.
+            If any edge was not found in the mesh container.
 
         """
+        for edge in edges:
+            for row in self._group.edges.where(
+                    'uid == value', condvars={'value': edge.uid.hex}):
+                n = len(edge.points)
+                row['n_points'] = n
+                row['points_uids'] = [
+                    puid.hex for puid in edge.points
+                    ] + [0] * (MAX_POINTS_IN_EDGE-n)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = edge.data
+                row.update()
+                row._flush_mod_rows()
+                break
+            else:
+                raise ValueError(err_upd.format('edge', edge.uid))
 
-        for row in self._group.edges.where(
-                'uid == value', condvars={'value': edge.uid.hex}):
-            n = len(edge.points)
-            row['n_points'] = n
-            row['points_uids'] = [puid.hex for puid in
-                                  edge.points] + [0] * (MAX_POINTS_IN_EDGE-n)
-            self._uidData[uuid.UUID(hex=row['data'], version=4)] = edge.data
-            row.update()
-            row._flush_mod_rows()
-            return
-        else:
-            error_str = "Trying to update a non existing edge with uid: "
-            raise ValueError(error_str.format(edge.uid))
-
-    def update_face(self, face):
+    def update_faces(self, faces):
         """ Updates the information of a face.
 
-        Gets the mesh face identified by the same
-        uid as the provided face and updates its information.
+        Gets the mesh faces identified by the same
+        uids as the ones provided in faces and updates their information.
 
         Parameters
         ----------
-        face : Face
-            Face to be updated.
+        faces : iterable of Face
+            Faces to be updated.
 
         Raises
         ------
         KeyError
-            If the face was not found in the mesh container.
+            If any face was not found in the mesh container.
 
         """
+        for face in faces:
+            for row in self._group.faces.where(
+                    'uid == value', condvars={'value': face.uid.hex}):
+                n = len(face.points)
+                row['n_points'] = n
+                row['points_uids'] = [
+                    puid.hex for puid in face.points
+                    ] + [0] * (MAX_POINTS_IN_FACE-n)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = face.data
+                row.update()
+                row._flush_mod_rows()
+                break
+            else:
+                raise ValueError(err_upd.format('face', face.uid))
 
-        for row in self._group.faces.where(
-                'uid == value', condvars={'value': face.uid.hex}):
-            n = len(face.points)
-            row['n_points'] = n
-            row['points_uids'] = [puid.hex for puid in
-                                  face.points] + [0] * (MAX_POINTS_IN_FACE-n)
-            self._uidData[uuid.UUID(hex=row['data'], version=4)] = face.data
-            row.update()
-            row._flush_mod_rows()
-            return
-        else:
-            error_str = "Trying to update a none existing face with uid: {}"
-            raise ValueError(error_str.format(face.uid))
+    def update_cells(self, cells):
+        """ Updates the information of every cell in cells.
 
-    def update_cell(self, cell):
-        """ Updates the information of a cell.
-
-        Gets the mesh cell identified by the same
-        uid as the provided cell and updates its information.
+        Gets the mesh cells identified by the same
+        uids as the ones provided in cells and updates their information.
 
         Parameters
         ----------
-        cell : Cell
-            Cell to be updated.
+        cellss : iterable of Cell
+            Cells to be updated.
 
         Raises
         ------
         KeyError
-            If the cell was not found in the mesh container.
+            If any cell was not found in the mesh container.
 
         """
 
-        for row in self._group.cells.where(
-                'uid == value', condvars={'value': cell.uid.hex}):
-            n = len(cell.points)
-            row['n_points'] = n
-            row['points_uids'] = [puid.hex for puid in
-                                  cell.points] + [0] * (MAX_POINTS_IN_CELL-n)
-            self._uidData[uuid.UUID(hex=row['data'], version=4)] = cell.data
-            row.update()
-            row._flush_mod_rows()
-            return
-        else:
-            error_str = "Trying to update an non existing cell with uid: {}"
-            raise ValueError(error_str.format(cell.uid))
+        for cell in cells:
+            for row in self._group.cells.where(
+                    'uid == value', condvars={'value': cell.uid.hex}):
+                n = len(cell.points)
+                row['n_points'] = n
+                row['points_uids'] = [
+                    puid.hex for puid in cell.points
+                    ] + [0] * (MAX_POINTS_IN_CELL-n)
+                self._uidData[
+                    uuid.UUID(hex=row['data'], version=4)
+                    ] = cell.data
+                row.update()
+                row._flush_mod_rows()
+                break
+            else:
+                raise ValueError(err_upd.format('cell', cell.uid))
 
     def iter_points(self, uids=None):
         """ Returns an iterator over points.
