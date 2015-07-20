@@ -5,6 +5,7 @@ import numpy
 
 from simphony.core.data_container import DataContainer
 from simphony.cuds import ABCParticles, Particle, Bond
+from simphony.core.cuds_item import CUDSItem
 from simphony.io.h5_cuds_items import H5CUDSItems
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 
@@ -132,6 +133,11 @@ class H5Particles(ABCParticles):
         self._particles = H5ParticleItems(group, 'particles')
         self._bonds = H5BondItems(group, 'bonds')
 
+        self._items_count = {
+            CUDSItem.PARTICLE: lambda: self._particles,
+            CUDSItem.BOND: lambda: self._bonds
+        }
+
     @property
     def name(self):
         """ The name of the container
@@ -249,6 +255,32 @@ class H5Particles(ABCParticles):
     def has_bond(self, uid):
         """Checks if a bond with uid "uid" exists in the container."""
         return uid in self._bonds
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     # Private methods --- these are temporary till we optimize things
 

@@ -2,6 +2,7 @@ from simphony.cuds import ABCLattice, LatticeNode
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer
+from simphony.core.cuds_item import CUDSItem
 
 import numpy as np
 
@@ -34,6 +35,10 @@ class H5Lattice(ABCLattice):
 
         self._table = IndexedDataContainerTable(group, 'lattice')
         self._data = IndexedDataContainerTable(group, 'data')
+
+        self._items_count = {
+            CUDSItem.NODE: lambda: self._table
+        }
 
     @classmethod
     def create_new(cls, group, type, base_vect, size, origin, record=None):
@@ -93,22 +98,23 @@ class H5Lattice(ABCLattice):
             raise IndexError('invalid index: {}'.format(index))
         return LatticeNode(index, self._table[n])
 
-    def update_node(self, node):
+    def update_nodes(self, nodes):
         """ Updates H5Lattice data for a LatticeNode
 
         Parameters
         ----------
-        node : LatticeNode
-            reference to LatticeNode object
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects
 
         """
         # Find correct row for node
-        index = node.index
-        try:
-            n = np.ravel_multi_index(index, self._size)
-        except ValueError:
-            raise IndexError('invalid index: {}'.format(index))
-        self._table[n] = node.data
+        for node in nodes:
+            index = node.index
+            try:
+                n = np.ravel_multi_index(index, self._size)
+            except ValueError:
+                raise IndexError('invalid index: {}'.format(index))
+            self._table[n] = node.data
 
     def iter_nodes(self, indices=None):
         """ Get an iterator over the LatticeNodes described by the ids.
@@ -130,6 +136,32 @@ class H5Lattice(ABCLattice):
         else:
             for index in indices:
                 yield self.get_node(index)
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def get_coordinate(self, index):
         """ Get coordinate of the given index coordinate.

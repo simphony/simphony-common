@@ -17,8 +17,8 @@ from simphony.testing.abc_check_particles import (
 class TestH5ContainerAddParticles(CheckAddingParticles, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -40,8 +40,8 @@ class TestH5ContainerManipulatingParticles(
         CheckManipulatingParticles, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -62,8 +62,8 @@ class TestH5ContainerManipulatingParticles(
 class TestH5ContainerAddBonds(CheckAddingBonds, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -85,8 +85,8 @@ class TestH5ContainerManipulatingBonds(
         CheckManipulatingBonds, unittest.TestCase):
 
     def container_factory(self, name):
-        return self.handle.add_particles(
-            Particles(name=name))
+        self.handle.add_dataset(Particles(name=name))
+        return self.handle.get_dataset(name)
 
     def supported_cuba(self):
         return set(CUBA)

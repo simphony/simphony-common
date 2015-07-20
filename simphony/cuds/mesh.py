@@ -6,6 +6,7 @@ and modify a mesh
 """
 import uuid
 from simphony.cuds.abc_mesh import ABCMesh
+from simphony.core.cuds_item import CUDSItem
 import simphony.core.data_container as dc
 
 
@@ -210,6 +211,13 @@ class Mesh(ABCMesh):
 
         self._data = dc.DataContainer()
 
+        self._items_count = {
+            CUDSItem.POINT: lambda: self._points,
+            CUDSItem.EDGE: lambda: self._edges,
+            CUDSItem.FACE: lambda: self._faces,
+            CUDSItem.CELL: lambda: self._cells
+        }
+
     @property
     def data(self):
         return dc.DataContainer(self._data)
@@ -342,107 +350,123 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def add_point(self, point):
-        """ Adds a new point to the mesh.
+    def add_points(self, points):
+        """ Adds a set of new points to the mesh.
 
         Parameters
         ----------
-        point : Point
-            Point to be added to the mesh
+        points : iterable of Point
+            Points to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other point with the same uid was already
+            If other point with a duplicated uid was already
             in the mesh.
 
         """
-        if point.uid is None:
-            point.uid = self._generate_uuid()
-        elif point.uid in self._points:
-            error_str = "Trying to add an already existing point with uuid: {}"
-            raise ValueError(error_str.format(point.uid))
+        rpoints = []
+        for point in points:
+            if point.uid is None:
+                point.uid = self._generate_uuid()
+            elif point.uid in self._points:
+                err_str = "Trying to add an already existing \
+                    point with uuid: {}"
+                raise ValueError(err_str.format(point.uid))
 
-        self._points[point.uid] = Point.from_point(point)
+            self._points[point.uid] = Point.from_point(point)
 
-        return point.uid
+            rpoints.append(point.uid)
+        return rpoints
 
-    def add_edge(self, edge):
-        """ Adds a new edge to the mesh.
+    def add_edges(self, edges):
+        """ Adds a set of new edges to the mesh.
 
         Parameters
         ----------
-        edge : Edge
+        edges : iterable of Edge
             Edge to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other edge with the same uid was already
+            If other edge with a duplicated uid was already
             in the mesh
 
         """
+        redges = []
+        for edge in edges:
+            if edge.uid is None:
+                edge.uid = self._generate_uuid()
+            elif edge.uid in self._edges:
+                err_str = "Trying to add an already existing \
+                    edge with uuid: {}"
+                raise ValueError(err_str.format(edge.uid))
 
-        if edge.uid is None:
-            edge.uid = self._generate_uuid()
-        elif edge.uid in self._edges:
-            error_str = "Trying to add an already existing edge with uuid: {}"
-            raise ValueError(error_str.format(edge.uid))
+            self._edges[edge.uid] = Edge.from_edge(edge)
 
-        self._edges[edge.uid] = Edge.from_edge(edge)
-        return edge.uid
+            redges.append(edge.uid)
+        return redges
 
-    def add_face(self, face):
-        """ Adds a new face to the mesh.
+    def add_faces(self, faces):
+        """ Adds a set of new faces to the mesh.
 
         Parameters
         ----------
-        face : Face
+        faces : iterable of Face
             Face to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other face with the same uid was already
+            If other face with a duplicated uid was already
             in the mesh
 
         """
-        if face.uid is None:
-            face.uid = self._generate_uuid()
-        elif face.uid in self._faces:
-            error_str = "Trying to add an already existing face with uuid: {}"
-            raise ValueError(error_str.format(face.uid))
+        rfaces = []
+        for face in faces:
+            if face.uid is None:
+                face.uid = self._generate_uuid()
+            elif face.uid in self._faces:
+                err_str = "Trying to add an already existing \
+                    face with uuid: {}"
+                raise ValueError(err_str.format(face.uid))
 
-        self._faces[face.uid] = Face.from_face(face)
-        return face.uid
+            self._faces[face.uid] = Face.from_face(face)
 
-    def add_cell(self, cell):
-        """ Adds a new cell to the mesh.
+            rfaces.append(face.uid)
+        return rfaces
+
+    def add_cells(self, cells):
+        """ Adds a set of new cells to the mesh.
 
         Parameters
         ----------
-        cell : Cell
+        cells : iterable of Cell
             Cell to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other cell with the same uid was already
+            If other cell with a duplicated uid was already
             in the mesh
 
         """
+        rcells = []
+        for cell in cells:
+            if cell.uid is None:
+                cell.uid = self._generate_uuid()
+            elif cell.uid in self._cells:
+                err_str = "Trying to add an already existing \
+                    cell with uuid: {}"
+                raise ValueError(err_str.format(cell.uid))
 
-        if cell.uid is None:
-            cell.uid = self._generate_uuid()
-        elif cell.uid in self._cells:
-            error_str = "Trying to add an already existing cell with uuid: {}"
-            raise ValueError(error_str.format(cell.uid))
+            self._cells[cell.uid] = Cell.from_cell(cell)
+            rcells.append(cell.uid)
+        return rcells
 
-        self._cells[cell.uid] = Cell.from_cell(cell)
-        return cell.uid
-
-    def update_point(self, point):
-        """ Updates the information of a point.
+    def update_points(self, points):
+        """ Updates the information of a set of points.
 
         Gets the mesh point identified by the same
         uid as the provided point and updates its information
@@ -450,25 +474,26 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        point : Point
+        points : iterable of Point
             Point to be updated
 
         Raises
         ------
         ValueError :
-            If the point was not found in the mesh
+            If the any point was not found in the mesh
 
         """
-        if point.uid not in self._points:
-            error_str = "Trying to update a non-existing point with uid: {}"
-            raise ValueError(error_str.format(point.uid))
+        for point in points:
+            if point.uid not in self._points:
+                err_str = "Trying to update a non-existing point with uid: {}"
+                raise ValueError(err_str.format(point.uid))
 
-        point_to_update = self._points[point.uid]
-        point_to_update.data = point.data
-        point_to_update.coordinates = point.coordinates
+            point_to_update = self._points[point.uid]
+            point_to_update.data = point.data
+            point_to_update.coordinates = point.coordinates
 
-    def update_edge(self, edge):
-        """ Updates the information of an edge.
+    def update_edges(self, edges):
+        """ Updates the information of a set of edges.
 
         Gets the mesh edge identified by the same
         uid as the provided edge and updates its information
@@ -476,25 +501,26 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        edge : Edge
+        edges : iterable of Edge
             Edge to be updated
 
         Raises
         ------
         ValueError :
-            If the edge was not found in the mesh
+            If the any edge was not found in the mesh
 
         """
-        if edge.uid not in self._edges:
-            error_str = "Trying to update a non-existing edge with uid: {}"
-            raise ValueError(error_str.format(edge.uid))
+        for edge in edges:
+            if edge.uid not in self._edges:
+                err_str = "Trying to update a non-existing edge with uid: {}"
+                raise ValueError(err_str.format(edge.uid))
 
-        edge_to_update = self._edges[edge.uid]
-        edge_to_update.data = edge.data
-        edge_to_update.points = edge.points
+            edge_to_update = self._edges[edge.uid]
+            edge_to_update.data = edge.data
+            edge_to_update.points = edge.points
 
-    def update_face(self, face):
-        """ Updates the information of a face.
+    def update_faces(self, faces):
+        """ Updates the information of a set of faces.
 
         Gets the mesh face identified by the same
         uid as the provided face and updates its information
@@ -502,27 +528,26 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        face : Face
+        faces : iterable of Face
             Face to be updated
 
         Raises
         ------
         ValueError :
-            If the face was not found in the mesh
+            If the any face was not found in the mesh
 
         """
+        for face in faces:
+            if face.uid not in self._faces:
+                err_str = "Trying to update a non-existing face with uid: {}"
+                raise ValueError(err_str.format(face.uid))
 
-        if face.uid not in self._faces:
-            error_str = "Trying to update a non-existing face with uid: {}"
-            raise ValueError(error_str.format(face.uid))
+            face_to_update = self._faces[face.uid]
+            face_to_update.data = face.data
+            face_to_update.points = face.points
 
-        face_to_update = self._faces[face.uid]
-
-        face_to_update.data = face.data
-        face_to_update.points = face.points
-
-    def update_cell(self, cell):
-        """ Updates the information of a cell.
+    def update_cells(self, cells):
+        """ Updates the information of a set of cells.
 
         Gets the mesh cell identified by the same
         uid as the provided cell and updates its information
@@ -530,22 +555,23 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        cell : Cell
+        cells : iterable of Cell
             Cell to be updated
 
         Raises
         ------
         ValueError :
-            If the cell was not found in the mesh
+            If the any cell was not found in the mesh
 
         """
-        if cell.uid not in self._cells:
-            error_str = "Trying to update a non-existing cell with uid: {}"
-            raise ValueError(error_str.format(cell.uid))
+        for cell in cells:
+            if cell.uid not in self._cells:
+                err_str = "Trying to update a non-existing cell with uid: {}"
+                raise ValueError(err_str.format(cell.uid))
 
-        cell_to_update = self._cells[cell.uid]
-        cell_to_update.data = cell.data
-        cell_to_update.points = cell.points
+            cell_to_update = self._cells[cell.uid]
+            cell_to_update.data = cell.data
+            cell_to_update.points = cell.points
 
     def iter_points(self, uids=None):
         """ Returns an iterator over points.
@@ -675,6 +701,33 @@ class Mesh(ABCMesh):
 
         """
         return len(self._cells) > 0
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def _generate_uuid(self):
         """ Provides a uuid for the object

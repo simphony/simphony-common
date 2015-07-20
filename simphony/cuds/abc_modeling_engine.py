@@ -22,185 +22,82 @@ class ABCModelingEngine(object):
 
     @abstractmethod
     def run(self):
-        """Run the modeling engine
+        """ Run the modeling engine
 
         Run the modeling engine using the configured settings (e.g. CM, BC,
         and SP) and the configured state data (e.g. particle, mesh and
         lattice data).
-
         """
         pass
 
     @abstractmethod
-    def add_lattice(self, lattice):
-        """Add lattice to the modeling engine
+    def add_dataset(self, container):
+        """Add a CUDS container
 
         Parameters
         ----------
-        lattice : ABCLattice
-            lattice to be added.
+        container : {ABCMesh, ABCParticles, ABCLattice}
+            The CUDS container to add to the engine.
 
-        Returns
-        -------
-        proxy : ABCLattice
-            A lattice to be used to update/query the internal representation
-            stored inside the modeling-engine. See get_lattice for more
-            information.
-
-        """
-        pass
-
-    @abstractmethod
-    def add_mesh(self, mesh):
-        """Add mesh to the modeling engine
-
-        Parameters
-        ----------
-        mesh: ABCMesh
-            mesh to be added.
-
-        Returns
-        -------
-        proxy : ABCMesh
-            A proxy mesh to be used to update/query the internal representation
-            stored inside the modeling-engine. See get_mesh for more
-            information.
-        """
-        pass
-
-    @abstractmethod
-    def add_particles(self, particles):
-        """Add particle container to the modeling engine
-
-        Parameters
-        ----------
-        particles: ABCParticles
-            particle container to be added.
-
-        Returns
-        -------
-        ABCParticles
-            A particle container to be used to update/query the internal
-            representation stored inside the modeling-engine. See
-            get_particles for more information.
+        Raises
+        ------
+        TypeError:
+            If the container type is not supported by the engine.
+        ValueError:
+            If there is already a dataset with the given name.
 
         """
         pass
 
     @abstractmethod
-    def delete_lattice(self, name):
-        """Delete a lattice
+    def remove_dataset(self, name):
+        """ Remove a dataset from the internal
 
         Parameters
         ----------
         name: str
-            name of lattice to be deleted
+            name of CUDS container to be deleted
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
 
         """
         pass
 
     @abstractmethod
-    def delete_mesh(self, name):
-        """Delete a mesh
+    def get_dataset(self, name):
+        """ Get the dataset
 
         Parameters
         ----------
         name: str
-            name of mesh to be deleted
-
-        """
-        pass
-
-    @abstractmethod
-    def delete_particles(self, name):
-        """Delete a particle container
-
-        Parameters
-        ----------
-        name: str
-            name of particle container to be deleted
-
-        """
-        pass
-
-    @abstractmethod
-    def get_lattice(self, name):
-        """ Get lattice
-
-        The returned lattice can be used to query and update the state of the
-        lattice inside the modeling engine.
+            name of CUDS container to be retrieved.
 
         Returns
         -------
-        ABCLattice
+        container :
+            A proxy of the dataset named ``name`` that is stored
+            internally in the Engine.
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
 
         """
         pass
 
     @abstractmethod
-    def get_mesh(self, name):
-        """ Get mesh
-
-        The returned mesh can be used to query and update the state of the
-        mesh inside the modeling engine.
-
-        Returns
-        -------
-        ABCMesh
-
-        """
-        pass
-
-    @abstractmethod
-    def get_particles(self, name):
-        """ Get particle container
-
-        The returned particle container can be used to query and update the
-        state of the particle container inside the modeling engine.
-
-        Returns
-        -------
-        ABCParticles
-
-        """
-        pass
-
-    @abstractmethod
-    def iter_lattices(self, names=None):
-        """ Returns an iterator over a subset or all of the lattices.
+    def iter_datasets(self, names=None):
+        """ Returns an iterator over a subset or all of the containers.
 
         Parameters
         ----------
         names : sequence of str, optional
-            names of specific lattices to be iterated over. If names is not
-            given, then all lattices will be iterated over.
-
-        """
-        pass
-
-    @abstractmethod
-    def iter_meshes(self, names=None):
-        """ Returns an iterator over a subset or all of the meshes.
-
-        Parameters
-        ----------
-        names : sequence of str, optional
-            names of specific meshes to be iterated over. If names is not
-            given, then all meshes will be iterated over.
-
-        """
-        pass
-
-    @abstractmethod
-    def iter_particles(self, names=None):
-        """ Returns an iterator over a subset or all of the particle containers.
-
-        Parameters
-        ----------
-        names : sequence of str, optional
-            names of specific particle containers to be iterated over.
-            If names is not given, then all particle containers will
-            be iterated over.
+            names of specific containers to be iterated over. If names is not
+            given, then all containers will be iterated over.
 
         """
         pass

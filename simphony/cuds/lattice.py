@@ -1,6 +1,7 @@
 import numpy as np
 from math import sqrt
 from simphony.cuds.abc_lattice import ABCLattice
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -54,6 +55,10 @@ class Lattice(ABCLattice):
         self._dcs = np.empty(size, dtype=object)
         self._data = DataContainer()
 
+        self._items_count = {
+            CUDSItem.NODE: lambda: self._size
+        }
+
     def get_node(self, index):
         """Get a copy of the node corresponding to the given index.
 
@@ -72,19 +77,21 @@ class Lattice(ABCLattice):
             raise IndexError('invalid index: {}'.format(tuple_index))
         return LatticeNode(tuple_index, self._dcs[tuple_index])
 
-    def update_node(self, lat_node):
-        """Update the corresponding lattice node (data copied).
+    def update_nodes(self, nodes):
+        """Update the corresponding lattice nodes (data copied).
 
         Parameters
         ----------
-        lat_node : reference to a LatticeNode object
-            data copied from the given node
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects from where the data is copied
+            to the Lattice
 
         """
-        index = lat_node.index
-        if any(value < 0 for value in index):
-            raise IndexError('invalid index: {}'.format(index))
-        self._dcs[index] = DataContainer(lat_node.data)
+        for node in nodes:
+            index = node.index
+            if any(value < 0 for value in index):
+                raise IndexError('invalid index: {}'.format(index))
+            self._dcs[index] = DataContainer(node.data)
 
     def iter_nodes(self, indices=None):
         """Get an iterator over the LatticeNodes described by the indices.
@@ -131,6 +138,32 @@ class Lattice(ABCLattice):
             return x, y, z
         else:
             return self.origin + self.base_vect*np.array(index)
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+        try:
+            return np.prod(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     @property
     def type(self):

@@ -7,6 +7,7 @@ from simphony.testing.utils import (
     create_data_container, compare_data_containers,
     create_particles_with_id, create_bonds_with_id)
 from simphony.cuds.particles import Particle, Bond
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -414,6 +415,24 @@ class CheckManipulatingParticles(object):
         # then
         self.assertEqual(particle.uid, self.particle_list[-1].uid)
 
+    def test_count_of_particles(self):
+        # given
+        container = self.container
+        particle_list = self.particle_list
+
+        # then
+        count_original = len(particle_list)
+        count_container = container.count_of(CUDSItem.PARTICLE)
+        self.assertEqual(count_original, count_container)
+
+    def test_count_of_particles_passing_unsupported_type(self):
+        # given
+        container = self.container
+
+        # then
+        with self.assertRaises(ValueError):
+            container.count_of(CUDSItem.EDGE)
+
 
 class CheckAddingBonds(object):
 
@@ -764,3 +783,21 @@ class CheckManipulatingBonds(object):
 
         # then
         self.assertEqual(bond.uid, self.bond_list[-1].uid)
+
+    def test_count_of_bonds(self):
+        # given
+        container = self.container
+        bond_list = self.bond_list
+
+        # then
+        count_original = len(bond_list)
+        count_container = container.count_of(CUDSItem.BOND)
+        self.assertEqual(count_original, count_container)
+
+    def test_count_of_bonds_passing_unsupported_type(self):
+        # given
+        container = self.container
+
+        # then
+        with self.assertRaises(ValueError):
+            container.count_of(CUDSItem.EDGE)

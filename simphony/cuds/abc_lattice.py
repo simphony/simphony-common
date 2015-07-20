@@ -38,12 +38,12 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def update_node(self, node):
-        """Update the corresponding lattice node.
+    def update_nodes(self, nodes):
+        """Update the corresponding lattice nodes.
 
         Parameters
         ----------
-        node : LatticeNode
+        nodes : iterator of LatticeNodes
 
         """
 
@@ -78,5 +78,27 @@ class ABCLattice(object):
         Returns
         -------
         coordinates : float[3]
+
+        """
+
+    @abstractmethod
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
 
         """
