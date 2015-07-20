@@ -281,6 +281,7 @@ class CheckMeshItemOperations(object):
     def test_update_multiple_item_with_unsuported_cuba(self):
         # given
         container = self.container
+        self._add_items(container)
         items = self.iter_operation(container)
         for item in items:
             item.data = create_data_container()
