@@ -252,7 +252,7 @@ class CheckMeshItemOperations(object):
         # given
         container = self.container
         self._add_items(container)
-        items = self.iter_operation(container)
+        items = list(self.iter_operation(container))
         for item in items:
             item.data = create_data_container(restrict=self.supported_cuba())
 
