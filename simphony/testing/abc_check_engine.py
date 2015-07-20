@@ -1,8 +1,7 @@
 import abc
 import uuid
-import sys
 
-from simphony.testing.utils import (  # noqa
+from simphony.testing.utils import (
     compare_particles_datasets, compare_mesh_datasets,
     compare_lattice_datasets)
 
@@ -40,21 +39,11 @@ class CheckEngine(object):
         """ Check if a dataset is instance of a class
         """
 
-    operation_mapping = {
-        'compare datasets': 'none',
-        'add item': 'none'}
+    @abc.abstractmethod
+    def compare_dataset(self, dataset, reference):
+        """ compare a dataset to a reference
 
-    def compare_operation(self, *args, **kwrds):
-        method = getattr(
-            sys.modules[__name__],
-            self.operation_mapping['compare datasets'])
-        return method(*args, **kwrds)
-
-    def add_operation(self, container, *args, **kwrds):
-        method = getattr(
-            sys.modules[__name__],
-            self.operation_mapping['add item'])
-        return method(*args, **kwrds)
+        """
 
     def test_get_missing_dataset(self):
         engine = self.engine_factory()
@@ -66,8 +55,7 @@ class CheckEngine(object):
         reference = self.create_dataset(name='test')
         engine.add_dataset(reference)
         ds = engine.get_dataset("test")
-
-        self.compare_operation(reference, ds, testcase=self)
+        self.compare_dataset(ds, reference)
 
     def test_add_dataset_invalid(self):
         engine = self.engine_factory()
@@ -113,8 +101,7 @@ class CheckEngine(object):
         # Store dataset along with its data
         engine.add_dataset(reference)
         ds = engine.get_dataset('test')
-
-        self.compare_operation(reference, ds, testcase=self)
+        self.compare_dataset(ds, reference)
 
     def test_add_get_dataset_data(self):
         engine = self.engine_factory()
@@ -128,8 +115,7 @@ class CheckEngine(object):
         # Store dataset along with its data
         engine.add_dataset(reference)
         ds = engine.get_dataset('test')
-
-        self.compare_operation(reference, ds, testcase=self)
+        self.compare_dataset(ds, reference)
 
     def test_add_dataset_with_same_name(self):
         engine = self.engine_factory()
@@ -157,7 +143,7 @@ class CheckEngine(object):
         subset = ds_names[:3]
         names = [
             ds.name for ds in engine.iter_datasets(subset)]
-        self.assertEquals(names, subset)
+        self.assertEqual(names, subset)
 
         for ds in engine.iter_datasets(ds_names):
             self.check_instance_of_dataset(ds)
@@ -184,7 +170,7 @@ class CheckEngine(object):
                 engine.get_dataset(ds.name)
             # test that we can't use the deleted datasets
             with self.assertRaises(Exception):
-                self.compare_operation(ds, self.items[0])
+                self.compare_dataset(ds, reference)
 
     def test_delete_non_existing_dataset(self):
         engine = self.engine_factory()
@@ -196,7 +182,7 @@ class CheckEngine(object):
         engine.add_dataset(self.create_dataset(name='foo'))
         ds = engine.get_dataset("foo")
         ds.name = "bar"
-        self.assertEqual("bar", ds.name)
+        self.assertEqual(ds.name, "bar")
 
         # we should not be able to use the old name "foo"
         with self.assertRaises(ValueError):
@@ -208,7 +194,7 @@ class CheckEngine(object):
 
         # we should be able to access using the new "bar" name
         ds_bar = engine.get_dataset("bar")
-        self.assertEqual("bar", ds_bar.name)
+        self.assertEqual(ds_bar.name, "bar")
 
         # and we should be able to use the no-longer used
         # "foo" name when adding another dataset
@@ -220,8 +206,8 @@ class ParticlesEngineCheck(CheckEngine):
     def setUp(self):
         CheckEngine.setUp(self)
 
-    operation_mapping = {
-        'compare datasets': 'compare_particles_datasets'}
+    def compare_dataset(self, dataset, reference):
+        compare_particles_datasets(dataset, reference, self)
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -244,8 +230,8 @@ class MeshEngineCheck(CheckEngine):
     def setUp(self):
         CheckEngine.setUp(self)
 
-    operation_mapping = {
-        'compare datasets': 'compare_mesh_datasets'}
+    def compare_dataset(self, dataset, reference):
+        compare_mesh_datasets(dataset, reference, self)
 
     def create_dataset(self, name):
         """ Create and return a cuds object
@@ -268,8 +254,8 @@ class LatticeEngineCheck(CheckEngine):
     def setUp(self):
         CheckEngine.setUp(self)
 
-    operation_mapping = {
-        'compare datasets': 'compare_lattice_datasets'}
+    def compare_dataset(self, dataset, reference):
+        compare_lattice_datasets(dataset, reference, self)
 
     def create_dataset(self, name):
         """ Create and return a cuds object
