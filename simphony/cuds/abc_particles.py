@@ -85,7 +85,7 @@ class ABCParticles(object):
 
         >>> bonds_list = [Bond(), Bond()]
         >>> particles = Particles(name="foo")
-        >>> particles.add_bond(bonds_list)
+        >>> particles.add_bonds(bonds_list)
 
         """
 
@@ -115,11 +115,8 @@ class ABCParticles(object):
         function passing the Particle items as parameter.
 
         >>> part_container = Particles(name="foo")
-        >>> ...
-        >>> part1 = part_container.get_particle(uid1)
-        >>> part2 = part_container.get_particle(uid2)
         >>> ... #do whatever you want with the particles
-        >>> part_container.update_particle([part1, part2])
+        >>> part_container.update_particles([part1, part2])
 
         """
 
@@ -223,12 +220,7 @@ class ABCParticles(object):
 
         >>> particles = Particles(name="foo")
         >>> ...
-        >>> particle1 = particles.get_particle(uid1)
-        >>> particle2 = particles.get_particle(uid2)
-        >>> ...
-        >>> particles.remove_particle([part1.uid, part2.uid)
-        or directly
-        >>> particles.remove_particle([uid1, uid2])
+        >>> particles.remove_particles([uid1, uid2])
 
         """
 
@@ -250,12 +242,7 @@ class ABCParticles(object):
 
         >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond1 = particles.get_bond(uid1)
-        >>> bond2 = particles.get_bond(uid2)
-        >>> ...
-        >>> particles.remove_bonds([bond1.uid, bond2.uid])
-        or
-        >>> particles.remove_bond([uid1, uid2])
+        >>> particles.remove_bonds([uid1, uid2])
 
         """
 
@@ -293,16 +280,9 @@ class ABCParticles(object):
         >>> particles = Particles(name="foo")
         >>> ...
         >>> for particle in particles.iter_particles([uid1, uid2, uid3]):
-                ...  #do stuff
-                #take the particle back to the container so it will be updated
-                #in case we need it
-                part_container.update_particle(particle)
-
+            ...  #do stuff
         >>> for particle in particles.iter_particles():
-                ...  #do stuff; it will iterate over all the particles
-                #take the particle back to the container so it will be updated
-                #in case we need it
-                particles.update_particle(particle)
+            ...  #do stuff
 
         """
 
