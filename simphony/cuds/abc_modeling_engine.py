@@ -21,7 +21,7 @@ class ABCModelingEngine(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def run(self):
+    def run(self):  # pragma: no cover
         """ Run the modeling engine
 
         Run the modeling engine using the configured settings (e.g. CM, BC,
@@ -30,7 +30,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def add_dataset(self, container):
+    def add_dataset(self, container):  # pragma: no cover
         """Add a CUDS container
 
         Parameters
@@ -48,7 +48,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def remove_dataset(self, name):
+    def remove_dataset(self, name):  # pragma: no cover
         """ Remove a dataset from the internal
 
         Parameters
@@ -64,7 +64,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def get_dataset(self, name):
+    def get_dataset(self, name):  # pragma: no cover
         """ Get the dataset
 
         Parameters
@@ -86,7 +86,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def iter_datasets(self, names=None):
+    def iter_datasets(self, names=None):  # pragma: no cover
         """ Returns an iterator over a subset or all of the containers.
 
         Parameters
