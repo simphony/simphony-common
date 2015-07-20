@@ -433,8 +433,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
 
         # container with items
         num_items = len(self.item_list)
-        for item in self.item_list:
-            self.add_operation(container, item)
+        self.add_operation(container, self.item_list)
 
         self.assertEqual(
             self.count_items_operation(container, CUDSItem.POINT),
@@ -546,8 +545,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
 
         # container with items
         num_items = len(self.item_list)
-        for item in self.item_list:
-            self.add_operation(container, item)
+        self.add_operation(container, self.item_list)
 
         self.assertEqual(
             self.count_items_operation(container, self.item_type),
