@@ -126,7 +126,7 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         reference.add_points(point_list)
         reference.add_edges(edge_list)
-        reference.add_faces(face_list)    
+        reference.add_faces(face_list)
         reference.add_cells(cell_list)
 
         mesh.data = data
@@ -154,7 +154,7 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         reference.add_points(point_list)
         reference.add_edges(edge_list)
-        reference.add_faces(face_list)    
+        reference.add_faces(face_list)
         reference.add_cells(cell_list)
 
         mesh.data = data
@@ -237,7 +237,7 @@ class TestCompareMeshDatasets(unittest.TestCase):
         mesh.add_edges(edge_list)
         mesh.add_faces(face_list)
         mesh.add_cells(cell_list)
-        
+
         mesh.data = test_data
 
         # when/then
