@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class ABCModelingEngine(object):
+class ABCModelingEngine(object):  # pragma: no cover
     """Abstract base class for modeling engines in SimPhoNy.
 
     Through this interface, the user controls and interacts with the
@@ -21,7 +21,7 @@ class ABCModelingEngine(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def run(self):  # pragma: no cover
+    def run(self):
         """ Run the modeling engine
 
         Run the modeling engine using the configured settings (e.g. CM, BC,
@@ -30,7 +30,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def add_dataset(self, container):  # pragma: no cover
+    def add_dataset(self, container):
         """Add a CUDS container
 
         Parameters
@@ -48,7 +48,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def remove_dataset(self, name):  # pragma: no cover
+    def remove_dataset(self, name):
         """ Remove a dataset from the internal
 
         Parameters
@@ -64,7 +64,7 @@ class ABCModelingEngine(object):
         """
 
     @abstractmethod
-    def get_dataset(self, name):  # pragma: no cover
+    def get_dataset(self, name):
         """ Get the dataset
 
         Parameters
