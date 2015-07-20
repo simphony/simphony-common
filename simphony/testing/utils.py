@@ -9,7 +9,43 @@ from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
-from simphony.cuds.mesh import Point
+from simphony.cuds.mesh import Point, Edge, Face, Cell
+
+
+def compare_particles_datasets(particles, reference, testcase=None):
+    self = testcase
+    self.assertEqual(particles.name, reference.name)
+    for b, r in zip(particles.iter_bonds(), reference.iter_bonds()):
+        compare_bonds(b, r, testcase=self)
+    for p, r in zip(particles.iter_particles(), reference.iter_particles()):
+        compare_particles(p, r, testcase=self)
+    compare_data_containers(particles.data, reference.data, testcase=self)
+
+
+def compare_mesh_datasets(mesh, reference, testcase=None):
+    self = testcase
+    self.assertEqual(mesh.name, reference.name)
+    for p, r in zip(mesh.iter_points(), reference.iter_points()):
+        compare_points(p, r, testcase=self)
+    for e, r in zip(mesh.iter_edges(), reference.iter_edges()):
+        compare_elements(e, r, testcase=self)
+    for f, r in zip(mesh.iter_faces(), reference.iter_faces()):
+        compare_elements(f, r, testcase=self)
+    for c, r in zip(mesh.iter_cells(), reference.iter_cells()):
+        compare_elements(c, r, testcase=self)
+    compare_data_containers(mesh.data, reference.data, testcase=self)
+
+
+def compare_lattice_datasets(lattice, reference, testcase=None):
+    self = testcase
+    self.assertEqual(lattice.name, reference.name)
+    for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
+        compare_lattice_nodes(l, r, testcase=self)
+    compare_data_containers(lattice.data, reference.data, testcase=self)
+    self.assertEqual(lattice.type, reference.type)
+    numpy.testing.assert_array_equal(lattice.base_vect, reference.base_vect)
+    self.assertEqual(lattice.size, reference.size)
+    numpy.testing.assert_array_equal(lattice.origin, reference.origin)
 
 
 def compare_bonds(bond, reference, msg=None, testcase=None):
@@ -92,14 +128,27 @@ def create_particles_with_id(n=10, restrict=None):
     return particle_list
 
 
-def create_points():
-    return [
-        Point((0.0, 0.0, 0.0)),
-        Point((1.0, 0.0, 0.0)),
-        Point((0.0, 1.0, 0.0)),
-        Point((0.0, 0.0, 1.0)),
-        Point((1.0, 0.0, 1.0)),
-        Point((0.0, 1.0, 1.0))]
+def create_points(n=10, restrict=None):
+    point_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        point_list.append(
+            Point(uid=None,
+                  coordinates=[i, i*10, i*100],
+                  data=data))
+    return point_list
+
+
+def create_points_with_id(n=10, restrict=None):
+    point_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict)
+        uid = uuid.uuid4()
+        point_list.append(
+            Point(uid=uid,
+                  coordinates=[i, i*10, i*100],
+                  data=data))
+    return point_list
 
 
 def create_bonds(n=5, restrict=None, particles=None):
@@ -127,6 +176,105 @@ def create_bonds_with_id(n=5, restrict=None, particles=None):
             ids = random.sample(uids, n)
         bond_list.append(Bond(uid=uid, particles=ids, data=data))
     return bond_list
+
+
+def create_edges(n=5, restrict=None, points=None):
+    edge_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(2)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 2)
+        edge_list.append(
+            Edge(uid=None,
+                 points=ids,
+                 data=data))
+    return edge_list
+
+
+def create_edges_with_id(n=5, restrict=None, points=None):
+    edge_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(2)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 2)
+        edge_list.append(
+            Edge(uid=uid,
+                 points=ids,
+                 data=data))
+    return edge_list
+
+
+def create_faces(n=5, restrict=None, points=None):
+    face_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(3)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 3)
+        face_list.append(
+            Face(uid=None,
+                 points=ids,
+                 data=data))
+    return face_list
+
+
+def create_faces_with_id(n=5, restrict=None, points=None):
+    face_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(3)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 3)
+        face_list.append(
+            Face(uid=uid,
+                 points=ids,
+                 data=data))
+    return face_list
+
+
+def create_cells(n=5, restrict=None, points=None):
+    cell_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(4)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 4)
+        cell_list.append(
+            Cell(uid=None,
+                 points=ids,
+                 data=data))
+    return cell_list
+
+
+def create_cells_with_id(n=5, restrict=None, points=None):
+    cell_list = []
+    for i in xrange(n):
+        data = create_data_container(restrict=restrict, constant=i)
+        uid = uuid.uuid4()
+        if points is None:
+            ids = [uuid.uuid4() for x in xrange(4)]
+        else:
+            uids = [point.uid for point in points]
+            ids = random.sample(uids, 4)
+        cell_list.append(
+            Cell(uid=uid,
+                 points=ids,
+                 data=data))
+    return cell_list
 
 
 def create_data_container(restrict=None, constant=None):
