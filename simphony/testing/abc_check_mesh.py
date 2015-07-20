@@ -254,7 +254,7 @@ class CheckMeshItemOperations(object):
         self._add_items(container)
         items = self.iter_operation(container)
         for item in items:
-            item.data = create_data_container(restrict=self.supported_cuba)
+            item.data = create_data_container(restrict=self.supported_cuba())
 
         # when
         self.update_operation(container, items)
@@ -293,7 +293,7 @@ class CheckMeshItemOperations(object):
         # then
         for item in items:
             retrieved = self.get_operation(container, item.uid)
-            item.data = create_data_container(restrict=self.supported_cuba)
+            item.data = create_data_container(restrict=self.supported_cuba())
             self.assertEqual(retrieved, item)
 
     def test_exception_when_update_item_with_wrong_id(self):
