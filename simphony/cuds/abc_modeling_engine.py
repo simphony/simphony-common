@@ -28,7 +28,6 @@ class ABCModelingEngine(object):
         and SP) and the configured state data (e.g. particle, mesh and
         lattice data).
         """
-        pass
 
     @abstractmethod
     def add_dataset(self, container):
@@ -47,7 +46,6 @@ class ABCModelingEngine(object):
             If there is already a dataset with the given name.
 
         """
-        pass
 
     @abstractmethod
     def remove_dataset(self, name):
@@ -64,7 +62,6 @@ class ABCModelingEngine(object):
             If there is no dataset with the given name
 
         """
-        pass
 
     @abstractmethod
     def get_dataset(self, name):
@@ -87,7 +84,6 @@ class ABCModelingEngine(object):
             If there is no dataset with the given name
 
         """
-        pass
 
     @abstractmethod
     def iter_datasets(self, names=None):
@@ -100,4 +96,3 @@ class ABCModelingEngine(object):
             given, then all containers will be iterated over.
 
         """
-        pass
