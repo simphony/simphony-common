@@ -119,18 +119,15 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         data = DataContainer()
 
-        for point in point_list:
-            mesh.add_point(point)
-            reference.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-            reference.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-            reference.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
-            reference.add_cell(cell)
+        mesh.add_points(point_list)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(face_list)
+        mesh.add_cells(cell_list)
+
+        reference.add_points(point_list)
+        reference.add_edges(edge_list)
+        reference.add_faces(face_list)    
+        reference.add_cells(cell_list)
 
         mesh.data = data
         reference.data = data
@@ -150,18 +147,15 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         data = create_data_container()
 
-        for point in point_list:
-            mesh.add_point(point)
-            reference.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-            reference.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-            reference.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
-            reference.add_cell(cell)
+        mesh.add_points(point_list)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(face_list)
+        mesh.add_cells(cell_list)
+
+        reference.add_points(point_list)
+        reference.add_edges(edge_list)
+        reference.add_faces(face_list)    
+        reference.add_cells(cell_list)
 
         mesh.data = data
         reference.data = data
@@ -174,14 +168,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         test_points = create_points_with_id()
 
         mesh = Mesh(name=reference.name)
-        for point in test_points:
-            mesh.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
+
+        mesh.add_points(test_points)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(face_list)
+        mesh.add_cells(cell_list)
+
         mesh.data = data
 
         # when/then
@@ -192,14 +184,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         test_edges = create_edges()
 
         mesh = Mesh(name=reference.name)
-        for point in point_list:
-            mesh.add_point(point)
-        for edge in test_edges:
-            mesh.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
+
+        mesh.add_points(point_list)
+        mesh.add_edges(test_edges)
+        mesh.add_faces(face_list)
+        mesh.add_cells(cell_list)
+
         mesh.data = data
 
         # when/then
@@ -210,14 +200,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         test_faces = create_faces()
 
         mesh = Mesh(name=reference.name)
-        for point in point_list:
-            mesh.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-        for face in test_faces:
-            mesh.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
+
+        mesh.add_points(point_list)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(test_faces)
+        mesh.add_cells(cell_list)
+
         mesh.data = data
 
         # when/then
@@ -228,14 +216,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         test_cells = create_cells()
 
         mesh = Mesh(name=reference.name)
-        for point in point_list:
-            mesh.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-        for cell in test_cells:
-            mesh.add_cell(cell)
+
+        mesh.add_points(point_list)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(face_list)
+        mesh.add_cells(test_cells)
+
         mesh.data = data
 
         # when/then
@@ -246,14 +232,12 @@ class TestCompareMeshDatasets(unittest.TestCase):
         test_data = DataContainer()
 
         mesh = Mesh(name=reference.name)
-        for point in point_list:
-            mesh.add_point(point)
-        for edge in edge_list:
-            mesh.add_edge(edge)
-        for face in face_list:
-            mesh.add_face(face)
-        for cell in cell_list:
-            mesh.add_cell(cell)
+
+        mesh.add_points(point_list)
+        mesh.add_edges(edge_list)
+        mesh.add_faces(face_list)
+        mesh.add_cells(cell_list)
+        
         mesh.data = test_data
 
         # when/then
