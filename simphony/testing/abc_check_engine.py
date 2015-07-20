@@ -170,7 +170,7 @@ class CheckEngine(object):
                 engine.get_dataset(ds.name)
             # test that we can't use the deleted datasets
             with self.assertRaises(Exception):
-                self.compare_dataset(ds, reference)
+                self.compare_dataset(ds, ds)
 
     def test_delete_non_existing_dataset(self):
         engine = self.engine_factory()
