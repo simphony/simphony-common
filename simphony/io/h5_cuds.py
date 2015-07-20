@@ -1,9 +1,6 @@
 import tables
 
-from simphony.cuds.abstractparticles import ABCParticles
-from simphony.cuds.abstractmesh import ABCMesh
-from simphony.cuds.abstractlattice import ABCLattice
-
+from simphony.cuds import ABCParticles, ABCMesh, ABCLattice
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice

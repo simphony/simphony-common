@@ -218,10 +218,10 @@ class CheckMeshItemOperations(object):
 
         # then
         retrieveda = self.get_operation(container, uid[0])
-        expecteda.data = create_data_container(restrict=self.supported_cuba)
+        expecteda.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieveda, expecteda)
         retrievedb = self.get_operation(container, uid[1])
-        expectedb.data = create_data_container(restrict=self.supported_cuba)
+        expectedb.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrievedb, expectedb)
 
     def test_exception_when_adding_item_twice(self):
