@@ -97,7 +97,7 @@ class CheckLatticeNodeOperations(object):
         with self.assertRaises(IndexError):
             container.get_node(index)
 
-    def test_update_node_with_invalid_index(self):
+    def test_update_nodes_with_invalid_index(self):
         container = self.container
 
         index = 2, 3, 4
@@ -105,42 +105,48 @@ class CheckLatticeNodeOperations(object):
 
         node.index = 2, 300, 4
         with self.assertRaises(IndexError):
-            container.update_node(node)
+            container.update_nodes((node,))
 
         node.index = 2, 3, -4
         with self.assertRaises(IndexError):
-            container.update_node(node)
+            container.update_nodes((node,))
 
-    def test_update_node(self):
+    def test_update_nodes(self):
         container = self.container
 
-        index = 2, 3, 4
-        node = container.get_node(index)
-        node.data = create_data_container(restrict=self.supported_cuba())
-        container.update_node(node)
+        indices = ((2, 3, 4), (1, 2, 3))
+        nodes = [container.get_node(index) for index in indices]
+        for node in nodes:
+            node.data = create_data_container(restrict=self.supported_cuba())
+        container.update_nodes(nodes)
 
-        new_node = container.get_node(index)
-        self.assertEqual(new_node, node)
-        # Check that `new_node` is not the same instance as `node`
-        self.assertIsNot(new_node, node)
+        for n in xrange(len(indices)):
+            index = indices[n]
+            new_node = container.get_node(index)
+            self.assertEqual(new_node, nodes[n])
+            # Check that `new_node` is not the same instance as `node`
+            self.assertIsNot(new_node, nodes[n])
 
-    def test_update_node_with_extra_keywords(self):
+    def test_update_nodes_with_extra_keywords(self):
         container = self.container
 
-        index = 2, 3, 4
-        node = container.get_node(index)
+        indices = ((2, 3, 4), (1, 2, 3))
+        nodes = [container.get_node(index) for index in indices]
         # Update with full DataContainer.
-        node.data = create_data_container()
-        container.update_node(node)
+        for node in nodes:
+            node.data = create_data_container()
+        container.update_nodes(nodes)
 
-        new_node = container.get_node(index)
-        # We expect only the supported CUBA to be stored.
-        expected = LatticeNode(
-            index=node.index,
-            data=create_data_container(restrict=self.supported_cuba()))
-        self.assertEqual(new_node, expected)
-        # Check that `new_node` is not the same instance as `node`
-        self.assertIsNot(new_node, node)
+        for n in xrange(len(indices)):
+            index = indices[n]
+            new_node = container.get_node(index)
+            # We expect only the supported CUBA to be stored.
+            expected = LatticeNode(
+                index=nodes[n].index,
+                data=create_data_container(restrict=self.supported_cuba()))
+            self.assertEqual(new_node, expected)
+            # Check that `new_node` is not the same instance as `node`
+            self.assertIsNot(new_node, nodes[n])
 
     def test_count_of_nodes(self):
         # given

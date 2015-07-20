@@ -122,76 +122,76 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def add_point(self, point):
-        """ Adds a new point to the mesh.
+    def add_points(self, points):
+        """ Adds a set of new points to the mesh.
 
         Parameters
         ----------
-        point : Point
-            Point to be added to the mesh
+        points : iterable of Point
+            Points to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other point with the same uid was already
-            in the mesh
+            If other point with a duplicated uid was already
+            in the mesh.
 
         """
 
     @abstractmethod
-    def add_edge(self, edge):
-        """ Adds a new edge to the mesh.
+    def add_edges(self, edge):
+        """ Adds a set of new edges to the mesh.
 
         Parameters
         ----------
-        edge : Edge
+        edges : iterable of Edge
             Edge to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other edge with the same uid was already
+            If other edge with a duplicated uid was already
             in the mesh
 
         """
 
     @abstractmethod
-    def add_face(self, face):
-        """ Adds a new face to the mesh.
+    def add_faces(self, face):
+        """ Adds a set of new faces to the mesh.
 
         Parameters
         ----------
-        face : Face
+        faces : iterable of Face
             Face to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other face with the same uid was already
+            If other face with a duplicated uid was already
             in the mesh
 
         """
 
     @abstractmethod
-    def add_cell(self, cell):
-        """ Adds a new cell to the mesh.
+    def add_cells(self, cell):
+        """ Adds a set of new cells to the mesh.
 
         Parameters
         ----------
-        cell : Cell
+        cells : iterable of Cell
             Cell to be added to the mesh
 
         Raises
         ------
         ValueError :
-            If other cell with the same uid was already
+            If other cell with a duplicated uid was already
             in the mesh
 
         """
 
     @abstractmethod
-    def update_point(self, point):
-        """ Updates the information of a point.
+    def update_points(self, point):
+        """ Updates the information of a set of points.
 
         Gets the mesh point identified by the same
         uid as the provided point and updates its information
@@ -199,19 +199,19 @@ class ABCMesh(object):
 
         Parameters
         ----------
-        point : Point
+        points : iterable of Point
             Point to be updated
 
         Raises
         ------
         ValueError :
-            If the point was not found in the mesh
+            If the any point was not found in the mesh
 
         """
 
     @abstractmethod
-    def update_edge(self, edge):
-        """ Updates the information of a edge.
+    def update_edges(self, edge):
+        """ Updates the information of a set of edges.
 
         Gets the mesh edge identified by the same
         uid as the provided edge and updates its information
@@ -219,19 +219,19 @@ class ABCMesh(object):
 
         Parameters
         ----------
-        edge : Edge
+        edges : iterable of Edge
             Edge to be updated
 
         Raises
         ------
         ValueError :
-            If the edge was not found in the mesh
+            If the any edge was not found in the mesh
 
         """
 
     @abstractmethod
-    def update_face(self, face):
-        """ Updates the information of a face.
+    def update_faces(self, face):
+        """ Updates the information of a set of faces.
 
         Gets the mesh face identified by the same
         uid as the provided face and updates its information
@@ -239,19 +239,19 @@ class ABCMesh(object):
 
         Parameters
         ----------
-        face : Face
+        faces : iterable of Face
             Face to be updated
 
         Raises
         ------
         ValueError :
-            If the face was not found in the mesh
+            If the any face was not found in the mesh
 
         """
 
     @abstractmethod
-    def update_cell(self, cell):
-        """ Updates the information of a cell.
+    def update_cells(self, cell):
+        """ Updates the information of a set of cells.
 
         Gets the mesh cell identified by the same
         uid as the provided cell and updates its information
@@ -259,13 +259,13 @@ class ABCMesh(object):
 
         Parameters
         ----------
-        cell : Cell
+        cells : iterable of Cell
             Cell to be updated
 
         Raises
         ------
         ValueError :
-            If the cell was not found in the mesh
+            If the any cell was not found in the mesh
 
         """
 

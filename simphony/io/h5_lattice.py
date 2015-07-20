@@ -8,6 +8,9 @@ from simphony.core.cuds_item import CUDSItem
 import numpy as np
 
 
+LATTICE_CUDS_VERSION = 1
+
+
 class H5Lattice(ABCLattice):
     """ H5Lattice object to use H5CUDS lattices.
 
@@ -22,6 +25,9 @@ class H5Lattice(ABCLattice):
             for lattice and data are located
 
         """
+        if group._v_attrs.cuds_version != LATTICE_CUDS_VERSION:
+            raise ValueError("Lattice file layout has an incompatible version")
+
         self._group = group
         self._type = group.lattice.attrs.type
         self._base_vect = group.lattice.attrs.base_vect
@@ -56,6 +62,8 @@ class H5Lattice(ABCLattice):
             A class that describes column types for PyTables table.
 
         """
+        group._v_attrs.cuds_version = LATTICE_CUDS_VERSION
+
         # If record not specified use NoUIDRecord in table initialization
         lattice = IndexedDataContainerTable(group, 'lattice',
                                             record if record is not None
@@ -91,22 +99,23 @@ class H5Lattice(ABCLattice):
             raise IndexError('invalid index: {}'.format(index))
         return LatticeNode(index, self._table[n])
 
-    def update_node(self, node):
+    def update_nodes(self, nodes):
         """ Updates H5Lattice data for a LatticeNode
 
         Parameters
         ----------
-        node : LatticeNode
-            reference to LatticeNode object
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects
 
         """
         # Find correct row for node
-        index = node.index
-        try:
-            n = np.ravel_multi_index(index, self._size)
-        except ValueError:
-            raise IndexError('invalid index: {}'.format(index))
-        self._table[n] = node.data
+        for node in nodes:
+            index = node.index
+            try:
+                n = np.ravel_multi_index(index, self._size)
+            except ValueError:
+                raise IndexError('invalid index: {}'.format(index))
+            self._table[n] = node.data
 
     def iter_nodes(self, indices=None):
         """ Get an iterator over the LatticeNodes described by the ids.

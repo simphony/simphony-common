@@ -4,12 +4,13 @@ class H5CUDS as "H5CUDS(Group)" {
    particle : Group = Particle
    mesh : Group = Bond
    lattice : Group = Lattice
-
+   -- Node Attributes --
+   cuds_version: int
 }
 
 class Particle as "Particle(Group)" {
    _v_name : string = "particle"
-   children of type H5Partilces
+   children of type H5Particles
 }
 
 class Mesh as "Mesh(Group)" {

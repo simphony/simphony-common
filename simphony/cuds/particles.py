@@ -50,147 +50,158 @@ class Particles(ABCParticles):
     def data(self, new_data):
         self._data = DataContainer(new_data)
 
-    def add_particle(self, particle):
-        """Adds the particle to the container.
+    def add_particles(self, iterable):
+        """Adds a set of particles from the provided iterable
+        to the container.
 
-        If the new particle has no uid, the particle container
-        will generate a new uid for it. If the particle has
-        already an uid, it won't add the particle if a particle
+        If any particle have no uids, the container
+        will generate a new uids for it. If the particle has
+        already an uids, it won't add the particle if a particle
         with the same uid already exists. If the user wants to replace
-        an existing particle in the container there is an 'update_particle'
+        an existing particle in the container there is an 'update_particles'
         method for that purpose.
 
         Parameters
         ----------
-        particle : Particle
-            the new particle that will be included in the container.
+        iterable : iterable of Particle objects
+            the new set of particles that will be included in the container.
 
         Returns
         -------
-        uid : uuid.UUID
-            The uid of the added particle.
+        uids : list of uuid.UUID
+            The uids of the added particles.
 
         Raises
         ------
         ValueError :
-            when the new particle already exists in the container.
+            when there is a particle with an uids that already exists
+            in the container.
 
         Examples
         --------
-        Having a Particle and a ParticleContainer just call the function
-        passing the Particle as parameter.
+        Add a set of particles to a Particles container.
 
-        >>> part = Particle()
-        >>> part_container = Particles(name="foo")
-        >>> part_container.add_particle(part)
+        >>> particle_list = [Particle(), Particle()]
+        >>> particles = Particles(name="foo")
+        >>> uids = particles.add_particles(particle_list)
 
         """
-        return self._add_element(
-            self._particles, particle, clone=Particle.from_particle)
+        uids = []
+        for particle in iterable:
+            uid = self._add_element(
+                self._particles, particle, clone=Particle.from_particle)
+            uids.append(uid)
+        return uids
 
-    def add_bond(self, bond):
-        """Adds the bond to the container.
+    def add_bonds(self, iterable):
+        """Adds a set of bonds to the container.
 
-        Also like with particles, if the bond has a defined uid,
+        Also like with particles, if any bond has a defined uid,
         it won't add the bond if a bond with the same uid already exists, and
         if the bond has no uid the particle container will generate an
         uid. If the user wants to replace an existing bond in the
-        container there is an 'update_bond' method for that purpose.
+        container there is an 'update_bonds' method for that purpose.
 
         Parameters
         ----------
-        new_bond : Bond
+        iterable : iterable of Bond objects
             the new bond that will be included in the container.
 
         Returns
         -------
-        uid : uuid.UID
-            The uid of the added bond.
+        uuid : list of uuid.UUID
+            The uuids of the added bonds.
 
         Raises
         ------
         ValueError :
-            When the new particle already exists in the container.
+            when there is a bond with an uuid that already exists
+            in the container.
 
         Examples
         --------
-        Having a Bond and a ParticleContainer just call the function
-        passing the Bond as parameter.
+        Add a set of bonds to a Particles container.
 
-        >>> bond = Bond()
-        >>> part_container = Particles(name="foo")
-        >>> part_container.add_bond(bond)
+        >>> bonds_list = [Bond(), Bond()]
+        >>> particles = Particles(name="foo")
+        >>> particles.add_bond(bonds_list)
 
         """
-        return self._add_element(self._bonds, bond, Bond.from_bond)
+        uids = []
+        for bond in iterable:
+            uid = self._add_element(self._bonds, bond, Bond.from_bond)
+            uids.append(uid)
+        return uids
 
-    def update_particle(self, particle):
-        """Replaces an existing particle.
+    def update_particles(self, iterable):
+        """Updates a set of particles from the provided iterable.
 
-        Takes the uid of 'particle' and searches inside the container for
-        that particle. If the particle exists, it is replaced with the new
-        particle passed as parameter. If the particle doesn't exist, it will
-        raise an exception.
+        Takes the uids of the particles and searches inside the container for
+        those particles. If the particles exists, they are replaced in the
+        container. If any particle doesn't exist, it will raise an exception.
 
         Parameters
         ----------
 
-        particle : Particle
-            the particle that will be replaced.
+        iterable : iterable of Particle objects
+            the particles that will be replaced.
 
         Raises
         ------
         ValueError :
-            If the particle does not exist.
+            If any particle inside the iterable does not exist.
 
         Examples
         --------
-        Having a Particle that already exists in the container (taken with the
-        'get_particle' method for example) and a ParticleContainer just call
-        the function passing the Particle as parameter.
+        Given a set of Particle objects that already exists in the container
+        (taken with the 'get_particle' method for example), just call the
+        function passing the Particle items as parameter.
 
         >>> part_container = Particles(name="foo")
         >>> ...
-        >>> part = part_container.get_particle(uid)
-        >>> ... #do whatever you want with the particle
-        >>> part_container.update_particle(part)
+        >>> part1 = part_container.get_particle(uid1)
+        >>> part2 = part_container.get_particle(uid2)
+        >>> ... #do whatever you want with the particles
+        >>> part_container.update_particle([part1, part2])
 
         """
-        self._update_element(
-            self._particles, particle, clone=Particle.from_particle)
+        for particle in iterable:
+            self._update_element(
+                self._particles, particle, clone=Particle.from_particle)
 
-    def update_bond(self, bond):
-        """Replaces an existing bond.
+    def update_bonds(self, iterable):
+        """Updates a set of bonds from the provided iterable.
 
-        Takes the uid of 'bond' and searchs inside the container for
-        that bond. If the bond exists, it is replaced with the new
-        bond passed as parameter. If the bond doesn't exist, it will
-        raise an exception.
+        Takes the uids of the bonds and searches inside the container for
+        those bond. If the bonds exists, they are replaced in the container.
+        If any bond doesn't exist, it will raise an exception.
 
         Parameters
         ----------
-        bond : Bond
-            the bond that will be replaced.
+        iterable : iterable of Bond objects
+            the bonds that will be replaced.
 
         Raises
         ------
         ValueError :
-            If the bond doesn't exist.
+            If any bond doesn't exist.
 
         Examples
         --------
-        Having a Bond that already exists in the container (taken with the
-        'get_bond' method for example) and a Particles just call the
-        function passing the Bond as parameter.
+        Given a set of Bond objects that already exists in the container
+        (taken with the 'get_bond' method for example) just call the
+        function passing the set of Bond as parameter.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond = part_container.get_bond(uid)
-        >>> ... #do whatever you want with the bond
-        >>> part_container.update_bond(bond)
+        >>> bond1 = particles.get_bond(uid1)
+        >>> bond2 = particles.get_bond(uid2)
+        >>> ... #do whatever you want with the bonds
+        >>> particles.update_bond([bond1, bond2])
 
         """
-        self._update_element(self._bonds, bond, clone=Bond.from_bond)
+        for bond in iterable:
+            self._update_element(self._bonds, bond, clone=Bond.from_bond)
 
     def get_particle(self, uid):
         """Returns a copy of the particle with the 'particle_id' id.
@@ -237,11 +248,11 @@ class Particles(ABCParticles):
         bond = self._bonds[uid]
         return Bond.from_bond(bond)
 
-    def remove_particle(self, uid):
-        """Removes the particle with uid from the container.
+    def remove_particles(self, uids):
+        """Remove the particles with the provided uids from the container.
 
-        The uid passed as parameter should exists in the container. Otherwise
-        an expcetion will be raised.
+        The uids inside the iterable should exists in the container. Otherwise
+        an exception will be raised.
 
         Parameters
         ----------
@@ -251,49 +262,53 @@ class Particles(ABCParticles):
         Raises
         ------
         KeyError :
-           If the particle doesn't exist.
+           If any particle doesn't exist.
 
 
         Examples
         --------
-        Having an uid of an existing particle, pass it to the function.
+        Having a set of uids of existing particles, pass it to the method.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> part = part_container.get_particle(uid)
+        >>> particle1 = particles.get_particle(uid1)
+        >>> particle2 = particles.get_particle(uid2)
         >>> ...
-        >>> part_container.remove_particle(part.uid)
+        >>> particles.remove_particle([part1.uid, part2.uid)
         or directly
-        >>> part_container.remove_particle(uid)
+        >>> particles.remove_particle([uid1, uid2])
 
         """
-        del self._particles[uid]
+        for uid in uids:
+            del self._particles[uid]
 
-    def remove_bond(self, uid):
-        """Removes the bond with the uid from the container.
+    def remove_bonds(self, uids):
+        """Remove the bonds with the provided uids.
 
-        The uid passed as parameter should exists in the container. If
-        it doesn't exists, nothing will happen.
+        The uids passed as parameter should exists in the container. If
+        any uid doesn't exist, an exception will be raised.
 
         Parameters
         ----------
-        uid : uuid.UUID
+        uids : uuid.UUID
             the uid of the bond to be removed.
 
         Examples
         --------
-        Having an uid of an existing bond, pass it to the function.
+        Having a set of uids of existing bonds, pass it to the method.
 
-        >>> part_container = Particles(name="foo")
+        >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond = part_container.get_bond(id)
+        >>> bond1 = particles.get_bond(uid1)
+        >>> bond2 = particles.get_bond(uid2)
         >>> ...
-        >>> part_container.remove_bond(bond.uid)
-        or directly
-        >>> part_container.remove_bond(id)
+        >>> particles.remove_bonds([bond1.uid, bond2.uid])
+        or
+        >>> particles.remove_bond([uid1, uid2])
 
         """
-        del self._bonds[uid]
+        for uid in uids:
+            del self._bonds[uid]
 
     def iter_particles(self, uids=None):
         """Generator method for iterating over the particles of the container.

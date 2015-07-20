@@ -7,7 +7,7 @@ abstract class ABCLattice {
   origin: float[3]
   data: DataContainer
   {abstract} get_node(index: int[3]) LatticeNode
-  {abstract} update_node(lat_node: LatticeNode)
+  {abstract} update_nodes(nodes: iterable of LatticeNode)
   {abstract} iter_nodes(indices: iterable of int[3] {optional}): iterator of LatticeNode
   {abstract} get_coordinate((index: int[3]): float[3]
 

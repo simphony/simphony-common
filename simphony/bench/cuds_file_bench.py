@@ -27,13 +27,11 @@ def create_file_with_id_particles():
 
 
 def add_id_particles_to_container(particle_container):
-    for particle in id_particles:
-        particle_container.add_particle(particle)
+    particle_container.add_particles(id_particles)
 
 
 def add_particles_to_container(particle_container):
-    for particle in particles:
-        particle_container.add_particle(particle)
+    particle_container.add_particles(particles)
 
 
 def iter_particles_in_container(particle_container):
@@ -41,9 +39,11 @@ def iter_particles_in_container(particle_container):
 
 
 def update_coordinates_of_particles_in_container(particle_container):
+    updated_particles = []
     for particle in particle_container.iter_particles():
         particle.coordinates = (0.1, 1.0, 1.0)
-        particle_container.update_particle(particle)
+        updated_particles.append(particle)
+    particle_container.update_particles(updated_particles)
 
 
 class Container(object):
@@ -55,7 +55,8 @@ class Container(object):
 
     def __enter__(self):
         self._file = H5CUDS.open(self._filename)
-        return self._file.add_particles(Particles("test"))
+        self._file.add_dataset(Particles("test"))
+        return self._file.get_dataset("test")
 
     def __exit__(self, type, value, tb):
         if os.path.exists(self._filename):

@@ -38,12 +38,12 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def update_node(self, node):
-        """Update the corresponding lattice node.
+    def update_nodes(self, nodes):
+        """Update the corresponding lattice nodes.
 
         Parameters
         ----------
-        node : LatticeNode
+        nodes : iterator of LatticeNodes
 
         """
 

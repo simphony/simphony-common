@@ -12,6 +12,7 @@ class H5Lattice as "H5Lattice(Group)" {
   base_vect : float[3]
   size : int[3]
   origin: float[3]
+  cuds_version: int
 }
 
 class Nodes as "Nodes(Table)" {

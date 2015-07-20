@@ -14,6 +14,8 @@ from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
 
+PARTICLES_CUDS_VERSION = 1
+
 
 class _ParticleDescription(tables.IsDescription):
     uid = tables.StringCol(32, pos=0)
@@ -122,6 +124,13 @@ class H5Particles(ABCParticles):
 
     """
     def __init__(self, group):
+        if not ("cuds_version" in group._v_attrs):
+            group._v_attrs.cuds_version = PARTICLES_CUDS_VERSION
+        else:
+            if group._v_attrs.cuds_version != PARTICLES_CUDS_VERSION:
+                raise ValueError(
+                    "Particles file layout has an incompatible version")
+
         self._group = group
         self._data = IndexedDataContainerTable(group, 'data')
         self._particles = H5ParticleItems(group, 'particles')
@@ -158,10 +167,10 @@ class H5Particles(ABCParticles):
 
     # Particle methods ######################################################
 
-    def add_particle(self, particle):
-        """Add particle
+    def add_particles(self, iterable):
+        """Add a set of particles.
 
-        If particle has a uid set then this is used.  If the
+        If the particles have a uid set then they are used. If any of the
         particle's uid is None then a new uid is generated for the
         particle.
 
@@ -173,26 +182,24 @@ class H5Particles(ABCParticles):
         Raises
         ------
         ValueError :
-           The particle uid already exists in the container.
+           Any particle uid already exists in the container.
 
         """
-        uid = particle.uid
-        if uid is None:
-            uid = uuid.uuid4()
-            particle.uid = uid
-            self._particles.add_unsafe(particle)
-        else:
-            self._particles.add_safe(particle)
-        return uid
+        uids = []
+        for particle in iterable:
+            uids.append(self._add_particle(particle))
+        return uids
 
-    def update_particle(self, particle):
-        self._particles.update_existing(particle)
+    def update_particles(self, iterable):
+        for particle in iterable:
+            self._update_particle(particle)
 
     def get_particle(self, uid):
         return self._particles[uid]
 
-    def remove_particle(self, uid):
-        del self._particles[uid]
+    def remove_particles(self, uids):
+        for uid in uids:
+            self._remove_particle(uid)
 
     def iter_particles(self, ids=None):
         """Get iterator over particles"""
@@ -207,10 +214,10 @@ class H5Particles(ABCParticles):
 
     # Bond methods #######################################################
 
-    def add_bond(self, bond):
-        """Add bond
+    def add_bonds(self, iterable):
+        """Add a set of bonds.
 
-        If bond has an uid then this is used.  If the
+        If the bonds have an uid then they are used. If any of the
         bond's uid is None then a uid is generated for the
         bond.
 
@@ -225,23 +232,21 @@ class H5Particles(ABCParticles):
            if an uid is given which already exists.
 
         """
-        uid = bond.uid
-        if uid is None:
-            uid = uuid.uuid4()
-            bond.uid = uid
-            self._bonds.add_unsafe(bond)
-        else:
-            self._bonds.add_safe(bond)
-        return uid
+        uids = []
+        for bond in iterable:
+            uids.append(self._add_bond(bond))
+        return uids
 
-    def update_bond(self, bond):
-        self._bonds.update_existing(bond)
+    def update_bonds(self, iterable):
+        for bond in iterable:
+            self._update_bond(bond)
 
     def get_bond(self, uid):
         return self._bonds[uid]
 
-    def remove_bond(self, uid):
-        del self._bonds[uid]
+    def remove_bonds(self, uids):
+        for uid in uids:
+            self._remove_bond(uid)
 
     def iter_bonds(self, ids=None):
         """Get iterator over particles"""
@@ -279,3 +284,37 @@ class H5Particles(ABCParticles):
         except KeyError:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
+
+    # Private methods --- these are temporary till we optimize things
+
+    def _add_particle(self, particle):
+        uid = particle.uid
+        if uid is None:
+            uid = uuid.uuid4()
+            particle.uid = uid
+            self._particles.add_unsafe(particle)
+        else:
+            self._particles.add_safe(particle)
+        return uid
+
+    def _update_particle(self, particle):
+        self._particles.update_existing(particle)
+
+    def _remove_particle(self, uid):
+        del self._particles[uid]
+
+    def _add_bond(self, bond):
+        uid = bond.uid
+        if uid is None:
+            uid = uuid.uuid4()
+            bond.uid = uid
+            self._bonds.add_unsafe(bond)
+        else:
+            self._bonds.add_safe(bond)
+        return uid
+
+    def _update_bond(self, bond):
+        self._bonds.update_existing(bond)
+
+    def _remove_bond(self, uid):
+        del self._bonds[uid]
