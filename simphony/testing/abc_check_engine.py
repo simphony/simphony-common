@@ -69,6 +69,17 @@ class CheckEngine(object):
 
         self.compare_operation(reference, ds, testcase=self)
 
+    def test_add_dataset_invalid(self):
+        handle = self.engine_factory()
+
+        class Invalid(object):
+
+            def __init__(self):
+                self.name = 'invalid'
+
+        with self.assertRaises(TypeError):
+            handle.add_dataset(Invalid())
+
     def test_add_dataset_data_copy(self):
         handle = self.engine_factory()
 
