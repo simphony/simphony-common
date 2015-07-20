@@ -94,22 +94,23 @@ class H5Lattice(ABCLattice):
             raise IndexError('invalid index: {}'.format(index))
         return LatticeNode(index, self._table[n])
 
-    def update_node(self, node):
+    def update_nodes(self, nodes):
         """ Updates H5Lattice data for a LatticeNode
 
         Parameters
         ----------
-        node : LatticeNode
-            reference to LatticeNode object
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects
 
         """
         # Find correct row for node
-        index = node.index
-        try:
-            n = np.ravel_multi_index(index, self._size)
-        except ValueError:
-            raise IndexError('invalid index: {}'.format(index))
-        self._table[n] = node.data
+        for node in nodes:
+            index = node.index
+            try:
+                n = np.ravel_multi_index(index, self._size)
+            except ValueError:
+                raise IndexError('invalid index: {}'.format(index))
+            self._table[n] = node.data
 
     def iter_nodes(self, indices=None):
         """ Get an iterator over the LatticeNodes described by the ids.

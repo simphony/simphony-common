@@ -72,19 +72,21 @@ class Lattice(ABCLattice):
             raise IndexError('invalid index: {}'.format(tuple_index))
         return LatticeNode(tuple_index, self._dcs[tuple_index])
 
-    def update_node(self, lat_node):
-        """Update the corresponding lattice node (data copied).
+    def update_nodes(self, nodes):
+        """Update the corresponding lattice nodes (data copied).
 
         Parameters
         ----------
-        lat_node : reference to a LatticeNode object
-            data copied from the given node
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects from where the data is copied
+            to the Lattice
 
         """
-        index = lat_node.index
-        if any(value < 0 for value in index):
-            raise IndexError('invalid index: {}'.format(index))
-        self._dcs[index] = DataContainer(lat_node.data)
+        for node in nodes:
+            index = node.index
+            if any(value < 0 for value in index):
+                raise IndexError('invalid index: {}'.format(index))
+            self._dcs[index] = DataContainer(node.data)
 
     def iter_nodes(self, indices=None):
         """Get an iterator over the LatticeNodes described by the indices.
