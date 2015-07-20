@@ -610,8 +610,6 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
             Point((1.0 * i, 1.0 * i, 1.0 * i))
             for i in range(self.points_range[-1])])
 
-        print 'ITEMS', items
-
         # increasing
         for n in self.points_range:
             # when
