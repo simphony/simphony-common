@@ -2,6 +2,7 @@
 import uuid
 
 from simphony.cuds.abstractparticles import ABCParticles
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -35,6 +36,11 @@ class Particles(ABCParticles):
         self._bonds = {}
         self._data = DataContainer()
         self.name = name
+
+        self._items_count = {
+            CUDSItem.PARTICLE: lambda: self._particles,
+            CUDSItem.BOND: lambda: self._bonds
+        }
 
     @property
     def data(self):
@@ -417,6 +423,32 @@ class Particles(ABCParticles):
         """Checks if a bond with the given uid already exists
         in the container."""
         return uid in self._bonds
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     # Utility methods ########################################################
 

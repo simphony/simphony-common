@@ -6,6 +6,7 @@ and modify a mesh
 """
 import uuid
 from simphony.cuds.abstractmesh import ABCMesh
+from simphony.core.cuds_item import CUDSItem
 import simphony.core.data_container as dc
 
 
@@ -209,6 +210,13 @@ class Mesh(ABCMesh):
         self._cells = {}
 
         self._data = dc.DataContainer()
+
+        self._items_count = {
+            CUDSItem.POINT: lambda: self._points,
+            CUDSItem.EDGE: lambda: self._edges,
+            CUDSItem.FACE: lambda: self._faces,
+            CUDSItem.CELL: lambda: self._cells
+        }
 
     @property
     def data(self):
@@ -693,6 +701,33 @@ class Mesh(ABCMesh):
 
         """
         return len(self._cells) > 0
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def _generate_uuid(self):
         """ Provides a uuid for the object

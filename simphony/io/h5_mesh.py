@@ -15,6 +15,7 @@ from simphony.cuds.mesh import Face
 from simphony.cuds.mesh import Cell
 
 from simphony.core.data_container import DataContainer
+from simphony.core.cuds_item import CUDSItem
 
 from simphony.io.data_container_table import DataContainerTable
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
@@ -152,6 +153,13 @@ class H5Mesh(ABCMesh):
 
         if "cells" not in self._group:
             self._create_cells_table()
+
+        self._items_count = {
+            CUDSItem.POINT: lambda: self._group.points,
+            CUDSItem.EDGE: lambda: self._group.edges,
+            CUDSItem.FACE: lambda: self._group.faces,
+            CUDSItem.CELL: lambda: self._group.cells
+        }
 
     @property
     def name(self):
@@ -502,6 +510,7 @@ class H5Mesh(ABCMesh):
             If any point was not found in the mesh container.
 
         """
+
         for point in points:
             for row in self._group.points.where(
                     'uid == value', condvars={'value': point.uid.hex}):
@@ -600,7 +609,6 @@ class H5Mesh(ABCMesh):
             If any cell was not found in the mesh container.
 
         """
-
         for cell in cells:
             for row in self._group.cells.where(
                     'uid == value', condvars={'value': cell.uid.hex}):
@@ -635,7 +643,6 @@ class H5Mesh(ABCMesh):
             Iterator over the points
 
         """
-
         if uids is None:
             for row in self._group.points:
                 yield Point(
@@ -664,7 +671,6 @@ class H5Mesh(ABCMesh):
             Iterator over the selected edges
 
         """
-
         if uids is None:
             for row in self._group.edges:
                 yield Edge(
@@ -694,7 +700,6 @@ class H5Mesh(ABCMesh):
             Iterator over the faces
 
         """
-
         if uids is None:
             for row in self._group.faces:
                 yield Face(
@@ -724,7 +729,6 @@ class H5Mesh(ABCMesh):
             Iterator over the selected cells
 
         """
-
         if uids is None:
             for row in self._group.cells:
                 yield Cell(
@@ -747,7 +751,6 @@ class H5Mesh(ABCMesh):
             False otherwise
 
         """
-
         return self._group.edges.nrows != 0
 
     def has_faces(self):
@@ -773,6 +776,32 @@ class H5Mesh(ABCMesh):
 
         """
         return self._group.cells.nrows != 0
+
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameter
+        ---------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+
+        """
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
 
     def _generate_uid(self):
         """ Provides and uid for the object

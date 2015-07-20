@@ -25,5 +25,7 @@ abstract class ABCMesh {
   {abstract} update_cells(cells: iterable of Cell)
   {abstract} iter_cells(uids: iterable of uuid.UUID {optional}): iterator of Cell {unordered}
   {abstract} has_cells(): boolean
+
+  {abstract} count_of(key: CUDSItem): integer
 }
 @enduml

@@ -8,6 +8,7 @@ from simphony.testing.utils import (
     grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
@@ -414,7 +415,37 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         'get item': 'get_point',
         'add item': 'add_points',
         'update item': 'update_points',
-        'iter items': 'iter_points'}
+        'iter items': 'iter_points',
+        'count items': 'count_of'}
+
+    def count_items_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['count items'])
+        return method(*args, **kwrds)
+
+    def test_count_items(self):
+        container = self.container
+
+        # container without items
+        self.assertEqual(
+            self.count_items_operation(container, CUDSItem.POINT),
+            0
+        )
+
+        # container with items
+        num_items = len(self.item_list)
+        self.add_operation(container, self.item_list)
+
+        self.assertEqual(
+            self.count_items_operation(container, CUDSItem.POINT),
+            num_items
+        )
+
+    def test_count_items_with_unsupported_item(self):
+        container = self.container
+
+        # container without items
+        with self.assertRaises(ValueError):
+            self.count_items_operation(container, CUDSItem.NODE)
 
     def test_update_item_coordniates(self):
         # given
@@ -476,14 +507,21 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         'add item': 'none',
         'update item': 'none',
         'iter items': 'none',
-        'has items': 'none'}
+        'has items': 'none',
+        'count items': 'none'}
 
     points_range = None
 
     point_groups = [1]
 
+    item_type = None
+
     def has_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['has items'])
+        return method(*args, **kwrds)
+
+    def count_items_operation(self, container, *args, **kwrds):
+        method = getattr(container, self.operation_mapping['count items'])
         return method(*args, **kwrds)
 
     def test_has_items(self):
@@ -495,6 +533,31 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         # container with items
         self.add_operation(container, [self.item_list[0]])
         self.assertTrue(self.has_items_operation(container))
+
+    def test_count_items(self):
+        container = self.container
+
+        # container without items
+        self.assertEqual(
+            self.count_items_operation(container, self.item_type),
+            0
+        )
+
+        # container with items
+        num_items = len(self.item_list)
+        self.add_operation(container, self.item_list)
+
+        self.assertEqual(
+            self.count_items_operation(container, self.item_type),
+            num_items
+        )
+
+    def test_count_items_with_unsupported_item(self):
+        container = self.container
+
+        # container without items
+        with self.assertRaises(ValueError):
+            self.count_items_operation(container, CUDSItem.NODE)
 
     def test_update_item_points(self):
         # given
@@ -582,11 +645,14 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_edges',
         'update item': 'update_edges',
         'iter items': 'iter_edges',
-        'has items': 'has_edges'}
+        'has items': 'has_edges',
+        'count items': 'count_of'}
 
     points_range = [2]
 
     point_groups = [1, 2]
+
+    item_type = CUDSItem.EDGE
 
     def create_items(self):
         uids = self.uids
@@ -615,11 +681,14 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_faces',
         'update item': 'update_faces',
         'iter items': 'iter_faces',
-        'has items': 'has_faces'}
+        'has items': 'has_faces',
+        'count items': 'count_of'}
 
     points_range = [3, 4]
 
     point_groups = [1, 2, 3, 4]
+
+    item_type = CUDSItem.FACE
 
     def create_items(self):
         uids = self.uids
@@ -648,11 +717,14 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
         'add item': 'add_cells',
         'update item': 'update_cells',
         'iter items': 'iter_cells',
-        'has items': 'has_cells'}
+        'has items': 'has_cells',
+        'count items': 'count_of'}
 
     points_range = range(4, 8)
 
     point_groups = [1, 2, 3, 4]
+
+    item_type = CUDSItem.CELL
 
     def create_items(self):
         uids = self.uids

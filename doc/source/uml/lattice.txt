@@ -10,5 +10,7 @@ abstract class ABCLattice {
   {abstract} update_nodes(nodes: iterable of LatticeNode)
   {abstract} iter_nodes(indices: iterable of int[3] {optional}): iterator of LatticeNode
   {abstract} get_coordinate((index: int[3]): float[3]
+
+  {abstract} count_of(key: CUDSItem): integer
 }
 @enduml
