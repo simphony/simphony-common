@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class ABCModelingEngine(object):
+class ABCModelingEngine(object):  # pragma: no cover
     """Abstract base class for modeling engines in SimPhoNy.
 
     Through this interface, the user controls and interacts with the
@@ -28,7 +28,6 @@ class ABCModelingEngine(object):
         and SP) and the configured state data (e.g. particle, mesh and
         lattice data).
         """
-        pass
 
     @abstractmethod
     def add_dataset(self, container):
@@ -47,7 +46,6 @@ class ABCModelingEngine(object):
             If there is already a dataset with the given name.
 
         """
-        pass
 
     @abstractmethod
     def remove_dataset(self, name):
@@ -64,7 +62,6 @@ class ABCModelingEngine(object):
             If there is no dataset with the given name
 
         """
-        pass
 
     @abstractmethod
     def get_dataset(self, name):
@@ -87,10 +84,9 @@ class ABCModelingEngine(object):
             If there is no dataset with the given name
 
         """
-        pass
 
     @abstractmethod
-    def iter_datasets(self, names=None):
+    def iter_datasets(self, names=None):  # pragma: no cover
         """ Returns an iterator over a subset or all of the containers.
 
         Parameters
@@ -100,4 +96,3 @@ class ABCModelingEngine(object):
             given, then all containers will be iterated over.
 
         """
-        pass

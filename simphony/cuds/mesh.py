@@ -5,7 +5,7 @@ and modify a mesh
 
 """
 import uuid
-from simphony.cuds.abstractmesh import ABCMesh
+from simphony.cuds.abc_mesh import ABCMesh
 from simphony.core.cuds_item import CUDSItem
 import simphony.core.data_container as dc
 
@@ -705,8 +705,8 @@ class Mesh(ABCMesh):
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

@@ -10,12 +10,11 @@ from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_particles import H5Particles
 from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_particles import (
-    ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
-    ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
+    CheckManipulatingBonds, CheckAddingParticles,
+    CheckAddingBonds, CheckManipulatingParticles)
 
 
-class TestH5ContainerAddParticles(
-        ContainerAddParticlesCheck, unittest.TestCase):
+class TestH5ContainerAddParticles(CheckAddingParticles, unittest.TestCase):
 
     def container_factory(self, name):
         self.handle.add_dataset(Particles(name=name))
@@ -29,7 +28,7 @@ class TestH5ContainerAddParticles(
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = H5CUDS.open(self.filename)
-        ContainerAddParticlesCheck.setUp(self)
+        CheckAddingParticles.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -38,7 +37,7 @@ class TestH5ContainerAddParticles(
 
 
 class TestH5ContainerManipulatingParticles(
-        ContainerManipulatingParticlesCheck, unittest.TestCase):
+        CheckManipulatingParticles, unittest.TestCase):
 
     def container_factory(self, name):
         self.handle.add_dataset(Particles(name=name))
@@ -52,7 +51,7 @@ class TestH5ContainerManipulatingParticles(
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = H5CUDS.open(self.filename)
-        ContainerManipulatingParticlesCheck.setUp(self)
+        CheckManipulatingParticles.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -60,7 +59,7 @@ class TestH5ContainerManipulatingParticles(
         shutil.rmtree(self.temp_dir)
 
 
-class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
+class TestH5ContainerAddBonds(CheckAddingBonds, unittest.TestCase):
 
     def container_factory(self, name):
         self.handle.add_dataset(Particles(name=name))
@@ -74,7 +73,7 @@ class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = H5CUDS.open(self.filename)
-        ContainerAddBondsCheck.setUp(self)
+        CheckAddingBonds.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -83,7 +82,7 @@ class TestH5ContainerAddBonds(ContainerAddBondsCheck, unittest.TestCase):
 
 
 class TestH5ContainerManipulatingBonds(
-        ContainerManipulatingBondsCheck, unittest.TestCase):
+        CheckManipulatingBonds, unittest.TestCase):
 
     def container_factory(self, name):
         self.handle.add_dataset(Particles(name=name))
@@ -97,7 +96,7 @@ class TestH5ContainerManipulatingBonds(
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = H5CUDS.open(self.filename)
-        ContainerManipulatingBondsCheck.setUp(self)
+        CheckManipulatingBonds.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):

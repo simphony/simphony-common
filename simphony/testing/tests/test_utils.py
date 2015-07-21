@@ -860,7 +860,7 @@ class TestCreateFactories(unittest.TestCase):
             self.assertIsInstance(bond, Bond)
             self.assertIsNotNone(bond.uid)
             compare_data_containers(
-                bond.data, create_data_container(),
+                bond.data, create_data_container(constant=index),
                 testcase=self)
             self.assertEqual(len(bond.particles), n)
             uids.update(bond.particles)
@@ -876,6 +876,24 @@ class TestCreateFactories(unittest.TestCase):
         self.assertEqual(len(bonds), n)
         for index, bond in enumerate(bonds):
             self.assertIsInstance(bond, Bond)
+            compare_data_containers(
+                bond.data, create_data_container(constant=index),
+                testcase=self)
+            self.assertEqual(len(bond.particles), n)
+            uids.update(bond.particles)
+        self.assertLessEqual(len(uids), n**2)
+
+    def test_create_bonds_with_ids_and_particles(self):
+        n = 9
+        particles = create_particles(n=100)
+        for particle in particles:
+            particle.uid = uuid.uuid4()
+        bonds = create_bonds_with_id(n=n, particles=particles)
+        uids = set()
+        self.assertEqual(len(bonds), n)
+        for index, bond in enumerate(bonds):
+            self.assertIsInstance(bond, Bond)
+            self.assertIsNotNone(bond.uid)
             compare_data_containers(
                 bond.data, create_data_container(constant=index),
                 testcase=self)

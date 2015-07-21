@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from simphony.cuds.abstractparticles import ABCParticles
+from simphony.cuds.abc_particles import ABCParticles
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
@@ -427,8 +427,8 @@ class Particles(ABCParticles):
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

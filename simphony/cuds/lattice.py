@@ -1,6 +1,6 @@
 import numpy as np
 from math import sqrt
-from simphony.cuds.abstractlattice import ABCLattice
+from simphony.cuds.abc_lattice import ABCLattice
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
@@ -142,8 +142,8 @@ class Lattice(ABCLattice):
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

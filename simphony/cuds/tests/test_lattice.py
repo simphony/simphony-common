@@ -7,7 +7,7 @@ from math import sqrt
 
 from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_lattice import (
-    CheckLatticeProperties, CheckLatticeNodeOperations,
+    CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)
 from simphony.cuds.lattice import (
     Lattice, LatticeNode, make_cubic_lattice, make_rectangular_lattice,
@@ -57,7 +57,7 @@ class TestLatticeNodeCoordinates(
         return set(CUBA)
 
 
-class TestLatticeProperties(CheckLatticeProperties, unittest.TestCase):
+class TestLatticeContainer(CheckLatticeContainer, unittest.TestCase):
 
     def container_factory(self, name, type_, base_vect, size, origin):
         return Lattice(name, type_, base_vect, size, origin)

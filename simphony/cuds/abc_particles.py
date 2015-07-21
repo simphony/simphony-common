@@ -16,7 +16,7 @@ class ABCParticles(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def add_particles(self, iterable):
+    def add_particles(self, iterable):  # pragma: no cover
         """Adds a set of particles from the provided iterable
         to the container.
 
@@ -54,7 +54,7 @@ class ABCParticles(object):
         """
 
     @abstractmethod
-    def add_bonds(self, iterable):
+    def add_bonds(self, iterable):  # pragma: no cover
         """Adds a set of bonds to the container.
 
         Also like with particles, if any bond has a defined uid,
@@ -85,12 +85,12 @@ class ABCParticles(object):
 
         >>> bonds_list = [Bond(), Bond()]
         >>> particles = Particles(name="foo")
-        >>> particles.add_bond(bonds_list)
+        >>> particles.add_bonds(bonds_list)
 
         """
 
     @abstractmethod
-    def update_particles(self, iterable):
+    def update_particles(self, iterable):  # pragma: no cover
         """Updates a set of particles from the provided iterable.
 
         Takes the uids of the particles and searches inside the container for
@@ -115,16 +115,13 @@ class ABCParticles(object):
         function passing the Particle items as parameter.
 
         >>> part_container = Particles(name="foo")
-        >>> ...
-        >>> part1 = part_container.get_particle(uid1)
-        >>> part2 = part_container.get_particle(uid2)
         >>> ... #do whatever you want with the particles
-        >>> part_container.update_particle([part1, part2])
+        >>> part_container.update_particles([part1, part2])
 
         """
 
     @abstractmethod
-    def update_bonds(self, iterable):
+    def update_bonds(self, iterable):  # pragma: no cover
         """Updates a set of bonds from the provided iterable.
 
         Takes the uids of the bonds and searches inside the container for
@@ -157,7 +154,7 @@ class ABCParticles(object):
         """
 
     @abstractmethod
-    def get_particle(self, uid):
+    def get_particle(self, uid):  # pragma: no cover
         """Returns a copy of the particle with the 'particle_id' id.
 
         Parameters
@@ -179,7 +176,7 @@ class ABCParticles(object):
         """
 
     @abstractmethod
-    def get_bond(self, uid):
+    def get_bond(self, uid):  # pragma: no cover
         """Returns a copy of the bond with the 'bond_id' id.
 
         Parameters
@@ -200,7 +197,7 @@ class ABCParticles(object):
         """
 
     @abstractmethod
-    def remove_particles(self, uids):
+    def remove_particles(self, uids):  # pragma: no cover
         """Remove the particles with the provided uids from the container.
 
         The uids inside the iterable should exists in the container. Otherwise
@@ -223,17 +220,12 @@ class ABCParticles(object):
 
         >>> particles = Particles(name="foo")
         >>> ...
-        >>> particle1 = particles.get_particle(uid1)
-        >>> particle2 = particles.get_particle(uid2)
-        >>> ...
-        >>> particles.remove_particle([part1.uid, part2.uid)
-        or directly
-        >>> particles.remove_particle([uid1, uid2])
+        >>> particles.remove_particles([uid1, uid2])
 
         """
 
     @abstractmethod
-    def remove_bonds(self, uids):
+    def remove_bonds(self, uids):  # pragma: no cover
         """Remove the bonds with the provided uids.
 
         The uids passed as parameter should exists in the container. If
@@ -250,17 +242,12 @@ class ABCParticles(object):
 
         >>> particles = Particles(name="foo")
         >>> ...
-        >>> bond1 = particles.get_bond(uid1)
-        >>> bond2 = particles.get_bond(uid2)
-        >>> ...
-        >>> particles.remove_bonds([bond1.uid, bond2.uid])
-        or
-        >>> particles.remove_bond([uid1, uid2])
+        >>> particles.remove_bonds([uid1, uid2])
 
         """
 
     @abstractmethod
-    def iter_particles(self, uids=None):
+    def iter_particles(self, uids=None):  # pragma: no cover
         """Generator method for iterating over the particles of the container.
 
         It can receive any kind of sequence of particle uids to iterate over
@@ -293,21 +280,14 @@ class ABCParticles(object):
         >>> particles = Particles(name="foo")
         >>> ...
         >>> for particle in particles.iter_particles([uid1, uid2, uid3]):
-                ...  #do stuff
-                #take the particle back to the container so it will be updated
-                #in case we need it
-                part_container.update_particle(particle)
-
+            ...  #do stuff
         >>> for particle in particles.iter_particles():
-                ...  #do stuff; it will iterate over all the particles
-                #take the particle back to the container so it will be updated
-                #in case we need it
-                particles.update_particle(particle)
+            ...  #do stuff
 
         """
 
     @abstractmethod
-    def iter_bonds(self, uids=None):
+    def iter_bonds(self, uids=None):  # pragma: no cover
         """Generator method for iterating over the bonds of the container.
 
         It can receive any kind of sequence of bond ids to iterate over
@@ -348,21 +328,21 @@ class ABCParticles(object):
         """
 
     @abstractmethod
-    def has_particle(self, uid):
+    def has_particle(self, uid):  # pragma: no cover
         """Checks if a particle with the given uid already exists
         in the container."""
 
     @abstractmethod
-    def has_bond(self, uid):
+    def has_bond(self, uid):  # pragma: no cover
         """Checks if a bond with the given uid already exists
         in the container."""
 
     @abstractmethod
-    def count_of(self, item_type):
+    def count_of(self, item_type):  # pragma: no cover
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

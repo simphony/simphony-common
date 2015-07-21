@@ -1,14 +1,13 @@
 import unittest
 import uuid
-from functools import partial
 
 from simphony.cuds.particles import Particle, Bond, Particles
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simphony.testing.utils import compare_data_containers
 from simphony.testing.abc_check_particles import (
-    ContainerManipulatingBondsCheck, ContainerAddParticlesCheck,
-    ContainerAddBondsCheck, ContainerManipulatingParticlesCheck)
+    CheckManipulatingBonds, CheckAddingParticles,
+    CheckAddingBonds, CheckManipulatingParticles,
+    CheckParticlesContainer)
 
 
 class ParticleTestCase(unittest.TestCase):
@@ -59,8 +58,8 @@ class BondTestCase(unittest.TestCase):
         self.assertEqual(str(bond), total_str)
 
 
-class TestNativeContainerAddParticles(
-        ContainerAddParticlesCheck, unittest.TestCase):
+class TestNativeContainerAddingParticles(
+        CheckAddingParticles, unittest.TestCase):
 
     def supported_cuba(self):
         return set(CUBA)
@@ -70,7 +69,7 @@ class TestNativeContainerAddParticles(
 
 
 class TestNativeContainerManipulatingParticles(
-        ContainerManipulatingParticlesCheck, unittest.TestCase):
+        CheckManipulatingParticles, unittest.TestCase):
 
     def supported_cuba(self):
         return set(CUBA)
@@ -79,8 +78,7 @@ class TestNativeContainerManipulatingParticles(
         return Particles(name=name)
 
 
-class TestNativeContainerAddBonds(
-        ContainerAddBondsCheck, unittest.TestCase):
+class TestNativeContainerAddBonds(CheckAddingBonds, unittest.TestCase):
 
     def supported_cuba(self):
         return set(CUBA)
@@ -90,7 +88,7 @@ class TestNativeContainerAddBonds(
 
 
 class TestNativeContainerManipulatingBonds(
-        ContainerManipulatingBondsCheck, unittest.TestCase):
+        CheckManipulatingBonds, unittest.TestCase):
 
     def supported_cuba(self):
         return set(CUBA)
@@ -99,28 +97,14 @@ class TestNativeContainerManipulatingBonds(
         return Particles(name=name)
 
 
-class TestParticlesDataContainer(unittest.TestCase):
+class TestParticlesContainer(CheckParticlesContainer, unittest.TestCase):
 
     def supported_cuba(self):
         return set(CUBA)
 
-    def setUp(self):
-        self.addTypeEqualityFunc(
-            DataContainer, partial(compare_data_containers, testcase=self))
+    def container_factory(self, name):
+        return Particles(name=name)
 
-    def test_data(self):
-        pc = Particles(name='foo')
-        data = pc.data
-        data[CUBA.MASS] = 9
-        pc.data = data
-        ret_data = pc.data
-        self.assertEqual(data, ret_data)
-        self.assertIsNot(data, ret_data)
-        cur_data = pc.data
-        cur_data[CUBA.MASS] = 10
-        ret_data = pc.data
-        self.assertEqual(data, ret_data)
-        self.assertIsNot(data, ret_data)
 
 if __name__ == '__main__':
     unittest.main()

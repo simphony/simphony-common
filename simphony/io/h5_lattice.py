@@ -1,5 +1,4 @@
-from simphony.cuds.lattice import ABCLattice
-from simphony.cuds.lattice import LatticeNode
+from simphony.cuds import ABCLattice, LatticeNode
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
 from simphony.io.data_container_description import NoUIDRecord
 from simphony.core.data_container import DataContainer
@@ -141,8 +140,8 @@ class H5Lattice(ABCLattice):
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

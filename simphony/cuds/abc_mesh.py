@@ -14,7 +14,7 @@ class ABCMesh(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get_point(self, uid):
+    def get_point(self, uid):  # pragma: no cover
         """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
@@ -41,7 +41,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def get_edge(self, uid):
+    def get_edge(self, uid):  # pragma: no cover
         """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
@@ -68,7 +68,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def get_face(self, uid):
+    def get_face(self, uid):  # pragma: no cover
         """ Returns a face with a given uid.
 
         Returns the face stored in the mesh
@@ -95,7 +95,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def get_cell(self, uid):
+    def get_cell(self, uid):  # pragma: no cover
         """ Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
@@ -122,7 +122,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def add_points(self, points):
+    def add_points(self, points):  # pragma: no cover
         """ Adds a set of new points to the mesh.
 
         Parameters
@@ -156,7 +156,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def add_faces(self, face):
+    def add_faces(self, face):  # pragma: no cover
         """ Adds a set of new faces to the mesh.
 
         Parameters
@@ -173,7 +173,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def add_cells(self, cell):
+    def add_cells(self, cell):  # pragma: no cover
         """ Adds a set of new cells to the mesh.
 
         Parameters
@@ -190,7 +190,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def update_points(self, point):
+    def update_points(self, point):  # pragma: no cover
         """ Updates the information of a set of points.
 
         Gets the mesh point identified by the same
@@ -210,7 +210,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def update_edges(self, edge):
+    def update_edges(self, edge):  # pragma: no cover
         """ Updates the information of a set of edges.
 
         Gets the mesh edge identified by the same
@@ -230,7 +230,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def update_faces(self, face):
+    def update_faces(self, face):  # pragma: no cover
         """ Updates the information of a set of faces.
 
         Gets the mesh face identified by the same
@@ -250,7 +250,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def update_cells(self, cell):
+    def update_cells(self, cell):  # pragma: no cover
         """ Updates the information of a set of cells.
 
         Gets the mesh cell identified by the same
@@ -270,7 +270,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def iter_points(self, uids=None):
+    def iter_points(self, uids=None):  # pragma: no cover
         """ Returns an iterator over points.
 
         Parameters
@@ -288,7 +288,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def iter_edges(self, uids=None):
+    def iter_edges(self, uids=None):  # pragma: no cover
         """ Returns an iterator over edges.
 
         Parameters
@@ -306,7 +306,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def iter_faces(self, uids=None):
+    def iter_faces(self, uids=None):  # pragma: no cover
         """ Returns an iterator over faces.
 
         Parameters
@@ -324,7 +324,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def iter_cells(self, uids=None):
+    def iter_cells(self, uids=None):  # pragma: no cover
         """ Returns an iterator over cells.
 
         Parameters
@@ -342,7 +342,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def has_edges(self):
+    def has_edges(self):  # pragma: no cover
         """ Check if the mesh has edges
 
         Returns
@@ -354,7 +354,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def has_faces(self):
+    def has_faces(self):  # pragma: no cover
         """ Check if the mesh has faces
 
         Returns
@@ -366,7 +366,7 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def has_cells(self):
+    def has_cells(self):  # pragma: no cover
         """ Check if the mesh has cells
 
         Returns
@@ -378,11 +378,11 @@ class ABCMesh(object):
         """
 
     @abstractmethod
-    def count_of(self, item_type):
+    def count_of(self, item_type):  # pragma: no cover
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

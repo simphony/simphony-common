@@ -167,7 +167,7 @@ def create_bonds(n=5, restrict=None, particles=None):
 def create_bonds_with_id(n=5, restrict=None, particles=None):
     bond_list = []
     for i in xrange(n):
-        data = create_data_container(restrict=restrict)
+        data = create_data_container(restrict=restrict, constant=i)
         uid = uuid.uuid4()
         if particles is None:
             ids = [uuid.uuid4() for x in xrange(n)]

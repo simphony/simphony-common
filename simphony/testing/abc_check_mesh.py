@@ -7,16 +7,13 @@ from simphony.testing.utils import (
     create_data_container, create_points, compare_points, compare_elements,
     grouper, compare_data_containers)
 from simphony.cuds.mesh import Point, Edge, Cell, Face
-from simphony.core.cuba import CUBA
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 
 
-class MeshAttributesCheck(object):
+class CheckMeshContainer(object):
 
     __metaclass__ = abc.ABCMeta
-
-    supported_cuba = list(CUBA)
 
     def setUp(self):
         self.addTypeEqualityFunc(
@@ -25,6 +22,11 @@ class MeshAttributesCheck(object):
     @abc.abstractmethod
     def container_factory(self, name):
         """ Create and return the container object
+        """
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
         """
 
     def test_container_name(self):
@@ -52,7 +54,7 @@ class MeshAttributesCheck(object):
     def test_container_data_update(self):
         # given
         container = self.container_factory('my_name')
-        data = create_data_container(restrict=self.supported_cuba)
+        data = create_data_container(restrict=self.supported_cuba())
 
         # when
         container.data = data
@@ -65,7 +67,7 @@ class MeshAttributesCheck(object):
         # given
         container = self.container_factory('my_name')
         data = create_data_container()
-        expected_data = create_data_container(restrict=self.supported_cuba)
+        expected_data = create_data_container(restrict=self.supported_cuba())
 
         # when
         container.data = data
@@ -75,11 +77,10 @@ class MeshAttributesCheck(object):
         self.assertIsNot(container.data, expected_data)
 
 
-class MeshItemOperationsCheck(object):
+class CheckMeshItemOperations(object):
 
     __metaclass__ = abc.ABCMeta
 
-    supported_cuba = list(CUBA)
     operation_mapping = {
         'get item': 'none',
         'add item': 'none',
@@ -89,6 +90,11 @@ class MeshItemOperationsCheck(object):
     def setUp(self):
         self.item_list = self.create_items()
         self.container = self.container_factory('foo')
+
+    @abc.abstractmethod
+    def supported_cuba(self):
+        """ Return a list of CUBA keys to use for restricted containers.
+        """
 
     @abc.abstractmethod
     def create_items(self):
@@ -195,7 +201,7 @@ class MeshItemOperationsCheck(object):
 
         # then
         retrieved = self.get_operation(container, uid[0])
-        expected.data = create_data_container(restrict=self.supported_cuba)
+        expected.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieved, expected)
 
     def test_add_multiple_item_with_unsuported_cuba(self):
@@ -211,10 +217,10 @@ class MeshItemOperationsCheck(object):
 
         # then
         retrieveda = self.get_operation(container, uid[0])
-        expecteda.data = create_data_container(restrict=self.supported_cuba)
+        expecteda.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieveda, expecteda)
         retrievedb = self.get_operation(container, uid[1])
-        expectedb.data = create_data_container(restrict=self.supported_cuba)
+        expectedb.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrievedb, expectedb)
 
     def test_exception_when_adding_item_twice(self):
@@ -231,7 +237,7 @@ class MeshItemOperationsCheck(object):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        item.data = create_data_container(restrict=self.supported_cuba)
+        item.data = create_data_container(restrict=self.supported_cuba())
 
         # when
         self.update_operation(container, [item])
@@ -245,9 +251,10 @@ class MeshItemOperationsCheck(object):
     def test_update_multiple_item_data(self):
         # given
         container = self.container
-        items = self.iter_operation(container)
+        self._add_items(container)
+        items = list(self.iter_operation(container))
         for item in items:
-            item.data = create_data_container(restrict=self.supported_cuba)
+            item.data = create_data_container(restrict=self.supported_cuba())
 
         # when
         self.update_operation(container, items)
@@ -269,13 +276,14 @@ class MeshItemOperationsCheck(object):
 
         # then
         retrieved = self.get_operation(container, item.uid)
-        item.data = create_data_container(restrict=self.supported_cuba)
+        item.data = create_data_container(restrict=self.supported_cuba())
         self.assertEqual(retrieved, item)
 
     def test_update_multiple_item_with_unsuported_cuba(self):
         # given
         container = self.container
-        items = self.iter_operation(container)
+        self._add_items(container)
+        items = list(self.iter_operation(container))
         for item in items:
             item.data = create_data_container()
 
@@ -285,7 +293,7 @@ class MeshItemOperationsCheck(object):
         # then
         for item in items:
             retrieved = self.get_operation(container, item.uid)
-            item.data = create_data_container(restrict=self.supported_cuba)
+            item.data = create_data_container(restrict=self.supported_cuba())
             self.assertEqual(retrieved, item)
 
     def test_exception_when_update_item_with_wrong_id(self):
@@ -395,10 +403,10 @@ class MeshItemOperationsCheck(object):
         self.assertEqual(container.data, DataContainer())
 
 
-class MeshPointOperationsCheck(MeshItemOperationsCheck):
+class CheckMeshPointOperations(CheckMeshItemOperations):
 
     def setUp(self):
-        MeshItemOperationsCheck.setUp(self)
+        CheckMeshItemOperations.setUp(self)
         self.addTypeEqualityFunc(
             Point, partial(compare_points, testcase=self))
 
@@ -409,7 +417,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         return Point(
             uid=uid,
             coordinates=(0.1, -3.5, 44),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
     operation_mapping = {
         'get item': 'get_point',
@@ -486,7 +494,7 @@ class MeshPointOperationsCheck(MeshItemOperationsCheck):
         self.assertNotEqual(retrievedb, self.item_list[2])
 
 
-class MeshElementOperationsCheck(MeshItemOperationsCheck):
+class CheckMeshElementOperations(CheckMeshItemOperations):
 
     def setUp(self):
         self.points = []
@@ -499,7 +507,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         self.uids = [uuid.uuid4() for _ in self.points]
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
-        MeshItemOperationsCheck.setUp(self)
+        CheckMeshItemOperations.setUp(self)
         self.container.add_points(self.points)
 
     operation_mapping = {
@@ -566,8 +574,7 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
         item = self.get_operation(container, uids[2])
         point_uids = container.add_points([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
-            for i in range(self.points_range[-1])
-            ])
+            for i in range(self.points_range[-1])])
 
         # increasing
         for n in self.points_range:
@@ -596,13 +603,13 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
     def test_update_multiple_items_points(self):
         # given
         container = self.container
+        self._add_items(container)
         items = [
             i for i in self.iter_operation(container)]
 
         point_uids = container.add_points([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
-            for i in range(self.points_range[-1])
-            ])
+            for i in range(self.points_range[-1])])
 
         # increasing
         for n in self.points_range:
@@ -633,10 +640,10 @@ class MeshElementOperationsCheck(MeshItemOperationsCheck):
                 self.assertNotEqual(retrieved, self.item_list[2])
 
 
-class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshEdgeOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Edge, partial(compare_elements, testcase=self))
 
@@ -658,7 +665,7 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
         uids = self.uids
         return [Edge(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 2)]
 
     def create_item(self, uid):
@@ -666,13 +673,13 @@ class MeshEdgeOperationsCheck(MeshElementOperationsCheck):
         return Edge(
             uid=uid,
             points=random.sample(uids, 2),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
 
-class MeshFaceOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshFaceOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Face, partial(compare_elements, testcase=self))
 
@@ -694,7 +701,7 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
         uids = self.uids
         return [Face(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 3)]
 
     def create_item(self, uid):
@@ -702,13 +709,13 @@ class MeshFaceOperationsCheck(MeshElementOperationsCheck):
         return Face(
             uid=uid,
             points=random.sample(uids, 3),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
 
 
-class MeshCellOperationsCheck(MeshElementOperationsCheck):
+class CheckMeshCellOperations(CheckMeshElementOperations):
 
     def setUp(self):
-        MeshElementOperationsCheck.setUp(self)
+        CheckMeshElementOperations.setUp(self)
         self.addTypeEqualityFunc(
             Cell, partial(compare_elements, testcase=self))
 
@@ -730,7 +737,7 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
         uids = self.uids
         return [Cell(
             points=puids,
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))
             for puids in grouper(uids, 4)]
 
     def create_item(self, uid):
@@ -738,4 +745,4 @@ class MeshCellOperationsCheck(MeshElementOperationsCheck):
         return Cell(
             uid=uid,
             points=random.sample(uids, 4),
-            data=create_data_container(restrict=self.supported_cuba))
+            data=create_data_container(restrict=self.supported_cuba()))

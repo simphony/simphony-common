@@ -4,22 +4,22 @@ import shutil
 import unittest
 import tables
 
+from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_mesh import (
-    MeshPointOperationsCheck, MeshEdgeOperationsCheck,
-    MeshFaceOperationsCheck, MeshCellOperationsCheck,
-    MeshAttributesCheck)
-
+    CheckMeshPointOperations, CheckMeshEdgeOperations,
+    CheckMeshFaceOperations, CheckMeshCellOperations,
+    CheckMeshContainer)
 from simphony.io.h5_mesh import H5Mesh
 
 
-class TestH5MeshPointOperations(MeshPointOperationsCheck, unittest.TestCase):
+class TestH5MeshPointOperations(CheckMeshPointOperations, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        MeshPointOperationsCheck.setUp(self)
+        CheckMeshPointOperations.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -30,15 +30,18 @@ class TestH5MeshPointOperations(MeshPointOperationsCheck, unittest.TestCase):
         group = self.handle.create_group(self.handle.root, name)
         return H5Mesh(group, self.handle)
 
+    def supported_cuba(self):
+        return set(CUBA)
 
-class TestH5MeshEdgeOperations(MeshEdgeOperationsCheck, unittest.TestCase):
+
+class TestH5MeshEdgeOperations(CheckMeshEdgeOperations, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        MeshEdgeOperationsCheck.setUp(self)
+        CheckMeshEdgeOperations.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -49,15 +52,18 @@ class TestH5MeshEdgeOperations(MeshEdgeOperationsCheck, unittest.TestCase):
         group = self.handle.create_group(self.handle.root, name)
         return H5Mesh(group, self.handle)
 
+    def supported_cuba(self):
+        return set(CUBA)
 
-class TestH5MeshFaceOperations(MeshFaceOperationsCheck, unittest.TestCase):
+
+class TestH5MeshFaceOperations(CheckMeshFaceOperations, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        MeshFaceOperationsCheck.setUp(self)
+        CheckMeshFaceOperations.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -68,15 +74,18 @@ class TestH5MeshFaceOperations(MeshFaceOperationsCheck, unittest.TestCase):
         group = self.handle.create_group(self.handle.root, name)
         return H5Mesh(group, self.handle)
 
+    def supported_cuba(self):
+        return set(CUBA)
 
-class TestH5MeshCellOperations(MeshCellOperationsCheck, unittest.TestCase):
+
+class TestH5MeshCellOperations(CheckMeshCellOperations, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        MeshCellOperationsCheck.setUp(self)
+        CheckMeshCellOperations.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -87,15 +96,18 @@ class TestH5MeshCellOperations(MeshCellOperationsCheck, unittest.TestCase):
         group = self.handle.create_group(self.handle.root, name)
         return H5Mesh(group, self.handle)
 
+    def supported_cuba(self):
+        return set(CUBA)
 
-class TestH5MeshAttributes(MeshAttributesCheck, unittest.TestCase):
+
+class TestH5Mesh(CheckMeshContainer, unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.filename = os.path.join(self.temp_dir, 'test_file.cuds')
         self.addCleanup(self.cleanup)
         self.handle = tables.open_file(self.filename, mode='w')
-        MeshAttributesCheck.setUp(self)
+        CheckMeshContainer.setUp(self)
 
     def cleanup(self):
         if os.path.exists(self.filename):
@@ -105,6 +117,9 @@ class TestH5MeshAttributes(MeshAttributesCheck, unittest.TestCase):
     def container_factory(self, name):
         group = self.handle.create_group(self.handle.root, name)
         return H5Mesh(group, self.handle)
+
+    def supported_cuba(self):
+        return set(CUBA)
 
 
 class TestH5MeshStoredLayout(unittest.TestCase):

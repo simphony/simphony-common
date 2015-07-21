@@ -23,7 +23,7 @@ class ABCLattice(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get_node(self, index):
+    def get_node(self, index):  # pragma: no cover
         """Get the lattice node corresponding to the given index.
 
         Parameters
@@ -38,7 +38,7 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def update_nodes(self, nodes):
+    def update_nodes(self, nodes):  # pragma: no cover
         """Update the corresponding lattice nodes.
 
         Parameters
@@ -48,7 +48,7 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def iter_nodes(self, indices=None):
+    def iter_nodes(self, indices=None):  # pragma: no cover
         """Get an iterator over the LatticeNodes described by the indices.
 
         Parameters
@@ -67,7 +67,7 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def get_coordinate(self, index):
+    def get_coordinate(self, index):  # pragma: no cover
         """Get coordinate of the given index coordinate.
 
         Parameters
@@ -82,11 +82,11 @@ class ABCLattice(object):
         """
 
     @abstractmethod
-    def count_of(self, item_type):
+    def count_of(self, item_type):  # pragma: no cover
         """ Return the count of item_type in the container.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         item_type : CUDSItem
             The CUDSItem enum of the type of the items to return the count of.
 

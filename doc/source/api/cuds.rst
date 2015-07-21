@@ -17,15 +17,15 @@ Abstract CUDS interfaces
 
 .. rubric:: Description
 
-.. automodule:: simphony.cuds.abstractmesh
+.. automodule:: simphony.cuds.abc_mesh
    :members:
    :undoc-members:
 
-.. automodule:: simphony.cuds.abstractparticles
+.. automodule:: simphony.cuds.abc_particles
    :members:
    :undoc-members:
 
-.. automodule:: simphony.cuds.abstractlattice
+.. automodule:: simphony.cuds.abc_lattice
    :members:
    :undoc-members:
 
