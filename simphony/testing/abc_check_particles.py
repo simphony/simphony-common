@@ -79,7 +79,6 @@ class CheckParticlesContainer(object):
 
         # then
         self.assertEqual(container.data, expected_data)
-        self.assertIsNot(container.data, expected_data)
 
 
 class CheckAddingParticles(object):
