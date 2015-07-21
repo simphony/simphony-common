@@ -9,6 +9,6 @@ abstract class ABCModelingEngine {
   {abstract} add_dataset(container: {ABCMesh, ABCParticles, ABCLattice})
   {abstract} remove_dataset(name: str)
   {abstract} get_dataset(name: str): {ABCMesh, ABCParticles, ABCLattice}
-  {abstract} iter_dataset(names: iterable of str {optional}): iterator {unordered}
+  {abstract} iter_datasets(names: iterable of str {optional}): iterator {unordered}
 }
 @enduml
