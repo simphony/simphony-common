@@ -1,0 +1,49 @@
+- description: Point item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: POINT
+  name: Point
+  number: 0
+  shape: [1]
+  type: integer
+- description: Particle item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: PARTICLE
+  name: Particle
+  number: 1
+  shape: [1]
+  type: integer
+- description: Bond item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: BOND
+  name: Bond
+  number: 2
+  shape: [1]
+  type: integer
+- description: Edge item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: EDGE
+  name: Edge
+  number: 3
+  shape: [1]
+  type: integer
+- description: Face item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: FACE
+  name: Face
+  number: 4
+  shape: [1]
+  type: integer
+- description: Cell item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: CELL
+  name: Cell
+  number: 5
+  shape: [1]
+  type: integer
+- description: Node item identifier
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: NODE
+  name: Node
+  number: 6
+  shape: [1]
+  type: integer
