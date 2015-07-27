@@ -9,7 +9,7 @@ Release 0.2.0
 * Added tests for testing subpackages (#146)
 * Added HDF5 File versioning (#156)
 * Added methods to query number of elements in a container (#164)
-# Added new tests for utils (#179)
+* Added new tests for utils (#179)
 * Improved name consistency through all test templates (#162)
 
 Release 0.1.5
