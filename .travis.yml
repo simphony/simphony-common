@@ -1,16 +1,25 @@
 language: python
+sudo: false
 python:
   - "2.7"
 virtualenv:
   system_site_packages: true
+addons:
+  apt:
+    packages:
+    - python-pip
+    - libhdf5-serial-dev
+cache:
+  directories:
+    - $HOME/.cache
+    - $HOME/.ccache
 before_install:
-  - sudo add-apt-repository ppa:cython-dev/master-ppa -y
-  - sudo apt-get update -qq
-  - sudo apt-get install libhdf5-serial-dev cython
+  - ccache -s
+  - export PATH=/usr/lib/ccache:${PATH}
+  - pip install --upgrade pip
 install:
   - pip install numexpr
   - pip install -r dev_requirements.txt
-  - pip install codecov
   - python setup.py develop
   - pushd examples/plugin
   - python setup.py develop
@@ -20,4 +29,5 @@ script:
   - coverage run -m unittest discover -p test*
   - python setup.py build_sphinx
 after_success:
-  codecov
+  - pip install codecov
+  - codecov
