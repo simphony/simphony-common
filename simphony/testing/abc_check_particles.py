@@ -177,7 +177,7 @@ class CheckAddingParticles(object):
     def test_add_multiple_particles_with_id(self):
         # given
         container = self.container
-        particles = create_particles_with_id()
+        particles = create_particles_with_id(restrict=self.supported_cuba())
 
         # when
         uids = container.add_particles(particles)
