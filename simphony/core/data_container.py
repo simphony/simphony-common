@@ -24,9 +24,7 @@ class DataContainer(dict):
 
     def __init__(self, *args, **kwargs):
         """ Constructor.
-
         Initialization follows the behaviour of the python dict class.
-
         """
         self._check_arguments(args, kwargs)
         if len(args) == 1 and not hasattr(args[0], 'keys'):
