@@ -2,7 +2,7 @@ Plugins
 =======
 
 The SimPhoNy library can extended through two `entry points`_ for
-contributing python modules that container engine and visualisation components:
+contributing python modules that contain engine and visualisation components:
 
 - ``simphony.engine`` -- A python module that provides one or more
   classes that implement the :class:`ABCModelingEngine` interface.
@@ -11,7 +11,7 @@ contributing python modules that container engine and visualisation components:
   function to show (visualise the high level CUDS containers)
 
 
-To declare that a package contains a visualisation or engine modules
+To declare that a package contains a visualisation or engine module
 for simphony, a developer has to add an entry point definition in the
 ``setup.py`` of the contributing package.
 
