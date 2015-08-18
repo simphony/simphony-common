@@ -113,24 +113,6 @@ class Lattice(ABCLattice):
             for index in indices:
                 yield self.get_node(index)
 
-    def get_coordinate(self, index):
-        """Get coordinate of the given index coordinate.
-
-        Parameters
-        ----------
-        index : int[3]
-            node index coordinate
-
-        Returns
-        -------
-        float[3]
-
-        """
-        p1 = self.prim_vec.p1
-        p2 = self.prim_vec.p2
-        p3 = self.prim_vec.p3
-        return self.origin + index[0]*p1 + index[1]*p2 + index[2]*p3
-
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 

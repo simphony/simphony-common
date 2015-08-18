@@ -16,7 +16,6 @@ class ABCLattice(object):
         primitive cell specifying the 3D Bravais lattice
     data : DataContainer
         high level CUBA data assigned to lattice
-
     """
     __metaclass__ = ABCMeta
 
@@ -64,8 +63,7 @@ class ABCLattice(object):
 
         """
 
-    @abstractmethod
-    def get_coordinate(self, index):  # pragma: no cover
+    def get_coordinate(self, index):
         """Get coordinate of the given index coordinate.
 
         Parameters
@@ -76,8 +74,11 @@ class ABCLattice(object):
         Returns
         -------
         coordinates : float[3]
-
         """
+        p1 = self.prim_cell.p1
+        p2 = self.prim_cell.p2
+        p3 = self.prim_cell.p3
+        return self.origin + index[0]*p1 + index[1]*p2 + index[2]*p3
 
     @abstractmethod
     def count_of(self, item_type):  # pragma: no cover
