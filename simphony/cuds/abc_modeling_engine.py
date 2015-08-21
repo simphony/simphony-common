@@ -86,6 +86,26 @@ class ABCModelingEngine(object):  # pragma: no cover
         """
 
     @abstractmethod
+    def get_dataset_names(self, container=None): # pragma: no cover
+        """ Returns a list with the names of all the objects in a container.
+
+        Returns a list with the names of all the objects in a container.
+        If not container is given it will return the name of all objects in
+        all containers.
+
+        Parameters
+        ----------
+        container : {ABCMesh, ABCParticles, ABCLattice}
+            The CUDS container to be queried.
+
+        Raises
+        ------
+        TypeError:
+            If the container type is not supported by the engine.
+
+        """
+
+    @abstractmethod
     def iter_datasets(self, names=None):  # pragma: no cover
         """ Returns an iterator over a subset or all of the containers.
 

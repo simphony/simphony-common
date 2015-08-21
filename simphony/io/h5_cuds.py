@@ -172,6 +172,46 @@ class H5CUDS(object):
             raise ValueError(
                 'Container \'{n}\` does not exist'.format(n=name))
 
+    def get_dataset_names(self, container=None):
+        """ Returns a list with the names of all the objects in a container.
+
+        Returns a list with the names of all the objects in a container.
+        If not container is given it will return the name of all objects in
+        all containers.
+
+        Parameters
+        ----------
+        container : {ABCMesh, ABCParticles, ABCLattice}
+            The CUDS container to be queried.
+
+        Raises
+        ------
+        TypeError:
+            If the container type is not supported by the engine.
+
+        """
+
+        ip = self._iter_particles(names)
+        im = self._iter_meshes(names)
+        il = self._iter_lattices(names)
+
+        iter_list = []
+
+        if container is None:
+            iter_list = ip + im + il
+        elif isinstance(container, ABCParticles):
+            iter_list = ip
+        elif isinstance(container, ABCMesh):
+            iter_list = im
+        elif isinstance(container, ABCLattice):
+            iter_list = il
+        else:
+            raise TypeError(
+                "The type of the container is not supported")
+
+        for i in iter_list:
+            yield i.name
+
     def iter_datasets(self, names=None):
         """ Returns an iterator over a subset or all of the containers.
 
