@@ -173,7 +173,7 @@ class H5CUDS(object):
                 'Container \'{n}\` does not exist'.format(n=name))
 
     def get_dataset_names(self):
-        """ Returns the names of all the CUDS objects in the containers.
+        """ Returns the names of the all the datasets in the engine workspace.
 
         """
 
@@ -181,7 +181,7 @@ class H5CUDS(object):
         im = self._iter_meshes()
         il = self._iter_lattices()
 
-        iter_list = [i for i in ip] + [i for i in im] + [i for i in il]
+        iter_list = itertools.chain(ip,im,il)
 
         for i in iter_list:
             yield i.name

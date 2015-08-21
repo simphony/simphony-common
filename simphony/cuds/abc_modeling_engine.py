@@ -87,7 +87,7 @@ class ABCModelingEngine(object):  # pragma: no cover
 
     @abstractmethod
     def get_dataset_names(self):  # pragma: no cover
-        """ Returns the names of all the CUDS objects in the containers.
+        """ Returns the names of the all the datasets in the engine workspace.
 
         """
 
