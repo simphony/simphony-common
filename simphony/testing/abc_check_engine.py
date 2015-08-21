@@ -124,6 +124,21 @@ class CheckEngine(object):
             engine.add_dataset(
                 self.create_dataset(name='test'))
 
+    def test_get_dataset_names(self):
+        engine = self.engine_factory()
+        # add a few empty datasets
+        ds_names = []
+
+        for i in xrange(5):
+            name = "test_{}".format(i)
+            ds_names.append(name)
+            engine.add_dataset(self.create_dataset(name=name))
+
+        # test that we are getting all the names
+        names = [
+            n for n in engine.get_dataset_names()]
+        self.assertEqual(names, ds_names)
+
     def test_iter_dataset(self):
         engine = self.engine_factory()
         # add a few empty datasets

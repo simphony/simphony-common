@@ -1,4 +1,5 @@
 import tables
+import itertools
 
 from simphony.cuds import ABCParticles, ABCMesh, ABCLattice
 from simphony.io.h5_particles import H5Particles
@@ -171,6 +172,20 @@ class H5CUDS(object):
         else:
             raise ValueError(
                 'Container \'{n}\` does not exist'.format(n=name))
+
+    def get_dataset_names(self):
+        """ Returns the names of the all the datasets in the engine workspace.
+
+        """
+
+        ip = self._iter_particles()
+        im = self._iter_meshes()
+        il = self._iter_lattices()
+
+        iter_list = itertools.chain(ip, im, il)
+
+        for i in iter_list:
+            yield i.name
 
     def iter_datasets(self, names=None):
         """ Returns an iterator over a subset or all of the containers.

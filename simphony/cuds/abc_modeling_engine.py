@@ -86,6 +86,12 @@ class ABCModelingEngine(object):  # pragma: no cover
         """
 
     @abstractmethod
+    def get_dataset_names(self):  # pragma: no cover
+        """ Returns the names of the all the datasets in the engine workspace.
+
+        """
+
+    @abstractmethod
     def iter_datasets(self, names=None):  # pragma: no cover
         """ Returns an iterator over a subset or all of the containers.
 
