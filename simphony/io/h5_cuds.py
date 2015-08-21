@@ -1,4 +1,5 @@
 import tables
+import itertools
 
 from simphony.cuds import ABCParticles, ABCMesh, ABCLattice
 from simphony.io.h5_particles import H5Particles
@@ -181,7 +182,7 @@ class H5CUDS(object):
         im = self._iter_meshes()
         il = self._iter_lattices()
 
-        iter_list = itertools.chain(ip,im,il)
+        iter_list = itertools.chain(ip, im, il)
 
         for i in iter_list:
             yield i.name
