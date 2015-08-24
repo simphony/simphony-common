@@ -2,6 +2,7 @@
 call setenv /x64
 
 rem install python packages
+pip install numpy
 pip install numexpr
 pip install -r dev_requirements.txt
 
