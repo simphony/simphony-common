@@ -24,4 +24,4 @@ install:
   - ps: pip --version
   - cmd /v:on /e:on /c ".\appveyor-install.cmd"
 test_script:
-  - cmd /v:on /e:on /c ".\appveyor-test.cmd"
+  #- cmd /v:on /e:on /c ".\appveyor-test.cmd"
