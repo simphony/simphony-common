@@ -13,7 +13,7 @@ pip install pyyaml>=3.11
 pip install sphinx>1.2.3
 pip install sphinxcontrib-napoleon>=0.2.10
 pip install tabulate>=0.7.4
-pip install mock
+pip install mock==1.0.1
 pip install coverage
 pip install flake8
 
