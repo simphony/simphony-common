@@ -15,7 +15,7 @@ pip install sphinxcontrib-napoleon>=0.2.10
 pip install tabulate>=0.7.4
 pip install mock
 pip install coverage
-pip install flake8'
+pip install flake8
 
 rem install simphony-common
 python setup.py develop
