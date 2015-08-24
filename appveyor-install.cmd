@@ -2,8 +2,8 @@
 call setenv /x64
 
 rem install python packages
-pip install --cache-dir $Env:whell_cache numexpr
-pip install --cache-dir $Env:whell_cache -r dev_requirements
+pip install --cache-dir "%whell_cache%" numexpr
+pip install --cache-dir "%Env:whell_cache%" -r dev_requirements.txt
 
 rem install simphony-common
 python setup.py develop
