@@ -11,7 +11,7 @@ environment:
       sdkver: "v7.0"
 
 cache:
-  - %localappdata%\pip\cache
+  - '%localappdata%\pip\cache'
 
 init:
   - ps: $Env:sdkbin = "C:\Program Files\Microsoft SDKs\Windows\" + $Env:sdkver + "\Bin"
