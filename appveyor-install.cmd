@@ -6,16 +6,16 @@ pip install numpy
 rem builds currently fail
 rem pip install numexpr
 rem pip install tables >= 3.1.1
-pip install 'enum34>=1.0.4'
-pip install 'stevedore>=1.2.0'
-pip install 'click>=3.3'
-pip install 'pyyaml>=3.11'
-pip install 'sphinx>=1.2.3'
-pip install 'sphinxcontrib-napoleon>=0.2.10'
-pip install 'tabulate>=0.7.4'
-pip install 'mock'
-pip install 'coverage'
-pip install 'flake8'
+pip install enum34>=1.0.4
+pip install stevedore>=1.2.0
+pip install click>=3.3
+pip install pyyaml>=3.11
+pip install sphinx>=1.2.3
+pip install sphinxcontrib-napoleon>=0.2.10
+pip install tabulate>=0.7.4
+pip install mock
+pip install coverage
+pip install flake8'
 
 rem install simphony-common
 python setup.py develop
