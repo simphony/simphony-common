@@ -4,7 +4,6 @@ environment:
 
   global:
     distutils_use_sdk: 1
-    wheel_cache: "C:/wheels"
 
   matrix:
     - python: "C:/Python27-x64"
