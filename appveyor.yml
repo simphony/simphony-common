@@ -11,14 +11,13 @@ environment:
       sdkver: "v7.0"
 
 cache:
-  - c:\wheel_cache
+  - %localappdata%\pip\cache
 
 init:
   - ps: $Env:sdkbin = "C:\Program Files\Microsoft SDKs\Windows\" + $Env:sdkver + "\Bin"
   - ps: $Env:sdkverpath = "C:/Program Files/Microsoft SDKs/Windows/" + $Env:sdkver + "/Setup/WindowsSdkVer.exe"
   - ps: $Env:path = $Env:python + ";" + $Env:python + "\scripts;" + $Env:sdkbin + ";" + $Env:path
 install:
-  - ps: if ((Test-Path $Env:wheel_cache) -eq 0) { mkdir $Env:wheel_cache }
   - ps: (new-object net.webclient).DownloadFile('https://raw.github.com/pypa/pip/master/contrib/get-pip.py', 'c:/get-pip.py')
   - ps: python c:/get-pip.py
   - ps: pip --version
