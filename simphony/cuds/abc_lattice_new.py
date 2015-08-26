@@ -63,6 +63,10 @@ class ABCLattice(object):
 
         """
 
+    @property
+    def prim_cell(self):
+        return self._prim_cell
+
     def get_coordinate(self, index):
         """Get coordinate of the given index coordinate.
 

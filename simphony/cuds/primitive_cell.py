@@ -2,7 +2,7 @@ import numpy as np
 from enum import Enum
 
 
-class BravaisLattice(Enum):
+class BravaisLattice(IntEnum):
     """The 3D Bravais lattices"""
     CUBIC = 0
     BODY_CENTERED_CUBIC = 1
@@ -83,7 +83,7 @@ class PrimitiveCell(object):
         self._bravais_lattice = BravaisLattice.TRICLINIC
             
     @classmethod
-    def create_cell_cubic_lattice(cls, a):
+    def for_cubic_lattice(cls, a):
         """
         Create a primitive cell for a Cubic lattice.
 
@@ -101,7 +101,7 @@ class PrimitiveCell(object):
         ValueError
            if the edge length is not strictly positive
         """
-        if a <= 0.0:
+        if a <= 0:
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
@@ -110,7 +110,7 @@ class PrimitiveCell(object):
         return pc
         
     @classmethod
-    def create_cell_body_cent_cubic_lattice(cls, a):
+    def for_body_centered_cubic_lattice(cls, a):
         """
         Create a primitive cell for a Body-centered Cubic lattice.
 
@@ -128,16 +128,16 @@ class PrimitiveCell(object):
         ValueError
            if the edge length is not strictly positive
         """
-        if a <= 0.0:
+        if a <= 0:
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((a, 0, 0), (0, a, 0), (a/2.0, a/2.0, a/2.0)))
+        pc = cls(((a, 0, 0), (0, a, 0), (a/2, a/2, a/2)))
         pc._bravais_lattice = BravaisLattice.BODY_CENTERED_CUBIC
         return pc
 
     @classmethod
-    def create_cell_face_cent_cubic_lattice(cls, a):
+    def for_face_centered_cubic_lattice(cls, a):
         """
         Create a primitive cell for a Face-centered Cubic lattice.
 
@@ -155,16 +155,16 @@ class PrimitiveCell(object):
         ValueError
            if the edge length is not strictly positive
         """
-        if a <= 0.0:
+        if a <= 0:
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((0, a/2.0, a/2.0), (a/2.0, 0, a/2.0), (a/2.0, a/2.0, 0)))
+        pc = cls(((0, a/2, a/2), (a/2, 0, a/2), (a/2, a/2, 0)))
         pc._bravais_lattice = BravaisLattice.FACE_CENTERED_CUBIC
         return pc
         
     @classmethod
-    def create_cell_rhombohedral_lattice(cls, a, alpha):
+    def for_rhombohedral_lattice(cls, a, alpha):
         """
         Create a primitive cell for a Rhombohedral lattice.
 
@@ -186,7 +186,7 @@ class PrimitiveCell(object):
            if the edge length is not strictly positive,
            if the edges are parallel to each other
         """
-        if a <= 0.0:
+        if a <= 0:
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
@@ -201,7 +201,7 @@ class PrimitiveCell(object):
         return pc
         
     @classmethod
-    def create_cell_hexagonal_lattice(cls, a, c):
+    def for_hexagonal_lattice(cls, a, c):
         """
         Create a primitive cell for a Hexagonal lattice.
 
@@ -219,16 +219,16 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or c <= 0.0:
+        if a <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((a, 0, 0), (a/2.0, a*np.sqrt(3.0)/2.0, 0), (0, 0, c)))
+        pc = cls(((a, 0, 0), (a/2, a*np.sqrt(3)/2, 0), (0, 0, c)))
         pc._bravais_lattice = BravaisLattice.HEXAGONAL
         return pc
 
     @classmethod
-    def create_cell_tetragonal_lattice(cls, a, c):
+    def for_tetragonal_lattice(cls, a, c):
         """
         Create a primitive cell for a Tetragonal lattice.
 
@@ -246,7 +246,7 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or c <= 0.0:
+        if a <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
@@ -255,7 +255,7 @@ class PrimitiveCell(object):
         return pc
 
     @classmethod
-    def create_cell_body_cent_tetragonal_lattice(cls, a, c):
+    def for_body_centered_tetragonal_lattice(cls, a, c):
         """
         Create a primitive cell for a Body-centered Tetragonal lattice.
 
@@ -273,16 +273,16 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or c <= 0.0:
+        if a <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((a, 0, 0), (0, a, 0), (a/2.0, a/2.0, c/2.0)))
+        pc = cls(((a, 0, 0), (0, a, 0), (a/2, a/2, c/2)))
         pc._bravais_lattice = BravaisLattice.BODY_CENTERED_TETRAGONAL
         return pc
 
     @classmethod
-    def create_cell_orthorhombic_lattice(cls, a, b, c):
+    def for_orthorhombic_lattice(cls, a, b, c):
         """
         Create a primitive cell for a Orthorhombic lattice.
 
@@ -300,7 +300,7 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
@@ -309,7 +309,7 @@ class PrimitiveCell(object):
         return pc
 
     @classmethod
-    def create_cell_body_cent_orthorhombic_lattice(cls, a, b, c):
+    def for_body_centered_orthorhombic_lattice(cls, a, b, c):
         """
         Create a primitive cell for a Body-centered Orthorhombic lattice.
 
@@ -327,16 +327,16 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((a, 0, 0), (0, b, 0), (a/2.0, b/2.0, c/2.0)))
+        pc = cls(((a, 0, 0), (0, b, 0), (a/2, b/2, c/2)))
         pc._bravais_lattice = BravaisLattice.BODY_CENTERED_ORTHORHOMBIC
         return pc
 
     @classmethod
-    def create_cell_face_cent_orthorhombic_lattice(cls, a, b, c):
+    def for_face_centered_orthorhombic_lattice(cls, a, b, c):
         """
         Create a primitive cell for a Face-centered Orthorhombic lattice.
 
@@ -354,16 +354,16 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((0, b/2.0, c/2.0), (a/2.0, 0, c/2.0), (a/2.0, b/2.0, 0)))
+        pc = cls(((0, b/2, c/2), (a/2, 0, c/2), (a/2, b/2, 0)))
         pc._bravais_lattice = BravaisLattice.FACE_CENTERED_ORTHORHOMBIC
         return pc
 
     @classmethod
-    def create_cell_base_cent_orthorhombic_lattice(cls, a, b, c):
+    def for_base_centered_orthorhombic_lattice(cls, a, b, c):
         """
         Create a primitive cell for a Base-centered Orthorhombic lattice.
 
@@ -381,16 +381,16 @@ class PrimitiveCell(object):
         ValueError
            if an edge length is not strictly positive
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls(((a, 0, 0), (a/2.0, b/2.0, 0), (0, 0, c)))
+        pc = cls(((a, 0, 0), (a/2, b/2, 0), (0, 0, c)))
         pc._bravais_lattice = BravaisLattice.BASE_CENTERED_ORTHORHOMBIC
         return pc
 
     @classmethod
-    def create_cell_monoclinic_lattice(cls, a, b, c, beta):
+    def for_monoclinic_lattice(cls, a, b, c, beta):
         """
         Create a primitive cell for a Monoclinic lattice.
 
@@ -412,7 +412,7 @@ class PrimitiveCell(object):
            if an edge length is not strictly positive,
            if the edges are parallel to each other
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
@@ -427,7 +427,7 @@ class PrimitiveCell(object):
         return pc
 
     @classmethod
-    def create_cell_base_cent_monoclinic_lattice(cls, a, b, c, beta):
+    def for_base_centered_monoclinic_lattice(cls, a, b, c, beta):
         """
         Create a primitive cell for a Base-centered Monoclinic lattice.
 
@@ -449,7 +449,7 @@ class PrimitiveCell(object):
            if an edge length is not strictly positive,
            if the edges are parallel to each other
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
@@ -460,13 +460,12 @@ class PrimitiveCell(object):
             raise ValueError(message)
         
         pc = cls(((a*np.sin(beta), 0, a*np.cos(beta)),
-                  (a*np.sin(beta)/2.0, b/2.0, a*np.cos(beta)/2.0),
-                  (0, 0, c)))
+                  (a*np.sin(beta)/2, b/2, a*np.cos(beta)/2), (0, 0, c)))
         pc._bravais_lattice = BravaisLattice.BASE_CENTERED_MONOCLINIC
         return pc
 
     @classmethod
-    def create_cell_triclinic_lattice(cls, a, b, c, alpha, beta, gamma):
+    def for_triclinic_lattice(cls, a, b, c, alpha, beta, gamma):
         """
         Create a primitive cell for a Triclinic lattice.
 
@@ -487,7 +486,7 @@ class PrimitiveCell(object):
            if an edge length is not strictly positive,
            if the edges are parallel to each other
         """
-        if a <= 0.0 or b <= 0.0 or c <= 0.0:
+        if a <= 0 or b <= 0 or c <= 0:
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 

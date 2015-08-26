@@ -3,7 +3,7 @@ from math import sqrt
 from simphony.cuds.abc_lattice import ABCLattice
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
-from simphony.cuds.primitive_cell import PrimitiveCell as pc
+from simphony.cuds.primitive_cell import PrimitiveCell as PrimCell
 
 
 class LatticeNode(object):
@@ -148,10 +148,6 @@ class Lattice(ABCLattice):
         return self._origin
 
     @property
-    def prim_cell(self):
-        return self._prim_cell
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
@@ -178,11 +174,11 @@ def make_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pcell = pc.create_cell_cubic_lattice(h)
-    return Lattice(name, 'Cubic', size, org, pcell)
+    pc = PrimCell.for_cubic_lattice(h)
+    return Lattice(name, size, org, pc)
 
 
-def make_body_cent_cubic_lattice(name, h, size, org=(0, 0, 0)):
+def make_body_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
     """Create and return a 3D body-centered cubic lattice.
 
     Parameters
@@ -200,11 +196,11 @@ def make_body_cent_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pcell = pc.create_cell_body_cent_cubic_lattice(h)
-    return Lattice(name, 'Body-Centered Cubic', size, org, pcell)
+    pc = PrimCell.for_body_centered_cubic_lattice(h)
+    return Lattice(name, size, org, pc)
 
 
-def make_face_cent_cubic_lattice(name, h, size, org=(0, 0, 0)):
+def make_face_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
     """Create and return a 3D face-centered cubic lattice.
 
     Parameters
@@ -222,8 +218,8 @@ def make_face_cent_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pcell = pc.create_cell_face_cent_cubic_lattice(h)
-    return Lattice(name, 'Face-Centered Cubic', size, org, pcell)
+    pc = PrimCell.for_face_centered_cubic_lattice(h)
+    return Lattice(name, size, org, pc)
 
 
 def make_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
@@ -245,11 +241,11 @@ def make_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pcell = pc.create_cell_orthorhombic_lattice(hs[0],hs[1],hs[2])
-    return Lattice(name, 'Orthorhombic', size, org, pcell)
+    pc = PrimCell.for_orthorhombic_lattice(hs[0],hs[1],hs[2])
+    return Lattice(name, size, org, pc)
 
     
-def make_body_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_body_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
     """Create and return a 3D body-centered orthorhombic lattice.
 
     Parameters
@@ -268,11 +264,11 @@ def make_body_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pcell = pc.create_cell_body_cent_orthorhombic_lattice(hs[0],hs[1],hs[2])
-    return Lattice(name, 'Body-Centered Orthorhombic', size, org, pcell)
+    pc = PrimCell.for_body_centered_orthorhombic_lattice(hs[0],hs[1],hs[2])
+    return Lattice(name, size, org, pc)
 
 
-def make_face_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_face_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
     """Create and return a 3D face-centered orthorhombic lattice.
 
     Parameters
@@ -291,11 +287,11 @@ def make_face_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pcell = pc.create_cell_face_cent_orthorhombic_lattice(hs[0],hs[1],hs[2])
-    return Lattice(name, 'Face-Centered Orthorhombic', size, org, pcell)
+    pc = PrimCell.for_face_centered_orthorhombic_lattice(hs[0],hs[1],hs[2])
+    return Lattice(name, size, org, pc)
 
 
-def make_base_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_base_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
     """Create and return a 3D base-centered orthorhombic lattice.
 
     Parameters
@@ -314,8 +310,8 @@ def make_base_cent_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pcell = pc.create_cell_base_cent_orthorhombic_lattice(hs[0],hs[1],hs[2])
-    return Lattice(name, 'Base-Centered Orthorhombic', size, org, pcell)
+    pc = PrimCell.for_base_centered_orthorhombic_lattice(hs[0],hs[1],hs[2])
+    return Lattice(name, size, org, pc)
 
 
 def make_hexagonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
@@ -338,5 +334,5 @@ def make_hexagonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pcell = pc.create_cell_hexagonal_lattice(hxy, hz)
-    return Lattice(name, 'Hexagonal', size, org, pcell)
+    pc = PrimCell.for_hexagonal_lattice(hxy, hz)
+    return Lattice(name, size, org, pc)
