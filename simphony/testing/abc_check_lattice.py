@@ -6,15 +6,7 @@ from numpy.testing import (assert_array_equal, assert_array_almost_equal)
 
 from simphony.testing.utils import (
     create_data_container, compare_data_containers, compare_lattice_nodes)
-from simphony.cuds.lattice import (
-    LatticeNode, make_cubic_lattice, make_body_centered_cubic_lattice,
-    make_face_centered_cubic_lattice, make_rhombohedral_lattice,
-    make_hexagonal_lattice, make_tetragonal_lattice,
-    make_body_centered_tetragonal_lattice, make_orthorhombic_lattice,
-    make_body_centered_orthorhombic_lattice,
-    make_face_centered_orthorhombic_lattice,
-    make_base_centered_orthorhombic_lattice, make_monoclinic_lattice,
-    make_base_centered_monoclinic_lattice, make_triclinic_lattice)
+from simphony.cuds.lattice import (LatticeNode, make_triclinic_lattice)
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 from simphony.cuds.primitive_cell import (BravaisLattice, PrimitiveCell)
@@ -304,13 +296,10 @@ class CheckLatticeNodeCoordinates(object):
         x, y, z = numpy.meshgrid(range(
             default.size[0]), range(default.size[1]), range(default.size[2]))
         indexes = zip(x.flat, y.flat, z.flat)
-        expected = zip(
-            x.ravel() * p1[0] + y.ravel() * p2[0] + z.ravel() * p3[0] +
-                default.origin[0],
-            x.ravel() * p1[1] + y.ravel() * p2[1] + z.ravel() * p3[1] +
-                default.origin[1],
-            x.ravel() * p1[2] + y.ravel() * p2[2] + z.ravel() * p3[2] +
-                default.origin[2])
+        expected = zip(x.ravel()*p1[0] + y.ravel()*p2[0] + z.ravel()*p3[0] +
+                       default.origin[0], x.ravel()*p1[1] + y.ravel()*p2[1] +
+                       z.ravel()*p3[1] + default.origin[1], x.ravel()*p1[2] +
+                       y.ravel()*p2[2] + z.ravel()*p3[2] + default.origin[2])
 
         for i, index in enumerate(indexes):
             assert_array_almost_equal(container.get_coordinate(index),

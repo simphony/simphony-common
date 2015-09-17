@@ -96,7 +96,7 @@ class TestPrimitiveCell(unittest.TestCase):
 
     def test_primitive_cell_for_body_centered_orthorhombic_lattice(self):
         pc = PrimitiveCell.for_body_centered_orthorhombic_lattice(
-                self.a, self.b, self.c)
+            self.a, self.b, self.c)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.BODY_CENTERED_ORTHORHOMBIC)
@@ -106,7 +106,7 @@ class TestPrimitiveCell(unittest.TestCase):
 
     def test_primitive_cell_for_face_centered_orthorhombic_lattice(self):
         pc = PrimitiveCell.for_face_centered_orthorhombic_lattice(
-                self.a, self.b, self.c)
+            self.a, self.b, self.c)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.FACE_CENTERED_ORTHORHOMBIC)
@@ -116,7 +116,7 @@ class TestPrimitiveCell(unittest.TestCase):
 
     def test_primitive_cell_for_base_centered_orthorhombic_lattice(self):
         pc = PrimitiveCell.for_base_centered_orthorhombic_lattice(
-                self.a, self.b, self.c)
+            self.a, self.b, self.c)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
@@ -125,8 +125,8 @@ class TestPrimitiveCell(unittest.TestCase):
         assert_array_equal(pc.p3, (0, 0, self.c))
 
     def test_primitive_cell_for_monoclinic_lattice(self):
-        pc = PrimitiveCell.for_monoclinic_lattice(self.a, self.b, self.c,
-                self.beta)
+        pc = PrimitiveCell.for_monoclinic_lattice(
+            self.a, self.b, self.c, self.beta)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.MONOCLINIC)
@@ -142,7 +142,7 @@ class TestPrimitiveCell(unittest.TestCase):
               self.a*np.cos(self.beta)/2)
 
         pc = PrimitiveCell.for_base_centered_monoclinic_lattice(
-                self.a, self.b, self.c, self.beta)
+            self.a, self.b, self.c, self.beta)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.BASE_CENTERED_MONOCLINIC)
@@ -162,8 +162,8 @@ class TestPrimitiveCell(unittest.TestCase):
         p3 = (self.c*cosb, self.c*(cosa-cosb*cosg) / sing,
               self.c*np.sqrt(sinb**2 - ((cosa-cosb*cosg) / sing)**2))
 
-        pc = PrimitiveCell.for_triclinic_lattice(self.a, self.b, self.c,
-                self.alpha, self.beta, self.gamma)
+        pc = PrimitiveCell.for_triclinic_lattice(
+            self.a, self.b, self.c, self.alpha, self.beta, self.gamma)
         self.assertIsInstance(pc, PrimitiveCell)
         self.assertEqual(pc.bravais_lattice,
                          BravaisLattice.TRICLINIC)

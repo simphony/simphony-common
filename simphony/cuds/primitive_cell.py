@@ -190,7 +190,7 @@ class PrimitiveCell(object):
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        angle1 = alpha%np.pi
+        angle1 = alpha % np.pi
         if np.allclose(angle1, 0) or np.allclose(angle1, np.pi):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
@@ -415,7 +415,7 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        angle1 = beta%np.pi
+        angle1 = beta % np.pi
         if np.allclose(angle1, 0) or np.allclose(angle1, np.pi):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
@@ -451,7 +451,7 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        angle1 = beta%np.pi
+        angle1 = beta % np.pi
         if np.allclose(angle1, 0) or np.allclose(angle1, np.pi):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
@@ -487,9 +487,9 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        a1 = alpha%np.pi
-        a2 = beta%np.pi
-        a3 = gamma%np.pi
+        a1 = alpha % np.pi
+        a2 = beta % np.pi
+        a3 = gamma % np.pi
 
         if np.any(np.isclose((a1, a2, a3), (0, 0, 0))) or \
            np.any(np.isclose((a1, a2, a3), (np.pi, np.pi, np.pi))):

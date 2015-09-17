@@ -1,5 +1,4 @@
 import numpy as np
-from math import sqrt
 from simphony.cuds.abc_lattice import ABCLattice
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer

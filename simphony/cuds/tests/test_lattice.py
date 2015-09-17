@@ -79,8 +79,8 @@ class TestLatticeFactories(unittest.TestCase):
         self.alpha, self.beta, self.gamma =  0.7, 0.64, 1.2
 
     def test_make_cubic_lattice(self):
-        lattice = make_cubic_lattice('Lattice0',
-                    self.a, (14, 4, 5), (4, 5, 6))
+        lattice = make_cubic_lattice(
+            'Lattice0', self.a, (14, 4, 5), (4, 5, 6))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice0')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -89,8 +89,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (4, 5, 6))
 
     def test_make_body_centered_cubic_lattice(self):
-        lattice = make_body_centered_cubic_lattice('Lattice1',
-                    self.a, (3, 3, 3))
+        lattice = make_body_centered_cubic_lattice(
+            'Lattice1', self.a, (3, 3, 3))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice1')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -99,8 +99,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_face_centered_cubic_lattice(self):
-        lattice = make_face_centered_cubic_lattice('Lattice2',
-                    self.a, (6, 7, 4))
+        lattice = make_face_centered_cubic_lattice(
+            'Lattice2', self.a, (6, 7, 4))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice2')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -109,8 +109,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_rhombohedral_lattice(self):
-        lattice = make_rhombohedral_lattice('Lattice3',
-                    self.a, self.alpha, (10, 2, 4))
+        lattice = make_rhombohedral_lattice(
+            'Lattice3', self.a, self.alpha, (10, 2, 4))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice3')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -119,8 +119,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_tetragonal_lattice(self):
-        lattice = make_tetragonal_lattice('Lattice4',
-                    self.a, self.c, (3, 4, 3))
+        lattice = make_tetragonal_lattice(
+            'Lattice4', self.a, self.c, (3, 4, 3))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice4')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -129,8 +129,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_body_centered_tetragonal_lattice(self):
-        lattice = make_body_centered_tetragonal_lattice('Lattice5',
-                    self.a, self.c, (4, 4, 4))
+        lattice = make_body_centered_tetragonal_lattice(
+            'Lattice5', self.a, self.c, (4, 4, 4))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice5')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -139,8 +139,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_hexagonal_lattice(self):
-        lattice = make_hexagonal_lattice('Lattice6',
-                    self.a, self.c, (5, 5, 5))
+        lattice = make_hexagonal_lattice(
+            'Lattice6', self.a, self.c, (5, 5, 5))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice6')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -149,8 +149,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_orthorhombic_lattice(self):
-        lattice = make_orthorhombic_lattice('Lattice7',
-                    (self.a, self.b, self.c), (6, 2, 2))
+        lattice = make_orthorhombic_lattice(
+            'Lattice7', (self.a, self.b, self.c), (6, 2, 2))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice7')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -159,8 +159,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_body_centered_orthorhombic_lattice(self):
-        lattice = make_body_centered_orthorhombic_lattice('Lattice8',
-                    (self.a, self.b, self.c), (3, 2, 9))
+        lattice = make_body_centered_orthorhombic_lattice(
+            'Lattice8', (self.a, self.b, self.c), (3, 2, 9))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice8')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -169,8 +169,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_face_centered_orthorhombic_lattice(self):
-        lattice = make_face_centered_orthorhombic_lattice('Lattice9',
-                    (self.a, self.b, self.c), (7, 4, 8))
+        lattice = make_face_centered_orthorhombic_lattice(
+            'Lattice9', (self.a, self.b, self.c), (7, 4, 8))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice9')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -179,8 +179,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_base_centered_orthorhombic_lattice(self):
-        lattice = make_base_centered_orthorhombic_lattice('Lattice10',
-                    (self.a, self.b, self.c), (6, 6, 6))
+        lattice = make_base_centered_orthorhombic_lattice(
+            'Lattice10', (self.a, self.b, self.c), (6, 6, 6))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice10')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -189,8 +189,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_monoclinic_lattice(self):
-        lattice = make_monoclinic_lattice('Lattice11',
-                    (self.a, self.b, self.c), self.beta, (7, 3, 2))
+        lattice = make_monoclinic_lattice(
+            'Lattice11', (self.a, self.b, self.c), self.beta, (7, 3, 2))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice11')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -199,8 +199,8 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_base_centered_monoclinic_lattice(self):
-        lattice = make_base_centered_monoclinic_lattice('Lattice12',
-                    (self.a, self.b, self.c), self.beta, (5, 3, 4))
+        lattice = make_base_centered_monoclinic_lattice(
+            'Lattice12', (self.a, self.b, self.c), self.beta, (5, 3, 4))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice12')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
@@ -209,9 +209,9 @@ class TestLatticeFactories(unittest.TestCase):
         assert_array_equal(lattice.origin, (0, 0, 0))
 
     def test_make_triclinic_lattice(self):
-        lattice = make_triclinic_lattice('Lattice13',
-                    (self.a, self.b, self.c),
-                    (self.alpha, self.beta, self.gamma), (4, 5, 6))
+        lattice = make_triclinic_lattice(
+            'Lattice13', (self.a, self.b, self.c),
+            (self.alpha, self.beta, self.gamma), (4, 5, 6))
         self.assertIsInstance(lattice, Lattice)
         self.assertEqual(lattice.name, 'Lattice13')
         self.assertEqual(lattice.prim_cell.bravais_lattice,
