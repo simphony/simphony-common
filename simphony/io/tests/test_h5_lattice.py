@@ -5,7 +5,8 @@ import unittest
 import tables
 
 from simphony.io.h5_lattice import H5Lattice
-from numpy.testing import assert_array_equal
+from simphony.cuds.primitive_cell import (PrimitiveCell, BravaisLattice)
+from numpy.testing import (assert_array_equal, assert_array_almost_equal)
 from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_lattice import (
     CheckLatticeContainer, CheckLatticeNodeOperations,
@@ -37,11 +38,10 @@ class TestH5LatticeProperties(CheckLatticeContainer, unittest.TestCase):
             self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, pc, size, origin):
         self.group = self.handle.create_group(
             self.handle.root, name)
-        return H5Lattice.create_new(
-            self.group, type_, base_vect, size, origin)
+        return H5Lattice.create_new(self.group, pc, size, origin)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -49,8 +49,11 @@ class TestH5LatticeProperties(CheckLatticeContainer, unittest.TestCase):
     def test_initialization_from_existing_lattice_in_file(self):
         lattice = H5Lattice(self.group)
         self.assertEqual(lattice.name, 'my_name')
-        self.assertEqual(lattice.type, 'Cubic')
-        assert_array_equal(lattice.base_vect, self.base_vect)
+        self.assertEqual(lattice.prim_cell.bravais_lattice,
+                         BravaisLattice.CUBIC)
+        assert_array_almost_equal(lattice.prim_cell.p1, self.prim_cell.p1)
+        assert_array_almost_equal(lattice.prim_cell.p2, self.prim_cell.p2)
+        assert_array_almost_equal(lattice.prim_cell.p3, self.prim_cell.p3)
         self.assertItemsEqual(lattice.size, self.size)
         assert_array_equal(lattice.origin, self.origin)
 
@@ -69,11 +72,10 @@ class TestH5LatticeNodeCoordinates(
             self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, pc, size, origin):
         self.group = self.handle.create_group(
             self.handle.root, name)
-        return H5Lattice.create_new(
-            self.group, type_, base_vect, size, origin)
+        return H5Lattice.create_new(self.group, pc, size, origin)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -94,11 +96,10 @@ class TestH5LatticeNodeOperations(
             self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, pc, size, origin):
         self.group = self.handle.create_group(
             self.handle.root, name)
-        return H5Lattice.create_new(
-            self.group, type_, base_vect, size, origin)
+        return H5Lattice.create_new(self.group, pc, size, origin)
 
     def supported_cuba(self):
         return set(CUBA)
@@ -118,10 +119,10 @@ class TestH5LatticeNodeCustomCoordinates(
             self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, pc, size, origin):
         self.group = self.handle.create_group(
             self.handle.root, name)
-        return H5Lattice.create_new(self.group, type_, base_vect, size,
+        return H5Lattice.create_new(self.group, pc, size,
                                     origin, record=CustomRecord)
 
     def supported_cuba(self):
@@ -143,10 +144,9 @@ class TestH5LatticeCustomNodeOperations(
             self.handle.close()
         shutil.rmtree(self.temp_dir)
 
-    def container_factory(self, name, type_, base_vect, size, origin):
-        self.group = self.handle.create_group(
-            self.handle.root, name)
-        return H5Lattice.create_new(self.group, type_, base_vect, size,
+    def container_factory(self, name, pc, size, origin):
+        self.group = self.handle.create_group(self.handle.root, name)
+        return H5Lattice.create_new(self.group, pc, size,
                                     origin, record=CustomRecord)
 
     def supported_cuba(self):
@@ -168,8 +168,8 @@ class TestH5LatticeVersions(unittest.TestCase):
             group = handle.create_group(handle.root, group_name)
 
             # given/when
-            H5Lattice.create_new(group, 'Cubic', base_vect=(0.2, 0.2, 0.2),
-                                 size=(5, 10, 15), origin=(-2.0, 0.0, 1.0))
+            H5Lattice.create_new(group, PrimitiveCell.for_cubic_lattice(0.2),
+                                 size=(5, 10, 15), origin=(-2, 0, 1))
 
             # then
             self.assertTrue(isinstance(group._v_attrs.cuds_version, int))

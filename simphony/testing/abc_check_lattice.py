@@ -2,15 +2,22 @@ import abc
 from functools import partial
 
 import numpy
-from numpy.testing import assert_array_equal
+from numpy.testing import (assert_array_equal, assert_array_almost_equal)
 
 from simphony.testing.utils import (
     create_data_container, compare_data_containers, compare_lattice_nodes)
 from simphony.cuds.lattice import (
-    LatticeNode, make_square_lattice, make_rectangular_lattice,
-    make_orthorombicp_lattice, make_hexagonal_lattice, make_cubic_lattice)
+    LatticeNode, make_cubic_lattice, make_body_centered_cubic_lattice,
+    make_face_centered_cubic_lattice, make_rhombohedral_lattice,
+    make_hexagonal_lattice, make_tetragonal_lattice,
+    make_body_centered_tetragonal_lattice, make_orthorhombic_lattice,
+    make_body_centered_orthorhombic_lattice,
+    make_face_centered_orthorhombic_lattice,
+    make_base_centered_orthorhombic_lattice, make_monoclinic_lattice,
+    make_base_centered_monoclinic_lattice, make_triclinic_lattice)
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
+from simphony.cuds.primitive_cell import (BravaisLattice, PrimitiveCell)
 
 
 class CheckLatticeContainer(object):
@@ -22,14 +29,14 @@ class CheckLatticeContainer(object):
             DataContainer, partial(compare_data_containers, testcase=self))
         self.addTypeEqualityFunc(
             LatticeNode, partial(compare_lattice_nodes, testcase=self))
+        self.prim_cell = PrimitiveCell.for_cubic_lattice(0.2)
         self.size = (5, 10, 15)
-        self.base_vect = (0.2, 0.2, 0.2)
         self.origin = (-2.0, 0.0, 1.0)
         self.container = self.container_factory(
-            'my_name', 'Cubic', self.base_vect, self.size, self.origin)
+            'my_name', self.prim_cell, self.size, self.origin)
 
     @abc.abstractmethod
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, prim_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -42,15 +49,15 @@ class CheckLatticeContainer(object):
         container = self.container
 
         # check values
-        self.assertEqual(container.type, 'Cubic')
+        self.assertEqual(container.prim_cell.bravais_lattice,
+                         BravaisLattice.CUBIC)
         self.assertEqual(container.name, 'my_name')
         assert_array_equal(container.size, self.size)
         assert_array_equal(container.origin, self.origin)
-        assert_array_equal(container.base_vect, self.base_vect)
 
         # check read-only
         with self.assertRaises(AttributeError):
-            container.type = 'Cubic'
+            container.prim_cell.bravais_lattice = BravaisLattice.CUBIC
 
         with self.assertRaises(AttributeError):
             container.size = self.size
@@ -59,7 +66,7 @@ class CheckLatticeContainer(object):
             container.origin = self.origin
 
         with self.assertRaises(AttributeError):
-            container.base_vect = self.base_vect
+            container.prim_cell = self.prim_cell
 
     def test_container_name(self):
         # given/when
@@ -120,14 +127,14 @@ class CheckLatticeNodeOperations(object):
             DataContainer, partial(compare_data_containers, testcase=self))
         self.addTypeEqualityFunc(
             LatticeNode, partial(compare_lattice_nodes, testcase=self))
+        self.prim_cell = PrimitiveCell.for_cubic_lattice(0.2)
         self.size = (5, 10, 15)
-        self.base_vect = (0.2, 0.2, 0.2)
         self.origin = (-2.0, 0.0, 1.0)
         self.container = self.container_factory(
-            'my_name', 'Cubic', self.base_vect, self.size, self.origin)
+            'my_name', self.prim_cell, self.size, self.origin)
 
     @abc.abstractmethod
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, prim_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -269,7 +276,7 @@ class CheckLatticeNodeCoordinates(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def container_factory(self, name, type_, base_vect, size, origin):
+    def container_factory(self, name, prim_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -279,108 +286,32 @@ class CheckLatticeNodeCoordinates(object):
 
         """
 
-    def test_get_coordinate_cubic(self):
-        default = make_cubic_lattice(
-            'Lattice3', 0.2, (5, 10, 15), (-2.0, 0.0, 1.0))
+    def test_get_coordinate(self):
+        """ ABCLattice.get_coordinate is the same for all lattices, therefore
+        tested only once.
+
+        """
+        default = make_triclinic_lattice(
+            'Lattice3', (0.2, 0.4, 0.9), (0.8, 0.4, 0.5), (5, 10, 15),
+            (-2.0, 0.0, 1.0))
         container = self.container_factory(
-            default.name,
-            default.type,
-            default.base_vect,
-            default.size,
-            default.origin)
-        xspace, yspace, zspace = default.base_vect
+            default.name, default.prim_cell, default.size, default.origin)
+
+        p1 = default.prim_cell.p1
+        p2 = default.prim_cell.p2
+        p3 = default.prim_cell.p3
+
         x, y, z = numpy.meshgrid(range(
             default.size[0]), range(default.size[1]), range(default.size[2]))
         indexes = zip(x.flat, y.flat, z.flat)
         expected = zip(
-            x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1],
-            z.ravel() * zspace + default.origin[2])
+            x.ravel() * p1[0] + y.ravel() * p2[0] + z.ravel() * p3[0] +
+                default.origin[0],
+            x.ravel() * p1[1] + y.ravel() * p2[1] + z.ravel() * p3[1] +
+                default.origin[1],
+            x.ravel() * p1[2] + y.ravel() * p2[2] + z.ravel() * p3[2] +
+                default.origin[2])
 
         for i, index in enumerate(indexes):
-            assert_array_equal(container.get_coordinate(index), expected[i])
-
-    def test_get_coordinate_square(self):
-        default = make_square_lattice('Lattice2', 0.2, (12, 22), (0.2, -2.4))
-        container = self.container_factory(
-            default.name,
-            default.type,
-            default.base_vect,
-            default.size,
-            default.origin)
-        xspace, yspace, zspace = default.base_vect
-        x, y, z = numpy.meshgrid(range(default.size[0]),
-                                 range(default.size[1]),
-                                 range(default.size[2]))
-        indexes = zip(x.flat, y.flat, z.flat)
-        expected = zip(
-            x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1],
-            z.ravel() * zspace + default.origin[2])
-
-        for i, index in enumerate(indexes):
-            assert_array_equal(container.get_coordinate(index), expected[i])
-
-    def test_get_coordinate_rectangular(self):
-        default = make_rectangular_lattice(
-            'Lattice3', (0.3, 0.35), (13, 23), (0.2, -2.7))
-        container = self.container_factory(
-            default.name,
-            default.type,
-            default.base_vect,
-            default.size,
-            default.origin)
-        xspace, yspace, zspace = default.base_vect
-        x, y, z = numpy.meshgrid(range(default.size[0]),
-                                 range(default.size[1]),
-                                 range(default.size[2]))
-        indexes = zip(x.flat, y.flat, z.flat)
-        expected = zip(
-            x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1],
-            z.ravel() * zspace + default.origin[2])
-
-        for i, index in enumerate(indexes):
-            assert_array_equal(container.get_coordinate(index), expected[i])
-
-    def test_get_coordinate_orthorombicp(self):
-        default = make_orthorombicp_lattice(
-            'Lattice4', (0.5, 0.54, 0.58), (15, 25, 35), (7, 9, 8))
-        container = self.container_factory(
-            default.name,
-            default.type,
-            default.base_vect,
-            default.size,
-            default.origin)
-        xspace, yspace, zspace = default.base_vect
-
-        x, y, z = numpy.meshgrid(
-            range(default.size[0]),
-            range(default.size[1]),
-            range(default.size[2]))
-        indexes = zip(x.flat, y.flat, z.flat)
-        expected = zip(
-            x.ravel() * xspace + default.origin[0],
-            y.ravel() * yspace + default.origin[1],
-            z.ravel() * zspace + default.origin[2])
-
-        for i, index in enumerate(indexes):
-            assert_array_equal(container.get_coordinate(index), expected[i])
-
-    def test_get_coordinate_hexagonal(self):
-        default = make_hexagonal_lattice('Lattice4', 0.1, (5, 4))
-        container = self.container_factory(
-            default.name,
-            default.type,
-            default.base_vect,
-            default.size,
-            default.origin)
-        xspace, yspace, zspace = default.base_vect
-
-        for node in container.iter_nodes():
-            index = node.index
-            position = (
-                index[0] * xspace + 0.5 * xspace * index[1],
-                index[1] * yspace,
-                container.origin[2])
-            assert_array_equal(container.get_coordinate(index), position)
+            assert_array_almost_equal(container.get_coordinate(index),
+                                      expected[i])

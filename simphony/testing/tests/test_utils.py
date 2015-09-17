@@ -6,7 +6,7 @@ import numpy
 from numpy.testing import assert_array_equal
 
 from simphony.cuds.particles import Particles, Particle, Bond
-from simphony.cuds.lattice import Lattice, LatticeNode
+from simphony.cuds.lattice import make_cubic_lattice, LatticeNode
 from simphony.cuds.mesh import Mesh, Point, Element, Edge, Face, Cell
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
@@ -249,12 +249,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_equal(self):
         # given
-        lattice = Lattice(
-            'test', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
-        reference = Lattice(
-            'test', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
+        lattice = make_cubic_lattice('test', 1.0, (2, 3, 4))
+        reference = make_cubic_lattice('test', 1.0, (2, 3, 4,))
 
         data = DataContainer()
 
@@ -266,12 +262,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
 
     def test_compare_lattice_datasets_not_equal(self):
         # given
-        lattice = Lattice(
-            'test', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
-        reference = Lattice(
-            'test_ref', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
+        lattice = make_cubic_lattice('test', 1.0, (2, 3, 4))
+        reference = make_cubic_lattice('test_ref', 1.0, (2, 3, 4,))
 
         data = create_data_container()
 
@@ -285,9 +277,7 @@ class TestCompareLatticeDatasets(unittest.TestCase):
         # given
         test_data = DataContainer()
 
-        lattice = Lattice(
-            'test_ref', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
+        lattice = make_cubic_lattice('test_ref', 1.0, (2, 3, 4))
         lattice.data = test_data
 
         # when/then
@@ -295,9 +285,7 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice(
-            'test_ref', 'cubic', (2.0, 2.0, 2.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
+        lattice = make_cubic_lattice('test', 2.0, (2, 3, 4))
         lattice.data = data
 
         # when/then
@@ -305,9 +293,7 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice(
-            'test_ref', 'cubic', (1.0, 1.0, 1.0),
-            (4, 6, 8), (0.0, 0.0, 0.0))
+        lattice = make_cubic_lattice('test_ref', 1.0, (4, 6, 8))
         lattice.data = data
 
         # when/then
@@ -315,9 +301,8 @@ class TestCompareLatticeDatasets(unittest.TestCase):
             compare_lattice_datasets(lattice, reference, testcase=self)
 
         # given
-        lattice = Lattice(
-            'test_ref', 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (2.0, 2.0, 2.0))
+        lattice = make_cubic_lattice('test_ref', 1.0, (2, 3, 4),
+                                     (2.0, 2.0, 2.0))
         lattice.data = data
 
         # when/then
