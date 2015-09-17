@@ -9,7 +9,7 @@ from simphony.testing.abc_check_lattice import (
     CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)
 from simphony.cuds.lattice import (
-    Lattice, LatticeNode,make_cubic_lattice,
+    Lattice, LatticeNode, make_cubic_lattice,
     make_body_centered_cubic_lattice, make_face_centered_cubic_lattice,
     make_rhombohedral_lattice, make_hexagonal_lattice,
     make_tetragonal_lattice, make_body_centered_tetragonal_lattice,
