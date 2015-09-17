@@ -12,7 +12,7 @@ class TestPrimitiveCell(unittest.TestCase):
 
     def setUp(self):
         self.a, self.b, self.c = 0.4, 0.9, 1.4
-        self.alpha, self.beta, self.gamma =  0.6, 0.5, 1.0
+        self.alpha, self.beta, self.gamma = 0.6, 0.5, 1.0
 
     def test_primitive_cell_for_cubic_lattice(self):
         pc = PrimitiveCell.for_cubic_lattice(self.a)

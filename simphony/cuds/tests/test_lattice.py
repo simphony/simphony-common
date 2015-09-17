@@ -8,12 +8,12 @@ from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_lattice import (
     CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)
-from simphony.cuds.lattice import (Lattice, LatticeNode,
-    make_cubic_lattice, make_body_centered_cubic_lattice,
-    make_face_centered_cubic_lattice, make_rhombohedral_lattice,
-    make_hexagonal_lattice, make_tetragonal_lattice,
-    make_body_centered_tetragonal_lattice, make_orthorhombic_lattice,
-    make_body_centered_orthorhombic_lattice,
+from simphony.cuds.lattice import (
+    Lattice, LatticeNode,make_cubic_lattice,
+    make_body_centered_cubic_lattice, make_face_centered_cubic_lattice,
+    make_rhombohedral_lattice, make_hexagonal_lattice,
+    make_tetragonal_lattice, make_body_centered_tetragonal_lattice,
+    make_orthorhombic_lattice, make_body_centered_orthorhombic_lattice,
     make_face_centered_orthorhombic_lattice,
     make_base_centered_orthorhombic_lattice, make_monoclinic_lattice,
     make_base_centered_monoclinic_lattice, make_triclinic_lattice)
@@ -76,7 +76,7 @@ class TestLatticeFactories(unittest.TestCase):
 
     def setUp(self):
         self.a, self.b, self.c = 0.4, 0.9, 1.4
-        self.alpha, self.beta, self.gamma =  0.7, 0.64, 1.2
+        self.alpha, self.beta, self.gamma = 0.7, 0.64, 1.2
 
     def test_make_cubic_lattice(self):
         lattice = make_cubic_lattice(
