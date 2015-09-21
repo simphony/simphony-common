@@ -38,6 +38,8 @@ Pure Python implementation
 
 .. autosummary::
 
+   ~primitive_cell.PrimitiveCell
+   ~primitive_cell.BravaisLattice
    ~lattice.Lattice
    ~lattice.LatticeNode
    ~particles.Particles

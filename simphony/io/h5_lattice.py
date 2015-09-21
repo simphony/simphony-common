@@ -73,7 +73,7 @@ class H5Lattice(ABCLattice):
 
         lattice._table.attrs.prim_cell = [pc.p1, pc.p2, pc.p3]
         lattice._table.attrs.bravais_lattice = pc.bravais_lattice
-        lattice._table.attrs.size = tuple(size)
+        lattice._table.attrs.size = size
         lattice._table.attrs.origin = origin
 
         IndexedDataContainerTable(group, 'data', NoUIDRecord, 1)

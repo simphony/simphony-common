@@ -31,10 +31,10 @@ class PrimitiveCell(object):
 
     Attributes
     ----------
-    p1, p2, p3: 3 x 3D vector
+    p1, p2, p3: 3 x float[3]
         primitive vectors
 
-    bravais_lattice: BravaisLattice(Enum)
+    bravais_lattice: BravaisLattice(IntEnum)
         the 3D Bravais lattice for which the primitive cell is defined,
         i.e. not the symmetry group or type of the primitive cell itself
     """
@@ -46,7 +46,7 @@ class PrimitiveCell(object):
 
         Parameters
         ----------
-        p1, p2, p3: 3 x 3D vector
+        p1, p2, p3: 3 x float[3]
             primitive vectors
 
         Raises
