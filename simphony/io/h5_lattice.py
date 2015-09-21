@@ -29,14 +29,13 @@ class H5Lattice(ABCLattice):
             raise ValueError("Lattice file layout has an incompatible version")
 
         self._group = group
-        self._prim_cell = PrimitiveCell(group.lattice.attrs.prim_cell[0],
-                                        group.lattice.attrs.prim_cell[1],
-                                        group.lattice.attrs.prim_cell[2])
-        self._prim_cell._bravais_lattice = BravaisLattice(
-            group.lattice.attrs.bravais_lattice)
+        attrs = group.lattice.attrs
+        self._primitive_cell = PrimitiveCell(
+            attrs.primitive_cell[0], attrs.primitive_cell[1], attrs.primitive_cell[2],
+            BravaisLattice(attrs.bravais_lattice))
 
-        self._size = group.lattice.attrs.size
-        self._origin = group.lattice.attrs.origin
+        self._size = attrs.size
+        self._origin = attrs.origin
 
         self._table = IndexedDataContainerTable(group, 'lattice')
         self._data = IndexedDataContainerTable(group, 'data')
@@ -44,7 +43,7 @@ class H5Lattice(ABCLattice):
         self._items_count = {CUDSItem.NODE: lambda: self._table}
 
     @classmethod
-    def create_new(cls, group, pc, size, origin, record=None):
+    def create_new(cls, group, primitive_cell, size, origin, record=None):
         """ Create a new lattice in H5CUDS file.
 
         Parameters
@@ -52,7 +51,7 @@ class H5Lattice(ABCLattice):
         group : HDF5 group in PyTables file
             reference to a group (folder) in PyTables file where the tables
             for lattice and data will be located
-        pc : PrimitiveCell
+        primitive_cell : PrimitiveCell
             primitive cell specifying the 3D Bravais lattice
         size : int[3]
             number of lattice nodes (in the direction of each axis).
@@ -71,7 +70,8 @@ class H5Lattice(ABCLattice):
         for i in xrange(np.prod(size)):
             lattice.append(DataContainer())
 
-        lattice._table.attrs.prim_cell = [pc.p1, pc.p2, pc.p3]
+        pc = primitive_cell
+        lattice._table.attrs.primitive_cell = [pc.p1, pc.p2, pc.p3]
         lattice._table.attrs.bravais_lattice = pc.bravais_lattice
         lattice._table.attrs.size = size
         lattice._table.attrs.origin = origin
@@ -163,10 +163,6 @@ class H5Lattice(ABCLattice):
         except KeyError:
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
-
-    @property
-    def prim_cell(self):
-        return self._prim_cell
 
     @property
     def size(self):

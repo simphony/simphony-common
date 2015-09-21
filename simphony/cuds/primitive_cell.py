@@ -39,7 +39,7 @@ class PrimitiveCell(object):
         i.e. not the symmetry group or type of the primitive cell itself
     """
 
-    def __init__(self, p1, p2, p3):
+    def __init__(self, p1, p2, p3, bravais_lattice):
         """
         Configure an arbitrary primitive cell.
         The cell edges are represented with primitive vectors.
@@ -48,6 +48,8 @@ class PrimitiveCell(object):
         ----------
         p1, p2, p3: 3 x float[3]
             primitive vectors
+        bravais_lattice: BravaisLattice(IntEnum)
+            the 3D Bravais lattice for which the primitive cell is defined
 
         Raises
         ------
@@ -80,7 +82,7 @@ class PrimitiveCell(object):
             message = 'Cell volume must be non-zero'
             raise ValueError(message)
 
-        self._bravais_lattice = BravaisLattice.TRICLINIC
+        self._bravais_lattice = bravais_lattice
 
     @classmethod
     def for_cubic_lattice(cls, a):
@@ -105,9 +107,7 @@ class PrimitiveCell(object):
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, a, 0), (0, 0, a))
-        pc._bravais_lattice = BravaisLattice.CUBIC
-        return pc
+        return cls((a, 0, 0), (0, a, 0), (0, 0, a), BravaisLattice.CUBIC)
 
     @classmethod
     def for_body_centered_cubic_lattice(cls, a):
@@ -132,9 +132,8 @@ class PrimitiveCell(object):
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, a, 0), (a/2, a/2, a/2))
-        pc._bravais_lattice = BravaisLattice.BODY_CENTERED_CUBIC
-        return pc
+        return cls((a, 0, 0), (0, a, 0), (a/2, a/2, a/2),
+                   BravaisLattice.BODY_CENTERED_CUBIC)
 
     @classmethod
     def for_face_centered_cubic_lattice(cls, a):
@@ -159,9 +158,8 @@ class PrimitiveCell(object):
             message = 'The edge length must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((0, a/2, a/2), (a/2, 0, a/2), (a/2, a/2, 0))
-        pc._bravais_lattice = BravaisLattice.FACE_CENTERED_CUBIC
-        return pc
+        return cls((0, a/2, a/2), (a/2, 0, a/2), (a/2, a/2, 0),
+                   BravaisLattice.FACE_CENTERED_CUBIC)
 
     @classmethod
     def for_rhombohedral_lattice(cls, a, alpha):
@@ -195,9 +193,14 @@ class PrimitiveCell(object):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
 
-        pc = cls.for_triclinic_lattice(a, a, a, alpha, alpha, alpha)
-        pc._bravais_lattice = BravaisLattice.RHOMBOHEDRAL
-        return pc
+        cosa = np.cos(alpha)
+        sina = np.sin(alpha)
+
+        p1 = (a, 0, 0)
+        p2 = (a*cosa, a*sina, 0)
+        p3 = (a*cosa, a*(cosa-cosa**2) / sina,
+              a*np.sqrt(sina**2 - ((cosa-cosa**2) / sina)**2))
+        return cls(p1, p2, p3, BravaisLattice.RHOMBOHEDRAL)
 
     @classmethod
     def for_tetragonal_lattice(cls, a, c):
@@ -222,9 +225,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, a, 0), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.TETRAGONAL
-        return pc
+        return cls((a, 0, 0), (0, a, 0), (0, 0, c),
+                   BravaisLattice.TETRAGONAL)
 
     @classmethod
     def for_body_centered_tetragonal_lattice(cls, a, c):
@@ -249,9 +251,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, a, 0), (a/2, a/2, c/2))
-        pc._bravais_lattice = BravaisLattice.BODY_CENTERED_TETRAGONAL
-        return pc
+        return cls((a, 0, 0), (0, a, 0), (a/2, a/2, c/2),
+                   BravaisLattice.BODY_CENTERED_TETRAGONAL)
 
     @classmethod
     def for_hexagonal_lattice(cls, a, c):
@@ -276,9 +277,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (a/2, a*np.sqrt(3)/2, 0), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.HEXAGONAL
-        return pc
+        return cls((a, 0, 0), (a/2, a*np.sqrt(3)/2, 0), (0, 0, c),
+                   BravaisLattice.HEXAGONAL)
 
     @classmethod
     def for_orthorhombic_lattice(cls, a, b, c):
@@ -303,9 +303,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, b, 0), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.ORTHORHOMBIC
-        return pc
+        return cls((a, 0, 0), (0, b, 0), (0, 0, c),
+                   BravaisLattice.ORTHORHOMBIC)
 
     @classmethod
     def for_body_centered_orthorhombic_lattice(cls, a, b, c):
@@ -330,9 +329,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (0, b, 0), (a/2, b/2, c/2))
-        pc._bravais_lattice = BravaisLattice.BODY_CENTERED_ORTHORHOMBIC
-        return pc
+        return cls((a, 0, 0), (0, b, 0), (a/2, b/2, c/2),
+                   BravaisLattice.BODY_CENTERED_ORTHORHOMBIC)
 
     @classmethod
     def for_face_centered_orthorhombic_lattice(cls, a, b, c):
@@ -357,9 +355,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((0, b/2, c/2), (a/2, 0, c/2), (a/2, b/2, 0))
-        pc._bravais_lattice = BravaisLattice.FACE_CENTERED_ORTHORHOMBIC
-        return pc
+        return cls((0, b/2, c/2), (a/2, 0, c/2), (a/2, b/2, 0),
+                   BravaisLattice.FACE_CENTERED_ORTHORHOMBIC)
 
     @classmethod
     def for_base_centered_orthorhombic_lattice(cls, a, b, c):
@@ -384,9 +381,8 @@ class PrimitiveCell(object):
             message = 'The edge lengths must be strictly positive'
             raise ValueError(message)
 
-        pc = cls((a, 0, 0), (a/2, b/2, 0), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.BASE_CENTERED_ORTHORHOMBIC
-        return pc
+        return cls((a, 0, 0), (a/2, b/2, 0), (0, 0, c),
+                   BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
     @classmethod
     def for_monoclinic_lattice(cls, a, b, c, beta):
@@ -420,9 +416,8 @@ class PrimitiveCell(object):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
 
-        pc = cls((a*np.sin(beta), 0, a*np.cos(beta)), (0, b, 0), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.MONOCLINIC
-        return pc
+        return cls((a*np.sin(beta), 0, a*np.cos(beta)), (0, b, 0), (0, 0, c),
+                   BravaisLattice.MONOCLINIC)
 
     @classmethod
     def for_base_centered_monoclinic_lattice(cls, a, b, c, beta):
@@ -456,10 +451,9 @@ class PrimitiveCell(object):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
 
-        pc = cls((a*np.sin(beta), 0, a*np.cos(beta)),
-                 (a*np.sin(beta)/2, b/2, a*np.cos(beta)/2), (0, 0, c))
-        pc._bravais_lattice = BravaisLattice.BASE_CENTERED_MONOCLINIC
-        return pc
+        return cls((a*np.sin(beta), 0, a*np.cos(beta)),
+                   (a*np.sin(beta)/2, b/2, a*np.cos(beta)/2), (0, 0, c),
+                   BravaisLattice.BASE_CENTERED_MONOCLINIC)
 
     @classmethod
     def for_triclinic_lattice(cls, a, b, c, alpha, beta, gamma):
@@ -510,8 +504,7 @@ class PrimitiveCell(object):
         p2 = (b*cosg, b*sing, 0)
         p3 = (c*cosb, c*(cosa-cosb*cosg) / sing,
               c*np.sqrt(sinb**2 - ((cosa-cosb*cosg) / sing)**2))
-        pc = cls(p1, p2, p3)
-        return pc
+        return cls(p1, p2, p3, BravaisLattice.TRICLINIC)
 
     @property
     def bravais_lattice(self):

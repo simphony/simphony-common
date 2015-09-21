@@ -8,7 +8,7 @@ class ABCLattice(object):
     ----------
     name : str
         name of lattice
-    prim_cell : PrimitiveCell
+    primitive_cell : PrimitiveCell
         primitive cell specifying the 3D Bravais lattice
     size : int[3]
         lattice dimensions
@@ -64,8 +64,8 @@ class ABCLattice(object):
         """
 
     @property
-    def prim_cell(self):
-        return self._prim_cell
+    def primitive_cell(self):
+        return self._primitive_cell
 
     def get_coordinate(self, ind):
         """Get coordinate of the given index coordinate.
@@ -79,9 +79,9 @@ class ABCLattice(object):
         -------
         coordinates : float[3]
         """
-        p1 = self.prim_cell.p1
-        p2 = self.prim_cell.p2
-        p3 = self.prim_cell.p3
+        p1 = self.primitive_cell.p1
+        p2 = self.primitive_cell.p2
+        p3 = self.primitive_cell.p3
         return (self.origin[0] + ind[0]*p1[0] + ind[1]*p2[0] + ind[2]*p3[0],
                 self.origin[1] + ind[0]*p1[1] + ind[1]*p2[1] + ind[2]*p3[1],
                 self.origin[2] + ind[0]*p1[2] + ind[1]*p2[2] + ind[2]*p3[2])

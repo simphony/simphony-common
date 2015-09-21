@@ -42,14 +42,14 @@ def compare_lattice_datasets(lattice, reference, testcase=None):
     for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
         compare_lattice_nodes(l, r, testcase=self)
     compare_data_containers(lattice.data, reference.data, testcase=self)
-    self.assertEqual(lattice.prim_cell.bravais_lattice,
-                     reference.prim_cell.bravais_lattice)
-    numpy.testing.assert_array_equal(lattice.prim_cell.p1,
-                                     reference.prim_cell.p1)
-    numpy.testing.assert_array_equal(lattice.prim_cell.p2,
-                                     reference.prim_cell.p2)
-    numpy.testing.assert_array_equal(lattice.prim_cell.p3,
-                                     reference.prim_cell.p3)
+    self.assertEqual(lattice.primitive_cell.bravais_lattice,
+                     reference.primitive_cell.bravais_lattice)
+    numpy.testing.assert_array_equal(lattice.primitive_cell.p1,
+                                     reference.primitive_cell.p1)
+    numpy.testing.assert_array_equal(lattice.primitive_cell.p2,
+                                     reference.primitive_cell.p2)
+    numpy.testing.assert_array_equal(lattice.primitive_cell.p3,
+                                     reference.primitive_cell.p3)
     self.assertEqual(lattice.size, reference.size)
     numpy.testing.assert_array_equal(lattice.origin, reference.origin)
 

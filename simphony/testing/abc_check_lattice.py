@@ -21,14 +21,14 @@ class CheckLatticeContainer(object):
             DataContainer, partial(compare_data_containers, testcase=self))
         self.addTypeEqualityFunc(
             LatticeNode, partial(compare_lattice_nodes, testcase=self))
-        self.prim_cell = PrimitiveCell.for_cubic_lattice(0.2)
+        self.primitive_cell = PrimitiveCell.for_cubic_lattice(0.2)
         self.size = (5, 10, 15)
         self.origin = (-2.0, 0.0, 1.0)
         self.container = self.container_factory(
-            'my_name', self.prim_cell, self.size, self.origin)
+            'my_name', self.primitive_cell, self.size, self.origin)
 
     @abc.abstractmethod
-    def container_factory(self, name, prim_cell, size, origin):
+    def container_factory(self, name, primitive_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -41,7 +41,7 @@ class CheckLatticeContainer(object):
         container = self.container
 
         # check values
-        self.assertEqual(container.prim_cell.bravais_lattice,
+        self.assertEqual(container.primitive_cell.bravais_lattice,
                          BravaisLattice.CUBIC)
         self.assertEqual(container.name, 'my_name')
         assert_array_equal(container.size, self.size)
@@ -49,7 +49,7 @@ class CheckLatticeContainer(object):
 
         # check read-only
         with self.assertRaises(AttributeError):
-            container.prim_cell.bravais_lattice = BravaisLattice.CUBIC
+            container.primitive_cell.bravais_lattice = BravaisLattice.CUBIC
 
         with self.assertRaises(AttributeError):
             container.size = self.size
@@ -58,7 +58,7 @@ class CheckLatticeContainer(object):
             container.origin = self.origin
 
         with self.assertRaises(AttributeError):
-            container.prim_cell = self.prim_cell
+            container.primitive_cell = self.primitive_cell
 
     def test_container_name(self):
         # given/when
@@ -119,14 +119,14 @@ class CheckLatticeNodeOperations(object):
             DataContainer, partial(compare_data_containers, testcase=self))
         self.addTypeEqualityFunc(
             LatticeNode, partial(compare_lattice_nodes, testcase=self))
-        self.prim_cell = PrimitiveCell.for_cubic_lattice(0.2)
+        self.primitive_cell = PrimitiveCell.for_cubic_lattice(0.2)
         self.size = (5, 10, 15)
         self.origin = (-2.0, 0.0, 1.0)
         self.container = self.container_factory(
-            'my_name', self.prim_cell, self.size, self.origin)
+            'my_name', self.primitive_cell, self.size, self.origin)
 
     @abc.abstractmethod
-    def container_factory(self, name, prim_cell, size, origin):
+    def container_factory(self, name, primitive_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -268,7 +268,7 @@ class CheckLatticeNodeCoordinates(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def container_factory(self, name, prim_cell, size, origin):
+    def container_factory(self, name, primitive_cell, size, origin):
         """ Create and return a lattice.
         """
 
@@ -287,11 +287,12 @@ class CheckLatticeNodeCoordinates(object):
             'Lattice3', (0.2, 0.4, 0.9), (0.8, 0.4, 0.5), (5, 10, 15),
             (-2.0, 0.0, 1.0))
         container = self.container_factory(
-            default.name, default.prim_cell, default.size, default.origin)
+            default.name, default.primitive_cell, default.size,
+            default.origin)
 
-        p1 = default.prim_cell.p1
-        p2 = default.prim_cell.p2
-        p3 = default.prim_cell.p3
+        p1 = default.primitive_cell.p1
+        p2 = default.primitive_cell.p2
+        p3 = default.primitive_cell.p3
 
         x, y, z = numpy.meshgrid(range(
             default.size[0]), range(default.size[1]), range(default.size[2]))

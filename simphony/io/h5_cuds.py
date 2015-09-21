@@ -286,7 +286,7 @@ class H5CUDS(object):
 
         group = tables.Group(lattice_root, name=name, new=True)
         h5_lattice = H5Lattice.create_new(
-            group, lattice.prim_cell, lattice.size, lattice.origin)
+            group, lattice.primitive_cell, lattice.size, lattice.origin)
         h5_lattice.data = lattice.data
         h5_lattice.update_nodes(lattice.iter_nodes())
 

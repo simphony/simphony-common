@@ -2,7 +2,7 @@ import numpy as np
 from simphony.cuds.abc_lattice import ABCLattice
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
-from simphony.cuds.primitive_cell import PrimitiveCell as PrimCell
+from simphony.cuds.primitive_cell import PrimitiveCell
 
 
 class LatticeNode(object):
@@ -32,7 +32,7 @@ class Lattice(ABCLattice):
     ----------
     name : str
         name of lattice
-    prim_cell : PrimitiveCell
+    primitive_cell : PrimitiveCell
         primitive cell specifying the 3D Bravais lattice
     size : int[3]
         lattice dimensions
@@ -42,9 +42,9 @@ class Lattice(ABCLattice):
         high level CUBA data assigned to lattice
     """
 
-    def __init__(self, name, prim_cell, size, origin):
+    def __init__(self, name, primitive_cell, size, origin):
         self.name = name
-        self._prim_cell = prim_cell
+        self._primitive_cell = primitive_cell
         self._size = size[0], size[1], size[2]
         self._origin = np.array((origin[0], origin[1], origin[2]),
                                 dtype=np.float)
@@ -95,10 +95,10 @@ class Lattice(ABCLattice):
         Parameters
         ----------
         indices : iterable set of int[3], optional
-            When indices (i.e. node index coordinates) are provided, then nodes
-            are returned in the same order of the provided indices. If indices
-            is None, there is no restriction on the order the nodes that are
-            returned.
+            When indices (i.e. node index coordinates) are provided, then
+            nodes are returned in the same order of the provided indices.
+            If indices is None, there is no restriction on the order the
+            nodes that are returned.
 
         Returns
         -------
@@ -118,7 +118,8 @@ class Lattice(ABCLattice):
         Parameters
         ----------
         item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+            The CUDSItem enum of the type of the items to return
+            the count of.
 
         Returns
         -------
@@ -155,7 +156,7 @@ class Lattice(ABCLattice):
         self._data = DataContainer(value)
 
 
-def make_cubic_lattice(name, h, size, org=(0, 0, 0)):
+def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     """Create and return a 3D cubic lattice.
 
     Parameters
@@ -165,7 +166,7 @@ def make_cubic_lattice(name, h, size, org=(0, 0, 0)):
         lattice spacing
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -173,11 +174,11 @@ def make_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_cubic_lattice(h)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_cubic_lattice(h)
+    return Lattice(name, pc, size, origin)
 
 
-def make_body_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
+def make_body_centered_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     """Create and return a 3D body-centered cubic lattice.
 
     Parameters
@@ -187,7 +188,7 @@ def make_body_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
         lattice spacing
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -195,11 +196,11 @@ def make_body_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_body_centered_cubic_lattice(h)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_body_centered_cubic_lattice(h)
+    return Lattice(name, pc, size, origin)
 
 
-def make_face_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
+def make_face_centered_cubic_lattice(name, h, size, origin=(0, 0, 0)):
     """Create and return a 3D face-centered cubic lattice.
 
     Parameters
@@ -209,7 +210,7 @@ def make_face_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
         lattice spacing
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -217,11 +218,11 @@ def make_face_centered_cubic_lattice(name, h, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_face_centered_cubic_lattice(h)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_face_centered_cubic_lattice(h)
+    return Lattice(name, pc, size, origin)
 
 
-def make_rhombohedral_lattice(name, h, angle, size, org=(0, 0, 0)):
+def make_rhombohedral_lattice(name, h, angle, size, origin=(0, 0, 0)):
     """Create and return a 3D rhombohedral lattice.
 
     Parameters
@@ -233,7 +234,7 @@ def make_rhombohedral_lattice(name, h, angle, size, org=(0, 0, 0)):
         angle between the (conventional) unit cell edges (in radians)
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -241,11 +242,11 @@ def make_rhombohedral_lattice(name, h, angle, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_rhombohedral_lattice(h, angle)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_rhombohedral_lattice(h, angle)
+    return Lattice(name, pc, size, origin)
 
 
-def make_tetragonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
+def make_tetragonal_lattice(name, hxy, hz, size, origin=(0, 0, 0)):
     """Create and return a 3D tetragonal lattice.
 
     Parameters
@@ -257,7 +258,7 @@ def make_tetragonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
         lattice spacing in the z-direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -265,12 +266,12 @@ def make_tetragonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_tetragonal_lattice(hxy, hz)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_tetragonal_lattice(hxy, hz)
+    return Lattice(name, pc, size, origin)
 
 
 def make_body_centered_tetragonal_lattice(name, hxy, hz, size,
-                                          org=(0, 0, 0)):
+                                          origin=(0, 0, 0)):
     """Create and return a 3D body-centered tetragonal lattice.
 
     Parameters
@@ -282,7 +283,7 @@ def make_body_centered_tetragonal_lattice(name, hxy, hz, size,
         lattice spacing in the z-direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -290,11 +291,11 @@ def make_body_centered_tetragonal_lattice(name, hxy, hz, size,
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_body_centered_tetragonal_lattice(hxy, hz)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_body_centered_tetragonal_lattice(hxy, hz)
+    return Lattice(name, pc, size, origin)
 
 
-def make_hexagonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
+def make_hexagonal_lattice(name, hxy, hz, size, origin=(0, 0, 0)):
     """Create and return a 3D hexagonal lattice.
 
     Parameters
@@ -306,7 +307,7 @@ def make_hexagonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
         lattice spacing in the z-direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -314,11 +315,11 @@ def make_hexagonal_lattice(name, hxy, hz, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_hexagonal_lattice(hxy, hz)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_hexagonal_lattice(hxy, hz)
+    return Lattice(name, pc, size, origin)
 
 
-def make_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_orthorhombic_lattice(name, hs, size, origin=(0, 0, 0)):
     """Create and return a 3D orthorhombic lattice.
 
     Parameters
@@ -328,7 +329,7 @@ def make_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         lattice spacings in each axis direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -337,11 +338,12 @@ def make_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pc = PrimCell.for_orthorhombic_lattice(hs[0], hs[1], hs[2])
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_orthorhombic_lattice(hs[0], hs[1], hs[2])
+    return Lattice(name, pc, size, origin)
 
 
-def make_body_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_body_centered_orthorhombic_lattice(name, hs, size,
+                                            origin=(0, 0, 0)):
     """Create and return a 3D body-centered orthorhombic lattice.
 
     Parameters
@@ -351,7 +353,7 @@ def make_body_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         lattice spacings in each axis direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -360,11 +362,13 @@ def make_body_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pc = PrimCell.for_body_centered_orthorhombic_lattice(hs[0], hs[1], hs[2])
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_body_centered_orthorhombic_lattice(
+        hs[0], hs[1], hs[2])
+    return Lattice(name, pc, size, origin)
 
 
-def make_face_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_face_centered_orthorhombic_lattice(name, hs, size,
+                                            origin=(0, 0, 0)):
     """Create and return a 3D face-centered orthorhombic lattice.
 
     Parameters
@@ -374,7 +378,7 @@ def make_face_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         lattice spacings in each axis direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -383,11 +387,13 @@ def make_face_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pc = PrimCell.for_face_centered_orthorhombic_lattice(hs[0], hs[1], hs[2])
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_face_centered_orthorhombic_lattice(
+        hs[0], hs[1], hs[2])
+    return Lattice(name, pc, size, origin)
 
 
-def make_base_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
+def make_base_centered_orthorhombic_lattice(name, hs, size,
+                                            origin=(0, 0, 0)):
     """Create and return a 3D base-centered orthorhombic lattice.
 
     Parameters
@@ -397,7 +403,7 @@ def make_base_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         lattice spacings in each axis direction
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -406,11 +412,12 @@ def make_base_centered_orthorhombic_lattice(name, hs, size, org=(0, 0, 0)):
         A reference to a Lattice object.
 
     """
-    pc = PrimCell.for_base_centered_orthorhombic_lattice(hs[0], hs[1], hs[2])
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_base_centered_orthorhombic_lattice(
+        hs[0], hs[1], hs[2])
+    return Lattice(name, pc, size, origin)
 
 
-def make_monoclinic_lattice(name, hs, beta, size, org=(0, 0, 0)):
+def make_monoclinic_lattice(name, hs, beta, size, origin=(0, 0, 0)):
     """Create and return a 3D monoclinic lattice.
 
     Parameters
@@ -422,7 +429,7 @@ def make_monoclinic_lattice(name, hs, beta, size, org=(0, 0, 0)):
         angle between the (conventional) unit cell edges (in radians),
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -430,12 +437,12 @@ def make_monoclinic_lattice(name, hs, beta, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_monoclinic_lattice(hs[0], hs[1], hs[2], beta)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_monoclinic_lattice(hs[0], hs[1], hs[2], beta)
+    return Lattice(name, pc, size, origin)
 
 
 def make_base_centered_monoclinic_lattice(name, hs, beta, size,
-                                          org=(0, 0, 0)):
+                                          origin=(0, 0, 0)):
     """Create and return a 3D base-centered monoclinic lattice.
 
     Parameters
@@ -447,7 +454,7 @@ def make_base_centered_monoclinic_lattice(name, hs, beta, size,
         angle between the (conventional) unit cell edges (in radians),
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -455,12 +462,12 @@ def make_base_centered_monoclinic_lattice(name, hs, beta, size,
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_base_centered_monoclinic_lattice(hs[0], hs[1], hs[2],
-                                                       beta)
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_base_centered_monoclinic_lattice(
+        hs[0], hs[1], hs[2], beta)
+    return Lattice(name, pc, size, origin)
 
 
-def make_triclinic_lattice(name, hs, angles, size, org=(0, 0, 0)):
+def make_triclinic_lattice(name, hs, angles, size, origin=(0, 0, 0)):
     """Create and return a 3D triclinic lattice.
 
     Parameters
@@ -472,7 +479,7 @@ def make_triclinic_lattice(name, hs, angles, size, org=(0, 0, 0)):
         angles between the (conventional) unit cell edges (in radians)
     size : int[3]
         Number of lattice nodes in each axis direction.
-    org : float[3], default value = (0, 0, 0)
+    origin : float[3], default value = (0, 0, 0)
         lattice origin
 
     Returns
@@ -480,6 +487,6 @@ def make_triclinic_lattice(name, hs, angles, size, org=(0, 0, 0)):
     lattice : Lattice
         A reference to a Lattice object.
     """
-    pc = PrimCell.for_triclinic_lattice(hs[0], hs[1], hs[2],
-                                        angles[0], angles[1], angles[2])
-    return Lattice(name, pc, size, org)
+    pc = PrimitiveCell.for_triclinic_lattice(
+        hs[0], hs[1], hs[2], angles[0], angles[1], angles[2])
+    return Lattice(name, pc, size, origin)
