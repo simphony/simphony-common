@@ -45,7 +45,7 @@ class LatticeNodeTestCase(unittest.TestCase):
 
 
 class TestLatticeNodeOperations(CheckLatticeNodeOperations,
-    unittest.TestCase):
+                                unittest.TestCase):
 
     def container_factory(self, name, primitive_cell, size, origin):
         return Lattice(name, primitive_cell, size, origin)

@@ -31,8 +31,8 @@ class H5Lattice(ABCLattice):
         self._group = group
         attrs = group.lattice.attrs
         self._primitive_cell = PrimitiveCell(
-            attrs.primitive_cell[0], attrs.primitive_cell[1], attrs.primitive_cell[2],
-            BravaisLattice(attrs.bravais_lattice))
+            attrs.primitive_cell[0], attrs.primitive_cell[1],
+            attrs.primitive_cell[2], BravaisLattice(attrs.bravais_lattice))
 
         self._size = attrs.size
         self._origin = attrs.origin
