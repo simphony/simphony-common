@@ -55,8 +55,7 @@ class PrimitiveCell(object):
         ------
         ValueError
            if an edge length is not strictly positive,
-           if the edges are parallel to each other,
-           if the volume of the cell is zero
+           if the edges are parallel to each other
         """
         a = np.sqrt(np.dot(p1, p1))
         b = np.sqrt(np.dot(p2, p2))
@@ -77,11 +76,6 @@ class PrimitiveCell(object):
         self._p1 = p1
         self._p2 = p2
         self._p3 = p3
-
-        if np.isclose(self.volume, 0):
-            message = 'Cell volume must be non-zero'
-            raise ValueError(message)
-
         self._bravais_lattice = bravais_lattice
 
     @classmethod
@@ -490,7 +484,7 @@ class PrimitiveCell(object):
             message = 'Edges must not be parallel to each other'
             raise ValueError(message)
 
-        if np.any(np.isclose((a1 + a2, a1 + a3, a2 + a3), (a3, a2, a1))):
+        if np.any(np.less((a1 + a2, a1 + a3, a2 + a3), (a3, a2, a1))):
             message = 'Sum of any two angles must be larger than the third'
             raise ValueError(message)
 
