@@ -38,6 +38,8 @@ Pure Python implementation
 
 .. autosummary::
 
+   ~primitive_cell.PrimitiveCell
+   ~primitive_cell.BravaisLattice
    ~lattice.Lattice
    ~lattice.LatticeNode
    ~particles.Particles
@@ -53,11 +55,20 @@ Pure Python implementation
 
 .. autosummary::
 
-   ~lattice.make_hexagonal_lattice
-   ~lattice.make_square_lattice
-   ~lattice.make_rectangular_lattice
    ~lattice.make_cubic_lattice
-   ~lattice.make_orthorombicp_lattice
+   ~lattice.make_body_centered_cubic_lattice
+   ~lattice.make_face_centered_cubic_lattice
+   ~lattice.make_rhombohedral_lattice
+   ~lattice.make_tetragonal_lattice
+   ~lattice.make_body_centered_tetragonal_lattice
+   ~lattice.make_hexagonal_lattice
+   ~lattice.make_orthorhombic_lattice
+   ~lattice.make_body_centered_orthorhombic_lattice
+   ~lattice.make_face_centered_orthorhombic_lattice
+   ~lattice.make_base_centered_orthorhombic_lattice
+   ~lattice.make_monoclinic_lattice
+   ~lattice.make_base_centered_monoclinic_lattice
+   ~lattice.make_triclinic_lattice
 
 .. rubric:: Implementation
 

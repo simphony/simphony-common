@@ -8,7 +8,7 @@ from simphony.testing.utils import (
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Particles
 from simphony.cuds.mesh import Point, Mesh
-from simphony.cuds.lattice import Lattice
+from simphony.cuds.lattice import make_cubic_lattice
 
 
 class CheckEngine(object):
@@ -276,9 +276,7 @@ class LatticeEngineCheck(CheckEngine):
         """ Create and return a cuds object
 
         """
-        return Lattice(
-            name, 'cubic', (1.0, 1.0, 1.0),
-            (2, 3, 4), (0.0, 0.0, 0.0))
+        return make_cubic_lattice(name, 1.0, (2, 3, 4))
 
     def create_dataset_items(self):
         """ Create and return a list of items

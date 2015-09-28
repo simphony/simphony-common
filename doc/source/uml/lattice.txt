@@ -1,16 +1,22 @@
 @startuml
 abstract class ABCLattice {
   name: str
-  type: str
-  base_vect: float[3]
+  prim_cell: PrimitiveCell
   size: int[3]
   origin: float[3]
   data: DataContainer
   {abstract} get_node(index: int[3]) LatticeNode
   {abstract} update_nodes(nodes: iterable of LatticeNode)
   {abstract} iter_nodes(indices: iterable of int[3] {optional}): iterator of LatticeNode
-  {abstract} get_coordinate((index: int[3]): float[3]
+  get_coordinate((index: int[3]): float[3]
 
   {abstract} count_of(key: CUDSItem): integer
+}
+
+class PrimitiveCell {
+  p1: float[3]
+  p2: float[3]
+  p3: float[3]
+  bravais_lattice: int
 }
 @enduml

@@ -8,9 +8,9 @@ class H5Lattice as "H5Lattice(Group)" {
   lattice : Table = Nodes
   data : Table = ContainerData
   -- Node Attributes --
-  type: str
-  base_vect : float[3]
-  size : int[3]
+  prim_cell: array of float[3]
+  bravais_lattice: int
+  size: int[3]
   origin: float[3]
   cuds_version: int
 }
