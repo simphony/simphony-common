@@ -1,6 +1,16 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.2.1
+-------------
+
+* Added method to engine that returns list of available dataset names (#200)
+* Added use of appveyor for Windows testing (#188)
+* Update travis-ci setup to use the container-based runs (#186)
+* Fix test_add_multiple_particles_with_id so that it tests only supported CUBA (#202)
+* Minor spelling fixes in README (#204)
+* Use primitive cell in lattice definition and other lattice-related improvements (#205, #158, #157, #78)
+
 Release 0.2.0
 -------------
 
