@@ -15,8 +15,8 @@ Release 0.2.0
 Release 0.1.5
 -------------
 
-* Added hexagonal lattice type to latticle template tests (#160)
-* Feixed bug while getting coordinates of hexagonal lattices (#94)
+* Added hexagonal lattice type to lattice template tests (#160)
+* Fixed bug while getting coordinates of hexagonal lattices (#94)
 * Updated benchmark files to work with the current library version (#151)
 * Fixed bug with duplicated groups in CUDS containers (#148)
 * Fixed bug with duplicated tables in H5Mesh (#144)
@@ -25,16 +25,16 @@ Release 0.1.4
 -------------
 
 * Added docstrings for ABCParticles (#153)
-* Fixed mispelled strings in ABCModelEngine diagrams (#152)
+* Fixed misspelled strings in ABCModelEngine diagrams (#152)
 * Fixed lattice documentation to show that lattice attributes are always 3D (#150)
-* Updated Latticle size, origin and base_vectors so there are always 3D (#80)
+* Updated Lattice size, origin and base_vectors so there are always 3D (#80)
 * Updated PyTables related tests to be executed only when PyTables are present (#143)
 * ABCParticlesCheck now support tests using a subset of CUBA keys (#139)
 
 Release 0.1.3
 -------------
 
-* Added missing reference to the simhony framework in the documentation (#131)
+* Added missing reference to the SimPhoNy framework in the documentation (#131)
 * Added pseudo UML with HDF5 serialization layout (#124)
 * Added missing reference to numpy in the requirements (#118)
 * Added UML diagrams for the current CUDS api (#95)
@@ -61,7 +61,7 @@ Release 0.1.1
 * Updated module names for FileMesh and FileLattice (#88)
 * Corrected ABCLattice tests not setting the size attribute correctly(#79)
 * Corrected various documentation mistakes in Mesh and H5_mesh (#86)
-* ABCCheckParticles no longer requiere pytables (#101)
+* ABCCheckParticles no longer requires pytables (#101)
 
 Release 0.1.0
 -------------
@@ -80,4 +80,4 @@ Release 0.1.0
 * Renamed ABCParticleContainer to ABCParticles (#63)
 * Integrated DataContainer into FileParticleContainer (#13)
 * Moved CUBA info from the wiki to cuba.yml (#8)
-* Achieved consistent identification for parameters and attribures in all the entities (#20)
+* Achieved consistent identification for parameters and attributes in all the entities (#20)
