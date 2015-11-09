@@ -256,14 +256,13 @@ class Particles(ABCParticles):
 
         Parameters
         ----------
-        uid : uuid.UUID
-            the uid of the particle to be removed.
+        uids : iterable of uuid.UUID
+            the uids of the particles to be removed.
 
         Raises
         ------
         KeyError :
            If any particle doesn't exist.
-
 
         Examples
         --------

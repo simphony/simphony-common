@@ -166,7 +166,7 @@ class ABCParticles(object):
         Raises
         ------
         KeyError :
-           when the particle is not in the container.
+            when the particle is not in the container.
 
         Returns
         -------
@@ -187,7 +187,7 @@ class ABCParticles(object):
         Raises
         ------
         KeyError :
-           when the bond is not in the container.
+            when the bond is not in the container.
 
         Returns
         -------
@@ -205,14 +205,13 @@ class ABCParticles(object):
 
         Parameters
         ----------
-        uid : uuid.UUID
-            the uid of the particle to be removed.
+        uids : iterable of uuid.UUID
+            the uids of the particles to be removed.
 
         Raises
         ------
         KeyError :
-           If any particle doesn't exist.
-
+            If any particle doesn't exist.
 
         Examples
         --------
