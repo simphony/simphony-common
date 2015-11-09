@@ -289,8 +289,8 @@ class Particles(ABCParticles):
 
         Parameters
         ----------
-        uids : uuid.UUID
-            the uid of the bond to be removed.
+        uids : iterable of uuid.UUID
+            the uids of the bonds to be removed.
 
         Examples
         --------

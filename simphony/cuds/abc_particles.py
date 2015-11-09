@@ -232,8 +232,13 @@ class ABCParticles(object):
 
         Parameters
         ----------
-        uids : uuid.UUID
-            the uid of the bond to be removed.
+        uids : iterable of uuid.UUID
+            the uids of the bond to be removed.
+
+        Raises
+        ------
+        KeyError :
+            If any bond doesn't exist.
 
         Examples
         --------
