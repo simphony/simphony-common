@@ -152,8 +152,7 @@ class CheckEngine(object):
         # test iterating over all
         names = [
             ds.name for ds in engine.iter_datasets()]
-        self.assertEqual(len(names), len(ds_names))
-        self.assertEqual(set(names), set(ds_names))
+        self.assertItemsEqual(names, ds_names)
 
         # test iterating over a specific subset
         subset = ds_names[:3]
