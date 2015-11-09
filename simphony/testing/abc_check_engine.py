@@ -178,15 +178,17 @@ class CheckEngine(object):
             name = "test_" + str(i)
             engine.add_dataset(self.create_dataset(name=name))
 
+        datasets_and_names = [(ds, ds.name) for ds in engine.iter_datasets()]
+
         # delete each of the datasets
-        for ds in engine.iter_datasets():
-            engine.remove_dataset(ds.name)
+        for (dataset, name) in datasets_and_names:
+            engine.remove_dataset(name)
             # test that we can't get deleted datasets
             with self.assertRaises(ValueError):
-                engine.get_dataset(ds.name)
+                engine.get_dataset(name)
             # test that we can't use the deleted datasets
             with self.assertRaises(Exception):
-                self.compare_dataset(ds, ds)
+                self.compare_dataset(dataset, dataset)
 
     def test_delete_non_existing_dataset(self):
         engine = self.engine_factory()
