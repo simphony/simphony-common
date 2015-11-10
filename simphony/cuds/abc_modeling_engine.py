@@ -49,7 +49,7 @@ class ABCModelingEngine(object):  # pragma: no cover
 
     @abstractmethod
     def remove_dataset(self, name):
-        """ Remove a dataset from the internal
+        """ Remove a dataset from the engine
 
         Parameters
         ----------
