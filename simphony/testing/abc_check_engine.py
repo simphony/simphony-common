@@ -215,12 +215,11 @@ class CheckEngine(object):
         # we should be able to access using the new "bar" name
         ds_bar = engine.get_dataset("bar")
         self.assertEqual(ds_bar.name, "bar")
-        if self.number_datasets_used_in_testing < 2:
-            engine.remove_dataset("bar")
 
         # and we should be able to use the no-longer used
         # "foo" name when adding another dataset
-        ds = engine.add_dataset(self.create_dataset(name='foo'))
+        if self.number_datasets_used_in_testing > 1:
+            ds = engine.add_dataset(self.create_dataset(name='foo'))
 
 
 class ParticlesEngineCheck(CheckEngine):
