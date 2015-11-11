@@ -215,6 +215,7 @@ class CheckEngine(object):
         # we should be able to access using the new "bar" name
         ds_bar = engine.get_dataset("bar")
         self.assertEqual(ds_bar.name, "bar")
+        engine.remove_dataset("bar")
 
         # and we should be able to use the no-longer used
         # "foo" name when adding another dataset
