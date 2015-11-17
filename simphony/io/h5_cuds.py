@@ -35,8 +35,8 @@ class H5CUDS(object):
         return self._handle is not None and self._handle.isopen
 
     @classmethod
-    def open(cls, filename, mode="a", title=''):
-        """ Returns an opened SimPhoNy CUDS-hdf5 file
+    def open(cls, filename, mode="a", title='', filters=None):
+        """ Returns a SimPhony file and returns an opened CudsFile
 
         Parameters
         ----------
@@ -63,7 +63,8 @@ class H5CUDS(object):
             If the file has an incompatible version
 
         """
-        handle = tables.open_file(filename, mode, title=title)
+
+        handle = tables.open_file(filename, mode, title=title, filter=filters)
 
         if handle.list_nodes("/"):
             if not ("cuds_version" in handle.root._v_attrs and
