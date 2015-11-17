@@ -136,9 +136,8 @@ class CheckEngine(object):
             engine.add_dataset(self.create_dataset(name=name))
 
         # test that we are getting all the names
-        names = [
-            n for n in engine.get_dataset_names()]
-        self.assertEqual(names, ds_names)
+        names = engine.get_dataset_names()
+        self.assertItemsEqual(names, ds_names)
 
     def test_iter_dataset(self):
         engine = self.engine_factory()
