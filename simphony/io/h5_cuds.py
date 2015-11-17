@@ -62,7 +62,7 @@ class H5CUDS(object):
             default parameters are: complevel=1, complib="zlib" and
             fletcher32=True.
 
-        Raises              Raises
+        Raises
         ------
         ValueError :
             If the file has an incompatible version
