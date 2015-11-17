@@ -242,7 +242,7 @@ class ParticlesEngineCheck(CheckEngine):
         items = []
         for i in xrange(10):
             items.append(
-                Particle((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
+                Particle((1.1 * i, 2.2 * i, 3.3 * i), uid=uuid.uuid4()))
         return items
 
 
@@ -266,7 +266,7 @@ class MeshEngineCheck(CheckEngine):
         items = []
         for i in xrange(10):
             items.append(
-                Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
+                Point((1.1 * i, 2.2 * i, 3.3 * i), uid=uuid.uuid4()))
         return items
 
 
@@ -290,5 +290,5 @@ class LatticeEngineCheck(CheckEngine):
         items = []
         for i in xrange(10):
             items.append(
-                Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
+                Point((1.1 * i, 2.2 * i, 3.3 * i), uid=uuid.uuid4()))
         return items
