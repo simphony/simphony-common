@@ -57,6 +57,11 @@ class H5CUDS(object):
             Title attribute of root node (only applies to a file which
               is being created)
 
+        filters : tables.Filter
+            Compression options used in the HDF5 file. If none is selected
+            default parameters are: complevel=1, complib="zlib" and
+            fletcher32=True.
+
         Raises              Raises
         ------
         ValueError :
@@ -64,7 +69,19 @@ class H5CUDS(object):
 
         """
 
-        handle = tables.open_file(filename, mode, title=title, filter=filters)
+        if filters is None:
+            filters = tables.Filters(
+                complevel=1,
+                complib='zlib',
+                fletcher32=True
+            )
+
+        handle = tables.open_file(
+            filename,
+            mode,
+            title=title,
+            filters=filters
+        )
 
         if handle.list_nodes("/"):
             if not ("cuds_version" in handle.root._v_attrs
