@@ -94,7 +94,7 @@ class H5CUDS(object):
         Raises
         ------
         TypeError:
-            If the container type is not supported by the engine.
+            If the container type is not supported by the file.
         ValueError:
             If there is already a dataset with the given name.
 
@@ -120,7 +120,7 @@ class H5CUDS(object):
                 "The type of the container is not supported")
 
     def remove_dataset(self, name):
-        """ Remove a dataset from the engine
+        """ Remove a dataset from the file
 
         Parameters
         ----------
@@ -174,7 +174,7 @@ class H5CUDS(object):
                 'Container \'{n}\` does not exist'.format(n=name))
 
     def get_dataset_names(self):
-        """ Returns the names of the all the datasets in the engine workspace.
+        """ Returns the names of the all the datasets contained in the file.
 
         """
 
