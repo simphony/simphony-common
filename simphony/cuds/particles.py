@@ -162,7 +162,7 @@ class Particles(ABCParticles):
         >>> part1 = part_container.get_particle(uid1)
         >>> part2 = part_container.get_particle(uid2)
         >>> ... #do whatever you want with the particles
-        >>> part_container.update_particle([part1, part2])
+        >>> part_container.update_particles([part1, part2])
 
         """
         for particle in iterable:
@@ -274,9 +274,9 @@ class Particles(ABCParticles):
         >>> particle1 = particles.get_particle(uid1)
         >>> particle2 = particles.get_particle(uid2)
         >>> ...
-        >>> particles.remove_particle([part1.uid, part2.uid)
+        >>> particles.remove_particles([part1.uid, part2.uid)
         or directly
-        >>> particles.remove_particle([uid1, uid2])
+        >>> particles.remove_particles([uid1, uid2])
 
         """
         for uid in uids:
@@ -304,7 +304,7 @@ class Particles(ABCParticles):
         >>> ...
         >>> particles.remove_bonds([bond1.uid, bond2.uid])
         or
-        >>> particles.remove_bond([uid1, uid2])
+        >>> particles.remove_bonds([uid1, uid2])
 
         """
         for uid in uids:
@@ -346,13 +346,13 @@ class Particles(ABCParticles):
                 ...  #do stuff
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particle(particle)
+                part_container.update_particles([particle])
 
         >>> for particle in part_container.iter_particles():
                 ...  #do stuff; it will iterate over all the particles
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particle(particle)
+                part_container.update_particles([particle])
 
         """
         if uids is None:
