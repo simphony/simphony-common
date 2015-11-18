@@ -36,7 +36,7 @@ class H5CUDS(object):
 
     @classmethod
     def open(cls, filename, mode="a", title=''):
-        """ Returns a SimPhony file and returns an opened CudsFile
+        """ Returns an opened SimPhoNy CUDS-hdf5 file
 
         Parameters
         ----------
@@ -253,7 +253,6 @@ class H5CUDS(object):
         ----------
         H5Mesh
             The mesh newly added to the file.
-            See get_mesh for more information.
 
         """
         name = mesh.name
