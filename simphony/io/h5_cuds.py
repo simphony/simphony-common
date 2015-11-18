@@ -57,7 +57,7 @@ class H5CUDS(object):
             Title attribute of root node (only applies to a file which
               is being created)
 
-        Raises              Raises
+        Raises
         ------
         ValueError :
             If the file has an incompatible version
