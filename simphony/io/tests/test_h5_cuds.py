@@ -75,7 +75,7 @@ class TestH5CUDS(unittest.TestCase):
 
         # Store particle container along with its data
         with closing(H5CUDS.open(filename)) as handle:
-            pc = handle.add_dataset(original_pc)
+            handle.add_dataset(original_pc)
 
         # Reopen the file and check the data if it is still there
         with closing(H5CUDS.open(filename, 'r')) as handle:
