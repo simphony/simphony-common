@@ -97,8 +97,8 @@ class Lattice(ABCLattice):
         indices : iterable set of int[3], optional
             When indices (i.e. node index coordinates) are provided, then
             nodes are returned in the same order of the provided indices.
-            If indices is None, there is no restriction on the order the
-            nodes that are returned.
+            If indices is None, there is no restriction on the order of the
+            returned nodes.
 
         Returns
         -------
