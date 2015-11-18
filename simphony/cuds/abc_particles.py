@@ -260,7 +260,7 @@ class ABCParticles(object):
             sequence containing the uids of the particles that will be
             iterated. When the uids are provided, then the particles are
             returned in the same order the uids are returned by the iterable.
-            If uids is None, then all particles are returned by the interable
+            If uids is None, then all particles are returned by the iterable
             and there is no restriction on the order that they are returned.
 
         Yields
@@ -301,7 +301,7 @@ class ABCParticles(object):
             sequence containing the id's of the bond that will be iterated.
             When the uids are provided, then the bonds are returned in
             the same order the uids are returned by the iterable. If uids is
-            None, then all bonds are returned by the interable and there
+            None, then all bonds are returned by the iterable and there
             is no restriction on the order that they are returned.
 
         Yields

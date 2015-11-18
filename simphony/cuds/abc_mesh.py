@@ -278,7 +278,7 @@ class ABCMesh(object):
         uids : iterable of uuid.UUID  or None
             When the uids are provided, then the points are returned in the
             same order the uids are returned by the iterable. If uids is None,
-            then all points are returned by the interable and there is no
+            then all points are returned by the iterable and there is no
             restriction on the order that they are returned.
 
         Yields
@@ -296,7 +296,7 @@ class ABCMesh(object):
         uids : iterable of uuid.UUID  or None
             When the uids are provided, then the edges are returned in the same
             order the uids are returned by the iterable. If uids is None, then
-            all edges are returned by the interable and there is no restriction
+            all edges are returned by the iterable and there is no restriction
             on the order that they are returned.
 
         Yields
@@ -314,7 +314,7 @@ class ABCMesh(object):
         uids : iterable of uuid.UUID  or None
             When the uids are provided, then the faces are returned in the same
             order the uids are returned by the iterable. If uids is None, then
-            all faces are returned by the interable and there is no restriction
+            all faces are returned by the iterable and there is no restriction
             on the order that they are returned.
 
         Yields
@@ -332,7 +332,7 @@ class ABCMesh(object):
         uids : iterable of uuid.UUID  or None
             When the uids are provided, then the cells are returned in the same
             order the uids are returned by the iterable. If uids is None, then
-            all cells are returned by the interable and there is no restriction
+            all cells are returned by the iterable and there is no restriction
             on the order that they are returned.
 
         Yields
