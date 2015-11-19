@@ -11,9 +11,9 @@ Abstract CUDS interfaces
 
 .. autosummary::
 
-   ~abstractmesh.ABCMesh
-   ~abstractparticles.ABCParticles
-   ~abstractlattice.ABCLattice
+   ~abc_mesh.ABCMesh
+   ~abc_particles.ABCParticles
+   ~abc_lattice.ABCLattice
 
 .. rubric:: Description
 
