@@ -15,9 +15,10 @@ class CheckEngine(object):
 
     __metaclass__ = abc.ABCMeta
 
-    def setUp(self):
+    def setUp(self, number_datasets_used_in_testing):
         self.maxDiff = None
         self.items = self.create_dataset_items()
+        self.number_datasets_used_in_testing = number_datasets_used_in_testing
 
     @abc.abstractmethod
     def engine_factory(self):
@@ -129,22 +130,21 @@ class CheckEngine(object):
         # add a few empty datasets
         ds_names = []
 
-        for i in xrange(5):
+        for i in xrange(self.number_datasets_used_in_testing):
             name = "test_{}".format(i)
             ds_names.append(name)
             engine.add_dataset(self.create_dataset(name=name))
 
         # test that we are getting all the names
-        names = [
-            n for n in engine.get_dataset_names()]
-        self.assertEqual(names, ds_names)
+        names = engine.get_dataset_names()
+        self.assertItemsEqual(names, ds_names)
 
     def test_iter_dataset(self):
         engine = self.engine_factory()
         # add a few empty datasets
         ds_names = []
 
-        for i in xrange(5):
+        for i in xrange(self.number_datasets_used_in_testing):
             name = "test_{}".format(i)
             ds_names.append(name)
             engine.add_dataset(self.create_dataset(name=name))
@@ -155,7 +155,9 @@ class CheckEngine(object):
         self.assertItemsEqual(names, ds_names)
 
         # test iterating over a specific subset
-        subset = ds_names[:3]
+        subset_index = 3 if self.number_datasets_used_in_testing > 3 \
+            else self.number_datasets_used_in_testing
+        subset = ds_names[:subset_index]
         names = [
             ds.name for ds in engine.iter_datasets(subset)]
         self.assertEqual(names, subset)
@@ -173,7 +175,7 @@ class CheckEngine(object):
     def test_delete_dataset(self):
         engine = self.engine_factory()
         # add a few empty datasets
-        for i in xrange(5):
+        for i in xrange(self.number_datasets_used_in_testing):
             name = "test_" + str(i)
             engine.add_dataset(self.create_dataset(name=name))
 
@@ -215,13 +217,14 @@ class CheckEngine(object):
 
         # and we should be able to use the no-longer used
         # "foo" name when adding another dataset
-        ds = engine.add_dataset(self.create_dataset(name='foo'))
+        if self.number_datasets_used_in_testing > 1:
+            ds = engine.add_dataset(self.create_dataset(name='foo'))
 
 
 class ParticlesEngineCheck(CheckEngine):
 
-    def setUp(self):
-        CheckEngine.setUp(self)
+    def setUp(self, number_datasets_used_in_testing=5):
+        CheckEngine.setUp(self, number_datasets_used_in_testing)
 
     def compare_dataset(self, dataset, reference):
         compare_particles_datasets(dataset, reference, self)
@@ -244,8 +247,8 @@ class ParticlesEngineCheck(CheckEngine):
 
 class MeshEngineCheck(CheckEngine):
 
-    def setUp(self):
-        CheckEngine.setUp(self)
+    def setUp(self, number_datasets_used_in_testing=5):
+        CheckEngine.setUp(self, number_datasets_used_in_testing)
 
     def compare_dataset(self, dataset, reference):
         compare_mesh_datasets(dataset, reference, self)
@@ -268,8 +271,8 @@ class MeshEngineCheck(CheckEngine):
 
 class LatticeEngineCheck(CheckEngine):
 
-    def setUp(self):
-        CheckEngine.setUp(self)
+    def setUp(self, number_datasets_used_in_testing=5):
+        CheckEngine.setUp(self, number_datasets_used_in_testing)
 
     def compare_dataset(self, dataset, reference):
         compare_lattice_datasets(dataset, reference, self)

@@ -66,8 +66,8 @@ class H5CUDS(object):
         handle = tables.open_file(filename, mode, title=title)
 
         if handle.list_nodes("/"):
-            if not ("cuds_version" in handle.root._v_attrs
-                    and handle.root._v_attrs.cuds_version == H5_FILE_VERSION):
+            if not ("cuds_version" in handle.root._v_attrs and
+                    handle.root._v_attrs.cuds_version == H5_FILE_VERSION):
                 handle.close()
                 raise ValueError("File version is incompatible")
         else:
@@ -174,7 +174,7 @@ class H5CUDS(object):
                 'Container \'{n}\` does not exist'.format(n=name))
 
     def get_dataset_names(self):
-        """ Returns the names of the all the datasets contained in the file.
+        """ Returns a list of the datasets' names contained in the file.
 
         """
 
@@ -184,8 +184,7 @@ class H5CUDS(object):
 
         iter_list = itertools.chain(ip, im, il)
 
-        for i in iter_list:
-            yield i.name
+        return [i.name for i in iter_list]
 
     def iter_datasets(self, names=None):
         """ Returns an iterator over a subset or all of the containers.

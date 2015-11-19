@@ -43,8 +43,7 @@ To support the HDF5 based native IO:
 
 To support the documentation built you need the following packages:
 
-- sphinx >= 1.2.3
-- sphinxcontrib-napoleon >= 0.2.10
+- sphinx >= 1.3.1
 - mock
 
 .. note::
