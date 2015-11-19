@@ -12,6 +12,15 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import sphinx.environment
+from docutils.utils import get_source_line
+
+def _warn_node(self, msg, node):
+    if not msg.startswith('nonlocal image URI found:'):
+        self._warnfunc(msg, '%s:%s' % get_source_line(node))
+
+
+sphinx.environment.BuildEnvironment.warn_node = _warn_node
 
 def mock_modules():
     import sys
