@@ -52,6 +52,16 @@ class TestH5CUDS(unittest.TestCase):
         with closing(H5CUDS.open(filename, 'r')) as handle:
             self.assertTrue(handle.valid())
 
+    def test_open_with_compression_off(self):
+        filters = tables.Filters(complevel=0)
+        filename = os.path.join(self.temp_dir, 'test.cuds')
+        with closing(H5CUDS.open(filename, 'w', filters=filters)) as handle:
+            self.assertTrue(handle.valid())
+        with closing(H5CUDS.open(filename, 'r', filters=filters)) as handle:
+            self.assertTrue(handle.valid())
+        with closing(H5CUDS.open(filename, 'a', filters=filters)) as handle:
+            self.assertTrue(handle.valid())
+
     def test_init_with_non_file(self):
         with self.assertRaises(Exception):
             H5CUDS(None)
