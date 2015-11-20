@@ -36,7 +36,7 @@ class H5CUDS(object):
 
     @classmethod
     def open(cls, filename, mode="a", title=''):
-        """ Returns a SimPhony file and returns an opened CudsFile
+        """ Returns an opened SimPhoNy CUDS-hdf5 file
 
         Parameters
         ----------
@@ -57,7 +57,7 @@ class H5CUDS(object):
             Title attribute of root node (only applies to a file which
               is being created)
 
-        Raises              Raises
+        Raises
         ------
         ValueError :
             If the file has an incompatible version
@@ -94,7 +94,7 @@ class H5CUDS(object):
         Raises
         ------
         TypeError:
-            If the container type is not supported by the engine.
+            If the container type is not supported by the file.
         ValueError:
             If there is already a dataset with the given name.
 
@@ -120,7 +120,7 @@ class H5CUDS(object):
                 "The type of the container is not supported")
 
     def remove_dataset(self, name):
-        """ Remove a dataset from the engine
+        """ Remove a dataset from the file
 
         Parameters
         ----------
@@ -174,7 +174,7 @@ class H5CUDS(object):
                 'Container \'{n}\` does not exist'.format(n=name))
 
     def get_dataset_names(self):
-        """ Returns a list with the datasets' names in the engine workspace.
+        """ Returns a list of the datasets' names contained in the file.
 
         """
 
@@ -252,7 +252,6 @@ class H5CUDS(object):
         ----------
         H5Mesh
             The mesh newly added to the file.
-            See get_mesh for more information.
 
         """
         name = mesh.name

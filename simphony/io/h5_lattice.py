@@ -90,7 +90,7 @@ class H5Lattice(ABCLattice):
 
         Returns
         -------
-        A reference to a LatticeNode object
+        node : LatticeNode
 
         """
         try:

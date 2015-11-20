@@ -162,7 +162,7 @@ class Particles(ABCParticles):
         >>> part1 = part_container.get_particle(uid1)
         >>> part2 = part_container.get_particle(uid2)
         >>> ... #do whatever you want with the particles
-        >>> part_container.update_particle([part1, part2])
+        >>> part_container.update_particles([part1, part2])
 
         """
         for particle in iterable:
@@ -273,9 +273,9 @@ class Particles(ABCParticles):
         >>> particle1 = particles.get_particle(uid1)
         >>> particle2 = particles.get_particle(uid2)
         >>> ...
-        >>> particles.remove_particle([part1.uid, part2.uid)
+        >>> particles.remove_particles([part1.uid, part2.uid)
         or directly
-        >>> particles.remove_particle([uid1, uid2])
+        >>> particles.remove_particles([uid1, uid2])
 
         """
         for uid in uids:
@@ -303,7 +303,7 @@ class Particles(ABCParticles):
         >>> ...
         >>> particles.remove_bonds([bond1.uid, bond2.uid])
         or
-        >>> particles.remove_bond([uid1, uid2])
+        >>> particles.remove_bonds([uid1, uid2])
 
         """
         for uid in uids:
@@ -322,7 +322,7 @@ class Particles(ABCParticles):
             sequence containing the uids of the particles that will be
             iterated. When the uids are provided, then the particles are
             returned in the same order the uids are returned by the iterable.
-            If uids is None, then all particles are returned by the interable
+            If uids is None, then all particles are returned by the iterable
             and there is no restriction on the order that they are returned.
 
         Yields
@@ -345,13 +345,13 @@ class Particles(ABCParticles):
                 ...  #do stuff
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particle(particle)
+                part_container.update_particles([particle])
 
         >>> for particle in part_container.iter_particles():
                 ...  #do stuff; it will iterate over all the particles
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particle(particle)
+                part_container.update_particles([particle])
 
         """
         if uids is None:
@@ -375,7 +375,7 @@ class Particles(ABCParticles):
             sequence containing the id's of the bond that will be iterated.
             When the uids are provided, then the bonds are returned in
             the same order the uids are returned by the iterable. If uids is
-            None, then all bonds are returned by the interable and there
+            None, then all bonds are returned by the iterable and there
             is no restriction on the order that they are returned.
 
         Yields
