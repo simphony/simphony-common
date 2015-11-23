@@ -58,7 +58,7 @@ class H5CUDS(object):
               is being created)
 
         filters : tables.Filter
-            Compression options used in the HDF5 file. If none is selected
+            Filter options used in the HDF5 file. If none is selected
             default parameters are: complevel=1, complib="zlib" and
             fletcher32=True. This only applies to newly created files.
 
