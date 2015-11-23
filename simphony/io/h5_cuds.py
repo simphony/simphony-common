@@ -35,8 +35,8 @@ class H5CUDS(object):
         return self._handle is not None and self._handle.isopen
 
     @classmethod
-    def open(cls, filename, mode="a", title=''):
-        """ Returns an opened SimPhoNy CUDS-hdf5 file
+    def open(cls, filename, mode="a", title='', filters=None):
+        """ Returns a SimPhony file and returns an opened CudsFile
 
         Parameters
         ----------
@@ -57,13 +57,31 @@ class H5CUDS(object):
             Title attribute of root node (only applies to a file which
               is being created)
 
+        filters : tables.Filter
+            Filter options used in the HDF5 file. If none is selected
+            default parameters are: complevel=1, complib="zlib" and
+            fletcher32=True. This only applies to newly created files.
+
         Raises
         ------
         ValueError :
             If the file has an incompatible version
 
         """
-        handle = tables.open_file(filename, mode, title=title)
+
+        if filters is None:
+            filters = tables.Filters(
+                complevel=1,
+                complib='zlib',
+                fletcher32=True
+            )
+
+        handle = tables.open_file(
+            filename,
+            mode,
+            title=title,
+            filters=filters
+        )
 
         if handle.list_nodes("/"):
             if not ("cuds_version" in handle.root._v_attrs and
