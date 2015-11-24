@@ -36,7 +36,7 @@ class H5CUDS(object):
 
     @classmethod
     def open(cls, filename, mode="a", title='', filters=None):
-        """ Returns a SimPhony file and returns an opened CudsFile
+        """ Returns an opened SimPhoNy CUDS-hdf5 file
 
         Parameters
         ----------
