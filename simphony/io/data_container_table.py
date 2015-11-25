@@ -174,6 +174,10 @@ class DataContainerTable(MutableMapping):
             if key in positions:
                 data[positions[key]] = value[key]
                 mask[positions[key]] = True
+
+                if key == CUBA.MATERIAL:
+                    # TODO rework how uuid type is being handled
+                    data[positions[key]] = value[key].hex
         row['mask'] = mask
         row['data'] = tuple(data)
 
@@ -184,6 +188,12 @@ class DataContainerTable(MutableMapping):
         cuba = self._position_to_cuba
         mask = row['mask']
         data = row['data']
-        return DataContainer({
+        data = DataContainer({
             cuba[index]: data[index]
             for index, valid in enumerate(mask) if valid})
+
+        # TODO incorporate info on which CUBA needs to be converted
+        if CUBA.MATERIAL in data:
+            data[CUBA.MATERIAL] = uuid.UUID(hex=data[CUBA.MATERIAL],
+                                            version=4)
+        return data

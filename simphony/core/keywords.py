@@ -554,4 +554,12 @@ KEYWORDS = {
         number=67,
         shape=[1],
         dtype=numpy.float64),
+    'MATERIAL': Keyword(
+        name='Material',
+        description='Material',  # noqa
+        domain=['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS'],
+        key='MATERIAL',
+        number=68,
+        shape=[1],
+        dtype='uuid')
 }
