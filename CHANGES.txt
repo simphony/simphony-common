@@ -1,6 +1,15 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.2.2
+-------------
+
+* Extended test engine or single-dataset engines (#221)
+* Solve problem while iterating datasets in test_delete_dataset and test_iter_dataset (#219)
+* Changed get_dataset_names so it is consistent with the documentation (#218)
+* Enabled HDF5 compression by default and extended API so it can be turned on/off (#215)
+* Fixed Doc warnings when building docs
+
 Release 0.2.1
 -------------
 
