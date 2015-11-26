@@ -113,6 +113,13 @@ def compare_data_containers(data, reference, msg=None, testcase=None):
             verbose=False)
 
 
+def compare_material(material, reference, msg=None, testcase=None):
+    self = testcase
+    self.assertEqual(material.uid, reference.uid)
+    self.assertEqual(material.description, reference.description)
+    compare_data_containers(material.data, reference.data, testcase=testcase)
+
+
 def create_particles(n=10, restrict=None):
     particle_list = []
     for i in xrange(n):

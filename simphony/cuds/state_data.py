@@ -1,4 +1,4 @@
-from simlammps.material import Material
+from simphony.cuds.material import Material
 
 
 class StateData(object):
@@ -26,7 +26,7 @@ class StateData(object):
 
         """
         try:
-            self._materials[material.uid] = material
+            self._materials[material.uid] = Material.from_material(material)
         except KeyError:
             raise ValueError
 
