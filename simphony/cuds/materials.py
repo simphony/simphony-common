@@ -1,11 +1,10 @@
 from simphony.cuds.material import Material
 
 
-class StateData(object):
-    """A class that represents the state data.
+class Materials(object):
+    """A class that contains materials.
 
-    Class describes the state data. It currently contains
-    the materials in the state data.
+    Class manages the materials.
 
     """
     def __init__(self, uid=None, data=None, description=""):
