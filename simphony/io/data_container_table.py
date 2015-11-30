@@ -5,6 +5,8 @@ import numpy
 import tables
 
 from simphony.io.data_container_description import Record
+from simphony.io.data_conversion import (convert_from_file_type,
+                                         convert_to_file_type)
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
@@ -172,12 +174,9 @@ class DataContainerTable(MutableMapping):
         data = list(row['data'])
         for key in value:
             if key in positions:
-                data[positions[key]] = value[key]
+                data[positions[key]] = convert_to_file_type(value[key], key)
                 mask[positions[key]] = True
 
-                if key == CUBA.MATERIAL:
-                    # TODO rework how uuid type is being handled
-                    data[positions[key]] = value[key].hex
         row['mask'] = mask
         row['data'] = tuple(data)
 
@@ -188,12 +187,6 @@ class DataContainerTable(MutableMapping):
         cuba = self._position_to_cuba
         mask = row['mask']
         data = row['data']
-        data = DataContainer({
-            cuba[index]: data[index]
+        return DataContainer({
+            cuba[index]: convert_from_file_type(data[index], cuba[index])
             for index, valid in enumerate(mask) if valid})
-
-        # TODO incorporate info on which CUBA needs to be converted
-        if CUBA.MATERIAL in data:
-            data[CUBA.MATERIAL] = uuid.UUID(hex=data[CUBA.MATERIAL],
-                                            version=4)
-        return data

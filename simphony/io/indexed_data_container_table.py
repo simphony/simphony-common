@@ -1,9 +1,10 @@
 from collections import Sequence
 
 import numpy
-import uuid
 
 from simphony.io.data_container_description import NoUIDRecord
+from simphony.io.data_conversion import (convert_from_file_type,
+                                         convert_to_file_type)
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
@@ -128,12 +129,8 @@ class IndexedDataContainerTable(Sequence):
         data = list(row['data'])
         for key in value:
             if key in positions:
-                data[positions[key]] = value[key]
+                data[positions[key]] = convert_to_file_type(value[key], key)
                 mask[positions[key]] = True
-
-                if key == CUBA.MATERIAL:
-                    # TODO rework how uuid type is being handled
-                    data[positions[key]] = value[key].hex
 
         row['mask'] = mask
         row['data'] = tuple(data)
@@ -149,15 +146,12 @@ class IndexedDataContainerTable(Sequence):
         for key in value:
             if key in positions:
                 position = positions[key]
-                if key == CUBA.MATERIAL:
-                    # TODO rework how uuid type is being handled
-                    data[position] = value[key].hex
                 # special case array valued cuba keys
                 # see numpy issue https://github.com/numpy/numpy/issues/3126
-                elif numpy.isscalar(data[position]):
-                    data[position] = value[key]
+                if numpy.isscalar(data[position]):
+                    data[position] = convert_to_file_type(value[key], key)
                 else:
-                    data[position][:] = value[key]
+                    data[position][:] = convert_from_file_type(value[key], key)
                 mask[position] = True
         return rec_array
 
@@ -168,12 +162,6 @@ class IndexedDataContainerTable(Sequence):
         cuba = self._position_to_cuba
         mask = row['mask']
         data = row['data']
-        data = DataContainer({
-            cuba[index]: data[index]
+        return DataContainer({
+            cuba[index]: convert_from_file_type(data[index], cuba[index])
             for index, valid in enumerate(mask) if valid})
-
-        # TODO incoperate info on which CUBA needs to be converted
-        if CUBA.MATERIAL in data:
-            data[CUBA.MATERIAL] = uuid.UUID(hex=data[CUBA.MATERIAL],
-                                            version=4)
-        return data

@@ -561,5 +561,5 @@ KEYWORDS = {
         key='MATERIAL',
         number=68,
         shape=[1],
-        dtype='uuid')
+        dtype='uuid'),
 }
