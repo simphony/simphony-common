@@ -7,7 +7,7 @@ from simphony.core.cuba import CUBA
 def convert_to_file_type(value, cuba):
     """ Covert value to type to be stored in file.
 
-    This method can be used to convert a CUBA value to a
+    This method is used to convert a CUBA value to a
     type suitable for storage.
 
     Parameters
@@ -32,7 +32,7 @@ def convert_to_file_type(value, cuba):
 def convert_from_file_type(file_value, cuba):
     """ Converts value from a value stored in file
 
-    This method can be used to convert a value from a type suitable for
+    This method is used to convert a value from a type suitable for
     storage back to the type given in its CUBA definition.
 
     Parameters
