@@ -19,9 +19,9 @@ Modelling engine
 
   **Figure. 1:** UML description of a CUDS modelling engine.
 
-The CUDS engine supports operations to add, get and remove CUDS
-containers from the internal memory of the engine wrapper to setup
-the SD state of the simulations.
+The CUDS engine (:class:`~.ABCModelingEngine`) supports operations to add,
+get and remove CUDS containers from the internal memory of the engine wrapper
+to setup the SD state of the simulations.
 
 When a CUDS container is added the CUDS modelling engine will copy
 into internal memory only the ``uid`` mapping and the CUBA information
