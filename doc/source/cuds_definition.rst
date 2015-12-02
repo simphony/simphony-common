@@ -3,8 +3,8 @@ CUDS Data Structures
 
 The Common Unified Data Structures (CUDS) define the expected
 interface for the modelling engine wrappers, the visualisation api the
-top level CUDS containers (i.e. Mesh, Lattice and Particles) and the
-low level CUDS components (e.g Point, Bond, LatticeNode)
+top-level CUDS containers (i.e. Mesh, Lattice and Particles) and the
+low-level CUDS components (e.g Point, Bond, LatticeNode)
 
 .. note::
 
@@ -75,7 +75,7 @@ CUDS Items
 
    **Figure 3:** UML diagram of the CUDS items and their relations.
 
-Low level items are smallest objects that can hold CUBA information in
+Low-level items are the smallest objects that can hold CUBA information in
 SimPhoNy simulations. Each CUDS container supports a specific set of
 these types as presented in **Fig. 2**.
 

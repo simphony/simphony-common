@@ -8,7 +8,7 @@ contributing python modules that contain engine and visualisation components:
   classes that implement the :class:`ABCModelingEngine` interface.
 
 - ``simphony.visualisation`` -- A python module that provides a simple
-  function to show (visualise the high level CUDS containers)
+  function to show (visualise the high-level CUDS containers)
 
 
 To declare that a package contains a visualisation or engine module
