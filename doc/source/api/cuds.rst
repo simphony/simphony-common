@@ -5,15 +5,17 @@ CUDS
 Abstract CUDS interfaces
 ------------------------
 
-.. rubric:: Containers
+.. rubric:: Engine and Containers
 
 .. currentmodule:: simphony.cuds
 
 .. autosummary::
 
+   ~abc_modeling_engine.ABCModelingEngine
    ~abc_mesh.ABCMesh
    ~abc_particles.ABCParticles
    ~abc_lattice.ABCLattice
+
 
 .. rubric:: Description
 
@@ -26,6 +28,10 @@ Abstract CUDS interfaces
    :undoc-members:
 
 .. automodule:: simphony.cuds.abc_lattice
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.abc_modeling_engine
    :members:
    :undoc-members:
 
