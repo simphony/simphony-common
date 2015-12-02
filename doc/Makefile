@@ -181,4 +181,4 @@ uml:
 	java -jar plantuml.jar "source/uml/" "source/images"
 	mv source/uml/*.png source/images
 	@echo
-	@echo "Coversion finished the uml files are in source/images."
+	@echo "Cocversion finished the uml files are in source/images."
