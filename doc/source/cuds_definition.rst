@@ -89,3 +89,14 @@ Core items
 The CUBA attribute container part of the SimPhoNy core. A dictionary
 like object maps :class:`~.CUBA` enum keys to they values. In its
 native python implementation it can support all CUBA attributes.
+
+Materials
+----------
+
+.. figure:: ./images/material_materials.png
+
+   **Figure 4:** UML diagram of Materials and Material.
+
+In the SimPhoNy modeling framework, :class:`~.Materials` and :class:`~.Material`
+are used to describe materials and to define common material properties. Each
+low-level  (e.g. Point, Particle) can be of a certain material.

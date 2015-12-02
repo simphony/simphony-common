@@ -1,0 +1,9 @@
+@startuml
+class Material {
+   uid: uuid.UUID
+   description: str
+   data: DataContainer
+   -- classmethods --
+   from_material(material: Material): Material {copy}
+}
+@enduml
