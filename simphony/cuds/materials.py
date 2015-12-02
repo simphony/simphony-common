@@ -21,7 +21,7 @@ class Materials(object):
         Raises
         ------
         ValueError:
-            If a material with the same uid already already exists in the SD
+            If a material with the same uid already exists
 
         """
         try:
@@ -56,7 +56,7 @@ class Materials(object):
         Raises
         ------
         ValueError:
-            If the SD does not contain a material with this uid
+            If a material with this uid does not exist
 
         """
         self._materials[material.uid] = Material.from_material(material)

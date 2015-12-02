@@ -13,7 +13,7 @@ class Material(object):
     description : str
         textual description of the material
     uid : uuid.UUID
-        the id of the material.
+        the id of the material. If None, then it is generated
     data : DataContainer
         data associated with this material
 
