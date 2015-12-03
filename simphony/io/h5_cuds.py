@@ -1,6 +1,8 @@
 import tables
 import itertools
 
+from simphony.core.cuds_item import CUDSItem
+from simphony.core.data_container import DataContainer
 from simphony.cuds import ABCParticles, ABCMesh, ABCLattice
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
@@ -91,7 +93,7 @@ class H5CUDS(object):
         container : {ABCMesh, ABCParticles, ABCLattice}
             The CUDS container to be added.
         cuba_keys : dict of CUDSItems (optional)
-            Dictionary of CUDSItems with their related CUBA keys that
+            Dictionary of CUDSItems with lists of CUBA keys that
             are added to the H5CUDS container. All keys in the container
             are stored by default
 
