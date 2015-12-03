@@ -83,13 +83,17 @@ class H5CUDS(object):
         """
         self._handle.close()
 
-    def add_dataset(self, container):
+    def add_dataset(self, container, cuba_keys=None):
         """Add a CUDS container
 
         Parameters
         ----------
         container : {ABCMesh, ABCParticles, ABCLattice}
             The CUDS container to be added.
+        cuba_keys : dict of CUDSItems (optional)
+            Dictionary of CUDSItems with their related CUBA keys that
+            are added to the H5CUDS container. All keys in the container
+            are stored by default
 
         Raises
         ------
@@ -110,11 +114,11 @@ class H5CUDS(object):
             raise ValueError(message.format('Lattice', name))
 
         if isinstance(container, ABCParticles):
-            self._add_particles(container)
+            self._add_particles(container, cuba_keys)
         elif isinstance(container, ABCMesh):
-            self._add_mesh(container)
+            self._add_mesh(container, cuba_keys)
         elif isinstance(container, ABCLattice):
-            self._add_lattice(container)
+            self._add_lattice(container, cuba_keys)
         else:
             raise TypeError(
                 "The type of the container is not supported")
@@ -214,13 +218,16 @@ class H5CUDS(object):
     def _get_child_names(self, node):
         return [n._v_name for n in node._f_iter_nodes()]
 
-    def _add_particles(self, particles):
+    def _add_particles(self, particles, cuba_keys):
         """Add particle container to the file.
 
         Parameters
         ----------
         particles : ABCParticles
             Particle container to be added.
+        cuba_keys : dict
+            Dictionary of CUDSItems with their related CUBA keys that
+            are added to the H5CUDS container.
 
         Returns
         -------
@@ -234,19 +241,34 @@ class H5CUDS(object):
         group = tables.Group(particles_root, name=name, new=True)
         h5_particles = H5Particles(group)
         h5_particles.data = particles.data
-        h5_particles.add_particles(particles.iter_particles())
-        h5_particles.add_bonds(particles.iter_bonds())
 
-    def _add_mesh(self, mesh):
+        if cuba_keys is not None:
+            for item in particles.iter_particles():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.PARTICLE]})
+                h5_particles.add_particles([item])
+
+            for item in particles.iter_bonds():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.BOND]})
+                h5_particles.add_bonds([item])
+        else:
+            h5_particles.add_particles(particles.iter_particles())
+            h5_particles.add_bonds(particles.iter_bonds())
+
+    def _add_mesh(self, mesh, cuba_keys):
         """Add a mesh to the file.
 
         Parameters
         ----------
-        name : str
-            name of the mesh
         mesh_container : ABCMesh, optional
             mesh to be added. If none is give,
             then an empty mesh is added.
+        cuba_keys : dict
+            Dictionary of CUDSItems with their related CUBA keys that
+            are added to the H5CUDS container.
 
         Returns
         ----------
@@ -260,18 +282,47 @@ class H5CUDS(object):
         group = tables.Group(mesh_root, name=name, new=True)
         h5_mesh = H5Mesh(group, self._handle)
         h5_mesh.data = mesh.data
-        h5_mesh.add_points(mesh.iter_points())
-        h5_mesh.add_edges(mesh.iter_edges())
-        h5_mesh.add_faces(mesh.iter_faces())
-        h5_mesh.add_cells(mesh.iter_cells())
 
-    def _add_lattice(self, lattice):
+        if cuba_keys is not None:
+            for item in mesh.iter_points():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.POINT]})
+                h5_mesh.add_points([item])
+
+            for item in mesh.iter_edges():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.EDGE]})
+                h5_mesh.add_points([item])
+
+            for item in mesh.iter_faces():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.FACE]})
+                h5_mesh.add_faces([item])
+
+            for item in mesh.iter_cells():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.CELL]})
+                h5_mesh.add_cells([item])
+        else:
+            h5_mesh.add_points(mesh.iter_points())
+            h5_mesh.add_edges(mesh.iter_edges())
+            h5_mesh.add_faces(mesh.iter_faces())
+            h5_mesh.add_cells(mesh.iter_cells())
+
+    def _add_lattice(self, lattice, cuba_keys):
         """Add lattice to the file.
 
         Parameters
         ----------
         lattice : Lattice
             lattice to be added
+        cuba_keys : dict
+            Dictionary of CUDSItems with their related CUBA keys that
+            are added to the H5CUDS container.
 
         Returns
         ----------
@@ -286,7 +337,15 @@ class H5CUDS(object):
         h5_lattice = H5Lattice.create_new(
             group, lattice.primitive_cell, lattice.size, lattice.origin)
         h5_lattice.data = lattice.data
-        h5_lattice.update_nodes(lattice.iter_nodes())
+
+        if cuba_keys is not None:
+            for item in lattice.iter_nodes():
+                item.data = DataContainer(
+                            {key: item.data[key] for key in item.data
+                                if key in cuba_keys[CUDSItem.NODE]})
+                h5_lattice.update_nodes([item])
+        else:
+            h5_lattice.update_nodes(lattice.iter_nodes())
 
     def _get_particles(self, name):
         """Get particle container from file.
