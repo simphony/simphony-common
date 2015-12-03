@@ -138,6 +138,11 @@ class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUDSItem.PARTICLE: [CUBA.VELOCITY]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
         ds = engine.get_dataset('test')
         self.compare_dataset(ds, expected)
 
@@ -181,6 +186,11 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUDSItem.POINT: [CUBA.VELOCITY]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
         ds = engine.get_dataset('test')
         self.compare_dataset(ds, expected)
 
@@ -222,6 +232,11 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUDSItem.NODE: [CUBA.MATERIAL_ID]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
         ds = engine.get_dataset('test')
         self.compare_dataset(ds, expected)
 
