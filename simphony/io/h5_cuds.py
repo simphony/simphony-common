@@ -247,14 +247,14 @@ class H5CUDS(object):
         if cuba_keys is not None:
             for item in particles.iter_particles():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.PARTICLE]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.PARTICLE]})
                 h5_particles.add_particles([item])
 
             for item in particles.iter_bonds():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.BOND]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.BOND]})
                 h5_particles.add_bonds([item])
         else:
             h5_particles.add_particles(particles.iter_particles())
@@ -288,26 +288,26 @@ class H5CUDS(object):
         if cuba_keys is not None:
             for item in mesh.iter_points():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.POINT]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.POINT]})
                 h5_mesh.add_points([item])
 
             for item in mesh.iter_edges():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.EDGE]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.EDGE]})
                 h5_mesh.add_points([item])
 
             for item in mesh.iter_faces():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.FACE]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.FACE]})
                 h5_mesh.add_faces([item])
 
             for item in mesh.iter_cells():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.CELL]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.CELL]})
                 h5_mesh.add_cells([item])
         else:
             h5_mesh.add_points(mesh.iter_points())
@@ -343,8 +343,8 @@ class H5CUDS(object):
         if cuba_keys is not None:
             for item in lattice.iter_nodes():
                 item.data = DataContainer(
-                            {key: item.data[key] for key in item.data
-                                if key in cuba_keys[CUDSItem.NODE]})
+                    {key: item.data[key] for key in item.data
+                     if key in cuba_keys[CUDSItem.NODE]})
                 h5_lattice.update_nodes([item])
         else:
             h5_lattice.update_nodes(lattice.iter_nodes())

@@ -1,6 +1,5 @@
 import unittest
 import os
-import uuid
 from contextlib import closing
 import shutil
 import tempfile
@@ -134,7 +133,7 @@ class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
             particle.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
             expected.add_particles([particle])
             particle.data = DataContainer(
-                            {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
+                {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
             reference.add_particles([particle])
 
         # Store reference dataset along with its data
@@ -177,7 +176,7 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
             point.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
             expected.add_points([point])
             point.data = DataContainer(
-                            {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
+                {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
             reference.add_points([point])
 
         # Store reference dataset along with its data
