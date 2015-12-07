@@ -51,7 +51,7 @@ class Materials(object):
         Parameters
         ----------
         material : Material
-            the material to be added.
+            the material to be updated.
 
         Raises
         ------
