@@ -7,7 +7,7 @@ class Materials(object):
     Class manages the materials.
 
     """
-    def __init__(self, uid=None, data=None, description=""):
+    def __init__(self):
         self._materials = {}
 
     def add_material(self, material):
