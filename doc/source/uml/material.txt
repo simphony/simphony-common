@@ -1,8 +1,8 @@
 @startuml
 class Material {
    uid: uuid.UUID
-   description: str
    data: DataContainer
+   description: str
    -- classmethods --
    from_material(material: Material): Material {copy}
 }

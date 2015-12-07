@@ -10,12 +10,12 @@ class Material(object):
 
     Attributes
     ----------
-    description : str
-        textual description of the material
     uid : uuid.UUID
         the id of the material. If None, then it is generated
     data : DataContainer
         data associated with this material
+    description : str
+        textual description of the material
 
     """
     def __init__(self, uid=None, data=None, description=""):
