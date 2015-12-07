@@ -99,4 +99,4 @@ Materials
 
 In the SimPhoNy modeling framework, :class:`~.Materials` and :class:`~.Material`
 are used to describe materials and to define common material properties. Each
-low-level  (e.g. Point, Particle) can be of a certain material.
+low-level object (e.g. Point, Particle) can be of a certain material.
