@@ -1,23 +1,31 @@
+# Questions after upload the first proposal:
+# - Does a mterial relation belong to cuds or rather to material-relation
+#   as stated in the wiki?
+# - In case it belongs to material-relations, would it make sense to also move
+#   material-relations.yml to material-relations directory?
+# - Why are we generating a single different material-relation for every
+#   existing instalation of a material-relation?
+
 - class_name : LennardJones
   kind: CUBA.LENNARD_JONES
   allowed_number_materials: [1, 2]
   supported_parameters:
-  - cuba: CUBA.CUTOFF_DISTANCE
+  - cuba: CUBA.POSITION
     required: yes
     default: 1.0
-  - cuba: CUBA.ENERGY_WELL_DEPTH
+  - cuba: CUBA.VELOCITY
     required: yes
     default: 1.0
-  - cuba: CUBA.VAN_DER_WAALS_RADIUS
+  - cuba: CUBA.DELTA_DISPLACEMENT
     required: yes
     default: 1.0
 - class_name : Coulomb
   kind: CUBA.COULOMB
   allowed_number_materials: [1, 2]
   supported_parameters:
-  - cuba: CUBA.CUTOFF_DISTANCE
+  - cuba: CUBA.POSITION
     required: yes
     default: 1.0
-  - cuba: CUBA.DIELECTRIC_CONTANCE
+  - cuba: CUBA.POSITION
     required: yes
     default: 1.0
