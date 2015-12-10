@@ -3,6 +3,7 @@ abstract class ABCModelingEngine {
   BC : DataContainer
   CM : DataContainer
   SP : DataContainer
+  materials : Materials
   --
   {abstract} run()
   ..

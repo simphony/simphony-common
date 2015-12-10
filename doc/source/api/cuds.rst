@@ -56,6 +56,8 @@ Pure Python implementation
    ~mesh.Edge
    ~mesh.Face
    ~mesh.Cell
+   ~material.Material
+   ~materials.Materials
 
 .. rubric:: Functions
 
@@ -87,5 +89,13 @@ Pure Python implementation
    :undoc-members:
 
 .. automodule:: simphony.cuds.particles
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.material
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.materials
    :members:
    :undoc-members:

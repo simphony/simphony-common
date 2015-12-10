@@ -3,6 +3,8 @@ from collections import Sequence
 import numpy
 
 from simphony.io.data_container_description import NoUIDRecord
+from simphony.io.data_conversion import (convert_from_file_type,
+                                         convert_to_file_type)
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
 
@@ -127,8 +129,9 @@ class IndexedDataContainerTable(Sequence):
         data = list(row['data'])
         for key in value:
             if key in positions:
-                data[positions[key]] = value[key]
+                data[positions[key]] = convert_to_file_type(value[key], key)
                 mask[positions[key]] = True
+
         row['mask'] = mask
         row['data'] = tuple(data)
 
@@ -146,9 +149,9 @@ class IndexedDataContainerTable(Sequence):
                 # special case array valued cuba keys
                 # see numpy issue https://github.com/numpy/numpy/issues/3126
                 if numpy.isscalar(data[position]):
-                    data[position] = value[key]
+                    data[position] = convert_to_file_type(value[key], key)
                 else:
-                    data[position][:] = value[key]
+                    data[position][:] = convert_from_file_type(value[key], key)
                 mask[position] = True
         return rec_array
 
@@ -160,5 +163,5 @@ class IndexedDataContainerTable(Sequence):
         mask = row['mask']
         data = row['data']
         return DataContainer({
-            cuba[index]: data[index]
+            cuba[index]: convert_from_file_type(data[index], cuba[index])
             for index, valid in enumerate(mask) if valid})

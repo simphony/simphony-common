@@ -474,31 +474,38 @@
   number: 67
   shape: [1]
   type: double
+- description: Material
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: MATERIAL
+  name: Material
+  number: 68
+  shape: [1]
+  type: uuid
 - description: Cutoff Distance
   domain: []
   key: CUTOFF_DISTANCE
   name: CutoffDistance
-  number: 68
+  number: 69
   shape: [1]
   type: double
 - description: Energy Well Depth
   domain: []
   key: ENERGY_WELL_DEPTH
   name: EnergyWellDepth
-  number: 69
+  number: 70
   shape: [1]
   type: double
 - description: Van Der Waals Radius
   domain: []
   key: VAN_DER_WAALS_RADIUS
   name: VanDerWaalsRadius
-  number: 70
+  number: 71
   shape: [1]
   type: double
 - description: Dielectric Contance
   domain: []
   key: DIELECTRIC_CONTANCE
   name: DielectricContance
-  number: 71
+  number: 72
   shape: [1]
   type: double

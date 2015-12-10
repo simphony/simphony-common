@@ -81,6 +81,7 @@ def table(input, output):
         'class Data(tables.IsDescription):\n',
         '\n'])
     data_types = {
+        'uuid': 'String',
         'string': 'String',
         'double': 'Float64',
         'integer': 'Int32'}
@@ -88,7 +89,10 @@ def table(input, output):
     for keyword in keywords:
         if keyword['name'] in CUBA_DATA_CONTAINER_EXCLUDE:
             continue
-        if keyword['type'] == 'string':
+        if keyword['type'] == 'uuid':
+            template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
+            shape = 32
+        elif keyword['type'] == 'string':
             template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
             shape = keyword['shape'][0]
         else:
@@ -152,6 +156,7 @@ def keywords(input, output):
         '\n',
         'KEYWORDS = {\n']
     data_types = {
+        'uuid': "'uuid'",
         'string': 'numpy.str',
         'double': 'numpy.float64',
         'integer': 'numpy.int32'}

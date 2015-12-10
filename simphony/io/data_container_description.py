@@ -70,20 +70,21 @@ class Data(tables.IsDescription):
     ln_of_restitution_coefficient = tables.Float64Col(pos=63)
     rolling_friction = tables.Float64Col(pos=64)
     volume_fraction = tables.Float64Col(pos=65)
-    cutoff_distance = tables.Float64Col(pos=66)
-    energy_well_depth = tables.Float64Col(pos=67)
-    van_der_waals_radius = tables.Float64Col(pos=68)
-    dielectric_contance = tables.Float64Col(pos=69)
+    material = tables.StringCol(pos=66, itemsize=32)
+    cutoff_distance = tables.Float64Col(pos=67)
+    energy_well_depth = tables.Float64Col(pos=68)
+    van_der_waals_radius = tables.Float64Col(pos=69)
+    dielectric_contance = tables.Float64Col(pos=70)
 
 
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(70,))
+    mask = tables.BoolCol(pos=1, shape=(71,))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(70,))
+    mask = tables.BoolCol(pos=1, shape=(71,))
