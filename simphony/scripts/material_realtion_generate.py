@@ -84,8 +84,8 @@ def generate_initializer(mr):
     code += [
         "\n\t):\n",
         "\t\tsuper({MR_NAME}, self).__init__(\n",
-        "\t\t\tname={MR_NAME}\n".format(MR_NAME=mr['class_name']),
-        "\t\t\tdescription={MR_DESC}\n".format(MR_DESC=mr['class_name']),
+        "\t\t\tname=\"{MR_NAME}\"\n".format(MR_NAME=mr['class_name']),
+        "\t\t\tdescription=\"{MR_DESC}\"\n".format(MR_DESC=mr['class_name']),
         "\t\t\tparameters=DataContainer()\n",
         "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t]".format(
             MR_S_PARAM=sup_param_cuba

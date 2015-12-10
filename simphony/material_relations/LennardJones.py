@@ -10,29 +10,29 @@ class LennardJones(MaterialRelation):
     Attributes
     ----------
 
-    position : <type 'numpy.float64'>
-        Position of a point or node or atom
-    velocity : <type 'numpy.float64'>
-        Velocity of a point or node
-    deltadisplacement : <type 'numpy.float64'>
-        Displacement during the last time step
+    cutoffdistance : <type 'numpy.float64'>
+        Cutoff Distance
+    energywelldepth : <type 'numpy.float64'>
+        Energy Well Depth
+    vanderwaalsradius : <type 'numpy.float64'>
+        Van Der Waals Radius
 
     """
 
     def __init(
         self,
-        position,
-        velocity,
-        deltadisplacement
+        cutoffdistance,
+        energywelldepth,
+        vanderwaalsradius
     ):
         super({MR_NAME}, self).__init__(
-            name=LennardJones
-            description=LennardJones
+            name="LennardJones"
+            description="LennardJones"
             parameters=DataContainer()
             supported_parameters=[
-                CUBA.POSITION,
-                CUBA.VELOCITY,
-                CUBA.DELTA_DISPLACEMENT,
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.ENERGY_WELL_DEPTH,
+                CUBA.VAN_DER_WAALS_RADIUS,
             ]
             materials=[1, 2]
             kind=CUBA.LENNARD_JONES

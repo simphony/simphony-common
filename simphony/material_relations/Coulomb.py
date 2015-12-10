@@ -10,25 +10,25 @@ class Coulomb(MaterialRelation):
     Attributes
     ----------
 
-    position : <type 'numpy.float64'>
-        Position of a point or node or atom
-    position : <type 'numpy.float64'>
-        Position of a point or node or atom
+    cutoffdistance : <type 'numpy.float64'>
+        Cutoff Distance
+    dielectriccontance : <type 'numpy.float64'>
+        Dielectric Contance
 
     """
 
     def __init(
         self,
-        position,
-        position
+        cutoffdistance,
+        dielectriccontance
     ):
         super({MR_NAME}, self).__init__(
-            name=Coulomb
-            description=Coulomb
+            name="Coulomb"
+            description="Coulomb"
             parameters=DataContainer()
             supported_parameters=[
-                CUBA.POSITION,
-                CUBA.POSITION,
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.DIELECTRIC_CONTANCE,
             ]
             materials=[1, 2]
             kind=CUBA.COULOMB
