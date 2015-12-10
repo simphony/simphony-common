@@ -35,3 +35,7 @@ class Coulomb(MaterialRelation):
             materials=[1, 2],
             kind=CUBA.COULOMB
         )
+
+        self.cutoffdistance = cutoffdistance
+        self.dielectriccontance = dielectriccontance
+

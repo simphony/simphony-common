@@ -39,3 +39,8 @@ class LennardJones(MaterialRelation):
             materials=[1, 2],
             kind=CUBA.LENNARD_JONES
         )
+
+        self.cutoffdistance = cutoffdistance
+        self.energywelldepth = energywelldepth
+        self.vanderwaalsradius = vanderwaalsradius
+

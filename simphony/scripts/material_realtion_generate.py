@@ -59,8 +59,12 @@ def generate_attributes_description(mr):
 
 def generate_initializer(mr):
 
+    decapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
+
     code = []
-    sup_param_cuba = ""
+
+    sub_param_assign = ""
+    sub_param_cuba = ""
 
     code += [
         "\n\t\"\"\"\n",
@@ -71,13 +75,15 @@ def generate_initializer(mr):
 
     for param in mr['supported_parameters']:
 
-        sup_param_cuba += "\n\t\t\t\t"+param['cuba']+","
+        sub_param_cuba += "\n\t\t\t\t"+param['cuba']+","
         key = param['cuba'].split('.')[1]
+        key_name = decapitalize(KEYWORDS[key].name)
+        sub_param_assign += "\n\t\tself."+key_name+" = "+key_name
 
         code += [
             ",\n",
             "\t\t{ATT_NAME}".format(
-                ATT_NAME=KEYWORDS[key].name.lower()
+                ATT_NAME=key_name
             ),
         ]
 
@@ -90,14 +96,16 @@ def generate_initializer(mr):
         "\t\t\tdescription=\"{MR_DESC}\",\n".format(MR_DESC=mr['class_name']),
         "\t\t\tparameters=dc.DataContainer(),\n",
         "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t],".format(
-            MR_S_PARAM=sup_param_cuba
+            MR_S_PARAM=sub_param_cuba
         ),
         "\n",
         "\t\t\tmaterials={MR_MATS},\n".format(
             MR_MATS=mr['allowed_number_materials']
         ),
         "\t\t\tkind={MR_KIND}\n".format(MR_KIND=mr['kind']),
-        "\t\t)\n"
+        "\t\t)\n",
+        "{MR_ASSIGN_ATT}\n".format(MR_ASSIGN_ATT=sub_param_assign),
+        "\n"
     ]
 
     return code
