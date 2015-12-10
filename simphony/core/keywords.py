@@ -554,4 +554,36 @@ KEYWORDS = {
         number=67,
         shape=[1],
         dtype=numpy.float64),
+    'CUTOFF_DISTANCE': Keyword(
+        name='CutoffDistance',
+        description='Cutoff Distance',  # noqa
+        domain=[],
+        key='CUTOFF_DISTANCE',
+        number=68,
+        shape=[1],
+        dtype=numpy.float64),
+    'ENERGY_WELL_DEPTH': Keyword(
+        name='EnergyWellDepth',
+        description='Energy Well Depth',  # noqa
+        domain=[],
+        key='ENERGY_WELL_DEPTH',
+        number=69,
+        shape=[1],
+        dtype=numpy.float64),
+    'VAN_DER_WAALS_RADIUS': Keyword(
+        name='VanDerWaalsRadius',
+        description='Van Der Waals Radius',  # noqa
+        domain=[],
+        key='VAN_DER_WAALS_RADIUS',
+        number=70,
+        shape=[1],
+        dtype=numpy.float64),
+    'DIELECTRIC_CONTANCE': Keyword(
+        name='DielectricContance',
+        description='Dielectric Contance',  # noqa
+        domain=[],
+        key='DIELECTRIC_CONTANCE',
+        number=71,
+        shape=[1],
+        dtype=numpy.float64),
 }
