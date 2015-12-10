@@ -1,5 +1,7 @@
-from simphony.material_relations.material-relation
-import MaterialRelation
+from simphony.material_relations.material_relation import (
+    MaterialRelation)
+from simphony.core.cuba import CUBA
+import simphony.core.data_container as dc
 
 
 class LennardJones(MaterialRelation):
@@ -25,15 +27,15 @@ class LennardJones(MaterialRelation):
         energywelldepth,
         vanderwaalsradius
     ):
-        super({MR_NAME}, self).__init__(
-            name="LennardJones"
-            description="LennardJones"
-            parameters=DataContainer()
+        super(LennardJones, self).__init__(
+            name="LennardJones",
+            description="LennardJones",
+            parameters=dc.DataContainer(),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
                 CUBA.ENERGY_WELL_DEPTH,
                 CUBA.VAN_DER_WAALS_RADIUS,
-            ]
-            materials=[1, 2]
+            ],
+            materials=[1, 2],
             kind=CUBA.LENNARD_JONES
         )

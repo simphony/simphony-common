@@ -1,14 +1,14 @@
 import click
 import yaml
-from tabulate import tabulate
-from collections import namedtuple
 from simphony.core.keywords import KEYWORDS
 
 
 def generate_class_import():
     return [
-        "from simphony.material_relations.material-relation\n",
-        "import MaterialRelation\n",
+        "from simphony.material_relations.material_relation import (\n",
+        "\tMaterialRelation)\n",
+        "from simphony.core.cuba import CUBA\n",
+        "import simphony.core.data_container as dc\n",
         "\n",
         "\n",
     ]
@@ -83,15 +83,17 @@ def generate_initializer(mr):
 
     code += [
         "\n\t):\n",
-        "\t\tsuper({MR_NAME}, self).__init__(\n",
-        "\t\t\tname=\"{MR_NAME}\"\n".format(MR_NAME=mr['class_name']),
-        "\t\t\tdescription=\"{MR_DESC}\"\n".format(MR_DESC=mr['class_name']),
-        "\t\t\tparameters=DataContainer()\n",
-        "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t]".format(
+        "\t\tsuper({MR_NAME}, self).__init__(\n".format(
+            MR_NAME=mr['class_name']
+        ),
+        "\t\t\tname=\"{MR_NAME}\",\n".format(MR_NAME=mr['class_name']),
+        "\t\t\tdescription=\"{MR_DESC}\",\n".format(MR_DESC=mr['class_name']),
+        "\t\t\tparameters=dc.DataContainer(),\n",
+        "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t],".format(
             MR_S_PARAM=sup_param_cuba
         ),
         "\n",
-        "\t\t\tmaterials={MR_MATS}\n".format(
+        "\t\t\tmaterials={MR_MATS},\n".format(
             MR_MATS=mr['allowed_number_materials']
         ),
         "\t\t\tkind={MR_KIND}\n".format(MR_KIND=mr['kind']),

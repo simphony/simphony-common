@@ -1,5 +1,7 @@
-from simphony.material_relations.material-relation
-import MaterialRelation
+from simphony.material_relations.material_relation import (
+    MaterialRelation)
+from simphony.core.cuba import CUBA
+import simphony.core.data_container as dc
 
 
 class Coulomb(MaterialRelation):
@@ -22,14 +24,14 @@ class Coulomb(MaterialRelation):
         cutoffdistance,
         dielectriccontance
     ):
-        super({MR_NAME}, self).__init__(
-            name="Coulomb"
-            description="Coulomb"
-            parameters=DataContainer()
+        super(Coulomb, self).__init__(
+            name="Coulomb",
+            description="Coulomb",
+            parameters=dc.DataContainer(),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
                 CUBA.DIELECTRIC_CONTANCE,
-            ]
-            materials=[1, 2]
+            ],
+            materials=[1, 2],
             kind=CUBA.COULOMB
         )
