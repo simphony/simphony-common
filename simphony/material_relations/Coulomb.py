@@ -21,8 +21,8 @@ class Coulomb(MaterialRelation):
 
     def __init(
         self,
-        cutoffdistance,
-        dielectriccontance
+        cutoffDistance,
+        dielectricContance
     ):
         super(Coulomb, self).__init__(
             name="Coulomb",
@@ -36,6 +36,5 @@ class Coulomb(MaterialRelation):
             kind=CUBA.COULOMB
         )
 
-        self.cutoffdistance = cutoffdistance
-        self.dielectriccontance = dielectriccontance
-
+        self.cutoffDistance = cutoffDistance
+        self.dielectricContance = dielectricContance

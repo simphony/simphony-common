@@ -23,9 +23,9 @@ class LennardJones(MaterialRelation):
 
     def __init(
         self,
-        cutoffdistance,
-        energywelldepth,
-        vanderwaalsradius
+        cutoffDistance,
+        energyWellDepth,
+        vanDerWaalsRadius
     ):
         super(LennardJones, self).__init__(
             name="LennardJones",
@@ -40,7 +40,6 @@ class LennardJones(MaterialRelation):
             kind=CUBA.LENNARD_JONES
         )
 
-        self.cutoffdistance = cutoffdistance
-        self.energywelldepth = energywelldepth
-        self.vanderwaalsradius = vanderwaalsradius
-
+        self.cutoffDistance = cutoffDistance
+        self.energyWellDepth = energyWellDepth
+        self.vanDerWaalsRadius = vanDerWaalsRadius

@@ -105,7 +105,6 @@ def generate_initializer(mr):
         "\t\t\tkind={MR_KIND}\n".format(MR_KIND=mr['kind']),
         "\t\t)\n",
         "{MR_ASSIGN_ATT}\n".format(MR_ASSIGN_ATT=sub_param_assign),
-        "\n"
     ]
 
     return code
