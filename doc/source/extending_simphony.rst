@@ -62,7 +62,7 @@ CUBA keywords
 Common Unified Base Attributes (CUBA) are a list of common keywords transcending
 across different scales, methods and modelling-engines. As SimPhoNy is extended,
 there is a need for CUBA to also be extended. Before adding a CUBA, developers
-should first consult the list of existing CUBA keywords (see :ref:`cuba-keywords`),
+should first consult the list of existing :ref:`cuba-keywords`,
 to see if the keyword already exists. Contact the developers at
 https://github.com/simphony/simphony-common if there are any questions.
 
