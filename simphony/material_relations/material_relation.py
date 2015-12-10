@@ -1,8 +1,8 @@
-from simphony.material_relations.abc_material_relation
-import ABCMaterialRelation
+from simphony.material_relations.abc_material_relation import (
+    ABCMaterialRelation)
 
 
-class MaterialRelation(object):
+class MaterialRelation(ABCMaterialRelation):
     """ MaterialRelation provides a general interface for describing the
     (physics/chemistry) relations between different materials
 
@@ -37,11 +37,3 @@ class MaterialRelation(object):
         self._supported_parameters = {}
         self._materials = {}
         self._kind = {}
-
-    @property
-    def data(self):
-        return dc.DataContainer(self._data)
-
-    @data.setter
-    def data(self, value):
-        self._data = dc.DataContainer(value)
