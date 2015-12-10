@@ -1,0 +1,4 @@
+@startuml
+!include materials.txt
+!include material.txt
+@enduml

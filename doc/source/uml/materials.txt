@@ -1,0 +1,8 @@
+@startuml
+class Materials {
+  add_material(Material)
+  get_material(uid: uuid.UUID): Materials
+  update_material(material: Material)
+  iter_materials(uids: iterable of uuid.UUID {optional}): iterator of Materials {unordered}
+}
+@enduml

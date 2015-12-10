@@ -474,3 +474,10 @@
   number: 67
   shape: [1]
   type: double
+- description: Material
+  domain: [ATM, DEM, FEM, FVM, LBM, SPH, VIS]
+  key: MATERIAL
+  name: Material
+  number: 68
+  shape: [1]
+  type: uuid

@@ -16,6 +16,8 @@ class ABCModelingEngine(object):  # pragma: no cover
         container of attributes related to the computational method
     SP : DataContainer
         container of attributes related to the system parameters/conditions
+    materials : Materials
+        materials related to state data
 
     """
     __metaclass__ = ABCMeta

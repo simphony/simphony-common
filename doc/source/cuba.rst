@@ -71,4 +71,5 @@ PoissonRatio                Poisson Ratio                                       
 LnOfRestitutionCoefficient  Natural Logarithm of the Restitution Coefficient                      ['DEM']                                            LN_OF_RESTITUTION_COEFFICIENT        65  [1]      double
 RollingFriction             Rolling Friction coefficient                                          ['DEM']                                            ROLLING_FRICTION                     66  [1]      double
 VolumeFraction              Volume fraction                                                       ['FEM', 'FVM']                                     VOLUME_FRACTION                      67  [1]      double
+Material                    Material                                                              ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  MATERIAL                             68  [1]      uuid
 ==========================  ====================================================================  =================================================  =============================  ========  =======  =======
