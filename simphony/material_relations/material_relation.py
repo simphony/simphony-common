@@ -31,9 +31,9 @@ class MaterialRelation(ABCMaterialRelation):
     def __init__(self, name, description, parameters, supported_parameters,
                  materials, kind):
 
-        self._name = name
-        self._description = {}
-        self._parameters = {}
-        self._supported_parameters = {}
-        self._materials = {}
-        self._kind = {}
+        self.name = name
+        self.description = {}
+        self.parameters = {}
+        self.supported_parameters = {}
+        self.materials = {}
+        self.kind = {}
