@@ -189,11 +189,16 @@ class PrimitiveCell(object):
 
         cosa = np.cos(alpha)
         sina = np.sin(alpha)
+        delta2 = sina**2 - ((cosa-cosa**2) / sina)**2
+        if delta2 < 0:
+            message = ('Angle is too big (>120 degree). '
+                       'Third vector is imaginary')
+            raise ValueError(message)
 
         p1 = (a, 0, 0)
         p2 = (a*cosa, a*sina, 0)
         p3 = (a*cosa, a*(cosa-cosa**2) / sina,
-              a*np.sqrt(sina**2 - ((cosa-cosa**2) / sina)**2))
+              a*np.sqrt(delta2))
         return cls(p1, p2, p3, BravaisLattice.RHOMBOHEDRAL)
 
     @classmethod
@@ -493,11 +498,15 @@ class PrimitiveCell(object):
         sinb = np.sin(beta)
         cosg = np.cos(gamma)
         sing = np.sin(gamma)
+        delta2 = sinb**2 - ((cosa-cosb*cosg) / sing)**2
+        if delta2 < 0:
+            message = "Angles are too big.  Third vector is imaginary"
+            raise ValueError(message)
 
         p1 = (a, 0, 0)
         p2 = (b*cosg, b*sing, 0)
         p3 = (c*cosb, c*(cosa-cosb*cosg) / sing,
-              c*np.sqrt(sinb**2 - ((cosa-cosb*cosg) / sing)**2))
+              c*np.sqrt(delta2))
         return cls(p1, p2, p3, BravaisLattice.TRICLINIC)
 
     @property
