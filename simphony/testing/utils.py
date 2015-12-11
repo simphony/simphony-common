@@ -343,7 +343,7 @@ def dummy_cuba_value(cuba, constant=None):
           numpy.issubdtype(keyword.dtype, numpy.int)):
         shape = keyword.shape
         if shape == [1]:
-            return numpy.dtype(keyword.dtype).type(cuba+constant)
+            return keyword.dtype(cuba+constant)
         else:
             data = numpy.arange(numpy.prod(shape),
                                 dtype=keyword.dtype)*(cuba+constant)
