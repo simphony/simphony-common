@@ -8,7 +8,7 @@ from hypothesis.strategies import floats, tuples, composite
 from hypothesis.strategies import fixed_dictionaries
 
 from simphony.cuds.primitive_cell import BravaisLattice, PrimitiveCell
-import simphony_mayavi.cuds.lattice_tools as lattice_tools
+import simphony.tools.lattice_tools as lattice_tools
 
 
 def rotate_primitive_cell(primitive_cell, angle1=numpy.pi/2., angle2=0.):
