@@ -309,13 +309,6 @@ class TestLatticeTools(unittest.TestCase):
                    specific_map2_general.keys()))
     def test_subtype_of_general_lattices(self, lattice):
         ''' Test if more symmetric lattices are part of more general lattices
-
-        Parameters
-        ----------
-            lattice : dict
-                {BravaisLattice(IntEnum): PrimitiveCell}
-            alpha, beta: floats
-                angles (in radian) for rotations about Z (alpha) and X (beta)
         '''
         alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
         for specific, primitive_cell in lattice.items():
