@@ -315,7 +315,7 @@ class TestLatticeTools(unittest.TestCase):
             self.assertEqual(actual_type, expected_type)
 
     @given(some_specific_lattices, rotate_angles, rotate_angles)
-    def test_find_lattice_type_ambiguous(self, lattice, alpha, beta):
+    def test_subtype_of_general_lattices(self, lattice, alpha, beta):
         ''' Test if more symmetric lattices are part of more general lattices
 
         Parameters
