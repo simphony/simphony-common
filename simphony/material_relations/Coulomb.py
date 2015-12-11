@@ -21,20 +21,36 @@ class Coulomb(MaterialRelation):
 
     def __init(
         self,
-        cutoffDistance,
-        dielectricContance
+        materials,
+        cutoff_distance,
+        dielectric_contance
     ):
         super(Coulomb, self).__init__(
             name="Coulomb",
-            description="Coulomb",
+            description="Coulomb material relation",  # noqa
             parameters=dc.DataContainer(),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
                 CUBA.DIELECTRIC_CONTANCE,
             ],
-            materials=[1, 2],
+            materials=materials,
+            num_materials=[1, 2],
             kind=CUBA.COULOMB
         )
 
-        self.cutoffDistance = cutoffDistance
-        self.dielectricContance = dielectricContance
+    @property
+    def cutoff_distance(self):
+        return self.parameters[CUBA.CUTOFF_DISTANCE]
+
+    @cutoff_distance.setter
+    def cutoff_distance(self, value):
+        self.parameters[CUBA.CUTOFF_DISTANCE] = value
+
+    @property
+    def dielectric_contance(self):
+        return self.parameters[CUBA.DIELECTRIC_CONTANCE]
+
+    @dielectric_contance.setter
+    def dielectric_contance(self, value):
+        self.parameters[CUBA.DIELECTRIC_CONTANCE] = value
+

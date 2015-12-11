@@ -23,23 +23,46 @@ class LennardJones(MaterialRelation):
 
     def __init(
         self,
-        cutoffDistance,
-        energyWellDepth,
-        vanDerWaalsRadius
+        materials,
+        cutoff_distance,
+        energy_well_depth,
+        van_der_waals_radius
     ):
         super(LennardJones, self).__init__(
             name="LennardJones",
-            description="LennardJones",
+            description="Lennard Jones material relation",  # noqa
             parameters=dc.DataContainer(),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
                 CUBA.ENERGY_WELL_DEPTH,
                 CUBA.VAN_DER_WAALS_RADIUS,
             ],
-            materials=[1, 2],
+            materials=materials,
+            num_materials=[1, 2],
             kind=CUBA.LENNARD_JONES
         )
 
-        self.cutoffDistance = cutoffDistance
-        self.energyWellDepth = energyWellDepth
-        self.vanDerWaalsRadius = vanDerWaalsRadius
+    @property
+    def cutoff_distance(self):
+        return self.parameters[CUBA.CUTOFF_DISTANCE]
+
+    @cutoff_distance.setter
+    def cutoff_distance(self, value):
+        self.parameters[CUBA.CUTOFF_DISTANCE] = value
+
+    @property
+    def energy_well_depth(self):
+        return self.parameters[CUBA.ENERGY_WELL_DEPTH]
+
+    @energy_well_depth.setter
+    def energy_well_depth(self, value):
+        self.parameters[CUBA.ENERGY_WELL_DEPTH] = value
+
+    @property
+    def van_der_waals_radius(self):
+        return self.parameters[CUBA.VAN_DER_WAALS_RADIUS]
+
+    @van_der_waals_radius.setter
+    def van_der_waals_radius(self, value):
+        self.parameters[CUBA.VAN_DER_WAALS_RADIUS] = value
+
