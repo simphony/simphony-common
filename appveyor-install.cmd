@@ -15,6 +15,7 @@ pip install tabulate>=0.7.4
 pip install mock==1.0.1
 pip install coverage
 pip install flake8
+pip install hypothesis
 
 rem install simphony-common
 python setup.py develop
