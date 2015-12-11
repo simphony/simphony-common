@@ -9,3 +9,4 @@ mock==1.0.1
 coverage
 flake8
 numpy >= 1.4.1
+hypothesis
