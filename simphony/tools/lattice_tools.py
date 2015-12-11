@@ -65,15 +65,15 @@ def same_lattice_type(target_pc, p1, p2, p3, permute=True):
                           for vec1, vec2 in permutations(pcs, 2))
 
     if permute:
-        iter_func = permutations
+        vectors_iter = permutations((p1, p2, p3))
     else:
-        iter_func = combinations
+        vectors_iter = ((p1, p2, p3),)
 
-    for iperm, perms in enumerate(iter_func((p1, p2, p3), 3)):
+    for vectors in vectors_iter:
         cosines = tuple(numpy.abs(cosine_two_vectors(vec1, vec2))
-                        for vec1, vec2 in combinations(perms, 2))
+                        for vec1, vec2 in combinations(vectors, 2))
         ratios = tuple(vector_len(vec1)/vector_len(vec2)
-                       for vec1, vec2 in permutations(perms, 2))
+                       for vec1, vec2 in permutations(vectors, 2))
 
         # single precision
         atol = numpy.finfo(numpy.float32).resolution
