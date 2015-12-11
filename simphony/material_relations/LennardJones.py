@@ -65,4 +65,3 @@ class LennardJones(MaterialRelation):
     @van_der_waals_radius.setter
     def van_der_waals_radius(self, value):
         self.parameters[CUBA.VAN_DER_WAALS_RADIUS] = value
-

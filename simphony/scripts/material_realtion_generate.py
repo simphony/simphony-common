@@ -101,8 +101,7 @@ def generate_initializer(mr):
             MR_MATS=mr['allowed_number_materials']
         ),
         "\t\t\tkind={MR_KIND}\n".format(MR_KIND=mr['kind']),
-        "\t\t)\n",
-        "\n",
+        "\t\t)\n"
     ]
 
     return code
@@ -120,13 +119,13 @@ def generate_property_get_set(mr):
     setter_string += "\tdef {PROP_NAME}(self, value):\n"
     setter_string += "\t\tself.parameters[{CUBA_KEY}] = value\n"
 
-    get_set_block = getter_string + "\n" + setter_string + "\n"
+    get_set_block = getter_string + "\n" + setter_string
 
     code = ""
 
     for param in mr['supported_parameters']:
 
-        code += get_set_block.format(
+        code += "\n" + get_set_block.format(
             PROP_NAME=param['cuba'].split('.')[1].lower(),
             CUBA_KEY=param['cuba']
         )

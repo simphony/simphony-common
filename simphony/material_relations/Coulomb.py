@@ -53,4 +53,3 @@ class Coulomb(MaterialRelation):
     @dielectric_contance.setter
     def dielectric_contance(self, value):
         self.parameters[CUBA.DIELECTRIC_CONTANCE] = value
-
