@@ -339,20 +339,15 @@ def dummy_cuba_value(cuba, constant=None):
         return uuid.UUID(int=constant, version=4)
     elif numpy.issubdtype(keyword.dtype, str):
         return keyword.name + str(constant)
-    else:
+    elif (numpy.issubdtype(keyword.dtype, numpy.float) or
+          numpy.issubdtype(keyword.dtype, numpy.int)):
         shape = keyword.shape
         if shape == [1]:
-            if numpy.issubdtype(keyword.dtype, 'float'):
-                return float(cuba + constant)
-            if numpy.issubdtype(keyword.dtype, 'int'):
-                return int(cuba + constant)
+            return keyword.dtype(cuba+constant)
         else:
-            data = numpy.arange(numpy.prod(shape)) * (cuba + constant)
-            data = numpy.reshape(data, shape)
-            if numpy.issubdtype(keyword.dtype, 'float'):
-                return numpy.ones(shape=shape, dtype=numpy.float64) * data
-            if numpy.issubdtype(keyword.dtype, 'int'):
-                return numpy.ones(shape=shape, dtype=numpy.int32) * data
+            data = numpy.arange(numpy.prod(shape),
+                                dtype=keyword.dtype)*(cuba+constant)
+            return data.reshape(shape)
 
     raise RuntimeError(
         'cannot create value for {}'.format(keyword.dtype))
