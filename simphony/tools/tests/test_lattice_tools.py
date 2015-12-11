@@ -325,7 +325,7 @@ class TestLatticeTools(unittest.TestCase):
             alpha, beta: floats
                 angles (in radian) for rotations about Z (alpha) and X (beta)
         '''
-        for specific, generals in specific_map2_general.items():
+        for specific, primitive_cell in lattice.items():
             primitive_cell = lattice[specific]
             # rotating vectors
             vectors = list(rotate_primitive_cell(primitive_cell, alpha, beta))
@@ -334,7 +334,7 @@ class TestLatticeTools(unittest.TestCase):
             # flipping vectors
             p1, p2, p3 = numpy.random.choice((1, -1), (3, 1))*vectors
 
-            for general in generals:
+            for general in specific_map2_general[specific]:
                 self.assertTrue(
                     lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
                                                                 general))
