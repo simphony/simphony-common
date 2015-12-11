@@ -335,7 +335,7 @@ def dummy_cuba_value(cuba, constant=None):
     if constant is None:
         constant = 3
     keyword = KEYWORDS[CUBA(cuba).name]
-    if keyword.dtype == "uuid":
+    if keyword.dtype is uuid.UUID:
         return uuid.UUID(int=constant, version=4)
     elif numpy.issubdtype(keyword.dtype, str):
         return keyword.name + str(constant)
