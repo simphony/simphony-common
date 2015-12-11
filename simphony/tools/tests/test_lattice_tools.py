@@ -283,16 +283,6 @@ specific_map2_general = defaultdict(
             BravaisLattice.TRICLINIC)})
 
 
-# angles for rotating the primitive vectors
-rotate_angles = floats(min_value=-numpy.pi+0.1,
-                       max_value=numpy.pi-0.1).filter(lambda x: x == x)
-
-factories = get_specific_primitive_cell_factories()
-specific_lattices = builder(factories)
-some_specific_lattices = builder(factories, specific_map2_general.keys())
-lattice_strict_examples = specific_lattices.example()
-
-
 class TestLatticeTools(unittest.TestCase):
 
     @staticmethod
@@ -300,9 +290,10 @@ class TestLatticeTools(unittest.TestCase):
         return map(numpy.array,
                    (primitive_cell.p1, primitive_cell.p2, primitive_cell.p3))
 
-    @given(specific_lattices, rotate_angles, rotate_angles)
-    def test_find_lattice_type_specific(self, lattice, alpha, beta):
+    @given(builder(get_specific_primitive_cell_factories()))
+    def test_find_lattice_type_specific(self, lattice):
         ''' Test getting the most specific lattice type correctly'''
+        alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
         for expected_type, primitive_cell in lattice.items():
             # rotate vectors
             vectors = list(rotate_primitive_cell(primitive_cell, alpha, beta))
@@ -314,8 +305,9 @@ class TestLatticeTools(unittest.TestCase):
             actual_type = lattice_tools.find_lattice_type(*vectors)
             self.assertEqual(actual_type, expected_type)
 
-    @given(some_specific_lattices, rotate_angles, rotate_angles)
-    def test_subtype_of_general_lattices(self, lattice, alpha, beta):
+    @given(builder(get_specific_primitive_cell_factories(),
+                   specific_map2_general.keys()))
+    def test_subtype_of_general_lattices(self, lattice):
         ''' Test if more symmetric lattices are part of more general lattices
 
         Parameters
@@ -325,6 +317,7 @@ class TestLatticeTools(unittest.TestCase):
             alpha, beta: floats
                 angles (in radian) for rotations about Z (alpha) and X (beta)
         '''
+        alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
         for specific, primitive_cell in lattice.items():
             primitive_cell = lattice[specific]
             # rotating vectors
@@ -339,13 +332,14 @@ class TestLatticeTools(unittest.TestCase):
                     lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
                                                                 general))
 
-    def test_incompatible_lattice_type(self, lattices=lattice_strict_examples):
+    def test_incompatible_lattice_type(self):
         ''' Test if some specific lattices are incompatible with some others
-        '''
-        # e.g. a strict BravaisLattice.TRICLINIC lattice
-        # cannot be considered as any other lattice of higher symmetry
-        # All other lattices are triclinic in its loose definition
 
+        e.g. a strict BravaisLattice.TRICLINIC lattice
+        cannot be considered as any other lattice of higher symmetry
+        All other lattices are triclinic in its loose definition
+        '''
+        lattices = builder(get_specific_primitive_cell_factories()).example()
         for bravais_lattice, primitive_cell in lattices.items():
             # bravais_lattice cannot be compatible with lattice
             # types in `exclusive`
