@@ -66,11 +66,11 @@ class MaterialRelation(ABCMaterialRelation):
 
     @name.setter
     def name(self, value):
-        if isinstance(value, string):
+        if isinstance(value, basestring):
             self._name = value
         else:
             message = 'Expected string but received {!r}'
-            raise TypeError(message.format(type(string)))
+            raise TypeError(message.format(type(basestring)))
 
     @property
     def description(self):
@@ -78,11 +78,11 @@ class MaterialRelation(ABCMaterialRelation):
 
     @description.setter
     def description(self, value):
-        if isinstance(value, string):
+        if isinstance(value, basestring):
             self._description = value
         else:
             message = 'Expected string but received {!r}'
-            raise TypeError(message.format(type(string)))
+            raise TypeError(message.format(type(basestring)))
 
     @property
     def supported_parameters(self):
