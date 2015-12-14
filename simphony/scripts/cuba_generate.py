@@ -84,12 +84,16 @@ def table(input, output):
         'uuid': 'String',
         'string': 'String',
         'double': 'Float64',
-        'integer': 'Int32'}
+        'integer': 'Int32',
+        'MaterialRelation': 'String'}
     position = 0
     for keyword in keywords:
         if keyword['name'] in CUBA_DATA_CONTAINER_EXCLUDE:
             continue
         if keyword['type'] == 'uuid':
+            template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
+            shape = 32
+        elif keyword['type'] == 'MaterialRelation':
             template = "    {} = tables.{}Col(pos={}, itemsize={})\n"
             shape = 32
         elif keyword['type'] == 'string':
@@ -159,7 +163,8 @@ def keywords(input, output):
         'uuid': "'uuid'",
         'string': 'numpy.str',
         'double': 'numpy.float64',
-        'integer': 'numpy.int32'}
+        'integer': 'numpy.int32',
+        'MaterialRelation': "'MaterialRelation'"}
     template = (
         "    '{key}': Keyword(\n"
         "        name='{name}',\n"

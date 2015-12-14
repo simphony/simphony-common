@@ -509,3 +509,17 @@
   number: 72
   shape: [1]
   type: double
+- description: Lennard Jones
+  domain: []
+  key: LENNARD_JONES
+  name: LennardJones
+  number: 73
+  shape: [1]
+  type: MaterialRelation
+- description: Coulomb
+  domain: []
+  key: COULOMB
+  name: Coulomb
+  number: 74
+  shape: [1]
+  type: MaterialRelation
