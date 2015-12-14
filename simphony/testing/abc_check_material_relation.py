@@ -53,18 +53,6 @@ class CheckMaterialRelation(object):
         with self.assertRaises(TypeError):
             relation.name = 42
 
-    def test_material_relation_data(self):
-        """ Test that data is set correctly
-
-        """
-        pass
-
-    def test_material_relation_data_update(self):
-        """ Test that data is updated correctly
-
-        """
-        pass
-
     def test_material_relation_parameters(self):
         """ Test that material relation parameteres are set correctly
 
