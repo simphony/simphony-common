@@ -1,5 +1,6 @@
 from simphony.material_relations.abc_material_relation import (
     ABCMaterialRelation)
+import simphony.core.data_container as dc
 
 
 class MaterialRelation(ABCMaterialRelation):
@@ -85,15 +86,23 @@ class MaterialRelation(ABCMaterialRelation):
 
     @property
     def supported_parameters(self):
-        return self._supported_parameters
+        return set(self._supported_parameters)
 
     @property
     def materials(self):
-        return self._materials
+        return list(self._materials)
 
     @materials.setter
     def materials(self, value):
         self._materials = value
+
+    @property
+    def parameters(self):
+        return dc.DataContainer(self._parameters)
+
+    @parameters.setter
+    def parameters(self, value):
+        self._parameters = dc.DataContainer(value)
 
     @property
     def num_materials(self):
