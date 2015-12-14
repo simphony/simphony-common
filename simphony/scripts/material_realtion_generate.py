@@ -77,8 +77,9 @@ def generate_initializer(mr):
 
         code += [
             ",\n",
-            "\t\t{ATT_NAME}".format(
-                ATT_NAME=param['cuba'].split('.')[1].lower()
+            "\t\t{ATT_NAME}={ATT_DEF}".format(
+                ATT_NAME=param['cuba'].split('.')[1].lower(),
+                ATT_DEF=param['default']
             ),
         ]
 
@@ -133,6 +134,44 @@ def generate_property_get_set(mr):
     return code
 
 
+def generate_test_import(mr):
+    return [
+        "import unittest\n",
+        "\n",
+        "from simphony.core.cuba import CUBA\n",
+        "from simphony.material_relations.{MR_FILE} import {MR_NAME}\n".format(
+            MR_FILE=mr['kind'].split('.')[1].lower(),
+            MR_NAME=mr['class_name']
+        ),
+        "from simphony.testing.abc_check_material_relation import (\n",
+        "\tCheckMaterialRelation)\n",
+        "\n",
+        "\n"
+    ]
+
+
+def generate_test_header(mr):
+    lines = [
+        "class Test{MR_NAME}MaterialRelation(\n".format(
+            MR_NAME=mr['class_name']
+        ),
+        "\tCheckMaterialRelation,\n",
+        "\tunittest.TestCase\n",
+        "):\n",
+        "\tdef container_factory(self, name):\n",
+        "\t\treturn {MR_NAME}(\n".format(MR_NAME=mr['class_name']),
+        "\t\t\tmaterials='{MR_MATS}'\n".format(MR_MATS='[0,1]'),
+        "\t\t)\n",
+        "\n",
+        "\tdef get_kind(self):\n",
+        "\t\treturn {MR_KIND}\n".format(
+            MR_KIND=mr['kind']
+        )
+    ]
+
+    return lines
+
+
 @click.group()
 def cli():
     """ Auto-generate code from material-relation yaml description. """
@@ -142,12 +181,13 @@ def cli():
 @click.argument('input', type=click.File('rb'))
 @click.argument('outpath', type=click.Path(exists=True))
 def python(input, outpath):
-    """ Create the material-relation class.
+    """ Create the material-relation classes.
     """
     material_relations = yaml.safe_load(input)
 
     for mr in material_relations:
-        with open(outpath+mr['class_name']+'.py', 'w+') as mrFile:
+        class_name_l = mr['kind'].split('.')[1].lower()
+        with open(outpath+class_name_l+'.py', 'w+') as mrFile:
             lines = []
             lines += generate_class_import()
             lines += generate_class_header(mr)
@@ -163,7 +203,19 @@ def python(input, outpath):
 @click.argument('input', type=click.File('rb'))
 @click.argument('outpath', type=click.Path(exists=True))
 def test(input, outpath):
-    pass
+    """ Create the material-relation test classes.
+    """
+    material_relations = yaml.safe_load(input)
+
+    for mr in material_relations:
+        class_name_l = mr['kind'].split('.')[1].lower()
+        with open(outpath+"test_"+class_name_l+'.py', 'w+') as mrFile:
+            lines = []
+            lines += generate_test_import(mr)
+            lines += generate_test_header(mr)
+
+            mrFile.writelines([i.replace('\t', '    ') for i in lines])
+
 
 if __name__ == '__main__':
     cli()
