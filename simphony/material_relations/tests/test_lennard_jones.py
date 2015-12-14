@@ -17,3 +17,5 @@ class TestLennardJonesMaterialRelation(
 
     def get_kind(self):
         return CUBA.LENNARD_JONES
+if __name__ == '__main__':
+    unittest.main()

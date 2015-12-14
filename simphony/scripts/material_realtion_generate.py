@@ -66,7 +66,7 @@ def generate_initializer(mr):
     code += [
         "\n\t\"\"\"\n",
         "\n",
-        "\tdef __init(\n",
+        "\tdef __init__(\n",
         "\t\tself,\n",
         "\t\tmaterials",
     ]
@@ -172,6 +172,15 @@ def generate_test_header(mr):
     return lines
 
 
+def generate_test_main():
+    lines = [
+        "if __name__ == '__main__':\n",
+        "\tunittest.main()\n"
+    ]
+
+    return lines
+
+
 @click.group()
 def cli():
     """ Auto-generate code from material-relation yaml description. """
@@ -213,6 +222,7 @@ def test(input, outpath):
             lines = []
             lines += generate_test_import(mr)
             lines += generate_test_header(mr)
+            lines += generate_test_main()
 
             mrFile.writelines([i.replace('\t', '    ') for i in lines])
 

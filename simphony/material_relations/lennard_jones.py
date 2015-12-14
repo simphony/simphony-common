@@ -21,7 +21,7 @@ class LennardJones(MaterialRelation):
 
     """
 
-    def __init(
+    def __init__(
         self,
         materials,
         cutoff_distance=1.0,

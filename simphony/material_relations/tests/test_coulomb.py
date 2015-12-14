@@ -17,3 +17,5 @@ class TestCoulombMaterialRelation(
 
     def get_kind(self):
         return CUBA.COULOMB
+if __name__ == '__main__':
+    unittest.main()
