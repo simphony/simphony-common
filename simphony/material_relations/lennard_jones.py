@@ -23,13 +23,14 @@ class LennardJones(MaterialRelation):
 
     def __init__(
         self,
-        materials,
+        name="LennardJones",
+        materials=None,
         cutoff_distance=1.0,
         energy_well_depth=1.0,
         van_der_waals_radius=1.0
     ):
         super(LennardJones, self).__init__(
-            name="LennardJones",
+            name=name,
             description="Lennard Jones material relation",  # noqa
             parameters=dc.DataContainer(),
             supported_parameters=[

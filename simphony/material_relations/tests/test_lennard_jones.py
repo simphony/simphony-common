@@ -10,10 +10,14 @@ class TestLennardJonesMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
-    def container_factory(self, name):
+    def container_factory(self, name="LennardJones"):
         return LennardJones(
-            materials='[0,1]'
+            name=name,
+            materials=[0, 1]
         )
+
+    def get_name(self):
+        return "LennardJones"
 
     def get_kind(self):
         return CUBA.LENNARD_JONES

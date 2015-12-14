@@ -21,12 +21,13 @@ class Coulomb(MaterialRelation):
 
     def __init__(
         self,
-        materials,
+        name="Coulomb",
+        materials=None,
         cutoff_distance=1.0,
         dielectric_contance=1.0
     ):
         super(Coulomb, self).__init__(
-            name="Coulomb",
+            name=name,
             description="Coulomb material relation",  # noqa
             parameters=dc.DataContainer(),
             supported_parameters=[

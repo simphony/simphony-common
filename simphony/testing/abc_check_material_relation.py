@@ -11,6 +11,16 @@ class CheckMaterialRelation(object):
     def setUp(self):
         pass
 
+    # Note: Since name has the role of an id, im not sure up to which extend
+    #   this can be set/modified by the user. Hence necessity of retrieve the
+    #   default value based on the derived class.
+    @abc.abstractmethod
+    def get_name():
+        """ Returns the name of the tested relation
+
+        """
+        pass
+
     @abc.abstractmethod
     def get_kind():
         """ Returns the kinf of the tested relation
@@ -19,7 +29,7 @@ class CheckMaterialRelation(object):
         pass
 
     @abc.abstractmethod
-    def container_factory(self, number):
+    def container_factory(self, name=None):
         """ Create and return a given number of material relations.
 
         """
@@ -37,12 +47,24 @@ class CheckMaterialRelation(object):
         self.assertEqual(relation.name, 'foo_relation')
         self.assertNotEqual(relation.name, original_name)
 
+    def test_material_relation_name_default(self):
+        """ Test that name is set correctly
+
+        """
+
+        relation = self.container_factory()
+        original_name = relation.name
+        original_name = 'foo_relation_2'
+
+        self.assertEqual(relation.name, self.get_name())
+        self.assertNotEqual(relation.name, original_name)
+
     def test_material_relation_name_update(self):
         """ Test that name is updated correctly
 
         """
 
-        relation = self.container_factory('foo_relation')
+        relation = self.container_factory()
         relation.name = 'foo_relation_2'
 
         self.assertEqual(relation.name, 'foo_relation_2')
@@ -75,17 +97,17 @@ class CheckMaterialRelation(object):
 
         # given
         relation = self.container_factory('foo_relation')
-        data = create_data_container()
-        expected_data = create_data_container(
-            restrict=self.supported_parameters
+
+        parameters = create_data_container(
+            restrict=relation.supported_parameters
         )
 
         # when
-        relation.data = data
+        relation.parameters = parameters
 
         # then
-        self.assertEqual(relation.data, expected_data)
-        self.assertIsNot(relation.data, expected_data)
+        self.assertEqual(relation.parameters, parameters)
+        self.assertIsNot(relation.parameters, parameters)
 
     def test_material_relation_supported_parameters(self):
         """ Test that name is set correctly

@@ -44,7 +44,7 @@ class MaterialRelation(ABCMaterialRelation):
 
         self._num_materials = num_materials
 
-        if(materials.size() not in self._num_materials):
+        if(len(materials) not in self._num_materials):
             error_str = "Incorrect number of materials, expected: {}"
             raise ValueError(
                 error_str.format(
@@ -60,6 +60,7 @@ class MaterialRelation(ABCMaterialRelation):
         self._materials = materials
         self._kind = kind
 
+    # Should we allow users to modify the id?
     @property
     def name(self):
         return self._name

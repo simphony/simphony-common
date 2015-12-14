@@ -68,7 +68,8 @@ def generate_initializer(mr):
         "\n",
         "\tdef __init__(\n",
         "\t\tself,\n",
-        "\t\tmaterials",
+        "\t\tname=\"{MR_NAME}\",\n".format(MR_NAME=mr['class_name']),
+        "\t\tmaterials=None",
     ]
 
     for param in mr['supported_parameters']:
@@ -88,7 +89,7 @@ def generate_initializer(mr):
         "\t\tsuper({MR_NAME}, self).__init__(\n".format(
             MR_NAME=mr['class_name']
         ),
-        "\t\t\tname=\"{MR_NAME}\",\n".format(MR_NAME=mr['class_name']),
+        "\t\t\tname=name,\n",
         "\t\t\tdescription=\"{MR_DESC}\",  # noqa\n".format(
             MR_DESC=mr['description']
         ),
@@ -158,10 +159,22 @@ def generate_test_header(mr):
         "\tCheckMaterialRelation,\n",
         "\tunittest.TestCase\n",
         "):\n",
-        "\tdef container_factory(self, name):\n",
-        "\t\treturn {MR_NAME}(\n".format(MR_NAME=mr['class_name']),
-        "\t\t\tmaterials='{MR_MATS}'\n".format(MR_MATS='[0,1]'),
+        "\tdef container_factory(self, name=\"{MR_NAME}\"):\n".format(
+            MR_NAME=mr['class_name']
+        ),
+        "\t\treturn {MR_NAME}(\n".format(
+            MR_NAME=mr['class_name']
+        ),
+        "\t\t\tname=name,\n",
+        "\t\t\tmaterials={MR_MATS}\n".format(
+            MR_MATS=[0, 1]
+        ),
         "\t\t)\n",
+        "\n",
+        "\tdef get_name(self):\n",
+        "\t\treturn \"{MR_NAME}\"\n".format(
+            MR_NAME=mr['class_name']
+        ),
         "\n",
         "\tdef get_kind(self):\n",
         "\t\treturn {MR_KIND}\n".format(

@@ -10,10 +10,14 @@ class TestCoulombMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
-    def container_factory(self, name):
+    def container_factory(self, name="Coulomb"):
         return Coulomb(
-            materials='[0,1]'
+            name=name,
+            materials=[0, 1]
         )
+
+    def get_name(self):
+        return "Coulomb"
 
     def get_kind(self):
         return CUBA.COULOMB
