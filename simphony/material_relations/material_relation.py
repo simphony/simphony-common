@@ -57,7 +57,6 @@ class MaterialRelation(ABCMaterialRelation):
         self._parameters = parameters
         self._supported_parameters = supported_parameters
         self._materials = materials
-        self._num_materials = num_materials
         self._kind = kind
 
     @property
@@ -66,7 +65,11 @@ class MaterialRelation(ABCMaterialRelation):
 
     @name.setter
     def name(self, value):
-        self._name = value
+        if isinstance(value, string):
+            self._name = value
+        else:
+            message = 'Expected string but received {!r}'
+            raise TypeError(message.format(type(string)))
 
     @property
     def description(self):
@@ -74,23 +77,15 @@ class MaterialRelation(ABCMaterialRelation):
 
     @description.setter
     def description(self, value):
-        self._description = value
-
-    @property
-    def parameters(self):
-        return self._parameters
-
-    @parameters.setter
-    def parameters(self, value):
-        self._parameters = value
+        if isinstance(value, string):
+            self._description = value
+        else:
+            message = 'Expected string but received {!r}'
+            raise TypeError(message.format(type(string)))
 
     @property
     def supported_parameters(self):
         return self._supported_parameters
-
-    @supported_parameters.setter
-    def supported_parameters(self, value):
-        self._supported_parameters = value
 
     @property
     def materials(self):
@@ -111,7 +106,3 @@ class MaterialRelation(ABCMaterialRelation):
     @property
     def kind(self):
         return self._kind
-
-    @kind.setter
-    def kind(self, value):
-        self._kind = value
