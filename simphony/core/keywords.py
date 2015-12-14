@@ -601,7 +601,7 @@ KEYWORDS = {
         key='LENNARD_JONES',
         number=73,
         shape=[1],
-        dtype='MaterialRelation'),
+        dtype=numpy.str),
     'COULOMB': Keyword(
         name='Coulomb',
         description='Coulomb',  # noqa
@@ -609,5 +609,5 @@ KEYWORDS = {
         key='COULOMB',
         number=74,
         shape=[1],
-        dtype='MaterialRelation'),
+        dtype=numpy.str),
 }

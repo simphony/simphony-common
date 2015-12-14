@@ -164,7 +164,7 @@ def keywords(input, output):
         'string': 'numpy.str',
         'double': 'numpy.float64',
         'integer': 'numpy.int32',
-        'MaterialRelation': "'MaterialRelation'"}
+        'MaterialRelation': 'numpy.str'}
     template = (
         "    '{key}': Keyword(\n"
         "        name='{name}',\n"
