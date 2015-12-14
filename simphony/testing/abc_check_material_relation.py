@@ -1,5 +1,7 @@
 import abc
-import uuid
+from simphony.core.data_container import DataContainer
+
+from simphony.testing.utils import create_data_container
 
 
 class CheckMaterialRelation(object):
@@ -32,7 +34,8 @@ class CheckMaterialRelation(object):
         original_name = relation.name
         original_name = 'foo_relation_2'
 
-        assertEqual(relation.name, 'foo_relation')
+        self.assertEqual(relation.name, 'foo_relation')
+        self.assertNotEqual(relation.name, original_name)
 
     def test_material_relation_name_update(self):
         """ Test that name is updated correctly
@@ -42,7 +45,7 @@ class CheckMaterialRelation(object):
         relation = self.container_factory('foo_relation')
         relation.name = 'foo_relation_2'
 
-        assertEqual(relation.name, 'foo_relation_2')
+        self.assertEqual(relation.name, 'foo_relation_2')
 
     def test_material_relation_invalid_name_update(self):
         """ Test that name is updated correctly
@@ -108,7 +111,7 @@ class CheckMaterialRelation(object):
         relation = self.container_factory('foo_relation')
         relation.name = 'foo_relation_2'
 
-        assertEqual(relation.name, 'foo_relation_2')
+        self.assertEqual(relation.name, 'foo_relation_2')
 
         pass
 
@@ -125,9 +128,7 @@ class CheckMaterialRelation(object):
 
         relation = self.container_factory('foo_relation')
 
-        assertEqual(self.kind, self.get_kind())
-
-        pass
+        self.assertEqual(relation.kind, self.get_kind())
 
     def test_material_relation_kind_update(self):
         """ Test that kind can't be accessed
