@@ -177,7 +177,7 @@ def get_specific_primitive_cell_factories():
         lambda a, c: not numpy.isclose(a, c))
 
     criteria[BravaisLattice.ORTHORHOMBIC] = (
-        lambda a, b, c: not numpy.isclose((a, b, a), (c, c, b)).any())
+        lambda a, b, c: not numpy.isclose((a, b, c), (b, c, a)).any())
 
     criteria[BravaisLattice.BODY_CENTERED_ORTHORHOMBIC] = (
         criteria[BravaisLattice.ORTHORHOMBIC])
@@ -190,6 +190,7 @@ def get_specific_primitive_cell_factories():
 
     criteria[BravaisLattice.MONOCLINIC] = (
         lambda a, b, c, alpha: (not numpy.isclose(alpha, numpy.pi/2.) and
+                                not numpy.isclose(a, c) and
                                 not (numpy.isclose(alpha, numpy.pi/3.) and
                                      numpy.isclose((a, b, c),
                                                    (b, c, a)).any())))
@@ -252,6 +253,7 @@ specific_map2_general = defaultdict(
             BravaisLattice.RHOMBOHEDRAL,
             BravaisLattice.TETRAGONAL,
             BravaisLattice.ORTHORHOMBIC,
+            BravaisLattice.BASE_CENTERED_ORTHORHOMBIC,
             BravaisLattice.MONOCLINIC,
             BravaisLattice.TRICLINIC),
         BravaisLattice.FACE_CENTERED_CUBIC: (
@@ -264,6 +266,7 @@ specific_map2_general = defaultdict(
             BravaisLattice.TRICLINIC),
         BravaisLattice.TETRAGONAL: (
             BravaisLattice.ORTHORHOMBIC,
+            BravaisLattice.BASE_CENTERED_ORTHORHOMBIC,
             BravaisLattice.MONOCLINIC,
             BravaisLattice.TRICLINIC),
         BravaisLattice.HEXAGONAL: (
