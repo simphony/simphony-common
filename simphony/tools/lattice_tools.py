@@ -506,7 +506,8 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
     ''' Test if primitive vectors describe a base centered orthorhombic
     lattice
 
-    Also returns True for vectors describing a hexagonal lattice
+    Also returns True for vectors describing a cubic, tetragonal,
+    or hexagonal lattice
 
     Parameters
     ----------
@@ -517,16 +518,38 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
     -------
     output : bool
     '''
-    vec_lengths = map(vector_len, (p1, p2, p3))
-    factory = PrimitiveCell.for_base_centered_orthorhombic_lattice
+    # there are two types of primitive cells
+    # type 1: (a, 0, 0), (a/2, b/2, 0), (0, 0, c)
+    # type 2: (a/2, -b/2, 0), (a/2, b/2, 0), (0, 0, c)
 
-    for alpha, beta, gamma in permutations(vec_lengths, 3):
-        delta = 4.*beta**2.-alpha**2.
-        if (delta > 0. and
-                same_lattice_type(factory(alpha, numpy.sqrt(delta), gamma),
-                                  p1, p2, p3)):
+    dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
+    right_angles = dot_products < TOLERANCE
+    if right_angles.sum() < 2:
+        return False
+
+    lenA, lenB, lenC = map(vector_len, (p1, p2, p3))
+    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
+
+    if equal_lengths.any() and all(right_angles):
+        return True
+    elif equal_lengths.any():
+        # find the pair of vectors that don't make a right angle
+        # if it is the type 2 cell, they should be equal length
+        if equal_lengths[numpy.where(~right_angles)[0][0]]:
             return True
-    return False
+
+    if not all(right_angles):
+        # try type 1
+        # find the two vectors that don't make right angles with the others
+        # the projection of one vector is half the another vector
+        not_right_angle = numpy.where(~right_angles)[0][0]
+        dot_product = dot_products[not_right_angle]
+        vec_mapping = {0: (p1, p2), 1: (p2, p3), 2: (p1, p3)}
+        v1, v2 = vec_mapping[not_right_angle]
+        return (numpy.abs(dot_product - numpy.dot(v1, v1)*0.5) < TOLERANCE or
+                numpy.abs(dot_product - numpy.dot(v2, v2)*0.5) < TOLERANCE)
+    else:
+        return False
 
 
 def is_monoclinic_lattice(p1, p2, p3):
