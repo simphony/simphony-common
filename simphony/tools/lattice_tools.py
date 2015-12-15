@@ -183,15 +183,29 @@ def is_body_centered_cubic_lattice(p1, p2, p3):
     -------
     output : bool
     '''
-    # exactly two sides of equal lengths
     a, b, c = map(vector_len, (p1, p2, p3))
-    equal_len_pairs = numpy.isclose((a, b, c), (b, c, a))
 
-    if not equal_len_pairs.sum() == 1:
+    equal_lengths = numpy.abs((a-b, b-c, c-a)) <= TOLERANCE
+
+    dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
+    right_angles = dot_products < TOLERANCE
+    one_right_angle = numpy.count_nonzero(right_angles) == 1
+
+    # two possible primitive cells for BCC
+    # type 1: p1=(a, 0, 0), p2=(0, a, 0), p3=(a/2, a/2, a/2)
+    # type 2: p1=0.5a(1, 1, -1), p2=0.5a(1, -1, 1), p3=0.5a(-1, 1, 1)
+    if sum(equal_lengths) == 1 and one_right_angle:
+        # type 1
+        # mapping for the length ratio of |p3|/|p1|
+        len_ratio = {0: c/a, 1: a/b, 2: b/a}
+        i_pair = numpy.where(equal_lengths)[0][0]
+        return (i_pair == numpy.where(right_angles)[0][0] and
+                numpy.abs(len_ratio[i_pair]-numpy.sqrt(3.)/2.) < TOLERANCE)
+    elif all(equal_lengths) and not one_right_angle:
+        # type 2
+        return (numpy.abs(dot_products*3./a/a - 1.) < TOLERANCE).all()
+    else:
         return False
-
-    return same_lattice_type(PrimitiveCell.for_body_centered_cubic_lattice(1.),
-                             p1, p2, p3)
 
 
 def is_face_centered_cubic_lattice(p1, p2, p3):
@@ -285,30 +299,71 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
     -------
     output : bool
     '''
-    # at least two sides of equal lengths
-    a, b, c = map(vector_len, (p1, p2, p3))
-    equal_len_pairs = numpy.isclose((a, b, c), (b, c, a))
+    # lengths of the vectors
+    lenA, lenB, lenC = map(vector_len, (p1, p2, p3))
+    all_length_equal = (numpy.abs(lenA/lenB-1.) < TOLERANCE and
+                        numpy.abs(lenB/lenC-1.) < TOLERANCE)
 
-    if not equal_len_pairs.any():
-        return False
-    elif equal_len_pairs.all():
+    # dot products of vectors
+    dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
+    right_angles = dot_products < TOLERANCE
+    one_right_angle = numpy.count_nonzero(right_angles) == 1
+
+    if all_length_equal and one_right_angle:
+        # type 1: as given by the PrimitiveCell class method
+        # p1: (a, 0, 0), p2: (0, a, 0), p3: (a/2, a/2, c/2)
         factory = PrimitiveCell.for_body_centered_tetragonal_lattice
-        return same_lattice_type(factory(1., 1.), p1, p2, p3)
+        return same_lattice_type(factory(1., numpy.sqrt(2.)), p1, p2, p3)
+
+    elif all_length_equal:
+        # type 2
+        # p1: 0.5(a, a, -c), p2: 0.5(a, -a, c), p3: 0.5(-a, a, c)
+        # deduce sides a and c for type 2 cell
+        equal_dot_products = numpy.isclose(dot_products,
+                                           dot_products[[2, 0, 1]],
+                                           atol=TOLERANCE)
+
+        # at least two of the dot products are equal
+        if not equal_dot_products.any():
+            return False
+
+        # at least two of the abs(dot products) = c**2.
+        c_square = dot_products[numpy.where(equal_dot_products)[0][0]]
+        a_square = (lenA*lenA-c_square)/2.
+
+        if a_square < TOLERANCE or c_square < TOLERANCE:
+            # lengths are invalid
+            return False
+        elif equal_dot_products.all():
+            return numpy.abs(a_square-c_square) < TOLERANCE
+        else:
+            mapping = {0: dot_products[1], 1: dot_products[2],
+                       2: dot_products[0]}
+            other_dot_product = mapping[numpy.where(equal_dot_products)[0][0]]
+            expected = numpy.abs(c_square - 2.*a_square)
+            return numpy.abs(other_dot_product-expected) < TOLERANCE
+
+    elif one_right_angle:
+        # all vectors have different lengths
+        # only type 1 primitive cell is possible
+        # find the only pair of vectors that make a right angle
+        i_right_angles = numpy.where(right_angles)[0][0]
+        mapping = {0: (lenB, lenA, lenC),
+                   1: (lenB, lenC, lenA),
+                   2: (lenA, lenC, lenB)}
+        # conventional sides (a, b, c)
+        a, b, c = mapping[i_right_angles]
+        # the rest of the dot products should match
+        expected = numpy.array((0.5*a*a, 0.5*b*b))
+        dot_products = dot_products[~right_angles]
+        angle_match = numpy.abs(dot_products-expected) < TOLERANCE
+
+        edge_match = (numpy.abs(a-b) < TOLERANCE or
+                      numpy.abs(c*c-(0.5*b*b + a*a/4.)) < TOLERANCE or
+                      numpy.abs(c*c-(0.5*a*a + b*b/4.)) < TOLERANCE)
+        return angle_match.all() and edge_match
     else:
-        # only one pair of equal edges
-        # mapping for the vectors and edges
-        pair_other = {0: ((p1, p2), p3, (a, c)),
-                      1: ((p2, p3), p1, (b, a)),
-                      2: ((p1, p3), p2, (a, b))}
-
-        # v1 and v2 should be perpendicular vectors of the same lengths
-        # the another vector make the same angle with the other two
-        (v1, v2), v3, (a, b) = pair_other[numpy.where(equal_len_pairs)[0][0]]
-
-        return (numpy.isclose(cosine_two_vectors(v1, v2), 0.) and
-                numpy.allclose((numpy.abs(cosine_two_vectors(v1, v3)),
-                                numpy.abs(cosine_two_vectors(v2, v3))),
-                               0.5*a/b))
+        return False
 
 
 def is_hexagonal_lattice(p1, p2, p3):
@@ -383,16 +438,37 @@ def is_body_centered_orthorhombic_lattice(p1, p2, p3):
     -------
     output : bool
     '''
-    vec_lengths = map(vector_len, (p1, p2, p3))
-    factory = PrimitiveCell.for_body_centered_orthorhombic_lattice
+    # dot products of vectors
+    dot_products = numpy.array(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
+    right_angles = numpy.abs(dot_products) < TOLERANCE
+    one_right_angle = right_angles.sum() == 1
 
-    for alpha, beta, gamma in permutations(vec_lengths):
-        delta = 4*gamma**2.-alpha**2.-beta**2.
-        if (delta > 0. and
-                same_lattice_type(factory(alpha, beta, numpy.sqrt(delta)),
-                                  p1, p2, p3)):
-            return True
-    return False
+    # lengths of the vectors
+    lenA, lenB, lenC = map(vector_len, (p1, p2, p3))
+    all_length_equal = (numpy.abs(lenA-lenC) < TOLERANCE and
+                        numpy.abs(lenB-lenC) < TOLERANCE)
+
+    if all_length_equal and one_right_angle:
+        # type 1: as given by the PrimitiveCell class method
+        factory = PrimitiveCell.for_body_centered_orthorhombic_lattice
+        return same_lattice_type(factory(1., 1., numpy.sqrt(2.)), p1, p2, p3)
+    elif all_length_equal:
+        # type 2
+        # p1: 0.5(a, b, -c), p2: 0.5(a, -b, c), p3: 0.5(-a, b, c)
+        # - p1.p2 - p2.p3 - p1.p3 == |p1|**2. == |p2|**2. == |p3|**2.
+        return numpy.abs(numpy.sum(dot_products) + lenA*lenA) < TOLERANCE
+    elif one_right_angle:
+        # type 1
+        i_right_angles = numpy.where(right_angles)[0][0]
+        mapping = {0: (lenB, lenA, lenC),
+                   1: (lenB, lenC, lenA),
+                   2: (lenA, lenC, lenB)}
+        lenA, lenB, lenC = mapping[i_right_angles]
+        expected = (0.5*lenA*lenA, 0.5*lenB*lenB)
+        dot_products = numpy.abs(dot_products[~right_angles])
+        return (numpy.abs(dot_products/expected-1.) < TOLERANCE).all()
+    else:
+        return False
 
 
 def is_face_centered_orthorhombic_lattice(p1, p2, p3):
