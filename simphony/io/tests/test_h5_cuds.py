@@ -1,19 +1,19 @@
 import unittest
 import os
-import uuid
 from contextlib import closing
 import shutil
 import tempfile
 import tables
 
-from simphony.cuds.particles import Particle, Particles
-from simphony.cuds.mesh import Point, Mesh
-
+from simphony.core.cuds_item import CUDSItem
 from simphony.core.cuba import CUBA
+from simphony.core.data_container import DataContainer
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_lattice import H5Lattice
+from simphony.cuds import Mesh, Particles
+from simphony.cuds.lattice import make_cubic_lattice
 
 from simphony.testing.abc_check_engine import (
     ParticlesEngineCheck, MeshEngineCheck,
@@ -24,13 +24,6 @@ class TestH5CUDS(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-        self.maxDiff = None
-        self.particles = []
-        self.points = []
-        for i in xrange(10):
-            self.particles.append(
-                Particle((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
-            self.points.append(Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -75,91 +68,24 @@ class TestH5CUDS(unittest.TestCase):
             self.assertTrue(handle.valid())
         self.assertFalse(handle.valid())
 
-    def test_add_get_particle_container_data(self):
+    def test_closed_file_not_usable(self):
         filename = os.path.join(self.temp_dir, 'test.cuds')
-        original_pc = Particles(name="test")
-        # Change data
-        data = original_pc.data
-        data[CUBA.NAME] = 'somename'
-        original_pc.data = data
-
-        # Store particle container along with its data
         with closing(H5CUDS.open(filename)) as handle:
-            handle.add_dataset(original_pc)
-
-        # Reopen the file and check the data if it is still there
-        with closing(H5CUDS.open(filename, 'r')) as handle:
-            pc = handle.get_dataset('test')
-            self.assertIn(CUBA.NAME, pc.data)
-            self.assertEqual(pc.data[CUBA.NAME], 'somename')
-
-    def test_add_get_particle_container(self):
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
-        with closing(H5CUDS.open(filename, 'w')) as handle:
-            # add particle container and add points to it
-            handle.add_dataset(Particles(name="test"))
-            pc_test = handle.get_dataset("test")
-            uids = pc_test.add_particles(self.particles)
-            for particle in self.particles:
-                uid = particle.uid
-                self.assertIn(uid, uids)
-                self.assertEqual(
-                    particle.coordinates,
-                    pc_test.get_particle(uid).coordinates)
-            self.assertEqual(
-                len(self.particles), sum(1 for _ in pc_test.iter_particles()))
-
-            # add the particle container from the first file
-            # into the second file
-            with closing(H5CUDS.open(filename_copy, 'w')) as handle_copy:
-                handle_copy.add_dataset(pc_test)
-                pc_copy = handle_copy.get_dataset(pc_test.name)
-
-                for particle in pc_test.iter_particles():
-                    particle_copy = pc_copy.get_particle(particle.uid)
-                    self.assertEqual(particle_copy.uid, particle.uid)
-                    self.assertEqual(
-                        particle_copy.coordinates, particle.coordinates)
-
-    def test_add_get_mesh(self):
-        # add mesh and add points to it
-        filename = os.path.join(self.temp_dir, 'test.cuds')
-        filename_copy = os.path.join(self.temp_dir, 'test-copy.cuds')
-        with closing(H5CUDS.open(filename)) as handle:
-            handle.add_dataset(Mesh(name="test"))
-            m_test = handle.get_dataset("test")
-            for p in self.points:
-                uid = m_test.add_points([p])
-                self.assertEqual(p.uid, uid[0])
-                self.assertEqual(
-                    p.coordinates, m_test.get_point(uid[0]).coordinates)
-
-            num_points = sum(1 for _ in m_test.iter_points())
-            self.assertEqual(num_points, len(self.points))
-
-            # add the mesh from the first file into the second file
-            with closing(H5CUDS.open(filename_copy)) as handle_copy:
-                handle_copy.add_dataset(m_test)
-                m_copy = handle_copy.get_dataset(m_test.name)
-
-                for p in m_test.iter_points():
-                    p1 = m_copy.get_point(p.uid)
-                    self.assertEqual(p1.uid, p.uid)
-                    self.assertEqual(p1.coordinates, p.coordinates)
-
+            handle.add_dataset(Mesh(name="test_1"))
+            handle.add_dataset(Particles(name="test_2"))
+            lattice = make_cubic_lattice("test_3", 1.0, (2, 3, 4))
+            handle.add_dataset(lattice)
+            test_h1 = handle.get_dataset("test_1")
+            test_h2 = handle.get_dataset("test_2")
+            test_h3 = handle.get_dataset("test_3")
         with self.assertRaises(Exception):
-            m_test.delete(self.points[0].uid)
+            handle.get_dataset('test_h1')
         with self.assertRaises(Exception):
-            handle.get_dataset('test')
-
-        # reopen file (in read only mode)
-        with closing(H5CUDS.open(filename, 'r')) as handle:
-            m_test = handle.get_dataset('test')
-            for p in self.points:
-                p1 = m_test.get_point(p.uid)
-                self.assertEqual(p1.uid, p.uid)
-                self.assertEqual(p1.coordinates, p.coordinates)
+            test_h1.name = 'foo'
+        with self.assertRaises(Exception):
+            test_h2.name = 'foo'
+        with self.assertRaises(Exception):
+            test_h3.name = 'foo'
 
 
 class TestH5CUDSVersions(unittest.TestCase):
@@ -202,9 +128,33 @@ class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
-        """
 
+        """
         self.assertTrue(isinstance(ds, H5Particles))
+
+    def test_add_get_dataset_with_cuba_keys_argument(self):
+        engine = self.engine_factory()
+        items = self.create_dataset_items()
+        reference = self.create_dataset(name='test')
+        expected = self.create_dataset(name='test')
+
+        # Add some CUBA data
+        for particle in items:
+            particle.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
+            expected.add_particles([particle])
+            particle.data = DataContainer(
+                {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
+            reference.add_particles([particle])
+
+        # Store reference dataset along with its data
+        engine.add_dataset(reference, {CUDSItem.PARTICLE: [CUBA.VELOCITY]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
+        ds = engine.get_dataset('test')
+        self.compare_dataset(ds, expected)
 
     def tearDown(self):
         for engine in self.engines:
@@ -226,9 +176,33 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
-        """
 
+        """
         self.assertTrue(isinstance(ds, H5Mesh))
+
+    def test_add_get_dataset_with_cuba_keys_argument(self):
+        engine = self.engine_factory()
+        items = self.create_dataset_items()
+        reference = self.create_dataset(name='test')
+        expected = self.create_dataset(name='test')
+
+        # Add some CUBA data
+        for point in items:
+            point.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
+            expected.add_points([point])
+            point.data = DataContainer(
+                {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
+            reference.add_points([point])
+
+        # Store reference dataset along with its data
+        engine.add_dataset(reference, {CUDSItem.POINT: [CUBA.VELOCITY]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
+        ds = engine.get_dataset('test')
+        self.compare_dataset(ds, expected)
 
     def tearDown(self):
         for engine in self.engines:
@@ -250,9 +224,31 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
 
     def check_instance_of_dataset(self, ds):
         """ Check if a dataset is instance of a class
-        """
 
+        """
         self.assertTrue(isinstance(ds, H5Lattice))
+
+    def test_add_get_dataset_with_cuba_keys_argument(self):
+        engine = self.engine_factory()
+        reference = self.create_dataset(name='test')
+        expected = self.create_dataset(name='test')
+
+        # Add some CUBA data
+        for node in reference.iter_nodes():
+            node.data = DataContainer({CUBA.MATERIAL_ID: 1})
+            expected.update_nodes([node])
+            node.data = DataContainer({CUBA.MATERIAL_ID: 1, CUBA.DENSITY: 2})
+            reference.update_nodes([node])
+
+        # Store reference dataset along with its data
+        engine.add_dataset(reference, {CUDSItem.NODE: [CUBA.MATERIAL_ID]})
+
+        # Closing and reopening the file
+        engine.close()
+        engine = self.engine_factory()
+
+        ds = engine.get_dataset('test')
+        self.compare_dataset(ds, expected)
 
     def tearDown(self):
         for engine in self.engines:

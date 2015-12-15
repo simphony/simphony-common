@@ -3,8 +3,8 @@ CUDS Data Structures
 
 The Common Unified Data Structures (CUDS) define the expected
 interface for the modelling engine wrappers, the visualisation api the
-top level CUDS containers (i.e. Mesh, Lattice and Particles) and the
-low level CUDS components (e.g Point, Bond, LatticeNode)
+top-level CUDS containers (i.e. Mesh, Lattice and Particles) and the
+low-level CUDS components (e.g Point, Bond, LatticeNode)
 
 .. note::
 
@@ -19,9 +19,9 @@ Modelling engine
 
   **Figure. 1:** UML description of a CUDS modelling engine.
 
-The CUDS engine supports operations to add, get and remove CUDS
-containers from the internal memory of the engine wrapper to setup
-the SD state of the simulations.
+The CUDS engine (:class:`~.ABCModelingEngine`) supports operations to add,
+get and remove CUDS containers from the internal memory of the engine wrapper
+to setup the SD state of the simulations.
 
 When a CUDS container is added the CUDS modelling engine will copy
 into internal memory only the ``uid`` mapping and the CUBA information
@@ -75,7 +75,7 @@ CUDS Items
 
    **Figure 3:** UML diagram of the CUDS items and their relations.
 
-Low level items are smallest objects that can hold CUBA information in
+Low-level items are the smallest objects that can hold CUBA information in
 SimPhoNy simulations. Each CUDS container supports a specific set of
 these types as presented in **Fig. 2**.
 
@@ -89,3 +89,14 @@ Core items
 The CUBA attribute container part of the SimPhoNy core. A dictionary
 like object maps :class:`~.CUBA` enum keys to they values. In its
 native python implementation it can support all CUBA attributes.
+
+Materials
+----------
+
+.. figure:: ./images/material_materials.png
+
+   **Figure 4:** UML diagram of Materials and Material.
+
+In the SimPhoNy modeling framework, :class:`~.Materials` and :class:`~.Material`
+are used to describe materials and to define common material properties. Each
+low-level object (e.g. Point, Particle) can be of a certain material.
