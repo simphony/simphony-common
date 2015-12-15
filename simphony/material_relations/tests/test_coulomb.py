@@ -10,10 +10,14 @@ class TestCoulombMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
-    def container_factory(self, name="Coulomb"):
+    def container_factory(
+        self,
+        name="Coulomb",
+        materials=[UUID('66eccff4-d0b2-409f-89ad-c5d2fddfff5e')]  # noqa
+    ):
         return Coulomb(
             name=name,
-            materials=[0, 1]
+            materials=materials
         )
 
     def get_name(self):

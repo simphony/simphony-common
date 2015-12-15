@@ -10,10 +10,14 @@ class TestLennardJonesMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
-    def container_factory(self, name="LennardJones"):
+    def container_factory(
+        self,
+        name="LennardJones",
+        materials=[UUID('10fe1f39-9273-4fae-838f-a8be56092a27')]  # noqa
+    ):
         return LennardJones(
             name=name,
-            materials=[0, 1]
+            materials=materials
         )
 
     def get_name(self):

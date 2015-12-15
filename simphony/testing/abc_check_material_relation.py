@@ -26,7 +26,7 @@ class CheckMaterialRelation(object):
         pass
 
     @abc.abstractmethod
-    def container_factory(self, name=None):
+    def container_factory(self, name=None, materials=None):
         """ Create and return a given number of material relations.
 
         """
@@ -68,6 +68,36 @@ class CheckMaterialRelation(object):
 
     def test_material_relation_invalid_name_update(self):
         """ Test that name is updated correctly
+
+        """
+
+        relation = self.container_factory('foo_relation')
+
+        with self.assertRaises(TypeError):
+            relation.name = 42
+
+    def test_material_relation_description(self):
+        """ Test that descriotion is set correctly
+
+        """
+
+        relation = self.container_factory('foo_relation')
+
+        self.assertNotEqual(relation.description, None)
+
+    def test_material_relation_description_update(self):
+        """ Test that description is updated correctly
+
+        """
+
+        relation = self.container_factory()
+        extended_desc = relation.descriotion + '_extended'
+        relation.descriotion = extended_desc
+
+        self.assertEqual(relation.name, extended_desc)
+
+    def test_material_relation_invalid_description_update(self):
+        """ Test that description is updated correctly
 
         """
 
@@ -127,13 +157,6 @@ class CheckMaterialRelation(object):
 
         """
 
-        relation = self.container_factory('foo_relation')
-        relation.name = 'foo_relation_2'
-
-        self.assertEqual(relation.name, 'foo_relation_2')
-
-        pass
-
     def test_material_relation_materials_update(self):
         """ Test that name is updated correctly
 
@@ -144,10 +167,7 @@ class CheckMaterialRelation(object):
         """ Test that kind is set correctly
 
         """
-
-        relation = self.container_factory('foo_relation')
-
-        self.assertEqual(relation.kind, self.get_kind())
+        pass
 
     def test_material_relation_kind_update(self):
         """ Test that kind can't be accessed
