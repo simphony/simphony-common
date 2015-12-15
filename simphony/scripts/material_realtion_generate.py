@@ -111,32 +111,34 @@ def generate_initializer(mr):
 
 def generate_property_get_set(mr):
 
-    getter_string = ""
-    getter_string += "\t@property\n"
-    getter_string += "\tdef {PROP_NAME}(self):\n"
-    getter_string += "\t\treturn self.parameters[{CUBA_KEY}]\n"
+    getter = (
+        "\t@property\n"
+        "\tdef {PROP_NAME}(self):\n"
+        "\t\treturn self.parameters[{CUBA_KEY}]\n"
+    )
 
-    setter_string = ""
-    setter_string += "\t@{PROP_NAME}.setter\n"
-    setter_string += "\tdef {PROP_NAME}(self, value):\n"
-    setter_string += "\t\tself.parameters[{CUBA_KEY}] = value\n"
+    setter = (
+        "\t@{PROP_NAME}.setter\n"
+        "\tdef {PROP_NAME}(self, value):\n"
+        "\t\tself.parameters[{CUBA_KEY}] = value\n"
+    )
 
-    get_set_block = getter_string + "\n" + setter_string
+    get_set_block = getter + "\n" + setter
 
-    code = ""
+    lines = []
 
     for param in mr['supported_parameters']:
-
-        code += "\n" + get_set_block.format(
+        lines.append("\n")
+        lines.extend(get_set_block.format(
             PROP_NAME=param['cuba'].split('.')[1].lower(),
             CUBA_KEY=param['cuba']
-        )
+        ))
 
-    return code
+    return lines
 
 
 def generate_test_import(mr):
-    return [
+    lines = [
         "import unittest\n",
         "\n",
         "from simphony.core.cuba import CUBA\n",
@@ -149,6 +151,8 @@ def generate_test_import(mr):
         "\n",
         "\n"
     ]
+
+    return lines
 
 
 def generate_test_header(mr):
@@ -185,8 +189,45 @@ def generate_test_header(mr):
     return lines
 
 
+def generate_test_parameters(mr):
+
+    test_att_template = (
+        "\tdef test_{ATT_NAME}(self):\n"
+        "\t\trelation = self.container_factory('foo_relation')\n"
+        "\n"
+        "\t\tself.assertEqual(relation.{ATT_NAME}, {ATT_DEFAULT})\n"
+    )
+
+    test_update_att_template = (
+        "\tdef test_{ATT_NAME}_update(self):\n"
+        "\t\trelation = self.container_factory('foo_relation')\n"
+        "\n"
+        "\t\toriginal = relation.{ATT_NAME}\n"
+        "\t\trelation.{ATT_NAME} = original + 1\n"
+        "\n"
+        "\t\tself.assertEqual(relation.{ATT_NAME}, original + 1)\n"
+    )
+
+    lines = []
+
+    for param in mr['supported_parameters']:
+        lines.append("\n")
+        lines.extend(test_att_template.format(
+            ATT_NAME=param['cuba'].split('.')[1].lower(),
+            ATT_DEFAULT=param['default']
+        ))
+        lines.append("\n")
+        lines.extend(test_update_att_template.format(
+            ATT_NAME=param['cuba'].split('.')[1].lower(),
+            ATT_DEFAULT=param['default']
+        ))
+
+    return lines
+
+
 def generate_test_main():
     lines = [
+        "\n",
         "if __name__ == '__main__':\n",
         "\tunittest.main()\n"
     ]
@@ -235,6 +276,7 @@ def test(input, outpath):
             lines = []
             lines += generate_test_import(mr)
             lines += generate_test_header(mr)
+            lines += generate_test_parameters(mr)
             lines += generate_test_main()
 
             mrFile.writelines([i.replace('\t', '    ') for i in lines])

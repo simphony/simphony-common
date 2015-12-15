@@ -21,5 +21,32 @@ class TestCoulombMaterialRelation(
 
     def get_kind(self):
         return CUBA.COULOMB
+
+    def test_cutoff_distance(self):
+        relation = self.container_factory('foo_relation')
+
+        self.assertEqual(relation.cutoff_distance, 1.0)
+
+    def test_cutoff_distance_update(self):
+        relation = self.container_factory('foo_relation')
+
+        original = relation.cutoff_distance
+        relation.cutoff_distance = original + 1
+
+        self.assertEqual(relation.cutoff_distance, original + 1)
+
+    def test_dielectric_contance(self):
+        relation = self.container_factory('foo_relation')
+
+        self.assertEqual(relation.dielectric_contance, 1.0)
+
+    def test_dielectric_contance_update(self):
+        relation = self.container_factory('foo_relation')
+
+        original = relation.dielectric_contance
+        relation.dielectric_contance = original + 1
+
+        self.assertEqual(relation.dielectric_contance, original + 1)
+
 if __name__ == '__main__':
     unittest.main()
