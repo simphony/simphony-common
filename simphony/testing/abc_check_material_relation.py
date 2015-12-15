@@ -11,9 +11,6 @@ class CheckMaterialRelation(object):
     def setUp(self):
         pass
 
-    # Note: Since name has the role of an id, im not sure up to which extend
-    #   this can be set/modified by the user. Hence necessity of retrieve the
-    #   default value based on the derived class.
     @abc.abstractmethod
     def get_name():
         """ Returns the name of the tested relation
