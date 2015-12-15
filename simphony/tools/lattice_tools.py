@@ -4,6 +4,9 @@ import numpy
 from simphony.cuds.primitive_cell import PrimitiveCell, BravaisLattice
 
 
+TOLERANCE = 1.e-6
+
+
 def vector_len(vec):
     ''' Length of vector
 
@@ -39,7 +42,11 @@ def cosine_two_vectors(vec1, vec2):
 def same_lattice_type(target_pc, p1, p2, p3, permute=True):
     ''' Return True if a set of primitive vectors ``p1``, ``p2``,
     ``p3`` describes the same type of lattice as the target
-    primitive cell ``target_pc`` does.  Single precision applies.
+    primitive cell ``target_pc`` does.
+
+    This function works by comparing length ratios and cosines
+    of the angles between vectors.  Single precision applies
+    by default, or change lattice_tools.TOLERANCE
 
     Parameters
     ----------
@@ -62,7 +69,7 @@ def same_lattice_type(target_pc, p1, p2, p3, permute=True):
 
     # length ratios between pairs of the target primitive vectors
     target_ratios = tuple(vector_len(vec1)/vector_len(vec2)
-                          for vec1, vec2 in permutations(pcs, 2))
+                          for vec1, vec2 in combinations(pcs, 2))
 
     if permute:
         vectors_iter = permutations((p1, p2, p3))
@@ -70,15 +77,12 @@ def same_lattice_type(target_pc, p1, p2, p3, permute=True):
         vectors_iter = ((p1, p2, p3),)
 
     for vectors in vectors_iter:
-        cosines = tuple(numpy.abs(cosine_two_vectors(vec1, vec2))
-                        for vec1, vec2 in combinations(vectors, 2))
-        ratios = tuple(vector_len(vec1)/vector_len(vec2)
-                       for vec1, vec2 in permutations(vectors, 2))
-
-        # single precision
-        atol = numpy.finfo(numpy.float32).resolution
-        if (numpy.allclose(cosines, target_cosines, atol=atol) and
-                numpy.allclose(ratios, target_ratios, atol=atol)):
+        cosines = numpy.abs(tuple(cosine_two_vectors(vec1, vec2)
+                                  for vec1, vec2 in combinations(vectors, 2)))
+        ratios = numpy.array(tuple(vector_len(vec1)/vector_len(vec2)
+                                   for vec1, vec2 in combinations(vectors, 2)))
+        if ((numpy.abs(cosines-target_cosines) <= TOLERANCE).all() and
+                (numpy.abs(ratios-target_ratios) <= TOLERANCE).all()):
             return True
     return False
 
@@ -159,13 +163,12 @@ def is_cubic_lattice(p1, p2, p3):
     '''
     # if all lengths close to each other
     a, b, c = map(vector_len, (p1, p2, p3))
-    if not numpy.allclose((b, c), a):
+    if numpy.abs(a-b) > TOLERANCE or numpy.abs(c-a) > TOLERANCE:
         return False
 
     # all angles close to 90 degree
-    cosines = map(cosine_two_vectors,
-                  (p1, p2, p3), (p2, p3, p1))
-    return numpy.isclose(cosines, 0.).all()
+    cosines = map(cosine_two_vectors, (p1, p2, p3), (p2, p3, p1))
+    return (numpy.abs(cosines) < TOLERANCE).all()
 
 
 def is_body_centered_cubic_lattice(p1, p2, p3):
@@ -205,13 +208,13 @@ def is_face_centered_cubic_lattice(p1, p2, p3):
     '''
     # all sides of equal lengths
     a, b, c = map(vector_len, (p1, p2, p3))
-    if not numpy.allclose((a, b), c):
+    if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
         return False
 
     # all angles close to 60 degree
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
-    return numpy.allclose(cosines, 0.5)
+    return numpy.allclose(cosines, 0.5, atol=TOLERANCE)
 
 
 def is_rhombohedral_lattice(p1, p2, p3):
@@ -231,13 +234,13 @@ def is_rhombohedral_lattice(p1, p2, p3):
     '''
     # all sides of equal lengths
     a, b, c = map(vector_len, (p1, p2, p3))
-    if not numpy.allclose((a, b), c):
+    if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
         return False
 
     # all angles close to each other
     cosa, cosb, cosc = numpy.abs(map(cosine_two_vectors,
                                      (p1, p2, p3), (p2, p3, p1)))
-    return numpy.allclose((cosa, cosb), cosc)
+    return numpy.allclose((cosa, cosb), cosc, atol=TOLERANCE)
 
 
 def is_tetragonal_lattice(p1, p2, p3):
@@ -255,16 +258,15 @@ def is_tetragonal_lattice(p1, p2, p3):
     output : bool
     '''
     # at least two sides of equal lengths
-    a, b, c = map(vector_len, (p1, p2, p3))
-    equal_lengths = numpy.isclose((a, b, c), (b, c, a))
+    lenA, lenB, lenC = map(vector_len, (p1, p2, p3))
+    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
 
     if not equal_lengths.any():
         return False
 
     # all angles close to 90 degrees
-    cosines = map(cosine_two_vectors,
-                  (p1, p2, p3), (p2, p3, p1))
-    return numpy.allclose(cosines, 0.)
+    cosines = numpy.abs(map(cosine_two_vectors, (p1, p2, p3), (p2, p3, p1)))
+    return (cosines < TOLERANCE).all()
 
 
 def is_body_centered_tetragonal_lattice(p1, p2, p3):
