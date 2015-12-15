@@ -1,5 +1,6 @@
 import click
 import yaml
+import uuid
 from simphony.core.keywords import KEYWORDS
 
 
@@ -163,16 +164,23 @@ def generate_test_header(mr):
         "\tCheckMaterialRelation,\n",
         "\tunittest.TestCase\n",
         "):\n",
-        "\tdef container_factory(self, name=\"{MR_NAME}\"):\n".format(
+        "\tdef container_factory(\n",
+        "\t\tself,\n",
+        "\t\tname=\"{MR_NAME}\",\n".format(
             MR_NAME=mr['class_name']
         ),
+        "\t\tmaterials={MR_MATS}  # noqa\n".format(
+            MR_MATS=[uuid.uuid4() for _ in xrange(
+                0,
+                mr['allowed_number_materials'][0]
+            )]
+        ),
+        "\t):\n",
         "\t\treturn {MR_NAME}(\n".format(
             MR_NAME=mr['class_name']
         ),
         "\t\t\tname=name,\n",
-        "\t\t\tmaterials={MR_MATS}\n".format(
-            MR_MATS=[0, 1]
-        ),
+        "\t\t\tmaterials=materials\n",
         "\t\t)\n",
         "\n",
         "\tdef get_name(self):\n",
