@@ -94,6 +94,14 @@ class MaterialRelation(ABCMaterialRelation):
 
     @materials.setter
     def materials(self, value):
+        if(len(materials) not in self._num_materials):
+            error_str = "Incorrect number of materials, expected: {}"
+            raise ValueError(
+                error_str.format(
+                    materials.size(),
+                    self._num_materials
+                )
+            )
         self._materials = value
 
     @property
