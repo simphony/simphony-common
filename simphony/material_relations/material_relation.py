@@ -116,10 +116,6 @@ class MaterialRelation(ABCMaterialRelation):
     def num_materials(self):
         return self._num_materials
 
-    @num_materials.setter
-    def num_materials(self, value):
-        self._num_materials = value
-
     @property
     def kind(self):
         return self._kind
