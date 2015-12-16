@@ -20,7 +20,7 @@ class CheckMaterialRelation(object):
 
     @abc.abstractmethod
     def get_kind():
-        """ Returns the kinf of the tested relation
+        """ Returns the kind of the tested relation
 
         """
         pass
@@ -77,7 +77,7 @@ class CheckMaterialRelation(object):
             relation.name = 42
 
     def test_material_relation_description(self):
-        """ Test that descriotion is set correctly
+        """ Test that description is set correctly
 
         """
 
