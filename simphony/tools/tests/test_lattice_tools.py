@@ -318,9 +318,9 @@ class TestLatticeTools(unittest.TestCase):
                    (primitive_cell.p1, primitive_cell.p2, primitive_cell.p3))
 
     @given(builder(get_specific_primitive_cell_factories()))
-    def test_find_lattice_type_specific(self, lattice):
+    def test_find_lattice_type_specific(self, lattices):
         ''' Test getting the most specific lattice type correctly'''
-        for expected, primitive_cell in lattice.items():
+        for expected, primitive_cell in lattices.items():
             # given
             aligned_vectors = self._get_primitive_vectors(primitive_cell)
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
@@ -333,10 +333,10 @@ class TestLatticeTools(unittest.TestCase):
 
     @given(builder(get_specific_primitive_cell_factories(),
                    specific_map2_general.keys()))
-    def test_subtype_of_general_lattices(self, lattice):
+    def test_subtype_of_general_lattices(self, lattices):
         ''' Test if more symmetric lattices are part of more general lattices
         '''
-        for specific, primitive_cell in lattice.items():
+        for specific, primitive_cell in lattices.items():
             # given
             aligned_vectors = self._get_primitive_vectors(primitive_cell)
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
@@ -411,17 +411,30 @@ class TestLatticeTools(unittest.TestCase):
         self.assertEqual(find_lattice_type(p1, p2, p3),
                          BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
-    def test_guess_primitive_vectors(self):
+    @given(builder(get_specific_primitive_cell_factories()))
+    def test_guess_primitive_vectors(self, lattices):
+        for primitive_cell in lattices.values():
+            # given
+            aligned_vectors = self._get_primitive_vectors(primitive_cell)
+            p1, p2, p3 = rotate_permute_flip(aligned_vectors)
+
+            # when
+            points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
+
+            # then
+            actual = guess_primitive_vectors(points)
+            numpy.testing.assert_allclose(actual, (p1, p2, p3))
+
+    def test_guess_primitive_vectors_special_case(self):
         # given
-        primitive_cell = PrimitiveCell.for_rhombohedral_lattice(0.1, 0.7)
+        p1, p2, p3 = (0., 0., 1.), (0., 2., 0.), (1., 0., 0.)
 
         # when
-        p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
         points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
-        actual = guess_primitive_vectors(points)
 
         # then
-        numpy.testing.assert_allclose((p1, p2, p3), actual)
+        actual = guess_primitive_vectors(points)
+        numpy.testing.assert_allclose(actual, (p1, p2, p3))
 
     def test_exception_guess_vectors_with_unsorted_points(self):
         # given
