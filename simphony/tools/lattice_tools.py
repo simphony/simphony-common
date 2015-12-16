@@ -146,9 +146,13 @@ def guess_primitive_vectors(points):
 
     # Test if the lattice points are ordered as expected
     # Does not test all points, otherwise slow for large data
-    if ((numpy.abs(numpy.diff(points[:nx, 0], n=2)) > TOLERANCE).any() or
-        (numpy.abs(numpy.diff(points[::nx, 1][:ny], n=2)) > TOLERANCE).any() or
-        (numpy.abs(numpy.diff(points[::nx*ny, 2], n=2)) > TOLERANCE).any()):
+    x_not_ordered = (numpy.abs(numpy.diff(points[:nx, 0],
+                                          n=2)) > TOLERANCE).any()
+    y_not_ordered = (numpy.abs(numpy.diff(points[::nx, 1][:ny],
+                                          n=2)) > TOLERANCE).any()
+    z_not_ordered = (numpy.abs(numpy.diff(points[::nx*ny, 2],
+                                          n=2)) > TOLERANCE).any()
+    if x_not_ordered or y_not_ordered or z_not_ordered:
         message = ("Deduction of the primitive vectors requires the "
                    "lattice nodes to be ordered in a C-contiguous fashion.")
         raise IndexError(message)
