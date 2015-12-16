@@ -91,10 +91,10 @@ class CheckMaterialRelation(object):
         """
 
         relation = self.container_factory()
-        extended_desc = relation.descriotion + '_extended'
-        relation.descriotion = extended_desc
+        extended_desc = relation.description + '_extended'
+        relation.description = extended_desc
 
-        self.assertEqual(relation.name, extended_desc)
+        self.assertEqual(relation.description, extended_desc)
 
     def test_material_relation_invalid_description_update(self):
         """ Test that description is updated correctly
