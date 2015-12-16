@@ -141,6 +141,7 @@ def generate_property_get_set(mr):
 def generate_test_import(mr):
     lines = [
         "import unittest\n",
+        "import uuid\n",
         "\n",
         "from simphony.core.cuba import CUBA\n",
         "from simphony.material_relations.{MR_FILE} import {MR_NAME}\n".format(
@@ -169,13 +170,10 @@ def generate_test_header(mr):
         "\t\tname=\"{MR_NAME}\",\n".format(
             MR_NAME=mr['class_name']
         ),
-        "\t\tmaterials={MR_MATS}  # noqa\n".format(
-            MR_MATS=[uuid.uuid4() for _ in xrange(
-                0,
-                mr['allowed_number_materials'][0]
-            )]
+        "\t\tmaterials=[uuid.uuid4() for _ in xrange({MR_NUM_MATS})]".format(
+            MR_NUM_MATS=mr['allowed_number_materials'][0]
         ),
-        "\t):\n",
+        "):\n",
         "\t\treturn {MR_NAME}(\n".format(
             MR_NAME=mr['class_name']
         ),

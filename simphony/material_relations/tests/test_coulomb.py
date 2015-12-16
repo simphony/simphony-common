@@ -1,4 +1,5 @@
 import unittest
+import uuid
 
 from simphony.core.cuba import CUBA
 from simphony.material_relations.coulomb import Coulomb
@@ -13,8 +14,7 @@ class TestCoulombMaterialRelation(
     def container_factory(
         self,
         name="Coulomb",
-        materials=[UUID('66eccff4-d0b2-409f-89ad-c5d2fddfff5e')]  # noqa
-    ):
+        materials=[uuid.uuid4() for _ in xrange(1)]):
         return Coulomb(
             name=name,
             materials=materials
