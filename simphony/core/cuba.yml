@@ -502,10 +502,10 @@
   number: 71
   shape: [1]
   type: double
-- description: Dielectric Contance
+- description: Dielectric Constant
   domain: []
-  key: DIELECTRIC_CONTANCE
-  name: DielectricContance
+  key: DIELECTRIC_CONSTANT
+  name: DielectricConstant
   number: 72
   shape: [1]
   type: double

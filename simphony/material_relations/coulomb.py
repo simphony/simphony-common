@@ -14,8 +14,8 @@ class Coulomb(MaterialRelation):
 
     cutoffdistance : <type 'numpy.float64'>
         Cutoff Distance
-    dielectriccontance : <type 'numpy.float64'>
-        Dielectric Contance
+    dielectricconstant : <type 'numpy.float64'>
+        Dielectric Constant
 
     """
 
@@ -24,18 +24,18 @@ class Coulomb(MaterialRelation):
         name="Coulomb",
         materials=None,
         cutoff_distance=1.0,
-        dielectric_contance=1.0
+        dielectric_constant=1.0
     ):
         super(Coulomb, self).__init__(
             name=name,
             description="Coulomb material relation",  # noqa
             parameters=DataContainer({
                 CUBA.CUTOFF_DISTANCE: cutoff_distance,
-                CUBA.DIELECTRIC_CONTANCE: dielectric_contance,
+                CUBA.DIELECTRIC_CONSTANT: dielectric_constant,
             }),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
-                CUBA.DIELECTRIC_CONTANCE,
+                CUBA.DIELECTRIC_CONSTANT,
             ],
             materials=materials,
             num_materials=[1, 2],
@@ -53,11 +53,11 @@ class Coulomb(MaterialRelation):
         self._parameters = updated_parameters
 
     @property
-    def dielectric_contance(self):
-        return self._parameters[CUBA.DIELECTRIC_CONTANCE]
+    def dielectric_constant(self):
+        return self._parameters[CUBA.DIELECTRIC_CONSTANT]
 
-    @dielectric_contance.setter
-    def dielectric_contance(self, value):
+    @dielectric_constant.setter
+    def dielectric_constant(self, value):
         updated_parameters = self._parameters
-        updated_parameters[CUBA.DIELECTRIC_CONTANCE] = value
+        updated_parameters[CUBA.DIELECTRIC_CONSTANT] = value
         self._parameters = updated_parameters

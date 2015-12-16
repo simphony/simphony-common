@@ -20,6 +20,6 @@
   - cuba: CUBA.CUTOFF_DISTANCE
     required: yes
     default: 1.0
-  - cuba: CUBA.DIELECTRIC_CONTANCE
+  - cuba: CUBA.DIELECTRIC_CONSTANT
     required: yes
     default: 1.0
