@@ -12,11 +12,11 @@ class LennardJones(MaterialRelation):
     Attributes
     ----------
 
-    cutoffdistance : <type 'numpy.float64'>
+    cutoff_distance : <type 'numpy.float64'>
         Cutoff Distance
-    energywelldepth : <type 'numpy.float64'>
+    energy_well_depth : <type 'numpy.float64'>
         Energy Well Depth
-    vanderwaalsradius : <type 'numpy.float64'>
+    van_der_waals_radius : <type 'numpy.float64'>
         Van Der Waals Radius
 
     """

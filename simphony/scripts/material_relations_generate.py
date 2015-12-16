@@ -46,7 +46,7 @@ def generate_attributes_description(mr):
 
         code += [
             "\t{ATT_NAME} : {ATT_TYPE}\n".format(
-                ATT_NAME=KEYWORDS[key].name.lower(),
+                ATT_NAME=param['cuba'].split('.')[1].lower(),
                 ATT_TYPE=KEYWORDS[key].dtype
             ),
             "\t\t{ATT_DESC}\n".format(

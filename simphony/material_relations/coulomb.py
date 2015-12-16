@@ -12,9 +12,9 @@ class Coulomb(MaterialRelation):
     Attributes
     ----------
 
-    cutoffdistance : <type 'numpy.float64'>
+    cutoff_distance : <type 'numpy.float64'>
         Cutoff Distance
-    dielectricconstant : <type 'numpy.float64'>
+    dielectric_constant : <type 'numpy.float64'>
         Dielectric Constant
 
     """
