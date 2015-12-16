@@ -23,8 +23,8 @@ class LennardJones(MaterialRelation):
 
     def __init__(
         self,
-        name="LennardJones",
-        materials=None,
+        name,
+        materials,
         cutoff_distance=1.0,
         energy_well_depth=1.0,
         van_der_waals_radius=1.0

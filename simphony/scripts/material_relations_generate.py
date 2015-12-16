@@ -68,8 +68,8 @@ def generate_initializer(mr):
         "\n",
         "\tdef __init__(\n",
         "\t\tself,\n",
-        "\t\tname=\"{MR_NAME}\",\n".format(MR_NAME=mr['class_name']),
-        "\t\tmaterials=None",
+        "\t\tname,\n",
+        "\t\tmaterials",
     ]
 
     for param in mr['supported_parameters']:

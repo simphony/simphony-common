@@ -21,8 +21,8 @@ class Coulomb(MaterialRelation):
 
     def __init__(
         self,
-        name="Coulomb",
-        materials=None,
+        name,
+        materials,
         cutoff_distance=1.0,
         dielectric_constant=1.0
     ):
