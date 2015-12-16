@@ -115,32 +115,40 @@ def guess_primitive_vectors(points):
     def find_jump(arr1d):
         ''' Return the index where the first derivation changes '''
         sec_dev = numpy.diff(arr1d, n=2)
-        return numpy.where(~numpy.isclose(sec_dev, 0.))[0][0]+2
+        return numpy.where(numpy.abs(sec_dev) > TOLERANCE)[0][0]+2
 
+    # find where the x increments are discontinuous
+    # keep the smallest value
+    nx = points.shape[0]
     for idim in range(3):
         try:
-            nx = find_jump(points[:, idim])
-            break
-        except IndexError:   # numpy.where is empty
+            size = find_jump(points[:, idim])
+        except IndexError:
             continue
-    else:
-        message = "Failed to deduce the first lattice dimension"
-        raise IndexError(message)
+        if size < nx:
+            nx = size
 
+    # find where the y increments are discontinuous
+    # keep the smallest value
+    ny = points.shape[0]
     for idim in range(3):
         try:
-            ny = find_jump(points[::nx, idim])
-            break
-        except IndexError:   # numpy.where is empty
+            size = find_jump(points[::nx, idim])
+        except IndexError:
             continue
-    else:
-        message = "Failed to deduce the second lattice dimension"
+        if size < ny:
+            ny = size
+
+    nz = points.shape[0] // nx // ny
+    if nx*ny*nz != points.shape[0]:
+        message = "Failed to deduce the lattice dimensions"
         raise IndexError(message)
 
     # Test if the lattice points are ordered as expected
-    if not (numpy.allclose(numpy.diff(points[:nx, 0], n=2), 0.) and
-            numpy.allclose(numpy.diff(points[::nx, 1][:ny], n=2), 0.) and
-            numpy.allclose(numpy.diff(points[::nx*ny, 2], n=2), 0.)):
+    # Does not test all points, otherwise slow for large data
+    if ((numpy.abs(numpy.diff(points[:nx, 0], n=2)) > TOLERANCE).any() or
+        (numpy.abs(numpy.diff(points[::nx, 1][:ny], n=2)) > TOLERANCE).any() or
+        (numpy.abs(numpy.diff(points[::nx*ny, 2], n=2)) > TOLERANCE).any()):
         message = ("Deduction of the primitive vectors requires the "
                    "lattice nodes to be ordered in a C-contiguous fashion.")
         raise IndexError(message)
