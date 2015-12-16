@@ -12,7 +12,7 @@ class CheckMaterialRelation(object):
 
     @abc.abstractmethod
     def container_factory(self, name):
-        """ Create and return a material relations with the default values
+        """ Create and return a material relations with the default parameters
 
         """
 
