@@ -8,23 +8,26 @@ from hypothesis.strategies import floats, tuples, composite
 from hypothesis.strategies import fixed_dictionaries
 
 from simphony.cuds.primitive_cell import BravaisLattice, PrimitiveCell
-import simphony.tools.lattice_tools as lattice_tools
+from simphony.tools.lattice_tools import (find_lattice_type,
+                                          guess_primitive_vectors,
+                                          is_bravais_lattice_consistent)
 
 
-def rotate_primitive_cell(primitive_cell, angle1=numpy.pi/2., angle2=0.):
+def rotate_vectors(vectors, angle1=numpy.pi/2., angle2=0.):
     ''' Rotate the given primitive cell for ``angle1`` about z
     and then for ``angle2`` about x
 
     Parameters
     ----------
-    primitive_cell : Primitive Cell
+    vectors: tuple of float[3]
+        set of vectors to be rotated, each of length 3: (x, y, z)
     angle1, angle2: float
         angles (in radian) for rotating about z and x
 
     Returns
     -------
-    p1, p2, p3: tuple of float[3]
-        Rotated vectors
+    rotated_vectors : tuple of float[3]
+        Rotated vectors. length = len(vectors)
     '''
     # rotate x-y for angle1 about z
     xy_rot = numpy.array([[numpy.cos(angle1), numpy.sin(angle1), 0],
@@ -37,9 +40,30 @@ def rotate_primitive_cell(primitive_cell, angle1=numpy.pi/2., angle2=0.):
     # rotate x-y, then y-z
     xyz_rot = numpy.inner(xy_rot, yz_rot)
 
-    return tuple((numpy.inner(xyz_rot, p) for p in (primitive_cell.p1,
-                                                    primitive_cell.p2,
-                                                    primitive_cell.p3)))
+    return tuple((numpy.inner(xyz_rot, vec) for vec in vectors))
+
+
+def rotate_permute_flip(vectors):
+    ''' randomly rotate, permute and flip a set of vectors
+
+    Parameters
+    ----------
+    vectors: tuple of float[3]
+        set of vectors to be rotated, each of length 3: (x, y, z)
+
+    Returns
+    -------
+    rotated_vectors : tuple of float[3]
+        Rotated vectors. length = len(vectors)
+    '''
+    alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
+    # rotating vectors
+    vectors = list(rotate_vectors(vectors, alpha, beta))
+    # random permutation
+    random.shuffle(vectors)
+    # flipping vectors
+    p1, p2, p3 = numpy.random.choice((1, -1), (3, 1))*vectors
+    return (p1, p2, p3)
 
 
 def create_points_from_pc(p1, p2, p3, size):
@@ -289,44 +313,40 @@ specific_map2_general = defaultdict(
 class TestLatticeTools(unittest.TestCase):
 
     @staticmethod
-    def get_primitive_vectors(primitive_cell):
+    def _get_primitive_vectors(primitive_cell):
         return map(numpy.array,
                    (primitive_cell.p1, primitive_cell.p2, primitive_cell.p3))
 
     @given(builder(get_specific_primitive_cell_factories()))
     def test_find_lattice_type_specific(self, lattice):
         ''' Test getting the most specific lattice type correctly'''
-        alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
-        for expected_type, primitive_cell in lattice.items():
-            # rotate vectors
-            vectors = list(rotate_primitive_cell(primitive_cell, alpha, beta))
-            # random permutation
-            random.shuffle(vectors)
-            # flipping vectors
-            vectors = numpy.random.choice((1, -1), (3, 1))*vectors
+        for expected, primitive_cell in lattice.items():
+            # given
+            aligned_vectors = self._get_primitive_vectors(primitive_cell)
+            p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
-            actual_type = lattice_tools.find_lattice_type(*vectors)
-            self.assertEqual(actual_type, expected_type)
+            # when
+            actual = find_lattice_type(p1, p2, p3)
+
+            # then
+            self.assertEqual(actual, expected)
 
     @given(builder(get_specific_primitive_cell_factories(),
                    specific_map2_general.keys()))
     def test_subtype_of_general_lattices(self, lattice):
         ''' Test if more symmetric lattices are part of more general lattices
         '''
-        alpha, beta = numpy.random.uniform(-numpy.pi, numpy.pi, 2)
         for specific, primitive_cell in lattice.items():
-            primitive_cell = lattice[specific]
-            # rotating vectors
-            vectors = list(rotate_primitive_cell(primitive_cell, alpha, beta))
-            # random permutation
-            random.shuffle(vectors)
-            # flipping vectors
-            p1, p2, p3 = numpy.random.choice((1, -1), (3, 1))*vectors
+            # given
+            aligned_vectors = self._get_primitive_vectors(primitive_cell)
+            p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
+            # then
+            msg = "Expected {!r} to be a symmetric case of {!r}. False."
             for general in specific_map2_general[specific]:
                 self.assertTrue(
-                    lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
-                                                                general))
+                    is_bravais_lattice_consistent(p1, p2, p3, general),
+                    msg.format(specific, general))
 
     def test_incompatible_lattice_type(self):
         ''' Test if some specific lattices are incompatible with some others
@@ -336,26 +356,69 @@ class TestLatticeTools(unittest.TestCase):
         All other lattices are triclinic in its loose definition
         '''
         lattices = builder(get_specific_primitive_cell_factories()).example()
+
         for bravais_lattice, primitive_cell in lattices.items():
-            # bravais_lattice cannot be compatible with lattice
-            # types in `exclusive`
+            # given
+            aligned_vectors = self._get_primitive_vectors(primitive_cell)
+            p1, p2, p3 = rotate_permute_flip(aligned_vectors)
+
+            # when
             exclusives = (set(BravaisLattice)
                           - set(specific_map2_general[bravais_lattice])
                           - set([bravais_lattice, BravaisLattice.TRICLINIC]))
-            p1, p2, p3 = self.get_primitive_vectors(primitive_cell)
+
+            # then
+            # bravais_lattice cannot be compatible with lattice
+            # types in `exclusive`
             for exclusive in exclusives:
+                msg = "Expected {!r} not be considered as {!r}"
                 self.assertFalse(
-                    lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
-                                                                exclusive))
+                    is_bravais_lattice_consistent(p1, p2, p3, exclusive),
+                    msg.format(bravais_lattice, exclusive))
+
+    def test_alternative_primitive_cell_settings(self):
+        '''Test against alternative primitive cells not in PrimitiveCell'''
+
+        ######################
+        # body-centered cubic
+        ######################
+        bcc_vectors = ((1., 1., -1.), (1., -1., 1.), (-1., 1., 1.))
+        p1, p2, p3 = rotate_permute_flip(bcc_vectors)
+        self.assertEqual(find_lattice_type(p1, p2, p3),
+                         BravaisLattice.BODY_CENTERED_CUBIC)
+
+        ###########################
+        # body-centered tetragonal
+        ###########################
+        bc_tetra_vectors = ((1., 1., -2.), (1., -1., 2.), (-1., 1., 2.))
+        p1, p2, p3 = rotate_permute_flip(bc_tetra_vectors)
+        self.assertEqual(find_lattice_type(p1, p2, p3),
+                         BravaisLattice.BODY_CENTERED_TETRAGONAL)
+
+        #############################
+        # body-centered orthorhombic
+        #############################
+        bc_orthor_vectors = ((1., 3., -2.), (1., -3., 2.), (-1., 3., 2.))
+        p1, p2, p3 = rotate_permute_flip(bc_orthor_vectors)
+        self.assertEqual(find_lattice_type(p1, p2, p3),
+                         BravaisLattice.BODY_CENTERED_ORTHORHOMBIC)
+
+        ##############################
+        # base-centered orthorhombic
+        ##############################
+        base_orthor_vectors = ((1., 2., 0.), (-1., 2., 0.), (0., 0., 3.))
+        p1, p2, p3 = rotate_permute_flip(base_orthor_vectors)
+        self.assertEqual(find_lattice_type(p1, p2, p3),
+                         BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
     def test_guess_primitive_vectors(self):
         # given
         primitive_cell = PrimitiveCell.for_rhombohedral_lattice(0.1, 0.7)
 
         # when
-        p1, p2, p3 = self.get_primitive_vectors(primitive_cell)
+        p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
         points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
-        actual = lattice_tools.guess_primitive_vectors(points)
+        actual = guess_primitive_vectors(points)
 
         # then
         numpy.testing.assert_allclose((p1, p2, p3), actual)
@@ -365,13 +428,13 @@ class TestLatticeTools(unittest.TestCase):
         primitive_cell = PrimitiveCell.for_rhombohedral_lattice(0.1, 0.7)
 
         # when
-        p1, p2, p3 = self.get_primitive_vectors(primitive_cell)
+        p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
         points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
         numpy.random.shuffle(points)
 
         # then
         with self.assertRaises(IndexError):
-            lattice_tools.guess_primitive_vectors(points)
+            guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_first_jump(self):
         # given
@@ -379,7 +442,7 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
-            lattice_tools.guess_primitive_vectors(points)
+            guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_second_jump(self):
         # given
@@ -388,4 +451,4 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
-            lattice_tools.guess_primitive_vectors(points)
+            guess_primitive_vectors(points)
