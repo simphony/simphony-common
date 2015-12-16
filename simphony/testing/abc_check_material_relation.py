@@ -107,7 +107,7 @@ class CheckMaterialRelation(object):
             relation.name = 42
 
     def test_material_relation_parameters(self):
-        """ Test that material relation parameteres are set correctly
+        """ Test that material relation parameters are set correctly
 
         """
 
@@ -118,7 +118,7 @@ class CheckMaterialRelation(object):
         self.assertEqual(relation._parameters, DataContainer())
 
     def test_material_relation_parameters_update(self):
-        """ Test that material relation parameteres are updated correctly
+        """ Test that material relation parameters are updated correctly
 
         """
 
