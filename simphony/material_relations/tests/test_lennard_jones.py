@@ -13,8 +13,8 @@ class TestLennardJonesMaterialRelation(
 ):
     def container_factory(
         self,
-        name="LennardJones",
-        materials=[uuid.uuid4() for _ in xrange(1)]):
+            name="LennardJones",
+            materials=[uuid.uuid4() for _ in xrange(1)]):
         return LennardJones(
             name=name,
             materials=materials

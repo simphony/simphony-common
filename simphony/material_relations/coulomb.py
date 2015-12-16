@@ -1,7 +1,7 @@
 from simphony.material_relations.material_relation import (
     MaterialRelation)
 from simphony.core.cuba import CUBA
-import simphony.core.data_container as dc
+from simphony.core.data_container import DataContainer
 
 
 class Coulomb(MaterialRelation):
@@ -29,7 +29,10 @@ class Coulomb(MaterialRelation):
         super(Coulomb, self).__init__(
             name=name,
             description="Coulomb material relation",  # noqa
-            parameters=dc.DataContainer(),
+            parameters=DataContainer({
+                CUBA.CUTOFF_DISTANCE: cutoff_distance,
+                CUBA.DIELECTRIC_CONTANCE: dielectric_contance,
+            }),
             supported_parameters=[
                 CUBA.CUTOFF_DISTANCE,
                 CUBA.DIELECTRIC_CONTANCE,
@@ -41,16 +44,20 @@ class Coulomb(MaterialRelation):
 
     @property
     def cutoff_distance(self):
-        return self.parameters[CUBA.CUTOFF_DISTANCE]
+        return self._parameters[CUBA.CUTOFF_DISTANCE]
 
     @cutoff_distance.setter
     def cutoff_distance(self, value):
-        self.parameters[CUBA.CUTOFF_DISTANCE] = value
+        updated_parameters = self._parameters
+        updated_parameters[CUBA.CUTOFF_DISTANCE] = value
+        self._parameters = updated_parameters
 
     @property
     def dielectric_contance(self):
-        return self.parameters[CUBA.DIELECTRIC_CONTANCE]
+        return self._parameters[CUBA.DIELECTRIC_CONTANCE]
 
     @dielectric_contance.setter
     def dielectric_contance(self, value):
-        self.parameters[CUBA.DIELECTRIC_CONTANCE] = value
+        updated_parameters = self._parameters
+        updated_parameters[CUBA.DIELECTRIC_CONTANCE] = value
+        self._parameters = updated_parameters

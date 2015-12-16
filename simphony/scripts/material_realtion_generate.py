@@ -1,6 +1,5 @@
 import click
 import yaml
-import uuid
 from simphony.core.keywords import KEYWORDS
 
 
@@ -9,7 +8,7 @@ def generate_class_import():
         "from simphony.material_relations.material_relation import (\n",
         "\tMaterialRelation)\n",
         "from simphony.core.cuba import CUBA\n",
-        "import simphony.core.data_container as dc\n",
+        "from simphony.core.data_container import DataContainer\n",
         "\n",
         "\n",
     ]
@@ -94,7 +93,18 @@ def generate_initializer(mr):
         "\t\t\tdescription=\"{MR_DESC}\",  # noqa\n".format(
             MR_DESC=mr['description']
         ),
-        "\t\t\tparameters=dc.DataContainer(),\n",
+        "\t\t\tparameters=DataContainer({\n"
+    ]
+
+    for param in mr['supported_parameters']:
+        code += "\t\t\t\t{CUBA_KEY}: {ATT_NAME},\n".format(
+            CUBA_KEY=param['cuba'],
+            ATT_NAME=param['cuba'].split('.')[1].lower()
+        )
+
+    code += "\t\t\t}),\n"
+
+    code += [
         "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t],".format(
             MR_S_PARAM=sub_param_cuba
         ),
@@ -121,7 +131,9 @@ def generate_property_get_set(mr):
     setter = (
         "\t@{PROP_NAME}.setter\n"
         "\tdef {PROP_NAME}(self, value):\n"
-        "\t\tself._parameters[{CUBA_KEY}] = value\n"
+        "\t\tupdated_parameters = self._parameters\n"
+        "\t\tupdated_parameters[{CUBA_KEY}] = value\n"
+        "\t\tself._parameters = updated_parameters\n"
     )
 
     get_set_block = getter + "\n" + setter
@@ -167,10 +179,10 @@ def generate_test_header(mr):
         "):\n",
         "\tdef container_factory(\n",
         "\t\tself,\n",
-        "\t\tname=\"{MR_NAME}\",\n".format(
+        "\t\t\tname=\"{MR_NAME}\",\n".format(
             MR_NAME=mr['class_name']
         ),
-        "\t\tmaterials=[uuid.uuid4() for _ in xrange({MR_NUM_MATS})]".format(
+        "\t\t\tmaterials=[uuid.uuid4() for _ in xrange({MR_NUM_MATS})]".format(
             MR_NUM_MATS=mr['allowed_number_materials'][0]
         ),
         "):\n",

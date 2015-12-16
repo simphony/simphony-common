@@ -13,8 +13,8 @@ class TestCoulombMaterialRelation(
 ):
     def container_factory(
         self,
-        name="Coulomb",
-        materials=[uuid.uuid4() for _ in xrange(1)]):
+            name="Coulomb",
+            materials=[uuid.uuid4() for _ in xrange(1)]):
         return Coulomb(
             name=name,
             materials=materials
