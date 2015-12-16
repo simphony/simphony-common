@@ -24,7 +24,6 @@ class CheckMaterialRelation(object):
         relation = self.container_factory('foo_relation')
         self.assertEqual(relation.name, 'foo_relation')
 
-
         relation.name = 'foo_relation_2'
         self.assertEqual(relation.name, 'foo_relation_2')
 
@@ -63,12 +62,12 @@ class CheckMaterialRelation(object):
         """ Test that material relation parameters are set correctly
 
         """
+        # TODO should be testing that it is created with defaults
 
         # when
-        relation = self.container_factory('foo_relation')
+        # relation = self.container_factory('foo_relation')
 
         # then
-        # TODO should be testing that it is created with defaults
         # self.assertEqual(relation._parameters, DataContainer())
 
     def test_material_relation_parameters_update(self):
@@ -100,7 +99,6 @@ class CheckMaterialRelation(object):
 
     def test_material_relation_materials_update(self):
         pass
-
 
     def test_material_relation_kind_update(self):
         relation = self.container_factory('foo_relation')
