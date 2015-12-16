@@ -1,6 +1,6 @@
 from simphony.material_relations.abc_material_relation import (
     ABCMaterialRelation)
-import simphony.core.data_container as dc
+from simphony.core.data_container import DataContainer
 
 
 class MaterialRelation(ABCMaterialRelation):
@@ -106,11 +106,11 @@ class MaterialRelation(ABCMaterialRelation):
 
     @property
     def parameters(self):
-        return dc.DataContainer(self._parameters)
+        return DataContainer(self._parameters)
 
     @parameters.setter
     def parameters(self, value):
-        self._parameters = dc.DataContainer(value)
+        self._parameters = DataContainer(value)
 
     @property
     def num_materials(self):
