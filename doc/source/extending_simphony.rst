@@ -59,7 +59,7 @@ Will allow the user to import the new engine from inside the ``simphony`` module
 CUBA keywords
 -------------
 
-Common Unified Base Attributes (CUBA) are a list of common keywords transcending
+Common Unified Basic Attributes (CUBA) are a list of common keywords transcending
 across different scales, methods and modelling-engines. As SimPhoNy is extended,
 there is a need for CUBA to also be extended. Before adding a CUBA, developers
 should first consult the list of existing :ref:`cuba-keywords`,
