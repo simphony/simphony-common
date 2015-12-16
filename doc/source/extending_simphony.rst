@@ -66,7 +66,7 @@ should first consult the list of existing :ref:`cuba-keywords`,
 to see if the keyword already exists. Contact the developers at
 https://github.com/simphony/simphony-common if there are any questions.
 
-Once you have decided upon the what CUBA needs to be added (or modified), edit
+Once you have decided upon what CUBA needs to be added (or modified), edit
 `simphony/core/cuba.yml` to add the respective keyword. Ensure that all the
 the required information is accurately provided.
 
