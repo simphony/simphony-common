@@ -72,7 +72,9 @@ def generate_initializer(mr):
         "\tdef __init__(\n",
         "\t\tself,\n",
         "\t\tname,\n",
-        "\t\tmaterials",
+        "\t\tmaterials,\n",
+        "\t\tdescription=\"\"",
+
     ]
 
     for param in mr['supported_parameters']:
@@ -93,9 +95,7 @@ def generate_initializer(mr):
             MR_NAME=mr['class_name']
         ),
         "\t\t\tname=name,\n",
-        "\t\t\tdescription=\"{MR_DESC}\",  # noqa\n".format(
-            MR_DESC=mr['description']
-        ),
+        "\t\t\tdescription=description,\n",
         "\t\t\tparameters=DataContainer({\n"
     ]
 
