@@ -31,9 +31,11 @@ def generate_description_block(mr):
             MR_NAME=mr['class_name']
         ),
         "\n",
+        "\t{MR_DOC_DESCRIPTION}\n\n".format(
+            MR_DOC_DESCRIPTION=mr['doc_description']
+        ),
         "\tAttributes\n",
         "\t----------\n",
-        "\n",
     ]
 
 
@@ -330,7 +332,7 @@ def material_relations_information(input, output):
         '\n',
         'ATTRIBUTES = [\n'
         ' "number", "class_name", "allowed_number_materials",\n'
-        ' "description", "supported_parameters"]\n'
+        ' "doc_description", "supported_parameters"]\n'
         'Material_Relation_Information = namedtuple("Material_Relation_Information",\n',  # noqa
         '                                           ATTRIBUTES)\n',  # noqa
         '\n',
@@ -343,7 +345,7 @@ def material_relations_information(input, output):
         "        class_name='{class_name}',\n"
         "        number={number},\n"
         "        allowed_number_materials={allowed_number_materials},\n"
-        "        description='{description}',  # noqa\n"
+        "        doc_description='{doc_description}',  # noqa\n"
         "        supported_parameters=[{supported_parameters} ]\n"
         "     ),\n")
     parameter_template = (

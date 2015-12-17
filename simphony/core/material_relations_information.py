@@ -7,7 +7,7 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 
 ATTRIBUTES = [
  "number", "class_name", "allowed_number_materials",
- "description", "supported_parameters"]
+ "doc_description", "supported_parameters"]
 Material_Relation_Information = namedtuple("Material_Relation_Information",
                                            ATTRIBUTES)
 
@@ -19,7 +19,7 @@ MATERIAL_RELATIONSHIP_INFORMATION = {
         class_name='LennardJones',
         number=1,
         allowed_number_materials=[1, 2],
-        description='Lennard Jones material relation',  # noqa
+        doc_description='Lennard Jones material relation',  # noqa
         supported_parameters=[
              Parameter(cuba_key=CUBA.CUTOFF_DISTANCE,
                        default_value=1.0),
@@ -32,7 +32,7 @@ MATERIAL_RELATIONSHIP_INFORMATION = {
         class_name='Coulomb',
         number=2,
         allowed_number_materials=[1, 2],
-        description='Coulomb material relation',  # noqa
+        doc_description='Coulomb material relation',  # noqa
         supported_parameters=[
              Parameter(cuba_key=CUBA.CUTOFF_DISTANCE,
                        default_value=1.0),

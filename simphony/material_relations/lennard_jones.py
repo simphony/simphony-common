@@ -10,9 +10,10 @@ class LennardJones(MaterialRelation):
 
     """ A LennardJones material-relation
 
+    Lennard Jones material relation
+
     Attributes
     ----------
-
     cutoff_distance : <type 'numpy.float64'>
         Cutoff Distance
     energy_well_depth : <type 'numpy.float64'>

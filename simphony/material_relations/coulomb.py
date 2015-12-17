@@ -10,9 +10,10 @@ class Coulomb(MaterialRelation):
 
     """ A Coulomb material-relation
 
+    Coulomb material relation
+
     Attributes
     ----------
-
     cutoff_distance : <type 'numpy.float64'>
         Cutoff Distance
     dielectric_constant : <type 'numpy.float64'>

@@ -2,7 +2,7 @@
   number: 1
   class_name : LennardJones
   allowed_number_materials: [1, 2]
-  description: Lennard Jones material relation
+  doc_description: Lennard Jones material relation
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
     default: 1.0
@@ -14,7 +14,7 @@
   number: 2
   class_name : Coulomb
   allowed_number_materials: [1, 2]
-  description: Coulomb material relation
+  doc_description: Coulomb material relation
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
     default: 1.0
