@@ -151,6 +151,7 @@ def keywords(input, output):
         'from collections import namedtuple\n',
         '\n',
         'import numpy\n',
+        'import uuid\n',
         '\n',
         '\n',
         'ATTRIBUTES = [\n'
@@ -160,7 +161,7 @@ def keywords(input, output):
         '\n',
         'KEYWORDS = {\n']
     data_types = {
-        'uuid': "'uuid'",
+        'uuid': 'uuid.UUID',
         'string': 'numpy.str',
         'double': 'numpy.float64',
         'integer': 'numpy.int32',

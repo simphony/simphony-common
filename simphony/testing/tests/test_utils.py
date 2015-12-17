@@ -912,7 +912,7 @@ class TestCreateFactories(unittest.TestCase):
         for cuba in CUBA:
             value = dummy_cuba_value(cuba)
             keyword = KEYWORDS[CUBA(cuba).name]
-            if keyword.dtype == "uuid":
+            if keyword.dtype is uuid.UUID:
                 self.assertEqual(value, uuid.UUID(int=constant, version=4))
             elif numpy.issubdtype(keyword.dtype, str):
                 self.assertEqual(value, keyword.name + str(constant))
@@ -931,7 +931,7 @@ class TestCreateFactories(unittest.TestCase):
         for cuba in CUBA:
             value = dummy_cuba_value(cuba, constant=18)
             keyword = KEYWORDS[CUBA(cuba).name]
-            if keyword.dtype == "uuid":
+            if keyword.dtype is uuid.UUID:
                 self.assertEqual(value, uuid.UUID(int=constant, version=4))
             elif numpy.issubdtype(keyword.dtype, str):
                 self.assertEqual(value, keyword.name + str(constant))

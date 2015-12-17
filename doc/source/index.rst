@@ -14,7 +14,7 @@ User Manual
 .. toctree::
    :maxdepth: 1
 
-   Extending Simphony <plugins>
+   Extending SimPhoNy <extending_simphony>
    CUBA <cuba_information>
    CUDS <cuds_definition>
    HDF5 Storage <hdf5_storage>
