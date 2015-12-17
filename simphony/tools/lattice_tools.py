@@ -91,9 +91,8 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
 def guess_primitive_vectors(points):
     ''' Guess the primitive vectors underlying a given array of
     lattice points (N, 3).  This assumes an ideal, fixed bravais
-    lattice with no defect.
-
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    lattice with no defect within numerical errors, controlled by
+    ``lattice_tools.TOLERANCE``
 
     Parameter
     ----------
@@ -195,6 +194,9 @@ def is_cubic_lattice(p1, p2, p3):
     if numpy.less_equal((a, b, c), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
+        raise ValueError("Vectors contain invalid values")
+
     # if all lengths close to each other
     if numpy.abs(a-b) > TOLERANCE or numpy.abs(c-a) > TOLERANCE:
         return False
@@ -227,6 +229,9 @@ def is_body_centered_cubic_lattice(p1, p2, p3):
 
     if numpy.less_equal((a, b, c), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
+        raise ValueError("Vectors contain invalid values")
 
     equal_lengths = numpy.abs((a-b, b-c, c-a)) <= TOLERANCE
 
@@ -271,6 +276,9 @@ def is_face_centered_cubic_lattice(p1, p2, p3):
     if numpy.less_equal((a, b, c), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
+        raise ValueError("Vectors contain invalid values")
+
     if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
         return False
 
@@ -297,12 +305,15 @@ def is_rhombohedral_lattice(p1, p2, p3):
     -------
     output : bool
     '''
-    # all sides of equal lengths
     a, b, c = map(vector_len, (p1, p2, p3))
 
     if numpy.less_equal((a, b, c), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
+        raise ValueError("Vectors contain invalid values")
+
+    # all sides of equal lengths
     if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
         return False
 
@@ -333,6 +344,10 @@ def is_tetragonal_lattice(p1, p2, p3):
 
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
 
     equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
 
@@ -371,6 +386,10 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
 
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
 
     all_length_equal = (numpy.abs(lenA-lenB) <= TOLERANCE and
                         numpy.abs(lenB-lenC) <= TOLERANCE)
@@ -457,6 +476,10 @@ def is_hexagonal_lattice(p1, p2, p3):
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
+
     equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
 
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
@@ -497,6 +520,10 @@ def is_orthorhombic_lattice(p1, p2, p3):
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
+
     # all angles close to 90 degrees
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
@@ -531,6 +558,10 @@ def is_body_centered_orthorhombic_lattice(p1, p2, p3):
 
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
 
     all_length_equal = (numpy.abs(lenA-lenC) < TOLERANCE and
                         numpy.abs(lenB-lenC) < TOLERANCE)
@@ -584,6 +615,10 @@ def is_face_centered_orthorhombic_lattice(p1, p2, p3):
     if numpy.less_equal((alpha2, beta2, gamma2), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if (numpy.isnan((alpha2, beta2, gamma2)).any() or
+            numpy.isinf((alpha2, beta2, gamma2)).any()):
+        raise ValueError("Vectors contain invalid values")
+
     a2 = 2.*(gamma2+beta2-alpha2)
     b2 = 2.*(alpha2+gamma2-beta2)
     c2 = 2.*(alpha2+beta2-gamma2)
@@ -635,6 +670,10 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
+
     equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
 
     if equal_lengths.any() and right_angles.all():
@@ -681,6 +720,10 @@ def is_monoclinic_lattice(p1, p2, p3):
     if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
 
+    if (numpy.isnan((lenA, lenB, lenC)).any() or
+            numpy.isinf((lenA, lenB, lenC)).any()):
+        raise ValueError("Vectors contain invalid values")
+
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
 
@@ -710,6 +753,9 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3):
 
     if numpy.less_equal(vec_lengths, TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if numpy.isnan(vec_lengths).any() or numpy.isinf(vec_lengths).any():
+        raise ValueError("Vectors contain invalid values")
 
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
@@ -757,6 +803,9 @@ def is_triclinic_lattice(p1, p2, p3):
 
     if numpy.less_equal((a, b, c), TOLERANCE).any():
         raise ValueError("Edge lengths must be strictly positive")
+
+    if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
+        raise ValueError("Vectors contain invalid values")
 
     alpha, beta, gamma = (numpy.arccos(cosine_two_vectors(p2, p3)),
                           numpy.arccos(cosine_two_vectors(p1, p3)),

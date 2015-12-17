@@ -414,12 +414,31 @@ class TestLatticeTools(unittest.TestCase):
         self.assertEqual(lattice_tools.find_lattice_type(p1, p2, p3),
                          BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
-    def test_exception_no_matching_lattice_for_invalid_vectors(self):
+    def test_exception_no_matching_lattice_too_strict_tolerance(self):
+        # given
+        p1 = numpy.array([0.5+1.e-5, 0.5, 0.])
+        p2 = numpy.array([0., 0.5, 0.5])
+        p3 = numpy.array([0.5, 0., 0.5])
+        lattice_tools.TOLERANCE = 1.e-20
+
+        # then
+        with self.assertRaises(TypeError):
+            lattice_tools.find_lattice_type(p1, p2, p3)
+
+    def test_exception_for_vectors_with_nan(self):
         # given
         p1, p2, p3 = ((numpy.nan, 0., 0.),)*3
 
         # then
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
+            lattice_tools.find_lattice_type(p1, p2, p3)
+
+    def test_exception_for_vectors_with_inf(self):
+        # given
+        p1, p2, p3 = ((numpy.inf, 0., 0.),)*3
+
+        # then
+        with self.assertRaises(ValueError):
             lattice_tools.find_lattice_type(p1, p2, p3)
 
     def test_exception_zero_length_vectors(self):
