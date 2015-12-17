@@ -6,8 +6,8 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 
 
 ATTRIBUTES = [
- "number", "class_name", "allowed_number_materials",
- "doc_description", "supported_parameters"]
+    "number", "class_name", "allowed_number_materials",
+    "doc_description", "supported_parameters"]
 Material_Relation_Information = namedtuple("Material_Relation_Information",
                                            ATTRIBUTES)
 

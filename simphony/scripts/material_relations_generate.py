@@ -321,8 +321,8 @@ def material_relations_information(input, output):
         '\n',
         '\n',
         'ATTRIBUTES = [\n'
-        ' "number", "class_name", "allowed_number_materials",\n'
-        ' "doc_description", "supported_parameters"]\n'
+        '    "number", "class_name", "allowed_number_materials",\n'
+        '    "doc_description", "supported_parameters"]\n'
         'Material_Relation_Information = namedtuple("Material_Relation_Information",\n',  # noqa
         '                                           ATTRIBUTES)\n',  # noqa
         '\n',
