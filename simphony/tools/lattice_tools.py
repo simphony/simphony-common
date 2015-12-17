@@ -4,9 +4,6 @@ import numpy
 from simphony.cuds.primitive_cell import BravaisLattice
 
 
-TOLERANCE = 1.e-6
-
-
 def vector_len(vec):
     ''' Length of vector
 
@@ -38,14 +35,15 @@ def cosine_two_vectors(vec1, vec2):
     return numpy.dot(vec1, vec2)/vec1_length/vec2_length
 
 
-def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
+def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True,
+                               tolerance=1.e-6):
     ''' Return True if a set of primitive vectors ``p1``, ``p2``,
     ``p3`` describe a primitive cell that is geometrically similar to
     another primitive cell described by ``(v1, v2, v3)``.
 
     This function works by comparing length ratios and cosines
     of the angles between vectors.  Single precision applies
-    by default, or change ``lattice_tools.TOLERANCE``
+    by default, or change ``tolerance``
 
     Parameters
     ----------
@@ -55,6 +53,8 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
         Primitive vectors of another primitive cell
     permute: boolean
         whether p1, p2, p3 are permutated
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -82,18 +82,18 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
                              for vec1, vec2 in combinations(vectors, 2)])
         ratios = numpy.array([vector_len(vec1)/vector_len(vec2)
                               for vec1, vec2 in combinations(vectors, 2)])
-        if ((numpy.abs(cosines-target_cosines) <= TOLERANCE).all() and
-                (numpy.abs(ratios-target_ratios) <= TOLERANCE).all()):
+        if ((numpy.abs(cosines-target_cosines) <= tolerance).all() and
+                (numpy.abs(ratios-target_ratios) <= tolerance).all()):
             return True
     return False
 
 
-def guess_primitive_vectors(points):
+def guess_primitive_vectors(points, tolerance=1.e-6):
     ''' Guess the primitive vectors underlying a given array of lattice
     points (N, 3).
 
     This assumes an ideal, fixed bravais lattice with no defect within
-    numerical errors, controlled by ``lattice_tools.TOLERANCE``
+    numerical errors, controlled by ``tolerance``
 
     Parameter
     ----------
@@ -103,6 +103,8 @@ def guess_primitive_vectors(points):
         Assumed to be arranged in C-contiguous order so that the
         first point is the origin, the last point is furthest
         away from the origin
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -125,7 +127,7 @@ def guess_primitive_vectors(points):
     def find_jump(arr1d):
         ''' Return the index where the first derivation changes '''
         sec_dev = numpy.diff(arr1d, n=2)
-        return numpy.where(numpy.abs(sec_dev) > TOLERANCE)[0][0]+2
+        return numpy.where(numpy.abs(sec_dev) > tolerance)[0][0]+2
 
     # find the first dimension where the x/y/z increments
     # in the coordinates are discontinuous.
@@ -161,17 +163,17 @@ def guess_primitive_vectors(points):
     # Test if the lattice points spacings are uniform
     # Does not test all points, otherwise slow for large data
     x_not_ordered = (numpy.abs(numpy.diff(points[:nx, 0],
-                                          n=2)) > TOLERANCE).any()
+                                          n=2)) > tolerance).any()
     y_not_ordered = (numpy.abs(numpy.diff(points[::nx, 1][:ny],
-                                          n=2)) > TOLERANCE).any()
+                                          n=2)) > tolerance).any()
     z_not_ordered = (numpy.abs(numpy.diff(points[::nx*ny, 2],
-                                          n=2)) > TOLERANCE).any()
+                                          n=2)) > tolerance).any()
     if x_not_ordered or y_not_ordered or z_not_ordered:
         message = ("Separations of lattice nodes are not even along "
                    "each lattice dimension.  Perhaps the lattice nodes "
                    "are NOT ordered in a C-contiguous fashion or "
                    "there are defects beyond {}")
-        raise ValueError(message.format(TOLERANCE))
+        raise ValueError(message.format(tolerance))
 
     # Primitive vectors
     return tuple((points[ipoint, 0]-points[0, 0],
@@ -179,15 +181,17 @@ def guess_primitive_vectors(points):
                   points[ipoint, 2]-points[0, 2]) for ipoint in (1, nx, nx*ny))
 
 
-def is_cubic_lattice(p1, p2, p3):
+def is_cubic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a cubic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -198,27 +202,29 @@ def is_cubic_lattice(p1, p2, p3):
     if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((a, b, c), TOLERANCE).any():
+    if numpy.less_equal((a, b, c), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     # if all lengths close to each other
-    if numpy.abs(a-b) > TOLERANCE or numpy.abs(c-a) > TOLERANCE:
+    if numpy.abs(a-b) > tolerance or numpy.abs(c-a) > tolerance:
         return False
 
     # all angles close to 90 degree
     cosines = map(cosine_two_vectors, (p1, p2, p3), (p2, p3, p1))
-    return (numpy.abs(cosines) <= TOLERANCE).all()
+    return (numpy.abs(cosines) <= tolerance).all()
 
 
-def is_body_centered_cubic_lattice(p1, p2, p3):
+def is_body_centered_cubic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a body centered cubic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -234,14 +240,14 @@ def is_body_centered_cubic_lattice(p1, p2, p3):
     if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((a, b, c), TOLERANCE).any():
+    if numpy.less_equal((a, b, c), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    equal_lengths = numpy.abs((a-b, b-c, c-a)) <= TOLERANCE
+    equal_lengths = numpy.abs((a-b, b-c, c-a)) <= tolerance
 
     # need the number of right angles
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
-    right_angles = dot_products < TOLERANCE
+    right_angles = dot_products < tolerance
     one_right_angle = numpy.count_nonzero(right_angles) == 1
 
     if sum(equal_lengths) == 1 and one_right_angle:
@@ -251,24 +257,26 @@ def is_body_centered_cubic_lattice(p1, p2, p3):
         len_ratio = {0: c/a, 1: a/b, 2: b/a}
         i_pair = numpy.where(equal_lengths)[0][0]
         return (i_pair == numpy.where(right_angles)[0][0] and
-                numpy.abs(len_ratio[i_pair]-numpy.sqrt(3.)/2.) <= TOLERANCE)
+                numpy.abs(len_ratio[i_pair]-numpy.sqrt(3.)/2.) <= tolerance)
     elif all(equal_lengths) and not one_right_angle:
         # type 2
         # all dot products == (|p1|**2.)/3
-        return (numpy.abs(dot_products*3. - a*a) <= TOLERANCE).all()
+        return (numpy.abs(dot_products*3. - a*a) <= tolerance).all()
     else:
         return False
 
 
-def is_face_centered_cubic_lattice(p1, p2, p3):
+def is_face_centered_cubic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a face centered cubic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -280,30 +288,32 @@ def is_face_centered_cubic_lattice(p1, p2, p3):
     if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((a, b, c), TOLERANCE).any():
+    if numpy.less_equal((a, b, c), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
+    if numpy.abs(a-c) > tolerance or numpy.abs(b-c) > tolerance:
         return False
 
     # all angles close to 60 degree
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
-    return (numpy.abs(cosines - 0.5) <= TOLERANCE).all()
+    return (numpy.abs(cosines - 0.5) <= tolerance).all()
 
 
-def is_rhombohedral_lattice(p1, p2, p3):
+def is_rhombohedral_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a rhombohedral lattice
 
     Also returns True for vectors describing a cubic or face centered
     cubic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -314,30 +324,32 @@ def is_rhombohedral_lattice(p1, p2, p3):
     if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((a, b, c), TOLERANCE).any():
+    if numpy.less_equal((a, b, c), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     # all sides of equal lengths
-    if numpy.abs(a-c) > TOLERANCE or numpy.abs(b-c) > TOLERANCE:
+    if numpy.abs(a-c) > tolerance or numpy.abs(b-c) > tolerance:
         return False
 
     # all angles close to each other
     cosa, cosb, cosc = numpy.abs(map(cosine_two_vectors,
                                      (p1, p2, p3), (p2, p3, p1)))
-    return (numpy.abs((cosa-cosc, cosb-cosc)) <= TOLERANCE).all()
+    return (numpy.abs((cosa-cosc, cosb-cosc)) <= tolerance).all()
 
 
-def is_tetragonal_lattice(p1, p2, p3):
+def is_tetragonal_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a tetragonal lattice
 
     Also returns True for vectors describing a cubic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -350,32 +362,34 @@ def is_tetragonal_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
+    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= tolerance
 
     if not equal_lengths.any():
         return False
 
     # all angles close to 90 degrees
     cosines = numpy.abs(map(cosine_two_vectors, (p1, p2, p3), (p2, p3, p1)))
-    return (cosines <= TOLERANCE).all()
+    return (cosines <= tolerance).all()
 
 
-def is_body_centered_tetragonal_lattice(p1, p2, p3):
+def is_body_centered_tetragonal_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a body centered tetragonal
     lattice
 
     Also returns True for vectors describing a body centered cubic
     lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -392,19 +406,19 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    all_length_equal = (numpy.abs(lenA-lenB) <= TOLERANCE and
-                        numpy.abs(lenB-lenC) <= TOLERANCE)
+    all_length_equal = (numpy.abs(lenA-lenB) <= tolerance and
+                        numpy.abs(lenB-lenC) <= tolerance)
 
     # dot products of vectors
     # want to know which pair of dot products are equal
     # and the number of right angles
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
     dot_products_diff = numpy.abs(dot_products-dot_products[[1, 2, 0]])
-    equal_dot_products = dot_products_diff <= TOLERANCE
-    right_angles = dot_products < TOLERANCE
+    equal_dot_products = dot_products_diff <= tolerance
+    right_angles = dot_products < tolerance
     one_right_angle = numpy.count_nonzero(right_angles) == 1
 
     if right_angles.all():
@@ -422,17 +436,17 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
         # the rest of the dot products should match 0.5a**2 and 0.5b**2
         expected = numpy.array((0.5*a*a, 0.5*b*b))
         dot_products = dot_products[~right_angles]
-        angle_match = (numpy.abs(dot_products-expected) < TOLERANCE).all()
+        angle_match = (numpy.abs(dot_products-expected) < tolerance).all()
 
-        edge_match = (numpy.abs(a-b) < TOLERANCE or
-                      numpy.abs(c*c-(0.5*b*b + a*a/4.)) < TOLERANCE or
-                      numpy.abs(c*c-(0.5*a*a + b*b/4.)) < TOLERANCE)
+        edge_match = (numpy.abs(a-b) < tolerance or
+                      numpy.abs(c*c-(0.5*b*b + a*a/4.)) < tolerance or
+                      numpy.abs(c*c-(0.5*a*a + b*b/4.)) < tolerance)
         return angle_match and edge_match
 
     elif all_length_equal and equal_dot_products.all():
         # type 2
         # the length of vector should be 3 times of the dot product
-        return numpy.abs(dot_products[0]*3.-lenA*lenA) <= TOLERANCE
+        return numpy.abs(dot_products[0]*3.-lenA*lenA) <= tolerance
 
     elif all_length_equal and equal_dot_products.any():
         # type 2
@@ -442,7 +456,7 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
         c_square = dot_products[numpy.where(equal_dot_products)[0][0]]
         a_square = (lenA*lenA-c_square)/2.
 
-        if a_square < TOLERANCE or c_square < TOLERANCE:
+        if a_square < tolerance or c_square < tolerance:
             # lengths are invalid
             return False
         else:
@@ -455,20 +469,22 @@ def is_body_centered_tetragonal_lattice(p1, p2, p3):
                        2: dot_products[1]}
             other_dot_product = mapping[numpy.where(equal_dot_products)[0][0]]
             expected = numpy.abs(c_square - 2.*a_square)
-            return numpy.abs(other_dot_product-expected) < TOLERANCE
+            return numpy.abs(other_dot_product-expected) < tolerance
     else:
         return False
 
 
-def is_hexagonal_lattice(p1, p2, p3):
+def is_hexagonal_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a hexagonal lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -481,13 +497,13 @@ def is_hexagonal_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
+    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= tolerance
 
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
-    right_angles = dot_products <= TOLERANCE
+    right_angles = dot_products <= tolerance
 
     if not right_angles.sum() == 2 or not equal_lengths.any():
         return False
@@ -498,22 +514,24 @@ def is_hexagonal_lattice(p1, p2, p3):
         i_not_right_angle = numpy.where(~right_angles)[0][0]
         a, b = mapping[i_not_right_angle]
         cosine = dot_products[i_not_right_angle]/a/b
-        return (numpy.abs(a-b) <= TOLERANCE and
-                numpy.abs(cosine-0.5) <= TOLERANCE)
+        return (numpy.abs(a-b) <= tolerance and
+                numpy.abs(cosine-0.5) <= tolerance)
 
 
-def is_orthorhombic_lattice(p1, p2, p3):
+def is_orthorhombic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe an orthorhombic lattice
 
     Also returns True for vectors describing a cubic or tetragonal
     lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -525,28 +543,30 @@ def is_orthorhombic_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     # all angles close to 90 degrees
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
-    return (cosines <= TOLERANCE).all()
+    return (cosines <= tolerance).all()
 
 
-def is_body_centered_orthorhombic_lattice(p1, p2, p3):
+def is_body_centered_orthorhombic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a body centered orthorhombic
     lattice
 
     Also returns True for vectors describing a body centered cubic or
     a body centered tetragonal lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -559,15 +579,15 @@ def is_body_centered_orthorhombic_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    all_length_equal = (numpy.abs(lenA-lenC) < TOLERANCE and
-                        numpy.abs(lenB-lenC) < TOLERANCE)
+    all_length_equal = (numpy.abs(lenA-lenC) < tolerance and
+                        numpy.abs(lenB-lenC) < tolerance)
 
     # dot products of vectors
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
-    right_angles = dot_products <= TOLERANCE
+    right_angles = dot_products <= tolerance
     one_right_angle = right_angles.sum() == 1
 
     if one_right_angle:
@@ -581,8 +601,8 @@ def is_body_centered_orthorhombic_lattice(p1, p2, p3):
         mapping = {0: (lenA, lenB), 1: (lenB, lenC), 2: (lenC, lenA)}
         lengths = numpy.array(mapping[numpy.where(right_angles)[0][0]])
         expected = 0.5*lengths**2.
-        return ((numpy.abs(nonzero_dot-expected) <= TOLERANCE).all() or
-                (numpy.abs(nonzero_dot[::-1]-expected) <= TOLERANCE).all())
+        return ((numpy.abs(nonzero_dot-expected) <= tolerance).all() or
+                (numpy.abs(nonzero_dot[::-1]-expected) <= tolerance).all())
     elif all_length_equal and not one_right_angle:
         # type 2
         # p1: 0.5(a, b, -c), p2: 0.5(a, -b, c), p3: 0.5(-a, b, c)
@@ -590,26 +610,28 @@ def is_body_centered_orthorhombic_lattice(p1, p2, p3):
         # where
         #    p1.p2 + p2.p3 + p1.p3 == |p1|**2. == |p2|**2. == |p3|**2.
         for signs in product(*((1, -1),)*3):
-            if numpy.abs((dot_products*signs).sum() + lenA*lenA) <= TOLERANCE:
+            if numpy.abs((dot_products*signs).sum() + lenA*lenA) <= tolerance:
                 return True
         return False
     else:
         return False
 
 
-def is_face_centered_orthorhombic_lattice(p1, p2, p3):
+def is_face_centered_orthorhombic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a face centered orthorhombic
     lattice
 
     Also returns True for vectors describing a face centered cubic
     lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -621,7 +643,7 @@ def is_face_centered_orthorhombic_lattice(p1, p2, p3):
             numpy.isinf((alpha2, beta2, gamma2)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((alpha2, beta2, gamma2), TOLERANCE).any():
+    if numpy.less_equal((alpha2, beta2, gamma2), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     a2 = 2.*(gamma2+beta2-alpha2)
@@ -634,28 +656,30 @@ def is_face_centered_orthorhombic_lattice(p1, p2, p3):
     # expected squared lengths of vectors
     expected_len2 = 0.25*numpy.array((b2+c2, a2+c2, a2+b2))
     lengths_square = (alpha2, beta2, gamma2)
-    if not (numpy.abs(lengths_square-expected_len2) <= TOLERANCE).all():
+    if not (numpy.abs(lengths_square-expected_len2) <= tolerance).all():
         return False
 
     # expected dot products
     expected_dot_prod = numpy.array((c2/4., a2/4., b2/4.))
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
-    return (numpy.abs(dot_products-expected_dot_prod) <= TOLERANCE).all()
+    return (numpy.abs(dot_products-expected_dot_prod) <= tolerance).all()
 
 
-def is_base_centered_orthorhombic_lattice(p1, p2, p3):
+def is_base_centered_orthorhombic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a base centered orthorhombic
     lattice
 
     Also returns True for vectors describing a cubic, tetragonal,
     or hexagonal lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -671,16 +695,16 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     dot_products = numpy.abs(map(numpy.dot, (p1, p2, p3), (p2, p3, p1)))
-    right_angles = dot_products <= TOLERANCE
+    right_angles = dot_products <= tolerance
 
     if right_angles.sum() < 2:
         return False
 
-    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= TOLERANCE
+    equal_lengths = numpy.abs((lenA-lenB, lenB-lenC, lenC-lenA)) <= tolerance
 
     if equal_lengths.any() and right_angles.all():
         return True
@@ -698,24 +722,26 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
         dot_product = dot_products[not_right_angle]
         vec_mapping = {0: (p1, p2), 1: (p2, p3), 2: (p1, p3)}
         v1, v2 = vec_mapping[not_right_angle]
-        return (numpy.abs(dot_product - numpy.dot(v1, v1)*0.5) < TOLERANCE or
-                numpy.abs(dot_product - numpy.dot(v2, v2)*0.5) < TOLERANCE)
+        return (numpy.abs(dot_product - numpy.dot(v1, v1)*0.5) < tolerance or
+                numpy.abs(dot_product - numpy.dot(v2, v2)*0.5) < tolerance)
     else:
         return False
 
 
-def is_monoclinic_lattice(p1, p2, p3):
+def is_monoclinic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a monoclinic lattice
 
     Also returns True for vectors describing a cubic, hexagonal,
     tetragonal, orthorhombic or base centered orthorhombic lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -727,29 +753,31 @@ def is_monoclinic_lattice(p1, p2, p3):
             numpy.isinf((lenA, lenB, lenC)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((lenA, lenB, lenC), TOLERANCE).any():
+    if numpy.less_equal((lenA, lenB, lenC), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     cosines = numpy.abs(map(cosine_two_vectors,
                             (p1, p2, p3), (p2, p3, p1)))
 
     # base on loose definition: at least 2 angles are 90 degrees
-    return (cosines <= TOLERANCE).sum() >= 2
+    return (cosines <= tolerance).sum() >= 2
 
 
-def is_base_centered_monoclinic_lattice(p1, p2, p3):
+def is_base_centered_monoclinic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a base centered monoclinic
     lattice
 
     Also returns True for vectors describing a base centered
     orthorhombic lattice or a hexagonal lattice
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -760,7 +788,7 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3):
     if numpy.isnan(vec_lengths).any() or numpy.isinf(vec_lengths).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal(vec_lengths, TOLERANCE).any():
+    if numpy.less_equal(vec_lengths, tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     cosines = numpy.abs(map(cosine_two_vectors,
@@ -782,24 +810,26 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3):
                                  alpha*cosines[ivectors[0]]/beta/2.,
                                  cosines[ivectors[0]]))
         for actual_cosines in permutations(cosines):
-            if ((numpy.abs(expected1-actual_cosines) <= TOLERANCE).all() or
-                    (numpy.abs(expected2-actual_cosines) <= TOLERANCE).all()):
+            if ((numpy.abs(expected1-actual_cosines) <= tolerance).all() or
+                    (numpy.abs(expected2-actual_cosines) <= tolerance).all()):
                 return True
     return False
 
 
-def is_triclinic_lattice(p1, p2, p3):
+def is_triclinic_lattice(p1, p2, p3, tolerance=1.e-6):
     ''' Test if primitive vectors describe a triclinic lattice
 
     Also returns True for vectors describing any other types of Bravais
     lattices
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3: array_like
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -810,7 +840,7 @@ def is_triclinic_lattice(p1, p2, p3):
     if numpy.isnan((a, b, c)).any() or numpy.isinf((a, b, c)).any():
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((a, b, c), TOLERANCE).any():
+    if numpy.less_equal((a, b, c), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
     alpha, beta, gamma = (numpy.arccos(cosine_two_vectors(p2, p3)),
@@ -832,21 +862,24 @@ def is_triclinic_lattice(p1, p2, p3):
         v2 = (b*cosg, b*sing, 0)
         v3 = (c*cosb, c*(cosa-cosb*cosg) / sing,
               c*numpy.sqrt(sinb**2 - ((cosa-cosb*cosg) / sing)**2))
-        return same_primitive_cell_config(v1, v2, v3, p1, p2, p3)
+        return same_primitive_cell_config(v1, v2, v3, p1, p2, p3,
+                                          permute=True, tolerance=tolerance)
     else:
         return False
 
 
-def find_lattice_type(p1, p2, p3):
+def find_lattice_type(p1, p2, p3, tolerance=1.e-6):
     ''' Return the lattice type as BravaisLattice(IntEnum)
     given a set of primitive vectors
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3 : 3 x float[3]
         primitive vectors
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -860,33 +893,33 @@ def find_lattice_type(p1, p2, p3):
     '''
     # Should be ordered from the most specific lattice
     # to the most general ones
-    if is_cubic_lattice(p1, p2, p3):
+    if is_cubic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.CUBIC
-    elif is_body_centered_cubic_lattice(p1, p2, p3):
+    elif is_body_centered_cubic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.BODY_CENTERED_CUBIC
-    elif is_face_centered_cubic_lattice(p1, p2, p3):
+    elif is_face_centered_cubic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.FACE_CENTERED_CUBIC
-    elif is_rhombohedral_lattice(p1, p2, p3):
+    elif is_rhombohedral_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.RHOMBOHEDRAL
-    elif is_tetragonal_lattice(p1, p2, p3):
+    elif is_tetragonal_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.TETRAGONAL
-    elif is_body_centered_tetragonal_lattice(p1, p2, p3):
+    elif is_body_centered_tetragonal_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.BODY_CENTERED_TETRAGONAL
-    elif is_hexagonal_lattice(p1, p2, p3):
+    elif is_hexagonal_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.HEXAGONAL
-    elif is_orthorhombic_lattice(p1, p2, p3):
+    elif is_orthorhombic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.ORTHORHOMBIC
-    elif is_body_centered_orthorhombic_lattice(p1, p2, p3):
+    elif is_body_centered_orthorhombic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.BODY_CENTERED_ORTHORHOMBIC
-    elif is_face_centered_orthorhombic_lattice(p1, p2, p3):
+    elif is_face_centered_orthorhombic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.FACE_CENTERED_ORTHORHOMBIC
-    elif is_base_centered_orthorhombic_lattice(p1, p2, p3):
+    elif is_base_centered_orthorhombic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.BASE_CENTERED_ORTHORHOMBIC
-    elif is_monoclinic_lattice(p1, p2, p3):
+    elif is_monoclinic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.MONOCLINIC
-    elif is_base_centered_monoclinic_lattice(p1, p2, p3):
+    elif is_base_centered_monoclinic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.BASE_CENTERED_MONOCLINIC
-    elif is_triclinic_lattice(p1, p2, p3):
+    elif is_triclinic_lattice(p1, p2, p3, tolerance):
         return BravaisLattice.TRICLINIC
     else:
         message = ("None of the predefined Bravais Lattices matches the "
@@ -894,17 +927,20 @@ def find_lattice_type(p1, p2, p3):
         raise TypeError(message)
 
 
-def is_bravais_lattice_consistent(p1, p2, p3, bravais_lattice):
+def is_bravais_lattice_consistent(p1, p2, p3, bravais_lattice,
+                                  tolerance=1.e-6):
     ''' Test if the bravais lattice is consistent with the
     primitive vectors given
 
-    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
+    Numerical errors are tolerated within ``tolerance``
 
     Parameters
     ----------
     p1, p2, p3 : array_like
         Primitive vectors
     bravais_lattice : BravaisLattice(IntEnum)
+    tolerance: float
+        tolerance for numerical errors
 
     Returns
     -------
@@ -951,4 +987,4 @@ def is_bravais_lattice_consistent(p1, p2, p3, bravais_lattice):
             is_base_centered_monoclinic_lattice,
         BravaisLattice.TRICLINIC: is_triclinic_lattice}
 
-    return check_functions[bravais_lattice](p1, p2, p3)
+    return check_functions[bravais_lattice](p1, p2, p3, tolerance)

@@ -310,9 +310,6 @@ specific_map2_general = defaultdict(
 
 class TestLatticeTools(unittest.TestCase):
 
-    def setUp(self):
-        lattice_tools.TOLERANCE = 1.e-6
-
     @staticmethod
     def _get_primitive_vectors(primitive_cell):
         return map(numpy.array,
@@ -416,14 +413,13 @@ class TestLatticeTools(unittest.TestCase):
 
     def test_exception_no_matching_lattice_too_strict_tolerance(self):
         # given
-        p1 = numpy.array([0.5+1.e-5, 0.5, 0.])
+        p1 = numpy.array([0.5+1.e-4, 0.5, 0.])
         p2 = numpy.array([0., 0.5, 0.5])
         p3 = numpy.array([0.5, 0., 0.5])
-        lattice_tools.TOLERANCE = 1.e-20
 
         # then
         with self.assertRaises(TypeError):
-            lattice_tools.find_lattice_type(p1, p2, p3)
+            lattice_tools.find_lattice_type(p1, p2, p3, tolerance=1.e-20)
 
     def test_exception_for_vectors_with_nan(self):
         # given
@@ -531,19 +527,21 @@ class TestLatticeTools(unittest.TestCase):
             p1[0] += 1.e-4
 
             # when
-            lattice_tools.TOLERANCE = 1.e-6
+            tolerance = 1.e-6
 
             # then
             actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
-                                                                 lattice_type)
+                                                                 lattice_type,
+                                                                 tolerance)
             self.assertFalse(actual)
 
             # when
-            lattice_tools.TOLERANCE = 1.e-3
+            tolerance = 1.e-3
 
             # then
             actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
-                                                                 lattice_type)
+                                                                 lattice_type,
+                                                                 tolerance)
             self.assertTrue(actual)
 
     def test_changing_tolerance_guess_primitive_vectors(self):
@@ -559,16 +557,16 @@ class TestLatticeTools(unittest.TestCase):
         ndeflects = npoints/2
         indices = numpy.random.choice(xrange(npoints), ndeflects, False)
         points[indices] += numpy.random.rand(ndeflects, 3)*1.e-4
-        lattice_tools.TOLERANCE = 1.e-6
+        tolerance = 1.e-6
 
         # then
         with self.assertRaises(ValueError):
-            lattice_tools.guess_primitive_vectors(points)
+            lattice_tools.guess_primitive_vectors(points, tolerance)
 
         # when
-        lattice_tools.TOLERANCE = 1.e-3
+        tolerance = 1.e-3
 
         # then
-        actual = lattice_tools.guess_primitive_vectors(points)
+        actual = lattice_tools.guess_primitive_vectors(points, tolerance)
         numpy.testing.assert_allclose(actual, (p1, p2, p3),
-                                      atol=lattice_tools.TOLERANCE)
+                                      atol=tolerance)
