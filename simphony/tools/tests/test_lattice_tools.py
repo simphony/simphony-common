@@ -411,6 +411,23 @@ class TestLatticeTools(unittest.TestCase):
         self.assertEqual(find_lattice_type(p1, p2, p3),
                          BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
+    def test_exception_no_matching_bravais_lattice(self):
+        # given
+        p1, p2, p3 = ((numpy.nan, 0., 0.),)*3
+
+        # then
+        with self.assertRaises(TypeError):
+            find_lattice_type(p1, p2, p3)
+
+    def test_exception_zero_length_vectors(self):
+        # given
+        p1, p2, p3 = (0., 1., 0.), (0., 0., 0.), (1., 0., 0.)
+
+        # then
+        for bravais_lattice in BravaisLattice:
+            with self.assertRaises(ValueError):
+                is_bravais_lattice_consistent(p1, p2, p3, bravais_lattice)
+
     @given(builder(get_specific_primitive_cell_factories()))
     def test_guess_primitive_vectors(self, lattices):
         for primitive_cell in lattices.values():
@@ -464,4 +481,12 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
+            guess_primitive_vectors(points)
+
+    def test_exception_guess_vectors_with_wrong_shape_points(self):
+        # given
+        points = numpy.zeros((10, 2))
+
+        # then
+        with self.assertRaises(ValueError):
             guess_primitive_vectors(points)
