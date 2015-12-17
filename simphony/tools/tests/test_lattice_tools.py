@@ -511,12 +511,14 @@ class TestLatticeTools(unittest.TestCase):
             lattice_tools.TOLERANCE = 1.e-6
 
             # then
-            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3, lattice_type)
+            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                                 lattice_type)
             self.assertFalse(actual)
 
             # when
             lattice_tools.TOLERANCE = 1.e-3
 
             # then
-            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3, lattice_type)
+            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                                 lattice_type)
             self.assertTrue(actual)
