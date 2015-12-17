@@ -1,7 +1,7 @@
 import unittest
 import uuid
 
-from simphony.core.cuba import CUBA
+from simphony.core.cuds_material_relation import CUDSMaterialRelation
 from simphony.material_relations.lennard_jones import LennardJones
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
@@ -24,7 +24,7 @@ class TestLennardJonesMaterialRelation(
         return "LennardJones"
 
     def get_kind(self):
-        return CUBA.LENNARD_JONES
+        return CUDSMaterialRelation.LENNARD_JONES
 
     def test_cutoff_distance(self):
         relation = self.container_factory('foo_relation')

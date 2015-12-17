@@ -2,6 +2,7 @@
 from simphony.material_relations.material_relation import (
     MaterialRelation)
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_material_relation import CUDSMaterialRelation
 from simphony.core.data_container import DataContainer
 
 
@@ -39,7 +40,7 @@ class Coulomb(MaterialRelation):
             ],
             materials=materials,
             num_materials=[1, 2],
-            kind=CUBA.COULOMB
+            kind=CUDSMaterialRelation.COULOMB
         )
 
     @property
