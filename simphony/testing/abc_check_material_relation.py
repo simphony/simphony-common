@@ -1,6 +1,9 @@
 import abc
 
 from simphony.testing.utils import create_data_container
+from simphony.core.data_container import DataContainer
+from simphony.core.material_relations_information import (
+    MATERIAL_RELATIONSHIP_INFORMATION)
 
 
 class CheckMaterialRelation(object):
@@ -62,13 +65,17 @@ class CheckMaterialRelation(object):
         """ Test that material relation parameters are set correctly
 
         """
-        # TODO should be testing that it is created with defaults
-
         # when
-        # relation = self.container_factory('foo_relation')
+        relation = self.container_factory('foo_relation')
+
+        default_data_container = DataContainer()
+        info = MATERIAL_RELATIONSHIP_INFORMATION[relation.kind]
+        for parameter in info.supported_parameters:
+            default_data_container[parameter.cuba_key] = \
+                parameter.default_value
 
         # then
-        # self.assertEqual(relation._parameters, DataContainer())
+        self.assertEqual(relation.parameters, default_data_container)
 
     def test_material_relation_parameters_update(self):
         """ Test that material relation parameters are updated correctly
