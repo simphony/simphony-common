@@ -459,7 +459,7 @@ class TestLatticeTools(unittest.TestCase):
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
             # when
-            points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
+            points = create_points_from_pc(p1, p2, p3, (4, 5, 3))
 
             # then
             actual = lattice_tools.guess_primitive_vectors(points)
@@ -470,7 +470,7 @@ class TestLatticeTools(unittest.TestCase):
         p1, p2, p3 = (0., 0., 1.), (0., 2., 0.), (1., 0., 0.)
 
         # when
-        points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
+        points = create_points_from_pc(p1, p2, p3, (4, 5, 3))
 
         # then
         actual = lattice_tools.guess_primitive_vectors(points)
@@ -518,7 +518,7 @@ class TestLatticeTools(unittest.TestCase):
                    {BravaisLattice.CUBIC, BravaisLattice.BODY_CENTERED_CUBIC,
                     BravaisLattice.FACE_CENTERED_CUBIC,
                     BravaisLattice.RHOMBOHEDRAL, BravaisLattice.HEXAGONAL}))
-    def test_changing_tolerance(self, lattices):
+    def test_changing_tolerance_lattice_type(self, lattices):
         for lattice_type, primitive_cell in lattices.items():
             # double precision (numpy.float64)
             p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
@@ -541,3 +541,30 @@ class TestLatticeTools(unittest.TestCase):
             actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
                                                                  lattice_type)
             self.assertTrue(actual)
+
+    def test_changing_tolerance_guess_primitive_vectors(self):
+        # given
+        p1 = numpy.array([1.5, 0., 0.])
+        p2 = numpy.array([0., 0.5, 0.5])
+        p3 = numpy.array([0.5, 0., 0.5])
+        points = create_points_from_pc(p1, p2, p3, (4, 5, 3))
+        npoints = points.shape[0]
+
+        # when
+        # add some defects
+        ndeflects = npoints/2
+        indices = numpy.random.choice(xrange(npoints), ndeflects, False)
+        points[indices] += numpy.random.rand(ndeflects, 3)*1.e-4
+        lattice_tools.TOLERANCE = 1.e-6
+
+        # then
+        with self.assertRaises(ValueError):
+            lattice_tools.guess_primitive_vectors(points)
+
+        # when
+        lattice_tools.TOLERANCE = 1.e-3
+
+        # then
+        actual = lattice_tools.guess_primitive_vectors(points)
+        numpy.testing.assert_allclose(actual, (p1, p2, p3),
+                                      atol=lattice_tools.TOLERANCE)
