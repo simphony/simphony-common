@@ -482,11 +482,11 @@ class TestLatticeTools(unittest.TestCase):
 
         # when
         p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
-        points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
+        points = create_points_from_pc(p1, p2, p3, (4, 5, 3))
         numpy.random.shuffle(points)
 
         # then
-        with self.assertRaises(IndexError):
+        with self.assertRaises(ValueError):
             lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_first_jump(self):

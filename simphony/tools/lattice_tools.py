@@ -89,10 +89,11 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
 
 
 def guess_primitive_vectors(points):
-    ''' Guess the primitive vectors underlying a given array of
-    lattice points (N, 3).  This assumes an ideal, fixed bravais
-    lattice with no defect within numerical errors, controlled by
-    ``lattice_tools.TOLERANCE``
+    ''' Guess the primitive vectors underlying a given array of lattice
+    points (N, 3).
+
+    This assumes an ideal, fixed bravais lattice with no defect within
+    numerical errors, controlled by ``lattice_tools.TOLERANCE``
 
     Parameter
     ----------
@@ -105,16 +106,17 @@ def guess_primitive_vectors(points):
 
     Returns
     -------
-    p1, p2, p3 : array-like
+    p1, p2, p3 : tuple of float[3]
         primitive vectors, each of length 3
 
     Raises
     ------
     IndexError
-        (1) if the lattice dimension cannot be determined
-        (2) if the points are not ordered contiguously
+        if the lattice dimension cannot be determined
     ValueError
-        if the shape of points is not (N, 3)
+        (1) if the shape of points is not (N, 3)
+        (2) if the spacing between points along each deduced lattice
+            dimension is non-uniform
     '''
 
     if len(points.shape) != 2 or points.shape[-1] != 3:
@@ -156,7 +158,7 @@ def guess_primitive_vectors(points):
         message = "Failed to deduce the lattice dimensions"
         raise IndexError(message)
 
-    # Test if the lattice points are ordered as expected
+    # Test if the lattice points spacings are uniform
     # Does not test all points, otherwise slow for large data
     x_not_ordered = (numpy.abs(numpy.diff(points[:nx, 0],
                                           n=2)) > TOLERANCE).any()
@@ -165,9 +167,11 @@ def guess_primitive_vectors(points):
     z_not_ordered = (numpy.abs(numpy.diff(points[::nx*ny, 2],
                                           n=2)) > TOLERANCE).any()
     if x_not_ordered or y_not_ordered or z_not_ordered:
-        message = ("Deduction of the primitive vectors requires the "
-                   "lattice nodes to be ordered in a C-contiguous fashion.")
-        raise IndexError(message)
+        message = ("Separations of lattice nodes are not even along "
+                   "each lattice dimension.  Perhaps the lattice nodes "
+                   "are NOT ordered in a C-contiguous fashion or "
+                   "there are defects beyond {}")
+        raise ValueError(message.format(TOLERANCE))
 
     # Primitive vectors
     return tuple((points[ipoint, 0]-points[0, 0],
