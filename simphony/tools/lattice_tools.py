@@ -242,7 +242,7 @@ def is_body_centered_cubic_lattice(p1, p2, p3):
         len_ratio = {0: c/a, 1: a/b, 2: b/a}
         i_pair = numpy.where(equal_lengths)[0][0]
         return (i_pair == numpy.where(right_angles)[0][0] and
-                numpy.abs(len_ratio[i_pair]-numpy.sqrt(3.)/2.) < TOLERANCE)
+                numpy.abs(len_ratio[i_pair]-numpy.sqrt(3.)/2.) <= TOLERANCE)
     elif all(equal_lengths) and not one_right_angle:
         # type 2
         # all dot products == (|p1|**2.)/3

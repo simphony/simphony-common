@@ -8,9 +8,7 @@ from hypothesis.strategies import floats, tuples, composite
 from hypothesis.strategies import fixed_dictionaries
 
 from simphony.cuds.primitive_cell import BravaisLattice, PrimitiveCell
-from simphony.tools.lattice_tools import (find_lattice_type,
-                                          guess_primitive_vectors,
-                                          is_bravais_lattice_consistent)
+from simphony.tools import lattice_tools
 
 
 def rotate_vectors(vectors, angle1=numpy.pi/2., angle2=0.):
@@ -312,6 +310,9 @@ specific_map2_general = defaultdict(
 
 class TestLatticeTools(unittest.TestCase):
 
+    def setUp(self):
+        lattice_tools.TOLERANCE = 1.e-6
+
     @staticmethod
     def _get_primitive_vectors(primitive_cell):
         return map(numpy.array,
@@ -326,7 +327,7 @@ class TestLatticeTools(unittest.TestCase):
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
             # when
-            actual = find_lattice_type(p1, p2, p3)
+            actual = lattice_tools.find_lattice_type(p1, p2, p3)
 
             # then
             self.assertEqual(actual, expected)
@@ -345,7 +346,8 @@ class TestLatticeTools(unittest.TestCase):
             msg = "Expected {!r} to be a symmetric case of {!r}. False."
             for general in specific_map2_general[specific]:
                 self.assertTrue(
-                    is_bravais_lattice_consistent(p1, p2, p3, general),
+                    lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                                general),
                     msg.format(specific, general))
 
     def test_incompatible_lattice_type(self):
@@ -370,10 +372,11 @@ class TestLatticeTools(unittest.TestCase):
             # then
             # bravais_lattice cannot be compatible with lattice
             # types in `exclusive`
+            msg = "Expected {!r} not be considered as {!r}"
             for exclusive in exclusives:
-                msg = "Expected {!r} not be considered as {!r}"
                 self.assertFalse(
-                    is_bravais_lattice_consistent(p1, p2, p3, exclusive),
+                    lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                                exclusive),
                     msg.format(bravais_lattice, exclusive))
 
     def test_alternative_primitive_cell_settings(self):
@@ -384,7 +387,7 @@ class TestLatticeTools(unittest.TestCase):
         ######################
         bcc_vectors = ((1., 1., -1.), (1., -1., 1.), (-1., 1., 1.))
         p1, p2, p3 = rotate_permute_flip(bcc_vectors)
-        self.assertEqual(find_lattice_type(p1, p2, p3),
+        self.assertEqual(lattice_tools.find_lattice_type(p1, p2, p3),
                          BravaisLattice.BODY_CENTERED_CUBIC)
 
         ###########################
@@ -392,7 +395,7 @@ class TestLatticeTools(unittest.TestCase):
         ###########################
         bc_tetra_vectors = ((1., 1., -2.), (1., -1., 2.), (-1., 1., 2.))
         p1, p2, p3 = rotate_permute_flip(bc_tetra_vectors)
-        self.assertEqual(find_lattice_type(p1, p2, p3),
+        self.assertEqual(lattice_tools.find_lattice_type(p1, p2, p3),
                          BravaisLattice.BODY_CENTERED_TETRAGONAL)
 
         #############################
@@ -400,7 +403,7 @@ class TestLatticeTools(unittest.TestCase):
         #############################
         bc_orthor_vectors = ((1., 3., -2.), (1., -3., 2.), (-1., 3., 2.))
         p1, p2, p3 = rotate_permute_flip(bc_orthor_vectors)
-        self.assertEqual(find_lattice_type(p1, p2, p3),
+        self.assertEqual(lattice_tools.find_lattice_type(p1, p2, p3),
                          BravaisLattice.BODY_CENTERED_ORTHORHOMBIC)
 
         ##############################
@@ -408,16 +411,16 @@ class TestLatticeTools(unittest.TestCase):
         ##############################
         base_orthor_vectors = ((1., 2., 0.), (-1., 2., 0.), (0., 0., 3.))
         p1, p2, p3 = rotate_permute_flip(base_orthor_vectors)
-        self.assertEqual(find_lattice_type(p1, p2, p3),
+        self.assertEqual(lattice_tools.find_lattice_type(p1, p2, p3),
                          BravaisLattice.BASE_CENTERED_ORTHORHOMBIC)
 
-    def test_exception_no_matching_bravais_lattice(self):
+    def test_exception_no_matching_lattice_for_invalid_vectors(self):
         # given
         p1, p2, p3 = ((numpy.nan, 0., 0.),)*3
 
         # then
         with self.assertRaises(TypeError):
-            find_lattice_type(p1, p2, p3)
+            lattice_tools.find_lattice_type(p1, p2, p3)
 
     def test_exception_zero_length_vectors(self):
         # given
@@ -426,7 +429,8 @@ class TestLatticeTools(unittest.TestCase):
         # then
         for bravais_lattice in BravaisLattice:
             with self.assertRaises(ValueError):
-                is_bravais_lattice_consistent(p1, p2, p3, bravais_lattice)
+                lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                            bravais_lattice)
 
     @given(builder(get_specific_primitive_cell_factories()))
     def test_guess_primitive_vectors(self, lattices):
@@ -439,7 +443,7 @@ class TestLatticeTools(unittest.TestCase):
             points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
 
             # then
-            actual = guess_primitive_vectors(points)
+            actual = lattice_tools.guess_primitive_vectors(points)
             numpy.testing.assert_allclose(actual, (p1, p2, p3))
 
     def test_guess_primitive_vectors_special_case(self):
@@ -450,7 +454,7 @@ class TestLatticeTools(unittest.TestCase):
         points = create_points_from_pc(p1, p2, p3, (4, 5, 6))
 
         # then
-        actual = guess_primitive_vectors(points)
+        actual = lattice_tools.guess_primitive_vectors(points)
         numpy.testing.assert_allclose(actual, (p1, p2, p3))
 
     def test_exception_guess_vectors_with_unsorted_points(self):
@@ -464,7 +468,7 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
-            guess_primitive_vectors(points)
+            lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_first_jump(self):
         # given
@@ -472,7 +476,7 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
-            guess_primitive_vectors(points)
+            lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_second_jump(self):
         # given
@@ -481,7 +485,7 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(IndexError):
-            guess_primitive_vectors(points)
+            lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_wrong_shape_points(self):
         # given
@@ -489,4 +493,30 @@ class TestLatticeTools(unittest.TestCase):
 
         # then
         with self.assertRaises(ValueError):
-            guess_primitive_vectors(points)
+            lattice_tools.guess_primitive_vectors(points)
+
+    @given(builder(get_specific_primitive_cell_factories(),
+                   {BravaisLattice.CUBIC, BravaisLattice.BODY_CENTERED_CUBIC,
+                    BravaisLattice.FACE_CENTERED_CUBIC,
+                    BravaisLattice.RHOMBOHEDRAL, BravaisLattice.HEXAGONAL}))
+    def test_changing_tolerance(self, lattices):
+        for lattice_type, primitive_cell in lattices.items():
+            # double precision (numpy.float64)
+            p1, p2, p3 = self._get_primitive_vectors(primitive_cell)
+
+            # given perturbation
+            p1[0] += 1.e-4
+
+            # when
+            lattice_tools.TOLERANCE = 1.e-6
+
+            # then
+            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3, lattice_type)
+            self.assertFalse(actual)
+
+            # when
+            lattice_tools.TOLERANCE = 1.e-3
+
+            # then
+            actual = lattice_tools.is_bravais_lattice_consistent(p1, p2, p3, lattice_type)
+            self.assertTrue(actual)
