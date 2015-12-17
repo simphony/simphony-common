@@ -1,4 +1,6 @@
 from simphony.core.data_container import DataContainer
+from simphony.core.material_relations_information import (
+    MATERIAL_RELATIONSHIP_INFORMATION)
 
 
 class MaterialRelation(object):
@@ -9,56 +11,46 @@ class MaterialRelation(object):
 
     Attributes
     ----------
+    kind: CUDSMaterialRelation
+        Describes the kind of the MaterialRelation
+
     name : str
         name of the material-relation
-
-    description: str
-        user-defined description of the material-relation
-
-    parameters: DataContainer
-        the required parameters
-
-    supported_parameters: list of CUBA
-        CUBA values required/allowed for the parameters
 
     materials: list of uids
         materials where this relation applies
 
-    num_materials: list of int
+    parameters: DataContainer
+        the required parameters
+
+    description: str
+        user-defined description of the material-relation
+
+    supported_parameters: list of CUBA
+        CUBA values required/allowed for the parameters
+
+    allowed_number_materials : list of int
         list with all possible configurations of avaliable
         number of materials in the relation
 
-    kind: CUBA
-        Describes the kind of the MaterialRelation
-
-    Raises
-    ------
-    ValueError :
-        If the number of materials does not match with any value of
-        num_materials
-
     """
 
-    def __init__(self, name, description, parameters, supported_parameters,
-                 materials, num_materials, kind):
+    def __init__(self, name, kind, materials, parameters, description=""):
 
-        self._num_materials = num_materials
-
-        if(len(materials) not in self._num_materials):
-            error_str = "Incorrect number of materials, expected: {}"
-            raise ValueError(
-                error_str.format(
-                    materials.size(),
-                    self._num_materials
-                )
-            )
+        info = MATERIAL_RELATIONSHIP_INFORMATION[kind]
+        self._allowed_number_materials = info.allowed_number_materials
+        self._supported_parameters = [
+            parameter.cuba_key for parameter in info.supported_parameters]
 
         self._name = name
-        self._description = description
-        self._parameters = parameters
-        self._supported_parameters = supported_parameters
-        self._materials = materials
         self._kind = kind
+        self._description = description
+
+        self._check_materials(materials)
+        self._materials = materials
+
+        self._check_parameters(parameters)
+        self._parameters = parameters
 
     @property
     def name(self):
@@ -93,16 +85,19 @@ class MaterialRelation(object):
         return list(self._materials)
 
     @materials.setter
-    def materials(self, value):
-        if(len(self.materials) not in self._num_materials):
+    def _set_materials(self, value):
+        self._check_materials(value)
+        self._materials = value
+
+    def _check_materials(self, value):
+        if(len(value) not in self._allowed_number_materials):
             error_str = "Incorrect number of materials, expected: {}"
             raise ValueError(
                 error_str.format(
-                    self.materials.size(),
-                    self._num_materials
+                    len(value),
+                    self._allowed_number_materials
                 )
             )
-        self._materials = value
 
     @property
     def parameters(self):
@@ -110,11 +105,16 @@ class MaterialRelation(object):
 
     @parameters.setter
     def parameters(self, value):
+        self._check_parameters(value)
         self._parameters = DataContainer(value)
 
+    def _check_parameters(self, value):
+        if (set(self._supported_parameters) != set(value.keys())):
+            raise ValueError("Unsupported parameters")
+
     @property
-    def num_materials(self):
-        return self._num_materials
+    def allowed_number_materials(self):
+        return self._allowed_number_materials
 
     @property
     def kind(self):
