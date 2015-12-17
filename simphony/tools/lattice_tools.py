@@ -90,7 +90,10 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
 
 def guess_primitive_vectors(points):
     ''' Guess the primitive vectors underlying a given array of
-    lattice points (N, 3).
+    lattice points (N, 3).  This assumes an ideal, fixed bravais
+    lattice with no defect.
+
+    Numerical errors are tolerated within ``lattice_tools.TOLERANCE``
 
     Parameter
     ----------
@@ -123,7 +126,8 @@ def guess_primitive_vectors(points):
         sec_dev = numpy.diff(arr1d, n=2)
         return numpy.where(numpy.abs(sec_dev) > TOLERANCE)[0][0]+2
 
-    # find where the x increments are discontinuous
+    # find the first dimension where the x/y/z increments
+    # in the coordinates are discontinuous
     # keep the smallest value
     nx = points.shape[0]
     for idim in range(3):
@@ -134,7 +138,8 @@ def guess_primitive_vectors(points):
         if size < nx:
             nx = size
 
-    # find where the y increments are discontinuous
+    # find the second dimension, i.e. where the x/y/z increments
+    # for every `nx` points are discontinuous
     # keep the smallest value
     ny = points.shape[0]
     for idim in range(3):
@@ -145,7 +150,9 @@ def guess_primitive_vectors(points):
         if size < ny:
             ny = size
 
+    # deduce the third dimension
     nz = points.shape[0] // nx // ny
+
     if nx*ny*nz != points.shape[0]:
         message = "Failed to deduce the lattice dimensions"
         raise IndexError(message)
