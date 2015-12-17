@@ -2,6 +2,7 @@
 from collections import namedtuple
 
 import numpy
+import uuid
 
 
 ATTRIBUTES = [
@@ -561,7 +562,7 @@ KEYWORDS = {
         key='MATERIAL',
         number=68,
         shape=[1],
-        dtype='uuid'),
+        dtype=uuid.UUID),
     'CUTOFF_DISTANCE': Keyword(
         name='CutoffDistance',
         description='Cutoff Distance',  # noqa
