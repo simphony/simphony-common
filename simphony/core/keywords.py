@@ -594,20 +594,4 @@ KEYWORDS = {
         number=72,
         shape=[1],
         dtype=numpy.float64),
-    'LENNARD_JONES': Keyword(
-        name='LennardJones',
-        description='Lennard Jones',  # noqa
-        domain=[],
-        key='LENNARD_JONES',
-        number=73,
-        shape=[1],
-        dtype=numpy.str),
-    'COULOMB': Keyword(
-        name='Coulomb',
-        description='Coulomb',  # noqa
-        domain=[],
-        key='COULOMB',
-        number=74,
-        shape=[1],
-        dtype=numpy.str),
 }
