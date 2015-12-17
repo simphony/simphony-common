@@ -127,7 +127,7 @@ def guess_primitive_vectors(points):
         return numpy.where(numpy.abs(sec_dev) > TOLERANCE)[0][0]+2
 
     # find the first dimension where the x/y/z increments
-    # in the coordinates are discontinuous
+    # in the coordinates are discontinuous.
     # keep the smallest value
     nx = points.shape[0]
     for idim in range(3):
@@ -138,8 +138,8 @@ def guess_primitive_vectors(points):
         if size < nx:
             nx = size
 
-    # find the second dimension, i.e. where the x/y/z increments
-    # for every `nx` points are discontinuous
+    # find the second dimension, i.e. where for every `nx` points,
+    # the x/y/z increments are discontinuous.
     # keep the smallest value
     ny = points.shape[0]
     for idim in range(3):
@@ -719,12 +719,6 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3):
         delta2 = 4.*beta**2.-alpha**2.
         if delta2 <= 0.:
             continue
-
-        # cosines are compared directly instead of using
-        # a reference cell from the PrimitiveCell factory
-        # This is because the latter contains more cosine
-        # and sine operations introduce additional numerical
-        # errors
 
         # In order to minimise numerical errors, cosine(special angle)
         # is taken directly from the given vectors
