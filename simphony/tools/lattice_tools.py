@@ -41,7 +41,7 @@ def cosine_two_vectors(vec1, vec2):
 def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
     ''' Return True if a set of primitive vectors ``p1``, ``p2``,
     ``p3`` describe a primitive cell that is geometrically similar to
-    the target primitive cell ``(v1, v2, v3)``.
+    another primitive cell described by ``(v1, v2, v3)``.
 
     This function works by comparing length ratios and cosines
     of the angles between vectors.  Single precision applies
@@ -50,9 +50,9 @@ def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True):
     Parameters
     ----------
     v1, v2, v3 : array_like (len=3)
-        Target primitive vectors
+        Primitive vectors of one primitive cell
     p1, p2, p3 : array_like (len=3)
-        Primitive vectors
+        Primitive vectors of another primitive cell
     permute: boolean
         whether p1, p2, p3 are permutated
 
@@ -589,7 +589,7 @@ def is_base_centered_orthorhombic_lattice(p1, p2, p3):
 
     # not type 2 cell, try type 1
     if not right_angles.all():
-        # find the two vectors that don't make right angles with the others
+        # find the two vectors that don't make right angles with each other
         # the projection of one vector is half the another vector
         not_right_angle = numpy.where(~right_angles)[0][0]
         dot_product = dot_products[not_right_angle]
@@ -654,10 +654,9 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3):
             continue
 
         # cosines are compared directly instead of using
-        # `same_lattice_type`.  This is because the latter requires
-        # creating a target base centered monoclinic cell
-        # and additional cosine and sine operations within the
-        # primitive cell factory functions lead to additional numerical
+        # a reference cell from the PrimitiveCell factory
+        # This is because the latter contains more cosine
+        # and sine operations introduce additional numerical
         # errors
 
         # In order to minimise numerical errors, cosine(special angle)
