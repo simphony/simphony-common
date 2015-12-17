@@ -74,19 +74,17 @@ class Data(tables.IsDescription):
     cutoff_distance = tables.Float64Col(pos=67)
     energy_well_depth = tables.Float64Col(pos=68)
     van_der_waals_radius = tables.Float64Col(pos=69)
-    dielectric_contance = tables.Float64Col(pos=70)
-    lennard_jones = tables.StringCol(pos=71, itemsize=32)
-    coulomb = tables.StringCol(pos=72, itemsize=32)
+    dielectric_constant = tables.Float64Col(pos=70)
 
 
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(73,))
+    mask = tables.BoolCol(pos=1, shape=(71,))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(73,))
+    mask = tables.BoolCol(pos=1, shape=(71,))

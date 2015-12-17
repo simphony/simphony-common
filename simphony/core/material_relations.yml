@@ -1,25 +1,22 @@
-- class_name : LennardJones
-  kind: CUBA.LENNARD_JONES
+- key: LENNARD_JONES
+  number: 1
+  class_name : LennardJones
   allowed_number_materials: [1, 2]
-  description: Lennard Jones material relation
+  doc_description: Lennard Jones material relation
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
-    required: yes
     default: 1.0
   - cuba: CUBA.ENERGY_WELL_DEPTH
-    required: yes
     default: 1.0
   - cuba: CUBA.VAN_DER_WAALS_RADIUS
-    required: yes
     default: 1.0
-- class_name : Coulomb
-  kind: CUBA.COULOMB
+- key: COULOMB
+  number: 2
+  class_name : Coulomb
   allowed_number_materials: [1, 2]
-  description: Coulomb material relation
+  doc_description: Coulomb material relation
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
-    required: yes
     default: 1.0
-  - cuba: CUBA.DIELECTRIC_CONTANCE
-    required: yes
+  - cuba: CUBA.DIELECTRIC_CONSTANT
     default: 1.0

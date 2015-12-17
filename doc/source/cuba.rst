@@ -72,4 +72,8 @@ LnOfRestitutionCoefficient  Natural Logarithm of the Restitution Coefficient    
 RollingFriction             Rolling Friction coefficient                                          ['DEM']                                            ROLLING_FRICTION                     66  [1]      double
 VolumeFraction              Volume fraction                                                       ['FEM', 'FVM']                                     VOLUME_FRACTION                      67  [1]      double
 Material                    Material                                                              ['ATM', 'DEM', 'FEM', 'FVM', 'LBM', 'SPH', 'VIS']  MATERIAL                             68  [1]      uuid
+CutoffDistance              Cutoff Distance                                                       []                                                 CUTOFF_DISTANCE                      69  [1]      double
+EnergyWellDepth             Energy Well Depth                                                     []                                                 ENERGY_WELL_DEPTH                    70  [1]      double
+VanDerWaalsRadius           Van Der Waals Radius                                                  []                                                 VAN_DER_WAALS_RADIUS                 71  [1]      double
+DielectricConstant          Dielectric Constant                                                   []                                                 DIELECTRIC_CONSTANT                  72  [1]      double
 ==========================  ====================================================================  =================================================  =============================  ========  =======  =======

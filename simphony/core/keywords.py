@@ -587,28 +587,12 @@ KEYWORDS = {
         number=71,
         shape=[1],
         dtype=numpy.float64),
-    'DIELECTRIC_CONTANCE': Keyword(
-        name='DielectricContance',
-        description='Dielectric Contance',  # noqa
+    'DIELECTRIC_CONSTANT': Keyword(
+        name='DielectricConstant',
+        description='Dielectric Constant',  # noqa
         domain=[],
-        key='DIELECTRIC_CONTANCE',
+        key='DIELECTRIC_CONSTANT',
         number=72,
         shape=[1],
         dtype=numpy.float64),
-    'LENNARD_JONES': Keyword(
-        name='LennardJones',
-        description='Lennard Jones',  # noqa
-        domain=[],
-        key='LENNARD_JONES',
-        number=73,
-        shape=[1],
-        dtype=numpy.str),
-    'COULOMB': Keyword(
-        name='Coulomb',
-        description='Coulomb',  # noqa
-        domain=[],
-        key='COULOMB',
-        number=74,
-        shape=[1],
-        dtype=numpy.str),
 }
