@@ -156,7 +156,6 @@ def generate_test_import(mr):
         "import unittest\n",
         "import uuid\n",
         "\n",
-        "from simphony.core.cuds_material_relation import CUDSMaterialRelation\n",  # noqa
         "from simphony.material_relations.{MR_FILE} import {MR_NAME}\n".format(
             MR_FILE=mr['key'].lower(),
             MR_NAME=mr['class_name']
@@ -192,17 +191,7 @@ def generate_test_header(mr):
         ),
         "\t\t\tname=name,\n",
         "\t\t\tmaterials=materials\n",
-        "\t\t)\n",
-        "\n",
-        "\tdef get_name(self):\n",
-        "\t\treturn \"{MR_NAME}\"\n".format(
-            MR_NAME=mr['class_name']
-        ),
-        "\n",
-        "\tdef get_kind(self):\n",
-        "\t\treturn CUDSMaterialRelation.{MR_KEY}\n".format(
-            MR_KEY=mr['key']
-        )
+        "\t\t)\n"
     ]
 
     return lines
