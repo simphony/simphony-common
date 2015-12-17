@@ -1,10 +1,10 @@
-from simphony.material_relations.abc_material_relation import (
-    ABCMaterialRelation)
 from simphony.core.data_container import DataContainer
 
 
-class MaterialRelation(ABCMaterialRelation):
-    """ MaterialRelation provides a general interface for describing the
+class MaterialRelation(object):
+    """ Class represents relationships between materials
+
+    MaterialRelation provides a general interface for describing the
     (physics/chemistry) relations between different materials
 
     Attributes
