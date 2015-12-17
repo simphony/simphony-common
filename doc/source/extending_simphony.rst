@@ -67,7 +67,7 @@ to see if the keyword already exists. Contact the developers at
 https://github.com/simphony/simphony-common if there are any questions.
 
 Once you have decided upon what CUBA needs to be added (or modified), edit
-`simphony/core/cuba.yml` to add the respective keyword. Ensure that all the
+``simphony/core/cuba.yml`` to add the respective keyword. Ensure that all the
 the required information is accurately provided.
 
 Developers should then use cuba_generate.py to generate four files which are
@@ -83,3 +83,25 @@ Finally, a pull request should be created and reviewed.
 Also note that the H5_FILE_VERSION version of :class:`~.H5CUDS` will usually
 have to be updated for each release of SimPhoNy when the list of CUBA keywords
 has been modified.
+
+
+Material Relationships
+----------------------
+
+Material relations are defined in ``simphony/core/material_relations.yml``.
+Similar to extending CUBA, a script is used to generate multiple files based
+on the content of 'material_relations.yml'::
+
+   python simphony/scripts/material_relations_generate.py test simphony/core/material_relations.yml simphony/material_relations/tests/
+   python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relations.yml simphony/core/cuds_material_relation.py
+   python simphony/scripts/material_relations_generate.py python simphony/core/material_relations.yml simphony/material_relations/
+
+A pull request should be created https://github.com/simphony/simphony-common
+and reviewed by the SimPhoNy developers.
+
+Note that the scripts create multiple files in ``simphony/material_relations/``.
+Take care to ensure that any new files are included in your PR.  Also note that
+the scripts will **only** create new files or update existing files in
+``simphony/material_relations/``. So if you change the name of a material
+relation, the still existing (but now outdated) file that has the old name
+should be removed.
