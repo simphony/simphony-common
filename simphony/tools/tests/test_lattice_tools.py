@@ -430,16 +430,20 @@ class TestLatticeTools(unittest.TestCase):
         p1, p2, p3 = ((numpy.nan, 0., 0.),)*3
 
         # then
-        with self.assertRaises(ValueError):
-            lattice_tools.find_lattice_type(p1, p2, p3)
+        for bravais_lattice in BravaisLattice:
+            with self.assertRaises(ValueError):
+                lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                            bravais_lattice)
 
     def test_exception_for_vectors_with_inf(self):
         # given
         p1, p2, p3 = ((numpy.inf, 0., 0.),)*3
 
         # then
-        with self.assertRaises(ValueError):
-            lattice_tools.find_lattice_type(p1, p2, p3)
+        for bravais_lattice in BravaisLattice:
+            with self.assertRaises(ValueError):
+                lattice_tools.is_bravais_lattice_consistent(p1, p2, p3,
+                                                            bravais_lattice)
 
     def test_exception_zero_length_vectors(self):
         # given
