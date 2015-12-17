@@ -96,6 +96,8 @@ def generate_initializer(mr):
         ),
         "\t\t\tname=name,\n",
         "\t\t\tdescription=description,\n",
+        "\t\t\tkind=CUDSMaterialRelation.{MR_KEY},\n".format(MR_KEY=mr['key']),
+        "\t\t\tmaterials=materials,\n",
         "\t\t\tparameters=DataContainer({\n"
     ]
 
@@ -105,20 +107,8 @@ def generate_initializer(mr):
             ATT_NAME=param['cuba'].split('.')[1].lower()
         )
 
-    code += "\t\t\t}),\n"
-
-    code += [
-        "\t\t\tsupported_parameters=[{MR_S_PARAM}\n\t\t\t],".format(
-            MR_S_PARAM=sub_param_cuba
-        ),
-        "\n",
-        "\t\t\tmaterials=materials,\n",
-        "\t\t\tnum_materials={MR_MATS},\n".format(
-            MR_MATS=mr['allowed_number_materials']
-        ),
-        "\t\t\tkind=CUDSMaterialRelation.{MR_KEY}\n".format(MR_KEY=mr['key']),
-        "\t\t)\n"
-    ]
+    code += "\t\t\t})\n"
+    code += "\t\t)\n"
 
     return code
 

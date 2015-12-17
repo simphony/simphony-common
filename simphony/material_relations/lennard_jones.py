@@ -35,19 +35,13 @@ class LennardJones(MaterialRelation):
         super(LennardJones, self).__init__(
             name=name,
             description=description,
+            kind=CUDSMaterialRelation.LENNARD_JONES,
+            materials=materials,
             parameters=DataContainer({
                 CUBA.CUTOFF_DISTANCE: cutoff_distance,
                 CUBA.ENERGY_WELL_DEPTH: energy_well_depth,
                 CUBA.VAN_DER_WAALS_RADIUS: van_der_waals_radius,
-            }),
-            supported_parameters=[
-                CUBA.CUTOFF_DISTANCE,
-                CUBA.ENERGY_WELL_DEPTH,
-                CUBA.VAN_DER_WAALS_RADIUS,
-            ],
-            materials=materials,
-            num_materials=[1, 2],
-            kind=CUDSMaterialRelation.LENNARD_JONES
+            })
         )
 
     @property

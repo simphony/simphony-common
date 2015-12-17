@@ -32,17 +32,12 @@ class Coulomb(MaterialRelation):
         super(Coulomb, self).__init__(
             name=name,
             description=description,
+            kind=CUDSMaterialRelation.COULOMB,
+            materials=materials,
             parameters=DataContainer({
                 CUBA.CUTOFF_DISTANCE: cutoff_distance,
                 CUBA.DIELECTRIC_CONSTANT: dielectric_constant,
-            }),
-            supported_parameters=[
-                CUBA.CUTOFF_DISTANCE,
-                CUBA.DIELECTRIC_CONSTANT,
-            ],
-            materials=materials,
-            num_materials=[1, 2],
-            kind=CUDSMaterialRelation.COULOMB
+            })
         )
 
     @property
