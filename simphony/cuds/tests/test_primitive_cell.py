@@ -71,6 +71,10 @@ class TestPrimitiveCell(unittest.TestCase):
         with self.assertRaises(ValueError):
             PrimitiveCell.for_rhombohedral_lattice(1, np.pi)
 
+        with self.assertRaises(ValueError):
+            # angle too big
+            PrimitiveCell.for_rhombohedral_lattice(1, np.pi*2./3.+0.1)
+
         cosa = np.cos(self.alpha)
         sina = np.sin(self.alpha)
 
@@ -224,6 +228,10 @@ class TestPrimitiveCell(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             PrimitiveCell.for_triclinic_lattice(1, 2, 3, 0.1, 0.2, 0.8)
+
+        with self.assertRaises(ValueError):
+            # angles too big
+            PrimitiveCell.for_triclinic_lattice(1, 2, 3, 2.1, 2.1, 2.1)
 
         cosa = np.cos(self.alpha)
         cosb = np.cos(self.beta)
