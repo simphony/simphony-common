@@ -38,8 +38,9 @@ def cosine_two_vectors(vec1, vec2):
 def same_primitive_cell_config(v1, v2, v3, p1, p2, p3, permute=True,
                                tolerance=1.e-6):
     ''' Return True if a set of primitive vectors ``p1``, ``p2``,
-    ``p3`` describe a primitive cell that is geometrically similar to
-    another primitive cell described by ``(v1, v2, v3)``.
+    ``p3`` describe a primitive cell that is similar to the primitive
+    cell described by ``(v1, v2, v3)``, among which the vectors may be
+    flipped by 180 degree.
 
     This function works by comparing length ratios and cosines
     of the angles between vectors.  Single precision applies
