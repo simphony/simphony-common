@@ -324,7 +324,7 @@ class TestLatticeTools(unittest.TestCase):
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
             # when
-            actual = lattice_tools.find_lattice_type(p1, p2, p3)
+            actual = lattice_tools.find_lattice_type(p1, p2, p3, 1.e-8)
 
             # then
             self.assertEqual(actual, expected)
