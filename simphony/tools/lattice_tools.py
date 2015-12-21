@@ -638,25 +638,25 @@ def is_face_centered_orthorhombic_lattice(p1, p2, p3, tolerance=1.e-6):
     -------
     output : bool
     '''
-    alpha2, beta2, gamma2 = map(numpy.dot, (p1, p2, p3), (p1, p2, p3))
+    lenA2, lenB2, lenC2 = map(numpy.dot, (p1, p2, p3), (p1, p2, p3))
 
-    if (numpy.isnan((alpha2, beta2, gamma2)).any() or
-            numpy.isinf((alpha2, beta2, gamma2)).any()):
+    if (numpy.isnan((lenA2, lenB2, lenC2)).any() or
+            numpy.isinf((lenA2, lenB2, lenC2)).any()):
         raise ValueError("Vectors contain invalid values")
 
-    if numpy.less_equal((alpha2, beta2, gamma2), tolerance).any():
+    if numpy.less_equal((lenA2, lenB2, lenC2), tolerance).any():
         raise ValueError("Edge lengths must be strictly positive")
 
-    a2 = 2.*(gamma2+beta2-alpha2)
-    b2 = 2.*(alpha2+gamma2-beta2)
-    c2 = 2.*(alpha2+beta2-gamma2)
+    a2 = 2.*(lenC2+lenB2-lenA2)
+    b2 = 2.*(lenA2+lenC2-lenB2)
+    c2 = 2.*(lenA2+lenB2-lenC2)
 
     if a2 <= 0 or b2 <= 0 or c2 <= 0:
         return False
 
     # expected squared lengths of vectors
     expected_len2 = 0.25*numpy.array((b2+c2, a2+c2, a2+b2))
-    lengths_square = (alpha2, beta2, gamma2)
+    lengths_square = (lenA2, lenB2, lenC2)
     if not (numpy.abs(lengths_square-expected_len2) <= tolerance).all():
         return False
 
@@ -761,7 +761,8 @@ def is_monoclinic_lattice(p1, p2, p3, tolerance=1.e-6):
                             (p1, p2, p3), (p2, p3, p1)))
 
     # base on loose definition: at least 2 angles are 90 degrees
-    return (cosines <= tolerance).sum() >= 2
+    return ((cosines <= tolerance).sum() >= 2 and
+            ((1.-cosines) > tolerance).all())
 
 
 def is_base_centered_monoclinic_lattice(p1, p2, p3, tolerance=1.e-6):
@@ -796,19 +797,19 @@ def is_base_centered_monoclinic_lattice(p1, p2, p3, tolerance=1.e-6):
                             (p1, p2, p3), (p2, p3, p1)))
 
     for ivectors in permutations(range(3)):
-        alpha, beta, gamma = (vec_lengths[i] for i in ivectors)
-        delta2 = 4.*beta**2.-alpha**2.
+        lenA, lenB, lenC = (vec_lengths[i] for i in ivectors)
+        delta2 = 4.*lenB**2.-lenA**2.
         if delta2 <= 0.:
             continue
 
         # In order to minimise numerical errors, cosine(special angle)
         # is taken directly from the given vectors
         # There are two possible positions for the special angle
-        expected1 = numpy.array((alpha/beta/2.,
-                                 alpha*cosines[ivectors[-1]]/beta/2.,
+        expected1 = numpy.array((lenA/lenB/2.,
+                                 lenA*cosines[ivectors[-1]]/lenB/2.,
                                  cosines[ivectors[-1]]))
-        expected2 = numpy.array((alpha/beta/2.,
-                                 alpha*cosines[ivectors[0]]/beta/2.,
+        expected2 = numpy.array((lenA/lenB/2.,
+                                 lenA*cosines[ivectors[0]]/lenB/2.,
                                  cosines[ivectors[0]]))
         for actual_cosines in permutations(cosines):
             if ((numpy.abs(expected1-actual_cosines) <= tolerance).all() or
