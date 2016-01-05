@@ -1,7 +1,8 @@
 import unittest
 import uuid
 
-from simphony.material_relations.coulomb import Coulomb
+from simphony.cuds.material_relations.coulomb import (
+    Coulomb)
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
 

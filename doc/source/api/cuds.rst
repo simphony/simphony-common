@@ -58,6 +58,8 @@ Pure Python implementation
    ~mesh.Cell
    ~material.Material
    ~materials.Materials
+   ~material_relations.material_relation.MaterialRelation
+
 
 .. rubric:: Functions
 
@@ -97,5 +99,9 @@ Pure Python implementation
    :undoc-members:
 
 .. automodule:: simphony.cuds.materials
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.material_relations.material_relation
    :members:
    :undoc-members:

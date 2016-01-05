@@ -1,7 +1,8 @@
 import unittest
 import uuid
 
-from simphony.material_relations.lennard_jones import LennardJones
+from simphony.cuds.material_relations.lennard_jones import (
+    LennardJones)
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
 
