@@ -46,11 +46,8 @@ class MaterialRelation(object):
         self._kind = kind
         self._description = description
 
-        self._check_materials(materials)
-        self._materials = materials
-
-        self._check_parameters(parameters)
-        self._parameters = parameters
+        self.materials = materials
+        self.parameters = parameters
 
     @property
     def name(self):
@@ -85,7 +82,7 @@ class MaterialRelation(object):
         return list(self._materials)
 
     @materials.setter
-    def _set_materials(self, value):
+    def materials(self, value):
         self._check_materials(value)
         self._materials = value
 
