@@ -30,8 +30,7 @@ class MaterialRelation(object):
         CUBA values required/allowed for the parameters
 
     allowed_number_materials : list of int
-        list with all possible configurations of avaliable
-        number of materials in the relation
+        list of all allowed lengths of materials for this relation.
 
     """
 
