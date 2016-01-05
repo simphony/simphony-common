@@ -102,7 +102,7 @@ are used to describe materials and to define common material properties. Each
 low-level object (e.g. Point, Particle) can be of a certain material.
 
 MaterialRelation
-----------
+----------------
 
 .. figure:: ./images/material_relation.png
 
