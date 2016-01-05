@@ -100,3 +100,13 @@ Materials
 In the SimPhoNy modeling framework, :class:`~.Materials` and :class:`~.Material`
 are used to describe materials and to define common material properties. Each
 low-level object (e.g. Point, Particle) can be of a certain material.
+
+MaterialRelation
+----------
+
+.. figure:: ./images/material_relation.png
+
+   **Figure 4:** UML diagram of MaterialRelation.
+
+In the SimPhoNy modeling framework, :class:`~.MaterialRelation`
+are used to describe relationship between materials.
