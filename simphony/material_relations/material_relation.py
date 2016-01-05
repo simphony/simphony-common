@@ -74,7 +74,7 @@ class MaterialRelation(object):
             self._description = value
         else:
             message = 'Expected string but received {!r}'
-            raise TypeError(message.format(type(basestring)))
+            raise TypeError(message.format(type(value)))
 
     @property
     def supported_parameters(self):
