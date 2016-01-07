@@ -105,3 +105,11 @@ Pure Python implementation
 .. automodule:: simphony.cuds.material_relations.material_relation
    :members:
    :undoc-members:
+
+Material relations
+------------------
+For each ``kind`` of material relation, there exists a
+subclass of :class:`~.MaterialRelation`.
+
+.. include:: material_relations.rst
+

@@ -95,7 +95,9 @@ on the content of 'material_relations.yml'::
    python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relations.yml simphony/core/cuds_material_relation.py
    python simphony/scripts/material_relations_generate.py python simphony/core/material_relations.yml simphony/cuds/material_relations/
    python simphony/scripts/material_relations_generate.py test simphony/core/material_relations.yml simphony/cuds/material_relations/tests/
-   python  simphony/scripts/material_relations_generate.py material_relations_information simphony/core/material_relations.yml simphony/core/material_relations_information.py
+   python simphony/scripts/material_relations_generate.py material_relations_information simphony/core/material_relations.yml simphony/core/material_relations_information.py
+   python simphony/scripts/material_relations_generate.py table_rst simphony/core/material_relations.yml doc/source/material_relations_table.rst
+   python simphony/scripts/material_relations_generate.py create_api simphony/core/material_relations.yml doc/source/api/material_relations.rst
 
 A pull request should be created https://github.com/simphony/simphony-common
 and reviewed by the SimPhoNy developers.

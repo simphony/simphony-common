@@ -109,4 +109,8 @@ MaterialRelation
    **Figure 4:** UML diagram of MaterialRelation.
 
 In the SimPhoNy modeling framework, :class:`~.MaterialRelation`
-are used to describe relationship between materials.
+are used to describe relationship between materials.  For each ``kind`` of
+material relation, there exists a subclasses of :class:`~.MaterialRelation`.
+See the following table for a list of each type of material relation:
+
+.. include:: material_relations_table.rst
