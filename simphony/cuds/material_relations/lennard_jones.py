@@ -50,9 +50,7 @@ class LennardJones(MaterialRelation):
 
     @cutoff_distance.setter
     def cutoff_distance(self, value):
-        updated_parameters = self._parameters
-        updated_parameters[CUBA.CUTOFF_DISTANCE] = value
-        self._parameters = updated_parameters
+        self._parameters[CUBA.CUTOFF_DISTANCE] = value
 
     @property
     def energy_well_depth(self):
@@ -60,9 +58,7 @@ class LennardJones(MaterialRelation):
 
     @energy_well_depth.setter
     def energy_well_depth(self, value):
-        updated_parameters = self._parameters
-        updated_parameters[CUBA.ENERGY_WELL_DEPTH] = value
-        self._parameters = updated_parameters
+        self._parameters[CUBA.ENERGY_WELL_DEPTH] = value
 
     @property
     def van_der_waals_radius(self):
@@ -70,6 +66,4 @@ class LennardJones(MaterialRelation):
 
     @van_der_waals_radius.setter
     def van_der_waals_radius(self, value):
-        updated_parameters = self._parameters
-        updated_parameters[CUBA.VAN_DER_WAALS_RADIUS] = value
-        self._parameters = updated_parameters
+        self._parameters[CUBA.VAN_DER_WAALS_RADIUS] = value

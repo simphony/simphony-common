@@ -127,9 +127,7 @@ def generate_property_get_set(mr):
     setter = (
         "\t@{PROP_NAME}.setter\n"
         "\tdef {PROP_NAME}(self, value):\n"
-        "\t\tupdated_parameters = self._parameters\n"
-        "\t\tupdated_parameters[{CUBA_KEY}] = value\n"
-        "\t\tself._parameters = updated_parameters\n"
+        "\t\tself._parameters[{CUBA_KEY}] = value\n"
     )
 
     get_set_block = getter + "\n" + setter

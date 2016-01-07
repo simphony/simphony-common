@@ -46,9 +46,7 @@ class Coulomb(MaterialRelation):
 
     @cutoff_distance.setter
     def cutoff_distance(self, value):
-        updated_parameters = self._parameters
-        updated_parameters[CUBA.CUTOFF_DISTANCE] = value
-        self._parameters = updated_parameters
+        self._parameters[CUBA.CUTOFF_DISTANCE] = value
 
     @property
     def dielectric_constant(self):
@@ -56,6 +54,4 @@ class Coulomb(MaterialRelation):
 
     @dielectric_constant.setter
     def dielectric_constant(self, value):
-        updated_parameters = self._parameters
-        updated_parameters[CUBA.DIELECTRIC_CONSTANT] = value
-        self._parameters = updated_parameters
+        self._parameters[CUBA.DIELECTRIC_CONSTANT] = value
