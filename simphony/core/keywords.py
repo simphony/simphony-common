@@ -565,7 +565,7 @@ KEYWORDS = {
         dtype=uuid.UUID),
     'CUTOFF_DISTANCE': Keyword(
         name='CutoffDistance',
-        description='Cutoff Distance',  # noqa
+        description='Distance where force is no longer taken into account.',  # noqa
         domain=[],
         key='CUTOFF_DISTANCE',
         number=69,
@@ -573,7 +573,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'ENERGY_WELL_DEPTH': Keyword(
         name='EnergyWellDepth',
-        description='Energy Well Depth',  # noqa
+        description='Measurement of how strongly the two particles attract each other.',  # noqa
         domain=[],
         key='ENERGY_WELL_DEPTH',
         number=70,
@@ -581,7 +581,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'VAN_DER_WAALS_RADIUS': Keyword(
         name='VanDerWaalsRadius',
-        description='Van Der Waals Radius',  # noqa
+        description='Distance at which the intermolecular potential between the two particles is zero.',  # noqa
         domain=[],
         key='VAN_DER_WAALS_RADIUS',
         number=71,
@@ -589,7 +589,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'DIELECTRIC_CONSTANT': Keyword(
         name='DielectricConstant',
-        description='Dielectric Constant',  # noqa
+        description='Ratio of the permittivity of a substance to the permittivity of free space or vacuum',  # noqa
         domain=[],
         key='DIELECTRIC_CONSTANT',
         number=72,

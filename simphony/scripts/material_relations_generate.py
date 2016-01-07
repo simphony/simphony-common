@@ -70,7 +70,7 @@ def generate_initializer(mr):
     sub_param_cuba = ""
 
     code += [
-        "\n\t\"\"\"\n",
+        "\n\t\"\"\"  # noqa\n",
         "\n",
         "\tdef __init__(\n",
         "\t\tself,\n",

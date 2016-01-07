@@ -10,18 +10,18 @@ class LennardJones(MaterialRelation):
 
     """ A LennardJones material-relation
 
-    Lennard Jones material relation
+    Approximated potential energy of interaction between a pair of neutral atoms or molecules based on their distance of separation.
 
     Attributes
     ----------
     cutoff_distance : <type 'numpy.float64'>
-        Cutoff Distance
+        Distance where force is no longer taken into account.
     energy_well_depth : <type 'numpy.float64'>
-        Energy Well Depth
+        Measurement of how strongly the two particles attract each other.
     van_der_waals_radius : <type 'numpy.float64'>
-        Van Der Waals Radius
+        Distance at which the intermolecular potential between the two particles is zero.
 
-    """
+    """  # noqa
 
     def __init__(
         self,

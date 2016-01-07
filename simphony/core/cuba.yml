@@ -481,28 +481,28 @@
   number: 68
   shape: [1]
   type: uuid
-- description: Cutoff Distance
+- description: Distance where force is no longer taken into account.
   domain: []
   key: CUTOFF_DISTANCE
   name: CutoffDistance
   number: 69
   shape: [1]
   type: double
-- description: Energy Well Depth
+- description: Measurement of how strongly the two particles attract each other.
   domain: []
   key: ENERGY_WELL_DEPTH
   name: EnergyWellDepth
   number: 70
   shape: [1]
   type: double
-- description: Van Der Waals Radius
+- description: Distance at which the intermolecular potential between the two particles is zero.
   domain: []
   key: VAN_DER_WAALS_RADIUS
   name: VanDerWaalsRadius
   number: 71
   shape: [1]
   type: double
-- description: Dielectric Constant
+- description: Ratio of the permittivity of a substance to the permittivity of free space or vacuum
   domain: []
   key: DIELECTRIC_CONSTANT
   name: DielectricConstant

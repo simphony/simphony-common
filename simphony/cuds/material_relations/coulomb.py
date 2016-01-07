@@ -10,16 +10,16 @@ class Coulomb(MaterialRelation):
 
     """ A Coulomb material-relation
 
-    Coulomb material relation
+    Effective potential energy of the interaction between a pair of point charges.
 
     Attributes
     ----------
     cutoff_distance : <type 'numpy.float64'>
-        Cutoff Distance
+        Distance where force is no longer taken into account.
     dielectric_constant : <type 'numpy.float64'>
-        Dielectric Constant
+        Ratio of the permittivity of a substance to the permittivity of free space or vacuum
 
-    """
+    """  # noqa
 
     def __init__(
         self,
