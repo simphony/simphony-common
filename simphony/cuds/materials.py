@@ -24,10 +24,11 @@ class Materials(object):
             If a material with the same uid already exists
 
         """
-        try:
+        if material.uid in self._materials:
+            raise ValueError(
+                "Material (uid:{}) already exists.".format(material.uid))
+        else:
             self._materials[material.uid] = Material.from_material(material)
-        except KeyError:
-            raise ValueError
 
     def remove_material(self, uid):
         """ Remove a material
