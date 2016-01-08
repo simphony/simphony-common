@@ -1,5 +1,4 @@
 import unittest
-import random
 from collections import defaultdict
 
 import numpy
@@ -58,7 +57,7 @@ def rotate_permute_flip(vectors):
     # rotating vectors
     vectors = list(rotate_vectors(vectors, alpha, beta))
     # random permutation
-    random.shuffle(vectors)
+    numpy.random.shuffle(vectors)
     # flipping vectors
     p1, p2, p3 = numpy.random.choice((1, -1), (3, 1))*vectors
     return (p1, p2, p3)
@@ -494,7 +493,7 @@ class TestLatticeTools(unittest.TestCase):
         points = numpy.zeros((20, 3))
 
         # then
-        with self.assertRaises(IndexError):
+        with self.assertRaises(ValueError):
             lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_no_second_jump(self):
@@ -503,7 +502,7 @@ class TestLatticeTools(unittest.TestCase):
         points[1, 0] = 2
 
         # then
-        with self.assertRaises(IndexError):
+        with self.assertRaises(ValueError):
             lattice_tools.guess_primitive_vectors(points)
 
     def test_exception_guess_vectors_with_wrong_shape_points(self):
