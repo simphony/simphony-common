@@ -27,6 +27,12 @@ class TestMaterials(unittest.TestCase):
             self.example_materials[0].uid),
             self.example_materials[0])
 
+    def test_add_existing_material(self):
+        self.materials.add_material(self.example_materials[0])
+
+        with self.assertRaises(ValueError):
+            self.materials.add_material(self.example_materials[0])
+
     def test_get_missing_material(self):
         with self.assertRaises(KeyError):
             self.materials.get_material(uuid.uuid4())
