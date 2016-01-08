@@ -86,7 +86,7 @@ class MaterialRelation(object):
         self._materials = value
 
     def _check_materials(self, value):
-        if(len(value) not in self._allowed_number_materials):
+        if len(value) not in self._allowed_number_materials:
             error_str = "Incorrect number of materials, expected: {}"
             raise ValueError(
                 error_str.format(
@@ -105,7 +105,7 @@ class MaterialRelation(object):
         self._parameters = DataContainer(value)
 
     def _check_parameters(self, value):
-        if (set(self._supported_parameters) != set(value.keys())):
+        if set(self._supported_parameters) != set(value.keys()):
             raise ValueError("Unsupported parameters")
 
     @property
