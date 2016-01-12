@@ -1,5 +1,5 @@
 from simphony.core.data_container import DataContainer
-from simphony.core.material_relations_definitions import (
+from simphony.core.material_relation_definitions import (
     MATERIAL_RELATION_DEFINITIONS)
 
 
