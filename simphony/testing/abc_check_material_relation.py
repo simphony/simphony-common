@@ -2,8 +2,8 @@ import abc
 
 from simphony.testing.utils import create_data_container
 from simphony.core.data_container import DataContainer
-from simphony.core.material_relations_information import (
-    MATERIAL_RELATIONSHIP_INFORMATION)
+from simphony.core.material_relation_definitions import (
+    MATERIAL_RELATION_DEFINITIONS)
 
 
 class CheckMaterialRelation(object):
@@ -69,7 +69,7 @@ class CheckMaterialRelation(object):
         relation = self.container_factory('foo_relation')
 
         default_data_container = DataContainer()
-        info = MATERIAL_RELATIONSHIP_INFORMATION[relation.kind]
+        info = MATERIAL_RELATION_DEFINITIONS[relation.kind]
         for parameter in info.supported_parameters:
             default_data_container[parameter.cuba_key] = \
                 parameter.default_value

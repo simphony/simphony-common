@@ -1,6 +1,6 @@
 from simphony.core.data_container import DataContainer
-from simphony.core.material_relations_information import (
-    MATERIAL_RELATIONSHIP_INFORMATION)
+from simphony.core.material_relations_definitions import (
+    MATERIAL_RELATION_DEFINITIONS)
 
 
 class MaterialRelation(object):
@@ -36,7 +36,7 @@ class MaterialRelation(object):
 
     def __init__(self, name, kind, materials, parameters, description=""):
 
-        info = MATERIAL_RELATIONSHIP_INFORMATION[kind]
+        info = MATERIAL_RELATION_DEFINITIONS[kind]
         self._allowed_number_materials = info.allowed_number_materials
         self._supported_parameters = [
             parameter.cuba_key for parameter in info.supported_parameters]

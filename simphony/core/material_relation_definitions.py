@@ -14,7 +14,7 @@ Material_Relation_Information = namedtuple("Material_Relation_Information",
 Parameter = namedtuple("Parameter", ["cuba_key", "default_value"])
 
 
-MATERIAL_RELATIONSHIP_INFORMATION = {
+MATERIAL_RELATION_DEFINITIONS = {
     CUDSMaterialRelation.LENNARD_JONES: Material_Relation_Information(
         class_name='LennardJones',
         number=1,

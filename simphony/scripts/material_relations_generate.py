@@ -307,7 +307,7 @@ def create_enum(input, output):
 @cli.command()
 @click.argument('input', type=click.File('rb'))
 @click.argument('output', type=click.File('wb'))
-def material_relations_information(input, output):
+def material_relations_definitions_py(input, output):
     """ Create a dictionary describing material relations.
     """
     keywords = yaml.safe_load(input)
@@ -329,7 +329,7 @@ def material_relations_information(input, output):
         'Parameter = namedtuple("Parameter", ["cuba_key", "default_value"])\n',
         '\n',
         '\n',
-        'MATERIAL_RELATIONSHIP_INFORMATION = {\n']
+        'MATERIAL_RELATION_DEFINITIONS = {\n']
     template = (
         "    CUDSMaterialRelation.{key}: Material_Relation_Information(\n"
         "        class_name='{class_name}',\n"

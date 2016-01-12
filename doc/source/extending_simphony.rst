@@ -89,18 +89,18 @@ Material Relationships
 ----------------------
 
 :ref:`Material relations <material-relations-table>` are defined in
-``simphony/core/material_relations_information.yml``.
+``simphony/core/material_relation_definitions.yml``.
 This information is used to generate different documentation and code.
 
 Similar to extending CUBA, a script is used to generate multiple files
-based on the content of ``material_relations_information.yml``::
+based on the content of ``material_relation_definitions.yml``::
 
-   python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relations_information.yml simphony/core/cuds_material_relation.py
-   python simphony/scripts/material_relations_generate.py python simphony/core/material_relations_information.yml simphony/cuds/material_relations/
-   python simphony/scripts/material_relations_generate.py test simphony/core/material_relations_information.yml simphony/cuds/material_relations/tests/
-   python simphony/scripts/material_relations_generate.py material_relations_information simphony/core/material_relations_information.yml simphony/core/material_relations_information.py
-   python simphony/scripts/material_relations_generate.py table_rst simphony/core/material_relations_information.yml doc/source/material_relations_table.rst
-   python simphony/scripts/material_relations_generate.py create_api simphony/core/material_relations_information.yml doc/source/api/material_relations.rst
+   python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relation_definitions.yml simphony/core/cuds_material_relation.py
+   python simphony/scripts/material_relations_generate.py python simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/
+   python simphony/scripts/material_relations_generate.py test simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/tests/
+   python simphony/scripts/material_relations_generate.py material_relations_definitions_py simphony/core/material_relation_definitions.yml simphony/core/material_relation_definitions.py
+   python simphony/scripts/material_relations_generate.py table_rst simphony/core/material_relation_definitions.yml doc/source/material_relations_table.rst
+   python simphony/scripts/material_relations_generate.py create_api simphony/core/material_relation_definitions.yml doc/source/api/material_relations.rst
 
 A pull request should be created https://github.com/simphony/simphony-common
 and reviewed by the SimPhoNy developers.
