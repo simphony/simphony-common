@@ -109,7 +109,9 @@ Pure Python implementation
 Material relations
 ------------------
 For each ``kind`` of material relation, there exists a
-subclass of :class:`~.MaterialRelation`.
+subclass of :class:`~.MaterialRelation`.  See
+:ref:`list of material relations <material-relations-table>` for more details.
+
 
 .. include:: material_relations.rst
 

@@ -88,9 +88,12 @@ has been modified.
 Material Relationships
 ----------------------
 
-Material relations are defined in ``simphony/core/material_relations_information.yml``.
-Similar to extending CUBA, a script is used to generate multiple files based
-on the content of ``material_relations_information.yml``::
+:ref:`Material relations <material-relations-table>` are defined in
+``simphony/core/material_relations_information.yml``.
+This information is used to generate different documentation and code.
+
+Similar to extending CUBA, a script is used to generate multiple files
+based on the content of ``material_relations_information.yml``::
 
    python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relations_information.yml simphony/core/cuds_material_relation.py
    python simphony/scripts/material_relations_generate.py python simphony/core/material_relations_information.yml simphony/cuds/material_relations/
