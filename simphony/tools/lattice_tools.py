@@ -158,8 +158,10 @@ def guess_primitive_vectors(points, tolerance=1.e-6):
     nz = points.shape[0] // nx // ny
 
     if nx*ny*nz != points.shape[0]:
-        message = "Failed to deduce the lattice dimensions"
-        raise IndexError(message)
+        message = ("Failed to deduce the lattice dimensions. "
+                   "Guessed nx={0}, ny={1}, nz={2}. This may be caused "
+                   "by missing nodes or defects beyond {3}")
+        raise ValueError(message.format(nx, ny, nz, tolerance))
 
     # Test if the lattice points spacings are uniform
     # Does not test all points, otherwise slow for large data
