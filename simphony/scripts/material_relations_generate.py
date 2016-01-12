@@ -323,15 +323,15 @@ def material_relations_definitions_py(input, output):
         'ATTRIBUTES = [\n'
         '    "number", "class_name", "allowed_number_materials",\n'
         '    "doc_description", "supported_parameters"]\n'
-        'Material_Relation_Information = namedtuple("Material_Relation_Information",\n',  # noqa
-        '                                           ATTRIBUTES)\n',  # noqa
+        'Material_Relation_Definition = namedtuple("Material_Relation_Definition",\n',  # noqa
+        '                                          ATTRIBUTES)\n',  # noqa
         '\n',
         'Parameter = namedtuple("Parameter", ["cuba_key", "default_value"])\n',
         '\n',
         '\n',
         'MATERIAL_RELATION_DEFINITIONS = {\n']
     template = (
-        "    CUDSMaterialRelation.{key}: Material_Relation_Information(\n"
+        "    CUDSMaterialRelation.{key}: Material_Relation_Definition(\n"
         "        class_name='{class_name}',\n"
         "        number={number},\n"
         "        allowed_number_materials={allowed_number_materials},\n"

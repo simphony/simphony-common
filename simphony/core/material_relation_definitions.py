@@ -8,14 +8,14 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 ATTRIBUTES = [
     "number", "class_name", "allowed_number_materials",
     "doc_description", "supported_parameters"]
-Material_Relation_Information = namedtuple("Material_Relation_Information",
-                                           ATTRIBUTES)
+Material_Relation_Definition = namedtuple("Material_Relation_Definition",
+                                          ATTRIBUTES)
 
 Parameter = namedtuple("Parameter", ["cuba_key", "default_value"])
 
 
 MATERIAL_RELATION_DEFINITIONS = {
-    CUDSMaterialRelation.LENNARD_JONES: Material_Relation_Information(
+    CUDSMaterialRelation.LENNARD_JONES: Material_Relation_Definition(
         class_name='LennardJones',
         number=1,
         allowed_number_materials=[1, 2],
@@ -28,7 +28,7 @@ MATERIAL_RELATION_DEFINITIONS = {
              Parameter(cuba_key=CUBA.VAN_DER_WAALS_RADIUS,
                        default_value=1.0), ]
      ),
-    CUDSMaterialRelation.COULOMB: Material_Relation_Information(
+    CUDSMaterialRelation.COULOMB: Material_Relation_Definition(
         class_name='Coulomb',
         number=2,
         allowed_number_materials=[1, 2],
