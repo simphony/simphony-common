@@ -1,0 +1,11 @@
+@startuml
+class MaterialRelation {
+   kind: CUDSMaterialRelation
+   name: str
+   materials: uuid.UUID[]
+   parameters: DataContainer
+   description: str
+   supported_parameters: CUBA[]
+   allowed_number_materials: int[]
+}
+@enduml

@@ -110,7 +110,9 @@ release = '0.3.0.dev0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['cuba.rst']
+exclude_patterns = ['cuba.rst',
+                    'material_relations_table.rst',
+                    'api/material_relations.rst']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
