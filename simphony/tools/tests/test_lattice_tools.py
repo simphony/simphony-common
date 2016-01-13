@@ -361,9 +361,9 @@ class TestLatticeTools(unittest.TestCase):
             p1, p2, p3 = rotate_permute_flip(aligned_vectors)
 
             # when
-            exclusives = (set(BravaisLattice)
-                          - set(specific_map2_general[bravais_lattice])
-                          - set([bravais_lattice, BravaisLattice.TRICLINIC]))
+            exclusives = (set(BravaisLattice) -
+                          set(specific_map2_general[bravais_lattice]) -
+                          set([bravais_lattice, BravaisLattice.TRICLINIC]))
 
             # then
             # bravais_lattice cannot be compatible with lattice
