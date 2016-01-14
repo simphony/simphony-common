@@ -9,7 +9,7 @@ Release 0.3.0
 * Added Materials (#227)
 * Added MaterialRelations (#226, #236)
 * Added CUBA keys to add_dataset method (#229)
-* Added documentation on how yo propose new CUBA (#209)
+* Added documentation on how to propose new CUBA (#209)
 
 Release 0.2.2
 -------------
