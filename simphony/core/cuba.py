@@ -3,9 +3,11 @@ from enum import IntEnum, unique
 
 
 @unique
-class CUBA(IntEnum):
+class CUDSItem(IntEnum):
 
+    ID = 0
     NAME = 1
+    POSITION = 2
     DIRECTION = 3
     STATUS = 4
     LABEL = 5
@@ -76,3 +78,11 @@ class CUBA(IntEnum):
     ENERGY_WELL_DEPTH = 70
     VAN_DER_WAALS_RADIUS = 71
     DIELECTRIC_CONSTANT = 72
+    DYNAMIC_PRESSURE = 73
+    FLUX = 74
+    MESO_SCALE_STRESS_TENSOR = 75
+    STRAIN_TENSOR = 76
+    RELATIVE_VELOCITY = 77
+    DIFFUSION_VELOCITY = 78
+    STRESS_TENSOR = 79
+    VOLUME_FRACTION_GRADIENT = 80
