@@ -3,11 +3,9 @@ from enum import IntEnum, unique
 
 
 @unique
-class CUDSItem(IntEnum):
+class CUBA(IntEnum):
 
-    ID = 0
     NAME = 1
-    POSITION = 2
     DIRECTION = 3
     STATUS = 4
     LABEL = 5
