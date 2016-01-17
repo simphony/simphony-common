@@ -77,7 +77,7 @@ class Data(tables.IsDescription):
     dielectric_constant = tables.Float64Col(pos=70)
     dynamic_pressure = tables.Float64Col(pos=71)
     flux = tables.Float64Col(pos=72)
-    meso_scale_stress_tensor = tables.Float64Col(pos=73, shape=9)
+    homogenized_stress_tensor = tables.Float64Col(pos=73, shape=9)
     strain_tensor = tables.Float64Col(pos=74, shape=9)
     relative_velocity = tables.Float64Col(pos=75, shape=3)
     diffusion_velocity = tables.Float64Col(pos=76, shape=3)

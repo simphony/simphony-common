@@ -523,10 +523,10 @@
   number: 74
   shape: [1]
   type: double
-- description: Meso scale total stress tensor
+- description: Homogenized stress tensor
   domain: [FEM, FVM]
-  key: MESO_SCALE_STRESS_TENSOR
-  name: MesoScaleStressTensor
+  key: HOMOGENIZED_STRESS_TENSOR
+  name: HomogenizedStressTensor
   number: 75
   shape: [9]
   type: double
@@ -537,14 +537,14 @@
   number: 76
   shape: [9]
   type: double
-- description: Relative velocity of disperse phase to continuous phase
+- description: Relative velocity
   domain: [FEM, FVM]
   key: RELATIVE_VELOCITY
   name: RelativeVelocity
   number: 77
   shape: [3]
   type: double
-- description: Diffusion velocity - velocity of phase to mixture volume center
+- description: Diffusion velocity
   domain: [FEM, FVM]
   key: DIFFUSION_VELOCITY
   name: DiffusionVelocity

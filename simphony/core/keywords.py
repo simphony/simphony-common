@@ -611,11 +611,11 @@ KEYWORDS = {
         number=74,
         shape=[1],
         dtype=numpy.float64),
-    'MESO_SCALE_STRESS_TENSOR': Keyword(
-        name='MesoScaleStressTensor',
-        description='Meso scale total stress tensor',  # noqa
+    'HOMOGENIZED_STRESS_TENSOR': Keyword(
+        name='HomogenizedStressTensor',
+        description='Homogenized stress tensor',  # noqa
         domain=['FEM', 'FVM'],
-        key='MESO_SCALE_STRESS_TENSOR',
+        key='HOMOGENIZED_STRESS_TENSOR',
         number=75,
         shape=[9],
         dtype=numpy.float64),
@@ -629,7 +629,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'RELATIVE_VELOCITY': Keyword(
         name='RelativeVelocity',
-        description='Relative velocity of disperse phase to continuous phase',  # noqa
+        description='Relative velocity',  # noqa
         domain=['FEM', 'FVM'],
         key='RELATIVE_VELOCITY',
         number=77,
@@ -637,7 +637,7 @@ KEYWORDS = {
         dtype=numpy.float64),
     'DIFFUSION_VELOCITY': Keyword(
         name='DiffusionVelocity',
-        description='Diffusion velocity - velocity of phase to mixture volume center',  # noqa
+        description='Diffusion velocity',  # noqa
         domain=['FEM', 'FVM'],
         key='DIFFUSION_VELOCITY',
         number=78,
