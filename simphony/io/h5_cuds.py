@@ -8,7 +8,7 @@ from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_lattice import H5Lattice
 
-H5_FILE_VERSION = 2
+H5_FILE_VERSION = 3
 
 
 class H5CUDS(object):
