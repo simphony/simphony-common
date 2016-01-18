@@ -400,6 +400,7 @@ def table_rst(input, output):
     columns = [_Column("key", "Key", lambda x: "{}".format(x)),
                _Column("class_name", "Class",
                        lambda x: ":class:`~.{}`".format(x)),
+               _Column("domain", "Domain", lambda x: ", ".join(x)),
                _Column("doc_description", "Description",
                        lambda x: "{}".format(x)),
                _Column("allowed_number_materials",

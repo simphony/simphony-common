@@ -3,6 +3,7 @@
   class_name : LennardJones
   allowed_number_materials: [1, 2]
   doc_description: Approximated potential energy of interaction between a pair of neutral atoms or molecules based on their distance of separation.
+  domain: [MD]
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
     default: 1.0
@@ -15,6 +16,7 @@
   class_name : Coulomb
   allowed_number_materials: [1, 2]
   doc_description: Effective potential energy of the interaction between a pair of point charges.
+  domain: [MD]
   supported_parameters:
   - cuba: CUBA.CUTOFF_DISTANCE
     default: 1.0
@@ -25,6 +27,7 @@
   class_name : FrictionForce
   allowed_number_materials: [1, 2]
   doc_description: Shear force accounting for the tangential displacement between contacting particles.
+  domain: [DEM]
   supported_parameters:
   - cuba: CUBA.FRICTION_COEFFICIENT
     default: 0.0
@@ -33,6 +36,7 @@
   class_name : Dissipation_Force
   allowed_number_materials: [1, 2]
   doc_description: Viscous normal force describing the inelasticity of particle collisions.
+  domain: [DEM]
   supported_parameters:
   - cuba: CUBA.RESTITUTION_COEFFICIENT
     default: 1.0
@@ -41,6 +45,7 @@
   class_name : Cohesion_Force
   allowed_number_materials: [1, 2]
   doc_description: Viscous normal force describing the inelasticity of particle collisions.
+  domain: [DEM]
   supported_parameters:
   - cuba: CUBA.COHESION_ENERGY_DENSITY
     default: 0.0
