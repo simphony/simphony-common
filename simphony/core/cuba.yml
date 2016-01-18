@@ -453,10 +453,10 @@
   number: 64
   shape: [1]
   type: double
-- description: Natural Logarithm of the Restitution Coefficient
+- description: Restitution Coefficient
   domain: [DEM]
-  key: LN_OF_RESTITUTION_COEFFICIENT
-  name: LnOfRestitutionCoefficient
+  key: RESTITUTION_COEFFICIENT
+  name: RestitutionCoefficient
   number: 65
   shape: [1]
   type: double

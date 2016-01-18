@@ -531,11 +531,11 @@ KEYWORDS = {
         number=64,
         shape=[1],
         dtype=numpy.float64),
-    'LN_OF_RESTITUTION_COEFFICIENT': Keyword(
-        name='LnOfRestitutionCoefficient',
-        description='Natural Logarithm of the Restitution Coefficient',  # noqa
+    'RESTITUTION_COEFFICIENT': Keyword(
+        name='RestitutionCoefficient',
+        description='Restitution Coefficient',  # noqa
         domain=['DEM'],
-        key='LN_OF_RESTITUTION_COEFFICIENT',
+        key='RESTITUTION_COEFFICIENT',
         number=65,
         shape=[1],
         dtype=numpy.float64),

@@ -67,7 +67,7 @@ class Data(tables.IsDescription):
     sphericity = tables.Float64Col(pos=60)
     young_modulus = tables.Float64Col(pos=61)
     poisson_ratio = tables.Float64Col(pos=62)
-    ln_of_restitution_coefficient = tables.Float64Col(pos=63)
+    restitution_coefficient = tables.Float64Col(pos=63)
     rolling_friction = tables.Float64Col(pos=64)
     volume_fraction = tables.Float64Col(pos=65)
     material = tables.StringCol(pos=66, itemsize=32)
