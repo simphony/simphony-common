@@ -7,3 +7,6 @@ class CUDSMaterialRelation(IntEnum):
 
     LENNARD_JONES = 1
     COULOMB = 2
+    FRICTION_FORCE = 3
+    DISSIPATION_FORCE = 4
+    COHESION_FORCE = 5

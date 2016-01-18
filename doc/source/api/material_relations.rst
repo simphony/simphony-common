@@ -7,6 +7,9 @@
 
    ~lennard_jones.LennardJones
    ~coulomb.Coulomb
+   ~friction_force.FrictionForce
+   ~dissipation_force.Dissipation_Force
+   ~cohesion_force.Cohesion_Force
 
 .. rubric:: Implementation
 
@@ -17,6 +20,21 @@
    :show-inheritance:
 
 .. automodule:: simphony.cuds.material_relations.coulomb
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: simphony.cuds.material_relations.friction_force
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: simphony.cuds.material_relations.dissipation_force
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: simphony.cuds.material_relations.cohesion_force
    :members:
    :undoc-members:
    :show-inheritance:

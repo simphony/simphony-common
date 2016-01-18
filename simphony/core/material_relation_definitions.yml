@@ -20,3 +20,27 @@
     default: 1.0
   - cuba: CUBA.DIELECTRIC_CONSTANT
     default: 1.0
+- key: FRICTION_FORCE
+  number: 3
+  class_name : FrictionForce
+  allowed_number_materials: [1, 2]
+  doc_description: Shear force accounting for the tangential displacement between contacting particles.
+  supported_parameters:
+  - cuba: CUBA.FRICTION_COEFFICIENT
+    default: 0.0
+- key: DISSIPATION_FORCE
+  number: 4
+  class_name : Dissipation_Force
+  allowed_number_materials: [1, 2]
+  doc_description: Viscous normal force describing the inelasticity of particle collisions.
+  supported_parameters:
+  - cuba: CUBA.RESTITUTION_COEFFICIENT
+    default: 1.0
+- key: COHESION_FORCE
+  number: 5
+  class_name : Cohesion_Force
+  allowed_number_materials: [1, 2]
+  doc_description: Viscous normal force describing the inelasticity of particle collisions.
+  supported_parameters:
+  - cuba: CUBA.COHESION_ENERGY_DENSITY
+    default: 0.0
