@@ -595,4 +595,68 @@ KEYWORDS = {
         number=72,
         shape=[1],
         dtype=numpy.float64),
+    'DYNAMIC_PRESSURE': Keyword(
+        name='DynamicPressure',
+        description='Dynamic pressure',  # noqa
+        domain=['FEM', 'FVM'],
+        key='DYNAMIC_PRESSURE',
+        number=73,
+        shape=[1],
+        dtype=numpy.float64),
+    'FLUX': Keyword(
+        name='Flux',
+        description='Flux',  # noqa
+        domain=['FEM', 'FVM'],
+        key='FLUX',
+        number=74,
+        shape=[1],
+        dtype=numpy.float64),
+    'HOMOGENIZED_STRESS_TENSOR': Keyword(
+        name='HomogenizedStressTensor',
+        description='Homogenized stress tensor',  # noqa
+        domain=['FEM', 'FVM'],
+        key='HOMOGENIZED_STRESS_TENSOR',
+        number=75,
+        shape=[9],
+        dtype=numpy.float64),
+    'STRAIN_TENSOR': Keyword(
+        name='StrainTensor',
+        description='Strain tensor',  # noqa
+        domain=['FEM', 'FVM'],
+        key='STRAIN_TENSOR',
+        number=76,
+        shape=[9],
+        dtype=numpy.float64),
+    'RELATIVE_VELOCITY': Keyword(
+        name='RelativeVelocity',
+        description='Relative velocity',  # noqa
+        domain=['FEM', 'FVM'],
+        key='RELATIVE_VELOCITY',
+        number=77,
+        shape=[3],
+        dtype=numpy.float64),
+    'DIFFUSION_VELOCITY': Keyword(
+        name='DiffusionVelocity',
+        description='Diffusion velocity',  # noqa
+        domain=['FEM', 'FVM'],
+        key='DIFFUSION_VELOCITY',
+        number=78,
+        shape=[3],
+        dtype=numpy.float64),
+    'STRESS_TENSOR': Keyword(
+        name='StressTensor',
+        description='Stress tensor',  # noqa
+        domain=['FEM', 'FVM'],
+        key='STRESS_TENSOR',
+        number=79,
+        shape=[9],
+        dtype=numpy.float64),
+    'VOLUME_FRACTION_GRADIENT': Keyword(
+        name='VolumeFractionGradient',
+        description='Volume fraction gradient',  # noqa
+        domain=['FEM', 'FVM'],
+        key='VOLUME_FRACTION_GRADIENT',
+        number=80,
+        shape=[3],
+        dtype=numpy.float64),
 }

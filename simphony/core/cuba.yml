@@ -509,4 +509,59 @@
   number: 72
   shape: [1]
   type: double
-
+- description: Dynamic pressure
+  domain: [FEM, FVM]
+  key: DYNAMIC_PRESSURE
+  name: DynamicPressure
+  number: 73
+  shape: [1]
+  type: double
+- description: Flux
+  domain: [FEM, FVM]
+  key: FLUX
+  name: Flux
+  number: 74
+  shape: [1]
+  type: double
+- description: Homogenized stress tensor
+  domain: [FEM, FVM]
+  key: HOMOGENIZED_STRESS_TENSOR
+  name: HomogenizedStressTensor
+  number: 75
+  shape: [9]
+  type: double
+- description: Strain tensor
+  domain: [FEM, FVM]
+  key: STRAIN_TENSOR
+  name: StrainTensor
+  number: 76
+  shape: [9]
+  type: double
+- description: Relative velocity
+  domain: [FEM, FVM]
+  key: RELATIVE_VELOCITY
+  name: RelativeVelocity
+  number: 77
+  shape: [3]
+  type: double
+- description: Diffusion velocity
+  domain: [FEM, FVM]
+  key: DIFFUSION_VELOCITY
+  name: DiffusionVelocity
+  number: 78
+  shape: [3]
+  type: double
+- description: Stress tensor
+  domain: [FEM, FVM]
+  key: STRESS_TENSOR
+  name: StressTensor
+  number: 79
+  shape: [9]
+  type: double
+- description: Volume fraction gradient
+  domain: [FEM, FVM]
+  key: VOLUME_FRACTION_GRADIENT
+  name: VolumeFractionGradient
+  number: 80
+  shape: [3]
+  type: double

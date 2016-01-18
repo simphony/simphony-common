@@ -75,16 +75,24 @@ class Data(tables.IsDescription):
     energy_well_depth = tables.Float64Col(pos=68)
     van_der_waals_radius = tables.Float64Col(pos=69)
     dielectric_constant = tables.Float64Col(pos=70)
+    dynamic_pressure = tables.Float64Col(pos=71)
+    flux = tables.Float64Col(pos=72)
+    homogenized_stress_tensor = tables.Float64Col(pos=73, shape=9)
+    strain_tensor = tables.Float64Col(pos=74, shape=9)
+    relative_velocity = tables.Float64Col(pos=75, shape=3)
+    diffusion_velocity = tables.Float64Col(pos=76, shape=3)
+    stress_tensor = tables.Float64Col(pos=77, shape=9)
+    volume_fraction_gradient = tables.Float64Col(pos=78, shape=3)
 
 
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(71,))
+    mask = tables.BoolCol(pos=1, shape=(79,))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(71,))
+    mask = tables.BoolCol(pos=1, shape=(79,))
