@@ -565,3 +565,10 @@
   number: 80
   shape: [3]
   type: double
+- description: Work of adhesion per unit contact area
+  domain: [DEM]
+  key: COHESION_ENERGY_DENSITY
+  name: Cohesion_Energy_Density
+  number: 81
+  shape: [1]
+  type: double

@@ -659,4 +659,12 @@ KEYWORDS = {
         number=80,
         shape=[3],
         dtype=numpy.float64),
+    'COHESION_ENERGY_DENSITY': Keyword(
+        name='Cohesion_Energy_Density',
+        description='Work of adhesion per unit contact area',  # noqa
+        domain=['DEM'],
+        key='COHESION_ENERGY_DENSITY',
+        number=81,
+        shape=[1],
+        dtype=numpy.float64),
 }
