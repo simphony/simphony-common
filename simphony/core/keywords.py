@@ -410,7 +410,7 @@ KEYWORDS = {
         key='NUMBER_OF_TIME_STEPS',
         number=49,
         shape=[1],
-        dtype=numpy.float64),
+        dtype=numpy.int32),
     'FORCE': Keyword(
         name='Force',
         description='Force',  # noqa
