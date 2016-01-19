@@ -1,21 +1,21 @@
 import unittest
 import uuid
 
-from simphony.cuds.material_relations.cohesion_force import (
-    Cohesion_Force)
+from simphony.cuds.material_relations.sjkr_cohesion_force import (
+    SJKRCohesionForce)
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
 
 
-class TestCohesion_ForceMaterialRelation(
+class TestSJKRCohesionForceMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
     def container_factory(
         self,
-            name="Cohesion_Force",
+            name="SJKRCohesionForce",
             materials=[uuid.uuid4() for _ in xrange(1)]):
-        return Cohesion_Force(
+        return SJKRCohesionForce(
             name=name,
             materials=materials
         )

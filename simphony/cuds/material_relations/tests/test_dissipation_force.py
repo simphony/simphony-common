@@ -2,20 +2,20 @@ import unittest
 import uuid
 
 from simphony.cuds.material_relations.dissipation_force import (
-    Dissipation_Force)
+    DissipationForce)
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
 
 
-class TestDissipation_ForceMaterialRelation(
+class TestDissipationForceMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
     def container_factory(
         self,
-            name="Dissipation_Force",
+            name="DissipationForce",
             materials=[uuid.uuid4() for _ in xrange(1)]):
-        return Dissipation_Force(
+        return DissipationForce(
             name=name,
             materials=materials
         )

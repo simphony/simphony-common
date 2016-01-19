@@ -6,11 +6,11 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 from simphony.core.data_container import DataContainer
 
 
-class Cohesion_Force(MaterialRelation):
+class SJKRCohesionForce(MaterialRelation):
 
-    """ A Cohesion_Force material-relation
+    """ A SJKRCohesionForce material-relation
 
-    Viscous normal force describing the inelasticity of particle collisions.
+    Additional normal force tending to maintain the contact.
 
     Attributes
     ----------
@@ -26,10 +26,10 @@ class Cohesion_Force(MaterialRelation):
         description="",
         cohesion_energy_density=0.0
     ):
-        super(Cohesion_Force, self).__init__(
+        super(SJKRCohesionForce, self).__init__(
             name=name,
             description=description,
-            kind=CUDSMaterialRelation.COHESION_FORCE,
+            kind=CUDSMaterialRelation.SJKR_COHESION_FORCE,
             materials=materials,
             parameters=DataContainer({
                 CUBA.COHESION_ENERGY_DENSITY: cohesion_energy_density,

@@ -1,21 +1,21 @@
 import unittest
 import uuid
 
-from simphony.cuds.material_relations.friction_force import (
-    FrictionForce)
+from simphony.cuds.material_relations.coulomb_friction_force import (
+    CoulombFrictionForce)
 from simphony.testing.abc_check_material_relation import (
     CheckMaterialRelation)
 
 
-class TestFrictionForceMaterialRelation(
+class TestCoulombFrictionForceMaterialRelation(
     CheckMaterialRelation,
     unittest.TestCase
 ):
     def container_factory(
         self,
-            name="FrictionForce",
+            name="CoulombFrictionForce",
             materials=[uuid.uuid4() for _ in xrange(1)]):
-        return FrictionForce(
+        return CoulombFrictionForce(
             name=name,
             materials=materials
         )

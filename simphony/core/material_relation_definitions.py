@@ -39,8 +39,8 @@ MATERIAL_RELATION_DEFINITIONS = {
              Parameter(cuba_key=CUBA.DIELECTRIC_CONSTANT,
                        default_value=1.0), ]
      ),
-    CUDSMaterialRelation.FRICTION_FORCE: Material_Relation_Definition(
-        class_name='FrictionForce',
+    CUDSMaterialRelation.COULOMB_FRICTION_FORCE: Material_Relation_Definition(
+        class_name='CoulombFrictionForce',
         number=3,
         allowed_number_materials=[1, 2],
         doc_description='Shear force accounting for the tangential displacement between contacting particles.',  # noqa
@@ -49,7 +49,7 @@ MATERIAL_RELATION_DEFINITIONS = {
                        default_value=0.0), ]
      ),
     CUDSMaterialRelation.DISSIPATION_FORCE: Material_Relation_Definition(
-        class_name='Dissipation_Force',
+        class_name='DissipationForce',
         number=4,
         allowed_number_materials=[1, 2],
         doc_description='Viscous normal force describing the inelasticity of particle collisions.',  # noqa
@@ -57,11 +57,11 @@ MATERIAL_RELATION_DEFINITIONS = {
              Parameter(cuba_key=CUBA.RESTITUTION_COEFFICIENT,
                        default_value=1.0), ]
      ),
-    CUDSMaterialRelation.COHESION_FORCE: Material_Relation_Definition(
-        class_name='Cohesion_Force',
+    CUDSMaterialRelation.SJKR_COHESION_FORCE: Material_Relation_Definition(
+        class_name='SJKRCohesionForce',
         number=5,
         allowed_number_materials=[1, 2],
-        doc_description='Viscous normal force describing the inelasticity of particle collisions.',  # noqa
+        doc_description='Additional normal force tending to maintain the contact.',  # noqa
         supported_parameters=[
              Parameter(cuba_key=CUBA.COHESION_ENERGY_DENSITY,
                        default_value=0.0), ]

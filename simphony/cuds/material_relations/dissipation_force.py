@@ -6,9 +6,9 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 from simphony.core.data_container import DataContainer
 
 
-class Dissipation_Force(MaterialRelation):
+class DissipationForce(MaterialRelation):
 
-    """ A Dissipation_Force material-relation
+    """ A DissipationForce material-relation
 
     Viscous normal force describing the inelasticity of particle collisions.
 
@@ -26,7 +26,7 @@ class Dissipation_Force(MaterialRelation):
         description="",
         restitution_coefficient=1.0
     ):
-        super(Dissipation_Force, self).__init__(
+        super(DissipationForce, self).__init__(
             name=name,
             description=description,
             kind=CUDSMaterialRelation.DISSIPATION_FORCE,

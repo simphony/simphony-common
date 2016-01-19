@@ -6,9 +6,9 @@ from simphony.core.cuds_material_relation import CUDSMaterialRelation
 from simphony.core.data_container import DataContainer
 
 
-class FrictionForce(MaterialRelation):
+class CoulombFrictionForce(MaterialRelation):
 
-    """ A FrictionForce material-relation
+    """ A CoulombFrictionForce material-relation
 
     Shear force accounting for the tangential displacement between contacting particles.
 
@@ -26,10 +26,10 @@ class FrictionForce(MaterialRelation):
         description="",
         friction_coefficient=0.0
     ):
-        super(FrictionForce, self).__init__(
+        super(CoulombFrictionForce, self).__init__(
             name=name,
             description=description,
-            kind=CUDSMaterialRelation.FRICTION_FORCE,
+            kind=CUDSMaterialRelation.COULOMB_FRICTION_FORCE,
             materials=materials,
             parameters=DataContainer({
                 CUBA.FRICTION_COEFFICIENT: friction_coefficient,
