@@ -347,7 +347,7 @@
   name: NumberOfTimeSteps
   number: 49
   shape: [1]
-  type: double
+  type: integer
 - description: Force
   domain: [DEM, LBM, SPH]
   key: FORCE
