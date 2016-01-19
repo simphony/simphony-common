@@ -1,6 +1,16 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.3.0
+-------------
+
+* Fixed ABCModelingEngine documentation (#241)
+* Added lattice_tools module for checking lattice type (#240)
+* Added Materials (#227)
+* Added MaterialRelations (#226, #236)
+* Added CUBA keys to add_dataset method (#229)
+* Added documentation on how to propose new CUBA (#209)
+
 Release 0.2.2
 -------------
 
