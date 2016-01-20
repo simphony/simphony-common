@@ -17,7 +17,7 @@ pip install coverage
 pip install flake8
 pip install hypothesis
 
-rem install simphony-common
+rem install simphony-common 
 python setup.py develop
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd examples/plugin

@@ -453,10 +453,10 @@
   number: 64
   shape: [1]
   type: double
-- description: Natural Logarithm of the Restitution Coefficient
+- description: Restitution Coefficient
   domain: [DEM]
-  key: LN_OF_RESTITUTION_COEFFICIENT
-  name: LnOfRestitutionCoefficient
+  key: RESTITUTION_COEFFICIENT
+  name: RestitutionCoefficient
   number: 65
   shape: [1]
   type: double
@@ -564,4 +564,11 @@
   name: VolumeFractionGradient
   number: 80
   shape: [3]
+  type: double
+- description: Work of adhesion per unit contact area
+  domain: [DEM]
+  key: COHESION_ENERGY_DENSITY
+  name: Cohesion_Energy_Density
+  number: 81
+  shape: [1]
   type: double

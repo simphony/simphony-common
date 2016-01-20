@@ -531,11 +531,11 @@ KEYWORDS = {
         number=64,
         shape=[1],
         dtype=numpy.float64),
-    'LN_OF_RESTITUTION_COEFFICIENT': Keyword(
-        name='LnOfRestitutionCoefficient',
-        description='Natural Logarithm of the Restitution Coefficient',  # noqa
+    'RESTITUTION_COEFFICIENT': Keyword(
+        name='RestitutionCoefficient',
+        description='Restitution Coefficient',  # noqa
         domain=['DEM'],
-        key='LN_OF_RESTITUTION_COEFFICIENT',
+        key='RESTITUTION_COEFFICIENT',
         number=65,
         shape=[1],
         dtype=numpy.float64),
@@ -658,5 +658,13 @@ KEYWORDS = {
         key='VOLUME_FRACTION_GRADIENT',
         number=80,
         shape=[3],
+        dtype=numpy.float64),
+    'COHESION_ENERGY_DENSITY': Keyword(
+        name='Cohesion_Energy_Density',
+        description='Work of adhesion per unit contact area',  # noqa
+        domain=['DEM'],
+        key='COHESION_ENERGY_DENSITY',
+        number=81,
+        shape=[1],
         dtype=numpy.float64),
 }

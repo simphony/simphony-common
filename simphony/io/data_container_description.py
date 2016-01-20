@@ -67,7 +67,7 @@ class Data(tables.IsDescription):
     sphericity = tables.Float64Col(pos=60)
     young_modulus = tables.Float64Col(pos=61)
     poisson_ratio = tables.Float64Col(pos=62)
-    ln_of_restitution_coefficient = tables.Float64Col(pos=63)
+    restitution_coefficient = tables.Float64Col(pos=63)
     rolling_friction = tables.Float64Col(pos=64)
     volume_fraction = tables.Float64Col(pos=65)
     material = tables.StringCol(pos=66, itemsize=32)
@@ -83,16 +83,17 @@ class Data(tables.IsDescription):
     diffusion_velocity = tables.Float64Col(pos=76, shape=3)
     stress_tensor = tables.Float64Col(pos=77, shape=9)
     volume_fraction_gradient = tables.Float64Col(pos=78, shape=3)
+    cohesion_energy_density = tables.Float64Col(pos=79)
 
 
 class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(79,))
+    mask = tables.BoolCol(pos=1, shape=(80,))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(79,))
+    mask = tables.BoolCol(pos=1, shape=(80,))
