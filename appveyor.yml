@@ -16,6 +16,8 @@ init:
   - ps: $Env:sdkbin = "C:\Program Files\Microsoft SDKs\Windows\" + $Env:sdkver + "\Bin"
   - ps: $Env:sdkverpath = "C:/Program Files/Microsoft SDKs/Windows/" + $Env:sdkver + "/Setup/WindowsSdkVer.exe"
   - ps: $Env:path = $Env:python + ";" + $Env:python + "\scripts;" + $Env:sdkbin + ";" + $Env:path
+    # not updating pip (using get-pip.py) due to problem
+    # with pip/wheel (https://github.com/simphony/simphony-common/issues/274)
 install:
   - "%PYTHON%\\python.exe -m pip install wheel"
   - ps: pip --version
