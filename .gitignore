@@ -56,3 +56,9 @@ target/
 
 # jar files
 *.jar
+
+# Hypothesis test suite stuff
+.hypothesis
+
+# PyCharm IDE stuff
+.idea
