@@ -67,16 +67,16 @@ to see if the keyword already exists. Contact the developers at
 https://github.com/simphony/simphony-common if there are any questions.
 
 Once you have decided upon what CUBA needs to be added (or modified), edit
-``simphony/core/cuba.yml`` to add the respective keyword. Ensure that all the
+``simphony/core/cuba.yml`` to add the respective keyword. Ensure that all
 the required information is accurately provided.
 
 Developers should then use cuba_generate.py to generate four files which are
 based on the contents of cuba.yml::
 
-   python simphony/scripts/cuba_generate.py python simphony/core/cuba.yml simphony/core/cuba.py
-   python simphony/scripts/cuba_generate.py keywords simphony/core/cuba.yml simphony/core/keywords.py
-   python simphony/scripts/cuba_generate.py rst simphony/core/cuba.yml doc/source/cuba.rst
-   python simphony/scripts/cuba_generate.py table simphony/core/cuba.yml simphony/io/data_container_description.py
+   python scripts/cuba_generate.py python simphony/core/cuba.yml simphony/core/cuba.py
+   python scripts/cuba_generate.py keywords simphony/core/cuba.yml simphony/core/keywords.py
+   python scripts/cuba_generate.py rst simphony/core/cuba.yml doc/source/cuba.rst
+   python scripts/cuba_generate.py table simphony/core/cuba.yml simphony/io/data_container_description.py
 
 Finally, a pull request should be created and reviewed.
 
@@ -95,12 +95,12 @@ This information is used to generate different documentation and code.
 Similar to extending CUBA, a script is used to generate multiple files
 based on the content of ``material_relation_definitions.yml``::
 
-   python simphony/scripts/material_relations_generate.py create_enum simphony/core/material_relation_definitions.yml simphony/core/cuds_material_relation.py
-   python simphony/scripts/material_relations_generate.py python simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/
-   python simphony/scripts/material_relations_generate.py test simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/tests/
-   python simphony/scripts/material_relations_generate.py material_relations_definitions_py simphony/core/material_relation_definitions.yml simphony/core/material_relation_definitions.py
-   python simphony/scripts/material_relations_generate.py table_rst simphony/core/material_relation_definitions.yml doc/source/material_relations_table.rst
-   python simphony/scripts/material_relations_generate.py create_api simphony/core/material_relation_definitions.yml doc/source/api/material_relations.rst
+   python scripts/material_relations_generate.py create_enum simphony/core/material_relation_definitions.yml simphony/core/cuds_material_relation.py
+   python scripts/material_relations_generate.py python simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/
+   python scripts/material_relations_generate.py test simphony/core/material_relation_definitions.yml simphony/cuds/material_relations/tests/
+   python scripts/material_relations_generate.py material_relations_definitions_py simphony/core/material_relation_definitions.yml simphony/core/material_relation_definitions.py
+   python scripts/material_relations_generate.py table_rst simphony/core/material_relation_definitions.yml doc/source/material_relations_table.rst
+   python scripts/material_relations_generate.py create_api simphony/core/material_relation_definitions.yml doc/source/api/material_relations.rst
 
 A pull request should be created https://github.com/simphony/simphony-common
 and reviewed by the SimPhoNy developers.
