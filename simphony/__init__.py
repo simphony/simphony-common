@@ -10,6 +10,6 @@ SimPhoNy is an EU-project funded by the 7th Framework Programme (Project
 
 For more information see: http://www.simphony-project.eu/.
 
-:copyright: (c) 2014, 2015 SimPhoNy Consortium
+:copyright: (c) 2014, 2015, 2016 SimPhoNy Consortium
 :license: BSD, see LICENSE for more details.
 """
