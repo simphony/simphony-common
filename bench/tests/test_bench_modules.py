@@ -21,9 +21,9 @@ else:
 
 class TestBenchModules(unittest.TestCase):
 
-    def test_imporiting(self):
+    def test_importing(self):
         for module in BENCH_MODULES:
-            name = '.'.join(('simphony', 'bench', module))
+            name = '.'.join(('bench', module))
             importlib.import_module(name)
 
 

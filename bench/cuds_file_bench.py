@@ -3,7 +3,7 @@ import shutil
 import tempfile
 import uuid
 
-from simphony.bench.util import bench
+from .util import bench
 from simphony.io.h5_cuds import H5CUDS
 from simphony.cuds.particles import Particle, Particles
 

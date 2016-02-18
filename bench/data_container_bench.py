@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import random
 
-from simphony.bench.util import bench
+from .util import bench
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 

@@ -4,17 +4,16 @@ import random
 import tempfile
 import os.path
 import shutil
-import uuid
 from contextlib import closing
 
 import tables
 
-from simphony.bench.util import bench
+from .util import bench
 from simphony.core.cuba import CUBA
 from simphony.core.data_container import DataContainer
-from simphony.io.data_container_table import DataContainerTable
-from simphony.io.tests.abc_data_container_table_check import (
-    create_data_container)
+from simphony.io.indexed_data_container_table import (
+    IndexedDataContainerTable)
+from simphony.testing.utils import create_data_container
 
 
 temp_dir = tempfile.mkdtemp()
@@ -34,7 +33,7 @@ def append(handle, n, value):
     root = handle.root
     if hasattr(root, 'my_data_table'):
         handle.remove_node(root, 'my_data_table', recursive=True)
-    table = DataContainerTable(root, 'my_data_table')
+    table = IndexedDataContainerTable(root, 'my_data_table', expected_number=n)
     return [table.append(value) for i in range(n)]
 
 
@@ -42,7 +41,7 @@ def set_item(handle, uids, value):
     root = handle.root
     if hasattr(root, 'my_data_table'):
         handle.remove_node(root, 'my_data_table', recursive=True)
-    table = DataContainerTable(root, 'my_data_table')
+    table = IndexedDataContainerTable(root, 'my_data_table', expected_number=n)
     for uid in uids:
         table[uid] = value
 
@@ -80,65 +79,43 @@ def create_table(filename):
 def main():
     try:
         print("""
-        Benchmarking various operations on the DataContainerTable.
+        Benchmarking various operations on the IndexDataContainerTable.
 
         """)
         with closing(tables.open_file(filename, mode='w')) as handle:
             root = handle.root
-            table = DataContainerTable(root, 'my_data_table')
+            table = IndexedDataContainerTable(root, 'my_data_table')
             print(
                 "Append {}:".format(n),
                 bench(lambda: append(handle, 1000, data_container)))
 
         with closing(tables.open_file(filename, mode='w')) as handle:
             root = handle.root
-            table = DataContainerTable(root, 'my_data_table')
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
             print(
                 "Append {} masked:".format(n),
                 bench(lambda: append(handle, 1000, data_container_half)))
-
-        uids = [uuid.uuid4() for _ in range(n)]
-        with closing(tables.open_file(filename, mode='w')) as handle:
-
-            print(
-                "Set item {}:".format(n),
-                bench(
-                    lambda: set_item(handle, uids, data_container),
-                    repeat=1, adjust_runs=False))
-
-        with closing(tables.open_file(filename, mode='w')) as handle:
-            root = handle.root
-            table = DataContainerTable(root, 'my_data_table')
-            print(
-                "Set item {} masked:".format(n),
-                bench(
-                    lambda: set_item(handle, uids, data_container),
-                    repeat=1, adjust_runs=False))
 
         uids = create_table(filename)
         sample = random.sample(uids, 300)
 
         with closing(tables.open_file(filename, mode='r')) as handle:
             root = handle.root
-            table = DataContainerTable(root, 'my_data_table')
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
             print("Iterate {}:".format(n), bench(lambda: iteration(table)))
-            print(
-                "IterSequence of 300:",
-                bench(lambda: iteration_with_sequence(table, sample)))
             print(
                 'Getitem sample of 300:',
                 bench(lambda: getitem_access(table, sample)))
 
         with closing(tables.open_file(filename, mode='a')) as handle:
             root = handle.root
-            table = DataContainerTable(root, 'my_data_table')
+            table = IndexedDataContainerTable(
+                root, 'my_data_table', expected_number=n)
             print(
                 "Update item of 300 sample:",
                 bench(lambda: setitem(table, data_container_half, sample)))
-            print(
-                "Delitem of 300 sample:", bench(
-                    lambda: delitem(table, sample),
-                    repeat=1, adjust_runs=False))
     finally:
         shutil.rmtree(temp_dir)
 
