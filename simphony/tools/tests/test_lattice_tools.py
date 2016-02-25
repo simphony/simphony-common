@@ -2,7 +2,7 @@ import unittest
 from collections import defaultdict
 
 import numpy
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis.strategies import floats, tuples, composite
 from hypothesis.strategies import fixed_dictionaries
 
@@ -305,6 +305,24 @@ specific_map2_general = defaultdict(
             BravaisLattice.MONOCLINIC,
             BravaisLattice.BASE_CENTERED_MONOCLINIC,
             BravaisLattice.TRICLINIC)})
+
+
+# 1. The health check for "taking too long to generate samples"
+# should be skipped:
+#      The collection of primitive cell samples take too long to generate.
+#      However skipping some of the samples make the tests less robust
+# 2. The health check for using other random modules *can* be skipped:
+#      `numpy.random` module is used for randomly rotating primitive
+#      vectors for testing functions that are spatial invariant.
+#      Although it is desirable for failed tests to be reproducible,
+#      the many `hypothesis.random` instances make the code complicated.
+#      In this case, readability outweighs reproducibility.  If the test
+#      fails on a particular set of random values but passes on the next,
+#      we will get a Flaky error and that is still good.
+
+# Right now, we can't choose which health checks to skip
+# The following skips all of them (4)
+settings.perform_health_check = False
 
 
 class TestLatticeTools(unittest.TestCase):
