@@ -1,3 +1,6 @@
+"""This module is part of simphony-common package. It contains
+wrappers base class.
+"""
 from abc import ABCMeta, abstractmethod
 
 
@@ -21,6 +24,31 @@ class ABCModelingEngine(object):  # pragma: no cover
 
     """
     __metaclass__ = ABCMeta
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the engine.
+
+        Parameters
+        ----------
+        cuds:
+            The CUDS computational model object
+
+        Returns
+        -------
+
+        """
+        self._cuds = kwargs.get('cuds')
+        self._load_cuds()
+
+    # This class is supposed to be overridden, however it is not labeled
+    # abstract, in order to be backward-compatible.
+    def _load_cuds(self):
+        """Load information from CUDS into the engine."""
+        pass
+
+    def get_cuds(self):
+        """Get current CUDS instance."""
+        return self._cuds
 
     @abstractmethod
     def run(self):
