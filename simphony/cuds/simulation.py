@@ -34,6 +34,8 @@ class Simulation(object):
         Name of the wrapper to launch the simulation with.
     """
     def __init__(self, cuds, wrapper_name):
+        if not isinstance(cuds, CUDS):
+            raise TypeError('Expected CUDS but got %s' % type(cuds))
         self._cuds = cuds
         self._wrapper = WrapperFactory.create(wrapper_name, cuds)
 

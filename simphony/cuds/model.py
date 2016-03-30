@@ -1,6 +1,7 @@
 """CUDS computational model implementation.
 
-This module contains the classes used to represent a computational model, based on SimPhoNy metadata.
+This module contains the classes used to represent a computational model,
+based on SimPhoNy metadata.
 """
 from ..core import DataContainer
 from .store import MemoryStateDataStore

@@ -36,11 +36,11 @@ def load_engine_extentions():
         namespace='simphony.engine',
         invoke_on_load=False)
     extensions = {}
-    for extension in mgr.extensions:
-        extensions[extension.name] = extension.plugin
+    for ext in mgr.extensions:
+        extensions[ext.name] = ext.plugin
         # Invoke 'get_wrappers' method and register wrappers.
-        if hasattr(extension.plugin, 'get_wrappers'):
-            wrappers = extension.plugin.get_wrappers()
+        if hasattr(ext.plugin, 'get_wrappers'):
+            wrappers = ext.plugin.get_wrappers()
             if wrappers:
                 _WRAPPER_REGISTRY.update(wrappers)
     return extensions

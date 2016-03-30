@@ -1,7 +1,7 @@
 """Base storage mechanism for accessing CUDS entities, mainly datasets.
 
-This module contains the base class for implementing different access strategies
-for CUDS,notably MemoryStore and ProxyStore.
+This module contains the base class for implementing different access
+strategies for CUDS,notably MemoryStore and ProxyStore.
 """
 import abc
 
@@ -74,17 +74,16 @@ class ProxyStateDataStore(ABCStateDataStore):
 
     def get(self, name):
         """Return the dataset with the given name."""
-	return self._wrapper.get_dataset(name)
+        return self._wrapper.get_dataset(name)
 
     def remove(self, name):
         """Remove the dataset with the given name."""
-	self._wrapper.remove_dataset(name)
+        self._wrapper.remove_dataset(name)
 
     def get_names(self):
         """Return names of the existing datasets."""
-	return self._wrapper.get_dataset_names()
+        return self._wrapper.get_dataset_names()
 
     def iter_datasets(self, names=None):
         """Iterate over all or a subset of datasets."""
-	return self._wrapper.iter_datasets(names=names)
-
+        return self._wrapper.iter_datasets(names=names)
