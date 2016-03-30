@@ -1,6 +1,6 @@
 """Contains simulation controllers."""
 from . import CUDS
-from ..engine import get_wrapper
+from ..engine import get_wrapper, get_wrappers
 
 
 class WrapperFactory(object):
@@ -18,7 +18,7 @@ class WrapperFactory(object):
         """
         wrapper = get_wrapper(wrapper_name)
         if not wrapper:
-            raise Exception('Unknown wrapper: %s' % wrapper_name)
+            raise Exception('%s is unknown, accepted values are: %s' % (wrapper_name, ', '.join(get_wrappers())))
 
         return wrapper(cuds=cuds)
 

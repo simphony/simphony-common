@@ -23,7 +23,7 @@ def get_wrapper(wrapper_name):
 
 
 def get_wrappers():
-    """Return a list of know wrappers."""
+    """Return a list of known wrappers."""
     return _WRAPPER_REGISTRY.keys()
 
 

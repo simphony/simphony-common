@@ -33,11 +33,11 @@ class CUDS(object):
     @property
     def data(self):
         """Data container for CUDS items."""
-        return self._data
+        return DataContainer(self._data)
 
     @data.setter
-    def data_setter(self):
-        raise Exception('Replacing data container is not supported.')
+    def data_setter(self, value):
+        self._data = DataContainer(value)
 
     def add(self, component):
         """Adds a component to the CUDS computational model.
