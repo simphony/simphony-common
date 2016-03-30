@@ -18,7 +18,8 @@ class WrapperFactory(object):
         """
         wrapper = get_wrapper(wrapper_name)
         if not wrapper:
-            raise Exception('%s is unknown, accepted values are: %s' % (wrapper_name, ', '.join(get_wrappers())))
+            raise Exception('%s is unknown, accepted values are: %s' %
+                            (wrapper_name, ', '.join(get_wrappers())))
 
         return wrapper(cuds=cuds)
 

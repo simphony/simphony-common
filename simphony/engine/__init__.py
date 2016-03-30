@@ -6,7 +6,6 @@ registered at the 'simphony.engine' entry point.
 
 
 """
-
 # A temporary solution to keep a list of wrappers known to SimPhoNy
 _WRAPPER_REGISTRY = {}
 
@@ -27,6 +26,26 @@ def get_wrappers():
     return _WRAPPER_REGISTRY.keys()
 
 
+def _update_wrappers(wrappers):
+    """Update the wrapper registry.
+
+    Parameters
+    ----------
+    wrappers: dict
+        key/ABCModelingEngine class pairs
+    """
+    if not wrappers:
+        return
+
+    if not isinstance(wrappers, dict):
+        raise TypeError('Must be a dict of key/ABCModelingEngine pairs.')
+
+    for key in wrappers.keys():
+        if key in _WRAPPER_REGISTRY:
+            raise ValueError('A wrapper already exists for the key %s' % key)
+    _WRAPPER_REGISTRY.update(wrappers)
+
+
 def load_engine_extentions():
     """ Discover and load engine extension modules.
 
@@ -39,10 +58,9 @@ def load_engine_extentions():
     for ext in mgr.extensions:
         extensions[ext.name] = ext.plugin
         # Invoke 'get_wrappers' method and register wrappers.
-        if hasattr(ext.plugin, 'get_wrappers'):
-            wrappers = ext.plugin.get_wrappers()
-            if wrappers:
-                _WRAPPER_REGISTRY.update(wrappers)
+        if hasattr(ext.plugin, 'get_wrappers') and \
+                callable(ext.plugin.get_wrappers):
+            _update_wrappers(ext.plugin.get_wrappers())
     return extensions
 
 
