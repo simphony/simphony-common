@@ -1,44 +1,27 @@
 """Contains simulation controllers."""
 from . import CUDS
-from ..engine import get_wrapper, get_wrappers
-
-
-class WrapperFactory(object):
-    """Creates wrappers."""
-    @staticmethod
-    def create(wrapper_name, cuds):
-        """Create a wrapper instance of the given name.
-
-        Parameters
-        ----------
-        cuds: CUDS
-            a cuds object containing simulation data
-        wrapper_name: str
-            A SimPhoNy wrapper name, should be of of registered engines.
-        """
-        wrapper = get_wrapper(wrapper_name)
-        if not wrapper:
-            raise Exception('%s is unknown, accepted values are: %s' %
-                            (wrapper_name, ', '.join(get_wrappers())))
-
-        return wrapper(cuds=cuds)
+from ..engine import create_wrapper
 
 
 class Simulation(object):
-    """Represents a simulation using CUDS.
+    """A CUDS computational model simulation.
 
     Parameters
     ----------
     cuds: CUDS
         A cuds object which contains model information.
-    wrapper_name: str
-        Name of the wrapper to launch the simulation with.
+    engine_name: str
+        Name of the underlying engine to launch the simulation with.
+    engine_interface: EngineInterface
+        The interface to the engine, internal or fileio.
     """
-    def __init__(self, cuds, wrapper_name):
+    def __init__(self, cuds, engine_name, engine_interface=None):
         if not isinstance(cuds, CUDS):
             raise TypeError('Expected CUDS but got %s' % type(cuds))
         self._cuds = cuds
-        self._wrapper = WrapperFactory.create(wrapper_name, cuds)
+        self._wrapper = create_wrapper(cuds,
+                                       engine_name,
+                                       engine_interface=engine_interface)
 
     def run(self, *args, **kwargs):
         """Run the simulation."""

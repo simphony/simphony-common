@@ -3,47 +3,35 @@
 This module is dynamicaly populated at import with the
 registered plugins modules. Plugins modules need to be
 registered at the 'simphony.engine' entry point.
-
-
 """
-# A temporary solution to keep a list of wrappers known to SimPhoNy
-_WRAPPER_REGISTRY = {}
+from .extension import ABCEngineExtension
+from .extension import EngineInterface
+from .extension import EngineManager
 
 
-def get_wrapper(wrapper_name):
-    """Return corresponding wrapper class.
-
-    Parameters
-    ----------
-    wrapper_name: str
-        name that wrapper is registered with.
-    """
-    return _WRAPPER_REGISTRY.get(wrapper_name)
+# TODO: Use an application server and put this in app context.
+# Wrapper manager class.
+_ENGINE_MANAGER = EngineManager()
 
 
-def get_wrappers():
-    """Return a list of known wrappers."""
-    return _WRAPPER_REGISTRY.keys()
+def get_supported_engines():
+    """Show a list of supported engines."""
+    return _ENGINE_MANAGER.get_supported_engines()
 
 
-def _update_wrappers(wrappers):
-    """Update the wrapper registry.
+def create_wrapper(cuds, engine_name, engine_interface=None):
+    """Create a wrapper to the given engine.
 
     Parameters
     ----------
-    wrappers: dict
-        key/ABCModelingEngine class pairs
+    cuds: CUDS
+        A cuds object which contains model information.
+    engine_name: str
+        Name of the underlying engine to launch the simulation with.
+    engine_interface: EngineInterface
+        The interface to the engine, internal or fileio.
     """
-    if not wrappers:
-        return
-
-    if not isinstance(wrappers, dict):
-        raise TypeError('Must be a dict of key/ABCModelingEngine pairs.')
-
-    for key in wrappers.keys():
-        if key in _WRAPPER_REGISTRY:
-            raise ValueError('A wrapper already exists for the key %s' % key)
-    _WRAPPER_REGISTRY.update(wrappers)
+    return _ENGINE_MANAGER.create_wrapper(cuds, engine_name, engine_interface)
 
 
 def load_engine_extentions():
@@ -57,10 +45,8 @@ def load_engine_extentions():
     extensions = {}
     for ext in mgr.extensions:
         extensions[ext.name] = ext.plugin
-        # Invoke 'get_wrappers' method and register wrappers.
-        if hasattr(ext.plugin, 'get_wrappers') and \
-                callable(ext.plugin.get_wrappers):
-            _update_wrappers(ext.plugin.get_wrappers())
+        # Load engine metadata
+        _ENGINE_MANAGER.load_metadata(ext.plugin)
     return extensions
 
 
