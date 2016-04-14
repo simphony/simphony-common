@@ -37,7 +37,8 @@ class EngineFeatureMetadata(object):
         if not physics_equation:
             raise EngineManagerException('Physics equation must have a value.')
         if not methods or len(methods) == 0:
-            raise EngineManagerException('At least one method must be provided.')
+            raise \
+                EngineManagerException('At least one method must be provided.')
         self.physics_equation = physics_equation
         self.methods = methods
 
@@ -122,7 +123,7 @@ class ABCEngineExtension(object):
         physics_equation: PhysicsEquation
           represents a physics equation
         methods: list
-          methods to solve the equation as a list of ComputationalMethod objects
+          ComputationalMethod objects to solve the equation
 
         Return
         ------
@@ -147,7 +148,8 @@ class EngineManager(object):
           A python module provided by an extension
         """
         if not inspect.ismodule(plugin):
-            raise EngineManagerException('The provided object is not a module: %s' % plugin)
+            raise EngineManagerException(
+                'The provided object is not a module: %s' % plugin)
 
         for name, value in inspect.getmembers(plugin, inspect.isclass):
             if not inspect.isabstract(value) and\
@@ -172,8 +174,8 @@ class EngineManager(object):
                 raise Exception('There is already an extension registered'
                                 ' for %s engine.' % engine.name)
 
-            # We keep this extension because it knows how to create wrappers for
-            # the given engine. It is our interaction point with its engines.
+            # This extension knows how to create wrappers for the given engine.
+            # It is our interaction point with its engines.
             self._engine_extensions[engine.name] = extension
 
     def create_wrapper(self, cuds, engine_name, engine_interface=None):
@@ -194,7 +196,8 @@ class EngineManager(object):
                                             engine_name,
                                             engine_interface)
         else:
-            raise EngineManagerException('Invalid engine name: %s' % engine_name)
+            raise EngineManagerException(
+                'Invalid engine name: %s' % engine_name)
 
     def get_supported_engines(self):
         """Show a list of supported engines."""

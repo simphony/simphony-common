@@ -9,6 +9,10 @@ from .extension import EngineInterface
 from .extension import EngineManager
 
 
+__all__ = ['ABCEngineExtension', 'EngineInterface',
+           'get_supported_engines', 'create_wrapper']
+
+
 # TODO: Use an application server and put this in app context.
 # Wrapper manager class.
 _ENGINE_MANAGER = EngineManager()

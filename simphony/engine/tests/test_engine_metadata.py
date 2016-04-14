@@ -81,7 +81,8 @@ class TestEngineManager(unittest.TestCase):
         self.assertEqual(len(supported), 1)
 
     def test_assert_duplicate_engine(self):
-        self.assertRaises(Exception, self.manager.load_metadata, sys.modules[__name__])
+        self.assertRaises(Exception,
+                          self.manager.load_metadata, sys.modules[__name__])
 
     def test_add_extension(self):
         cls = get_example_engine_extension()
@@ -91,13 +92,16 @@ class TestEngineManager(unittest.TestCase):
         self.assertEqual(len(supported), 2)
 
     def test_create_wrapper(self):
-        self.assertRaises(EngineManagerException, self.manager.create_wrapper, None, 'EXAMPLE2')
+        self.assertRaises(EngineManagerException,
+                          self.manager.create_wrapper, None, 'EXAMPLE2')
         # Example is a dummpy engine. It does not have any wrapper.
         self.assertEqual(self.manager.create_wrapper(None, 'EXAMPLE1'), None)
 
     def test_non_module_load(self):
-        class MyClass:pass
-        self.assertRaises(EngineManagerException, self.manager.load_metadata, MyClass)
+        class MyClass:
+            pass
+        self.assertRaises(EngineManagerException,
+                          self.manager.load_metadata, MyClass)
 
 
 class TestEngineFeature(unittest.TestCase):
@@ -109,8 +113,10 @@ class TestEngineFeature(unittest.TestCase):
         pass
 
     def test_init(self):
-        self.assertRaises(EngineManagerException, EngineFeatureMetadata, None, None)
-        self.assertRaises(EngineManagerException, EngineFeatureMetadata, None, [])
+        self.assertRaises(EngineManagerException,
+                          EngineFeatureMetadata, None, None)
+        self.assertRaises(EngineManagerException,
+                          EngineFeatureMetadata, None, [])
 
 
 class TestEngineMetadata(unittest.TestCase):
