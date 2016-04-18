@@ -72,12 +72,12 @@ class TestEngineManager(unittest.TestCase):
         pass
 
     def test_get_supported_engines(self):
-        supported = self.manager.get_supported_engines()
+        supported = self.manager.get_supported_engine_names()
         self.assertIn('EXAMPLE1', supported)
         self.assertNotIn('LAMMPS', supported)
 
     def test_engine_count(self):
-        supported = self.manager.get_supported_engines()
+        supported = self.manager.get_supported_engine_names()
         self.assertEqual(len(supported), 1)
 
     def test_assert_duplicate_engine(self):
@@ -87,7 +87,7 @@ class TestEngineManager(unittest.TestCase):
     def test_add_extension(self):
         cls = get_example_engine_extension()
         self.manager.add_extension(cls())
-        supported = self.manager.get_supported_engines()
+        supported = self.manager.get_supported_engine_names()
         self.assertIn('EXAMPLE2', supported)
         self.assertEqual(len(supported), 2)
 

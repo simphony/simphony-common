@@ -18,6 +18,16 @@ __all__ = ['ABCEngineExtension', 'EngineInterface',
 _ENGINE_MANAGER = EngineManager()
 
 
+def get_supported_engine_names():
+    """Show a list of supported engines.
+
+    Returns
+    -------
+    list: a list of engine names
+    """
+    return _ENGINE_MANAGER.get_supported_engine_names()
+
+
 def get_supported_engines():
     """Show a list of supported engines."""
     return _ENGINE_MANAGER.get_supported_engines()

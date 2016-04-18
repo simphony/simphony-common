@@ -197,8 +197,24 @@ class EngineManager(object):
                                             engine_interface)
         else:
             raise EngineManagerException(
-                'Invalid engine name: %s' % engine_name)
+                'Invalid engine name: %s. Available engines are %s'
+                % (engine_name, self.get_supported_engine_names()))
 
     def get_supported_engines(self):
-        """Show a list of supported engines."""
+        """Get metadata about supported engines.
+
+        Returns
+        -------
+        list: a list of EngineMetadata objects
+        """
+        return list(self._engine_extensions.values())
+
+    def get_supported_engine_names(self):
+        """Show a list of supported engines.
+
+        Returns
+        -------
+        list: a list of engine names
+        """
         return self._engine_extensions.keys()
+

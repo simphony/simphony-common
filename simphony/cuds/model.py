@@ -9,7 +9,13 @@ from .store import MemoryStateDataStore
 
 # IDEA: add consistency check handlers/instances to the CUDS class (dynamic).
 class CUDS(object):
-    """CUDS computational model."""
+    """Common Universal Data Structure, i.e. CUDS computational model.
+
+    This is the main data structure to hold all the information regarding
+    a computational model. Having the data provided by this class, one should
+    be able to start a new computational model based on that with no extra
+    information.
+    """
     def __init__(self):
 
         # Add datasets to memory datastore by default
