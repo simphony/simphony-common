@@ -105,10 +105,3 @@ class CUDS(object):
         for component in self._store.iteritems():
             if isinstance(component, component_type):
                 yield component.name
-
-    def change_datastore(self, store):
-        """Replace the current dataset store with the given one.
-
-        This method is intented to be used from wrappers. A wrapper will
-        switch the store to its own proxy store after getting the cuds."""
-        self._dataset_store = store
