@@ -3,8 +3,13 @@
 This module contains the classes used to represent a computational model,
 based on SimPhoNy metadata.
 """
+import uuid
+
 from ..core import DataContainer
 from .store import MemoryStateDataStore
+from .abc_particles import ABCParticles
+from .abc_lattice import ABCLattice
+from .abc_mesh import ABCMesh
 
 
 # IDEA: add consistency check handlers/instances to the CUDS class (dynamic).
@@ -24,8 +29,15 @@ class CUDS(object):
         # Memory storage to keep CUDS components
         self._store = {}
 
-        # Data container
+        # The generic data container
         self._data = DataContainer()
+
+        # A map to find the object for a given id amoung datasets or
+        # simple components. Unfortunately, at the moment dataset
+        # containers do not have `uid' and therefore this workaround
+        # is necessary. This is a dict of key of any kind and a lambda
+        # that will return the corresponding value.
+        self._map = {}
 
     @staticmethod
     def _is_cuds_component(obj):
@@ -35,6 +47,14 @@ class CUDS(object):
         # TODO: replace with metadata type checks
         return all([hasattr(obj, 'name'),
                     hasattr(obj, 'data')])
+
+    @staticmethod
+    def _is_dataset(obj):
+        """Check if the object is a dataset."""
+        if isinstance(obj, (ABCParticles, ABCLattice, ABCMesh)):
+            return True
+        else:
+            return False
 
     @property
     def data(self):
@@ -57,19 +77,33 @@ class CUDS(object):
         if not self._is_cuds_component(component):
             raise ValueError('Not a CUDS component.')
 
-        # Store the component
-        # TODO: use uuid of the component - does not exist yet
-        self._store[id(component)] = component
+        # Add datasets separately
+        if self._is_dataset(component):
+            self._dataset_store.add(component)
+            # Datasets have a uuid field called uid
+            self._map[component.name] = \
+                lambda key=component.name: self._dataset_store.get(key)
+        else:
+            # Store the component. Any cuds item has uuid property.
+            component_id = str(component.uuid)
+            self._store[component_id] = component
+            self._map[component_id] = \
+                lambda key=component_id: self._store.get(key)
 
     def get(self, component_id):
         """Gets a component from the CUDS computational model.
 
         Parameters
         ----------
-        component_id: CUDSComponent's UUID
-            uuid of a CUDS component.
+        component_id: str
+            key of a CUDS component.
         """
-        return self._store.get(component_id)
+        if not isinstance(component_id, (str, uuid.UUID)):
+            raise TypeError('ID should be of string or UUID type')
+        if isinstance(component_id, uuid.UUID):
+            component_id = str(component_id)
+        if component_id in self._map:
+            return self._map[component_id]()
 
     def remove(self, component_id):
         """Removes a component from the CUDS computational model.
@@ -79,7 +113,18 @@ class CUDS(object):
         component_id: CUDSComponent uuid
             a component of CUDS, reflecting SimPhoNy metadata
         """
-        self._store.remove(component_id)
+        if not isinstance(component_id, (str, uuid.UUID)):
+            raise TypeError('ID should be of string or UUID type')
+        if isinstance(component_id, uuid.UUID):
+            component_id = str(component_id)
+
+        component = self.get(component_id)
+        if not component:
+            raise KeyError('%s' % component_id)
+        if self._is_dataset(component):
+            self._dataset_store.remove(component.name)
+        else:
+            del self._store[component_id]
 
     # This should be query method
     def iter(self, component_type):
@@ -89,6 +134,10 @@ class CUDS(object):
         ----------
         component_type: CUDSComponent class
             a component of CUDS, reflecting SimPhoNy metadata
+
+        Returns
+        -------
+        An iterator over results
         """
         for component in self._store.itervalues():
             if isinstance(component, component_type):
@@ -101,7 +150,15 @@ class CUDS(object):
         ----------
         component_type: CUDSComponent class
             a component of CUDS, reflecting SimPhoNy metadata
+
+        Returns
+        -------
+        list: list of names of the items of the given type
         """
-        for component in self._store.iteritems():
-            if isinstance(component, component_type):
-                yield component.name
+        if any([issubclass(component_type, ABCParticles),
+               issubclass(component_type, ABCLattice),
+               issubclass(component_type, ABCMesh)]):
+            return self._dataset_store.get_names()
+        else:
+            return [cp.name for cp in self._store.itervalues()
+                    if isinstance(cp, component_type)]
