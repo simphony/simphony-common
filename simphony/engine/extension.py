@@ -217,4 +217,3 @@ class EngineManager(object):
         list: a list of engine names
         """
         return self._engine_extensions.keys()
-
