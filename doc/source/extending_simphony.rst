@@ -109,7 +109,7 @@ create a wrapper instance and return it.
 
 The other method is ``get_supported_engines``. This method must create and return a list of
 the engine's features. Features are simply a pair of physics equation and a list of methods
-that the corresponing egnine provides in order to solve the physics equation. Features are
+that the corresponing engine provides in order to solve the physics equation. Features are
 created by calling the ``create_engine_metadata_feature``. After creating features one must
 pass them to the ``create_engine_metadata`` method in order to create metadata objects. Each
 engine metadata object is a pair of engine name and a list of features provided by that engine.
