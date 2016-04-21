@@ -25,7 +25,7 @@ def get_supported_engine_names():
     Returns
     -------
     names: list
-        a list of engine names.
+        a list of engine names
     """
     return _ENGINE_MANAGER.get_supported_engine_names()
 
@@ -47,11 +47,11 @@ def create_wrapper(cuds, engine_name, engine_interface=None):
     Parameters
     ----------
     cuds: CUDS
-        A cuds object which contains model information.
+        a cuds object which contains model information
     engine_name: str
-        Name of the underlying engine to launch the simulation with.
+        name of the underlying engine to launch the simulation with
     engine_interface: engine.EngineInterface
-        The interface to the engine, internal or fileio.
+        the interface to the engine, internal or fileio
 
     Returns
     -------

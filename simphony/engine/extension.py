@@ -51,7 +51,7 @@ class EngineMetadata(object):
     Parameters
     ----------
     name: str
-      fixed name of a support engine to be used in user's data, i.e. key.
+      fixed name of a support engine to be used in user's data, i.e. key
     features: list
       features of this engine as a list of EngineFeatureMetadata objects
     interfaces: list
@@ -102,7 +102,7 @@ class ABCEngineExtension(object):
         Parameters
         ----------
         name: str
-          fixed name of a support engine to be used in user's data, i.e. key.
+          fixed name of a support engine to be used in user's data, i.e. key
         features: list
           features of this engine as a list of EngineFeatureMetadata objects
         interfaces: list
@@ -145,7 +145,7 @@ class EngineManager(object):
          interactions with corresponding engines.
 
         plugin: module
-          A python module provided by an extension
+          a python module provided by an extension
         """
         if not inspect.ismodule(plugin):
             raise EngineManagerException(
@@ -167,7 +167,7 @@ class EngineManager(object):
         Parameters
         ----------
         extension: engine.ABCEngineExtension
-          an extension that has knowledge about its own engines.
+          an extension that has knowledge about its own engines
         """
         for engine in extension.get_supported_engines():
             if engine.name in self._engine_extensions:
@@ -184,11 +184,11 @@ class EngineManager(object):
         Parameters
         ----------
         cuds: CUDS
-            A cuds object which contains model information.
+            a cuds object which contains model information
         engine_name: str
-            Name of the underlying engine to launch the simulation with.
+            name of the underlying engine to launch the simulation with
         engine_interface: engine.EngineInterface
-            The interface to the engine, internal or fileio.
+            the interface to the engine, internal or fileio
         """
         if engine_name in self._engine_extensions:
             extension = self._engine_extensions[engine_name]
@@ -205,7 +205,8 @@ class EngineManager(object):
 
         Returns
         -------
-        list: a list of EngineMetadata objects
+        metadata: list
+            a list of EngineMetadata objects
         """
         return list(self._engine_extensions.values())
 
@@ -214,6 +215,7 @@ class EngineManager(object):
 
         Returns
         -------
-        list: a list of engine names
+        names: list
+            a list of engine names
         """
         return self._engine_extensions.keys()

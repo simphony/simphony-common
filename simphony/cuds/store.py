@@ -40,7 +40,7 @@ class MemoryStateDataStore(ABCStateDataStore):
     def add(self, dataset, *args, **kwargs):
         """Add the dataset to the store."""
         if dataset.name in self._datasets:
-            raise Exception('Dateset %s already exists.' % dataset.name)
+            raise Exception('Dataset %s already exists.' % dataset.name)
         self._datasets[dataset.name] = dataset
 
     def get(self, name):

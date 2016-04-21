@@ -32,7 +32,7 @@ class CUDS(object):
         # The generic data container
         self._data = DataContainer()
 
-        # A map to find the object for a given id amoung datasets or
+        # A map to find the object for a given id among datasets or
         # simple components. Unfortunately, at the moment dataset
         # containers do not have `uid' and therefore this workaround
         # is necessary. This is a dict of key of any kind and a lambda
@@ -96,7 +96,7 @@ class CUDS(object):
         Parameters
         ----------
         component_id: uuid.UUID
-            key of a CUDS component.
+            key of a CUDS component
 
         Returns
         -------
@@ -142,7 +142,7 @@ class CUDS(object):
 
         Yields
         ------
-        An iterator over the components
+        iterator over the components of the given type
         """
         for component in self._store.itervalues():
             if isinstance(component, component_type):
