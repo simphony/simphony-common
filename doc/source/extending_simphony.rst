@@ -4,7 +4,7 @@ Extending SimPhoNy
 Plugins
 -------
 
-The SimPhoNy library can extended through two `entry points`_ for
+The SimPhoNy library can be extended through two `entry points`_ for
 contributing python modules that contain engine and visualisation components:
 
 - ``simphony.engine`` -- A python module that provides one or more
@@ -55,6 +55,70 @@ Will allow the user to import the new engine from inside the ``simphony`` module
 
 .. _entry points : http://pythonhosted.org/setuptools/pkg_resources.html#entry-points
 
+
+Plugin metadata
+---------------
+Each plugin should implement a subclass of ``simphony.engine.extension.ABCEngineExtension`` and
+put it inside its top-level package, i.e. the package that is registered at the entry point.
+
+This a sample from simphony-lammps-md plugin::
+
+    from simphony.engine import ABCEngineExtension
+    from simphony.engine import EngineInterface
+
+    class SimlammpsExtension(ABCEngineExtension):
+        def get_supported_engines(self):
+            lammps_features =\
+                self.create_engine_metadata_feature(MolecularDynamics(),
+                                                    [Verlet()])
+            liggghts_features =\
+                self.create_engine_metadata_feature(GranularDynamics(),
+                                                    [DEM()])
+            lammps = self.create_engine_metadata('LAMMPS',
+                                                 lammps_features,
+                                                 [EngineInterface.Internal,
+                                                  EngineInterface.FileIO])
+            liggghts = self.create_engine_metadata('LIGGGHTS',
+                                                   liggghts_features,
+                                                   [EngineInterface.FileIO])
+            return [lammps, liggghts]
+
+        def create_wrapper(self, cuds, engine_name, engine_interface):
+            use_internal_interface = False
+            if engine_interface == EngineInterface.Internal:
+                use_internal_interface = True
+            if engine_name == 'LAMMPS':
+                return LammpsWrapper(cuds=cuds,
+                                     engine_type=EngineType.MD,
+                                     use_internal_interface=use_internal_interface)
+            elif engine_name == 'LIGGGHTS':
+                return LammpsWrapper(cuds=cuds,
+                                     engine_type=EngineType.DEM,
+                                     use_internal_interface=use_internal_interface)
+            else:
+                raise Exception('Only LAMMPS and LIGGGHTS engines are supported. '
+                                'Unsupported eninge: %s', engine_name)
+
+
+SimPhoNy will inspect the plugins for subclasses of ``ABCEngineExtension``. SimPhoNy
+creates an instance of each class and keeps track of available wrappers and their capabilities.
+As implemented in the above example, there are two methods that should be implemented by
+wrapper developers. ``create_wrapper`` is a factory method that receives a ``CUDS``, an
+engine name and an interface (according to ``EngineInterface`` enum). This method must
+create a wrapper instance and return it.
+
+The other method is ``get_supported_engines``. This method must create and return a list of
+the engine's features. Features are simply a pair of physics equation and a list of methods
+that the corresponing egnine provides in order to solve the physics equation. Features are
+create by calling the ``create_engine_metadata_feature``. After creating features one must
+pass the to the ``create_engine_metadata`` method in order to create metadata objects. Each
+engine metadata object is a pair of engine name and a list of features provided by that engine.
+
+Having this class implemented in the wrapper plugin, one can query for the available engines::
+
+    >>> from simphony.engine import get_supported_engine_names
+    >>> get_supported_engine_names()
+    ['LIGGGHTS', 'LAMMPS']
 
 CUBA keywords
 -------------

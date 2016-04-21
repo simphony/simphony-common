@@ -1,7 +1,6 @@
 CUDS
 ====
 
-
 Abstract CUDS interfaces
 ------------------------
 
@@ -32,6 +31,27 @@ Abstract CUDS interfaces
    :undoc-members:
 
 .. automodule:: simphony.cuds.abc_modeling_engine
+   :members:
+   :undoc-members:
+
+CUDS Computational Model
+------------------------
+.. rubric:: Container and Simulation
+
+.. currentmodule:: simphony.cuds
+
+.. autosummary::
+
+   ~model.CUDS
+   ~simulation.Simulation
+
+.. rubric:: Description
+
+.. automodule:: simphony.cuds.model
+   :members:
+   :undoc-members:
+
+.. automodule:: simphony.cuds.simulation
    :members:
    :undoc-members:
 

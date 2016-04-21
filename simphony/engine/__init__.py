@@ -10,7 +10,8 @@ from .extension import EngineManager
 
 
 __all__ = ['ABCEngineExtension', 'EngineInterface',
-           'get_supported_engines', 'create_wrapper']
+           'get_supported_engines', 'create_wrapper',
+           'get_supported_engine_names']
 
 
 # TODO: Use an application server and put this in app context.
@@ -19,17 +20,24 @@ _ENGINE_MANAGER = EngineManager()
 
 
 def get_supported_engine_names():
-    """Show a list of supported engines.
+    """Show a list of supported engine names.
 
     Returns
     -------
-    list: a list of engine names
+    names: list
+        a list of engine names.
     """
     return _ENGINE_MANAGER.get_supported_engine_names()
 
 
 def get_supported_engines():
-    """Show a list of supported engines."""
+    """Show a list of supported engines.
+
+    Returns
+    -------
+    metadata: list
+        a list of engine metadata objects
+    """
     return _ENGINE_MANAGER.get_supported_engines()
 
 
@@ -44,6 +52,11 @@ def create_wrapper(cuds, engine_name, engine_interface=None):
         Name of the underlying engine to launch the simulation with.
     engine_interface: EngineInterface
         The interface to the engine, internal or fileio.
+
+    Returns
+    -------
+    wrapper: ABCEngineExtension
+        an engine wrapper instance
     """
     return _ENGINE_MANAGER.create_wrapper(cuds, engine_name, engine_interface)
 

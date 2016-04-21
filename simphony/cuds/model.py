@@ -66,7 +66,7 @@ class CUDS(object):
         self._data = DataContainer(value)
 
     def add(self, component):
-        """Adds a component to the CUDS computational model.
+        """Add a component to the CUDS computational model.
 
         Parameters
         ----------
@@ -95,8 +95,13 @@ class CUDS(object):
 
         Parameters
         ----------
-        component_id: str
+        component_id: uuid.UUID
             key of a CUDS component.
+
+        Returns
+        -------
+        component: CUDSComponent
+            a cuds component
         """
         if not isinstance(component_id, (str, uuid.UUID)):
             raise TypeError('ID should be of string or UUID type')
@@ -110,7 +115,7 @@ class CUDS(object):
 
         Parameters
         ----------
-        component_id: CUDSComponent uuid
+        component_id: uuid.UUID
             a component of CUDS, reflecting SimPhoNy metadata
         """
         if not isinstance(component_id, (str, uuid.UUID)):
@@ -135,9 +140,9 @@ class CUDS(object):
         component_type: CUDSComponent class
             a component of CUDS, reflecting SimPhoNy metadata
 
-        Returns
-        -------
-        An iterator over results
+        Yields
+        ------
+        An iterator over the components
         """
         for component in self._store.itervalues():
             if isinstance(component, component_type):
@@ -153,7 +158,8 @@ class CUDS(object):
 
         Returns
         -------
-        list: list of names of the items of the given type
+        names: list
+            names of the items of the given type
         """
         if any([issubclass(component_type, ABCParticles),
                issubclass(component_type, ABCLattice),

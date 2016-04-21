@@ -28,6 +28,7 @@ API Reference
    api/core
    api/cuds
    api/io
+   api/extension
 
 
 Indices and tables

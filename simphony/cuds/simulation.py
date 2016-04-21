@@ -9,10 +9,10 @@ class Simulation(object):
     Parameters
     ----------
     cuds: CUDS
-        A cuds object which contains model information.
+        Model information.
     engine_name: str
-        Name of the underlying engine to launch the simulation with.
-    engine_interface: EngineInterface
+        Name of the underlying engine.
+    engine_interface: engine.EngineInterface
         The interface to the engine, internal or fileio.
     """
     def __init__(self, cuds, engine_name, engine_interface=None):
@@ -26,3 +26,13 @@ class Simulation(object):
     def run(self, *args, **kwargs):
         """Run the simulation."""
         self._wrapper.run(*args, **kwargs)
+
+    def get_cuds(self):
+        """Return the latest CUDS from the engine.
+
+        Returns
+        -------
+        cuds: CUDS
+            the most recent CUDS.
+        """
+        return self._wrapper.get_cuds()
