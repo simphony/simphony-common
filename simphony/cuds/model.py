@@ -51,10 +51,7 @@ class CUDS(object):
     @staticmethod
     def _is_dataset(obj):
         """Check if the object is a dataset."""
-        if isinstance(obj, (ABCParticles, ABCLattice, ABCMesh)):
-            return True
-        else:
-            return False
+        return isinstance(obj, (ABCParticles, ABCLattice, ABCMesh))
 
     @property
     def data(self):
