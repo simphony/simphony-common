@@ -50,12 +50,12 @@ def create_wrapper(cuds, engine_name, engine_interface=None):
         A cuds object which contains model information.
     engine_name: str
         Name of the underlying engine to launch the simulation with.
-    engine_interface: EngineInterface
+    engine_interface: engine.EngineInterface
         The interface to the engine, internal or fileio.
 
     Returns
     -------
-    wrapper: ABCEngineExtension
+    wrapper: engine.ABCEngineExtension
         an engine wrapper instance
     """
     return _ENGINE_MANAGER.create_wrapper(cuds, engine_name, engine_interface)

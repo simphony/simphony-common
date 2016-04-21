@@ -55,7 +55,7 @@ class EngineMetadata(object):
     features: list
       features of this engine as a list of EngineFeatureMetadata objects
     interfaces: list
-      supported engine interfaces as a list of EngineInterface enums
+      supported engine interfaces as a list of engine.EngineInterface enums
 
     """
     def __init__(self, name, features, interfaces):
@@ -87,7 +87,7 @@ class ABCEngineExtension(object):
           CUDS computational model data
         engine_name: str
           name of the engine, must be supported by this extension
-        engine_interface: EngineInterface
+        engine_interface: engine.EngineInterface
           the interface to interact with engine
 
         Returns
@@ -106,7 +106,7 @@ class ABCEngineExtension(object):
         features: list
           features of this engine as a list of EngineFeatureMetadata objects
         interfaces: list
-          supported engine interfaces as a list of EngineInterface enums
+          supported engine interfaces as a list of engine.EngineInterface enums
 
         Returns
         -------
@@ -166,7 +166,7 @@ class EngineManager(object):
 
         Parameters
         ----------
-        extension: ABCEngineExtension
+        extension: engine.ABCEngineExtension
           an extension that has knowledge about its own engines.
         """
         for engine in extension.get_supported_engines():
@@ -187,7 +187,7 @@ class EngineManager(object):
             A cuds object which contains model information.
         engine_name: str
             Name of the underlying engine to launch the simulation with.
-        engine_interface: EngineInterface
+        engine_interface: engine.EngineInterface
             The interface to the engine, internal or fileio.
         """
         if engine_name in self._engine_extensions:
