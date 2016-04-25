@@ -63,8 +63,8 @@ class CUDS(object):
         component after the component is successfully added
         to the CUDS computational model.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         component: CUDSComponent
             a component of CUDS, reflecting SimPhoNy metadata
 
