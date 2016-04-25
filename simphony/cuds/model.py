@@ -32,13 +32,6 @@ class CUDS(object):
         # The generic data container
         self._data = DataContainer()
 
-        # A map to find the object for a given id among datasets or
-        # simple components. Unfortunately, at the moment dataset
-        # containers do not have `uid' and therefore this workaround
-        # is necessary. This is a dict of key of any kind and a lambda
-        # that will return the corresponding value.
-        self._map = {}
-
     @staticmethod
     def _is_cuds_component(obj):
         """Check whether the object is a CUDS component."""
@@ -101,14 +94,9 @@ class CUDS(object):
         # Add datasets separately
         if self._is_dataset(component):
             self._dataset_store.add(component)
-            # Datasets have a uuid field called uid
-            self._map[component.name] = \
-                lambda key=component.name: self._dataset_store.get(key)
         else:
             # Store the component. Any cuds item has uuid property.
             self._store[component_id] = component
-            self._map[component_id] = \
-                lambda key=component_id: self._store.get(key)
 
         # If the component already has a defined uid, this just reassigns
         # the same value.  If the component.uuid is originaly None, this
