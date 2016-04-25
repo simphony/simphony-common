@@ -80,6 +80,10 @@ class CUDS(object):
         if not self._is_cuds_component(component):
             raise TypeError('Not a CUDS component.')
 
+        # FIXME: what if component.uuid was defined before adding the
+        # component and it is not an instance of uuid.UUID,
+        # should we check for it, somewhere in this function?
+
         try:
             component_id = component.uuid
         except AttributeError:
@@ -102,7 +106,7 @@ class CUDS(object):
         # the same value.  If the component.uuid is originaly None, this
         # assigns the new uid to the component.uuid
         # Only do so after successfully adding the component
-        if isinstance(component_id, uuid.UUID) and hasattr(component, "uid"):
+        if hasattr(component, "uuid"):
             component.uuid = component_id
 
     def get(self, component_id):
