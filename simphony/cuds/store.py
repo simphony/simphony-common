@@ -37,6 +37,15 @@ class MemoryStateDataStore(ABCStateDataStore):
     def __init__(self, *args, **kwargs):
         self._datasets = {}
 
+    def __contains__(self, key):
+        return key in self._datasets
+
+    def __delitem__(self, key):
+        del self._datasets[key]
+
+    def __getitem__(self, key):
+        return self._datasets[key]
+
     def add(self, dataset, *args, **kwargs):
         """Add the dataset to the store."""
         if dataset.name in self._datasets:
