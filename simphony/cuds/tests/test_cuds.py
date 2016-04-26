@@ -31,14 +31,19 @@ class CUDSTestCase(unittest.TestCase):
         self.assertEqual(self.cuds.data, data)
         self.assertIsNot(self.cuds.data, data)
 
-    def test_get(self):
-        self.assertRaises(TypeError,
-                          self.cuds.get,
-                          42)
-
     def test_add_get_component(self):
-        self.assertRaises(ValueError, self.cuds.add, object())
+        self.assertRaises(TypeError, self.cuds.add, object())
         self.cuds.add(self.dummpy_component1)
+        self.assertEqual(self.cuds.get(self.dummpy_component1.uuid),
+                         self.dummpy_component1)
+
+    def test_add_component_with_no_uuid(self):
+        # Set the uuid to None
+        self.dummpy_component1.uuid = None
+
+        self.cuds.add(self.dummpy_component1)
+
+        self.assertIsNotNone(self.dummpy_component1.uuid)
         self.assertEqual(self.cuds.get(self.dummpy_component1.uuid),
                          self.dummpy_component1)
 

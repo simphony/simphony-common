@@ -65,14 +65,42 @@ class CUDS(object):
     def add(self, component):
         """Add a component to the CUDS computational model.
 
+        If the component has `uid` attribute but that value is
+        None, a new uuid will be created and assigned to the
+        component after the component is successfully added
+        to the CUDS computational model.
+
         Parameters
         ----------
         component: CUDSComponent
             a component of CUDS, reflecting SimPhoNy metadata
+
+        Raises
+        ------
+        TypeError
+            if component is not a CUDS component
+
+        ValueError
+            if the component is already added
         """
         # Check if the object is valid
         if not self._is_cuds_component(component):
-            raise ValueError('Not a CUDS component.')
+            raise TypeError('Not a CUDS component.')
+
+        # FIXME: what if component.uuid was defined before adding the
+        # component and it is not an instance of uuid.UUID,
+        # should we check for it, somewhere in this function?
+
+        try:
+            component_id = component.uuid
+        except AttributeError:
+            # Datasets (ABCParticles, ABCLattice, ABCMesh) do not
+            # have a uid attibute
+            component_id = component.name
+        else:
+            # if the uuid is not defined, create a new one here
+            if component_id is None:
+                component_id = uuid.uuid4()
 
         # Add datasets separately
         if self._is_dataset(component):
@@ -82,10 +110,16 @@ class CUDS(object):
                 lambda key=component.name: self._dataset_store.get(key)
         else:
             # Store the component. Any cuds item has uuid property.
-            component_id = str(component.uuid)
             self._store[component_id] = component
             self._map[component_id] = \
                 lambda key=component_id: self._store.get(key)
+
+        # If the component already has a defined uid, this just reassigns
+        # the same value.  If the component.uuid is originaly None, this
+        # assigns the new uid to the component.uuid
+        # Only do so after successfully adding the component
+        if hasattr(component, "uuid"):
+            component.uuid = component_id
 
     def get(self, component_id):
         """Gets a component from the CUDS computational model.
@@ -100,10 +134,6 @@ class CUDS(object):
         component: CUDSComponent
             a cuds component
         """
-        if not isinstance(component_id, (str, uuid.UUID)):
-            raise TypeError('ID should be of string or UUID type')
-        if isinstance(component_id, uuid.UUID):
-            component_id = str(component_id)
         if component_id in self._map:
             return self._map[component_id]()
 
@@ -115,11 +145,6 @@ class CUDS(object):
         component_id: uuid.UUID
             a component of CUDS, reflecting SimPhoNy metadata
         """
-        if not isinstance(component_id, (str, uuid.UUID)):
-            raise TypeError('ID should be of string or UUID type')
-        if isinstance(component_id, uuid.UUID):
-            component_id = str(component_id)
-
         component = self.get(component_id)
         if not component:
             raise KeyError('%s' % component_id)
