@@ -3,23 +3,20 @@ import unittest
 
 from simphony import CUDS
 from simphony import Simulation
-from simphony.engine.extension import EngineManager
+from simphony.ext import EngineManager
+from simphony.ext import set_engine_manager
 from simphony.engine.tests.test_engine_metadata import \
     get_example_engine_extension
-import simphony.engine as engine_api
 
 
 class SimulationTestCase(unittest.TestCase):
     """Simulation tests."""
     def setUp(self):
         self.manager = EngineManager()
-        module_with_dummy_extensions = \
-            __import__('simphony.engine.tests.test_engine_metadata')
-        self.manager.load_metadata(module_with_dummy_extensions)
         cls = get_example_engine_extension()
         self.manager.add_extension(cls())
         # Patch api for test
-        engine_api._ENGINE_MANAGER = self.manager
+        set_engine_manager(self.manager)
 
     def test_empty_simulation(self):
         cuds = CUDS()
@@ -45,6 +42,7 @@ class SimulationTestCase(unittest.TestCase):
     def test_run(self):
         cuds = CUDS()
         engine_names = self.manager.get_supported_engine_names()
+        print engine_names
         # There should be at least one dummy extension there
         self.assertGreater(len(engine_names), 0)
         engine_a_name = engine_names[0]

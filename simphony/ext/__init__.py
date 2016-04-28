@@ -21,6 +21,18 @@ def get_engine_manager():
     return _ENGINE_MANAGER
 
 
+def set_engine_manager(manager):
+    """Use an arbitrary engine manager for testing.
+
+    Parameters
+    ----------
+    manager: EngineManager
+        an instance of engine manager
+    """
+    global _ENGINE_MANAGER
+    _ENGINE_MANAGER = manager
+
+
 def create_wrapper(cuds, engine_name, engine_interface=None):
     """Create a wrapper to the given engine.
 
