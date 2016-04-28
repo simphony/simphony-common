@@ -1,15 +1,16 @@
 Engine Extensions
 =================
 
-Base class and tools for loading engine extension metadata into SimPhoNy.
+Base class and tools for loading extension metadata into SimPhoNy.
 
 For information on engine entry points, see :doc:`../extending_simphony`
 
 .. rubric:: Classes
 
-.. currentmodule:: simphony.engine
+.. currentmodule:: simphony.ext
 
 .. autosummary::
+  :nosignatures:
 
    ~extension.ABCEngineExtension
    ~extension.EngineInterface
@@ -21,18 +22,32 @@ For information on engine entry points, see :doc:`../extending_simphony`
 .. rubric:: Functions
 
 .. autosummary::
+   ~get_engine_manager
+   ~create_wrapper
 
+.. currentmodule:: simphony.engine
+.. autosummary::
    ~get_supported_engine_names
    ~get_supported_engines
 
 .. rubric:: Implementation
 
-.. automodule:: simphony.engine.extension
+.. automodule:: simphony.ext
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: simphony.ext.extension
     :members:
     :undoc-members:
     :show-inheritance:
 
 .. automodule:: simphony.engine
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: simphony.engine.extension
     :members:
     :undoc-members:
     :show-inheritance:

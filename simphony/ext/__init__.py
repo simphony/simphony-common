@@ -8,7 +8,7 @@ from .extension import EngineManager
 
 
 __all__ = ['ABCEngineExtension', 'EngineInterface',
-           'EngineManager']
+           'get_engine_manager', 'create_wrapper']
 
 
 # TODO: Use an application server and put this in app context.
@@ -38,4 +38,6 @@ def create_wrapper(cuds, engine_name, engine_interface=None):
     wrapper: engine.ABCEngineExtension
         an engine wrapper instance
     """
-    return _ENGINE_MANAGER.create_wrapper(cuds, engine_name, engine_interface)
+    return get_engine_manager().create_wrapper(cuds,
+                                               engine_name,
+                                               engine_interface)

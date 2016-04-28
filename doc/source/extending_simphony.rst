@@ -58,13 +58,13 @@ Will allow the user to import the new engine from inside the ``simphony`` module
 
 Plugin metadata
 ---------------
-Each plugin should implement a subclass of ``simphony.engine.extension.ABCEngineExtension`` and
+Each plugin should implement a subclass of ``ABCEngineExtension`` and
 put it inside its top-level package, i.e. the package that is registered at the entry point.
 
 This a sample from simphony-lammps-md plugin::
 
-    from simphony.engine import ABCEngineExtension
-    from simphony.engine import EngineInterface
+    from simphony.ext import ABCEngineExtension
+    from simphony.ext import EngineInterface
 
     class SimlammpsExtension(ABCEngineExtension):
         def get_supported_engines(self):
