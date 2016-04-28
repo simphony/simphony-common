@@ -46,8 +46,3 @@ For information on engine entry points, see :doc:`../extending_simphony`
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. automodule:: simphony.engine.extension
-    :members:
-    :undoc-members:
-    :show-inheritance:
