@@ -5,10 +5,9 @@ registered plugins modules. Plugins modules need to be
 registered at the 'simphony.engine' entry point.
 """
 from ..extension import get_engine_manager
-from ..extension import create_wrapper
 
 
-__all__ = ['get_supported_engines', 'create_wrapper',
+__all__ = ['get_supported_engines',
            'get_supported_engine_names']
 
 
