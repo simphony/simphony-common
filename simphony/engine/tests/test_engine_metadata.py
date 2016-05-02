@@ -5,9 +5,9 @@ import unittest
 import simphony.engine as engine_api
 from simphony import CUDS
 from simphony.cuds.abc_modeling_engine import ABCModelingEngine
-from simphony.engine import ABCEngineExtension, EngineInterface
-from simphony.engine.extension import EngineManager, EngineManagerException
-from simphony.engine.extension import EngineFeatureMetadata, EngineMetadata
+from simphony.extension import ABCEngineExtension, EngineInterface
+from simphony.extension.extension import EngineManager, EngineManagerException
+from simphony.extension.extension import EngineFeatureMetadata, EngineMetadata
 
 
 class DummyEngine(ABCModelingEngine):
@@ -125,7 +125,7 @@ class TestEngineManager(unittest.TestCase):
         example1 = \
             self.manager.create_wrapper(cuds,
                                         'EXAMPLE1',
-                                        engine_api.EngineInterface.Internal)
+                                        EngineInterface.Internal)
         self.assertIsInstance(example1, DummyEngine1)
         self.assertEqual(cuds, example1.get_cuds())
 
@@ -135,7 +135,7 @@ class TestEngineManager(unittest.TestCase):
         example2 = \
             self.manager.create_wrapper(cuds,
                                         'EXAMPLE2',
-                                        engine_api.EngineInterface.Internal)
+                                        EngineInterface.Internal)
         self.assertIsInstance(example2, DummyEngine2)
         self.assertEqual(cuds, example2.get_cuds())
 
