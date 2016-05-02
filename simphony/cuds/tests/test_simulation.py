@@ -3,8 +3,8 @@ import unittest
 
 from simphony import CUDS
 from simphony import Simulation
-from simphony.ext import EngineManager
-from simphony.ext import set_engine_manager
+from simphony.extension import EngineManager
+from simphony.extension import set_engine_manager
 from simphony.engine.tests.test_engine_metadata import \
     get_example_engine_extension
 

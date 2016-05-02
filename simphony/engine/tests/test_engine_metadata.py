@@ -5,9 +5,9 @@ import unittest
 import simphony.engine as engine_api
 from simphony import CUDS
 from simphony.cuds.abc_modeling_engine import ABCModelingEngine
-from simphony.ext import ABCEngineExtension, EngineInterface
-from simphony.ext.extension import EngineManager, EngineManagerException
-from simphony.ext.extension import EngineFeatureMetadata, EngineMetadata
+from simphony.extension import ABCEngineExtension, EngineInterface
+from simphony.extension.extension import EngineManager, EngineManagerException
+from simphony.extension.extension import EngineFeatureMetadata, EngineMetadata
 
 
 class DummyEngine(ABCModelingEngine):

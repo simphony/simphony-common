@@ -63,8 +63,8 @@ put it inside its top-level package, i.e. the package that is registered at the 
 
 This a sample from simphony-lammps-md plugin::
 
-    from simphony.ext import ABCEngineExtension
-    from simphony.ext import EngineInterface
+    from simphony.extension import ABCEngineExtension
+    from simphony.extension import EngineInterface
 
     class SimlammpsExtension(ABCEngineExtension):
         def get_supported_engines(self):

@@ -7,7 +7,7 @@ For information on engine entry points, see :doc:`../extending_simphony`
 
 .. rubric:: Classes
 
-.. currentmodule:: simphony.ext
+.. currentmodule:: simphony.extension
 
 .. autosummary::
   :nosignatures:
@@ -32,12 +32,12 @@ For information on engine entry points, see :doc:`../extending_simphony`
 
 .. rubric:: Implementation
 
-.. automodule:: simphony.ext
+.. automodule:: simphony.extension
     :members:
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: simphony.ext.extension
+.. automodule:: simphony.extension.extension
     :members:
     :undoc-members:
     :show-inheritance:

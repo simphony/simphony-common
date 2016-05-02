@@ -4,8 +4,8 @@ This module is dynamicaly populated at import with the
 registered plugins modules. Plugins modules need to be
 registered at the 'simphony.engine' entry point.
 """
-from ..ext import get_engine_manager
-from ..ext import create_wrapper
+from ..extension import get_engine_manager
+from ..extension import create_wrapper
 
 
 __all__ = ['get_supported_engines', 'create_wrapper',
