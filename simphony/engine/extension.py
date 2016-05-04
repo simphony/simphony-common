@@ -3,6 +3,8 @@ import inspect
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 
+from .exceptions import EngineManagerError
+
 
 class EngineInterface(Enum):
     """Represents an available interface to an engine.
@@ -14,11 +16,6 @@ class EngineInterface(Enum):
     """
     Internal = 'internal'
     FileIO = 'fileio'
-
-
-class EngineManagerException(Exception):
-    """Any excpetion related to engine manager."""
-    pass
 
 
 class EngineFeatureMetadata(object):
@@ -35,10 +32,10 @@ class EngineFeatureMetadata(object):
     """
     def __init__(self, physics_equation, methods):
         if not physics_equation:
-            raise EngineManagerException('Physics equation must have a value.')
+            raise EngineManagerError('Physics equation must have a value.')
         if not methods or len(methods) == 0:
             raise \
-                EngineManagerException('At least one method must be provided.')
+                EngineManagerError('At least one method must be provided.')
         self.physics_equation = physics_equation
         self.methods = methods
 
@@ -137,6 +134,23 @@ class EngineManager(object):
     def __init__(self):
         self._engine_extensions = {}
 
+    def register(self, cls):
+        """Register an engine from the metadata class.
+
+        Parameters
+        ----------
+        cls: ABCEngineExtension
+          a subclass of base extension metadata type
+        """
+        if not issubclass(cls, ABCEngineExtension):
+            raise \
+                EngineManagerError("Not valid engine metadata class %s" % cls)
+        extension = cls()
+        if not isinstance(extension, ABCEngineExtension):
+            raise ValueError('Expected ABCEngineExtension, got %s' %
+                             extension)
+        self.add_extension(extension)
+
     def load_metadata(self, plugin):
         """Load existing engine extensions into the manager.
 
@@ -148,7 +162,7 @@ class EngineManager(object):
           a python module provided by an extension
         """
         if not inspect.ismodule(plugin):
-            raise EngineManagerException(
+            raise EngineManagerError(
                 'The provided object is not a module: %s' % plugin)
 
         for name, value in inspect.getmembers(plugin, inspect.isclass):
@@ -196,7 +210,7 @@ class EngineManager(object):
                                             engine_name,
                                             engine_interface)
         else:
-            raise EngineManagerException(
+            raise EngineManagerError(
                 'Invalid engine name: %s. Available engines are %s'
                 % (engine_name, self.get_supported_engine_names()))
 

@@ -2,12 +2,12 @@
 import sys
 import unittest
 
-import simphony.engine as engine_api
 from simphony import CUDS
 from simphony.cuds.abc_modeling_engine import ABCModelingEngine
-from simphony.extension import ABCEngineExtension, EngineInterface
-from simphony.extension.extension import EngineManager, EngineManagerException
-from simphony.extension.extension import EngineFeatureMetadata, EngineMetadata
+from simphony.engine import ABCEngineExtension, EngineInterface
+from simphony.engine import get_supported_engines
+from simphony.engine.extension import EngineManager, EngineManagerError
+from simphony.engine.extension import EngineFeatureMetadata, EngineMetadata
 
 
 class DummyEngine(ABCModelingEngine):
@@ -88,7 +88,7 @@ def get_example_engine_extension():
 class TestEnginePublicAPI(unittest.TestCase):
     """Test everything engine metadata."""
     def test_get_supported_engines(self):
-        supported = engine_api.get_supported_engines()
+        supported = get_supported_engines()
         # TODO: inspect the returned metadata
         assert(isinstance(supported, list))
 
@@ -142,16 +142,16 @@ class TestEngineManager(unittest.TestCase):
     def test_non_module_load(self):
         class MyClass:
             pass
-        self.assertRaises(EngineManagerException,
+        self.assertRaises(EngineManagerError,
                           self.manager.load_metadata, MyClass)
 
 
 class TestEngineFeature(unittest.TestCase):
     """Test everything engine metadata."""
     def test_init(self):
-        self.assertRaises(EngineManagerException,
+        self.assertRaises(EngineManagerError,
                           EngineFeatureMetadata, None, None)
-        self.assertRaises(EngineManagerException,
+        self.assertRaises(EngineManagerError,
                           EngineFeatureMetadata, None, [])
 
 
