@@ -4,6 +4,10 @@ from abc import ABCMeta, abstractmethod
 
 from .exceptions import EngineManagerError
 
+__all__ = ['EngineFeatureMetadata',
+           'EngineMetadata',
+           'EngineManager']
+
 
 class EngineInterface(Enum):
     """Represents an available interface to an engine.

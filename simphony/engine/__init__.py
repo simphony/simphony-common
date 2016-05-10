@@ -1,6 +1,6 @@
 """ Simphony engine module
 
-This module is dynamicaly populated at import with the
+This module is dynamically populated at import with the
 registered plugins modules. Plugins modules need to be
 registered at the 'simphony.engine' entry point.
 """
@@ -8,7 +8,8 @@ from .extension import ABCEngineExtension
 from .extension import EngineInterface
 from .extension import EngineManager
 
-__all__ = ['get_supported_engines',
+__all__ = ['create_wrapper',
+           'get_supported_engines',
            'get_supported_engine_names',
            'ABCEngineExtension', 'EngineInterface']
 

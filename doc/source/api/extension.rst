@@ -12,21 +12,18 @@ For information on engine entry points, see :doc:`../extending_simphony`
 .. autosummary::
   :nosignatures:
 
-   ~extension.ABCEngineExtension
-   ~extension.EngineInterface
+   ~ABCEngineExtension
+   ~EngineInterface
    ~extension.EngineMetadata
    ~extension.EngineFeatureMetadata
-   ~extension.EngineManagerException
    ~extension.EngineManager
+   ~exceptions.EngineManagerError
 
 .. rubric:: Functions
 
 .. autosummary::
-   ~get_engine_manager
    ~create_wrapper
-
-.. currentmodule:: simphony.engine
-.. autosummary::
+   ~decorators.register
    ~get_supported_engine_names
    ~get_supported_engines
 
