@@ -11,5 +11,5 @@ def register(cls):
       a subclass of base extension metadata type
     """
     # Register the given class on the current engine manager.
-    get_engine_manager().register(cls)
+    get_engine_manager().register_extension(cls)
     return cls

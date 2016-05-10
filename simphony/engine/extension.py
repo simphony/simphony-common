@@ -1,7 +1,6 @@
 """Engine extension tools and classes."""
-import inspect
-from abc import ABCMeta, abstractmethod
 from enum import Enum
+from abc import ABCMeta, abstractmethod
 
 from .exceptions import EngineManagerError
 
@@ -134,8 +133,8 @@ class EngineManager(object):
     def __init__(self):
         self._engine_extensions = {}
 
-    def register(self, cls):
-        """Register an engine from the metadata class.
+    def register_extension(self, cls):
+        """Register an engine extension class.
 
         Parameters
         ----------
@@ -145,44 +144,14 @@ class EngineManager(object):
         if not issubclass(cls, ABCEngineExtension):
             raise \
                 EngineManagerError("Not valid engine metadata class %s" % cls)
+
+        # Instantiate the extension
         extension = cls()
+
         if not isinstance(extension, ABCEngineExtension):
             raise ValueError('Expected ABCEngineExtension, got %s' %
                              extension)
-        self.add_extension(extension)
 
-    def load_metadata(self, plugin):
-        """Load existing engine extensions into the manager.
-
-        This method inspects the given module and looks for ABCEngineExtension
-         subclasses. If provided, will instantiate and keep them for further
-         interactions with corresponding engines.
-
-        plugin: module
-          a python module provided by an extension
-        """
-        if not inspect.ismodule(plugin):
-            raise EngineManagerError(
-                'The provided object is not a module: %s' % plugin)
-
-        for name, value in inspect.getmembers(plugin, inspect.isclass):
-            if not inspect.isabstract(value) and\
-                    issubclass(value, ABCEngineExtension):
-                # Load the corresponding engine extension
-                extension = value()
-                if not isinstance(extension, ABCEngineExtension):
-                    raise ValueError('Expected ABCEngineExtension, got %s' %
-                                     extension)
-                self.add_extension(extension)
-
-    def add_extension(self, extension):
-        """Add an extension to the context.
-
-        Parameters
-        ----------
-        extension: engine.ABCEngineExtension
-          an extension that has knowledge about its own engines
-        """
         for engine in extension.get_supported_engines():
             if engine.name in self._engine_extensions:
                 raise Exception('There is already an extension registered'

@@ -1,5 +1,4 @@
 """Tests regarding loading engine's metadata."""
-import sys
 import unittest
 
 from simphony import CUDS
@@ -8,6 +7,7 @@ from simphony.engine import ABCEngineExtension, EngineInterface
 from simphony.engine import get_supported_engines
 from simphony.engine.extension import EngineManager, EngineManagerError
 from simphony.engine.extension import EngineFeatureMetadata, EngineMetadata
+from simphony.engine.decorators import register
 
 
 class DummyEngine(ABCModelingEngine):
@@ -48,6 +48,7 @@ class DummyEngine2(DummyEngine):
     pass
 
 
+@register
 class _Example1(ABCEngineExtension):
     """A dummy engine extension."""
     def get_supported_engines(self):
@@ -98,7 +99,7 @@ class TestEngineManager(unittest.TestCase):
     def setUp(self):
         self.manager = EngineManager()
         # Load engines defined in this test moduel.
-        self.manager.load_metadata(sys.modules[__name__])
+        self.manager.register_extension(_Example1)
 
     def test_get_supported_engines(self):
         supported = self.manager.get_supported_engine_names()
@@ -111,11 +112,13 @@ class TestEngineManager(unittest.TestCase):
 
     def test_assert_duplicate_engine(self):
         self.assertRaises(Exception,
-                          self.manager.load_metadata, sys.modules[__name__])
+                          self.manager.register_extension, DummyEngine1)
+        self.assertRaises(Exception,
+                          self.manager.register_extension, DummyEngine2)
 
     def test_add_extension(self):
         cls = get_example_engine_extension()
-        self.manager.add_extension(cls())
+        self.manager.register_extension(cls)
         supported = self.manager.get_supported_engine_names()
         self.assertIn('EXAMPLE2', supported)
         self.assertEqual(len(supported), 2)
@@ -129,9 +132,9 @@ class TestEngineManager(unittest.TestCase):
         self.assertIsInstance(example1, DummyEngine1)
         self.assertEqual(cuds, example1.get_cuds())
 
-        # Explicitely add example2 engine
+        # Explicitly add example2 engine
         cls = get_example_engine_extension()
-        self.manager.add_extension(cls())
+        self.manager.register_extension(cls)
         example2 = \
             self.manager.create_wrapper(cuds,
                                         'EXAMPLE2',
@@ -143,7 +146,7 @@ class TestEngineManager(unittest.TestCase):
         class MyClass:
             pass
         self.assertRaises(EngineManagerError,
-                          self.manager.load_metadata, MyClass)
+                          self.manager.register_extension, MyClass)
 
 
 class TestEngineFeature(unittest.TestCase):
