@@ -1,4 +1,5 @@
 """Engine extension tools and classes."""
+import warnings
 from enum import Enum
 from abc import ABCMeta, abstractmethod
 
@@ -137,6 +138,9 @@ class EngineManager(object):
     def __init__(self):
         self._engine_extensions = {}
 
+        # List of registered class ids
+        self._registry = []
+
     def register_extension(self, cls):
         """Register an engine extension class.
 
@@ -145,6 +149,11 @@ class EngineManager(object):
         cls: ABCEngineExtension
           a subclass of base extension metadata type
         """
+        if cls.__name__ in self._registry:
+            warnings.warn(
+                'Ignoring already registered class %s' % cls.__name__)
+            return
+
         if not issubclass(cls, ABCEngineExtension):
             raise \
                 EngineManagerError("Not valid engine metadata class %s" % cls)
@@ -158,12 +167,14 @@ class EngineManager(object):
 
         for engine in extension.get_supported_engines():
             if engine.name in self._engine_extensions:
-                raise Exception('There is already an extension registered'
-                                ' for %s engine.' % engine.name)
+                raise EngineManagerError(
+                    'There is already an extension registered '
+                    'for %s engine.' % engine.name)
 
             # This extension knows how to create wrappers for the given engine.
             # It is our interaction point with its engines.
             self._engine_extensions[engine.name] = extension
+            self._registry.append(cls.__name__)
 
     def create_wrapper(self, cuds, engine_name, engine_interface=None):
         """Create a wrapper to the given engine.

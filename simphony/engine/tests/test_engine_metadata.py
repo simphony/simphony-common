@@ -1,9 +1,11 @@
 """Tests regarding loading engine's metadata."""
 import unittest
+from mock import patch
 
 from simphony import CUDS
 from simphony.cuds.abc_modeling_engine import ABCModelingEngine
-from simphony.engine import ABCEngineExtension, EngineInterface
+from simphony.engine import ABCEngineExtension,\
+    EngineInterface, get_engine_manager, get_supported_engine_names
 from simphony.engine import get_supported_engines
 from simphony.engine.extension import EngineManager, EngineManagerError
 from simphony.engine.extension import EngineFeatureMetadata, EngineMetadata
@@ -86,12 +88,27 @@ def get_example_engine_extension():
     return _Example2
 
 
+@patch('simphony.engine._ENGINE_MANAGER', new=EngineManager())
 class TestEnginePublicAPI(unittest.TestCase):
     """Test everything engine metadata."""
     def test_get_supported_engines(self):
         supported = get_supported_engines()
         # TODO: inspect the returned metadata
         assert(isinstance(supported, list))
+
+    def test_register_decorator(self):
+        cls = get_example_engine_extension()
+        self.assertNotIn('EXAMPLE2',
+                         get_supported_engine_names())
+        register(cls)
+        self.assertIn('EXAMPLE2',
+                      get_supported_engine_names())
+        self.assertIn(cls.__name__,
+                      get_engine_manager()._registry)
+
+    def test_loaded_engines(self):
+        self.assertNotIn('EXAMPLE1',
+                         get_supported_engine_names())
 
 
 class TestEngineManager(unittest.TestCase):
@@ -110,11 +127,46 @@ class TestEngineManager(unittest.TestCase):
         supported = self.manager.get_supported_engine_names()
         self.assertEqual(len(supported), 1)
 
-    def test_assert_duplicate_engine(self):
-        self.assertRaises(Exception,
-                          self.manager.register_extension, DummyEngine1)
-        self.assertRaises(Exception,
-                          self.manager.register_extension, DummyEngine2)
+    def test_register_extension(self):
+        cls = get_example_engine_extension()
+        self.manager.register_extension(cls)
+        self.assertIn(cls.__name__,
+                      self.manager._registry)
+        self.assertIn('EXAMPLE2',
+                      self.manager.get_supported_engine_names())
+
+    def test_duplicate_engine(self):
+        cls = get_example_engine_extension()
+        self.manager.register_extension(cls)
+        cls.__name__ = 'some other name'
+        self.assertRaisesRegexp(EngineManagerError,
+                                'There is already an extension registered',
+                                self.manager.register_extension,
+                                cls)
+
+    def test_duplicate_ignored(self):
+        before = list(self.manager._registry)
+        self.manager.register_extension(_Example1)
+        self.assertEqual(before, self.manager._registry)
+
+    def test_bad_extension(self):
+        class SomethingElse(object):
+            pass
+
+        class BadExtension(ABCEngineExtension):
+            def __new__(cls):
+                return SomethingElse()
+
+            def get_supported_engines(self):
+                return []
+
+            def create_wrapper(self, cuds, engine_name, engine_interface):
+                return None
+
+        self.assertRaisesRegexp(ValueError,
+                                'Expected ABCEngineExtension, got',
+                                self.manager.register_extension,
+                                BadExtension)
 
     def test_add_extension(self):
         cls = get_example_engine_extension()
@@ -143,10 +195,13 @@ class TestEngineManager(unittest.TestCase):
         self.assertEqual(cuds, example2.get_cuds())
 
     def test_non_module_load(self):
-        class MyClass:
+        class MyClass(object):
             pass
-        self.assertRaises(EngineManagerError,
-                          self.manager.register_extension, MyClass)
+
+        self.assertRaisesRegexp(EngineManagerError,
+                                'Not valid engine metadata',
+                                self.manager.register_extension,
+                                MyClass)
 
 
 class TestEngineFeature(unittest.TestCase):

@@ -2,5 +2,5 @@
 
 
 class EngineManagerError(Exception):
-    """Any excpetion related to engine manager."""
+    """Any exception related to engine manager."""
     pass
