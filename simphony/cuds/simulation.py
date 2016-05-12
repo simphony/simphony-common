@@ -1,6 +1,6 @@
 """Contains simulation controllers."""
 from . import CUDS
-from ..extension import create_wrapper
+from ..engine import create_wrapper
 
 
 class Simulation(object):

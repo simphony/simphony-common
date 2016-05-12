@@ -1,7 +1,13 @@
 """Engine extension tools and classes."""
-import inspect
-from abc import ABCMeta, abstractmethod
+import warnings
 from enum import Enum
+from abc import ABCMeta, abstractmethod
+
+from .exceptions import EngineManagerError
+
+__all__ = ['EngineFeatureMetadata',
+           'EngineMetadata',
+           'EngineManager']
 
 
 class EngineInterface(Enum):
@@ -14,11 +20,6 @@ class EngineInterface(Enum):
     """
     Internal = 'internal'
     FileIO = 'fileio'
-
-
-class EngineManagerException(Exception):
-    """Any excpetion related to engine manager."""
-    pass
 
 
 class EngineFeatureMetadata(object):
@@ -35,10 +36,10 @@ class EngineFeatureMetadata(object):
     """
     def __init__(self, physics_equation, methods):
         if not physics_equation:
-            raise EngineManagerException('Physics equation must have a value.')
+            raise EngineManagerError('Physics equation must have a value.')
         if not methods or len(methods) == 0:
             raise \
-                EngineManagerException('At least one method must be provided.')
+                EngineManagerError('At least one method must be provided.')
         self.physics_equation = physics_equation
         self.methods = methods
 
@@ -137,46 +138,43 @@ class EngineManager(object):
     def __init__(self):
         self._engine_extensions = {}
 
-    def load_metadata(self, plugin):
-        """Load existing engine extensions into the manager.
+        # List of registered class ids
+        self._registry = []
 
-        This method inspects the given module and looks for ABCEngineExtension
-         subclasses. If provided, will instantiate and keep them for further
-         interactions with corresponding engines.
-
-        plugin: module
-          a python module provided by an extension
-        """
-        if not inspect.ismodule(plugin):
-            raise EngineManagerException(
-                'The provided object is not a module: %s' % plugin)
-
-        for name, value in inspect.getmembers(plugin, inspect.isclass):
-            if not inspect.isabstract(value) and\
-                    issubclass(value, ABCEngineExtension):
-                # Load the corresponding engine extension
-                extension = value()
-                if not isinstance(extension, ABCEngineExtension):
-                    raise ValueError('Expected ABCEngineExtension, got %s' %
-                                     extension)
-                self.add_extension(extension)
-
-    def add_extension(self, extension):
-        """Add an extension to the context.
+    def register_extension(self, cls):
+        """Register an engine extension class.
 
         Parameters
         ----------
-        extension: engine.ABCEngineExtension
-          an extension that has knowledge about its own engines
+        cls: ABCEngineExtension
+          a subclass of base extension metadata type
         """
+        if cls.__name__ in self._registry:
+            warnings.warn(
+                'Ignoring already registered class %s' % cls.__name__)
+            return
+
+        if not issubclass(cls, ABCEngineExtension):
+            raise \
+                EngineManagerError("Not valid engine metadata class %s" % cls)
+
+        # Instantiate the extension
+        extension = cls()
+
+        if not isinstance(extension, ABCEngineExtension):
+            raise ValueError('Expected ABCEngineExtension, got %s' %
+                             extension)
+
         for engine in extension.get_supported_engines():
             if engine.name in self._engine_extensions:
-                raise Exception('There is already an extension registered'
-                                ' for %s engine.' % engine.name)
+                raise EngineManagerError(
+                    'There is already an extension registered '
+                    'for %s engine.' % engine.name)
 
             # This extension knows how to create wrappers for the given engine.
             # It is our interaction point with its engines.
             self._engine_extensions[engine.name] = extension
+            self._registry.append(cls.__name__)
 
     def create_wrapper(self, cuds, engine_name, engine_interface=None):
         """Create a wrapper to the given engine.
@@ -196,7 +194,7 @@ class EngineManager(object):
                                             engine_name,
                                             engine_interface)
         else:
-            raise EngineManagerException(
+            raise EngineManagerError(
                 'Invalid engine name: %s. Available engines are %s'
                 % (engine_name, self.get_supported_engine_names()))
 

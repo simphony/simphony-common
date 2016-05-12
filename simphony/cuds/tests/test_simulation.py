@@ -1,31 +1,27 @@
 """Tests for Simulation classes."""
 import unittest
+from mock import patch
 
 from simphony import CUDS
 from simphony import Simulation
-from simphony.extension import EngineManager
-from simphony.extension import set_engine_manager
+from simphony.engine import get_engine_manager
 from simphony.engine.tests.test_engine_metadata import \
     get_example_engine_extension
+from simphony.engine.extension import EngineManager
 
 
+@patch('simphony.engine._ENGINE_MANAGER', EngineManager())
 class SimulationTestCase(unittest.TestCase):
     """Simulation tests."""
-    def setUp(self):
-        self.manager = EngineManager()
-        cls = get_example_engine_extension()
-        self.manager.add_extension(cls())
-        # Patch api for test
-        set_engine_manager(self.manager)
-
     def test_empty_simulation(self):
+        get_engine_manager().register_extension(get_example_engine_extension())
         cuds = CUDS()
-        engine_names = self.manager.get_supported_engine_names()
+        engine_names = get_engine_manager().get_supported_engine_names()
         # There should be at least one dummy extension there
         self.assertGreater(len(engine_names), 0)
         engine_a_name = engine_names[0]
         engine_a = None
-        for engine_ext in self.manager.get_supported_engines():
+        for engine_ext in get_engine_manager().get_supported_engines():
             for engine in engine_ext.get_supported_engines():
                 if engine.name == engine_a_name:
                     engine_a = engine
@@ -40,14 +36,14 @@ class SimulationTestCase(unittest.TestCase):
         self.assertIsNotNone(sim)
 
     def test_run(self):
+        get_engine_manager().register_extension(get_example_engine_extension())
         cuds = CUDS()
-        engine_names = self.manager.get_supported_engine_names()
-        print engine_names
+        engine_names = get_engine_manager().get_supported_engine_names()
         # There should be at least one dummy extension there
         self.assertGreater(len(engine_names), 0)
         engine_a_name = engine_names[0]
         engine_a = None
-        for engine_ext in self.manager.get_supported_engines():
+        for engine_ext in get_engine_manager().get_supported_engines():
             for engine in engine_ext.get_supported_engines():
                 if engine.name == engine_a_name:
                     engine_a = engine

@@ -60,12 +60,17 @@ Plugin metadata
 ---------------
 Each plugin should implement a subclass of ``ABCEngineExtension`` and
 put it inside its top-level package, i.e. the package that is registered at the entry point.
+Moreover, this class should be registered using ``register`` decorator. The class's ``__name__``
+attribute will be used as its identifier.
 
 This a sample from simphony-lammps-md plugin::
 
-    from simphony.extension import ABCEngineExtension
-    from simphony.extension import EngineInterface
+    from simphony.engine import ABCEngineExtension
+    from simphony.engine import EngineInterface
+    from simphony.engine.decorators import register
 
+
+    @register
     class SimlammpsExtension(ABCEngineExtension):
         def get_supported_engines(self):
             lammps_features =\
