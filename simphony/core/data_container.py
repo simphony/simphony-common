@@ -129,17 +129,9 @@ def create_data_container(restricted_keys):
     if any(not isinstance(key, CUBA) for key in restricted_keys):
         raise ValueError('All restricted keys should be CUBA IntEnum')
 
-    template = '''class RestrictedDataContainer(DataContainer):
-    __doc__ = DataContainer.__doc__
-    __slots__ = ()
-    restricted_keys = restricted_keys
-    _restricted_mapping = mapping
-    '''
-
     mapping = {key.name: key for key in restricted_keys}
 
-    namespace = dict(DataContainer=DataContainer,
-                     restricted_keys=frozenset(restricted_keys),
-                     mapping=mapping)
-    exec template in namespace
-    return namespace['RestrictedDataContainer']
+    return type('RestrictedDataContainer', (DataContainer,),
+                {'__doc__': DataContainer.__doc__,
+                 'restricted_keys': frozenset(restricted_keys),
+                 '_restricted_mapping': mapping})
