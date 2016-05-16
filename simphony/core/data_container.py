@@ -1,4 +1,4 @@
-from .cuba import CUBA
+from simphony.core.cuba import CUBA
 
 
 class DataContainer(dict):

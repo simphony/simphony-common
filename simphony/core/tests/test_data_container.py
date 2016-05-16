@@ -184,6 +184,10 @@ class TestRestrictedDataContainer(unittest.TestCase):
         with self.assertRaises(ValueError):
             create_data_container(self.valid_keys)(data)
 
+    def test_error_with_non_cuba_keys(self):
+        with self.assertRaises(ValueError):
+            create_data_container((1, 2))
+
 
 if __name__ == '__main__':
     unittest.main()
