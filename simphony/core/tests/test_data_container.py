@@ -1,7 +1,7 @@
 import unittest
 
 from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer
+from simphony.core.data_container import DataContainer, create_data_container
 
 
 class TestDataContainer(unittest.TestCase):
@@ -62,6 +62,16 @@ class TestDataContainer(unittest.TestCase):
         data = {int(key): key + 3 for key in CUBA}
         with self.assertRaises(ValueError):
             DataContainer(data)
+
+    def test_initialization_with_generator(self):
+        generator = ((key, key + 3) for key in CUBA)
+        container = DataContainer(generator)
+        self.assertEqual(len(container), len(CUBA))
+
+    def test_initialization_with_non_cuba_generator(self):
+        generator = (('foo'+str(i), i) for i in range(5))
+        with self.assertRaises(ValueError):
+            DataContainer(generator)
 
     def test_update_with_a_dictionary(self):
         container = DataContainer()
@@ -137,6 +147,42 @@ class TestDataContainer(unittest.TestCase):
         container = DataContainer()
         with self.assertRaises(ValueError):
             container[100] = 29
+
+
+class TestRestrictedDataContainer(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+        iter_cuba = iter(CUBA)
+        # The first 9 keys are supported keys
+        self.valid_keys = tuple(iter_cuba.next() for i in range(1, 10))
+        # The rest are not supported
+        self.invalid_keys = tuple(key for key in iter_cuba)
+
+    def test_setitem_with_valid_key(self):
+        container = create_data_container(self.valid_keys)()
+        container[self.valid_keys[0]] = 20
+        self.assertIsInstance(container.keys()[0], CUBA)
+        self.assertEqual(container[self.valid_keys[0]], 20)
+
+    def test_setitem_with_invalid_key(self):
+        container = create_data_container(self.valid_keys)()
+
+        for key in self.invalid_keys:
+            with self.assertRaises(ValueError):
+                container[key] = 1
+
+    def test_update_with_valid_keys(self):
+        data = {key: key+3 for key in self.valid_keys}
+        container = create_data_container(self.valid_keys)(data)
+        self.assertTrue(all(key in self.valid_keys for key in container))
+
+    def test_update_with_some_invalid_keys(self):
+        data = {key: key+3 for key in self.valid_keys}
+        data[self.invalid_keys[0]] = 20
+
+        with self.assertRaises(ValueError):
+            create_data_container(self.valid_keys)(data)
 
 
 if __name__ == '__main__':

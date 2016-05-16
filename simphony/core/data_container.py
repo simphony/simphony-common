@@ -1,13 +1,12 @@
-from simphony.core.cuba import CUBA
-
-_CUBA_MEMBERS = CUBA.__members__
+from .cuba import CUBA
 
 
 class DataContainer(dict):
     """ A DataContainer instance
 
     The DataContainer object is implemented as a python dictionary whose keys
-    are restricted to be members of the CUBA enum class.
+    are restricted to the instance's `restricted_keys`, default to the CUBA
+    enum members.
 
     The data container can be initialized like a typical python dict
     using the mapping and iterables where the keys are CUBA enum members.
@@ -22,66 +21,125 @@ class DataContainer(dict):
     # Memory usage optimization.
     __slots__ = ()
 
+    # These are the allowed CUBA keys (faster to convert to set for lookup)
+    restricted_keys = frozenset(CUBA)
+
+    # Map CUBA enum name to CUBA enum
+    # Used by assigning key using keyword name
+    _restricted_mapping = CUBA.__members__
+
     def __init__(self, *args, **kwargs):
         """ Constructor.
         Initialization follows the behaviour of the python dict class.
         """
-        self._check_arguments(args, kwargs)
-        if len(args) == 1 and not hasattr(args[0], 'keys'):
-            super(DataContainer, self).__init__()
-            for key, value in args[0]:
-                self.__setitem__(key, value)
-        elif len(args) == 1:
-            mapping = args[0]
-            if not isinstance(mapping, DataContainer):
-                if any(not isinstance(key, CUBA) for key in mapping):
-                    non_cuba_keys = [
-                        key for key in mapping if not isinstance(key, CUBA)]
-                    message = \
-                        "Key(s) {!r} are not in the approved CUBA keywords"
-                    raise ValueError(message.format(non_cuba_keys))
-            super(DataContainer, self).__init__(mapping)
-        super(DataContainer, self).update(
-            {CUBA[kwarg]: value for kwarg, value in kwargs.viewitems()})
+
+        super(DataContainer, self).__init__()
+        self.update(*args, **kwargs)
 
     def __setitem__(self, key, value):
         """ Set/Update the key value only when the key is a CUBA key.
 
         """
-        if isinstance(key, CUBA):
+        if isinstance(key, CUBA) and key in self.restricted_keys:
             super(DataContainer, self).__setitem__(key, value)
         else:
-            message = "Key {!r} is not in the approved CUBA keywords"
+            message = "Key {!r} is not in the supported CUBA keywords"
             raise ValueError(message.format(key))
 
     def update(self, *args, **kwargs):
         self._check_arguments(args, kwargs)
-        if len(args) == 1 and not hasattr(args[0], 'keys'):
+
+        if args and not hasattr(args[0], 'keys'):
+            # args is an iterator
             for key, value in args[0]:
-                self.__setitem__(key, value)
-        elif len(args) == 1:
+                self[key] = value
+        elif args:
             mapping = args[0]
-            if not isinstance(mapping, DataContainer):
-                if any(not isinstance(key, CUBA) for key in mapping):
-                    non_cuba_keys = [
-                        key for key in mapping if not isinstance(key, CUBA)]
-                    message = \
-                        "Key(s) {!r} are not in the approved CUBA keywords"
-                    raise ValueError(message.format(non_cuba_keys))
-            super(DataContainer, self).update(mapping)
+            if (isinstance(mapping, DataContainer) and
+                    mapping.restricted_keys == self.restricted_keys):
+                super(DataContainer, self).update(mapping)
+            else:
+                self._check_mapping(mapping)
+                super(DataContainer, self).update(mapping)
+
         super(DataContainer, self).update(
-            {CUBA[kwarg]: value for kwarg, value in kwargs.viewitems()})
+            {self._restricted_mapping[kwarg]: value
+             for kwarg, value in kwargs.viewitems()})
 
     def _check_arguments(self, args, kwargs):
         """ Check for the right arguments.
 
         """
         # See if there are any non CUBA keys in the keyword arguments
-        if any(key not in _CUBA_MEMBERS for key in kwargs):
-            non_cuba_keys = kwargs.viewkeys() - _CUBA_MEMBERS.viewkeys()
-            message = "Key(s) {!r} are not in the approved CUBA keywords"
-            raise ValueError(message.format(non_cuba_keys))
+        invalid_keys = [key for key in kwargs
+                        if key not in self._restricted_mapping]
+        if invalid_keys:
+            message = "Key(s) {!r} are not in the supported CUBA keywords"
+            raise ValueError(message.format(invalid_keys))
         # Only one positional argument is allowed.
         if len(args) > 1:
             message = 'DataContainer expected at most 1 arguments, got {}'
             raise TypeError(message.format(len(args)))
+
+    def _check_mapping(self, mapping):
+        ''' Check if the keys in the mappings are all supported CUBA keys
+
+        Parameters
+        ----------
+        mapping : Mapping
+
+        Raises
+        ------
+        ValueError
+            if any of the keys in the mappings is not supported
+        '''
+        invalid_keys = [key for key in mapping
+                        if (not isinstance(key, CUBA) or
+                            key not in self.restricted_keys)]
+        if invalid_keys:
+            message = 'Key(s) {!r} are not in the supported CUBA keywords'
+            raise ValueError(message.format(invalid_keys))
+
+
+def create_data_container(restricted_keys):
+    ''' Create a DataContainer subclass with the given
+    restricted keys
+
+    Parameters
+    ----------
+    restricted_keys : sequence
+        CUBA IntEnum
+
+    Returns
+    -------
+    RestrictedDataContainer : DataContainer
+        subclass of DataContainer with the given `restricted_keys`
+
+    Examples
+    --------
+    >>> container = create_data_container((CUBA.NAME, CUBA.VELOCITY))()
+    >>> container.restricted_keys
+    {<CUBA.VELOCITY: 55>, <CUBA.NAME: 61>}
+    >>> container[CUBA.NAME] = 'name'
+    >>> container[CUBA.POSITION] = (1.0, 1.0, 1.0)
+    ...
+    ValueError: Key <CUBA.POSITION: 119> is not in the supported CUBA keywords
+    '''
+    # Make sure all restricted keys are CUBA keys
+    if any(not isinstance(key, CUBA) for key in restricted_keys):
+        raise ValueError('All restricted keys should be CUBA IntEnum')
+
+    template = '''class RestrictedDataContainer(DataContainer):
+    __doc__ = DataContainer.__doc__
+    __slots__ = ()
+    restricted_keys = restricted_keys
+    _restricted_mapping = mapping
+    '''
+
+    mapping = {key.name: key for key in restricted_keys}
+
+    namespace = dict(DataContainer=DataContainer,
+                     restricted_keys=frozenset(restricted_keys),
+                     mapping=mapping)
+    exec template in namespace
+    return namespace['RestrictedDataContainer']
