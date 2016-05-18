@@ -1,3 +1,5 @@
+import cPickle
+from io import BytesIO
 import unittest
 
 from simphony.core.cuba import CUBA
@@ -149,6 +151,12 @@ class TestDataContainer(unittest.TestCase):
             container[100] = 29
 
 
+# Create a container class here for testing pickling
+# As with all dynamically created classes, it needs to be
+# properly named in a module in order for pickling to work
+RestrictedDataContainer = create_data_container(CUBA)
+
+
 class TestRestrictedDataContainer(unittest.TestCase):
 
     def setUp(self):
@@ -187,6 +195,21 @@ class TestRestrictedDataContainer(unittest.TestCase):
     def test_error_with_non_cuba_keys(self):
         with self.assertRaises(ValueError):
             create_data_container((1, 2))
+
+    def test_data_container_can_be_pickled(self):
+        # Create a container with data
+        container = RestrictedDataContainer()
+        for key in CUBA:
+            container[key] = key+3
+
+        # Pickle and write to a buffer
+        stream = BytesIO()
+        cPickle.dump(container, stream)
+        stream.seek(0)
+
+        # Restore the data
+        pickled_data = cPickle.load(stream)
+        self.assertDictEqual(pickled_data, container)
 
 
 if __name__ == '__main__':

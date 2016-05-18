@@ -1,3 +1,5 @@
+import sys as _sys
+
 from simphony.core.cuba import CUBA
 
 
@@ -105,6 +107,12 @@ def create_data_container(restricted_keys):
     ''' Create a DataContainer subclass with the given
     restricted keys
 
+    Note
+    ----
+    For pickling to work, the created class needs to be assigned
+    a name `RestrictedDataContainer` in the module where it is
+    created
+
     Parameters
     ----------
     restricted_keys : sequence
@@ -119,7 +127,7 @@ def create_data_container(restricted_keys):
     --------
     >>> container = create_data_container((CUBA.NAME, CUBA.VELOCITY))()
     >>> container.restricted_keys
-    {<CUBA.VELOCITY: 55>, <CUBA.NAME: 61>}
+    frozenset({<CUBA.VELOCITY: 55>, <CUBA.NAME: 61>})
     >>> container[CUBA.NAME] = 'name'
     >>> container[CUBA.POSITION] = (1.0, 1.0, 1.0)
     ...
@@ -131,7 +139,18 @@ def create_data_container(restricted_keys):
 
     mapping = {key.name: key for key in restricted_keys}
 
-    return type('RestrictedDataContainer', (DataContainer,),
-                {'__doc__': DataContainer.__doc__,
-                 'restricted_keys': frozenset(restricted_keys),
-                 '_restricted_mapping': mapping})
+    new_class = type('RestrictedDataContainer', (DataContainer,),
+                     {'__doc__': DataContainer.__doc__,
+                      '__slots__': (),
+                      'restricted_keys': frozenset(restricted_keys),
+                      '_restricted_mapping': mapping})
+
+    # For the dynamically generated class to have a chance to be
+    # pickleable.  Bypass this step for some Python implementations
+    try:
+        new_class.__module__ = _sys._getframe(1).f_globals.get(
+            '__name__', '__main__')
+    except AttributeError:
+        pass
+
+    return new_class
