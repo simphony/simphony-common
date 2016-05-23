@@ -103,7 +103,8 @@ class DataContainer(dict):
             raise ValueError(message.format(invalid_keys))
 
 
-def create_data_container(restricted_keys):
+def create_data_container(restricted_keys,
+                          class_name='RestrictedDataContainer'):
     ''' Create a DataContainer subclass with the given
     restricted keys
 
@@ -118,6 +119,9 @@ def create_data_container(restricted_keys):
     restricted_keys : sequence
         CUBA IntEnum
 
+    class_name : str
+        Name of the returned class
+
     Returns
     -------
     RestrictedDataContainer : DataContainer
@@ -125,7 +129,9 @@ def create_data_container(restricted_keys):
 
     Examples
     --------
-    >>> container = create_data_container((CUBA.NAME, CUBA.VELOCITY))()
+    >>> RestrictedDataContainer = create_data_container((CUBA.NAME,
+                                                         CUBA.VELOCITY))
+    >>> container = RestrictedDataContainer()
     >>> container.restricted_keys
     frozenset({<CUBA.VELOCITY: 55>, <CUBA.NAME: 61>})
     >>> container[CUBA.NAME] = 'name'
@@ -139,7 +145,7 @@ def create_data_container(restricted_keys):
 
     mapping = {key.name: key for key in restricted_keys}
 
-    new_class = type('RestrictedDataContainer', (DataContainer,),
+    new_class = type(class_name, (DataContainer,),
                      {'__doc__': DataContainer.__doc__,
                       '__slots__': (),
                       'restricted_keys': frozenset(restricted_keys),
