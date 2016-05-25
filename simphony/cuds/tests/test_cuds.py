@@ -89,7 +89,7 @@ class CUDSTestCase(unittest.TestCase):
                          [self.dummpy_component1.name,
                           self.dummpy_component2.name])
 
-    def test_iter(self):
+    def test_iter_with_dataset(self):
         p1 = Particle()
         p2 = Particle()
         p3 = Particle()
@@ -100,11 +100,26 @@ class CUDSTestCase(unittest.TestCase):
         ps2.add_particles([p3, p4])
         self.cuds.add(ps1)
         self.cuds.add(ps2)
-        for item in self.cuds.iter(Particles):
-            self.assertIn(item, [ps1, ps2])
 
+        cuds_list = []
+        for item in self.cuds.iter(Particles):
+            cuds_list.append(item)
+
+        self.assertTrue(len(cuds_list), 2)
+
+        for cuds in cuds_list:
+            self.assertIsInstance(cuds, Particles)
+            self.assertIn(cuds, [ps1, ps2])
+
+    def test_iter_with_component(self):
         self.cuds.add(self.dummpy_component1)
         self.cuds.add(self.dummpy_component2)
+
+        component_list = []
         for item in self.cuds.iter(type(self.dummpy_component1)):
-            self.assertIn(item, [self.dummpy_component1,
-                                 self.dummpy_component2])
+            component_list.append(item)
+
+        self.assertTrue(len(component_list), 2)
+        for cmp in component_list:
+            self.assertIn(cmp, [self.dummpy_component1,
+                                self.dummpy_component2])
