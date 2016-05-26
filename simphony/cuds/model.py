@@ -166,7 +166,13 @@ class CUDS(object):
         ------
         iterator over the components of the given type
         """
-        for component in self._store.itervalues():
+        values = None
+        if issubclass(component_type, (ABCParticles, ABCLattice, ABCMesh)):
+            values = self._dataset_store.iter_datasets()
+        else:
+            values = self._store.itervalues()
+
+        for component in values:
             if isinstance(component, component_type):
                 yield component
 
