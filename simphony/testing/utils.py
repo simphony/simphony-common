@@ -310,7 +310,7 @@ def create_data_container(restrict=None, constant=None):
 
     """
     if restrict is None:
-        restrict = CUBA
+        restrict = [c for c in CUBA if c.name in KEYWORDS]
     data = {cuba: dummy_cuba_value(cuba, constant) for cuba in restrict}
     return DataContainer(data)
 
@@ -337,6 +337,8 @@ def dummy_cuba_value(cuba, constant=None):
     keyword = KEYWORDS[CUBA(cuba).name]
     if keyword.dtype is uuid.UUID:
         return uuid.UUID(int=constant, version=4)
+    elif numpy.issubdtype(keyword.dtype, bool):
+        return bool(constant)
     elif numpy.issubdtype(keyword.dtype, str):
         return keyword.name + str(constant)
     elif (numpy.issubdtype(keyword.dtype, numpy.float) or
