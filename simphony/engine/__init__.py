@@ -73,6 +73,7 @@ def load_engine_extentions():
     """ Discover and load engine extension modules.
 
     """
+    print "--- load_engine_extentions ---"
     from stevedore import extension
     mgr = extension.ExtensionManager(
         namespace='simphony.engine',
