@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ComputationalModel(CUDSComponent):
+
     '''Model category according to the RoMM  # noqa
     '''
 
@@ -20,7 +21,6 @@ class ComputationalModel(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Model category according to the RoMM'  # noqa
 
@@ -48,7 +48,6 @@ class ComputationalModel(CUDSComponent):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

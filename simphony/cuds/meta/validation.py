@@ -31,7 +31,7 @@ def to_camel_case(text, special={'cuds': 'CUDS'}):
             return special[word]
         else:
             # Capitalise the first character
-            return word[0].upper() + word[1:]
+            return word[0].upper()+word[1:]
 
     return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
 
@@ -87,17 +87,17 @@ def check_shape(value, shape):
         if the `value` does not comply with the required `shape`
     """
     decoded_shape = decode_shape(shape)
-
     if len(decoded_shape) == 0:
         # Any shape is allowed
         return
 
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
-    value_shape = numpy.asarray(value).shape or (1, )
+    value_shape = numpy.asarray(value).shape or (1,)
 
     msg_fmt = ("value has a shape of {value_shape}, "
                "which does not comply with shape: {shape}")
-    error_message = msg_fmt.format(value_shape=value_shape, shape=shape)
+    error_message = msg_fmt.format(value_shape=value_shape,
+                                   shape=shape)
 
     if len(decoded_shape) != len(value_shape):
         raise ValueError(error_message)
@@ -145,7 +145,11 @@ def validate_cuba_keyword(value, key):
     # Keyword name in KEYWORDS
     keyword_name = key.upper()
 
-    if keyword_name in KEYWORDS:
+    if api_class:
+        if not isinstance(value, api_class):
+            message = '{0!r} is not an instance of {1}'
+            raise TypeError(message.format(value, api_class))
+    elif keyword_name in KEYWORDS:
         keyword = KEYWORDS[keyword_name]
 
         # Check type
@@ -170,11 +174,6 @@ def validate_cuba_keyword(value, key):
         # to our shape syntax
         shape = '({})'.format(str(keyword.shape).strip('[]'))
         check_shape(value, shape)
-
-    elif api_class:
-        if not isinstance(value, api_class):
-            message = '{0!r} is not an instance of {1}'
-            raise TypeError(message.format(value, api_class))
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))
@@ -212,6 +211,25 @@ def cast_data_type(value, key):
     if keyword_name in KEYWORDS:
         target_type = KEYWORDS[keyword_name].dtype
 
+        # Check if target is cuds instance
+        if not target_type:
+            # No casting for CUDS instances
+            return value
+
+#            from . import api
+
+            # target_name = KEYWORDS[keyword_name].name
+            # cuds_type = getattr(api, target_name)
+
+            # # Check if we are dealing with a CUDS class rather than a
+            # # simple CUBA
+            # if cuds_type and not isinstance(value, cuds_type):
+            #     return numpy.asarray(value).astype(cuds_type,
+            #                                        casting='same_kind')
+            #     #raise ValueError('Value must be of %s type but is of type %s %s' %
+            #     #                 (cuds_type, type(value), value))
+            # return cuds_value or value
+
         # If safe casting is not possible,
         # this will raise a ValueError/TypeError
         new_value = numpy.asarray(value).astype(target_type,
@@ -227,3 +245,4 @@ def cast_data_type(value, key):
 
     else:
         return value
+

@@ -10,29 +10,23 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
+
     '''A constant electrostatic field model  # noqa
     '''
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 electrostatic_field=[0.0, 0.0, 0.0]):
+    def __init__(self, description=None, name=None, data=None, electrostatic_field=[0.0, 0.0, 0.0]):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
         self.electrostatic_field = electrostatic_field
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'A constant electrostatic field model'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = [CUBA.ELECTRIC_FIELD, CUBA.CHARGE]
 
@@ -60,7 +54,6 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @property
     def electrostatic_field(self):
-
         return self.data[CUBA.ELECTROSTATIC_FIELD]
 
     @electrostatic_field.setter
@@ -71,17 +64,14 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -92,10 +82,8 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class EngineFeature(CUDSItem):
+
     '''Provides a physics equation and methods that engines provides to solve them  # noqa
     '''
 
@@ -18,13 +19,10 @@ class EngineFeature(CUDSItem):
 
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._physics_equation = None
-
         # This is a system-managed, read-only attribute
         self._definition = 'Provides a physics equation and methods that engines provides to solve them'  # noqa
-
         # This is a system-managed, read-only attribute
         self._computational_method = None
 
@@ -52,17 +50,14 @@ class EngineFeature(CUDSItem):
 
     @property
     def physics_equation(self):
-
         return self.data[CUBA.PHYSICS_EQUATION]
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def computational_method(self):
-
         return self.data[CUBA.COMPUTATIONAL_METHOD]
 
     @property
@@ -77,4 +72,4 @@ class EngineFeature(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

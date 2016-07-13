@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ModelEquation(CUDSComponent):
+
     '''The model equations are represented by all physics equations and material relations according to the RoMM  # noqa
     '''
 
@@ -20,13 +21,10 @@ class ModelEquation(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = []
-
         # This is a system-managed, read-only attribute
         self._definition = 'The model equations are represented by all physics equations and material relations according to the RoMM'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class ModelEquation(CUDSComponent):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property

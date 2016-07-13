@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class NeumannBoundaryCondition(Condition):
+
     '''Neumann boundary condition  # noqa
     '''
 
@@ -22,19 +23,15 @@ class NeumannBoundaryCondition(Condition):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Neumann boundary condition'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = None
 
     @property
     def material(self):
-
         return self.data[CUBA.MATERIAL]
 
     @material.setter
@@ -70,17 +67,14 @@ class NeumannBoundaryCondition(Condition):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property

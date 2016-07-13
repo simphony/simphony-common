@@ -5,25 +5,18 @@ from .rheology_model import RheologyModel
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.MINIMUM_VISCOSITY, CUBA.LINEAR_CONSTANT, CUBA.UUID,
-     CUBA.POWER_LAW_INDEX, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME),
+    (CUBA.DESCRIPTION, CUBA.MINIMUM_VISCOSITY, CUBA.LINEAR_CONSTANT, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class PowerLawViscosityModel(RheologyModel):
+
     '''Power law model for a variable viscosity function that is limited by minimum and maximum values  # noqa
     '''
 
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 linear_constant=1e-5,
-                 minimum_viscosity=1e-5,
-                 maximum_viscosity=1e-3,
-                 power_law_index=1.0):
+    def __init__(self, description=None, name=None, data=None, linear_constant=1e-5, minimum_viscosity=1e-5, maximum_viscosity=1e-3, power_law_index=1.0):
 
         self.description = description
         self.name = name
@@ -33,13 +26,10 @@ class PowerLawViscosityModel(RheologyModel):
         self.minimum_viscosity = minimum_viscosity
         self.maximum_viscosity = maximum_viscosity
         self.power_law_index = power_law_index
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Power law model for a variable viscosity function that is limited by minimum and maximum values'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -67,7 +57,6 @@ class PowerLawViscosityModel(RheologyModel):
 
     @property
     def linear_constant(self):
-
         return self.data[CUBA.LINEAR_CONSTANT]
 
     @linear_constant.setter
@@ -78,7 +67,6 @@ class PowerLawViscosityModel(RheologyModel):
 
     @property
     def minimum_viscosity(self):
-
         return self.data[CUBA.MINIMUM_VISCOSITY]
 
     @minimum_viscosity.setter
@@ -89,7 +77,6 @@ class PowerLawViscosityModel(RheologyModel):
 
     @property
     def maximum_viscosity(self):
-
         return self.data[CUBA.MAXIMUM_VISCOSITY]
 
     @maximum_viscosity.setter
@@ -100,7 +87,6 @@ class PowerLawViscosityModel(RheologyModel):
 
     @property
     def power_law_index(self):
-
         return self.data[CUBA.POWER_LAW_INDEX]
 
     @power_law_index.setter
@@ -111,17 +97,14 @@ class PowerLawViscosityModel(RheologyModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -132,11 +115,8 @@ class PowerLawViscosityModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MINIMUM_VISCOSITY, CUBA.LINEAR_CONSTANT,
-                CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.MAXIMUM_VISCOSITY,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MINIMUM_VISCOSITY, CUBA.LINEAR_CONSTANT, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

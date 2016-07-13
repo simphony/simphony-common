@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Condition(CUDSComponent):
+
     '''Condition on boundaries or model entities  # noqa
     '''
 
@@ -20,7 +21,6 @@ class Condition(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Condition on boundaries or model entities'  # noqa
 
@@ -48,7 +48,6 @@ class Condition(CUDSComponent):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

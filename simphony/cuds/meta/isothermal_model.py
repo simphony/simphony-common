@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class IsothermalModel(ThermalModel):
+
     '''Isothermal heat transport model, no transport of heat is assumed  # noqa
     '''
 
@@ -20,13 +21,10 @@ class IsothermalModel(ThermalModel):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Isothermal heat transport model, no transport of heat is assumed'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class IsothermalModel(ThermalModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -79,5 +74,4 @@ class IsothermalModel(ThermalModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

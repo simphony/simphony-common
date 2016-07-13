@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class PhysicsEquation(ModelEquation):
+
     '''Physics equation  # noqa
     '''
 
@@ -20,13 +21,10 @@ class PhysicsEquation(ModelEquation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Physics equation'  # noqa
-
         # This is a system-managed, read-only attribute
         self._models = []
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class PhysicsEquation(ModelEquation):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def variables(self):
-
         return self._variables
 
     @property

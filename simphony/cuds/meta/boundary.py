@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Boundary(CUDSComponent):
+
     '''System boundary  # noqa
     '''
 
@@ -20,7 +21,6 @@ class Boundary(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'System boundary'  # noqa
 
@@ -48,7 +48,6 @@ class Boundary(CUDSComponent):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

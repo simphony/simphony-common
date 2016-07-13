@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SolverParameter(CUDSComponent):
+
     '''Solver parameter and metadata  # noqa
     '''
 
@@ -20,7 +21,6 @@ class SolverParameter(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Solver parameter and metadata'  # noqa
 
@@ -48,7 +48,6 @@ class SolverParameter(CUDSComponent):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

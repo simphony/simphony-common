@@ -10,29 +10,23 @@ _RestrictedDataContainer = create_data_container(
 
 
 class GravityModel(PhysicsEquation):
+
     '''A simple gravity model  # noqa
     '''
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 acceleration=[0.0, 0.0, 0.0]):
+    def __init__(self, description=None, name=None, data=None, acceleration=[0.0, 0.0, 0.0]):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
         self.acceleration = acceleration
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'A simple gravity model'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = [CUBA.ACCELERATION]
 
@@ -60,7 +54,6 @@ class GravityModel(PhysicsEquation):
 
     @property
     def acceleration(self):
-
         return self.data[CUBA.ACCELERATION]
 
     @acceleration.setter
@@ -71,17 +64,14 @@ class GravityModel(PhysicsEquation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -96,5 +86,4 @@ class GravityModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

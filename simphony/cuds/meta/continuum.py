@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Continuum(ComputationalModel):
+
     '''Continuum model category according to the RoMM  # noqa
     '''
 
@@ -20,7 +21,6 @@ class Continuum(ComputationalModel):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Continuum model category according to the RoMM'  # noqa
 
@@ -48,7 +48,6 @@ class Continuum(ComputationalModel):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

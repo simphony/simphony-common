@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Version(CUDSItem):
+
     '''Version of a software tool used in a simulation  # noqa
     '''
 
@@ -23,13 +24,11 @@ class Version(CUDSItem):
         self.full = full
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Version of a software tool used in a simulation'  # noqa
 
     @property
     def minor(self):
-
         return self.data[CUBA.MINOR]
 
     @minor.setter
@@ -40,7 +39,6 @@ class Version(CUDSItem):
 
     @property
     def patch(self):
-
         return self.data[CUBA.PATCH]
 
     @patch.setter
@@ -51,7 +49,6 @@ class Version(CUDSItem):
 
     @property
     def major(self):
-
         return self.data[CUBA.MAJOR]
 
     @major.setter
@@ -62,7 +59,6 @@ class Version(CUDSItem):
 
     @property
     def full(self):
-
         return self.data[CUBA.FULL]
 
     @full.setter
@@ -95,7 +91,6 @@ class Version(CUDSItem):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
@@ -110,4 +105,4 @@ class Version(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

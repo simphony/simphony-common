@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ComputationalMethod(CUDSComponent):
+
     '''A computational method according to the RoMM  # noqa
     '''
 
@@ -20,10 +21,8 @@ class ComputationalMethod(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._physics_equation = []
-
         # This is a system-managed, read-only attribute
         self._definition = 'A computational method according to the RoMM'  # noqa
 
@@ -51,12 +50,10 @@ class ComputationalMethod(CUDSComponent):
 
     @property
     def physics_equation(self):
-
         return self._physics_equation
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

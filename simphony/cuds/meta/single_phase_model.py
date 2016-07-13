@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SinglePhaseModel(MultiphaseModel):
+
     '''A single phase fluid model  # noqa
     '''
 
@@ -20,13 +21,10 @@ class SinglePhaseModel(MultiphaseModel):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'A single phase fluid model'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class SinglePhaseModel(MultiphaseModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -79,5 +74,4 @@ class SinglePhaseModel(MultiphaseModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

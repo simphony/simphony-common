@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Engine(SoftwareTool):
+
     '''Represents a software tool which is used to solve the physics equation  # noqa
     '''
 
@@ -19,10 +20,8 @@ class Engine(SoftwareTool):
         self.version = version
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the physics equation'  # noqa
-
         # This is a system-managed, read-only attribute
         self._engine_feature = None
 
@@ -50,12 +49,10 @@ class Engine(SoftwareTool):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def engine_feature(self):
-
         return self.data[CUBA.ENGINE_FEATURE]
 
     @property

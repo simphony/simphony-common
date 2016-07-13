@@ -11,82 +11,63 @@ from .constant_electrostatic_field_model import ConstantElectrostaticFieldModel
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-     CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL,
-     CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL, CUBA.MULTIPHASE_MODEL,
-     CUBA.NAME),
+    (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL, CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL, CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL, CUBA.MULTIPHASE_MODEL, CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class Cfd(PhysicsEquation):
+
     '''Computational fluid dynamics general (set of ) equations for momentum, mass and energy  # noqa
     '''
 
     cuba_key = CUBA.CFD
 
-    def __init__(self,
-                 gravity_model,
-                 description=None,
-                 name=None,
-                 data=None,
-                 multiphase_model=None,
-                 rheology_model=None,
-                 turbulence_model=None,
-                 thermal_model=None,
-                 compressibility_model=None,
-                 electrostatic_model=None):
+    def __init__(self, gravity_model, description=None, name=None, data=None, multiphase_model=None, rheology_model=None, turbulence_model=None, thermal_model=None, compressibility_model=None, electrostatic_model=None):
 
         self.gravity_model = gravity_model
         self.description = description
         self.name = name
         if data:
             self.data = data
-
+        
         if multiphase_model:
             self.multiphase_model = multiphase_model
         else:
             self.multiphase_model = SinglePhaseModel()
-
+        
         if rheology_model:
             self.rheology_model = rheology_model
         else:
             self.rheology_model = NewtonianFluidModel()
-
+        
         if turbulence_model:
             self.turbulence_model = turbulence_model
         else:
             self.turbulence_model = LaminarFlowModel()
-
+        
         if thermal_model:
             self.thermal_model = thermal_model
         else:
             self.thermal_model = IsothermalModel()
-
+        
         if compressibility_model:
             self.compressibility_model = compressibility_model
         else:
             self.compressibility_model = IncompressibleFluidModel()
-
+        
         if electrostatic_model:
             self.electrostatic_model = electrostatic_model
         else:
             self.electrostatic_model = ConstantElectrostaticFieldModel()
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Computational fluid dynamics general (set of ) equations for momentum, mass and energy'  # noqa
-
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM,
-                           CUBA.DENSITY, CUBA.VISCOSITY, CUBA.TIME,
-                           CUBA.STRESS_TENSOR, CUBA.PRESSURE,
-                           CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION]
+        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.DENSITY, CUBA.VISCOSITY, CUBA.TIME, CUBA.STRESS_TENSOR, CUBA.PRESSURE, CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION]
 
     @property
     def gravity_model(self):
-
         return self.data[CUBA.GRAVITY_MODEL]
 
     @gravity_model.setter
@@ -119,7 +100,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def multiphase_model(self):
-
         return self.data[CUBA.MULTIPHASE_MODEL]
 
     @multiphase_model.setter
@@ -130,7 +110,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def rheology_model(self):
-
         return self.data[CUBA.RHEOLOGY_MODEL]
 
     @rheology_model.setter
@@ -141,7 +120,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def turbulence_model(self):
-
         return self.data[CUBA.TURBULENCE_MODEL]
 
     @turbulence_model.setter
@@ -152,7 +130,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def thermal_model(self):
-
         return self.data[CUBA.THERMAL_MODEL]
 
     @thermal_model.setter
@@ -163,7 +140,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def compressibility_model(self):
-
         return self.data[CUBA.COMPRESSIBILITY_MODEL]
 
     @compressibility_model.setter
@@ -174,7 +150,6 @@ class Cfd(PhysicsEquation):
 
     @property
     def electrostatic_model(self):
-
         return self.data[CUBA.ELECTROSTATIC_MODEL]
 
     @electrostatic_model.setter
@@ -185,17 +160,14 @@ class Cfd(PhysicsEquation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -206,12 +178,8 @@ class Cfd(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-                CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL,
-                CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL,
-                CUBA.MULTIPHASE_MODEL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL, CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL, CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL, CUBA.MULTIPHASE_MODEL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

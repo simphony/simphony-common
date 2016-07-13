@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class NewtonianFluidModel(RheologyModel):
+
     '''Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation  # noqa
     '''
 
@@ -20,13 +21,10 @@ class NewtonianFluidModel(RheologyModel):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class NewtonianFluidModel(RheologyModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -79,5 +74,4 @@ class NewtonianFluidModel(RheologyModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

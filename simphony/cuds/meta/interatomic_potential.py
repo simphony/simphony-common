@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class InteratomicPotential(MaterialRelation):
+
     '''Interatomic Potentials Category  # noqa
     '''
 
@@ -21,13 +22,10 @@ class InteratomicPotential(MaterialRelation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Interatomic Potentials Category'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -55,17 +53,14 @@ class InteratomicPotential(MaterialRelation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -80,5 +75,4 @@ class InteratomicPotential(MaterialRelation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

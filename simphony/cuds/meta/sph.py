@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Sph(ComputationalMethod):
+
     '''Smooth particle hydrodynamics  # noqa
     '''
 
@@ -20,10 +21,8 @@ class Sph(ComputationalMethod):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._physics_equation = [CUBA.CFD]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Smooth particle hydrodynamics'  # noqa
 
@@ -51,12 +50,10 @@ class Sph(ComputationalMethod):
 
     @property
     def physics_equation(self):
-
         return self._physics_equation
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

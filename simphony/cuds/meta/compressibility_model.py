@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class CompressibilityModel(PhysicsEquation):
+
     '''Compressibility model  # noqa
     '''
 
@@ -20,13 +21,10 @@ class CompressibilityModel(PhysicsEquation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Compressibility model'  # noqa
-
         # This is a system-managed, read-only attribute
         self._models = []
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,17 +52,14 @@ class CompressibilityModel(PhysicsEquation):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -79,5 +74,4 @@ class CompressibilityModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

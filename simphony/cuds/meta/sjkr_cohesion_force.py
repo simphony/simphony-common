@@ -5,23 +5,18 @@ from .material_relation import MaterialRelation
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL, CUBA.UUID,
-     CUBA.NAME),
+    (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class SjkrCohesionForce(MaterialRelation):
+
     '''Additional normal force tending to maintain the contact  # noqa
     '''
 
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
-    def __init__(self,
-                 material,
-                 description=None,
-                 name=None,
-                 data=None,
-                 cohesion_energy_density=0.0):
+    def __init__(self, material, description=None, name=None, data=None, cohesion_energy_density=0.0):
 
         self.material = material
         self.description = description
@@ -29,13 +24,10 @@ class SjkrCohesionForce(MaterialRelation):
         if data:
             self.data = data
         self.cohesion_energy_density = cohesion_energy_density
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Additional normal force tending to maintain the contact'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -63,7 +55,6 @@ class SjkrCohesionForce(MaterialRelation):
 
     @property
     def cohesion_energy_density(self):
-
         return self.data[CUBA.COHESION_ENERGY_DENSITY]
 
     @cohesion_energy_density.setter
@@ -74,17 +65,14 @@ class SjkrCohesionForce(MaterialRelation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -95,10 +83,8 @@ class SjkrCohesionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

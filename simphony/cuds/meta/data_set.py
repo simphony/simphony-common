@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class DataSet(CUDSComponent):
+
     '''Data set  # noqa
     '''
 
@@ -20,10 +21,8 @@ class DataSet(CUDSComponent):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = []
-
         # This is a system-managed, read-only attribute
         self._definition = 'Data set'  # noqa
 
@@ -51,12 +50,10 @@ class DataSet(CUDSComponent):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

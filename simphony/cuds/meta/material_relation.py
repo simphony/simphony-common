@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class MaterialRelation(ModelEquation):
+
     '''Material relation  # noqa
     '''
 
@@ -22,19 +23,15 @@ class MaterialRelation(ModelEquation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Material relation'  # noqa
-
         # This is a system-managed, read-only attribute
         self._models = []
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
     @property
     def material(self):
-
         return self.data[CUBA.MATERIAL]
 
     @material.setter
@@ -70,17 +67,14 @@ class MaterialRelation(ModelEquation):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def variables(self):
-
         return self._variables
 
     @property

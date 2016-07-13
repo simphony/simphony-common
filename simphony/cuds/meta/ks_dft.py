@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class KsDft(PhysicsEquation):
+
     '''Kohn-Sham DFT equations  # noqa
     '''
 
@@ -20,17 +21,12 @@ class KsDft(PhysicsEquation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ELECTRONIC]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Kohn-Sham DFT equations'  # noqa
-
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.CHEMICAL_SPECIE,
-                           CUBA.ELECTRON_MASS, CUBA.CHARGE_DENSITY,
-                           CUBA.ENERGY]
+        self._variables = [CUBA.POSITION, CUBA.CHEMICAL_SPECIE, CUBA.ELECTRON_MASS, CUBA.CHARGE_DENSITY, CUBA.ENERGY]
 
     @property
     def data(self):
@@ -56,17 +52,14 @@ class KsDft(PhysicsEquation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -81,5 +74,4 @@ class KsDft(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

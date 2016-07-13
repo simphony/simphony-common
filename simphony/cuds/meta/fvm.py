@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Fvm(ComputationalMethod):
+
     '''Finite volume method  # noqa
     '''
 
@@ -20,10 +21,8 @@ class Fvm(ComputationalMethod):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._physics_equation = [CUBA.CFD]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Finite volume method'  # noqa
 
@@ -51,12 +50,10 @@ class Fvm(ComputationalMethod):
 
     @property
     def physics_equation(self):
-
         return self._physics_equation
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

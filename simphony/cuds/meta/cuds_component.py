@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class CUDSComponent(CUDSItem):
+
     '''Base data type for the CUDS components  # noqa
     '''
 
@@ -21,7 +22,6 @@ class CUDSComponent(CUDSItem):
             self.data = data
         self.description = description
         self.name = name
-
         # This is a system-managed, read-only attribute
         self._definition = 'Base data type for the CUDS components'  # noqa
 
@@ -49,7 +49,6 @@ class CUDSComponent(CUDSItem):
 
     @property
     def description(self):
-
         return self.data[CUBA.DESCRIPTION]
 
     @description.setter
@@ -61,7 +60,6 @@ class CUDSComponent(CUDSItem):
 
     @property
     def name(self):
-
         return self.data[CUBA.NAME]
 
     @name.setter
@@ -73,7 +71,6 @@ class CUDSComponent(CUDSItem):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
@@ -88,4 +85,4 @@ class CUDSComponent(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SoftwareTool(CUDSItem):
+
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
@@ -20,7 +21,6 @@ class SoftwareTool(CUDSItem):
         if data:
             self.data = data
         self.version = version
-
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the model or in pre/post processing'  # noqa
 
@@ -48,7 +48,6 @@ class SoftwareTool(CUDSItem):
 
     @property
     def version(self):
-
         return self.data[CUBA.VERSION]
 
     @version.setter
@@ -60,7 +59,6 @@ class SoftwareTool(CUDSItem):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
@@ -75,4 +73,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

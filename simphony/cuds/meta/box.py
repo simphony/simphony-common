@@ -10,23 +10,19 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Box(Boundary):
+
     '''A simple hexahedron box object  # noqa
     '''
 
     cuba_key = CUBA.BOX
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 vector=[[0, 0, 0], [0, 0, 0], [0, 0, 0]]):
+    def __init__(self, description=None, name=None, data=None, vector=[[0, 0, 0], [0, 0, 0], [0, 0, 0]]):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
         self.vector = vector
-
         # This is a system-managed, read-only attribute
         self._definition = 'A simple hexahedron box object'  # noqa
 
@@ -54,7 +50,6 @@ class Box(Boundary):
 
     @property
     def vector(self):
-
         return self.data[CUBA.VECTOR]
 
     @vector.setter
@@ -67,7 +62,6 @@ class Box(Boundary):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

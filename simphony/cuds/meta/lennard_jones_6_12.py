@@ -5,25 +5,18 @@ from .pair_potential import PairPotential
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL, CUBA.UUID,
-     CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS, CUBA.NAME),
+    (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS, CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class LennardJones_6_12(PairPotential):
+
     '''A Lennard-Jones 6-12 Potential  # noqa
     '''
 
     cuba_key = CUBA.LENNARD_JONES_6_12
 
-    def __init__(self,
-                 material,
-                 description=None,
-                 name=None,
-                 data=None,
-                 van_der_waals_radius=1.0,
-                 cutoff_distance=1.0,
-                 energy_well_depth=1.0):
+    def __init__(self, material, description=None, name=None, data=None, van_der_waals_radius=1.0, cutoff_distance=1.0, energy_well_depth=1.0):
 
         self.material = material
         self.description = description
@@ -33,13 +26,10 @@ class LennardJones_6_12(PairPotential):
         self.van_der_waals_radius = van_der_waals_radius
         self.cutoff_distance = cutoff_distance
         self.energy_well_depth = energy_well_depth
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
-
         # This is a system-managed, read-only attribute
         self._definition = 'A Lennard-Jones 6-12 Potential'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = [CUBA.POSITION, CUBA.POTENTIAL_ENERGY]
 
@@ -67,7 +57,6 @@ class LennardJones_6_12(PairPotential):
 
     @property
     def van_der_waals_radius(self):
-
         return self.data[CUBA.VAN_DER_WAALS_RADIUS]
 
     @van_der_waals_radius.setter
@@ -78,7 +67,6 @@ class LennardJones_6_12(PairPotential):
 
     @property
     def cutoff_distance(self):
-
         return self.data[CUBA.CUTOFF_DISTANCE]
 
     @cutoff_distance.setter
@@ -89,7 +77,6 @@ class LennardJones_6_12(PairPotential):
 
     @property
     def energy_well_depth(self):
-
         return self.data[CUBA.ENERGY_WELL_DEPTH]
 
     @energy_well_depth.setter
@@ -100,17 +87,14 @@ class LennardJones_6_12(PairPotential):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -121,12 +105,8 @@ class LennardJones_6_12(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
-                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

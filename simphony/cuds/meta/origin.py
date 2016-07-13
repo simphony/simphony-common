@@ -10,23 +10,19 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Origin(CUDSComponent):
+
     '''The origin of a space system  # noqa
     '''
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 point=[0, 0, 0]):
+    def __init__(self, description=None, name=None, data=None, point=[0, 0, 0]):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
         self.point = point
-
         # This is a system-managed, read-only attribute
         self._definition = 'The origin of a space system'  # noqa
 
@@ -54,7 +50,6 @@ class Origin(CUDSComponent):
 
     @property
     def point(self):
-
         return self.data[CUBA.POINT]
 
     @point.setter
@@ -65,7 +60,6 @@ class Origin(CUDSComponent):
 
     @property
     def definition(self):
-
         return self._definition
 
     @property

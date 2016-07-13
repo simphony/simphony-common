@@ -6,9 +6,10 @@ from .lattice import Lattice, LatticeNode
 from .particles import Particles, Particle, Bond
 from .model import CUDS
 from .simulation import Simulation
+from .meta import api
 
 __all__ = [
     'ABCLattice', 'ABCMesh', 'ABCParticles',
     'Mesh', 'Point', 'Element', 'Edge', 'Face', 'Cell',
-    'Lattice', 'LatticeNode',
+    'Lattice', 'LatticeNode', 'api',
     'Particles', 'Particle', 'Bond', 'CUDS', 'Simulation']

@@ -5,25 +5,18 @@ from .rheology_model import RheologyModel
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX,
-     CUBA.RELAXATION_TIME, CUBA.LINEAR_CONSTANT, CUBA.NAME),
+    (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME, CUBA.LINEAR_CONSTANT, CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class HerschelBulkleyModel(RheologyModel):
+
     '''Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid  # noqa
     '''
 
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 initial_viscosity=1e-3,
-                 relaxation_time=1.0,
-                 linear_constant=1e-5,
-                 power_law_index=1.0):
+    def __init__(self, description=None, name=None, data=None, initial_viscosity=1e-3, relaxation_time=1.0, linear_constant=1e-5, power_law_index=1.0):
 
         self.description = description
         self.name = name
@@ -33,13 +26,10 @@ class HerschelBulkleyModel(RheologyModel):
         self.relaxation_time = relaxation_time
         self.linear_constant = linear_constant
         self.power_law_index = power_law_index
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid'  # noqa
-
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -67,7 +57,6 @@ class HerschelBulkleyModel(RheologyModel):
 
     @property
     def initial_viscosity(self):
-
         return self.data[CUBA.INITIAL_VISCOSITY]
 
     @initial_viscosity.setter
@@ -78,7 +67,6 @@ class HerschelBulkleyModel(RheologyModel):
 
     @property
     def relaxation_time(self):
-
         return self.data[CUBA.RELAXATION_TIME]
 
     @relaxation_time.setter
@@ -89,7 +77,6 @@ class HerschelBulkleyModel(RheologyModel):
 
     @property
     def linear_constant(self):
-
         return self.data[CUBA.LINEAR_CONSTANT]
 
     @linear_constant.setter
@@ -100,7 +87,6 @@ class HerschelBulkleyModel(RheologyModel):
 
     @property
     def power_law_index(self):
-
         return self.data[CUBA.POWER_LAW_INDEX]
 
     @power_law_index.setter
@@ -111,17 +97,14 @@ class HerschelBulkleyModel(RheologyModel):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -132,11 +115,8 @@ class HerschelBulkleyModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME,
-                CUBA.LINEAR_CONSTANT, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME, CUBA.LINEAR_CONSTANT, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class MolecularDynamics(PhysicsEquation):
+
     '''Classical atomistic molecular dynamics using Newtons equations of motion  # noqa
     '''
 
@@ -20,16 +21,12 @@ class MolecularDynamics(PhysicsEquation):
         self.name = name
         if data:
             self.data = data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
-
         # This is a system-managed, read-only attribute
         self._definition = 'Classical atomistic molecular dynamics using Newtons equations of motion'  # noqa
-
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM,
-                           CUBA.ACCELERATION, CUBA.FORCE]
+        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.ACCELERATION, CUBA.FORCE]
 
     @property
     def data(self):
@@ -55,17 +52,14 @@ class MolecularDynamics(PhysicsEquation):
 
     @property
     def models(self):
-
         return self._models
 
     @property
     def definition(self):
-
         return self._definition
 
     @property
     def variables(self):
-
         return self._variables
 
     @property
@@ -80,5 +74,4 @@ class MolecularDynamics(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
