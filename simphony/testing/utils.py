@@ -310,7 +310,7 @@ def create_data_container(restrict=None, constant=None):
 
     """
     if restrict is None:
-        restrict = [c for c in CUBA if c.name in KEYWORDS]
+        restrict = CUBA
     data = {cuba: dummy_cuba_value(cuba, constant) for cuba in restrict}
     return DataContainer(data)
 
@@ -334,22 +334,35 @@ def dummy_cuba_value(cuba, constant=None):
     """
     if constant is None:
         constant = 3
+
     keyword = KEYWORDS[CUBA(cuba).name]
+
+    # If dtype is None, it is expected to a CUDS meta class
+    if keyword.dtype is None:
+        # FIXME: Should return an instance of the meta class
+        return None
+
     if keyword.dtype is uuid.UUID:
         return uuid.UUID(int=constant, version=4)
-    elif numpy.issubdtype(keyword.dtype, bool):
-        return bool(constant)
     elif numpy.issubdtype(keyword.dtype, str):
-        return keyword.name + str(constant)
+        return (keyword.name + str(constant))[:keyword.shape[0]]
     elif (numpy.issubdtype(keyword.dtype, numpy.float) or
           numpy.issubdtype(keyword.dtype, numpy.int)):
+
         shape = keyword.shape
+
+        # Unknown shape, randomly generate one
+        if shape is None:
+            shape = [random.randint(2, 10)]
+
         if shape == [1]:
             return keyword.dtype(cuba+constant)
         else:
             data = numpy.arange(numpy.prod(shape),
                                 dtype=keyword.dtype)*(cuba+constant)
             return data.reshape(shape)
+    elif keyword.dtype in (bool, numpy.bool):
+        return bool(constant)
 
     raise RuntimeError(
         'cannot create value for {}'.format(keyword.dtype))
