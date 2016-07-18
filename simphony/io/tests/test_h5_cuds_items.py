@@ -10,6 +10,7 @@ from collections import OrderedDict
 import tables
 
 from simphony.io.h5_cuds_items import H5CUDSItems
+from simphony.io.data_container_description import SUPPORTED_CUBA
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.testing.utils import (
@@ -81,7 +82,7 @@ class TestH5CUDSItems(unittest.TestCase):
     def item_list(self):
         item_list = []
         for i in xrange(10):
-            data = create_data_container()
+            data = create_data_container(restrict=SUPPORTED_CUBA)
             data[CUBA.VELOCITY] = i
             item_list.append(_DummyItem(data=data, value=i))
         return item_list

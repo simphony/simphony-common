@@ -5,6 +5,7 @@ import unittest
 import tables
 
 from simphony.io.h5_lattice import H5Lattice
+from simphony.io.data_container_description import SUPPORTED_CUBA
 from simphony.cuds.primitive_cell import (PrimitiveCell, BravaisLattice)
 from numpy.testing import (assert_array_equal, assert_array_almost_equal)
 from simphony.core.cuba import CUBA
@@ -44,7 +45,7 @@ class TestH5LatticeProperties(CheckLatticeContainer, unittest.TestCase):
         return H5Lattice.create_new(self.group, primitive_cell, size, origin)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
     def test_initialization_from_existing_lattice_in_file(self):
         lattice = H5Lattice(self.group)
@@ -81,7 +82,7 @@ class TestH5LatticeNodeCoordinates(
         return H5Lattice.create_new(self.group, primitive_cell, size, origin)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5LatticeNodeOperations(
@@ -105,7 +106,7 @@ class TestH5LatticeNodeOperations(
         return H5Lattice.create_new(self.group, primitive_cell, size, origin)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5LatticeNodeCustomCoordinates(

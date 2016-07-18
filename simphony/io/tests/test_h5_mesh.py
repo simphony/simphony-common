@@ -4,12 +4,12 @@ import shutil
 import unittest
 import tables
 
-from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_mesh import (
     CheckMeshPointOperations, CheckMeshEdgeOperations,
     CheckMeshFaceOperations, CheckMeshCellOperations,
     CheckMeshContainer)
 from simphony.io.h5_mesh import H5Mesh
+from simphony.io.data_container_description import SUPPORTED_CUBA
 
 
 class TestH5MeshPointOperations(CheckMeshPointOperations, unittest.TestCase):
@@ -31,7 +31,8 @@ class TestH5MeshPointOperations(CheckMeshPointOperations, unittest.TestCase):
         return H5Mesh(group, self.handle)
 
     def supported_cuba(self):
-        return set(CUBA)
+        # FIXME: Only a subset of all CUBA are supported for serialisation
+        return SUPPORTED_CUBA
 
 
 class TestH5MeshEdgeOperations(CheckMeshEdgeOperations, unittest.TestCase):
@@ -53,7 +54,7 @@ class TestH5MeshEdgeOperations(CheckMeshEdgeOperations, unittest.TestCase):
         return H5Mesh(group, self.handle)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5MeshFaceOperations(CheckMeshFaceOperations, unittest.TestCase):
@@ -75,7 +76,7 @@ class TestH5MeshFaceOperations(CheckMeshFaceOperations, unittest.TestCase):
         return H5Mesh(group, self.handle)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5MeshCellOperations(CheckMeshCellOperations, unittest.TestCase):
@@ -97,7 +98,7 @@ class TestH5MeshCellOperations(CheckMeshCellOperations, unittest.TestCase):
         return H5Mesh(group, self.handle)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5Mesh(CheckMeshContainer, unittest.TestCase):
@@ -119,7 +120,7 @@ class TestH5Mesh(CheckMeshContainer, unittest.TestCase):
         return H5Mesh(group, self.handle)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
 
 class TestH5MeshStoredLayout(unittest.TestCase):
