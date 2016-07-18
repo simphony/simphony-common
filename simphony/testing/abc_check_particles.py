@@ -534,7 +534,7 @@ class CheckAddingBonds(object):
         # given
         container = self.container
         uid = uuid.uuid4()
-        bonds = create_bonds_with_id()
+        bonds = create_bonds_with_id(restrict=self.supported_cuba())
 
         # when
         uids = container.add_bonds(bonds)
