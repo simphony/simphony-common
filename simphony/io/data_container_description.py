@@ -18,17 +18,17 @@ _TYPE_MAPPINGS = {
 }
 
 
-def create_data_table(class_name, keywords):
+def create_data_table(class_name, supported_cuba=CUBA):
     ''' Create tables.IsDescription class dynamically given
-    a keyword dictionary
+    a set of supported CUBA IntEnum
 
     Parameters
     ----------
     class_name : str
         Name of the created class
 
-    keywords : dict
-        key is the keyword name, value is a simphony.core.keywords.Keyword
+    supported_cuba : iterable
+        Supported CUBA IntEnum
 
     Returns
     -------
@@ -37,24 +37,25 @@ def create_data_table(class_name, keywords):
     table_meta = {}
 
     ignored_keys = []
-    for ikey, name in enumerate(keywords):
+    for ikey, cuba_key in enumerate(supported_cuba):
+        keyword = KEYWORDS[cuba_key.name]
 
         # We skip keywords that do not have a known type
-        dtype = keywords[name].dtype
+        dtype = keyword.dtype
         if dtype not in _TYPE_MAPPINGS:
-            ignored_keys.append(name)
+            ignored_keys.append(cuba_key.name)
             continue
 
         column_type = _TYPE_MAPPINGS[dtype]
 
         column_meta = {'pos': ikey}
-        shape = keywords[name].shape
+        shape = keyword.shape
         if column_type is tables.StringCol:
             column_meta['itemsize'] = shape[0]
         else:
             column_meta['shape'] = tuple(shape)
 
-        table_meta[name.lower()] = column_type(**column_meta)
+        table_meta[cuba_key.name.lower()] = column_type(**column_meta)
 
     if ignored_keys:
         warnings.warn(
@@ -66,7 +67,7 @@ def create_data_table(class_name, keywords):
                 table_meta)
 
 
-Data = create_data_table('Data', KEYWORDS)
+Data = create_data_table('Data', CUBA)
 
 # FIXME: Not all CUBA values are supported in serialisation
 # Set of CUBA that are supported in serialisation
