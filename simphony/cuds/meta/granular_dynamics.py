@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class GranularDynamics(PhysicsEquation):
-
     '''Granular dynamics of spherical particles using DEM  # noqa
     '''
 
@@ -26,7 +25,9 @@ class GranularDynamics(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Granular dynamics of spherical particles using DEM'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.ACCELERATION, CUBA.MOMENT_INERTIA, CUBA.TORQUE, CUBA.ANGULAR_VELOCITY]
+        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM,
+                           CUBA.ACCELERATION, CUBA.MOMENT_INERTIA, CUBA.TORQUE,
+                           CUBA.ANGULAR_VELOCITY]
 
     @property
     def data(self):
@@ -74,4 +75,5 @@ class GranularDynamics(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

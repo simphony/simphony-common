@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class PairPotential(InteratomicPotential):
-
     '''Pair Interatomic Potentials Category  # noqa
     '''
 
@@ -89,4 +88,5 @@ class PairPotential(InteratomicPotential):
 
     @classmethod
     def parents(cls):
-        return (CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

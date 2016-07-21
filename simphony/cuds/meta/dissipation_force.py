@@ -5,18 +5,23 @@ from .material_relation import MaterialRelation
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME),
+    (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL,
+     CUBA.NAME),
     class_name="_RestrictedDataContainer")
 
 
 class DissipationForce(MaterialRelation):
-
     '''Viscous normal force describing the inelasticity of particle collisions  # noqa
     '''
 
     cuba_key = CUBA.DISSIPATION_FORCE
 
-    def __init__(self, material, description=None, name=None, data=None, restitution_coefficient=1.0):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 restitution_coefficient=1.0):
 
         self.material = material
         self.description = description
@@ -83,8 +88,10 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -5,12 +5,10 @@ from .cuds_item import CUDSItem
 from . import validation
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.VERSION, CUBA.UUID),
-    class_name="_RestrictedDataContainer")
+    (CUBA.VERSION, CUBA.UUID), class_name="_RestrictedDataContainer")
 
 
 class SoftwareTool(CUDSItem):
-
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
@@ -73,4 +71,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

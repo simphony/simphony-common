@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class MolecularStatics(PhysicsEquation):
-
     '''Classical atomistic static molecular model  # noqa
     '''
 
@@ -74,4 +73,5 @@ class MolecularStatics(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

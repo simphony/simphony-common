@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ComputationalModel(CUDSComponent):
-
     '''Model category according to the RoMM  # noqa
     '''
 

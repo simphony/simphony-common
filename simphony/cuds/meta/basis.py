@@ -10,13 +10,16 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Basis(CUDSComponent):
-
     '''Space basis vectors  # noqa
     '''
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, description=None, name=None, data=None, vector=[[1, 0, 0], [0, 1, 0], [0, 0, 1]]):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 vector=[[1, 0, 0], [0, 1, 0], [0, 0, 1]]):
 
         self.description = description
         self.name = name

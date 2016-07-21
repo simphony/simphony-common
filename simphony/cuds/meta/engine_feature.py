@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class EngineFeature(CUDSItem):
-
     '''Provides a physics equation and methods that engines provides to solve them  # noqa
     '''
 
@@ -72,4 +71,4 @@ class EngineFeature(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

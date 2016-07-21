@@ -10,13 +10,13 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Origin(CUDSComponent):
-
     '''The origin of a space system  # noqa
     '''
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, description=None, name=None, data=None, point=[0, 0, 0]):
+    def __init__(self, description=None, name=None, data=None,
+                 point=[0, 0, 0]):
 
         self.description = description
         self.name = name

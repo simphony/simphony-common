@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class NeumannBoundaryCondition(Condition):
-
     '''Neumann boundary condition  # noqa
     '''
 

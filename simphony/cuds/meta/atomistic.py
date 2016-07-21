@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Atomistic(ComputationalModel):
-
     '''Atomistic model category according to the RoMM  # noqa
     '''
 

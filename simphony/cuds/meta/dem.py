@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Dem(ComputationalMethod):
-
     '''Discrete element method  # noqa
     '''
 
