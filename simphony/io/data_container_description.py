@@ -75,11 +75,12 @@ except TypeError:
     class Data(tables.IsDescription):
         pass
 
-
-# FIXME: Not all CUBA values are supported in serialisation
-# Set of CUBA that are supported in serialisation
-SUPPORTED_CUBA = frozenset(getattr(CUBA, name.upper())
-                           for name in Data.columns)
+    SUPPORTED_CUBA = frozenset()
+else:
+    # FIXME: Not all CUBA values are supported in serialisation
+    # Set of CUBA that are supported in serialisation
+    SUPPORTED_CUBA = frozenset(getattr(CUBA, name.upper())
+                               for name in Data.columns)
 
 
 class Record(tables.IsDescription):
