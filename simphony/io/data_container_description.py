@@ -87,10 +87,10 @@ class Record(tables.IsDescription):
 
     index = tables.StringCol(itemsize=32, pos=0)
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(len(Data.columns),))
+    mask = tables.BoolCol(pos=1, shape=(len(SUPPORTED_CUBA),))
 
 
 class NoUIDRecord(tables.IsDescription):
 
     data = Data()
-    mask = tables.BoolCol(pos=1, shape=(len(Data.columns),))
+    mask = tables.BoolCol(pos=1, shape=(len(SUPPORTED_CUBA),))
