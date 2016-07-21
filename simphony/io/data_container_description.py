@@ -67,7 +67,14 @@ def create_data_table(class_name, supported_cuba=CUBA):
                 table_meta)
 
 
-Data = create_data_table('Data', CUBA)
+try:
+    Data = create_data_table('Data', CUBA)
+except TypeError:
+    # We don't want to fail the documentation build
+    # just because pytables is not available
+    class Data(tables.IsDescription):
+        pass
+
 
 # FIXME: Not all CUBA values are supported in serialisation
 # Set of CUBA that are supported in serialisation
