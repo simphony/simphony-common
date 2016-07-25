@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class IsothermalModel(ThermalModel):
+
     '''Isothermal heat transport model, no transport of heat is assumed  # noqa
     '''
 
@@ -73,5 +74,4 @@ class IsothermalModel(ThermalModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

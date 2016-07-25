@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ModelEquation(CUDSComponent):
+
     '''The model equations are represented by all physics equations and material relations according to the RoMM  # noqa
     '''
 

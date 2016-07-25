@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class MaterialRelation(ModelEquation):
+
     '''Material relation  # noqa
     '''
 

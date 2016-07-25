@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class CUDSComponent(CUDSItem):
+
     '''Base data type for the CUDS components  # noqa
     '''
 
@@ -84,4 +85,4 @@ class CUDSComponent(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

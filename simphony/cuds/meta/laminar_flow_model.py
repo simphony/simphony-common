@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class LaminarFlowModel(TurbulenceModel):
+
     '''Laminar model  # noqa
     '''
 
@@ -73,5 +74,4 @@ class LaminarFlowModel(TurbulenceModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.TURBULENCE_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.TURBULENCE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

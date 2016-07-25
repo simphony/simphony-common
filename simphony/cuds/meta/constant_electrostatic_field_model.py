@@ -10,22 +10,20 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
+
     '''A constant electrostatic field model  # noqa
     '''
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 electrostatic_field=[0.0, 0.0, 0.0]):
+    def __init__(self, description=None, name=None, data=None, electrostatic_field=None):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
-        self.electrostatic_field = electrostatic_field
+        if electrostatic_field is None:
+            self.electrostatic_field = [0.0, 0.0, 0.0]
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -85,10 +83,8 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

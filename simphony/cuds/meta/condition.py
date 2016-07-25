@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Condition(CUDSComponent):
+
     '''Condition on boundaries or model entities  # noqa
     '''
 

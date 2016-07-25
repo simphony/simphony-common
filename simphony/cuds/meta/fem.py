@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Fem(ComputationalMethod):
+
     '''Finite element method  # noqa
     '''
 

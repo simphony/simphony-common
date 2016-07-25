@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Material(CUDSComponent):
+
     '''Definition of a material and its parameters  # noqa
     '''
 

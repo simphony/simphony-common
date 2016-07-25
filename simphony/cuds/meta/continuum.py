@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Continuum(ComputationalModel):
+
     '''Continuum model category according to the RoMM  # noqa
     '''
 

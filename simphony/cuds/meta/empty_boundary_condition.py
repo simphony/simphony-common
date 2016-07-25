@@ -10,6 +10,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class EmptyBoundaryCondition(Condition):
+
     '''Empty boundary condition  # noqa
     '''
 

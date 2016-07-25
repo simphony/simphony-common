@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Engine(SoftwareTool):
+
     '''Represents a software tool which is used to solve the physics equation  # noqa
     '''
 

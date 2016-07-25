@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class ComputationalMethod(CUDSComponent):
+
     '''A computational method according to the RoMM  # noqa
     '''
 

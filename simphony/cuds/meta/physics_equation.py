@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class PhysicsEquation(ModelEquation):
+
     '''Physics equation  # noqa
     '''
 

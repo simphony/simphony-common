@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SinglePhaseModel(MultiphaseModel):
+
     '''A single phase fluid model  # noqa
     '''
 
@@ -73,5 +74,4 @@ class SinglePhaseModel(MultiphaseModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

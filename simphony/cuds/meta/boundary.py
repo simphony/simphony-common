@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Boundary(CUDSComponent):
+
     '''System boundary  # noqa
     '''
 

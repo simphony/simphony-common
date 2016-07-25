@@ -3,10 +3,12 @@ from simphony.core.data_container import create_data_container
 from simphony.core.cuba import CUBA
 
 _RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, ), class_name="_RestrictedDataContainer")
+    (CUBA.UUID,),
+    class_name="_RestrictedDataContainer")
 
 
 class CUDSItem(object):
+
     '''Root of all CUDS types  # noqa
     '''
 
@@ -53,7 +55,7 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, )
+        return (CUBA.UUID,)
 
     @classmethod
     def parents(cls):

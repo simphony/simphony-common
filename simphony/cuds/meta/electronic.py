@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Electronic(ComputationalModel):
+
     '''Electronic model category according to the RoMM  # noqa
     '''
 

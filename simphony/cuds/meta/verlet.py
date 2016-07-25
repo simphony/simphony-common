@@ -9,6 +9,7 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Verlet(ComputationalMethod):
+
     '''Newtonian dynamics integration using verlet algorithm  # noqa
     '''
 
