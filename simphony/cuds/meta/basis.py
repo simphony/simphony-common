@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Basis(CUDSComponent):
-
     '''Space basis vectors  # noqa
     '''
 

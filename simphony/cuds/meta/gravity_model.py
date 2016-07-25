@@ -10,13 +10,16 @@ _RestrictedDataContainer = create_data_container(
 
 
 class GravityModel(PhysicsEquation):
-
     '''A simple gravity model  # noqa
     '''
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, description=None, name=None, data=None, acceleration=None):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 acceleration=None):
 
         self.description = description
         self.name = name
@@ -87,4 +90,5 @@ class GravityModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Mesoscopic(ComputationalModel):
-
     '''Mesoscopic model category according to the RoMM  # noqa
     '''
 

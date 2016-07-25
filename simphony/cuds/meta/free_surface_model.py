@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class FreeSurfaceModel(PhysicsEquation):
-
     '''Free surface model  # noqa
     '''
 
@@ -74,4 +73,5 @@ class FreeSurfaceModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

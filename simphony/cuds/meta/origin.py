@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Origin(CUDSComponent):
-
     '''The origin of a space system  # noqa
     '''
 

@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class DirichletBoundaryCondition(Condition):
-
     '''Dirichlet boundary condition  # noqa
     '''
 

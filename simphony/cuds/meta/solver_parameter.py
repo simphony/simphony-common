@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SolverParameter(CUDSComponent):
-
     '''Solver parameter and metadata  # noqa
     '''
 

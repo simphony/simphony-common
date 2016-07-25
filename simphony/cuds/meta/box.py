@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Box(Boundary):
-
     '''A simple hexahedron box object  # noqa
     '''
 

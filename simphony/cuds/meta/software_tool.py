@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class SoftwareTool(CUDSItem):
-
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
@@ -73,4 +72,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

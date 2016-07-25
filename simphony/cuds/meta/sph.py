@@ -9,7 +9,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Sph(ComputationalMethod):
-
     '''Smooth particle hydrodynamics  # noqa
     '''
 

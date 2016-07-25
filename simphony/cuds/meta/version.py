@@ -10,7 +10,6 @@ _RestrictedDataContainer = create_data_container(
 
 
 class Version(CUDSItem):
-
     '''Version of a software tool used in a simulation  # noqa
     '''
 
@@ -105,4 +104,4 @@ class Version(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )
