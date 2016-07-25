@@ -10,7 +10,7 @@ class CoulombFrictionForce(MaterialRelation):
 
     """ A CoulombFrictionForce material-relation
 
-    Shear force accounting for the tangential displacement between contacting particles.
+    Shear force accounting for the tangential displacement between contacting particles. # noqa
 
     Attributes
     ----------
