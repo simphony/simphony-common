@@ -14,7 +14,7 @@ pip install sphinx>=1.3.1
 pip install tabulate>=0.7.4
 pip install mock==1.0.1
 pip install coverage
-pip install flake8!=3.0.0,!=3.0.1
+pip install "flake8!=3.0.0,!=3.0.1"
 pip install hypothesis
 
 rem install simphony-common 
