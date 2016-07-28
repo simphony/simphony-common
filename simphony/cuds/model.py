@@ -87,12 +87,12 @@ class CUDS(object):
         if not self._is_cuds_component(component):
             raise TypeError('Not a CUDS component.')
 
-        # FIXME: what if component.uuid was defined before adding the
+        # FIXME: what if component.uui was defined before adding the
         # component and it is not an instance of uuid.UUID,
         # should we check for it, somewhere in this function?
 
         try:
-            component_id = component.uuid
+            component_id = component.uid
         except AttributeError:
             # Datasets (ABCParticles, ABCLattice, ABCMesh) do not
             # have a uid attibute
@@ -116,10 +116,10 @@ class CUDS(object):
 
         # If the component already has a defined uid, this just reassigns
         # the same value.  If the component.uuid is originaly None, this
-        # assigns the new uid to the component.uuid
+        # assigns the new uid to the component.uid
         # Only do so after successfully adding the component
-        if hasattr(component, "uuid"):
-            component.uuid = component_id
+        if hasattr(component, "uid"):
+            component.uid = component_id
 
     def get(self, component_id):
         """Gets a component from the CUDS computational model.
