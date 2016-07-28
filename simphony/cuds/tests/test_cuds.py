@@ -2,7 +2,7 @@
 import unittest
 import uuid
 
-from simphony import CUDS
+from simphony.api import CUDS
 from simphony.cuds.particles import Particle, Particles
 
 
