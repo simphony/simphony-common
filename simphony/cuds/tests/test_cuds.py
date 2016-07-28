@@ -1,8 +1,8 @@
 """Tests for CUDS data structure."""
 import unittest
-import uuid
 
 from simphony.api import CUDS
+from simphony.cuds.meta import api
 from simphony.cuds.particles import Particle, Particles
 
 
@@ -11,12 +11,11 @@ class CUDSTestCase(unittest.TestCase):
     def setUp(self):
         self.cuds = CUDS()
 
-        # TODO: use generated components
-        class DummyComponent(object):
+        class DummyComponent(api.CUDSComponent):
             def __init__(self):
-                self.uuid = uuid.uuid4()
+                super(DummyComponent, self).__init__()
                 self.name = 'dummyname'
-                self.data = {}
+
         self.dummpy_component1 = DummyComponent()
         self.dummpy_component2 = DummyComponent()
 
@@ -34,17 +33,14 @@ class CUDSTestCase(unittest.TestCase):
     def test_add_get_component(self):
         self.assertRaises(TypeError, self.cuds.add, object())
         self.cuds.add(self.dummpy_component1)
-        self.assertEqual(self.cuds.get(self.dummpy_component1.uuid),
+        self.assertEqual(self.cuds.get(self.dummpy_component1.uid),
                          self.dummpy_component1)
 
-    def test_add_component_with_no_uuid(self):
-        # Set the uuid to None
-        self.dummpy_component1.uuid = None
-
+    def test_component_uid_value(self):
         self.cuds.add(self.dummpy_component1)
 
-        self.assertIsNotNone(self.dummpy_component1.uuid)
-        self.assertEqual(self.cuds.get(self.dummpy_component1.uuid),
+        self.assertIsNotNone(self.dummpy_component1.uid)
+        self.assertEqual(self.cuds.get(self.dummpy_component1.uid),
                          self.dummpy_component1)
 
     def test_add_dataset(self):
@@ -58,8 +54,8 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_remove_component(self):
         self.cuds.add(self.dummpy_component1)
-        self.cuds.remove(self.dummpy_component1.uuid)
-        self.assertIsNone(self.cuds.get(self.dummpy_component1.uuid))
+        self.cuds.remove(self.dummpy_component1.uid)
+        self.assertIsNone(self.cuds.get(self.dummpy_component1.uid))
 
     def test_remove_dataset(self):
         p1 = Particle()
