@@ -12,4 +12,11 @@ For more information see: http://www.simphony-project.eu/.
 
 :copyright: (c) 2014, 2015, 2016 SimPhoNy Consortium
 :license: BSD, see LICENSE for more details.
+
+This module exports the public interface of the SimPhoNy project.
 """
+from .core import CUBA
+from .cuds import CUDS, Simulation
+
+
+__all__ = ['CUBA', 'CUDS', 'Simulation']
