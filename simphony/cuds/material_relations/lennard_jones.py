@@ -10,7 +10,7 @@ class LennardJones(MaterialRelation):
 
     """ A LennardJones material-relation
 
-    Approximated potential energy of interaction between a pair of neutral atoms or molecules based on their distance of separation.
+    Approximated potential energy of interaction between a pair of neutral atoms or molecules based on their distance of separation. # noqa
 
     Attributes
     ----------
@@ -19,7 +19,7 @@ class LennardJones(MaterialRelation):
     energy_well_depth : <type 'numpy.float64'>
         Measurement of how strongly the two particles attract each other.
     van_der_waals_radius : <type 'numpy.float64'>
-        Distance at which the intermolecular potential between the two particles is zero.
+        Distance at which the intermolecular potential between the two particles is zero. # noqa
 
     """  # noqa
 

@@ -8,7 +8,7 @@ import tables
 from simphony.cuds.particles import Particles
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_particles import H5Particles
-from simphony.core.cuba import CUBA
+from simphony.io.data_container_description import SUPPORTED_CUBA
 from simphony.testing.abc_check_particles import (
     CheckManipulatingBonds, CheckAddingParticles,
     CheckAddingBonds, CheckManipulatingParticles)
@@ -21,7 +21,7 @@ class TestH5ContainerAddParticles(CheckAddingParticles, unittest.TestCase):
         return self.handle.get_dataset(name)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -44,7 +44,7 @@ class TestH5ContainerManipulatingParticles(
         return self.handle.get_dataset(name)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -66,7 +66,7 @@ class TestH5ContainerAddBonds(CheckAddingBonds, unittest.TestCase):
         return self.handle.get_dataset(name)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
@@ -89,7 +89,7 @@ class TestH5ContainerManipulatingBonds(
         return self.handle.get_dataset(name)
 
     def supported_cuba(self):
-        return set(CUBA)
+        return SUPPORTED_CUBA
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
