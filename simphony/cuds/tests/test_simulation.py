@@ -2,8 +2,8 @@
 import unittest
 from mock import patch
 
-from simphony import CUDS
-from simphony import Simulation
+from simphony.api import CUDS
+from simphony.api import Simulation
 from simphony.engine import get_engine_manager
 from simphony.engine.tests.test_engine_metadata import \
     get_example_engine_extension

@@ -19,6 +19,8 @@ The CUDS to HDF5 file adapters.
 
 .. rubric:: Table descriptions
 
+.. autofunction:: simphony.io.data_container_description.create_data_table
+
 .. autosummary::
 
    ~data_container_description.Data

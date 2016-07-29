@@ -909,7 +909,7 @@ class TestCreateFactories(unittest.TestCase):
 
     def test_dummy_cuba_value(self):
         constant = 3
-        for cuba in CUBA:
+        for cuba in [c for c in CUBA if c in KEYWORDS]:
             value = dummy_cuba_value(cuba)
             keyword = KEYWORDS[CUBA(cuba).name]
             if keyword.dtype is uuid.UUID:
@@ -928,7 +928,7 @@ class TestCreateFactories(unittest.TestCase):
 
     def test_dummy_cuba_value_with_constant(self):
         constant = 18
-        for cuba in CUBA:
+        for cuba in [c for c in CUBA if c in KEYWORDS]:
             value = dummy_cuba_value(cuba, constant=18)
             keyword = KEYWORDS[CUBA(cuba).name]
             if keyword.dtype is uuid.UUID:

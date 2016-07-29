@@ -411,7 +411,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
             Point, partial(compare_points, testcase=self))
 
     def create_items(self):
-        return create_points()
+        return create_points(restrict=self.supported_cuba())
 
     def create_item(self, uid):
         return Point(
@@ -499,7 +499,7 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
     def setUp(self):
         self.points = []
         for multiplier in self.point_groups:
-            points = create_points()
+            points = create_points(restrict=self.supported_cuba())
             for point in points:
                 point.coordinates = [
                     value * multiplier for value in point.coordinates]
