@@ -12,7 +12,6 @@ def load_pre_processing_extentions():
     """ Discover and load pre_processing extension modules.
 
     """
-    print "--- load_pre_processing_extentions ---"
     from stevedore import extension
     mgr = extension.ExtensionManager(
         namespace='simphony.pre_processing',

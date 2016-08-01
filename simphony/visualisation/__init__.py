@@ -12,7 +12,6 @@ def load_visualisation_extentions():
     """ Discover and load visualisation extension modules.
 
     """
-    print "--- load_visualisation_extentions ---"
     from stevedore import extension
     mgr = extension.ExtensionManager(
         namespace='simphony.visualisation',
