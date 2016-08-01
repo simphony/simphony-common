@@ -4,8 +4,9 @@ Extending SimPhoNy
 Plugins
 -------
 
-The SimPhoNy library can be extended through two `entry points`_ for
-contributing python modules that contain engine and visualisation components:
+The SimPhoNy library can be extended through three `entry points`_ for
+contributing python modules that contain engine, visualisation and
+pre-processing components:
 
 - ``simphony.engine`` -- A python module that provides one or more
   classes that implement the :class:`~.ABCModelingEngine` interface.
@@ -13,9 +14,12 @@ contributing python modules that contain engine and visualisation components:
 - ``simphony.visualisation`` -- A python module that provides a simple
   function to show (visualise the high-level CUDS containers)
 
+- ``simphony.pre_processing`` -- A python module that provides
+  pre-processing tools and utilities
 
-To declare that a package contains a visualisation or engine module
-for simphony, a developer has to add an entry point definition in the
+
+To declare that a package contains a visualisation, engine or pre_processing 
+module for simphony, a developer has to add an entry point definition in the
 ``setup.py`` of the contributing package.
 
 e.g.::
