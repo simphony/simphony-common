@@ -11,8 +11,8 @@ class CUDSTestCase(unittest.TestCase):
     def setUp(self):
         self.cuds = CUDS()
 
-        self.dummpy_component1 = api.Box(name='mybox')
-        self.dummpy_component2 = api.Box(name='mysecondbox')
+        self.dummy_component1 = api.Box(name='mybox')
+        self.dummy_component2 = api.Box(name='mysecondbox')
 
     def test_empty_cuds(self):
         self.assertEqual(len(self.cuds.data), 0)
@@ -28,19 +28,19 @@ class CUDSTestCase(unittest.TestCase):
     def test_add_get_component(self):
         # Add non-CUDS non-dataset object
         self.assertRaises(TypeError, self.cuds.add, object())
-        self.cuds.add(self.dummpy_component1)
-        self.assertEqual(self.cuds.get_by_uid(self.dummpy_component1.uid),
-                         self.dummpy_component1)
-        self.assertEqual(self.cuds.get(self.dummpy_component1.name),
-                         self.dummpy_component1)
+        self.cuds.add(self.dummy_component1)
+        self.assertEqual(self.cuds.get_by_uid(self.dummy_component1.uid),
+                         self.dummy_component1)
+        self.assertEqual(self.cuds.get(self.dummy_component1.name),
+                         self.dummy_component1)
 
     def test_add_duplicate(self):
-        self.cuds.add(self.dummpy_component1)
+        self.cuds.add(self.dummy_component1)
         # Name is the same
-        self.assertRaises(ValueError, self.cuds.add, self.dummpy_component1)
+        self.assertRaises(ValueError, self.cuds.add, self.dummy_component1)
         self.assertRaises(ValueError,
                           self.cuds.add,
-                          api.Material(name=self.dummpy_component1.name))
+                          api.Material(name=self.dummy_component1.name))
 
     def test_add_dataset(self):
         p1 = Particle()
@@ -53,13 +53,13 @@ class CUDSTestCase(unittest.TestCase):
         self.assertRaises(ValueError, self.cuds.add, ps)
 
     def test_remove_component(self):
-        self.cuds.add(self.dummpy_component1)
-        self.cuds.remove(self.dummpy_component1.name)
-        self.assertIsNone(self.cuds.get(self.dummpy_component1.name))
+        self.cuds.add(self.dummy_component1)
+        self.cuds.remove(self.dummy_component1.name)
+        self.assertIsNone(self.cuds.get(self.dummy_component1.name))
 
-        self.cuds.add(self.dummpy_component1)
-        self.cuds.remove_by_uid(self.dummpy_component1.uid)
-        self.assertIsNone(self.cuds.get_by_uid(self.dummpy_component1.uid))
+        self.cuds.add(self.dummy_component1)
+        self.cuds.remove_by_uid(self.dummy_component1.uid)
+        self.assertIsNone(self.cuds.get_by_uid(self.dummy_component1.uid))
 
     def test_remove_dataset(self):
         p1 = Particle()
@@ -83,12 +83,12 @@ class CUDSTestCase(unittest.TestCase):
         self.cuds.add(ps2)
         self.assertEqual(self.cuds.get_names(Particles), ['M1', 'M2'])
 
-        self.cuds.add(self.dummpy_component1)
-        self.cuds.add(self.dummpy_component2)
-        names = set(self.cuds.get_names(type(self.dummpy_component1)))
+        self.cuds.add(self.dummy_component1)
+        self.cuds.add(self.dummy_component2)
+        names = set(self.cuds.get_names(type(self.dummy_component1)))
         self.assertEqual(names,
-                         set([self.dummpy_component1.name,
-                              self.dummpy_component2.name]))
+                         set([self.dummy_component1.name,
+                              self.dummy_component2.name]))
 
     def test_iter_with_dataset(self):
         p1 = Particle()
@@ -113,14 +113,14 @@ class CUDSTestCase(unittest.TestCase):
             self.assertIn(cuds, [ps1, ps2])
 
     def test_iter_with_component(self):
-        self.cuds.add(self.dummpy_component1)
-        self.cuds.add(self.dummpy_component2)
+        self.cuds.add(self.dummy_component1)
+        self.cuds.add(self.dummy_component2)
 
         component_list = []
-        for item in self.cuds.iter(type(self.dummpy_component1)):
+        for item in self.cuds.iter(type(self.dummy_component1)):
             component_list.append(item)
 
         self.assertTrue(len(component_list), 2)
         for cmp in component_list:
-            self.assertIn(cmp, [self.dummpy_component1,
-                                self.dummpy_component2])
+            self.assertIn(cmp, [self.dummy_component1,
+                                self.dummy_component2])
