@@ -120,7 +120,8 @@ class CUDS(object):
             self._map[component.name] = \
                 lambda key=component.name: self._dataset_store.get(key)
             # Datasets use name as id
-            self._name_to_id_map[component.name] = component.name
+            if component.name not in (None, ''):
+                self._name_to_id_map[component.name] = component.name
         else:
             # Delete existing item with the same name
             # Store the component. Any CUDS item has uid property.
@@ -128,7 +129,8 @@ class CUDS(object):
             self._map[component.uid] = \
                 lambda key=component.uid: self._store.get(key)
             # Store name for name-to-id mapping.
-            self._name_to_id_map[component.name] = component.uid
+            if component.name not in (None, ''):
+                self._name_to_id_map[component.name] = component.uid
 
     def get(self, name):
         """Get the corresponding component from the CUDS computational model.
@@ -203,7 +205,8 @@ class CUDS(object):
         else:
             del self._store[uid]
         # Delete object key from the mappings
-        del self._name_to_id_map[component.name]
+        if component.name in self._name_to_id_map:
+            del self._name_to_id_map[component.name]
 
     # This should be query method
     def iter(self, component_type):
