@@ -3,6 +3,8 @@
 This module contains the classes used to represent a computational model,
 based on SimPhoNy metadata.
 """
+import uuid
+
 from .store import MemoryStateDataStore
 from .abc_particles import ABCParticles
 from .abc_lattice import ABCLattice
@@ -28,6 +30,9 @@ class CUDS(object):
     """
     def __init__(self, name=None, description=None):
 
+        # Assign unique ID
+        self._uid = uuid.uuid4()
+
         # Add name
         self.name = name
 
@@ -52,6 +57,18 @@ class CUDS(object):
 
         # Another map to keep a mapping between names and ids
         self._name_to_id_map = {}
+
+    @property
+    def uid(self):
+        return self._uid
+
+    @uid.setter
+    def uid(self, value):
+        raise TypeError("uid is readonly.")
+
+    @uid.deleter
+    def uid(self):
+        raise TypeError("Can't delete uid.")
 
     @staticmethod
     def _is_dataset(obj):
