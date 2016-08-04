@@ -115,16 +115,9 @@ class CUDS(object):
             raise TypeError('Not a CUDSComponent nor a dataset object: %s.' %
                             type(component))
 
-        # Do not accept items with duplicate names unless the expected
-        # behaviour is defined clearly for the following sample code:
-        # m1 = api.Material(name="item1")
-        # m2 = api.Material(name="item1")
-        # b1 = api.Box(name="item1")
-        # b2 = api.Box(name="item1")
-        # cuds.add(m1)
-        # cuds.add(m2)
-        # cuds.add(b1)
-        # cuds.add(b2)
+        # Do not accept items with duplicate names.
+        # Components/datasets with no name will be added, however
+        # it is not possible to get/remove them with `name`
         if component.name in self._name_to_id_map:
             raise ValueError('Name clash. A %s component has the same name %s'
                              % (type(self.get(component.name)),
@@ -140,8 +133,7 @@ class CUDS(object):
             self._map[component.name] = \
                 lambda key=component.name: self._dataset_store.get(key)
             # Datasets use name as id
-            if component.name not in (None, ''):
-                self._name_to_id_map[component.name] = component.name
+            self._name_to_id_map[component.name] = component.name
         else:
             # Delete existing item with the same name
             # Store the component. Any CUDS item has uid property.
@@ -149,6 +141,9 @@ class CUDS(object):
             self._map[component.uid] = \
                 lambda key=component.uid: self._store.get(key)
             # Store name for name-to-id mapping.
+            # Components with no name will are not added to the mapping
+            # and it is not possible to access them using add/remove
+            # methods. Use `get_by_uid` and `remove_by_uid` instead.
             if component.name not in (None, ''):
                 self._name_to_id_map[component.name] = component.uid
 
