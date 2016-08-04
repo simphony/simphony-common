@@ -132,6 +132,9 @@ class CUDS(object):
 
         # Add datasets separately
         if self._is_dataset(component):
+            if not component.name:
+                raise TypeError('Dataset must have a name.')
+
             self._dataset_store.add(component)
             # Datasets at the moment do not have uid
             self._map[component.name] = \
@@ -193,7 +196,13 @@ class CUDS(object):
         ------
         KeyError
             if no component exists of the given name
+
+        TypeError
+            if the name is not a non empty string
         """
+        if not name:
+            raise TypeError('name must be a non empty string.')
+
         uid = self._name_to_id_map.get(name)
         self.remove_by_uid(uid)
 

@@ -1,4 +1,5 @@
 """Tests for CUDS data structure."""
+import uuid
 import unittest
 
 from simphony.api import CUDS
@@ -7,120 +8,216 @@ from simphony.cuds.particles import Particle, Particles
 
 
 class CUDSTestCase(unittest.TestCase):
-    """CUDS class tests."""
+    """Tests for CUDS container class."""
     def setUp(self):
-        self.cuds = CUDS()
+        self.named_cuds_1 = api.Box(name='mybox')
+        self.named_cuds_2 = api.Box(name='mysecondbox')
+        self.nameless_cuds_1 = api.Box()
 
-        self.dummy_component1 = api.Box(name='mybox')
-        self.dummy_component2 = api.Box(name='mysecondbox')
+    def test_cuds_uid(self):
+        c = CUDS()
 
-    def test_empty_cuds(self):
-        self.assertEqual(len(self.cuds.data), 0)
-        self.assertEqual(self.cuds.get('nonexistentkey'), None)
-        self.assertEqual(self.cuds.data, {})
-        self.assertRaises(KeyError, self.cuds.remove, 'nonexistentkey')
+        self.assertIsNotNone(c.uid)
+        self.assertIsInstance(c.uid, uuid.UUID)
 
-    def test_data(self):
-        data = self.cuds.data
-        self.assertEqual(self.cuds.data, data)
-        self.assertIsNot(self.cuds.data, data)
+    def test_named_cuds_name(self):
+        c = CUDS(name='mycuds')
 
-    def test_add_get_component(self):
-        # Add non-CUDS non-dataset object
-        self.assertRaises(TypeError, self.cuds.add, object())
-        self.cuds.add(self.dummy_component1)
-        self.assertEqual(self.cuds.get_by_uid(self.dummy_component1.uid),
-                         self.dummy_component1)
-        self.assertEqual(self.cuds.get(self.dummy_component1.name),
-                         self.dummy_component1)
+        self.assertEqual(c.name, 'mycuds')
 
-    def test_add_duplicate(self):
-        self.cuds.add(self.dummy_component1)
-        # Name is the same
-        self.assertRaises(ValueError, self.cuds.add, self.dummy_component1)
-        self.assertRaises(ValueError,
-                          self.cuds.add,
-                          api.Material(name=self.dummy_component1.name))
+    def test_nameless_cuds_name(self):
+        c = CUDS()
 
-    def test_add_dataset(self):
-        p1 = Particle()
-        p2 = Particle()
+        self.assertIsNone(c.name)
+
+    def test_descriptioned_cuds_description(self):
+        c = CUDS(description='test model')
+
+        self.assertEqual(c.description, 'test model')
+
+    def test_descriptionless_cuds_description(self):
+        c = CUDS()
+
+        self.assertIsNone(c.description)
+
+    def test_cuds_data(self):
+        c = CUDS()
+        data = c.data
+
+        self.assertEqual(c.data, data)
+        self.assertIsNot(c.data, data, msg='data is not a copy.')
+        self.assertEqual(len(c.data), 0, msg='data is not empty.')
+
+    def test_add_cuds_component(self):
+        c = CUDS()
+
+        self.assertIsNone(c.add(self.named_cuds_1))
+        self.assertIsNone(c.add(self.nameless_cuds_1))
+
+    def test_add_non_cuds_component(self):
+        c = CUDS()
+
+        self.assertRaises(TypeError, c.add, object())
+
+    def test_add_nameless_cuds_component(self):
+        c = CUDS()
+
+        self.assertIsNone(c.add(self.nameless_cuds_1))
+        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+
+    def test_add_named_cuds_component(self):
+        c = CUDS()
+
+        self.assertIsNone(c.add(self.named_cuds_1))
+        self.assertEqual(c.get(self.named_cuds_1.name),
+                         self.named_cuds_1)
+
+    def test_add_named_component_several_times(self):
+        c = CUDS()
+        c.add(self.named_cuds_1)
+
+        self.assertRaises(ValueError, c.add, self.named_cuds_1)
+
+    def test_add_nameless_component_several_times(self):
+        c = CUDS()
+        c.add(self.nameless_cuds_1)
+        c.add(self.nameless_cuds_1)
+
+        self.assertEqual(c.get_by_uid(self.nameless_cuds_1.uid),
+                         self.nameless_cuds_1)
+        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+
+    def test_get_nameless_cuds_component(self):
+        c = CUDS()
+        c.add(self.nameless_cuds_1)
+
+        self.assertEqual(c.get_by_uid(self.nameless_cuds_1.uid),
+                         self.nameless_cuds_1)
+        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+
+    def test_get_named_cuds_component(self):
+        c = CUDS()
+        c.add(self.named_cuds_1)
+
+        self.assertEqual(c.get(self.named_cuds_1.name),
+                         self.named_cuds_1)
+        self.assertEqual(c.get_by_uid(self.named_cuds_1.uid),
+                         self.named_cuds_1)
+
+    def test_add_named_dataset(self):
         ps = Particles('my particles')
-        ps.add_particles([p1, p2])
+        ps.add_particles([Particle(), Particle()])
+        c = CUDS()
+        c.add(ps)
 
-        self.cuds.add(ps)
-        self.assertEqual(self.cuds.get(ps.name), ps)
-        self.assertRaises(ValueError, self.cuds.add, ps)
+        self.assertEqual(c.get(ps.name), ps)
+        self.assertRaises(ValueError, c.add, ps)
 
-    def test_remove_component(self):
-        self.cuds.add(self.dummy_component1)
-        self.cuds.remove(self.dummy_component1.name)
-        self.assertIsNone(self.cuds.get(self.dummy_component1.name))
+    def test_add_nameless_dataset(self):
+        ps = Particles(None)
+        ps.add_particles([Particle(), Particle()])
+        c = CUDS()
 
-        self.cuds.add(self.dummy_component1)
-        self.cuds.remove_by_uid(self.dummy_component1.uid)
-        self.assertIsNone(self.cuds.get_by_uid(self.dummy_component1.uid))
+        self.assertRaises(TypeError, c.add, ps)
+
+    def test_remove_named_component_by_name(self):
+        c = CUDS()
+
+        c.add(self.named_cuds_1)
+        c.remove(self.named_cuds_1.name)
+
+        self.assertIsNone(c.get(self.named_cuds_1.name))
+
+    def test_remove_named_component_by_uid(self):
+        c = CUDS()
+        c.add(self.named_cuds_1)
+        c.remove_by_uid(self.named_cuds_1.uid)
+
+        self.assertIsNone(c.get(self.named_cuds_1.name))
+
+    def test_remove_nameless_component_by_name(self):
+        c = CUDS()
+
+        c.add(self.nameless_cuds_1)
+
+        self.assertRaises(TypeError,
+                          c.remove,
+                          self.nameless_cuds_1.name)
+
+    def test_remove_nameless_component_by_uid(self):
+        c = CUDS()
+
+        c.add(self.nameless_cuds_1)
+        c.remove_by_uid(self.nameless_cuds_1.uid)
+
+        self.assertIsNone(c.get(self.nameless_cuds_1.name))
 
     def test_remove_dataset(self):
-        p1 = Particle()
-        p2 = Particle()
         ps = Particles('my particles')
-        ps.add_particles([p1, p2])
-        self.cuds.add(ps)
-        self.cuds.remove(ps.name)
-        self.assertIsNone(self.cuds.get(ps.name))
+        ps.add_particles([Particle(), Particle()])
+        c = CUDS()
+        c.add(ps)
+        c.remove(ps.name)
 
-    def test_get_names(self):
-        p1 = Particle()
-        p2 = Particle()
-        p3 = Particle()
-        p4 = Particle()
+        self.assertIsNone(c.get(ps.name))
+
+    def test_get_dataset_names(self):
         ps1 = Particles('M1')
         ps2 = Particles('M2')
-        ps1.add_particles([p1, p2])
-        ps2.add_particles([p3, p4])
-        self.cuds.add(ps1)
-        self.cuds.add(ps2)
-        self.assertEqual(self.cuds.get_names(Particles), ['M1', 'M2'])
+        ps1.add_particles([Particle(), Particle()])
+        ps2.add_particles([Particle(), Particle()])
+        c = CUDS()
+        c.add(ps1)
+        c.add(ps2)
 
-        self.cuds.add(self.dummy_component1)
-        self.cuds.add(self.dummy_component2)
-        names = set(self.cuds.get_names(type(self.dummy_component1)))
+        self.assertEqual(c.get_names(Particles), ['M1', 'M2'])
+
+    def test_cuds_component_names(self):
+        c = CUDS()
+        c.add(self.named_cuds_1)
+        c.add(self.named_cuds_2)
+        names = set(c.get_names(type(self.named_cuds_1)))
+
         self.assertEqual(names,
-                         set([self.dummy_component1.name,
-                              self.dummy_component2.name]))
+                         set([self.named_cuds_1.name,
+                              self.named_cuds_2.name]))
 
-    def test_iter_with_dataset(self):
-        p1 = Particle()
-        p2 = Particle()
-        p3 = Particle()
-        p4 = Particle()
+    def test_iter_datasets_dimention(self):
         ps1 = Particles('M1')
         ps2 = Particles('M2')
-        ps1.add_particles([p1, p2])
-        ps2.add_particles([p3, p4])
-        self.cuds.add(ps1)
-        self.cuds.add(ps2)
-
+        ps1.add_particles([Particle(), Particle()])
+        ps2.add_particles([Particle(), Particle()])
+        c = CUDS()
+        c.add(ps1)
+        c.add(ps2)
         cuds_list = []
-        for item in self.cuds.iter(Particles):
-            cuds_list.append(item)
+        for component in c.iter(Particles):
+            cuds_list.append(component)
 
         self.assertTrue(len(cuds_list), 2)
 
-        for cuds in cuds_list:
-            self.assertIsInstance(cuds, Particles)
-            self.assertIn(cuds, [ps1, ps2])
+    def test_iter_datasets_types(self):
+        dataset = Particles('M1')
+        dataset.add_particles([Particle(),
+                               Particle()])
+        c = CUDS()
+        c.add(dataset)
+
+        for ps in c.iter(Particles):
+            self.assertIsInstance(ps, Particles)
+            self.assertIn(ps, [dataset])
 
     def test_iter_with_component(self):
-        self.cuds.add(self.dummy_component1)
-        self.cuds.add(self.dummy_component2)
+        c = CUDS()
+
+        c.add(self.named_cuds_1)
+        c.add(self.named_cuds_2)
 
         component_list = []
-        for item in self.cuds.iter(type(self.dummy_component1)):
-            component_list.append(item)
+        for component in c.iter(type(self.named_cuds_1)):
+            component_list.append(component)
 
         self.assertTrue(len(component_list), 2)
         for cmp in component_list:
-            self.assertIn(cmp, [self.dummy_component1,
-                                self.dummy_component2])
+            self.assertIn(cmp, [self.named_cuds_1,
+                                self.named_cuds_2])
