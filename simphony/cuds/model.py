@@ -62,14 +62,6 @@ class CUDS(object):
     def uid(self):
         return self._uid
 
-    @uid.setter
-    def uid(self, value):
-        raise TypeError("uid is readonly.")
-
-    @uid.deleter
-    def uid(self):
-        raise TypeError("Can't delete uid.")
-
     @staticmethod
     def _is_dataset(obj):
         """Check if the object is a dataset."""
@@ -86,10 +78,6 @@ class CUDS(object):
     @data.setter
     def data(self, value):
         self._data = DataContainer(value)
-
-    @data.deleter
-    def data(self):
-        raise TypeError("Can't delete data.")
 
     def add(self, component):
         """Add a component to the CUDS computational model.
