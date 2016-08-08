@@ -82,8 +82,7 @@ class CUDS(object):
     def add(self, component):
         """Add a component to the CUDS computational model.
 
-        This will replace any existing value with the same `uid`
-        or `name`.
+        This will replace any existing value with the same `uid`.
 
         Parameters
         ----------
@@ -95,7 +94,7 @@ class CUDS(object):
         TypeError
             if the component is not a CUDS component
         ValueError
-            if a component already exists
+            if a component with the same name already exists
         """
         # Only accept CUDSComponent subclasses and datasets
         if not (isinstance(component, api.CUDSComponent) or
@@ -107,8 +106,9 @@ class CUDS(object):
         # Components/datasets with no name will be added, however
         # it is not possible to get/remove them with `name`
         if component.name in self._name_to_id_map:
-            raise ValueError('Name clash. A %s component has the same name %s'
-                             % (type(self.get(component.name)),
+            raise ValueError('Name clash. Component with uid `%s`'
+                             ' is already named `%s`'
+                             % (self._name_to_id_map[component.name],
                                 component.name))
 
         # Add datasets separately
