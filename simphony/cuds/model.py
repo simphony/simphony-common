@@ -147,7 +147,15 @@ class CUDS(object):
         -------
         component: CUDSComponent
             the corresponding CUDS component or None
+
+        Raises
+        ------
+        TypeError
+            if the name is not a non empty string
         """
+        if not name:
+            raise TypeError('name must be a non empty string.')
+
         uid = self._name_to_id_map.get(name)
         return self.get_by_uid(uid)
 

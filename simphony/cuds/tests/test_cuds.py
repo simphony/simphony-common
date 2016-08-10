@@ -61,9 +61,11 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_add_nameless_cuds_component(self):
         c = CUDS()
+        c.add(self.nameless_cuds_1)
 
-        self.assertIsNone(c.add(self.nameless_cuds_1))
-        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+        self.assertEqual(c.get_by_uid(self.nameless_cuds_1.uid),
+                         self.nameless_cuds_1)
+        self.assertRaises(TypeError, c.get, self.nameless_cuds_1.name)
 
     def test_add_named_cuds_component(self):
         c = CUDS()
@@ -82,18 +84,20 @@ class CUDSTestCase(unittest.TestCase):
         c = CUDS()
         c.add(self.nameless_cuds_1)
         c.add(self.nameless_cuds_1)
+        component = c.get_by_uid(self.nameless_cuds_1.uid)
 
-        self.assertEqual(c.get_by_uid(self.nameless_cuds_1.uid),
+        self.assertEqual(component,
                          self.nameless_cuds_1)
-        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+        self.assertRaises(TypeError, c.get, component.name)
 
     def test_get_nameless_cuds_component(self):
         c = CUDS()
         c.add(self.nameless_cuds_1)
+        component = c.get_by_uid(self.nameless_cuds_1.uid)
 
-        self.assertEqual(c.get_by_uid(self.nameless_cuds_1.uid),
+        self.assertEqual(component,
                          self.nameless_cuds_1)
-        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+        self.assertRaises(TypeError, c.get, component.name)
 
     def test_get_named_cuds_component(self):
         c = CUDS()
@@ -149,8 +153,9 @@ class CUDSTestCase(unittest.TestCase):
 
         c.add(self.nameless_cuds_1)
         c.remove_by_uid(self.nameless_cuds_1.uid)
+        component = c.get_by_uid(self.nameless_cuds_1.uid)
 
-        self.assertIsNone(c.get(self.nameless_cuds_1.name))
+        self.assertIsNone(component)
 
     def test_remove_dataset(self):
         ps = Particles('my particles')
