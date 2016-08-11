@@ -8,6 +8,7 @@ setup(
     packages=find_packages(),
     install_requires=['simphony'],
     entry_points={
+        'simphony.pre_processing': ['example = simphony_example'],
         'simphony.visualisation': ['example = simphony_example'],
         'simphony.engine': ['example_engine = simphony_example']
     })
