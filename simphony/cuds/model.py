@@ -5,14 +5,14 @@ based on SimPhoNy metadata.
 """
 import uuid
 
-from ..core import DataContainer
 from .store import MemoryStateDataStore
 from .abc_particles import ABCParticles
 from .abc_lattice import ABCLattice
 from .abc_mesh import ABCMesh
+from .meta import api
+from ..core import DataContainer
 
 
-# IDEA: add consistency check handlers/instances to the CUDS class (dynamic).
 class CUDS(object):
     """Common Universal Data Structure, i.e. CUDS computational model.
 
@@ -20,8 +20,24 @@ class CUDS(object):
     a computational model. Having the data provided by this class, one should
     be able to start a new computational model based on that with no extra
     information.
+
+    Parameters
+    ----------
+    name: str
+        Name of this CUDS
+    description: str
+        More information about this CUDS
     """
-    def __init__(self):
+    def __init__(self, name=None, description=None):
+
+        # Assign unique ID
+        self._uid = uuid.uuid4()
+
+        # Add name
+        self.name = name
+
+        # Add description
+        self.description = description
 
         # Add datasets to memory datastore by default
         self._dataset_store = MemoryStateDataStore()
@@ -39,19 +55,20 @@ class CUDS(object):
         # that will return the corresponding value.
         self._map = {}
 
-    @staticmethod
-    def _is_cuds_component(obj):
-        """Check whether the object is a CUDS component."""
-        # When I see a bird that walks like a duck and swims like a duck
-        # and quacks like a duck, I call that bird a duck
-        # TODO: replace with metadata type checks
-        return all([hasattr(obj, 'name'),
-                    hasattr(obj, 'data')])
+        # Another map to keep a mapping between names and ids
+        self._name_to_id_map = {}
+
+    @property
+    def uid(self):
+        return self._uid
 
     @staticmethod
     def _is_dataset(obj):
         """Check if the object is a dataset."""
-        return isinstance(obj, (ABCParticles, ABCLattice, ABCMesh))
+        return isinstance(obj, (ABCParticles,
+                                ABCLattice,
+                                ABCMesh,
+                                api.DataSet))
 
     @property
     def data(self):
@@ -59,99 +76,154 @@ class CUDS(object):
         return DataContainer(self._data)
 
     @data.setter
-    def data_setter(self, value):
+    def data(self, value):
         self._data = DataContainer(value)
 
     def add(self, component):
         """Add a component to the CUDS computational model.
 
-        If the component has `uid` attribute but that value is
-        None, a new uuid will be created and assigned to the
-        component after the component is successfully added
-        to the CUDS computational model.
+        This will replace any existing value with the same `uid`.
 
         Parameters
         ----------
         component: CUDSComponent
-            a component of CUDS, reflecting SimPhoNy metadata
+            a CUDS component according to the SimPhoNy metadata
 
         Raises
         ------
         TypeError
-            if component is not a CUDS component
-
+            if the component is not a CUDS component
         ValueError
-            if the component is already added
+            if a component with the same name already exists
         """
-        # Check if the object is valid
-        if not self._is_cuds_component(component):
-            raise TypeError('Not a CUDS component.')
+        # Only accept CUDSComponent subclasses and datasets
+        if not (isinstance(component, api.CUDSComponent) or
+                self._is_dataset(component)):
+            raise TypeError('Not a CUDSComponent nor a dataset object: %s.' %
+                            type(component))
 
-        # FIXME: what if component.uuid was defined before adding the
-        # component and it is not an instance of uuid.UUID,
-        # should we check for it, somewhere in this function?
-
-        try:
-            component_id = component.uuid
-        except AttributeError:
-            # Datasets (ABCParticles, ABCLattice, ABCMesh) do not
-            # have a uid attibute
-            component_id = component.name
-        else:
-            # if the uuid is not defined, create a new one here
-            if component_id is None:
-                component_id = uuid.uuid4()
+        # Do not accept items with duplicate names.
+        # Components/datasets with no name will be added, however
+        # it is not possible to get/remove them with `name`
+        if component.name in self._name_to_id_map:
+            raise ValueError('Name clash. Component with uid `%s`'
+                             ' is already named `%s`'
+                             % (self._name_to_id_map[component.name],
+                                component.name))
 
         # Add datasets separately
         if self._is_dataset(component):
+            if not component.name:
+                raise TypeError('Dataset must have a name.')
+
             self._dataset_store.add(component)
-            # Datasets have a uuid field called uid
+            # Datasets at the moment do not have uid
             self._map[component.name] = \
                 lambda key=component.name: self._dataset_store.get(key)
+            # Datasets use name as id
+            self._name_to_id_map[component.name] = component.name
         else:
-            # Store the component. Any cuds item has uuid property.
-            self._store[component_id] = component
-            self._map[component_id] = \
-                lambda key=component_id: self._store.get(key)
+            # Delete existing item with the same name
+            # Store the component. Any CUDS item has uid property.
+            self._store[component.uid] = component
+            self._map[component.uid] = \
+                lambda key=component.uid: self._store.get(key)
+            # Store name for name-to-id mapping.
+            # Components with no name will are not added to the mapping
+            # and it is not possible to access them using add/remove
+            # methods. Use `get_by_uid` and `remove_by_uid` instead.
+            if component.name not in (None, ''):
+                self._name_to_id_map[component.name] = component.uid
 
-        # If the component already has a defined uid, this just reassigns
-        # the same value.  If the component.uuid is originaly None, this
-        # assigns the new uid to the component.uuid
-        # Only do so after successfully adding the component
-        if hasattr(component, "uuid"):
-            component.uuid = component_id
-
-    def get(self, component_id):
-        """Gets a component from the CUDS computational model.
+    def get(self, name):
+        """Get the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        component_id: uuid.UUID
-            key of a CUDS component
+        name: str
+            name of the component
 
         Returns
         -------
         component: CUDSComponent
-            a cuds component
-        """
-        if component_id in self._map:
-            return self._map[component_id]()
+            the corresponding CUDS component or None
 
-    def remove(self, component_id):
-        """Removes a component from the CUDS computational model.
+        Raises
+        ------
+        TypeError
+            if the name is not a non empty string
+        """
+        if not name:
+            raise TypeError('name must be a non empty string.')
+
+        uid = self._name_to_id_map.get(name)
+        return self.get_by_uid(uid)
+
+    def get_by_uid(self, uid):
+        """Get the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        component_id: uuid.UUID
-            a component of CUDS, reflecting SimPhoNy metadata
+        uid: uuid.UUID
+            uid of the component
+
+        Returns
+        -------
+        component: CUDSComponent
+            the corresponding CUDS component
         """
-        component = self.get(component_id)
+        if uid in self._map:
+            return self._map[uid]()
+
+    def remove(self, name):
+        """Remove the corresponding component from the CUDS computational model.
+
+        Parameters
+        ----------
+        name: str
+            name of the component to be removed
+
+        Raises
+        ------
+        KeyError
+            if no component exists of the given name
+
+        TypeError
+            if the name is not a non empty string
+        """
+        if not name:
+            raise TypeError('name must be a non empty string.')
+
+        uid = self._name_to_id_map.get(name)
+        self.remove_by_uid(uid)
+
+        # Delete object's key from the mapping
+        if name in self._name_to_id_map:
+            del self._name_to_id_map[name]
+
+    def remove_by_uid(self, uid):
+        """Remove the corresponding component from the CUDS computational model.
+
+        Parameters
+        ----------
+        uid: uuid.UUID
+            uid of the component to be removed
+
+        Raises
+        ------
+        KeyError
+            if no component exists of the given uid
+        """
+        component = self.get_by_uid(uid)
         if not component:
-            raise KeyError('%s' % component_id)
+            raise KeyError('No component exists for %s' % uid)
         if self._is_dataset(component):
             self._dataset_store.remove(component.name)
         else:
-            del self._store[component_id]
+            del self._store[uid]
+        # Delete object key from the mappings
+        if component.name in self._name_to_id_map:
+            del self._name_to_id_map[component.name]
 
     # This should be query method
     def iter(self, component_type):
@@ -190,8 +262,8 @@ class CUDS(object):
             names of the items of the given type
         """
         if any([issubclass(component_type, ABCParticles),
-               issubclass(component_type, ABCLattice),
-               issubclass(component_type, ABCMesh)]):
+                issubclass(component_type, ABCLattice),
+                issubclass(component_type, ABCMesh)]):
             return self._dataset_store.get_names()
         else:
             return [cp.name for cp in self._store.itervalues()

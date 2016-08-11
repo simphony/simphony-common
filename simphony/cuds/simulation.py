@@ -14,8 +14,17 @@ class Simulation(object):
         Name of the underlying engine.
     engine_interface: engine.EngineInterface
         The interface to the engine, internal or fileio.
+    name: str
+        A custom name for this simulation
+    description: str
+        More information about this simulation
     """
-    def __init__(self, cuds, engine_name, engine_interface=None):
+    def __init__(self, cuds, engine_name, engine_interface=None,
+                 name=None,
+                 description=None):
+        self.name = name
+        self.description = description
+
         if not isinstance(cuds, CUDS):
             raise TypeError('Expected CUDS but got %s' % type(cuds))
         self._cuds = cuds
