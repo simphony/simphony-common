@@ -78,8 +78,6 @@ Pure Python implementation
    ~mesh.Cell
    ~material.Material
    ~materials.Materials
-   ~material_relations.material_relation.MaterialRelation
-
 
 .. rubric:: Functions
 
@@ -121,17 +119,3 @@ Pure Python implementation
 .. automodule:: simphony.cuds.materials
    :members:
    :undoc-members:
-
-.. automodule:: simphony.cuds.material_relations.material_relation
-   :members:
-   :undoc-members:
-
-Material relations
-------------------
-For each ``kind`` of material relation, there exists a
-subclass of :class:`~.MaterialRelation`.  See
-:ref:`list of material relations <material-relations-table>` for more details.
-
-
-.. include:: material_relations.rst
-
