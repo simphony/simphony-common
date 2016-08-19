@@ -12,7 +12,7 @@ from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_lattice import H5Lattice
-from simphony.cuds import Mesh, Particles
+from simphony.cuds import Mesh, Particles, Point, Edge, Face, Cell
 from simphony.cuds.lattice import make_cubic_lattice
 
 from simphony.testing.abc_check_engine import (
@@ -187,12 +187,24 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
         expected = self.create_dataset(name='test')
 
         # Add some CUBA data
-        for point in items:
+        for point in [p for p in items if isinstance(p, Point)]:
             point.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
             expected.add_points([point])
             point.data = DataContainer(
                 {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
             reference.add_points([point])
+
+        for edge in [e for e in items if isinstance(e, Edge)]:
+            expected.add_edges([edge])
+            reference.add_edges([edge])
+
+        for face in [f for f in items if isinstance(f, Face)]:
+            expected.add_faces([face])
+            reference.add_faces([face])
+
+        for cell in [c for c in items if isinstance(c, Cell)]:
+            expected.add_cells([cell])
+            reference.add_cells([cell])
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUDSItem.POINT: [CUBA.VELOCITY]})
