@@ -18,8 +18,9 @@ def grouper(iterable, group_size):
     >>> grouper('abcdefg', 3)
     [('a', 'b', 'c'), ('d', 'e', 'f')]
     """
-    iters=[iter(iterable)]*group_size
+    iters = [iter(iterable)]*group_size
     return zip(*iters)
+
 
 class CheckEngine(object):
 
