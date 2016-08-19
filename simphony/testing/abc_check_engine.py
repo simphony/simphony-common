@@ -274,21 +274,21 @@ class MeshEngineCheck(CheckEngine):
         """ Create and return a list of items
         """
         items = []
-        points = []
+        point_uids = []
         for i in xrange(10):
             point = Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4())
             items.append(point)
-            points.append(point)
+            point_uids.append(point.uid)
 
-        for edge_points in grouper(points, 2):
+        for edge_points in grouper(point_uids, 2):
             edge = Edge(edge_points, uid=uuid.uuid4())
             items.append(edge)
 
-        for face_points in grouper(points, 4):
+        for face_points in grouper(point_uids, 4):
             face = Face(face_points, uid=uuid.uuid4())
             items.append(face)
 
-        for cell_points in grouper(points, 8):
+        for cell_points in grouper(point_uids, 8):
             cell = Cell(cell_points, uid=uuid.uuid4())
             items.append(cell)
 
