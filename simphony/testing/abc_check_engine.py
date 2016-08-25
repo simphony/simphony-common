@@ -7,8 +7,19 @@ from simphony.testing.utils import (
 
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Particles
-from simphony.cuds.mesh import Point, Mesh
+from simphony.cuds.mesh import Edge, Face, Cell, Point, Mesh
 from simphony.cuds.lattice import make_cubic_lattice
+
+
+def grouper(iterable, group_size):
+    """Given an iterable, returns groups of size group_size.
+    Excess entries are not included.
+
+    >>> grouper('abcdefg', 3)
+    [('a', 'b', 'c'), ('d', 'e', 'f')]
+    """
+    iters = [iter(iterable)]*group_size
+    return zip(*iters)
 
 
 class CheckEngine(object):
@@ -263,9 +274,24 @@ class MeshEngineCheck(CheckEngine):
         """ Create and return a list of items
         """
         items = []
+        point_uids = []
         for i in xrange(10):
-            items.append(
-                Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4()))
+            point = Point((1.1*i, 2.2*i, 3.3*i), uid=uuid.uuid4())
+            items.append(point)
+            point_uids.append(point.uid)
+
+        for edge_points in grouper(point_uids, 2):
+            edge = Edge(edge_points, uid=uuid.uuid4())
+            items.append(edge)
+
+        for face_points in grouper(point_uids, 4):
+            face = Face(face_points, uid=uuid.uuid4())
+            items.append(face)
+
+        for cell_points in grouper(point_uids, 8):
+            cell = Cell(cell_points, uid=uuid.uuid4())
+            items.append(cell)
+
         return items
 
 

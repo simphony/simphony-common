@@ -314,7 +314,7 @@ class H5CUDS(object):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUDSItem.EDGE]})
-                h5_mesh.add_points([item])
+                h5_mesh.add_edges([item])
 
             for item in mesh.iter_faces():
                 item.data = DataContainer(
