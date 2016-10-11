@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
 from . import validation
 
@@ -10,7 +10,7 @@ class Coulomb(PairPotential):
     '''The standard electrostatic Coulombic interaction potential between a pair of point charges  # noqa
     '''
 
-    cuba_key = cb.CUBA.COULOMB
+    cuba_key = CUBA.COULOMB
 
     def __init__(self, material, description=None, name=None, data=None, cutoff_distance=1.0, dielectric_constant=1.0):
 
@@ -22,7 +22,7 @@ class Coulomb(PairPotential):
         self.cutoff_distance = cutoff_distance
         self.dielectric_constant = dielectric_constant
         # This is a system-managed, read-only attribute
-        self._models = [cb.CUBA.ATOMISTIC]
+        self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'The standard electrostatic Coulombic interaction potential between a pair of point charges'  # noqa
         # This is a system-managed, read-only attribute
@@ -33,42 +33,42 @@ class Coulomb(PairPotential):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def cutoff_distance(self):
-        return self.data[cb.CUBA.CUTOFF_DISTANCE]
+        return self.data[CUBA.CUTOFF_DISTANCE]
 
     @cutoff_distance.setter
     def cutoff_distance(self, value):
         value = validation.cast_data_type(value, 'cutoff_distance')
         validation.validate_cuba_keyword(value, 'cutoff_distance')
-        self.data[cb.CUBA.CUTOFF_DISTANCE] = value
+        self.data[CUBA.CUTOFF_DISTANCE] = value
 
     @property
     def dielectric_constant(self):
-        return self.data[cb.CUBA.DIELECTRIC_CONSTANT]
+        return self.data[CUBA.DIELECTRIC_CONSTANT]
 
     @dielectric_constant.setter
     def dielectric_constant(self, value):
         value = validation.cast_data_type(value, 'dielectric_constant')
         validation.validate_cuba_keyword(value, 'dielectric_constant')
-        self.data[cb.CUBA.DIELECTRIC_CONSTANT] = value
+        self.data[CUBA.DIELECTRIC_CONSTANT] = value
 
     @property
     def models(self):
@@ -90,8 +90,8 @@ class Coulomb(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.DESCRIPTION, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.CUTOFF_DISTANCE, cb.CUBA.DIELECTRIC_CONSTANT, cb.CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.PAIR_POTENTIAL, cb.CUBA.INTERATOMIC_POTENTIAL, cb.CUBA.MATERIAL_RELATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

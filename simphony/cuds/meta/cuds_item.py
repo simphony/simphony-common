@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 
 
 class CUDSItem(object):
@@ -8,7 +8,7 @@ class CUDSItem(object):
     '''Root of all CUDS types  # noqa
     '''
 
-    cuba_key = cb.CUBA.CUDS_ITEM
+    cuba_key = CUBA.CUDS_ITEM
 
     def __init__(self, data=None):
 
@@ -22,22 +22,22 @@ class CUDSItem(object):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -51,7 +51,7 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.UUID,)
+        return (CUBA.UUID,)
 
     @classmethod
     def parents(cls):

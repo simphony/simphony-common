@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .computational_method import ComputationalMethod
 from . import validation
 
@@ -10,7 +10,7 @@ class IntegrationStep(ComputationalMethod):
     '''the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
-    cuba_key = cb.CUBA.INTEGRATION_STEP
+    cuba_key = CUBA.INTEGRATION_STEP
 
     def __init__(self, size, final, description=None, name=None, data=None, current=0):
 
@@ -28,57 +28,57 @@ class IntegrationStep(ComputationalMethod):
 
     @property
     def size(self):
-        return self.data[cb.CUBA.SIZE]
+        return self.data[CUBA.SIZE]
 
     @size.setter
     def size(self, value):
         if value is not None:
             value = validation.cast_data_type(value, 'size')
             validation.validate_cuba_keyword(value, 'size')
-        self.data[cb.CUBA.SIZE] = value
+        self.data[CUBA.SIZE] = value
 
     @property
     def final(self):
-        return self.data[cb.CUBA.FINAL]
+        return self.data[CUBA.FINAL]
 
     @final.setter
     def final(self, value):
         if value is not None:
             value = validation.cast_data_type(value, 'final')
             validation.validate_cuba_keyword(value, 'final')
-        self.data[cb.CUBA.FINAL] = value
+        self.data[CUBA.FINAL] = value
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def current(self):
-        return self.data[cb.CUBA.CURRENT]
+        return self.data[CUBA.CURRENT]
 
     @current.setter
     def current(self, value):
         value = validation.cast_data_type(value, 'current')
         validation.validate_cuba_keyword(value, 'current')
-        self.data[cb.CUBA.CURRENT] = value
+        self.data[CUBA.CURRENT] = value
 
     @property
     def definition(self):
@@ -96,8 +96,8 @@ class IntegrationStep(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.CURRENT, cb.CUBA.UUID, cb.CUBA.DESCRIPTION, cb.CUBA.PHYSICS_EQUATION, cb.CUBA.SIZE, cb.CUBA.FINAL, cb.CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.COMPUTATIONAL_METHOD, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.COMPUTATIONAL_METHOD, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

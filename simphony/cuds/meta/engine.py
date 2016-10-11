@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .software_tool import SoftwareTool
 
 
@@ -9,7 +9,7 @@ class Engine(SoftwareTool):
     '''Represents a software tool which is used to solve the physics equation  # noqa
     '''
 
-    cuba_key = cb.CUBA.ENGINE
+    cuba_key = CUBA.ENGINE
 
     def __init__(self, version=None, data=None):
 
@@ -26,22 +26,22 @@ class Engine(SoftwareTool):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -49,7 +49,7 @@ class Engine(SoftwareTool):
 
     @property
     def engine_feature(self):
-        return self.data[cb.CUBA.ENGINE_FEATURE]
+        return self.data[CUBA.ENGINE_FEATURE]
 
     @property
     def uid(self):
@@ -59,8 +59,8 @@ class Engine(SoftwareTool):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.VERSION, cb.CUBA.UUID, cb.CUBA.ENGINE_FEATURE)
+        return (CUBA.VERSION, CUBA.UUID, CUBA.ENGINE_FEATURE)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.SOFTWARE_TOOL, cb.CUBA.CUDS_ITEM)
+        return (CUBA.SOFTWARE_TOOL, CUBA.CUDS_ITEM)

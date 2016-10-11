@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 from . import validation
 
@@ -10,7 +10,7 @@ class SurfaceTensionRelation(MaterialRelation):
     '''Surface tension relation between two fluids  # noqa
     '''
 
-    cuba_key = cb.CUBA.SURFACE_TENSION_RELATION
+    cuba_key = CUBA.SURFACE_TENSION_RELATION
 
     def __init__(self, material, description=None, name=None, data=None, surface_tension=0.07):
 
@@ -21,7 +21,7 @@ class SurfaceTensionRelation(MaterialRelation):
             self.data = data
         self.surface_tension = surface_tension
         # This is a system-managed, read-only attribute
-        self._models = [cb.CUBA.CONTINUUM]
+        self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Surface tension relation between two fluids'  # noqa
         # This is a system-managed, read-only attribute
@@ -29,7 +29,7 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @property
     def material(self):
-        return self.data[cb.CUBA.MATERIAL]
+        return self.data[CUBA.MATERIAL]
 
     @material.setter
     def material(self, value):
@@ -38,39 +38,39 @@ class SurfaceTensionRelation(MaterialRelation):
             validation.check_shape(value, '(2)')
             for item in value:
                 validation.validate_cuba_keyword(item, 'material')
-        self.data[cb.CUBA.MATERIAL] = value
+        self.data[CUBA.MATERIAL] = value
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def surface_tension(self):
-        return self.data[cb.CUBA.SURFACE_TENSION]
+        return self.data[CUBA.SURFACE_TENSION]
 
     @surface_tension.setter
     def surface_tension(self, value):
         value = validation.cast_data_type(value, 'surface_tension')
         validation.validate_cuba_keyword(value, 'surface_tension')
-        self.data[cb.CUBA.SURFACE_TENSION] = value
+        self.data[CUBA.SURFACE_TENSION] = value
 
     @property
     def models(self):
@@ -92,8 +92,8 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.UUID, cb.CUBA.SURFACE_TENSION, cb.CUBA.DESCRIPTION, cb.CUBA.MATERIAL, cb.CUBA.NAME)
+        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.MATERIAL_RELATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

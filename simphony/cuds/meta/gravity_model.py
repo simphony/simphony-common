@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .physics_equation import PhysicsEquation
 from . import validation
 
@@ -10,7 +10,7 @@ class GravityModel(PhysicsEquation):
     '''A simple gravity model  # noqa
     '''
 
-    cuba_key = cb.CUBA.GRAVITY_MODEL
+    cuba_key = CUBA.GRAVITY_MODEL
 
     def __init__(self, description=None, name=None, data=None, acceleration=None):
 
@@ -21,43 +21,43 @@ class GravityModel(PhysicsEquation):
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]
         # This is a system-managed, read-only attribute
-        self._models = [cb.CUBA.MESOSCOPIC, cb.CUBA.CONTINUUM]
+        self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'A simple gravity model'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [cb.CUBA.ACCELERATION]
+        self._variables = [CUBA.ACCELERATION]
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def acceleration(self):
-        return self.data[cb.CUBA.ACCELERATION]
+        return self.data[CUBA.ACCELERATION]
 
     @acceleration.setter
     def acceleration(self, value):
         value = validation.cast_data_type(value, 'acceleration')
         validation.validate_cuba_keyword(value, 'acceleration')
-        self.data[cb.CUBA.ACCELERATION] = value
+        self.data[CUBA.ACCELERATION] = value
 
     @property
     def models(self):
@@ -79,8 +79,8 @@ class GravityModel(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.ACCELERATION, cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
+        return (CUBA.ACCELERATION, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.PHYSICS_EQUATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

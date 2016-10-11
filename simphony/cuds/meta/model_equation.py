@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
 
 
@@ -9,7 +9,7 @@ class ModelEquation(CUDSComponent):
     '''The model equations are represented by all physics equations and material relations according to the RoMM  # noqa
     '''
 
-    cuba_key = cb.CUBA.MODEL_EQUATION
+    cuba_key = CUBA.MODEL_EQUATION
 
     def __init__(self, description=None, name=None, data=None):
 
@@ -29,22 +29,22 @@ class ModelEquation(CUDSComponent):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def models(self):
@@ -66,8 +66,8 @@ class ModelEquation(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

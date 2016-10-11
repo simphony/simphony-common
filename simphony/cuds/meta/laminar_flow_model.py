@@ -1,6 +1,6 @@
 import uuid
-from simphony.core import data_container as dc
-from simphony.core import cuba as cb
+from simphony.core.data_container import DataContainer
+from simphony.core.cuba import CUBA
 from .turbulence_model import TurbulenceModel
 
 
@@ -9,7 +9,7 @@ class LaminarFlowModel(TurbulenceModel):
     '''Laminar model  # noqa
     '''
 
-    cuba_key = cb.CUBA.LAMINAR_FLOW_MODEL
+    cuba_key = CUBA.LAMINAR_FLOW_MODEL
 
     def __init__(self, description=None, name=None, data=None):
 
@@ -18,7 +18,7 @@ class LaminarFlowModel(TurbulenceModel):
         if data:
             self.data = data
         # This is a system-managed, read-only attribute
-        self._models = [cb.CUBA.CONTINUUM]
+        self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Laminar model'  # noqa
         # This is a system-managed, read-only attribute
@@ -29,22 +29,22 @@ class LaminarFlowModel(TurbulenceModel):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = dc.DataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, dc.DataContainer):
+            if not isinstance(data_container, DataContainer):
                 raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, dc.DataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = dc.DataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def models(self):
@@ -66,8 +66,8 @@ class LaminarFlowModel(TurbulenceModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.TURBULENCE_MODEL, cb.CUBA.PHYSICS_EQUATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (CUBA.TURBULENCE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

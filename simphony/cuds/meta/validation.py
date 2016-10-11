@@ -3,7 +3,7 @@ import re
 
 import numpy
 
-from simphony.core import keywords as kw
+from simphony.core.keywords import KEYWORDS
 
 
 def to_camel_case(text, special={'cuds': 'CUDS'}):
@@ -149,8 +149,8 @@ def validate_cuba_keyword(value, key):
         if not isinstance(value, api_class):
             message = '{0!r} is not an instance of {1}'
             raise TypeError(message.format(value, api_class))
-    elif keyword_name in kw.KEYWORDS:
-        keyword = kw.KEYWORDS[keyword_name]
+    elif keyword_name in KEYWORDS:
+        keyword = KEYWORDS[keyword_name]
 
         # Check type
         value_arr = numpy.asarray(value)
@@ -208,8 +208,8 @@ def cast_data_type(value, key):
     '''
     keyword_name = key.upper()
 
-    if keyword_name in kw.KEYWORDS:
-        target_type = kw.KEYWORDS[keyword_name].dtype
+    if keyword_name in KEYWORDS:
+        target_type = KEYWORDS[keyword_name].dtype
 
         # Check if target is cuds instance
         if not target_type:
