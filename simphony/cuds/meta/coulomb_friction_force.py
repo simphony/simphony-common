@@ -1,27 +1,18 @@
 import uuid
-from simphony.core.data_container import create_data_container
-from simphony.core.cuba import CUBA
+from simphony.core import data_container as dc
+from simphony.core import cuba as cb
 from .material_relation import MaterialRelation
 from . import validation
 
-_RestrictedDataContainer = create_data_container(
-    (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID,
-     CUBA.NAME),
-    class_name="_RestrictedDataContainer")
-
 
 class CoulombFrictionForce(MaterialRelation):
+
     '''Shear force accounting for the tangential displacement between contacting particles  # noqa
     '''
 
-    cuba_key = CUBA.COULOMB_FRICTION_FORCE
+    cuba_key = cb.CUBA.COULOMB_FRICTION_FORCE
 
-    def __init__(self,
-                 material,
-                 description=None,
-                 name=None,
-                 data=None,
-                 friction_coefficient=0.0):
+    def __init__(self, material, description=None, name=None, data=None, friction_coefficient=0.0):
 
         self.material = material
         self.description = description
@@ -30,7 +21,7 @@ class CoulombFrictionForce(MaterialRelation):
             self.data = data
         self.friction_coefficient = friction_coefficient
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
+        self._models = [cb.CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Shear force accounting for the tangential displacement between contacting particles'  # noqa
         # This is a system-managed, read-only attribute
@@ -41,32 +32,32 @@ class CoulombFrictionForce(MaterialRelation):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = dc.DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, dc.DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, dc.DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = dc.DataContainer(new_data)
 
     @property
     def friction_coefficient(self):
-        return self.data[CUBA.FRICTION_COEFFICIENT]
+        return self.data[cb.CUBA.FRICTION_COEFFICIENT]
 
     @friction_coefficient.setter
     def friction_coefficient(self, value):
         value = validation.cast_data_type(value, 'friction_coefficient')
         validation.validate_cuba_keyword(value, 'friction_coefficient')
-        self.data[CUBA.FRICTION_COEFFICIENT] = value
+        self.data[cb.CUBA.FRICTION_COEFFICIENT] = value
 
     @property
     def models(self):
@@ -88,10 +79,8 @@ class CoulombFrictionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (cb.CUBA.FRICTION_COEFFICIENT, cb.CUBA.DESCRIPTION, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (cb.CUBA.MATERIAL_RELATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

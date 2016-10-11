@@ -1,19 +1,16 @@
 import uuid
-from simphony.core.data_container import create_data_container
-from simphony.core.cuba import CUBA
+from simphony.core import data_container as dc
+from simphony.core import cuba as cb
 from .cuds_component import CUDSComponent
 from . import validation
 
-_RestrictedDataContainer = create_data_container(
-    (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
-
 
 class Basis(CUDSComponent):
-    '''Space basis vectors  # noqa
+
+    '''Space basis vectors (row wise)  # noqa
     '''
 
-    cuba_key = CUBA.BASIS
+    cuba_key = cb.CUBA.BASIS
 
     def __init__(self, description=None, name=None, data=None, vector=None):
 
@@ -24,33 +21,33 @@ class Basis(CUDSComponent):
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         # This is a system-managed, read-only attribute
-        self._definition = 'Space basis vectors'  # noqa
+        self._definition = 'Space basis vectors (row wise)'  # noqa
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = dc.DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, dc.DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, dc.DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = dc.DataContainer(new_data)
 
     @property
     def vector(self):
-        return self.data[CUBA.VECTOR]
+        return self.data[cb.CUBA.VECTOR]
 
     @vector.setter
     def vector(self, value):
@@ -58,7 +55,7 @@ class Basis(CUDSComponent):
         validation.check_shape(value, '(3, 3)')
         for item in value:
             validation.validate_cuba_keyword(item, 'vector')
-        self.data[CUBA.VECTOR] = value
+        self.data[cb.CUBA.VECTOR] = value
 
     @property
     def definition(self):
@@ -72,8 +69,8 @@ class Basis(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (cb.CUBA.VECTOR, cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

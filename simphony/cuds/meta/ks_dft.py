@@ -1,18 +1,15 @@
 import uuid
-from simphony.core.data_container import create_data_container
-from simphony.core.cuba import CUBA
+from simphony.core import data_container as dc
+from simphony.core import cuba as cb
 from .physics_equation import PhysicsEquation
-
-_RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
 
 
 class KsDft(PhysicsEquation):
+
     '''Kohn-Sham DFT equations  # noqa
     '''
 
-    cuba_key = CUBA.KS_DFT
+    cuba_key = cb.CUBA.KS_DFT
 
     def __init__(self, description=None, name=None, data=None):
 
@@ -21,35 +18,33 @@ class KsDft(PhysicsEquation):
         if data:
             self.data = data
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ELECTRONIC]
+        self._models = [cb.CUBA.ELECTRONIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Kohn-Sham DFT equations'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.CHEMICAL_SPECIE,
-                           CUBA.ELECTRON_MASS, CUBA.CHARGE_DENSITY,
-                           CUBA.ENERGY]
+        self._variables = [cb.CUBA.POSITION, cb.CUBA.CHEMICAL_SPECIE, cb.CUBA.ELECTRON_MASS, cb.CUBA.CHARGE_DENSITY, cb.CUBA.ENERGY]
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = dc.DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, dc.DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, dc.DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = dc.DataContainer(new_data)
 
     @property
     def models(self):
@@ -71,9 +66,8 @@ class KsDft(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (cb.CUBA.PHYSICS_EQUATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

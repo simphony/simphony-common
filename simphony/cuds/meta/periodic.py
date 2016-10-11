@@ -1,21 +1,26 @@
 import uuid
 from simphony.core import data_container as dc
 from simphony.core import cuba as cb
+from .condition import Condition
 
 
-class CUDSItem(object):
+class Periodic(Condition):
 
-    '''Root of all CUDS types  # noqa
+    '''Periodic boundary condition (PBC)  # noqa
     '''
 
-    cuba_key = cb.CUBA.CUDS_ITEM
+    cuba_key = cb.CUBA.PERIODIC
 
-    def __init__(self, data=None):
+    def __init__(self, description=None, name=None, data=None):
 
+        self.description = description
+        self.name = name
         if data:
             self.data = data
         # This is a system-managed, read-only attribute
-        self._definition = 'Root of all CUDS types'  # noqa
+        self._models = [cb.CUBA.ELECTRONIC, cb.CUBA.ATOMISTIC, cb.CUBA.MESOSCOPIC, cb.CUBA.CONTINUUM]
+        # This is a system-managed, read-only attribute
+        self._definition = 'Periodic boundary condition (PBC)'  # noqa
 
     @property
     def data(self):
@@ -40,6 +45,10 @@ class CUDSItem(object):
             self._data = dc.DataContainer(new_data)
 
     @property
+    def models(self):
+        return self._models
+
+    @property
     def definition(self):
         return self._definition
 
@@ -51,8 +60,8 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.UUID,)
+        return (cb.CUBA.DESCRIPTION, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return ()
+        return (cb.CUBA.CONDITION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

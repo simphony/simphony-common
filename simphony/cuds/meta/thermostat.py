@@ -1,21 +1,29 @@
 import uuid
 from simphony.core import data_container as dc
 from simphony.core import cuba as cb
+from .material_relation import MaterialRelation
 
 
-class CUDSItem(object):
+class Thermostat(MaterialRelation):
 
-    '''Root of all CUDS types  # noqa
+    '''A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir  # noqa
     '''
 
-    cuba_key = cb.CUBA.CUDS_ITEM
+    cuba_key = cb.CUBA.THERMOSTAT
 
-    def __init__(self, data=None):
+    def __init__(self, material, description=None, name=None, data=None):
 
+        self.material = material
+        self.description = description
+        self.name = name
         if data:
             self.data = data
         # This is a system-managed, read-only attribute
-        self._definition = 'Root of all CUDS types'  # noqa
+        self._models = [cb.CUBA.ATOMISTIC, cb.CUBA.MESOSCOPIC]
+        # This is a system-managed, read-only attribute
+        self._definition = 'A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir'  # noqa
+        # This is a system-managed, read-only attribute
+        self._variables = []
 
     @property
     def data(self):
@@ -40,8 +48,16 @@ class CUDSItem(object):
             self._data = dc.DataContainer(new_data)
 
     @property
+    def models(self):
+        return self._models
+
+    @property
     def definition(self):
         return self._definition
+
+    @property
+    def variables(self):
+        return self._variables
 
     @property
     def uid(self):
@@ -51,8 +67,8 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.UUID,)
+        return (cb.CUBA.DESCRIPTION, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return ()
+        return (cb.CUBA.MATERIAL_RELATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

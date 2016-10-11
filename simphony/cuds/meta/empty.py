@@ -1,31 +1,31 @@
 import uuid
 from simphony.core import data_container as dc
 from simphony.core import cuba as cb
-from .material_relation import MaterialRelation
+from .condition import Condition
 from . import validation
 
 
-class SjkrCohesionForce(MaterialRelation):
+class Empty(Condition):
 
-    '''Additional normal force tending to maintain the contact  # noqa
+    '''Empty boundary condition  # noqa
     '''
 
-    cuba_key = cb.CUBA.SJKR_COHESION_FORCE
+    cuba_key = cb.CUBA.EMPTY
 
-    def __init__(self, material, description=None, name=None, data=None, cohesion_energy_density=0.0):
+    def __init__(self, description=None, name=None, data=None, variable=None, material=None):
 
-        self.material = material
         self.description = description
         self.name = name
         if data:
             self.data = data
-        self.cohesion_energy_density = cohesion_energy_density
+        if variable is None:
+            self.variable = []
+        if material is None:
+            self.material = []
         # This is a system-managed, read-only attribute
-        self._models = [cb.CUBA.ATOMISTIC]
+        self._models = [cb.CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
-        self._definition = 'Additional normal force tending to maintain the contact'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+        self._definition = 'Empty boundary condition'  # noqa
 
     @property
     def data(self):
@@ -50,14 +50,28 @@ class SjkrCohesionForce(MaterialRelation):
             self._data = dc.DataContainer(new_data)
 
     @property
-    def cohesion_energy_density(self):
-        return self.data[cb.CUBA.COHESION_ENERGY_DENSITY]
+    def variable(self):
+        return self.data[cb.CUBA.VARIABLE]
 
-    @cohesion_energy_density.setter
-    def cohesion_energy_density(self, value):
-        value = validation.cast_data_type(value, 'cohesion_energy_density')
-        validation.validate_cuba_keyword(value, 'cohesion_energy_density')
-        self.data[cb.CUBA.COHESION_ENERGY_DENSITY] = value
+    @variable.setter
+    def variable(self, value):
+        value = validation.cast_data_type(value, 'variable')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'variable')
+        self.data[cb.CUBA.VARIABLE] = value
+
+    @property
+    def material(self):
+        return self.data[cb.CUBA.MATERIAL]
+
+    @material.setter
+    def material(self, value):
+        value = validation.cast_data_type(value, 'material')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'material')
+        self.data[cb.CUBA.MATERIAL] = value
 
     @property
     def models(self):
@@ -68,10 +82,6 @@ class SjkrCohesionForce(MaterialRelation):
         return self._definition
 
     @property
-    def variables(self):
-        return self._variables
-
-    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -79,8 +89,8 @@ class SjkrCohesionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (cb.CUBA.DESCRIPTION, cb.CUBA.COHESION_ENERGY_DENSITY, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.NAME)
+        return (cb.CUBA.DESCRIPTION, cb.CUBA.VARIABLE, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (cb.CUBA.MATERIAL_RELATION, cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
+        return (cb.CUBA.CONDITION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

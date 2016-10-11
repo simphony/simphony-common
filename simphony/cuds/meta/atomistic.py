@@ -1,18 +1,15 @@
 import uuid
-from simphony.core.data_container import create_data_container
-from simphony.core.cuba import CUBA
+from simphony.core import data_container as dc
+from simphony.core import cuba as cb
 from .computational_model import ComputationalModel
-
-_RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
 
 
 class Atomistic(ComputationalModel):
+
     '''Atomistic model category according to the RoMM  # noqa
     '''
 
-    cuba_key = CUBA.ATOMISTIC
+    cuba_key = cb.CUBA.ATOMISTIC
 
     def __init__(self, description=None, name=None, data=None):
 
@@ -28,22 +25,22 @@ class Atomistic(ComputationalModel):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = dc.DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, dc.DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, dc.DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = dc.DataContainer(new_data)
 
     @property
     def definition(self):
@@ -57,8 +54,8 @@ class Atomistic(ComputationalModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
+        return (cb.CUBA.UUID, cb.CUBA.DESCRIPTION, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.COMPUTATIONAL_MODEL, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (cb.CUBA.COMPUTATIONAL_MODEL, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)

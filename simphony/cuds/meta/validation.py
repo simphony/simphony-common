@@ -3,7 +3,7 @@ import re
 
 import numpy
 
-from simphony.core.keywords import KEYWORDS
+from simphony.core import keywords as kw
 
 
 def to_camel_case(text, special={'cuds': 'CUDS'}):
@@ -31,7 +31,7 @@ def to_camel_case(text, special={'cuds': 'CUDS'}):
             return special[word]
         else:
             # Capitalise the first character
-            return word[0].upper() + word[1:]
+            return word[0].upper()+word[1:]
 
     return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
 
@@ -92,11 +92,12 @@ def check_shape(value, shape):
         return
 
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
-    value_shape = numpy.asarray(value).shape or (1, )
+    value_shape = numpy.asarray(value).shape or (1,)
 
     msg_fmt = ("value has a shape of {value_shape}, "
                "which does not comply with shape: {shape}")
-    error_message = msg_fmt.format(value_shape=value_shape, shape=shape)
+    error_message = msg_fmt.format(value_shape=value_shape,
+                                   shape=shape)
 
     if len(decoded_shape) != len(value_shape):
         raise ValueError(error_message)
@@ -148,8 +149,8 @@ def validate_cuba_keyword(value, key):
         if not isinstance(value, api_class):
             message = '{0!r} is not an instance of {1}'
             raise TypeError(message.format(value, api_class))
-    elif keyword_name in KEYWORDS:
-        keyword = KEYWORDS[keyword_name]
+    elif keyword_name in kw.KEYWORDS:
+        keyword = kw.KEYWORDS[keyword_name]
 
         # Check type
         value_arr = numpy.asarray(value)
@@ -207,8 +208,8 @@ def cast_data_type(value, key):
     '''
     keyword_name = key.upper()
 
-    if keyword_name in KEYWORDS:
-        target_type = KEYWORDS[keyword_name].dtype
+    if keyword_name in kw.KEYWORDS:
+        target_type = kw.KEYWORDS[keyword_name].dtype
 
         # Check if target is cuds instance
         if not target_type:
@@ -230,3 +231,4 @@ def cast_data_type(value, key):
 
     else:
         return value
+

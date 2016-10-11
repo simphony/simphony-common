@@ -1,19 +1,16 @@
 import uuid
-from simphony.core.data_container import create_data_container
-from simphony.core.cuba import CUBA
+from simphony.core import data_container as dc
+from simphony.core import cuba as cb
 from .model_equation import ModelEquation
 from . import validation
 
-_RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
-
 
 class MaterialRelation(ModelEquation):
+
     '''Material relation  # noqa
     '''
 
-    cuba_key = CUBA.MATERIAL_RELATION
+    cuba_key = cb.CUBA.MATERIAL_RELATION
 
     def __init__(self, material, description=None, name=None, data=None):
 
@@ -31,7 +28,7 @@ class MaterialRelation(ModelEquation):
 
     @property
     def material(self):
-        return self.data[CUBA.MATERIAL]
+        return self.data[cb.CUBA.MATERIAL]
 
     @material.setter
     def material(self, value):
@@ -40,29 +37,29 @@ class MaterialRelation(ModelEquation):
             validation.check_shape(value, '(:)')
             for item in value:
                 validation.validate_cuba_keyword(item, 'material')
-        self.data[CUBA.MATERIAL] = value
+        self.data[cb.CUBA.MATERIAL] = value
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = dc.DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, dc.DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, dc.DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = dc.DataContainer(new_data)
 
     @property
     def definition(self):
@@ -84,8 +81,8 @@ class MaterialRelation(ModelEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (cb.CUBA.DESCRIPTION, cb.CUBA.MATERIAL, cb.CUBA.UUID, cb.CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (cb.CUBA.MODEL_EQUATION, cb.CUBA.CUDS_COMPONENT, cb.CUBA.CUDS_ITEM)
