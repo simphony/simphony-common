@@ -36,7 +36,7 @@ KEYWORDS = {
         name='ElectrostaticField',
         definition='Electrostatic field',  # noqa
         key='ELECTROSTATIC_FIELD',
-        shape=[1],
+        shape=[3],
         dtype=numpy.float64),
     'KINEMATIC_VISCOSITY': Keyword(
         name='KinematicViscosity',
