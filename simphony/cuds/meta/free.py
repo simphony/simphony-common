@@ -1,26 +1,27 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
-from . import validation
+from .condition import Condition
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class Free(Condition):
+    '''Free boundary condition  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.FREE
 
-    def __init__(self, description=None, name=None, data=None, point=None):
+    def __init__(self, description=None, name=None, data=None):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
-        if point is None:
-            self.point = [0, 0, 0]
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._models = [
+            CUBA.ELECTRONIC, CUBA.ATOMISTIC, CUBA.MESOSCOPIC, CUBA.CONTINUUM
+        ]
+        # This is a system-managed, read-only attribute
+        self._definition = 'Free boundary condition'  # noqa
 
     @property
     def data(self):
@@ -45,14 +46,8 @@ class Origin(CUDSComponent):
             self._data = DataContainer(new_data)
 
     @property
-    def point(self):
-        return self.data[CUBA.POINT]
-
-    @point.setter
-    def point(self, value):
-        value = validation.cast_data_type(value, 'point')
-        validation.validate_cuba_keyword(value, 'point')
-        self.data[CUBA.POINT] = value
+    def models(self):
+        return self._models
 
     @property
     def definition(self):
@@ -66,8 +61,8 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POINT, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.CONDITION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

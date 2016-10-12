@@ -1,11 +1,7 @@
 import uuid
-from simphony.core.data_container import create_data_container
+from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .compressibility_model import CompressibilityModel
-
-_RestrictedDataContainer = create_data_container(
-    (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
 
 
 class IncompressibleFluidModel(CompressibilityModel):
@@ -25,30 +21,31 @@ class IncompressibleFluidModel(CompressibilityModel):
         # This is a system-managed, read-only attribute
         self._definition = 'Incompressible fluid model'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.VELOCITY, CUBA.POSITION, CUBA.DENSITY,
-                           CUBA.VISCOSITY]
+        self._variables = [
+            CUBA.VELOCITY, CUBA.POSITION, CUBA.DENSITY, CUBA.VISCOSITY
+        ]
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def models(self):

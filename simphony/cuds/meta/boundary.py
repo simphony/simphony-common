@@ -1,11 +1,8 @@
 import uuid
-from simphony.core.data_container import create_data_container
+from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
-
-_RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
+from . import validation
 
 
 class Boundary(CUDSComponent):
@@ -14,8 +11,9 @@ class Boundary(CUDSComponent):
 
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, description=None, name=None, data=None):
+    def __init__(self, condition, description=None, name=None, data=None):
 
+        self.condition = condition
         self.description = description
         self.name = name
         if data:
@@ -24,26 +22,39 @@ class Boundary(CUDSComponent):
         self._definition = 'System boundary'  # noqa
 
     @property
+    def condition(self):
+        return self.data[CUBA.CONDITION]
+
+    @condition.setter
+    def condition(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'condition')
+            validation.check_shape(value, '(:)')
+            for item in value:
+                validation.validate_cuba_keyword(item, 'condition')
+        self.data[CUBA.CONDITION] = value
+
+    @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -57,7 +68,7 @@ class Boundary(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

@@ -1,33 +1,36 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .material_relation import MaterialRelation
+from .thermostat import Thermostat
 from . import validation
 
 
-class DissipationForce(MaterialRelation):
-    '''Viscous normal force describing the inelasticity of particle collisions  # noqa
+class TemperatureRescaling(Thermostat):
+    '''A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.  # noqa
     '''
 
-    cuba_key = CUBA.DISSIPATION_FORCE
+    cuba_key = CUBA.TEMPERATURE_RESCALING
 
     def __init__(self,
                  material,
                  description=None,
                  name=None,
                  data=None,
-                 restitution_coefficient=1.0):
+                 coupling_time=1e-06,
+                 temperature=None):
 
         self.material = material
         self.description = description
         self.name = name
         if data:
             self.data = data
-        self.restitution_coefficient = restitution_coefficient
+        self.coupling_time = coupling_time
+        if temperature is None:
+            self.temperature = [0.0, 0.0]
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
+        self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
         # This is a system-managed, read-only attribute
-        self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
+        self._definition = 'A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,14 +57,26 @@ class DissipationForce(MaterialRelation):
             self._data = DataContainer(new_data)
 
     @property
-    def restitution_coefficient(self):
-        return self.data[CUBA.RESTITUTION_COEFFICIENT]
+    def coupling_time(self):
+        return self.data[CUBA.COUPLING_TIME]
 
-    @restitution_coefficient.setter
-    def restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'restitution_coefficient')
-        validation.validate_cuba_keyword(value, 'restitution_coefficient')
-        self.data[CUBA.RESTITUTION_COEFFICIENT] = value
+    @coupling_time.setter
+    def coupling_time(self, value):
+        value = validation.cast_data_type(value, 'coupling_time')
+        validation.validate_cuba_keyword(value, 'coupling_time')
+        self.data[CUBA.COUPLING_TIME] = value
+
+    @property
+    def temperature(self):
+        return self.data[CUBA.TEMPERATURE]
+
+    @temperature.setter
+    def temperature(self, value):
+        value = validation.cast_data_type(value, 'temperature')
+        validation.check_shape(value, '(2)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'temperature')
+        self.data[CUBA.TEMPERATURE] = value
 
     @property
     def models(self):
@@ -83,10 +98,10 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
                 CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

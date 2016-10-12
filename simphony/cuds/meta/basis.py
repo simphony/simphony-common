@@ -1,16 +1,12 @@
 import uuid
-from simphony.core.data_container import create_data_container
+from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
 from . import validation
 
-_RestrictedDataContainer = create_data_container(
-    (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME),
-    class_name="_RestrictedDataContainer")
-
 
 class Basis(CUDSComponent):
-    '''Space basis vectors  # noqa
+    '''Space basis vectors (row wise)  # noqa
     '''
 
     cuba_key = CUBA.BASIS
@@ -24,29 +20,29 @@ class Basis(CUDSComponent):
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         # This is a system-managed, read-only attribute
-        self._definition = 'Space basis vectors'  # noqa
+        self._definition = 'Space basis vectors (row wise)'  # noqa
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def vector(self):

@@ -1,5 +1,5 @@
 import uuid
-from simphony.core.data_container import create_data_container
+from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .single_phase_model import SinglePhaseModel
 from .physics_equation import PhysicsEquation
@@ -10,13 +10,6 @@ from .incompressible_fluid_model import IncompressibleFluidModel
 from .constant_electrostatic_field_model import ConstantElectrostaticFieldModel
 from . import validation
 
-_RestrictedDataContainer = create_data_container(
-    (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-     CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL,
-     CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL, CUBA.MULTIPHASE_MODEL,
-     CUBA.NAME),
-    class_name="_RestrictedDataContainer")
-
 
 class Cfd(PhysicsEquation):
     '''Computational fluid dynamics general (set of ) equations for momentum, mass and energy  # noqa
@@ -25,18 +18,17 @@ class Cfd(PhysicsEquation):
     cuba_key = CUBA.CFD
 
     def __init__(self,
-                 gravity_model,
                  description=None,
                  name=None,
                  data=None,
                  multiphase_model=None,
                  rheology_model=None,
                  turbulence_model=None,
+                 gravity_model=None,
                  thermal_model=None,
                  compressibility_model=None,
                  electrostatic_model=None):
 
-        self.gravity_model = gravity_model
         self.description = description
         self.name = name
         if data:
@@ -56,6 +48,7 @@ class Cfd(PhysicsEquation):
             self.turbulence_model = turbulence_model
         else:
             self.turbulence_model = LaminarFlowModel()
+        self.gravity_model = gravity_model
 
         if thermal_model:
             self.thermal_model = thermal_model
@@ -76,42 +69,33 @@ class Cfd(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Computational fluid dynamics general (set of ) equations for momentum, mass and energy'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM,
-                           CUBA.DENSITY, CUBA.VISCOSITY, CUBA.TIME,
-                           CUBA.STRESS_TENSOR, CUBA.PRESSURE,
-                           CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION]
-
-    @property
-    def gravity_model(self):
-        return self.data[CUBA.GRAVITY_MODEL]
-
-    @gravity_model.setter
-    def gravity_model(self, value):
-        value = validation.cast_data_type(value, 'gravity_model')
-        validation.validate_cuba_keyword(value, 'gravity_model')
-        self.data[CUBA.GRAVITY_MODEL] = value
+        self._variables = [
+            CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.DENSITY,
+            CUBA.VISCOSITY, CUBA.TIME, CUBA.STRESS_TENSOR, CUBA.PRESSURE,
+            CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION
+        ]
 
     @property
     def data(self):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = _RestrictedDataContainer()
+            self._data = DataContainer()
             return self._data
         else:
             # One more check in case the
             # property setter is by-passed
-            if not isinstance(data_container, _RestrictedDataContainer):
-                raise TypeError("data is not a RestrictedDataContainer. "
+            if not isinstance(data_container, DataContainer):
+                raise TypeError("data is not a DataContainer. "
                                 "data.setter is by-passed.")
             return data_container
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, _RestrictedDataContainer):
+        if isinstance(new_data, DataContainer):
             self._data = new_data
         else:
-            self._data = _RestrictedDataContainer(new_data)
+            self._data = DataContainer(new_data)
 
     @property
     def multiphase_model(self):
@@ -142,6 +126,17 @@ class Cfd(PhysicsEquation):
         value = validation.cast_data_type(value, 'turbulence_model')
         validation.validate_cuba_keyword(value, 'turbulence_model')
         self.data[CUBA.TURBULENCE_MODEL] = value
+
+    @property
+    def gravity_model(self):
+        return self.data[CUBA.GRAVITY_MODEL]
+
+    @gravity_model.setter
+    def gravity_model(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'gravity_model')
+            validation.validate_cuba_keyword(value, 'gravity_model')
+        self.data[CUBA.GRAVITY_MODEL] = value
 
     @property
     def thermal_model(self):

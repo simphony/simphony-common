@@ -1,35 +1,35 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .material_relation import MaterialRelation
+from .condition import Condition
 from . import validation
 
 
-class DissipationForce(MaterialRelation):
-    '''Viscous normal force describing the inelasticity of particle collisions  # noqa
+class Neumann(Condition):
+    '''Neumann boundary condition  # noqa
     '''
 
-    cuba_key = CUBA.DISSIPATION_FORCE
+    cuba_key = CUBA.NEUMANN
 
     def __init__(self,
-                 material,
                  description=None,
                  name=None,
                  data=None,
-                 restitution_coefficient=1.0):
+                 variable=None,
+                 material=None):
 
-        self.material = material
         self.description = description
         self.name = name
         if data:
             self.data = data
-        self.restitution_coefficient = restitution_coefficient
+        if variable is None:
+            self.variable = []
+        if material is None:
+            self.material = []
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
+        self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
-        self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+        self._definition = 'Neumann boundary condition'  # noqa
 
     @property
     def data(self):
@@ -54,14 +54,28 @@ class DissipationForce(MaterialRelation):
             self._data = DataContainer(new_data)
 
     @property
-    def restitution_coefficient(self):
-        return self.data[CUBA.RESTITUTION_COEFFICIENT]
+    def variable(self):
+        return self.data[CUBA.VARIABLE]
 
-    @restitution_coefficient.setter
-    def restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'restitution_coefficient')
-        validation.validate_cuba_keyword(value, 'restitution_coefficient')
-        self.data[CUBA.RESTITUTION_COEFFICIENT] = value
+    @variable.setter
+    def variable(self, value):
+        value = validation.cast_data_type(value, 'variable')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'variable')
+        self.data[CUBA.VARIABLE] = value
+
+    @property
+    def material(self):
+        return self.data[CUBA.MATERIAL]
+
+    @material.setter
+    def material(self, value):
+        value = validation.cast_data_type(value, 'material')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'material')
+        self.data[CUBA.MATERIAL] = value
 
     @property
     def models(self):
@@ -72,10 +86,6 @@ class DissipationForce(MaterialRelation):
         return self._definition
 
     @property
-    def variables(self):
-        return self._variables
-
-    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -83,10 +93,9 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.CONDITION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

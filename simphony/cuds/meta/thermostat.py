@@ -2,32 +2,25 @@ import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
-from . import validation
 
 
-class DissipationForce(MaterialRelation):
-    '''Viscous normal force describing the inelasticity of particle collisions  # noqa
+class Thermostat(MaterialRelation):
+    '''A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir  # noqa
     '''
 
-    cuba_key = CUBA.DISSIPATION_FORCE
+    cuba_key = CUBA.THERMOSTAT
 
-    def __init__(self,
-                 material,
-                 description=None,
-                 name=None,
-                 data=None,
-                 restitution_coefficient=1.0):
+    def __init__(self, material, description=None, name=None, data=None):
 
         self.material = material
         self.description = description
         self.name = name
         if data:
             self.data = data
-        self.restitution_coefficient = restitution_coefficient
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
+        self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
         # This is a system-managed, read-only attribute
-        self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
+        self._definition = 'A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
 
@@ -54,16 +47,6 @@ class DissipationForce(MaterialRelation):
             self._data = DataContainer(new_data)
 
     @property
-    def restitution_coefficient(self):
-        return self.data[CUBA.RESTITUTION_COEFFICIENT]
-
-    @restitution_coefficient.setter
-    def restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'restitution_coefficient')
-        validation.validate_cuba_keyword(value, 'restitution_coefficient')
-        self.data[CUBA.RESTITUTION_COEFFICIENT] = value
-
-    @property
     def models(self):
         return self._models
 
@@ -83,8 +66,7 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

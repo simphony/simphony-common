@@ -157,9 +157,9 @@ def validate_cuba_keyword(value, key):
         if not numpy.issubdtype(value_arr.dtype, keyword.dtype):
             message = ('value has dtype {dtype1} while {key} '
                        'needs to be a {dtype2}')
-            raise TypeError(message.format(dtype1=value_arr.dtype,
-                                           key=key,
-                                           dtype2=keyword.dtype))
+            raise TypeError(
+                message.format(
+                    dtype1=value_arr.dtype, key=key, dtype2=keyword.dtype))
         # FIXME: STRING
         # cuba.yml gives a fix length for the shape of string
         # It actually means the maximum length of the string
@@ -217,8 +217,8 @@ def cast_data_type(value, key):
 
         # If safe casting is not possible,
         # this will raise a ValueError/TypeError
-        new_value = numpy.asarray(value).astype(target_type,
-                                                casting='same_kind')
+        new_value = numpy.asarray(value).astype(
+            target_type, casting='same_kind')
 
         if isinstance(value, (list, tuple)):
             return type(value)(new_value)
