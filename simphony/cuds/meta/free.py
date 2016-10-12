@@ -5,7 +5,6 @@ from .condition import Condition
 
 
 class Free(Condition):
-
     '''Free boundary condition  # noqa
     '''
 
@@ -18,7 +17,9 @@ class Free(Condition):
         if data:
             self.data = data
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ELECTRONIC, CUBA.ATOMISTIC, CUBA.MESOSCOPIC, CUBA.CONTINUUM]
+        self._models = [
+            CUBA.ELECTRONIC, CUBA.ATOMISTIC, CUBA.MESOSCOPIC, CUBA.CONTINUUM
+        ]
         # This is a system-managed, read-only attribute
         self._definition = 'Free boundary condition'  # noqa
 

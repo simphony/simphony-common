@@ -6,7 +6,6 @@ from . import validation
 
 
 class Boundary(CUDSComponent):
-
     '''System boundary  # noqa
     '''
 

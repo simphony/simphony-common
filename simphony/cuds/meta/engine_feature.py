@@ -5,7 +5,6 @@ from .cuds_item import CUDSItem
 
 
 class EngineFeature(CUDSItem):
-
     '''Provides a physics equation and methods that engines provides to solve them  # noqa
     '''
 
@@ -68,4 +67,4 @@ class EngineFeature(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

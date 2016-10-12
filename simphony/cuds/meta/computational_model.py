@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class ComputationalModel(CUDSComponent):
-
     '''Model category according to the RoMM  # noqa
     '''
 

@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class DataSet(CUDSComponent):
-
     '''Data set  # noqa
     '''
 

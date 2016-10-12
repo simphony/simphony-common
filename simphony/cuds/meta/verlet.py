@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Verlet(ComputationalMethod):
-
     '''Newtonian dynamics integration using verlet algorithm  # noqa
     '''
 

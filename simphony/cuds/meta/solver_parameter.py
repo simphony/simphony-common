@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class SolverParameter(CUDSComponent):
-
     '''Solver parameter and metadata  # noqa
     '''
 

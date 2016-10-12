@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class Condition(CUDSComponent):
-
     '''Condition on boundaries or model entities  # noqa
     '''
 

@@ -6,13 +6,17 @@ from . import validation
 
 
 class SurfaceTensionRelation(MaterialRelation):
-
     '''Surface tension relation between two fluids  # noqa
     '''
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self, material, description=None, name=None, data=None, surface_tension=0.07):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 surface_tension=0.07):
 
         self.material = material
         self.description = description
@@ -92,8 +96,10 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

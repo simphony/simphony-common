@@ -6,13 +6,16 @@ from . import validation
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
-
     '''A constant electrostatic field model  # noqa
     '''
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self, description=None, name=None, data=None, electrostatic_field=None):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 electrostatic_field=None):
 
         self.description = description
         self.name = name
@@ -79,8 +82,10 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

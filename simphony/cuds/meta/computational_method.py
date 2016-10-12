@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class ComputationalMethod(CUDSComponent):
-
     '''A computational method according to the RoMM  # noqa
     '''
 

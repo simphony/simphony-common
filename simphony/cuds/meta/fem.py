@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Fem(ComputationalMethod):
-
     '''Finite element method  # noqa
     '''
 

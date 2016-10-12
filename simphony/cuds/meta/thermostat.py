@@ -5,7 +5,6 @@ from .material_relation import MaterialRelation
 
 
 class Thermostat(MaterialRelation):
-
     '''A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir  # noqa
     '''
 
@@ -71,4 +70,5 @@ class Thermostat(MaterialRelation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

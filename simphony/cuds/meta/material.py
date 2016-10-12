@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class Material(CUDSComponent):
-
     '''Definition of a material and its parameters  # noqa
     '''
 

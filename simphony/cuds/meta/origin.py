@@ -6,7 +6,6 @@ from . import validation
 
 
 class Origin(CUDSComponent):
-
     '''The origin of a space system  # noqa
     '''
 

@@ -5,7 +5,6 @@ from .physics_equation import PhysicsEquation
 
 
 class KsDft(PhysicsEquation):
-
     '''Kohn-Sham DFT equations  # noqa
     '''
 
@@ -22,7 +21,10 @@ class KsDft(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Kohn-Sham DFT equations'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.CHEMICAL_SPECIE, CUBA.ELECTRON_MASS, CUBA.CHARGE_DENSITY, CUBA.ENERGY]
+        self._variables = [
+            CUBA.POSITION, CUBA.CHEMICAL_SPECIE, CUBA.ELECTRON_MASS,
+            CUBA.CHARGE_DENSITY, CUBA.ENERGY
+        ]
 
     @property
     def data(self):
@@ -70,4 +72,5 @@ class KsDft(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

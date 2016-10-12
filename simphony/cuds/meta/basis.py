@@ -6,7 +6,6 @@ from . import validation
 
 
 class Basis(CUDSComponent):
-
     '''Space basis vectors (row wise)  # noqa
     '''
 

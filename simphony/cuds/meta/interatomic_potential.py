@@ -5,7 +5,6 @@ from .material_relation import MaterialRelation
 
 
 class InteratomicPotential(MaterialRelation):
-
     '''Interatomic Potentials Category  # noqa
     '''
 
@@ -71,4 +70,5 @@ class InteratomicPotential(MaterialRelation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

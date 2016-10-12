@@ -5,7 +5,6 @@ from .software_tool import SoftwareTool
 
 
 class Engine(SoftwareTool):
-
     '''Represents a software tool which is used to solve the physics equation  # noqa
     '''
 

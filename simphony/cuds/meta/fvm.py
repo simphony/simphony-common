@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Fvm(ComputationalMethod):
-
     '''Finite volume method  # noqa
     '''
 

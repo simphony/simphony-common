@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Dem(ComputationalMethod):
-
     '''Discrete element method  # noqa
     '''
 

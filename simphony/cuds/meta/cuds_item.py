@@ -4,7 +4,6 @@ from simphony.core.cuba import CUBA
 
 
 class CUDSItem(object):
-
     '''Root of all CUDS types  # noqa
     '''
 
@@ -51,7 +50,7 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID,)
+        return (CUBA.UUID, )
 
     @classmethod
     def parents(cls):

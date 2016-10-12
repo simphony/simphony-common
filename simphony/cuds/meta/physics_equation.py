@@ -5,7 +5,6 @@ from .model_equation import ModelEquation
 
 
 class PhysicsEquation(ModelEquation):
-
     '''Physics equation  # noqa
     '''
 

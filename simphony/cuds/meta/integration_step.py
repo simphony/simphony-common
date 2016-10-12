@@ -6,13 +6,18 @@ from . import validation
 
 
 class IntegrationStep(ComputationalMethod):
-
     '''the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self, size, final, description=None, name=None, data=None, current=0):
+    def __init__(self,
+                 size,
+                 final,
+                 description=None,
+                 name=None,
+                 data=None,
+                 current=0):
 
         self.size = size
         self.final = final
@@ -96,7 +101,8 @@ class IntegrationStep(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
+                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):

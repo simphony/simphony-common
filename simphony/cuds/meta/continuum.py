@@ -5,7 +5,6 @@ from .computational_model import ComputationalModel
 
 
 class Continuum(ComputationalModel):
-
     '''Continuum model category according to the RoMM  # noqa
     '''
 

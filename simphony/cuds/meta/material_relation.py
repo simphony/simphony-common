@@ -6,7 +6,6 @@ from . import validation
 
 
 class MaterialRelation(ModelEquation):
-
     '''Material relation  # noqa
     '''
 

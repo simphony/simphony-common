@@ -6,13 +6,18 @@ from . import validation
 
 
 class NoseHoover(Thermostat):
-
     '''Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.  # noqa
     '''
 
     cuba_key = CUBA.NOSE_HOOVER
 
-    def __init__(self, material, description=None, name=None, data=None, coupling_time=1.0, temperature=None):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 coupling_time=1.0,
+                 temperature=None):
 
         self.material = material
         self.description = description
@@ -93,8 +98,10 @@ class NoseHoover(Thermostat):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

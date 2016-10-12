@@ -6,13 +6,18 @@ from . import validation
 
 
 class TemperatureRescaling(Thermostat):
-
     '''A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.  # noqa
     '''
 
     cuba_key = CUBA.TEMPERATURE_RESCALING
 
-    def __init__(self, material, description=None, name=None, data=None, coupling_time=1e-06, temperature=None):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 coupling_time=1e-06,
+                 temperature=None):
 
         self.material = material
         self.description = description
@@ -93,8 +98,10 @@ class TemperatureRescaling(Thermostat):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

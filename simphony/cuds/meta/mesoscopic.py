@@ -5,7 +5,6 @@ from .computational_model import ComputationalModel
 
 
 class Mesoscopic(ComputationalModel):
-
     '''Mesoscopic model category according to the RoMM  # noqa
     '''
 

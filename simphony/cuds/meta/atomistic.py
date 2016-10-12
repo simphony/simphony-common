@@ -5,7 +5,6 @@ from .computational_model import ComputationalModel
 
 
 class Atomistic(ComputationalModel):
-
     '''Atomistic model category according to the RoMM  # noqa
     '''
 

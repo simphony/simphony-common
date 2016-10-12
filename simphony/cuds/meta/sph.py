@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Sph(ComputationalMethod):
-
     '''Smooth particle hydrodynamics  # noqa
     '''
 

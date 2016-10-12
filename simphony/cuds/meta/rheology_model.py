@@ -5,7 +5,6 @@ from .physics_equation import PhysicsEquation
 
 
 class RheologyModel(PhysicsEquation):
-
     '''Rheology model of a CFD fluid  # noqa
     '''
 
@@ -70,4 +69,5 @@ class RheologyModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

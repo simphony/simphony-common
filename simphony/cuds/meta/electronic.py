@@ -5,7 +5,6 @@ from .computational_model import ComputationalModel
 
 
 class Electronic(ComputationalModel):
-
     '''Electronic model category according to the RoMM  # noqa
     '''
 

@@ -6,13 +6,17 @@ from . import validation
 
 
 class Empty(Condition):
-
     '''Empty boundary condition  # noqa
     '''
 
     cuba_key = CUBA.EMPTY
 
-    def __init__(self, description=None, name=None, data=None, variable=None, material=None):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 variable=None,
+                 material=None):
 
         self.description = description
         self.name = name
@@ -89,7 +93,8 @@ class Empty(Condition):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):

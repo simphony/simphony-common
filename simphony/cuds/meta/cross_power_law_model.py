@@ -6,13 +6,19 @@ from . import validation
 
 
 class CrossPowerLawModel(RheologyModel):
-
     '''Viscosity Cross power law model  # noqa
     '''
 
     cuba_key = CUBA.CROSS_POWER_LAW_MODEL
 
-    def __init__(self, description=None, name=None, data=None, initial_viscosity=1e-3, linear_constant=1.0, maximum_viscosity=1e-5, power_law_index=0.5):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 initial_viscosity=1e-3,
+                 linear_constant=1.0,
+                 maximum_viscosity=1e-5,
+                 power_law_index=0.5):
 
         self.description = description
         self.name = name
@@ -111,8 +117,11 @@ class CrossPowerLawModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
+                CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT,
+                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

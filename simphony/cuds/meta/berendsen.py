@@ -6,13 +6,18 @@ from . import validation
 
 
 class Berendsen(Thermostat):
-
     '''The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath.  # noqa
     '''
 
     cuba_key = CUBA.BERENDSEN
 
-    def __init__(self, material, description=None, name=None, data=None, coupling_time=0.0001, temperature=None):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 coupling_time=0.0001,
+                 temperature=None):
 
         self.material = material
         self.description = description
@@ -93,8 +98,10 @@ class Berendsen(Thermostat):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -6,13 +6,18 @@ from . import validation
 
 
 class Coulomb(PairPotential):
-
     '''The standard electrostatic Coulombic interaction potential between a pair of point charges  # noqa
     '''
 
     cuba_key = CUBA.COULOMB
 
-    def __init__(self, material, description=None, name=None, data=None, cutoff_distance=1.0, dielectric_constant=1.0):
+    def __init__(self,
+                 material,
+                 description=None,
+                 name=None,
+                 data=None,
+                 cutoff_distance=1.0,
+                 dielectric_constant=1.0):
 
         self.material = material
         self.description = description
@@ -90,8 +95,11 @@ class Coulomb(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID,
+                CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
+                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

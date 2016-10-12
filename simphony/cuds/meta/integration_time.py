@@ -6,13 +6,18 @@ from . import validation
 
 
 class IntegrationTime(ComputationalMethod):
-
     '''the current time, time step, and final time for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
     cuba_key = CUBA.INTEGRATION_TIME
 
-    def __init__(self, description=None, name=None, data=None, current=0.0, size=0.0, final=0.0):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 current=0.0,
+                 size=0.0,
+                 final=0.0):
 
         self.description = description
         self.name = name
@@ -94,7 +99,8 @@ class IntegrationTime(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
+                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
