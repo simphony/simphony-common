@@ -1,11 +1,10 @@
 import yaml
 import numpy
 
-from simphony.cuds.model import *
-from simphony.core.data_container import DataContainer
+from simphony.cuds.model import CUDS
 from simphony.cuds.meta.cuds_component import CUDSComponent
 from simphony.core.keywords import KEYWORDS
-from simphony.cuds.meta import *
+# from simphony.cuds.meta import *
 from simphony.core.cuba import CUBA
 from collections import OrderedDict
 from importlib import import_module
@@ -107,7 +106,7 @@ def load_CUDS(handle):
                 _dict_to_CUDSComponent(cubatype, dict_cuds[cubatype],
                                        comp_dict)
 
-    model = CUDS(name = name, description = desc)
+    model = CUDS(name=name, description=desc)
     for compid in comp_dict.keys():
         model.add(comp_dict[compid])
 
@@ -152,7 +151,7 @@ def _CUDSComponent_to_yaml(comp, stream):
         if type(cdata[key]) == list:
             # List of simple types?
             if KEYWORDS[key._name_].dtype in [numpy.float64,
-                    numpy.int32, bool]:
+                                              numpy.int32, bool]:
                 items = []
                 for item in cdata[key]:
                     items.append(item.tolist())
@@ -208,7 +207,7 @@ def _CUDSComponent_to_yaml(comp, stream):
     return stream
 
 
-def _dict_to_CUDSComponent(cubatype, comp, comp_dict = {}):
+def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
     """ Generate a CUDSComponent on the basis of a dictionary
     provided by PyYaml library.
 
@@ -245,8 +244,8 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict = {}):
         # Go through the keys and values in comp dictionary and
         # add supported ones to data_dict
         data_dict = {}
-        supp_params = [str(e).replace('CUBA.','')
-            for e in comp_inst.supported_parameters()]
+        supp_params = [str(e).replace('CUBA.', '')
+                       for e in comp_inst.supported_parameters()]
         for key in comp.keys():
             # Check if it is safe to eval the key
             if key in supp_params:

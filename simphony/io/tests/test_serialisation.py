@@ -3,21 +3,19 @@
 """
 import unittest
 import os
+import shutil
 from contextlib import closing
 import tempfile
-from numpy.testing import assert_array_equal
-
-from simphony.cuds.meta.cuds_component import CUDSComponent
-
 import numpy
 import string
 import random
+from importlib import import_module
+
+from simphony.cuds.meta.cuds_component import CUDSComponent
+from simphony.cuds.model import CUDS
 from simphony.core.keywords import KEYWORDS
 from simphony.core.cuba import CUBA
-from uuid import UUID
-from simphony.io.serialization import *
-from collections import OrderedDict
-from importlib import import_module
+from simphony.io.serialisation import save_CUDS, load_CUDS
 from simphony.cuds.meta.validation import to_camel_case
 
 
@@ -33,11 +31,11 @@ class TestSerialization(unittest.TestCase):
         name = 'somename'
         filename = os.path.join(self.temp_dir, 'test_named.yml')
         C = CUDS(name=name)
-        with closing(open(filename,'w')) as handle:
+        with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
         CC = None
-        with closing(open(filename,'r')) as handle:
+        with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
 
         self.assertEqual(CC.name, name)
@@ -46,10 +44,10 @@ class TestSerialization(unittest.TestCase):
         description = 'some very long description'
         filename = os.path.join(self.temp_dir, 'test_description.yml')
         C = CUDS(description=description)
-        with closing(open(filename,'w')) as handle:
+        with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
-        with closing(open(filename,'r')) as handle:
+        with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
 
         self.assertEqual(CC.description, description)
@@ -57,11 +55,11 @@ class TestSerialization(unittest.TestCase):
     def test_save_CUDS_empty(self):
         filename = os.path.join(self.temp_dir, 'test_empty.yml')
         C = CUDS(name='empty', description='just an empty model')
-        with closing(open(filename,'w')) as handle:
+        with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
         CC = None
-        with closing(open(filename,'r')) as handle:
+        with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
 
         self.assertEqual(CC.name, C.name)
@@ -69,7 +67,6 @@ class TestSerialization(unittest.TestCase):
 
         for item in CC.iter():
             self.assertEqual(item, None)
-
 
     def test_save_CUDS_full(self):
         filename = os.path.join(self.temp_dir, 'test_full.yml')
@@ -111,8 +108,9 @@ class TestSerialization(unittest.TestCase):
                 else:
                     return numpy.random.rand(shape[0])
         elif dtype == str:
-            return ''.join(random.choice(string.ascii_uppercase +
-                    string.digits) for _ in range(shape[0]))
+            randstr = ''.join(random.choice(string.ascii_uppercase)
+                              for _ in range(shape[0]))
+            return randstr
         elif dtype == bool:
             return random.choice([True, False])
 
@@ -134,8 +132,8 @@ class TestSerialization(unittest.TestCase):
                                 subcomp1 = self._create_random_comp(name)
                                 data_dict[prm] = subcomp1
                             else:
-                                subcomp1 = random_component(name)
-                                subcomp2 = random_component(name)
+                                subcomp1 = self._create_random_comp(name)
+                                subcomp2 = self._create_random_comp(name)
                                 data_dict[prm] = [subcomp1, subcomp2]
                         else:
                             dtype = KEYWORDS[name].dtype
