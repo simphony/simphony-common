@@ -7,23 +7,18 @@ from contextlib import closing
 import tempfile
 from numpy.testing import assert_array_equal
 
-from simphony.cuds.model import *
-from simphony.core.data_container import DataContainer
-
 from simphony.cuds.meta.cuds_component import CUDSComponent
 
 import numpy
 import string
 import random
 from simphony.core.keywords import KEYWORDS
-from simphony.cuds.meta import *
 from simphony.core.cuba import CUBA
 from uuid import UUID
 from simphony.io.serialization import *
 from collections import OrderedDict
 from importlib import import_module
 from simphony.cuds.meta.validation import to_camel_case
-
 
 
 class TestSerialization(unittest.TestCase):
@@ -82,7 +77,7 @@ class TestSerialization(unittest.TestCase):
 
         for key in KEYWORDS.keys():
             if key not in ['VERSION']:
-                comp = self._create_random_CUDSComponent(key)
+                comp = self._create_random_comp(key)
                 if comp:
                     C.add(comp)
 
@@ -106,7 +101,7 @@ class TestSerialization(unittest.TestCase):
                 shape = [1]
             return numpy.random.randint(-9999999, 9999999, size=shape)
         elif dtype == numpy.float64:
-            if shape == [] or shape == None:
+            if shape == [] or shape is None:
                 return numpy.random.rand(3)
             elif len(shape) == 2:
                 return numpy.random.rand(shape[0], shape[1])
@@ -121,7 +116,7 @@ class TestSerialization(unittest.TestCase):
         elif dtype == bool:
             return random.choice([True, False])
 
-    def _create_random_CUDSComponent(self, key):
+    def _create_random_comp(self, key):
         api = import_module('simphony.cuds.meta.api')
         if to_camel_case(key) in dir(api):
             mod = import_module('simphony.cuds.meta.%s' % key.lower())
@@ -136,8 +131,7 @@ class TestSerialization(unittest.TestCase):
                         if to_camel_case(name) in dir(api):
                             # Create one or two subcomponents if supported
                             if numpy.random.randint(2):
-                                subcomp1
-                                    = self._create_random_CUDSComponent(name)
+                                subcomp1 = self._create_random_comp(name)
                                 data_dict[prm] = subcomp1
                             else:
                                 subcomp1 = random_component(name)

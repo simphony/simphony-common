@@ -40,7 +40,6 @@ def save_CUDS(handle, model):
     else:
         handle.write(' Null')
     handle.write('\n')
-    #handle.write('# COMPONENTS')
 
     # Construct a map of referenced objects
     global _CUDSREFMAP
@@ -105,7 +104,8 @@ def load_CUDS(handle):
             elif cubatype == 'DESCRIPTION':
                 desc = dict_cuds['DESCRIPTION']
             else:
-                _dict_to_CUDSComponent(cubatype, dict_cuds[cubatype], comp_dict)
+                _dict_to_CUDSComponent(cubatype, dict_cuds[cubatype],
+                                       comp_dict)
 
     model = CUDS(name = name, description = desc)
     for compid in comp_dict.keys():
@@ -263,13 +263,13 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict = {}):
                             _dict_to_CUDSComponent(key, subcomp, comp_dict)
                             tmp.append(comp_dict[id(subcomp)])
                         else:
-                            #validation.validate_cuba_keyword(subcomp, key)
+                            # validation.validate_cuba_keyword(subcomp, key)
                             tmp.append(subcomp)
                     data_dict[cubakey] = tmp
                 elif type(value) is dict:
                     _dict_to_CUDSComponent(key, value, comp_dict)
                 else:
-                    #validation.validate_cuba_keyword(value, key)
+                    # validation.validate_cuba_keyword(value, key)
                     data_dict[cubakey] = value
             else:
                 message = 'Unknown CUDSComponent "{}" as a subcomponent'
