@@ -65,7 +65,7 @@ class TestSerialization(unittest.TestCase):
         self.assertEqual(CC.name, C.name)
         self.assertEqual(CC.description, C.description)
 
-        for item in CC.iter():
+        for item in CC.iter(CUDSComponent):
             self.assertEqual(item, None)
 
     def test_save_CUDS_full(self):
@@ -88,7 +88,7 @@ class TestSerialization(unittest.TestCase):
         self.assertEqual(CC.name, C.name)
         self.assertEqual(CC.description, C.description)
 
-        for CCitem in CC.iter():
+        for CCitem in CC.iter(CUDSComponent):
             Citem = C.get(CCitem.name)
             self.assertEqual(Citem.name, CCitem.name)
 
