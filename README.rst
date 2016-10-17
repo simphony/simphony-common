@@ -184,7 +184,7 @@ Guide to generating metadata classes
   The generated code do not automatically comply with PEP 8.  Auto formatters are available on PyPI.
   Examples are `yapf <https://pypi.python.org/pypi/yapf>`_ and `authpep8 <https://pypi.python.org/pypi/autopep8>`_
 
-- Here is a wrap up of the above steps, assuming the metadata files reside in ``yaml_files`` directory and that we are in the root of ``simphony-metadata`` repository::
+- Here is a wrap up of the above steps, assuming the metadata files reside in ``yaml_files`` directory and that we are in the root of ``simphony-common`` repository::
 
     # Generate CUDS classes
     simphony-meta-generate meta_class yaml_files/simphony_metadata.yml simphony/cuds/meta -O
