@@ -87,7 +87,7 @@ class TestSerialisation(unittest.TestCase):
         # that they are present in the loaded model
         for Citem in C.iter(CUDSComponent):
             # Check items that have name parameter defined
-            if hasattr(Citem, 'name'):
+            if Citem.name is not None:
                 CCitem = CC.get(Citem.name)
                 self.assertEqual(CCitem.name, Citem.name)
                 for key in Citem.data:
