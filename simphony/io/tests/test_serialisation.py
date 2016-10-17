@@ -87,10 +87,10 @@ class TestSerialisation(unittest.TestCase):
         # that they are present in the loaded model
         for Citem in C.iter(CUDSComponent):
             # Check items that have name parameter defined
-            if hasattr(CCitem, 'name'):
-                Citem = C.get(CCitem.name)
-                self.assertEqual(Citem.name, CCitem.name)
-                for key in CCitem.data:
+            if hasattr(Citem, 'name'):
+                CCitem = CC.get(Citem.name)
+                self.assertEqual(CCitem.name, Citem.name)
+                for key in Citem.data:
                     self.assertEqual(Citem.data[key], CCitem.data[key])
 
     def _ran(self, dtype, shape):
