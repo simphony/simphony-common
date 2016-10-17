@@ -19,8 +19,8 @@ from simphony.io.serialisation import save_CUDS, load_CUDS
 from simphony.cuds.meta.validation import to_camel_case
 
 
-class TestSerialization(unittest.TestCase):
-    """Tests for CUDS Yaml serialization functions."""
+class TestSerialisation(unittest.TestCase):
+    """Tests for CUDS Yaml serialisation functions."""
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
 
@@ -34,10 +34,8 @@ class TestSerialization(unittest.TestCase):
         with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
-        CC = None
         with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
-
         self.assertEqual(CC.name, name)
 
     def test_save_CUDS_description(self):
@@ -49,7 +47,6 @@ class TestSerialization(unittest.TestCase):
 
         with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
-
         self.assertEqual(CC.description, description)
 
     def test_save_CUDS_empty(self):
@@ -58,7 +55,6 @@ class TestSerialization(unittest.TestCase):
         with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
-        CC = None
         with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
 
@@ -81,16 +77,21 @@ class TestSerialization(unittest.TestCase):
         with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
 
-        CC = None
         with closing(open(filename, 'r')) as handle:
             CC = load_CUDS(handle)
 
         self.assertEqual(CC.name, C.name)
         self.assertEqual(CC.description, C.description)
 
-        for CCitem in CC.iter(CUDSComponent):
-            Citem = C.get(CCitem.name)
-            self.assertEqual(Citem.name, CCitem.name)
+        # Iterate over components in the original model and check
+        # that they are present in the loaded model
+        for Citem in C.iter(CUDSComponent):
+            # Check items that have name parameter defined
+            if hasattr(CCitem, 'name'):
+                Citem = C.get(CCitem.name)
+                self.assertEqual(Citem.name, CCitem.name)
+                for key in CCitem.data:
+                    self.assertEqual(Citem.data[key], CCitem.data[key])
 
     def _ran(self, dtype, shape):
         if dtype == numpy.int32:
@@ -126,20 +127,21 @@ class TestSerialization(unittest.TestCase):
                 for prm in comp_inst.supported_parameters():
                     if prm is not CUBA.UUID:
                         name = str(prm).replace('CUBA.', '')
-                        if to_camel_case(name) in dir(api):
-                            # Create one or two subcomponents if supported
-                            if numpy.random.randint(2):
-                                subcomp1 = self._create_random_comp(name)
-                                data_dict[prm] = subcomp1
+                        if numpy.random.randint(2):
+                            if to_camel_case(name) in dir(api):
+                                # Create one or two subcomponents if supported
+                                if numpy.random.randint(2):
+                                    subcomp1 = self._create_random_comp(name)
+                                    data_dict[prm] = subcomp1
+                                else:
+                                    subcomp1 = self._create_random_comp(name)
+                                    subcomp2 = self._create_random_comp(name)
+                                    data_dict[prm] = [subcomp1, subcomp2]
                             else:
-                                subcomp1 = self._create_random_comp(name)
-                                subcomp2 = self._create_random_comp(name)
-                                data_dict[prm] = [subcomp1, subcomp2]
-                        else:
-                            dtype = KEYWORDS[name].dtype
-                            shape = KEYWORDS[name].shape
-                            val = self._ran(dtype, shape)
-                            data_dict[prm] = val
+                                dtype = KEYWORDS[name].dtype
+                                shape = KEYWORDS[name].shape
+                                val = self._ran(dtype, shape)
+                                data_dict[prm] = val
                 comp_inst.data = data_dict
                 return comp_inst
         return None
