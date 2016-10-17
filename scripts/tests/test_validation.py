@@ -1,7 +1,6 @@
 import unittest
 import numpy
 
-from simphony.api import CUBA
 from simphony.core.keywords import KEYWORDS
 from simphony.cuds.meta import api
 from simphony.cuds.meta.validation import\
