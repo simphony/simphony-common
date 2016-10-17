@@ -1,31 +1,15 @@
 import unittest
-
 import numpy
-from mock import patch
 
-from .cuba import CUBA
-from .keywords import KEYWORDS
-
-with patch('simphony.core.cuba.CUBA', CUBA),\
-     patch('simphony.core.data_container.CUBA', CUBA),\
-     patch('simphony.core.keywords.KEYWORDS', KEYWORDS),\
-     patch('simphony.core.data_container.DataContainer.restricted_keys',
-           frozenset(CUBA)),\
-     patch('simphony.core.data_container.DataContainer._restricted_mapping',
-           CUBA.__members__):
-    from .meta_class import api
-    from .meta_class.validation import (decode_shape,
-                                        check_shape,
-                                        validate_cuba_keyword)
+from simphony.api import CUBA
+from simphony.core.keywords import KEYWORDS
+from simphony.cuds.meta import api
+from simphony.cuds.meta.validation import\
+    (decode_shape,
+     check_shape,
+     validate_cuba_keyword)
 
 
-@patch('simphony.core.data_container.DataContainer.restricted_keys',
-       frozenset(CUBA))
-@patch('simphony.core.data_container.DataContainer._restricted_mapping',
-       CUBA.__members__)
-@patch('simphony.core.data_container.CUBA', CUBA)
-@patch('simphony.core.keywords.KEYWORDS', KEYWORDS)
-@patch('simphony.core.cuba.CUBA', CUBA)
 class TestValidation(unittest.TestCase):
 
     def test_decode_shape(self):
