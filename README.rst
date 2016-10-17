@@ -145,10 +145,10 @@ Directories
 Guide to generating metadata classes
 ------------------------------------
 
-- Install the code generator
+- Make sure the generator CLI script is installed:
 
   ```
-$ python setup.py install
+$ python setup.py develop
 $ simphony-meta-generate
  Usage: simphony-meta-generate [OPTIONS] COMMAND [ARGS]...
 
@@ -163,7 +163,7 @@ Commands:
   meta_class  Create the Simphony Metadata classes...
   ```
 
-- Generate Medata classes
+- Generate Metadata classes
 
   You need to supply the yaml file that define the metadata schema, and the
   path to the directory where the generated classes should be placed.
@@ -187,3 +187,22 @@ simphony-meta-generate keywords yaml_files/cuba.yml $PATH_TO_KEYWORD_PY
  
   The generated code do not automatically comply with PEP 8.  Auto formatters are available on PyPI.
   Examples are [`yapf`](https://pypi.python.org/pypi/yapf) and [`authpep8`](https://pypi.python.org/pypi/autopep8)
+
+- Here is a wrap up of the above steps, assuming the metadata files reside in `yaml_files` directory and that we are in the root of `simphony-metadata` repository:
+  ```
+  # Generate CUDS classes
+  simphony-meta-generate meta_class yaml_files/simphony_metadata.yml simphony/cuds/meta -O
+  
+  # Generate the CUBA enum
+  simphony-meta-generate cuba_enum yaml_files/cuba.yml yaml_files/simphony_metadata.yml simphony/core/cuba.py
+  
+  # Generate the KEYWORDS enum
+  simphony-meta-generate keywords yaml_files/cuba.yml yaml_files/simphony_metadata.yml simphony/core/keywords.py
+
+  # Make sure `yapf` is installed for styling
+  pip install yapf
+  
+  # Apply pep8 style
+  yapf --style pep8 --in-place simphony/core/{keywords.py,cuba.py}
+  yapf --style pep8 --in-place --recursive simphony/cuds/meta
+  ```
