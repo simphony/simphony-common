@@ -20,18 +20,19 @@ class BuildMeta(Command):
 
     def finalize_options(self):
         if self.simphony_metadata_path is None:
+            self.simphony_metadata_path = os.path.join(
+                os.getcwd(),
+                "simphony-metadata/")
             try:
-                check_call([
-                    "git",
-                    "clone",
-                    "https://github.com/simphony/simphony-metadata/"])
+                if not os.path.exists(self.simphony_metadata_path):
+                    check_call([
+                        "git",
+                        "clone",
+                        "https://github.com/simphony/simphony-metadata/"])
             except OSError:
                 print (textwrap.dedent("""
                 Failed to run git. Make sure it is installed in your
                 environment"""))
-            self.simphony_metadata_path = os.path.join(
-                os.getcwd(),
-                "simphony-metadata/")
 
     def run(self):
         metadata_yml = os.path.join(
@@ -93,6 +94,12 @@ class CustomBuild(build):
     ]
 
 
+class CustomInstall(build):
+    sub_commands = build.sub_commands + [
+        ('build_meta', None)
+    ]
+
+
 def write_version_py(filename=None):
     if filename is None:
         filename = os.path.join(
@@ -125,6 +132,7 @@ setup(
     cmdclass={
         'build_meta': BuildMeta,
         'build': CustomBuild,
+        'install': CustomInstall,
     },
     entry_points={
         'console_scripts': [
