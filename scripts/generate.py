@@ -13,8 +13,6 @@ from itertools import chain, count
 import click
 import yaml
 
-from . import validation
-
 # May be 'simphony.meta', we can make this as a command-line attribute
 PATH_TO_CLASSES = ''
 
@@ -29,9 +27,6 @@ IMPORT_PATHS = {
 # Excludes these keys in the `supported_parameters` property
 # FIXME: These are excluded because they are not defined CUBA keys
 EXCLUDE_SUPPORTED_PARAMETERS = ('definition', 'models', 'variables', 'data',)
-
-# validation.py for validation codes.
-VALIDATION_PY_PATH = os.path.splitext(validation.__file__)[0]+'.py'
 
 # keywords that are excludes from DataContainers
 CUBA_DATA_CONTAINER_EXCLUDE = ['Id', 'Position']
@@ -955,15 +950,19 @@ def meta_class(yaml_file, out_path, overwrite):
         # Create validation.py
         validation_path = os.path.join(temp_dir, 'validation.py')
 
+        from . import validation
+        # validation.py for validation codes.
+        validation_py_path = os.path.splitext(validation.__file__)[0]+'.py'
+
         with open(validation_path, 'wb') as dst_file, \
-                open(VALIDATION_PY_PATH, 'rb') as src_file:
+                open(validation_py_path, 'rb') as src_file:
 
             # Replace import path for KEYWORDS
             def read_lines(src_file):
                 while True:
                     line = src_file.next()
-                    yield re.sub(r'.+import KEYWORDS',
-                                 IMPORT_PATHS['KEYWORDS'], line)
+                    yield re.sub(r'(\s*).+import KEYWORDS',
+                                 "\\1"+IMPORT_PATHS['KEYWORDS'], line)
 
             # Copy the rest of the file
             print(*read_lines(src_file), file=dst_file, sep='')

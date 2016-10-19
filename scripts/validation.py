@@ -3,8 +3,6 @@ import re
 
 import numpy
 
-from simphony.core.keywords import KEYWORDS
-
 
 def to_camel_case(text, special={'cuds': 'CUDS'}):
     """ Convert text to CamelCase (for class name)
@@ -132,6 +130,8 @@ def validate_cuba_keyword(value, key):
           the value is not an instance of that class
     '''
     from . import api
+    from simphony.core.keywords import KEYWORDS
+
 
     # Sanitising, although generated code already did
     key = key.replace('CUBA.', '')
@@ -206,6 +206,8 @@ def cast_data_type(value, key):
     TypeError
         If casting would be unsafe
     '''
+    from simphony.core.keywords import KEYWORDS
+
     keyword_name = key.upper()
 
     if keyword_name in KEYWORDS:
