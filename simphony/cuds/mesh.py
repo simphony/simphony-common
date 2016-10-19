@@ -542,21 +542,6 @@ class Mesh(ABCMesh):
             for uid in uids:
                 yield Cell.from_cell(self._cells[uid])
 
-    def _iter_uids(self, uids):
-        """Iterates over a series of uids
-
-        Parameters
-        ----------
-        uids: iterable
-            iterable with the uids to return
-
-        Yields
-        ------
-        The items corresponding to the uids.
-        """
-        for uid in uids:
-            yield self.get(uid)
-
     def _has_points(self):
         """ Check if the mesh has points
 

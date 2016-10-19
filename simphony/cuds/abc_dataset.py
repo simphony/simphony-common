@@ -4,13 +4,6 @@ from abc import ABCMeta, abstractmethod
 
 class ABCDataset(object):
     """Abstract base class for a dataset.
-
-    Attributes
-    ----------
-    name : str
-        name of dataset item.
-    data : DataContainer
-        The data associated with the container
     """
     __metaclass__ = ABCMeta
 
@@ -40,14 +33,6 @@ class ABCDataset(object):
         ValueError :
             when there is an object with an uids that already exists
             in the dataset.
-
-        Examples
-        --------
-        Add a set of particles
-
-        >>> particle_list = [Particle(), Particle()]
-        >>> particles = Particles(name="foo")
-        >>> uids = particles.add(particle_list)
         """
 
     @abstractmethod
@@ -68,16 +53,6 @@ class ABCDataset(object):
         ------
         ValueError :
             If any object inside the iterable does not exist.
-
-        Examples
-        --------
-        Given a set of objects that already exists in the dataset
-        (taken with the 'get' method for example), just call the
-        function passing the items as parameter.
-
-        >>> part_container = Particles(name="foo")
-        >>> ... #do whatever you want with the particles
-        >>> part_container.update([part1, part2])
         """
 
     @abstractmethod
@@ -117,14 +92,6 @@ class ABCDataset(object):
         ------
         KeyError :
             If any object doesn't exist.
-
-        Examples
-        --------
-        Having a set of uids of existing objects, pass it to the method.
-
-        >>> particles = Particles(name="foo")
-        >>> ...
-        >>> particles.remove([uid1, uid2])
         """
 
     @abstractmethod
@@ -153,17 +120,6 @@ class ABCDataset(object):
         ------
         KeyError :
             if any of the ids passed as parameters are not in the dataset.
-
-        Examples
-        --------
-        It can be used with a sequence as parameter or without it:
-
-        >>> particles = Particles(name="foo")
-        >>> ...
-        >>> for object in particles.iter([uid1, uid2, uid3]):
-            ...  #do stuff
-        >>> for object in particles.iter():
-            ...  #do stuff
         """
 
     @abstractmethod
@@ -182,7 +138,7 @@ class ABCDataset(object):
         """
 
     @abstractmethod
-    def has_type(self, item_type):
+    def has_type(self, item_type):  # pragma: no cover
         """Checks if the specified CUDSItem type is present
         in the dataset.
 
