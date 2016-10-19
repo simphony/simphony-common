@@ -422,5 +422,3 @@ class Particles(ABCParticles):
             cur_dict[uid] = clone(element)
         else:
             raise ValueError('id: {} does not exist'.format(uid))
-
-
