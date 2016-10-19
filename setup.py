@@ -5,6 +5,7 @@ from subprocess import check_call
 from setuptools import setup, find_packages
 from distutils.cmd import Command
 from distutils.command.build import build
+from distutils.command.install import install
 
 # Read description
 with open('README.rst', 'r') as readme:
@@ -94,8 +95,8 @@ class CustomBuild(build):
     ]
 
 
-class CustomInstall(build):
-    sub_commands = build.sub_commands + [
+class CustomInstall(install):
+    sub_commands = install.sub_commands + [
         ('build_meta', None)
     ]
 
