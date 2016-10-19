@@ -7,7 +7,8 @@ from simphony.testing.utils import (
 
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Particles
-from simphony.cuds.mesh import Edge, Face, Cell, Point, Mesh
+from simphony.cuds.mesh import Mesh
+from simphony.cuds.mesh_items import Edge, Face, Cell, Point
 from simphony.cuds.lattice import make_cubic_lattice
 
 

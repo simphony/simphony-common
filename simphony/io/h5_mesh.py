@@ -4,16 +4,12 @@ This module contains the implentation to store, acces,
 and modify a file storing mesh data
 
 """
-import itertools
 import tables
 import uuid
 
 from simphony.cuds.mesh import ABCMesh
 
-from simphony.cuds.mesh import Point
-from simphony.cuds.mesh import Edge
-from simphony.cuds.mesh import Face
-from simphony.cuds.mesh import Cell
+from simphony.cuds.mesh_items import Edge, Face, Cell, Point
 
 from simphony.core.data_container import DataContainer
 from simphony.core.cuds_item import CUDSItem
@@ -210,137 +206,6 @@ class H5Mesh(ABCMesh):
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 
-    def get(self, uid):
-        """ Returns an edge with a given uid.
-
-        Returns the edge stored in the mesh
-        identified by uid. If such edge do not
-        exists an exception is raised.
-
-        Parameters
-        ----------
-        uid : uuid.UUID
-            uid of the desired edge.
-
-        Returns
-        -------
-        edge : Edge
-            Edge identified by uid
-
-        Raises
-        ------
-        KeyError :
-            If the edge identified by uid was not found
-        TypeError :
-            When ``uid`` is not uuid.UUID
-        """
-
-        if not isinstance(uid, uuid.UUID):
-            message = 'Expected type for `uid` is uuid.UUID but received {!r}'
-            raise TypeError(message.format(type(uid)))
-
-        try:
-            return self._get_point(uid)
-        except KeyError:
-            pass
-
-        try:
-            return self._get_edge(uid)
-        except KeyError:
-            pass
-
-        try:
-            return self._get_face(uid)
-        except KeyError:
-            pass
-
-        try:
-            return self._get_cell(uid)
-        except KeyError:
-            pass
-
-        raise KeyError("Unknown uid {}".format(uid))
-
-    def add(self, items):
-        uids = []
-        for item in items:
-            if isinstance(item, Point):
-                uids.extend(self._add_points([item]))
-            elif isinstance(item, Edge):
-                uids.extend(self._add_edges([item]))
-            elif isinstance(item, Face):
-                uids.extend(self._add_faces([item]))
-            elif isinstance(item, Cell):
-                uids.extend(self._add_cells([item]))
-            else:
-                raise TypeError(
-                    "Unrecognised item type {!r}".format(item)
-                )
-        return uids
-
-    def update(self, items):
-        for item in items:
-            if isinstance(item, Point):
-                self._update_points([item])
-            elif isinstance(item, Edge):
-                self._update_edges([item])
-            elif isinstance(item, Face):
-                self._update_faces([item])
-            elif isinstance(item, Cell):
-                self._update_cells([item])
-            else:
-                raise TypeError(
-                    "Unrecognised item type {!r}".format(item)
-                )
-
-    def remove(self, uids):
-        raise NotImplementedError("Remove is not implemented for Mesh")
-
-    def iter(self, uids=None, item_type=None):
-        if item_type == CUDSItem.POINT:
-            return self._iter_points(uids)
-        elif item_type == CUDSItem.EDGE:
-            return self._iter_edges(uids)
-        elif item_type == CUDSItem.FACE:
-            return self._iter_faces(uids)
-        elif item_type == CUDSItem.CELL:
-            return self._iter_cells(uids)
-        else:
-            if uids is None:
-                return itertools.chain(
-                    self._iter_points(),
-                    self._iter_edges(),
-                    self._iter_faces(),
-                    self._iter_cells(),
-                )
-            else:
-                return self._iter_uids(uids)
-
-    def has(self, uid):
-        for table in [self._group.points,
-                       self._group.edges,
-                        self._group.faces,
-                       self._group.cells]:
-            if len(table.where(
-                    'uid == value',
-                    condvars={'value': uid.hex}
-                    )):
-                return True
-
-        return False
-
-    def has_type(self, item_type):
-        if item_type == CUDSItem.POINT:
-            return self._has_points()
-        elif item_type == CUDSItem.EDGE:
-            return self._has_edges()
-        elif item_type == CUDSItem.FACE:
-            return self._has_faces()
-        elif item_type == CUDSItem.CELL:
-            return self._has_cells()
-        else:
-            raise ValueError("Unknown item_type "
-                             "{}".format(item_type))
     # Private
 
     def _get_point(self, uid):

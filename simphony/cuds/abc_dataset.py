@@ -169,12 +169,32 @@ class ABCDataset(object):
     @abstractmethod
     def has(self, uid):  # pragma: no cover
         """Checks if an object with the given uid already exists
-        in the dataset."""
+        in the dataset.
 
+        Parameters
+        ----------
+        uid : uuid.UUID
+            the uid of the object
+
+        Returns
+        -------
+        True if the uid is found, False otherwise.
+        """
+
+    @abstractmethod
     def has_type(self, item_type):
-        """Checks if an object with the given uid already exists
-        in the dataset."""
-        return self.count_of(item_type) != 0
+        """Checks if the specified CUDSItem type is present
+        in the dataset.
+
+        Parameters
+        ----------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        True if the type is present, False otherwise.
+        """
 
     @abstractmethod
     def count_of(self, item_type):  # pragma: no cover
