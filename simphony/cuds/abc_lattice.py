@@ -1,7 +1,11 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
+
+from simphony.core.cuds_item import CUDSItem
+from simphony.cuds.abc_dataset import ABCDataset
+from simphony.cuds.utils import deprecated
 
 
-class ABCLattice(object):
+class ABCLattice(ABCDataset):
     """Abstract base class for a lattice.
 
     Attributes
@@ -17,11 +21,37 @@ class ABCLattice(object):
     data : DataContainer
         high level CUBA data assigned to lattice
     """
-    __metaclass__ = ABCMeta
 
-    @abstractmethod
+    def get(self, index):
+        return self._get_node(index)
+
+    def add(self, iterable):
+        raise NotImplementedError()
+
+    def update(self, iterable):
+        self._update_nodes(iterable)
+
+    def remove(self, uids):
+        raise NotImplementedError()
+
+    def iter(self, uids=None, item_type=None):
+        if item_type is not None and item_type != CUDSItem.NODE:
+            raise ValueError("item_type must be CUDSItem.NODE")
+
+        return self._iter_nodes(uids)
+
+    def has(self, uid):
+        raise NotImplementedError()
+
+    def has_type(self, item_type):
+        raise NotImplementedError()
+
+    @deprecated
     def get_node(self, index):  # pragma: no cover
-        """Get the lattice node corresponding to the given index.
+        """
+        Deprecated. Use get() instead.
+
+        Get the lattice node corresponding to the given index.
 
         Parameters
         ----------
@@ -33,20 +63,28 @@ class ABCLattice(object):
         node : LatticeNode
 
         """
+        return self.get(index)
 
-    @abstractmethod
+    @deprecated
     def update_nodes(self, nodes):  # pragma: no cover
-        """Update the corresponding lattice nodes.
+        """
+        Deprecated. Use update() instead.
+
+        Update the corresponding lattice nodes.
 
         Parameters
         ----------
         nodes : iterator of LatticeNodes
 
         """
+        self.update(nodes)
 
-    @abstractmethod
+    @deprecated
     def iter_nodes(self, indices=None):  # pragma: no cover
-        """Get an iterator over the LatticeNodes described by the indices.
+        """
+        Deprecated. Use iter() instead.
+
+        Get an iterator over the LatticeNodes described by the indices.
 
         Parameters
         ----------
@@ -62,6 +100,7 @@ class ABCLattice(object):
             An iterator over LatticeNode objects
 
         """
+        return self.iter(indices)
 
     @property
     def primitive_cell(self):
@@ -87,23 +126,13 @@ class ABCLattice(object):
                 self.origin[2] + ind[0]*p1[2] + ind[1]*p2[2] + ind[2]*p3[2])
 
     @abstractmethod
-    def count_of(self, item_type):  # pragma: no cover
-        """ Return the count of item_type in the container.
+    def _get_node(self, index):  # pragma: no cover
+        pass
 
-        Parameters
-        ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+    @abstractmethod
+    def _update_nodes(self, nodes):  # pragma: no cover
+        pass
 
-        Returns
-        -------
-        count : int
-            The number of items of item_type in the container.
-
-        Raises
-        ------
-        ValueError :
-            If the type of the item is not supported in the current
-            container.
-
-        """
+    @abstractmethod
+    def _iter_nodes(self, indices=None):  # pragma: no cover
+        pass

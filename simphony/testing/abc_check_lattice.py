@@ -6,7 +6,8 @@ from numpy.testing import (assert_array_equal, assert_array_almost_equal)
 
 from simphony.testing.utils import (
     create_data_container, compare_data_containers, compare_lattice_nodes)
-from simphony.cuds.lattice import (LatticeNode, make_triclinic_lattice)
+from simphony.cuds.lattice import make_triclinic_lattice
+from simphony.cuds.lattice_items import LatticeNode
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 from simphony.cuds.primitive_cell import (BravaisLattice, PrimitiveCell)
