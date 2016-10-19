@@ -20,10 +20,15 @@ class BuildMeta(Command):
 
     def finalize_options(self):
         if self.simphony_metadata_path is None:
-            check_call([
-                "git",
-                "clone",
-                "https://github.com/simphony/simphony-metadata/"])
+            try:
+                check_call([
+                    "git",
+                    "clone",
+                    "https://github.com/simphony/simphony-metadata/"])
+            except OSError:
+                print (textwrap.dedent("""
+                Failed to run git. Make sure it is installed in your
+                environment"""))
             self.simphony_metadata_path = os.path.join(
                 os.getcwd(),
                 "simphony-metadata/")
@@ -33,7 +38,8 @@ class BuildMeta(Command):
             self.simphony_metadata_path,
             "yaml_files",
             "simphony_metadata.yml")
-        cuba_yml = os.path.join( self.simphony_metadata_path,
+        cuba_yml = os.path.join(
+            self.simphony_metadata_path,
             "yaml_files",
             "cuba.yml")
 
@@ -53,15 +59,15 @@ class BuildMeta(Command):
             meta_class.callback(simphony_metadata, "simphony/cuds/meta/", True)
 
         with open(metadata_yml, 'rb') as simphony_metadata, \
-             open(cuba_yml, 'rb') as cuba, \
-             open("simphony/core/keywords.py", "wb") as keywords_out:
+                open(cuba_yml, 'rb') as cuba, \
+                open("simphony/core/keywords.py", "wb") as keywords_out:
 
             from scripts.generate import keywords
             keywords.callback(cuba, simphony_metadata, keywords_out)
 
         with open(metadata_yml, 'rb') as simphony_metadata, \
-             open(cuba_yml, 'rb') as cuba, \
-             open("simphony/core/cuba.py", "wb") as cuba_out:
+                open(cuba_yml, 'rb') as cuba, \
+                open("simphony/core/cuba.py", "wb") as cuba_out:
 
             from scripts.generate import cuba_enum
             cuba_enum.callback(cuba, simphony_metadata, cuba_out)
@@ -71,14 +77,13 @@ class BuildMeta(Command):
             check_call(cmd_args + ["simphony/core/keywords.py"])
             check_call(cmd_args + ["simphony/core/keywords.py"])
             check_call(cmd_args + ["--recursive", "simphony/cuds/meta/"])
-        except OSError as e:
+        except OSError:
             print (textwrap.dedent("""
                 Failed to run yapf. Make sure it is installed in your
                 python environment, by running
 
                 pip install yapf
-                """)
-            )
+                """))
             raise
 
 
@@ -86,8 +91,6 @@ class CustomBuild(build):
     sub_commands = build.sub_commands + [
         ('build_meta', None)
     ]
-
-
 
 
 def write_version_py(filename=None):
