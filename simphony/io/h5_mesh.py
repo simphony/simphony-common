@@ -766,10 +766,6 @@ class H5Mesh(ABCMesh):
             for uid in uids:
                 yield self.get_cell(uid)
 
-    def _iter_uids(self, uids):
-        for uid in uids:
-            yield self.get(uid)
-
     def _has_points(self):
         """ Check if the mesh container has edges
 
