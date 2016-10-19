@@ -19,7 +19,14 @@ class BuildMeta(Command):
         self.simphony_metadata_path = None
 
     def finalize_options(self):
-        pass
+        if self.simphony_metadata_path is None:
+            check_call([
+                "git",
+                "clone",
+                "https://github.com/simphony/simphony-metadata/"])
+            self.simphony_metadata_path = os.path.join(
+                os.getcwd(),
+                "simphony-metadata/")
 
     def run(self):
         metadata_yml = os.path.join(

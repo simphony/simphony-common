@@ -63,3 +63,6 @@ target/
 # PyCharm IDE stuff
 .idea
 simphony/version.py
+simphony-metadata
+*-venv
+venv
