@@ -132,7 +132,6 @@ def validate_cuba_keyword(value, key):
     from . import api
     from simphony.core.keywords import KEYWORDS
 
-
     # Sanitising, although generated code already did
     key = key.replace('CUBA.', '')
 
