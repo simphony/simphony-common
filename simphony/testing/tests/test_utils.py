@@ -112,7 +112,7 @@ class TestCompareMeshDatasets(unittest.TestCase):
         mesh = Mesh(name="test")
         reference = Mesh(name="test")
 
-        point_list = create_particles_with_id()
+        point_list = create_points_with_id()
         edge_list = create_edges()
         face_list = create_faces()
         cell_list = create_cells()
@@ -140,7 +140,7 @@ class TestCompareMeshDatasets(unittest.TestCase):
         mesh = Mesh(name="test")
         reference = Mesh(name="test_ref")
 
-        point_list = create_particles_with_id()
+        point_list = create_points_with_id()
         edge_list = create_edges()
         face_list = create_faces()
         cell_list = create_cells()

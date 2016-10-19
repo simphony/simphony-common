@@ -5,6 +5,8 @@ and modify a mesh
 
 """
 import uuid
+import itertools
+
 from simphony.cuds.abc_mesh import ABCMesh
 from simphony.core.cuds_item import CUDSItem
 import simphony.core.data_container as dc
@@ -226,7 +228,158 @@ class Mesh(ABCMesh):
     def data(self, value):
         self._data = dc.DataContainer(value)
 
-    def get_point(self, uid):
+    def count_of(self, item_type):
+        """ Return the count of item_type in the container.
+
+        Parameters
+        ----------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the container.
+
+        Raises
+        ------
+        ValueError :
+            If the type of the item is not supported in the current
+            container.
+        """
+
+        try:
+            return len(self._items_count[item_type]())
+        except KeyError:
+            error_str = "Trying to obtain count a of non-supported item: {}"
+            raise ValueError(error_str.format(item_type))
+
+    def get(self, uid):
+        """ Returns an item with a given uid.
+
+        Returns the item stored in the mesh
+        identified by uid. If such item does not
+        exists an exception is raised.
+
+        Parameters
+        ----------
+        uid : uuid.UUID
+            uid of the desired item.
+
+        Returns
+        -------
+        item : Point | Edge | Face | Cell
+            Item identified by uid
+
+        Raises
+        ------
+        KeyError :
+            If the item identified by uid was not found
+        TypeError :
+            When ``uid`` is not uuid.UUID
+        """
+
+        try:
+            return self._get_point(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_edge(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_face(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_cell(uid)
+        except KeyError:
+            pass
+
+        raise KeyError("Unknown uid {}".format(uid))
+
+    def add(self, items):
+        uids = []
+        for item in items:
+            if isinstance(item, Point):
+                uids.extend(self._add_points([item]))
+            elif isinstance(item, Edge):
+                uids.extend(self._add_edges([item]))
+            elif isinstance(item, Face):
+                uids.extend(self._add_faces([item]))
+            elif isinstance(item, Cell):
+                uids.extend(self._add_cells([item]))
+            else:
+                raise TypeError(
+                    "Unrecognised item type {!r}".format(item)
+                )
+        return uids
+
+    def update(self, items):
+        for item in items:
+            if isinstance(item, Point):
+                self._update_points([item])
+            elif isinstance(item, Edge):
+                self._update_edges([item])
+            elif isinstance(item, Face):
+                self._update_faces([item])
+            elif isinstance(item, Cell):
+                self._update_cells([item])
+            else:
+                raise TypeError(
+                    "Unrecognised item type {!r}".format(item)
+                )
+
+    def remove(self, uids):
+        raise NotImplementedError("Remove is not implemented for Mesh")
+
+    def iter(self, uids=None, item_type=None):
+        if item_type == CUDSItem.POINT:
+            return self._iter_points(uids)
+        elif item_type == CUDSItem.EDGE:
+            return self._iter_edges(uids)
+        elif item_type == CUDSItem.FACE:
+            return self._iter_faces(uids)
+        elif item_type == CUDSItem.CELL:
+            return self._iter_cells(uids)
+        else:
+            if uids is None:
+                return itertools.chain(
+                    self._iter_points(),
+                    self._iter_edges(),
+                    self._iter_faces(),
+                    self._iter_cells(),
+                )
+            else:
+                return self._iter_uids(uids)
+
+    def has(self, uid):
+        try:
+            self.get(uid)
+        except KeyError:
+            return False
+
+        return True
+
+    def has_type(self, item_type):
+        if item_type == CUDSItem.POINT:
+            return self._has_points()
+        elif item_type == CUDSItem.EDGE:
+            return self._has_edges()
+        elif item_type == CUDSItem.FACE:
+            return self._has_faces()
+        elif item_type == CUDSItem.CELL:
+            return self._has_cells()
+        else:
+            raise ValueError("Unknown item_type "
+                             "{}".format(item_type))
+
+    # Private
+
+    def _get_point(self, uid):
         """ Returns a point with a given uid.
 
         Returns the point stored in the mesh
@@ -257,7 +410,7 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def get_edge(self, uid):
+    def _get_edge(self, uid):
         """ Returns an edge with a given uid.
 
         Returns the edge stored in the mesh
@@ -288,7 +441,7 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def get_face(self, uid):
+    def _get_face(self, uid):
         """ Returns a face with a given uid.
 
         Returns the face stored in the mesh
@@ -319,7 +472,7 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def get_cell(self, uid):
+    def _get_cell(self, uid):
         """ Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
@@ -350,7 +503,7 @@ class Mesh(ABCMesh):
             message = 'Expected type for `uid` is uuid.UUID but received {!r}'
             raise TypeError(message.format(type(uid)))
 
-    def add_points(self, points):
+    def _add_points(self, points):
         """ Adds a set of new points to the mesh.
 
         Parameters
@@ -379,7 +532,7 @@ class Mesh(ABCMesh):
             rpoints.append(point.uid)
         return rpoints
 
-    def add_edges(self, edges):
+    def _add_edges(self, edges):
         """ Adds a set of new edges to the mesh.
 
         Parameters
@@ -408,7 +561,7 @@ class Mesh(ABCMesh):
             redges.append(edge.uid)
         return redges
 
-    def add_faces(self, faces):
+    def _add_faces(self, faces):
         """ Adds a set of new faces to the mesh.
 
         Parameters
@@ -437,7 +590,7 @@ class Mesh(ABCMesh):
             rfaces.append(face.uid)
         return rfaces
 
-    def add_cells(self, cells):
+    def _add_cells(self, cells):
         """ Adds a set of new cells to the mesh.
 
         Parameters
@@ -465,7 +618,7 @@ class Mesh(ABCMesh):
             rcells.append(cell.uid)
         return rcells
 
-    def update_points(self, points):
+    def _update_points(self, points):
         """ Updates the information of a set of points.
 
         Gets the mesh point identified by the same
@@ -492,7 +645,7 @@ class Mesh(ABCMesh):
             point_to_update.data = point.data
             point_to_update.coordinates = point.coordinates
 
-    def update_edges(self, edges):
+    def _update_edges(self, edges):
         """ Updates the information of a set of edges.
 
         Gets the mesh edge identified by the same
@@ -519,7 +672,7 @@ class Mesh(ABCMesh):
             edge_to_update.data = edge.data
             edge_to_update.points = edge.points
 
-    def update_faces(self, faces):
+    def _update_faces(self, faces):
         """ Updates the information of a set of faces.
 
         Gets the mesh face identified by the same
@@ -546,7 +699,7 @@ class Mesh(ABCMesh):
             face_to_update.data = face.data
             face_to_update.points = face.points
 
-    def update_cells(self, cells):
+    def _update_cells(self, cells):
         """ Updates the information of a set of cells.
 
         Gets the mesh cell identified by the same
@@ -573,7 +726,7 @@ class Mesh(ABCMesh):
             cell_to_update.data = cell.data
             cell_to_update.points = cell.points
 
-    def iter_points(self, uids=None):
+    def _iter_points(self, uids=None):
         """ Returns an iterator over points.
 
         Parameters
@@ -596,7 +749,7 @@ class Mesh(ABCMesh):
             for point_uid in uids:
                 yield Point.from_point(self._points[point_uid])
 
-    def iter_edges(self, uids=None):
+    def _iter_edges(self, uids=None):
         """ Returns an iterator over edges.
 
         Parameters
@@ -620,7 +773,7 @@ class Mesh(ABCMesh):
             for uid in uids:
                 yield Edge.from_edge(self._edges[uid])
 
-    def iter_faces(self, uids=None):
+    def _iter_faces(self, uids=None):
         """ Returns an iterator over faces.
 
         Parameters
@@ -643,7 +796,7 @@ class Mesh(ABCMesh):
             for uid in uids:
                 yield Face.from_face(self._faces[uid])
 
-    def iter_cells(self, uids=None):
+    def _iter_cells(self, uids=None):
         """ Returns an iterator over cells.
 
         Parameters
@@ -666,7 +819,34 @@ class Mesh(ABCMesh):
             for uid in uids:
                 yield Cell.from_cell(self._cells[uid])
 
-    def has_edges(self):
+    def _iter_uids(self, uids):
+        """Iterates over a series of uids
+
+        Parameters
+        ----------
+        uids: iterable
+            iterable with the uids to return
+
+        Yields
+        ------
+        The items corresponding to the uids.
+        """
+        for uid in uids:
+            yield self.get(uid)
+
+    def _has_points(self):
+        """ Check if the mesh has points
+
+        Returns
+        -------
+        result  : bool
+            True of there are points inside the mesh,
+            False otherwise
+
+        """
+        return len(self._points) > 0
+
+    def _has_edges(self):
         """ Check if the mesh has edges
 
         Returns
@@ -678,7 +858,7 @@ class Mesh(ABCMesh):
         """
         return len(self._edges) > 0
 
-    def has_faces(self):
+    def _has_faces(self):
         """ Check if the mesh has faces
 
         Returns
@@ -690,7 +870,7 @@ class Mesh(ABCMesh):
         """
         return len(self._faces) > 0
 
-    def has_cells(self):
+    def _has_cells(self):
         """ Check if the mesh has cells
 
         Returns
@@ -701,33 +881,6 @@ class Mesh(ABCMesh):
 
         """
         return len(self._cells) > 0
-
-    def count_of(self, item_type):
-        """ Return the count of item_type in the container.
-
-        Parameters
-        ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
-
-        Returns
-        -------
-        count : int
-            The number of items of item_type in the container.
-
-        Raises
-        ------
-        ValueError :
-            If the type of the item is not supported in the current
-            container.
-
-        """
-
-        try:
-            return len(self._items_count[item_type]())
-        except KeyError:
-            error_str = "Trying to obtain count a of non-supported item: {}"
-            raise ValueError(error_str.format(item_type))
 
     def _generate_uuid(self):
         """ Provides a uuid for the object
