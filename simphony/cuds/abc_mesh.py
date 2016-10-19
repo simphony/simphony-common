@@ -670,6 +670,10 @@ class ABCMesh(ABCDataset):
         return self.has_type(CUDSItem.CELL)
 
     # Private. Need to be reimplemented by subclasses
+    #
+    # These methods documented behavior is as the deprecated
+    # variants above. They are used temporarily as a shim to expose
+    # the old interface through the new one without too many changes.
 
     @abstractmethod
     def _get_point(self, uid):  # pragma: no cover
@@ -752,6 +756,7 @@ class ABCMesh(ABCDataset):
         pass
 
     # Private, with implementation
+
     def _iter_uids(self, uids):
         """Iterates over a series of uids
 
