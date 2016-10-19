@@ -8,7 +8,7 @@ from numpy.testing import assert_equal
 from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simphony.cuds.particles import Particle, Bond
+from simphony.cuds.particles_items import Particle, Bond
 from simphony.cuds.mesh_items import Edge, Face, Cell, Point
 
 

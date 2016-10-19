@@ -4,7 +4,8 @@ import unittest
 
 from simphony.api import CUDS
 from simphony.cuds.meta import api
-from simphony.cuds.particles import Particle, Particles
+from simphony.cuds.particles import Particles
+from simphony.cuds.particles_items import Particle
 
 
 class CUDSTestCase(unittest.TestCase):

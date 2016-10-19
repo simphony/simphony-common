@@ -5,7 +5,8 @@ import uuid
 import numpy
 from numpy.testing import assert_array_equal
 
-from simphony.cuds.particles import Particles, Particle, Bond
+from simphony.cuds.particles import Particles
+from simphony.cuds.particles_items import Bond, Particle
 from simphony.cuds.lattice import make_cubic_lattice, LatticeNode
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh_items import Element, Edge, Face, Cell, Point
