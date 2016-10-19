@@ -195,4 +195,3 @@ class H5Lattice(ABCLattice):
         else:
             for index in indices:
                 yield self.get_node(index)
-
