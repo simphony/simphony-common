@@ -4,7 +4,8 @@ import tables
 import numpy
 
 from simphony.core.data_container import DataContainer
-from simphony.cuds import ABCParticles, Particle, Bond
+from simphony.cuds import ABCParticles
+from simphony.cuds.particles_items import Bond, Particle
 from simphony.core.cuds_item import CUDSItem
 from simphony.io.h5_cuds_items import H5CUDSItems
 from simphony.io.indexed_data_container_table import IndexedDataContainerTable
@@ -32,9 +33,8 @@ class H5ParticleItems(H5CUDSItems):
 
     The class implements the Mutable-Mapping api where each Particle
     instance is mapped to uid.
-
-
     """
+
     def __init__(self, root, name='particles'):
         """ Create a proxy object for an HDF5 backed particle table.
 
@@ -162,100 +162,6 @@ class H5Particles(ABCParticles):
         else:
             self._data[0] = value
 
-    # Particle methods ######################################################
-
-    def add_particles(self, iterable):
-        """Add a set of particles.
-
-        If the particles have a uid set then they are used. If any of the
-        particle's uid is None then a new uid is generated for the
-        particle.
-
-        Returns
-        -------
-        uid : uuid.UUID
-            uid of particle.
-
-        Raises
-        ------
-        ValueError :
-           Any particle uid already exists in the container.
-
-        """
-        uids = []
-        for particle in iterable:
-            uids.append(self._add_particle(particle))
-        return uids
-
-    def update_particles(self, iterable):
-        for particle in iterable:
-            self._update_particle(particle)
-
-    def get_particle(self, uid):
-        return self._particles[uid]
-
-    def remove_particles(self, uids):
-        for uid in uids:
-            self._remove_particle(uid)
-
-    def iter_particles(self, ids=None):
-        """Get iterator over particles"""
-        if ids is None:
-            return iter(self._particles)
-        else:
-            return self._particles.itersequence(ids)
-
-    def has_particle(self, uid):
-        """Checks if a particle with uid "uid" exists in the container."""
-        return uid in self._particles
-
-    # Bond methods #######################################################
-
-    def add_bonds(self, iterable):
-        """Add a set of bonds.
-
-        If the bonds have an uid then they are used. If any of the
-        bond's uid is None then a uid is generated for the
-        bond.
-
-        Returns
-        -------
-        uid : uuid.UUID
-            uid of bond
-
-        Raises
-        ------
-        ValueError :
-           if an uid is given which already exists.
-
-        """
-        uids = []
-        for bond in iterable:
-            uids.append(self._add_bond(bond))
-        return uids
-
-    def update_bonds(self, iterable):
-        for bond in iterable:
-            self._update_bond(bond)
-
-    def get_bond(self, uid):
-        return self._bonds[uid]
-
-    def remove_bonds(self, uids):
-        for uid in uids:
-            self._remove_bond(uid)
-
-    def iter_bonds(self, ids=None):
-        """Get iterator over particles"""
-        if ids is None:
-            return iter(self._bonds)
-        else:
-            return self._bonds.itersequence(ids)
-
-    def has_bond(self, uid):
-        """Checks if a bond with uid "uid" exists in the container."""
-        return uid in self._bonds
-
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
@@ -282,7 +188,99 @@ class H5Particles(ABCParticles):
             error_str = "Trying to obtain count a of non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 
-    # Private methods --- these are temporary till we optimize things
+    # Particle methods ######################################################
+
+    def _add_particles(self, iterable):
+        """Add a set of particles.
+
+        If the particles have a uid set then they are used. If any of the
+        particle's uid is None then a new uid is generated for the
+        particle.
+
+        Returns
+        -------
+        uid : uuid.UUID
+            uid of particle.
+
+        Raises
+        ------
+        ValueError :
+           Any particle uid already exists in the container.
+
+        """
+        uids = []
+        for particle in iterable:
+            uids.append(self._add_particle(particle))
+        return uids
+
+    def _update_particles(self, iterable):
+        for particle in iterable:
+            self._update_particle(particle)
+
+    def _get_particle(self, uid):
+        return self._particles[uid]
+
+    def _remove_particles(self, uids):
+        for uid in uids:
+            self._remove_particle(uid)
+
+    def _iter_particles(self, ids=None):
+        """Get iterator over particles"""
+        if ids is None:
+            return iter(self._particles)
+        else:
+            return self._particles.itersequence(ids)
+
+    def _has_particle(self, uid):
+        """Checks if a particle with uid "uid" exists in the container."""
+        return uid in self._particles
+
+    # Bond methods #######################################################
+
+    def _add_bonds(self, iterable):
+        """Add a set of bonds.
+
+        If the bonds have an uid then they are used. If any of the
+        bond's uid is None then a uid is generated for the
+        bond.
+
+        Returns
+        -------
+        uid : uuid.UUID
+            uid of bond
+
+        Raises
+        ------
+        ValueError :
+           if an uid is given which already exists.
+
+        """
+        uids = []
+        for bond in iterable:
+            uids.append(self._add_bond(bond))
+        return uids
+
+    def _update_bonds(self, iterable):
+        for bond in iterable:
+            self._update_bond(bond)
+
+    def _get_bond(self, uid):
+        return self._bonds[uid]
+
+    def _remove_bonds(self, uids):
+        for uid in uids:
+            self._remove_bond(uid)
+
+    def _iter_bonds(self, ids=None):
+        """Get iterator over particles"""
+        if ids is None:
+            return iter(self._bonds)
+        else:
+            return self._bonds.itersequence(ids)
+
+    def _has_bond(self, uid):
+        """Checks if a bond with uid "uid" exists in the container."""
+        return uid in self._bonds
 
     def _add_particle(self, particle):
         uid = particle.uid
