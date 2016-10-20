@@ -244,6 +244,18 @@ class ABCMesh(ABCDataset):
             raise ValueError("Unknown item_type "
                              "{}".format(item_type))
 
+    def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the dataset.
+        """
+        return sum(map(lambda x: self.count_of(x),
+                       [CUDSItem.POINT, CUDSItem.EDGE,
+                        CUDSItem.FACE, CUDSItem.CELL]))
+
     # Deprecated methods.
 
     @deprecated
