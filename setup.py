@@ -41,5 +41,6 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'cuba-generate = simphony.scripts.cuba_generate:cli [CUBAGen]']},
+            ('simphony-meta-generate = '
+             'scripts.generate:cli')]},
     )
