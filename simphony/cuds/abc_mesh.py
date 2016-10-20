@@ -167,6 +167,9 @@ class ABCMesh(ABCDataset):
             If uids is None, then all objects are returned by the iterable
             and there is no restriction on the order that they are returned.
 
+        item_type: CUDSItem
+            Restricts the iteration to the specified type
+
         Yields
         ------
         object : Particle
