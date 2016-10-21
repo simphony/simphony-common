@@ -247,13 +247,13 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
 
         # Add some CUBA data
         for node in reference.iter_nodes():
-            node.data = DataContainer({CUBA.MATERIAL_ID: 1})
+            node.data = DataContainer({CUBA.NAME: 'test_container'})
             expected.update_nodes([node])
-            node.data = DataContainer({CUBA.MATERIAL_ID: 1, CUBA.DENSITY: 2})
+            node.data = DataContainer({CUBA.NAME: 'test_container', CUBA.DENSITY: 2})
             reference.update_nodes([node])
 
         # Store reference dataset along with its data
-        engine.add_dataset(reference, {CUDSItem.NODE: [CUBA.MATERIAL_ID]})
+        engine.add_dataset(reference, {CUDSItem.NODE: [CUBA.NAME]})
 
         # Closing and reopening the file
         engine.close()
