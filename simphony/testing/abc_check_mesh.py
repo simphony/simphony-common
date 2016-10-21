@@ -410,6 +410,7 @@ class CheckMeshItemOperations(object):
         for uid in uids:
             self.assertTrue(uid in self.container)
 
+
 class CheckMeshPointOperations(CheckMeshItemOperations):
 
     def setUp(self):
