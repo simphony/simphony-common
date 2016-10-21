@@ -249,7 +249,8 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
         for node in reference.iter_nodes():
             node.data = DataContainer({CUBA.NAME: 'test_container'})
             expected.update_nodes([node])
-            node.data = DataContainer({CUBA.NAME: 'test_container', CUBA.DENSITY: 2})
+            node.data = DataContainer({CUBA.NAME: 'test_container',
+                                       CUBA.DENSITY: 2})
             reference.update_nodes([node])
 
         # Store reference dataset along with its data
