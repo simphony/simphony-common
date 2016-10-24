@@ -5,7 +5,6 @@ from .condition import Condition
 
 
 class Free(Condition):
-
     '''Free boundary condition  # noqa
     '''
 
@@ -18,7 +17,9 @@ class Free(Condition):
         self.description = description
         self.name = name
         # This is a system-managed, read-only attribute
-        self._models = [CUBA.ELECTRONIC, CUBA.ATOMISTIC, CUBA.MESOSCOPIC, CUBA.CONTINUUM]
+        self._models = [
+            CUBA.ELECTRONIC, CUBA.ATOMISTIC, CUBA.MESOSCOPIC, CUBA.CONTINUUM
+        ]
         # This is a system-managed, read-only attribute
         self._definition = 'Free boundary condition'  # noqa
 
@@ -38,8 +39,7 @@ class Free(Condition):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -47,8 +47,7 @@ class Free(Condition):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 

@@ -5,7 +5,6 @@ from .model_equation import ModelEquation
 
 
 class PhysicsEquation(ModelEquation):
-
     '''Physics equation  # noqa
     '''
 
@@ -40,8 +39,7 @@ class PhysicsEquation(ModelEquation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -49,8 +47,7 @@ class PhysicsEquation(ModelEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 

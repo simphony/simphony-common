@@ -7,11 +7,8 @@ from collections import namedtuple
 import numpy
 import uuid  # noqa
 
-
-ATTRIBUTES = [
-    "name", "definition", "key", "shape", "dtype"]
+ATTRIBUTES = ["name", "definition", "key", "shape", "dtype"]
 Keyword = namedtuple("Keyword", ATTRIBUTES)
-
 
 KEYWORDS = {
     'ANGULAR_ACCELERATION': Keyword(
