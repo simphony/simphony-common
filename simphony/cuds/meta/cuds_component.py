@@ -6,6 +6,7 @@ from . import validation
 
 
 class CUDSComponent(CUDSItem):
+
     '''Base data type for the CUDS components  # noqa
     '''
 
@@ -26,21 +27,18 @@ class CUDSComponent(CUDSItem):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def description(self):
@@ -51,7 +49,9 @@ class CUDSComponent(CUDSItem):
         if value is not None:
             value = validation.cast_data_type(value, 'description')
             validation.validate_cuba_keyword(value, 'description')
-        self.data[CUBA.DESCRIPTION] = value
+        data = self.data
+        data[CUBA.DESCRIPTION] = value
+        self.data = data
 
     @property
     def name(self):
@@ -62,7 +62,9 @@ class CUDSComponent(CUDSItem):
         if value is not None:
             value = validation.cast_data_type(value, 'name')
             validation.validate_cuba_keyword(value, 'name')
-        self.data[CUBA.NAME] = value
+        data = self.data
+        data[CUBA.NAME] = value
+        self.data = data
 
     @property
     def definition(self):
@@ -80,4 +82,4 @@ class CUDSComponent(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

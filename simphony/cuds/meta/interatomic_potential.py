@@ -5,6 +5,7 @@ from .material_relation import MaterialRelation
 
 
 class InteratomicPotential(MaterialRelation):
+
     '''Interatomic Potentials Category  # noqa
     '''
 
@@ -30,21 +31,18 @@ class InteratomicPotential(MaterialRelation):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def models(self):
@@ -70,5 +68,4 @@ class InteratomicPotential(MaterialRelation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

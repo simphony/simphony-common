@@ -6,6 +6,7 @@ from . import validation
 
 
 class SoftwareTool(CUDSItem):
+
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
@@ -25,21 +26,18 @@ class SoftwareTool(CUDSItem):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def version(self):
@@ -50,7 +48,9 @@ class SoftwareTool(CUDSItem):
         if value is not None:
             value = validation.cast_data_type(value, 'version')
             validation.validate_cuba_keyword(value, 'version')
-        self.data[CUBA.VERSION] = value
+        data = self.data
+        data[CUBA.VERSION] = value
+        self.data = data
 
     @property
     def definition(self):
@@ -68,4 +68,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

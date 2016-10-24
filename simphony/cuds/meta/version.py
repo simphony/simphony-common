@@ -6,6 +6,7 @@ from . import validation
 
 
 class Version(CUDSItem):
+
     '''Version of a software tool used in a simulation  # noqa
     '''
 
@@ -30,7 +31,9 @@ class Version(CUDSItem):
     def minor(self, value):
         value = validation.cast_data_type(value, 'minor')
         validation.validate_cuba_keyword(value, 'minor')
-        self.data[CUBA.MINOR] = value
+        data = self.data
+        data[CUBA.MINOR] = value
+        self.data = data
 
     @property
     def patch(self):
@@ -40,7 +43,9 @@ class Version(CUDSItem):
     def patch(self, value):
         value = validation.cast_data_type(value, 'patch')
         validation.validate_cuba_keyword(value, 'patch')
-        self.data[CUBA.PATCH] = value
+        data = self.data
+        data[CUBA.PATCH] = value
+        self.data = data
 
     @property
     def major(self):
@@ -50,7 +55,9 @@ class Version(CUDSItem):
     def major(self, value):
         value = validation.cast_data_type(value, 'major')
         validation.validate_cuba_keyword(value, 'major')
-        self.data[CUBA.MAJOR] = value
+        data = self.data
+        data[CUBA.MAJOR] = value
+        self.data = data
 
     @property
     def full(self):
@@ -60,7 +67,9 @@ class Version(CUDSItem):
     def full(self, value):
         value = validation.cast_data_type(value, 'full')
         validation.validate_cuba_keyword(value, 'full')
-        self.data[CUBA.FULL] = value
+        data = self.data
+        data[CUBA.FULL] = value
+        self.data = data
 
     @property
     def data(self):
@@ -68,21 +77,18 @@ class Version(CUDSItem):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -100,4 +106,4 @@ class Version(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

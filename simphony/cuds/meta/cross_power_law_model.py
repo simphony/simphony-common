@@ -6,19 +6,13 @@ from . import validation
 
 
 class CrossPowerLawModel(RheologyModel):
+
     '''Viscosity Cross power law model  # noqa
     '''
 
     cuba_key = CUBA.CROSS_POWER_LAW_MODEL
 
-    def __init__(self,
-                 description=None,
-                 name=None,
-                 data=None,
-                 initial_viscosity=1e-3,
-                 linear_constant=1.0,
-                 maximum_viscosity=1e-5,
-                 power_law_index=0.5):
+    def __init__(self, description=None, name=None, data=None, initial_viscosity=1e-3, linear_constant=1.0, maximum_viscosity=1e-5, power_law_index=0.5):
 
         self.description = description
         self.name = name
@@ -41,21 +35,18 @@ class CrossPowerLawModel(RheologyModel):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def initial_viscosity(self):
@@ -65,7 +56,9 @@ class CrossPowerLawModel(RheologyModel):
     def initial_viscosity(self, value):
         value = validation.cast_data_type(value, 'initial_viscosity')
         validation.validate_cuba_keyword(value, 'initial_viscosity')
-        self.data[CUBA.INITIAL_VISCOSITY] = value
+        data = self.data
+        data[CUBA.INITIAL_VISCOSITY] = value
+        self.data = data
 
     @property
     def linear_constant(self):
@@ -75,7 +68,9 @@ class CrossPowerLawModel(RheologyModel):
     def linear_constant(self, value):
         value = validation.cast_data_type(value, 'linear_constant')
         validation.validate_cuba_keyword(value, 'linear_constant')
-        self.data[CUBA.LINEAR_CONSTANT] = value
+        data = self.data
+        data[CUBA.LINEAR_CONSTANT] = value
+        self.data = data
 
     @property
     def maximum_viscosity(self):
@@ -85,7 +80,9 @@ class CrossPowerLawModel(RheologyModel):
     def maximum_viscosity(self, value):
         value = validation.cast_data_type(value, 'maximum_viscosity')
         validation.validate_cuba_keyword(value, 'maximum_viscosity')
-        self.data[CUBA.MAXIMUM_VISCOSITY] = value
+        data = self.data
+        data[CUBA.MAXIMUM_VISCOSITY] = value
+        self.data = data
 
     @property
     def power_law_index(self):
@@ -95,7 +92,9 @@ class CrossPowerLawModel(RheologyModel):
     def power_law_index(self, value):
         value = validation.cast_data_type(value, 'power_law_index')
         validation.validate_cuba_keyword(value, 'power_law_index')
-        self.data[CUBA.POWER_LAW_INDEX] = value
+        data = self.data
+        data[CUBA.POWER_LAW_INDEX] = value
+        self.data = data
 
     @property
     def models(self):
@@ -117,11 +116,8 @@ class CrossPowerLawModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

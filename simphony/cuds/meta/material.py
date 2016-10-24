@@ -5,17 +5,18 @@ from .cuds_component import CUDSComponent
 
 
 class Material(CUDSComponent):
+
     '''Definition of a material and its parameters  # noqa
     '''
 
     cuba_key = CUBA.MATERIAL
 
     def __init__(self, description=None, name=None, data=None):
-
-        self.description = description
-        self.name = name
+        print(data.restricted_keys)
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         # This is a system-managed, read-only attribute
         self._definition = 'Definition of a material and its parameters'  # noqa
 
@@ -25,21 +26,18 @@ class Material(CUDSComponent):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

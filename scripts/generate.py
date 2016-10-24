@@ -494,12 +494,20 @@ class CodeGenerator(object):
         # If the key is a CUBA key, store it in the DataContainer
         cuba_key = 'CUBA.'+key.upper()
         if cuba_key in self.class_data:
-            target = 'self.data[{cuba_key}]'.format(cuba_key=cuba_key)
+            self.methods.append('''
+    @{key}.setter
+    def {key}(self, value):
+        {validation_code}
+        data = self.data
+        data[{cuba_key}] = value
+        self.data = data'''.format(key=key,
+                                   cuba_key=cuba_key,
+                                   validation_code=validation_code))
         else:
             target = 'self._{key}'.format(key=key)
 
-        # default property setter
-        self.methods.append('''
+            # default property setter
+            self.methods.append('''
     @{key}.setter
     def {key}(self, value):
         {validation_code}
@@ -642,22 +650,19 @@ class CodeGenerator(object):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container''')
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)''')
 
         self.methods.append('''
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)''')
+        self._data = DataContainer(new_data)''')
 
     def collect_parents_to_mro(self, generators):
         ''' Recursively collect all the inherited into CodeGenerator.mro

@@ -6,17 +6,13 @@ from . import validation
 
 
 class SurfaceTensionRelation(MaterialRelation):
+
     '''Surface tension relation between two fluids  # noqa
     '''
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self,
-                 material,
-                 description=None,
-                 name=None,
-                 data=None,
-                 surface_tension=0.07):
+    def __init__(self, material, description=None, name=None, data=None, surface_tension=0.07):
 
         self.material = material
         self.description = description
@@ -42,7 +38,9 @@ class SurfaceTensionRelation(MaterialRelation):
             validation.check_shape(value, '(2)')
             for item in value:
                 validation.validate_cuba_keyword(item, 'material')
-        self.data[CUBA.MATERIAL] = value
+        data = self.data
+        data[CUBA.MATERIAL] = value
+        self.data = data
 
     @property
     def data(self):
@@ -50,21 +48,18 @@ class SurfaceTensionRelation(MaterialRelation):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def surface_tension(self):
@@ -74,7 +69,9 @@ class SurfaceTensionRelation(MaterialRelation):
     def surface_tension(self, value):
         value = validation.cast_data_type(value, 'surface_tension')
         validation.validate_cuba_keyword(value, 'surface_tension')
-        self.data[CUBA.SURFACE_TENSION] = value
+        data = self.data
+        data[CUBA.SURFACE_TENSION] = value
+        self.data = data
 
     @property
     def models(self):
@@ -96,10 +93,8 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
