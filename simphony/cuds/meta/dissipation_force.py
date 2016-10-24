@@ -6,13 +6,17 @@ from . import validation
 
 
 class DissipationForce(MaterialRelation):
-
     '''Viscous normal force describing the inelasticity of particle collisions  # noqa
     '''
 
     cuba_key = CUBA.DISSIPATION_FORCE
 
-    def __init__(self, material, restitution_coefficient=1.0, description=None, name=None, data=None):
+    def __init__(self,
+                 material,
+                 restitution_coefficient=1.0,
+                 description=None,
+                 name=None,
+                 data=None):
 
         self.material = material
         self.restitution_coefficient = restitution_coefficient
@@ -55,8 +59,7 @@ class DissipationForce(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -64,8 +67,7 @@ class DissipationForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -89,8 +91,10 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
+                CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

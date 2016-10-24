@@ -5,7 +5,6 @@ from .thermal_model import ThermalModel
 
 
 class IsothermalModel(ThermalModel):
-
     '''Isothermal heat transport model, no transport of heat is assumed  # noqa
     '''
 
@@ -40,8 +39,7 @@ class IsothermalModel(ThermalModel):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -49,8 +47,7 @@ class IsothermalModel(ThermalModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -78,4 +75,5 @@ class IsothermalModel(ThermalModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.THERMAL_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -6,13 +6,17 @@ from . import validation
 
 
 class Empty(Condition):
-
     '''Empty boundary condition  # noqa
     '''
 
     cuba_key = CUBA.EMPTY
 
-    def __init__(self, variable=None, material=None, description=None, name=None, data=None):
+    def __init__(self,
+                 variable=None,
+                 material=None,
+                 description=None,
+                 name=None,
+                 data=None):
 
         if variable is None:
             self.variable = []
@@ -71,8 +75,7 @@ class Empty(Condition):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -80,8 +83,7 @@ class Empty(Condition):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -101,7 +103,8 @@ class Empty(Condition):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):

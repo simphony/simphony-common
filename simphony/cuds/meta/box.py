@@ -6,13 +6,17 @@ from . import validation
 
 
 class Box(Boundary):
-
     '''A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).  # noqa
     '''
 
     cuba_key = CUBA.BOX
 
-    def __init__(self, condition=None, vector=None, description=None, name=None, data=None):
+    def __init__(self,
+                 condition=None,
+                 vector=None,
+                 description=None,
+                 name=None,
+                 data=None):
 
         self.condition = condition
         if vector is None:
@@ -69,8 +73,7 @@ class Box(Boundary):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -78,8 +81,7 @@ class Box(Boundary):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -95,7 +97,8 @@ class Box(Boundary):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION, CUBA.NAME)
+        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):

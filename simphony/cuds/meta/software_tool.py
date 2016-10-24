@@ -6,7 +6,6 @@ from . import validation
 
 
 class SoftwareTool(CUDSItem):
-
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
@@ -49,8 +48,7 @@ class SoftwareTool(CUDSItem):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -58,8 +56,7 @@ class SoftwareTool(CUDSItem):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -79,4 +76,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

@@ -6,13 +6,19 @@ from . import validation
 
 
 class HerschelBulkleyModel(RheologyModel):
-
     '''Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid  # noqa
     '''
 
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
 
-    def __init__(self, initial_viscosity=1e-3, relaxation_time=1.0, linear_constant=1e-5, power_law_index=1.0, description=None, name=None, data=None):
+    def __init__(self,
+                 initial_viscosity=1e-3,
+                 relaxation_time=1.0,
+                 linear_constant=1e-5,
+                 power_law_index=1.0,
+                 description=None,
+                 name=None,
+                 data=None):
 
         self.initial_viscosity = initial_viscosity
         self.relaxation_time = relaxation_time
@@ -93,8 +99,7 @@ class HerschelBulkleyModel(RheologyModel):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -102,8 +107,7 @@ class HerschelBulkleyModel(RheologyModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -127,8 +131,11 @@ class HerschelBulkleyModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME, CUBA.LINEAR_CONSTANT, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
+                CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME,
+                CUBA.LINEAR_CONSTANT, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
