@@ -8,7 +8,6 @@ import uuid
 
 from simphony.api import CUBA
 from simphony.cuds.meta import api as meta_class
-from simphony.core.data_container import create_data_container
 
 
 class TestMetaClass(unittest.TestCase):
@@ -331,14 +330,3 @@ class TestMetaClass(unittest.TestCase):
         box2 = meta_class.Box()
         box1.vector[0][0] = 1.
         self.assertNotEqual(box1.vector[0][0], box2.vector[0][0])
-
-    def test_assign_data_with_unsupported_parameters(self):
-        ''' Test for assigning unsupported CUBA keys to data '''
-        RDC = create_data_container(meta_class.Material.supported_parameters())
-        rdc = RDC()
-        rdc[CUBA.NAME] = 'test_material'
-        rdc[CUBA.DESCRIPTION] = 'Just another material'
-        mat = meta_class.Material(data=rdc)
-
-        with self.assertRaises(ValueError):
-            mat.data[CUBA.SIZE] = 1
