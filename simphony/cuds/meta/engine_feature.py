@@ -27,7 +27,8 @@ class EngineFeature(CUDSItem):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -35,11 +36,21 @@ class EngineFeature(CUDSItem):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def physics_equation(self):

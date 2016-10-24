@@ -12,13 +12,13 @@ class Berendsen(Thermostat):
 
     cuba_key = CUBA.BERENDSEN
 
-    def __init__(self, material, description=None, name=None, data=None, coupling_time=0.0001, temperature=None):
+    def __init__(self, material, data=None, description=None, name=None, coupling_time=0.0001, temperature=None):
 
         self.material = material
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         self.coupling_time = coupling_time
         if temperature is None:
             self.temperature = [0.0, 0.0]
@@ -34,7 +34,8 @@ class Berendsen(Thermostat):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -42,11 +43,21 @@ class Berendsen(Thermostat):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def coupling_time(self):

@@ -12,12 +12,12 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, description=None, name=None, data=None, point=None):
+    def __init__(self, data=None, description=None, name=None, point=None):
 
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         if point is None:
             self.point = [0, 0, 0]
         # This is a system-managed, read-only attribute
@@ -28,7 +28,8 @@ class Origin(CUDSComponent):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -36,11 +37,21 @@ class Origin(CUDSComponent):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def point(self):

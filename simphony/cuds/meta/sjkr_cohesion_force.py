@@ -12,13 +12,13 @@ class SjkrCohesionForce(MaterialRelation):
 
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
-    def __init__(self, material, description=None, name=None, data=None, cohesion_energy_density=0.0):
+    def __init__(self, material, data=None, description=None, name=None, cohesion_energy_density=0.0):
 
         self.material = material
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         self.cohesion_energy_density = cohesion_energy_density
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
@@ -32,7 +32,8 @@ class SjkrCohesionForce(MaterialRelation):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -40,11 +41,21 @@ class SjkrCohesionForce(MaterialRelation):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def cohesion_energy_density(self):

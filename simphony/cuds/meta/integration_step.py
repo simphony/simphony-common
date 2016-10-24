@@ -12,14 +12,14 @@ class IntegrationStep(ComputationalMethod):
 
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self, size, final, description=None, name=None, data=None, current=0):
+    def __init__(self, size, final, data=None, description=None, name=None, current=0):
 
         self.size = size
         self.final = final
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         self.current = current
         # This is a system-managed, read-only attribute
         self._definition = 'the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).'  # noqa
@@ -57,7 +57,8 @@ class IntegrationStep(ComputationalMethod):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -65,11 +66,21 @@ class IntegrationStep(ComputationalMethod):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def current(self):

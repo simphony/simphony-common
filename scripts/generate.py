@@ -294,6 +294,7 @@ class CodeGenerator(object):
                 self.system_variables[key] = contents
 
             elif isinstance(contents, dict) and 'default' in contents:
+                print("optional ", key)
                 self.optional_user_defined[key] = contents
 
             else:
@@ -649,7 +650,8 @@ class CodeGenerator(object):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -657,12 +659,22 @@ class CodeGenerator(object):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)''')
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue''')
 
         self.methods.append('''
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)''')
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data''')
 
     def collect_parents_to_mro(self, generators):
         ''' Recursively collect all the inherited into CodeGenerator.mro
@@ -723,7 +735,7 @@ class CodeGenerator(object):
                     'inherited_optional': 'optional_user_defined',
                     'inherited_sys_vars': 'system_variables'}
 
-        for parent_name in self.mro:
+        for parent_name in reversed(self.mro):
             parent = generators[parent_name]
 
             # Update the known attribute
@@ -915,6 +927,7 @@ def meta_class(yaml_file, out_path, overwrite):
     with make_temporary_directory() as temp_dir:
 
         for key, class_data in yml_data['CUDS_KEYS'].items():
+            print("cuds keys ", key, class_data)
 
             # Catch inconsistent definitions that would choke the generator
             parent = class_data['parent']

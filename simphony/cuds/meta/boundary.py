@@ -12,13 +12,13 @@ class Boundary(CUDSComponent):
 
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, condition, description=None, name=None, data=None):
+    def __init__(self, condition, data=None, description=None, name=None):
 
         self.condition = condition
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         # This is a system-managed, read-only attribute
         self._definition = 'System boundary'  # noqa
 
@@ -42,7 +42,8 @@ class Boundary(CUDSComponent):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -50,11 +51,21 @@ class Boundary(CUDSComponent):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def definition(self):

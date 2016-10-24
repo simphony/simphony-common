@@ -18,12 +18,12 @@ class Cfd(PhysicsEquation):
 
     cuba_key = CUBA.CFD
 
-    def __init__(self, description=None, name=None, data=None, multiphase_model=None, rheology_model=None, turbulence_model=None, gravity_model=None, thermal_model=None, compressibility_model=None, electrostatic_model=None):
+    def __init__(self, data=None, description=None, name=None, multiphase_model=None, rheology_model=None, turbulence_model=None, gravity_model=None, thermal_model=None, compressibility_model=None, electrostatic_model=None):
 
-        self.description = description
-        self.name = name
         if data:
             self.data = data
+        self.description = description
+        self.name = name
         
         if multiphase_model:
             self.multiphase_model = multiphase_model
@@ -67,7 +67,8 @@ class Cfd(PhysicsEquation):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer()
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
             data_container = self._data
 
         # One more check in case the
@@ -75,11 +76,21 @@ class Cfd(PhysicsEquation):
         if not isinstance(data_container, DataContainer):
             raise TypeError("data is not a DataContainer. "
                             "data.setter is by-passed.")
-        return DataContainer(data_container)
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
 
     @data.setter
     def data(self, new_data):
-        self._data = DataContainer(new_data)
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
 
     @property
     def multiphase_model(self):
