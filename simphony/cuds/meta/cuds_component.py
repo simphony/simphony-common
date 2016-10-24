@@ -6,47 +6,20 @@ from . import validation
 
 
 class CUDSComponent(CUDSItem):
+
     '''Base data type for the CUDS components  # noqa
     '''
 
     cuba_key = CUBA.CUDS_COMPONENT
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
         self.description = description
         self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'Base data type for the CUDS components'  # noqa
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer.new_with_restricted_keys(
-                self.supported_parameters())
-            data_container = self._data
-
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
-        retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        retvalue.update(data_container)
-
-        return retvalue
-
-    @data.setter
-    def data(self, new_data):
-        data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        data.update(new_data)
-        self._data = data
 
     @property
     def description(self):
@@ -75,6 +48,36 @@ class CUDSComponent(CUDSItem):
         self.data = data
 
     @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
+
+    @data.setter
+    def data(self, new_data):
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
+
+    @property
     def definition(self):
         return self._definition
 
@@ -90,4 +93,4 @@ class CUDSComponent(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

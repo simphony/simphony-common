@@ -5,17 +5,18 @@ from .computational_method import ComputationalMethod
 
 
 class Verlet(ComputationalMethod):
+
     '''Newtonian dynamics integration using verlet algorithm  # noqa
     '''
 
     cuba_key = CUBA.VERLET
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
         self.description = description
         self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._physics_equation = [CUBA.MOLECULAR_DYNAMICS]
         # This is a system-managed, read-only attribute
@@ -37,7 +38,8 @@ class Verlet(ComputationalMethod):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -45,7 +47,8 @@ class Verlet(ComputationalMethod):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 

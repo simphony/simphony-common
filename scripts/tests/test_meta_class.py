@@ -131,8 +131,12 @@ class TestMetaClass(unittest.TestCase):
         errors = []
 
         for name, klass in self.no_required_args_classes:
-            meta_obj = klass(data=DataContainer())
+            if CUBA.NAME not in klass.supported_parameters():
+                continue
+
+            meta_obj = klass(data=DataContainer(NAME="foobar"))
             self.check_cuds_item(meta_obj)
+            self.assertEqual(meta_obj.name, "foobar")
 
         if errors:
             self.fail('\n'.join(errors))
@@ -335,6 +339,12 @@ class TestMetaClass(unittest.TestCase):
         box = meta_class.Box()
         arr = box.vector == numpy.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         self.assertTrue(arr.all())
+
+    def test_Berendsen(self):
+        material = meta_class.Material()
+        berendsen = meta_class.Berendsen(material=[material])
+
+        self.assertIsNotNone(berendsen.material)
 
     def test_not_sharing_mutable(self):
         box1 = meta_class.Box()

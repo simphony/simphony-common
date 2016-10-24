@@ -6,30 +6,38 @@ from . import validation
 
 
 class CoulombFrictionForce(MaterialRelation):
+
     '''Shear force accounting for the tangential displacement between contacting particles  # noqa
     '''
 
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
-    def __init__(self,
-                 material,
-                 data=None,
-                 description=None,
-                 name=None,
-                 friction_coefficient=0.0):
+    def __init__(self, material, friction_coefficient=0.0, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
+        self.friction_coefficient = friction_coefficient
         self.description = description
         self.name = name
-        self.friction_coefficient = friction_coefficient
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Shear force accounting for the tangential displacement between contacting particles'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def friction_coefficient(self):
+        return self.data[CUBA.FRICTION_COEFFICIENT]
+
+    @friction_coefficient.setter
+    def friction_coefficient(self, value):
+        value = validation.cast_data_type(value, 'friction_coefficient')
+        validation.validate_cuba_keyword(value, 'friction_coefficient')
+        data = self.data
+        data[CUBA.FRICTION_COEFFICIENT] = value
+        self.data = data
 
     @property
     def data(self):
@@ -47,7 +55,8 @@ class CoulombFrictionForce(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -55,21 +64,10 @@ class CoulombFrictionForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def friction_coefficient(self):
-        return self.data[CUBA.FRICTION_COEFFICIENT]
-
-    @friction_coefficient.setter
-    def friction_coefficient(self, value):
-        value = validation.cast_data_type(value, 'friction_coefficient')
-        validation.validate_cuba_keyword(value, 'friction_coefficient')
-        data = self.data
-        data[CUBA.FRICTION_COEFFICIENT] = value
-        self.data = data
 
     @property
     def models(self):
@@ -91,10 +89,8 @@ class CoulombFrictionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

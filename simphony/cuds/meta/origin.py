@@ -6,21 +6,34 @@ from . import validation
 
 
 class Origin(CUDSComponent):
+
     '''The origin of a space system  # noqa
     '''
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, data=None, description=None, name=None, point=None):
+    def __init__(self, point=None, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
-        self.description = description
-        self.name = name
         if point is None:
             self.point = [0, 0, 0]
+        self.description = description
+        self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'The origin of a space system'  # noqa
+
+    @property
+    def point(self):
+        return self.data[CUBA.POINT]
+
+    @point.setter
+    def point(self, value):
+        value = validation.cast_data_type(value, 'point')
+        validation.validate_cuba_keyword(value, 'point')
+        data = self.data
+        data[CUBA.POINT] = value
+        self.data = data
 
     @property
     def data(self):
@@ -38,7 +51,8 @@ class Origin(CUDSComponent):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -46,21 +60,10 @@ class Origin(CUDSComponent):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def point(self):
-        return self.data[CUBA.POINT]
-
-    @point.setter
-    def point(self, value):
-        value = validation.cast_data_type(value, 'point')
-        validation.validate_cuba_keyword(value, 'point')
-        data = self.data
-        data[CUBA.POINT] = value
-        self.data = data
 
     @property
     def definition(self):

@@ -6,62 +6,28 @@ from . import validation
 
 
 class CrossPowerLawModel(RheologyModel):
+
     '''Viscosity Cross power law model  # noqa
     '''
 
     cuba_key = CUBA.CROSS_POWER_LAW_MODEL
 
-    def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 initial_viscosity=1e-3,
-                 linear_constant=1.0,
-                 maximum_viscosity=1e-5,
-                 power_law_index=0.5):
+    def __init__(self, initial_viscosity=1e-3, linear_constant=1.0, maximum_viscosity=1e-5, power_law_index=0.5, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
-        self.description = description
-        self.name = name
         self.initial_viscosity = initial_viscosity
         self.linear_constant = linear_constant
         self.maximum_viscosity = maximum_viscosity
         self.power_law_index = power_law_index
+        self.description = description
+        self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Viscosity Cross power law model'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer.new_with_restricted_keys(
-                self.supported_parameters())
-            data_container = self._data
-
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
-        retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        retvalue.update(data_container)
-
-        return retvalue
-
-    @data.setter
-    def data(self, new_data):
-        data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        data.update(new_data)
-        self._data = data
 
     @property
     def initial_viscosity(self):
@@ -112,6 +78,36 @@ class CrossPowerLawModel(RheologyModel):
         self.data = data
 
     @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
+
+    @data.setter
+    def data(self, new_data):
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
+
+    @property
     def models(self):
         return self._models
 
@@ -131,11 +127,8 @@ class CrossPowerLawModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

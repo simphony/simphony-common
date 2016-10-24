@@ -6,18 +6,32 @@ from . import validation
 
 
 class SoftwareTool(CUDSItem):
+
     '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
     '''
 
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, data=None, version=None):
+    def __init__(self, version=None, data=None):
 
+        self.version = version
         if data:
             self.data = data
-        self.version = version
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the model or in pre/post processing'  # noqa
+
+    @property
+    def version(self):
+        return self.data[CUBA.VERSION]
+
+    @version.setter
+    def version(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'version')
+            validation.validate_cuba_keyword(value, 'version')
+        data = self.data
+        data[CUBA.VERSION] = value
+        self.data = data
 
     @property
     def data(self):
@@ -35,7 +49,8 @@ class SoftwareTool(CUDSItem):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -43,22 +58,10 @@ class SoftwareTool(CUDSItem):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def version(self):
-        return self.data[CUBA.VERSION]
-
-    @version.setter
-    def version(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'version')
-            validation.validate_cuba_keyword(value, 'version')
-        data = self.data
-        data[CUBA.VERSION] = value
-        self.data = data
 
     @property
     def definition(self):
@@ -76,4 +79,4 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.CUDS_ITEM,)

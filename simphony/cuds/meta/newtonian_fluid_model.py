@@ -5,17 +5,18 @@ from .rheology_model import RheologyModel
 
 
 class NewtonianFluidModel(RheologyModel):
+
     '''Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation  # noqa
     '''
 
     cuba_key = CUBA.NEWTONIAN_FLUID_MODEL
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
         self.description = description
         self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -39,7 +40,8 @@ class NewtonianFluidModel(RheologyModel):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -47,7 +49,8 @@ class NewtonianFluidModel(RheologyModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -75,5 +78,4 @@ class NewtonianFluidModel(RheologyModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

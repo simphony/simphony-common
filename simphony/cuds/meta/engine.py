@@ -5,16 +5,17 @@ from .software_tool import SoftwareTool
 
 
 class Engine(SoftwareTool):
+
     '''Represents a software tool which is used to solve the physics equation  # noqa
     '''
 
     cuba_key = CUBA.ENGINE
 
-    def __init__(self, data=None, version=None):
+    def __init__(self, version=None, data=None):
 
+        self.version = version
         if data:
             self.data = data
-        self.version = version
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the physics equation'  # noqa
         # This is a system-managed, read-only attribute
@@ -36,7 +37,8 @@ class Engine(SoftwareTool):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -44,7 +46,8 @@ class Engine(SoftwareTool):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 

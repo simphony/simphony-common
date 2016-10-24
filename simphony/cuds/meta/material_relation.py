@@ -6,18 +6,19 @@ from . import validation
 
 
 class MaterialRelation(ModelEquation):
+
     '''Material relation  # noqa
     '''
 
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material, data=None, description=None, name=None):
+    def __init__(self, material, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
         self.description = description
         self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'Material relation'  # noqa
         # This is a system-managed, read-only attribute
@@ -56,7 +57,8 @@ class MaterialRelation(ModelEquation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -64,7 +66,8 @@ class MaterialRelation(ModelEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 

@@ -6,58 +6,25 @@ from . import validation
 
 
 class IntegrationTime(ComputationalMethod):
+
     '''the current time, time step, and final time for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
     cuba_key = CUBA.INTEGRATION_TIME
 
-    def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 current=0.0,
-                 size=0.0,
-                 final=0.0):
+    def __init__(self, current=0.0, size=0.0, final=0.0, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
-        self.description = description
-        self.name = name
         self.current = current
         self.size = size
         self.final = final
+        self.description = description
+        self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'the current time, time step, and final time for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
         self._physics_equation = []
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer.new_with_restricted_keys(
-                self.supported_parameters())
-            data_container = self._data
-
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
-        retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        retvalue.update(data_container)
-
-        return retvalue
-
-    @data.setter
-    def data(self, new_data):
-        data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        data.update(new_data)
-        self._data = data
 
     @property
     def current(self):
@@ -96,6 +63,36 @@ class IntegrationTime(ComputationalMethod):
         self.data = data
 
     @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer.new_with_restricted_keys(
+                self.supported_parameters())
+            data_container = self._data
+
+        # One more check in case the
+        # property setter is by-passed
+        if not isinstance(data_container, DataContainer):
+            raise TypeError("data is not a DataContainer. "
+                            "data.setter is by-passed.")
+
+        retvalue = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        retvalue.update(data_container)
+
+        return retvalue
+
+    @data.setter
+    def data(self, new_data):
+        data = DataContainer.new_with_restricted_keys(
+            self.supported_parameters()
+            )
+        data.update(new_data)
+        self._data = data
+
+    @property
     def definition(self):
         return self._definition
 
@@ -111,8 +108,7 @@ class IntegrationTime(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):

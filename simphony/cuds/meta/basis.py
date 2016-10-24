@@ -6,21 +6,36 @@ from . import validation
 
 
 class Basis(CUDSComponent):
+
     '''Space basis vectors (row wise)  # noqa
     '''
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, data=None, description=None, name=None, vector=None):
+    def __init__(self, vector=None, description=None, name=None, data=None):
 
-        if data:
-            self.data = data
-        self.description = description
-        self.name = name
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        self.description = description
+        self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'Space basis vectors (row wise)'  # noqa
+
+    @property
+    def vector(self):
+        return self.data[CUBA.VECTOR]
+
+    @vector.setter
+    def vector(self, value):
+        value = validation.cast_data_type(value, 'vector')
+        validation.check_shape(value, '(3, 3)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'vector')
+        data = self.data
+        data[CUBA.VECTOR] = value
+        self.data = data
 
     @property
     def data(self):
@@ -38,7 +53,8 @@ class Basis(CUDSComponent):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -46,23 +62,10 @@ class Basis(CUDSComponent):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def vector(self):
-        return self.data[CUBA.VECTOR]
-
-    @vector.setter
-    def vector(self, value):
-        value = validation.cast_data_type(value, 'vector')
-        validation.check_shape(value, '(3, 3)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'vector')
-        data = self.data
-        data[CUBA.VECTOR] = value
-        self.data = data
 
     @property
     def definition(self):

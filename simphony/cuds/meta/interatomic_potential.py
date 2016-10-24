@@ -5,18 +5,19 @@ from .material_relation import MaterialRelation
 
 
 class InteratomicPotential(MaterialRelation):
+
     '''Interatomic Potentials Category  # noqa
     '''
 
     cuba_key = CUBA.INTERATOMIC_POTENTIAL
 
-    def __init__(self, material, data=None, description=None, name=None):
+    def __init__(self, material, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
         self.description = description
         self.name = name
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
@@ -40,7 +41,8 @@ class InteratomicPotential(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -48,7 +50,8 @@ class InteratomicPotential(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -76,5 +79,4 @@ class InteratomicPotential(MaterialRelation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

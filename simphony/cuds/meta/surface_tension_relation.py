@@ -6,24 +6,20 @@ from . import validation
 
 
 class SurfaceTensionRelation(MaterialRelation):
+
     '''Surface tension relation between two fluids  # noqa
     '''
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self,
-                 material,
-                 data=None,
-                 description=None,
-                 name=None,
-                 surface_tension=0.07):
+    def __init__(self, material, surface_tension=0.07, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
+        self.surface_tension = surface_tension
         self.description = description
         self.name = name
-        self.surface_tension = surface_tension
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -47,6 +43,18 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data = data
 
     @property
+    def surface_tension(self):
+        return self.data[CUBA.SURFACE_TENSION]
+
+    @surface_tension.setter
+    def surface_tension(self, value):
+        value = validation.cast_data_type(value, 'surface_tension')
+        validation.validate_cuba_keyword(value, 'surface_tension')
+        data = self.data
+        data[CUBA.SURFACE_TENSION] = value
+        self.data = data
+
+    @property
     def data(self):
         try:
             data_container = self._data
@@ -62,7 +70,8 @@ class SurfaceTensionRelation(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -70,21 +79,10 @@ class SurfaceTensionRelation(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def surface_tension(self):
-        return self.data[CUBA.SURFACE_TENSION]
-
-    @surface_tension.setter
-    def surface_tension(self, value):
-        value = validation.cast_data_type(value, 'surface_tension')
-        validation.validate_cuba_keyword(value, 'surface_tension')
-        data = self.data
-        data[CUBA.SURFACE_TENSION] = value
-        self.data = data
 
     @property
     def models(self):
@@ -106,10 +104,8 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

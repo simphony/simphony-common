@@ -6,30 +6,38 @@ from . import validation
 
 
 class SjkrCohesionForce(MaterialRelation):
+
     '''Additional normal force tending to maintain the contact  # noqa
     '''
 
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
-    def __init__(self,
-                 material,
-                 data=None,
-                 description=None,
-                 name=None,
-                 cohesion_energy_density=0.0):
+    def __init__(self, material, cohesion_energy_density=0.0, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
+        self.cohesion_energy_density = cohesion_energy_density
         self.description = description
         self.name = name
-        self.cohesion_energy_density = cohesion_energy_density
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Additional normal force tending to maintain the contact'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def cohesion_energy_density(self):
+        return self.data[CUBA.COHESION_ENERGY_DENSITY]
+
+    @cohesion_energy_density.setter
+    def cohesion_energy_density(self, value):
+        value = validation.cast_data_type(value, 'cohesion_energy_density')
+        validation.validate_cuba_keyword(value, 'cohesion_energy_density')
+        data = self.data
+        data[CUBA.COHESION_ENERGY_DENSITY] = value
+        self.data = data
 
     @property
     def data(self):
@@ -47,7 +55,8 @@ class SjkrCohesionForce(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -55,21 +64,10 @@ class SjkrCohesionForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def cohesion_energy_density(self):
-        return self.data[CUBA.COHESION_ENERGY_DENSITY]
-
-    @cohesion_energy_density.setter
-    def cohesion_energy_density(self, value):
-        value = validation.cast_data_type(value, 'cohesion_energy_density')
-        validation.validate_cuba_keyword(value, 'cohesion_energy_density')
-        data = self.data
-        data[CUBA.COHESION_ENERGY_DENSITY] = value
-        self.data = data
 
     @property
     def models(self):
@@ -91,10 +89,8 @@ class SjkrCohesionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

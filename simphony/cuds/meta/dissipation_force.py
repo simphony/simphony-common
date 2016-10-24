@@ -6,30 +6,38 @@ from . import validation
 
 
 class DissipationForce(MaterialRelation):
+
     '''Viscous normal force describing the inelasticity of particle collisions  # noqa
     '''
 
     cuba_key = CUBA.DISSIPATION_FORCE
 
-    def __init__(self,
-                 material,
-                 data=None,
-                 description=None,
-                 name=None,
-                 restitution_coefficient=1.0):
+    def __init__(self, material, restitution_coefficient=1.0, description=None, name=None, data=None):
 
         self.material = material
-        if data:
-            self.data = data
+        self.restitution_coefficient = restitution_coefficient
         self.description = description
         self.name = name
-        self.restitution_coefficient = restitution_coefficient
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def restitution_coefficient(self):
+        return self.data[CUBA.RESTITUTION_COEFFICIENT]
+
+    @restitution_coefficient.setter
+    def restitution_coefficient(self, value):
+        value = validation.cast_data_type(value, 'restitution_coefficient')
+        validation.validate_cuba_keyword(value, 'restitution_coefficient')
+        data = self.data
+        data[CUBA.RESTITUTION_COEFFICIENT] = value
+        self.data = data
 
     @property
     def data(self):
@@ -47,7 +55,8 @@ class DissipationForce(MaterialRelation):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -55,21 +64,10 @@ class DissipationForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def restitution_coefficient(self):
-        return self.data[CUBA.RESTITUTION_COEFFICIENT]
-
-    @restitution_coefficient.setter
-    def restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'restitution_coefficient')
-        validation.validate_cuba_keyword(value, 'restitution_coefficient')
-        data = self.data
-        data[CUBA.RESTITUTION_COEFFICIENT] = value
-        self.data = data
 
     @property
     def models(self):
@@ -91,10 +89,8 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -6,26 +6,21 @@ from . import validation
 
 
 class IntegrationStep(ComputationalMethod):
+
     '''the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self,
-                 size,
-                 final,
-                 data=None,
-                 description=None,
-                 name=None,
-                 current=0):
+    def __init__(self, size, final, current=0, description=None, name=None, data=None):
 
         self.size = size
         self.final = final
-        if data:
-            self.data = data
+        self.current = current
         self.description = description
         self.name = name
-        self.current = current
+        if data:
+            self.data = data
         # This is a system-managed, read-only attribute
         self._definition = 'the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
@@ -58,6 +53,18 @@ class IntegrationStep(ComputationalMethod):
         self.data = data
 
     @property
+    def current(self):
+        return self.data[CUBA.CURRENT]
+
+    @current.setter
+    def current(self, value):
+        value = validation.cast_data_type(value, 'current')
+        validation.validate_cuba_keyword(value, 'current')
+        data = self.data
+        data[CUBA.CURRENT] = value
+        self.data = data
+
+    @property
     def data(self):
         try:
             data_container = self._data
@@ -73,7 +80,8 @@ class IntegrationStep(ComputationalMethod):
                             "data.setter is by-passed.")
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -81,21 +89,10 @@ class IntegrationStep(ComputationalMethod):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
-
-    @property
-    def current(self):
-        return self.data[CUBA.CURRENT]
-
-    @current.setter
-    def current(self, value):
-        value = validation.cast_data_type(value, 'current')
-        validation.validate_cuba_keyword(value, 'current')
-        data = self.data
-        data[CUBA.CURRENT] = value
-        self.data = data
 
     @property
     def definition(self):
@@ -113,8 +110,7 @@ class IntegrationStep(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
