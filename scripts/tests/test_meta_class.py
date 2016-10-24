@@ -346,6 +346,25 @@ class TestMetaClass(unittest.TestCase):
 
         self.assertIsNotNone(berendsen.material)
 
+    def test_IntegrationStep(self):
+        integration_step = meta_class.IntegrationStep(10, 10)
+        self.assertIsNotNone(integration_step.data)
+
+    def test_TemperatureRescaling(self):
+        material = meta_class.Material()
+        temp_rescaling = meta_class.TemperatureRescaling([material])
+        self.assertIsNotNone(temp_rescaling.data)
+
+    def test_Thermostat(self):
+        material = meta_class.Material()
+        thermostat = meta_class.Thermostat([material])
+        self.assertIsNotNone(thermostat.data)
+
+    def test_NoseHooverBoundary(self):
+        material = meta_class.Material()
+        nose_hoover = meta_class.NoseHoover([material])
+        self.assertIsNotNone(nose_hoover.data)
+
     def test_not_sharing_mutable(self):
         box1 = meta_class.Box()
         box2 = meta_class.Box()
