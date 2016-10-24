@@ -6,19 +6,13 @@ from . import validation
 
 
 class BirdCarreauModel(RheologyModel):
+
     '''Bird-Carreau model  # noqa
     '''
 
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
-    def __init__(self,
-                 initial_viscosity=1e-3,
-                 linear_constant=1.0,
-                 maximum_viscosity=1e-5,
-                 power_law_index=0.5,
-                 description=None,
-                 name=None,
-                 data=None):
+    def __init__(self, initial_viscosity=1e-3, linear_constant=1.0, maximum_viscosity=1e-5, power_law_index=0.5, description=None, name=None, data=None):
 
         self.initial_viscosity = initial_viscosity
         self.linear_constant = linear_constant
@@ -92,14 +86,9 @@ class BirdCarreauModel(RheologyModel):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -107,7 +96,8 @@ class BirdCarreauModel(RheologyModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -131,11 +121,8 @@ class BirdCarreauModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID, CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT, CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -4,6 +4,7 @@ from simphony.core.cuba import CUBA
 
 
 class CUDSItem(object):
+
     '''Root of all CUDS types  # noqa
     '''
 
@@ -25,14 +26,9 @@ class CUDSItem(object):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -40,7 +36,8 @@ class CUDSItem(object):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -56,7 +53,7 @@ class CUDSItem(object):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, )
+        return (CUBA.UUID,)
 
     @classmethod
     def parents(cls):

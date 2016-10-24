@@ -6,18 +6,13 @@ from . import validation
 
 
 class IntegrationTime(ComputationalMethod):
+
     '''the current time, time step, and final time for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
     cuba_key = CUBA.INTEGRATION_TIME
 
-    def __init__(self,
-                 current=0.0,
-                 size=0.0,
-                 final=0.0,
-                 description=None,
-                 name=None,
-                 data=None):
+    def __init__(self, current=0.0, size=0.0, final=0.0, description=None, name=None, data=None):
 
         self.current = current
         self.size = size
@@ -76,14 +71,9 @@ class IntegrationTime(ComputationalMethod):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -91,7 +81,8 @@ class IntegrationTime(ComputationalMethod):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -111,8 +102,7 @@ class IntegrationTime(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
 
     @classmethod
     def parents(cls):

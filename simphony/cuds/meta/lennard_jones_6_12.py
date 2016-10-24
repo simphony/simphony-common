@@ -6,19 +6,13 @@ from . import validation
 
 
 class LennardJones_6_12(PairPotential):
+
     '''A Lennard-Jones 6-12 Potential  # noqa
     '''
 
     cuba_key = CUBA.LENNARD_JONES_6_12
 
-    def __init__(self,
-                 material,
-                 van_der_waals_radius=1.0,
-                 cutoff_distance=1.0,
-                 energy_well_depth=1.0,
-                 description=None,
-                 name=None,
-                 data=None):
+    def __init__(self, material, van_der_waals_radius=1.0, cutoff_distance=1.0, energy_well_depth=1.0, description=None, name=None, data=None):
 
         self.material = material
         self.van_der_waals_radius = van_der_waals_radius
@@ -80,14 +74,9 @@ class LennardJones_6_12(PairPotential):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -95,7 +84,8 @@ class LennardJones_6_12(PairPotential):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -119,12 +109,8 @@ class LennardJones_6_12(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
-                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

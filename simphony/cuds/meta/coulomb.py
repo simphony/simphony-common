@@ -6,18 +6,13 @@ from . import validation
 
 
 class Coulomb(PairPotential):
+
     '''The standard electrostatic Coulombic interaction potential between a pair of point charges  # noqa
     '''
 
     cuba_key = CUBA.COULOMB
 
-    def __init__(self,
-                 material,
-                 cutoff_distance=1.0,
-                 dielectric_constant=1.0,
-                 description=None,
-                 name=None,
-                 data=None):
+    def __init__(self, material, cutoff_distance=1.0, dielectric_constant=1.0, description=None, name=None, data=None):
 
         self.material = material
         self.cutoff_distance = cutoff_distance
@@ -66,14 +61,9 @@ class Coulomb(PairPotential):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -81,7 +71,8 @@ class Coulomb(PairPotential):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -105,11 +96,8 @@ class Coulomb(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID,
-                CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
-                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -5,6 +5,7 @@ from .physics_equation import PhysicsEquation
 
 
 class KsDft(PhysicsEquation):
+
     '''Kohn-Sham DFT equations  # noqa
     '''
 
@@ -21,10 +22,7 @@ class KsDft(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Kohn-Sham DFT equations'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [
-            CUBA.POSITION, CUBA.CHEMICAL_SPECIE, CUBA.ELECTRON_MASS,
-            CUBA.CHARGE_DENSITY, CUBA.ENERGY
-        ]
+        self._variables = [CUBA.POSITION, CUBA.CHEMICAL_SPECIE, CUBA.ELECTRON_MASS, CUBA.CHARGE_DENSITY, CUBA.ENERGY]
 
     @property
     def data(self):
@@ -35,14 +33,9 @@ class KsDft(PhysicsEquation):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -50,7 +43,8 @@ class KsDft(PhysicsEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -78,5 +72,4 @@ class KsDft(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

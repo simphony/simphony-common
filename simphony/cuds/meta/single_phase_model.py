@@ -5,6 +5,7 @@ from .multiphase_model import MultiphaseModel
 
 
 class SinglePhaseModel(MultiphaseModel):
+
     '''A single phase fluid model  # noqa
     '''
 
@@ -32,14 +33,9 @@ class SinglePhaseModel(MultiphaseModel):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -47,7 +43,8 @@ class SinglePhaseModel(MultiphaseModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -75,5 +72,4 @@ class SinglePhaseModel(MultiphaseModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MULTIPHASE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

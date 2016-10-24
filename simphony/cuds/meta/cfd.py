@@ -12,49 +12,41 @@ from . import validation
 
 
 class Cfd(PhysicsEquation):
+
     '''Computational fluid dynamics general (set of ) equations for momentum, mass and energy  # noqa
     '''
 
     cuba_key = CUBA.CFD
 
-    def __init__(self,
-                 multiphase_model=None,
-                 rheology_model=None,
-                 turbulence_model=None,
-                 gravity_model=None,
-                 thermal_model=None,
-                 compressibility_model=None,
-                 electrostatic_model=None,
-                 description=None,
-                 name=None,
-                 data=None):
+    def __init__(self, multiphase_model=None, rheology_model=None, turbulence_model=None, gravity_model=None, thermal_model=None, compressibility_model=None, electrostatic_model=None, description=None, name=None, data=None):
 
+        
         if multiphase_model:
             self.multiphase_model = multiphase_model
         else:
             self.multiphase_model = SinglePhaseModel()
-
+        
         if rheology_model:
             self.rheology_model = rheology_model
         else:
             self.rheology_model = NewtonianFluidModel()
-
+        
         if turbulence_model:
             self.turbulence_model = turbulence_model
         else:
             self.turbulence_model = LaminarFlowModel()
         self.gravity_model = gravity_model
-
+        
         if thermal_model:
             self.thermal_model = thermal_model
         else:
             self.thermal_model = IsothermalModel()
-
+        
         if compressibility_model:
             self.compressibility_model = compressibility_model
         else:
             self.compressibility_model = IncompressibleFluidModel()
-
+        
         if electrostatic_model:
             self.electrostatic_model = electrostatic_model
         else:
@@ -68,11 +60,7 @@ class Cfd(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Computational fluid dynamics general (set of ) equations for momentum, mass and energy'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [
-            CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.DENSITY,
-            CUBA.VISCOSITY, CUBA.TIME, CUBA.STRESS_TENSOR, CUBA.PRESSURE,
-            CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION
-        ]
+        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.DENSITY, CUBA.VISCOSITY, CUBA.TIME, CUBA.STRESS_TENSOR, CUBA.PRESSURE, CUBA.DYNAMIC_PRESSURE, CUBA.VOLUME_FRACTION]
 
     @property
     def multiphase_model(self):
@@ -168,14 +156,9 @@ class Cfd(PhysicsEquation):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -183,7 +166,8 @@ class Cfd(PhysicsEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -207,12 +191,8 @@ class Cfd(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-                CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL,
-                CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL,
-                CUBA.MULTIPHASE_MODEL, CUBA.NAME)
+        return (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL, CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL, CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL, CUBA.MULTIPHASE_MODEL, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

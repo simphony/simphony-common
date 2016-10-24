@@ -6,6 +6,7 @@ from . import validation
 
 
 class PairPotential(InteratomicPotential):
+
     '''Pair Interatomic Potentials Category  # noqa
     '''
 
@@ -49,14 +50,9 @@ class PairPotential(InteratomicPotential):
                 self.supported_parameters())
             data_container = self._data
 
-        # One more check in case the
-        # property setter is by-passed
-        if not isinstance(data_container, DataContainer):
-            raise TypeError("data is not a DataContainer. "
-                            "data.setter is by-passed.")
-
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         retvalue.update(data_container)
 
         return retvalue
@@ -64,7 +60,8 @@ class PairPotential(InteratomicPotential):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
+            self.supported_parameters()
+            )
         data.update(new_data)
         self._data = data
 
@@ -92,5 +89,4 @@ class PairPotential(InteratomicPotential):
 
     @classmethod
     def parents(cls):
-        return (CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.INTERATOMIC_POTENTIAL, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
