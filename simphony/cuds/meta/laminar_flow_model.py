@@ -5,7 +5,6 @@ from .turbulence_model import TurbulenceModel
 
 
 class LaminarFlowModel(TurbulenceModel):
-
     '''Laminar model  # noqa
     '''
 
@@ -34,8 +33,7 @@ class LaminarFlowModel(TurbulenceModel):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -43,8 +41,7 @@ class LaminarFlowModel(TurbulenceModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -72,4 +69,5 @@ class LaminarFlowModel(TurbulenceModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.TURBULENCE_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.TURBULENCE_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

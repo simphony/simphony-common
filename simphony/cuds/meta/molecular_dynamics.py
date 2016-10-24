@@ -5,7 +5,6 @@ from .physics_equation import PhysicsEquation
 
 
 class MolecularDynamics(PhysicsEquation):
-
     '''Classical atomistic molecular dynamics using Newtons equations of motion  # noqa
     '''
 
@@ -22,7 +21,10 @@ class MolecularDynamics(PhysicsEquation):
         # This is a system-managed, read-only attribute
         self._definition = 'Classical atomistic molecular dynamics using Newtons equations of motion'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.ACCELERATION, CUBA.FORCE]
+        self._variables = [
+            CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.ACCELERATION,
+            CUBA.FORCE
+        ]
 
     @property
     def data(self):
@@ -34,8 +36,7 @@ class MolecularDynamics(PhysicsEquation):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -43,8 +44,7 @@ class MolecularDynamics(PhysicsEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -72,4 +72,5 @@ class MolecularDynamics(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

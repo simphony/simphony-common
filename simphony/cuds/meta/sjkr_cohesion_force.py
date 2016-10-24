@@ -6,13 +6,17 @@ from . import validation
 
 
 class SjkrCohesionForce(MaterialRelation):
-
     '''Additional normal force tending to maintain the contact  # noqa
     '''
 
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
-    def __init__(self, material, cohesion_energy_density=0.0, description=None, name=None, data=None):
+    def __init__(self,
+                 material,
+                 cohesion_energy_density=0.0,
+                 description=None,
+                 name=None,
+                 data=None):
 
         self.material = material
         self.cohesion_energy_density = cohesion_energy_density
@@ -49,8 +53,7 @@ class SjkrCohesionForce(MaterialRelation):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -58,8 +61,7 @@ class SjkrCohesionForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -83,8 +85,10 @@ class SjkrCohesionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL,
+                CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

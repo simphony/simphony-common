@@ -5,7 +5,6 @@ from .cuds_item import CUDSItem
 
 
 class EngineFeature(CUDSItem):
-
     '''Provides a physics equation and methods that engines provides to solve them  # noqa
     '''
 
@@ -32,8 +31,7 @@ class EngineFeature(CUDSItem):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -41,8 +39,7 @@ class EngineFeature(CUDSItem):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -70,4 +67,4 @@ class EngineFeature(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM,)
+        return (CUBA.CUDS_ITEM, )

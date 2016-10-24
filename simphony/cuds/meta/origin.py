@@ -6,7 +6,6 @@ from . import validation
 
 
 class Origin(CUDSComponent):
-
     '''The origin of a space system  # noqa
     '''
 
@@ -45,8 +44,7 @@ class Origin(CUDSComponent):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -54,8 +52,7 @@ class Origin(CUDSComponent):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 

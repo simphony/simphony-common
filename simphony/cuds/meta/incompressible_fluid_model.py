@@ -5,7 +5,6 @@ from .compressibility_model import CompressibilityModel
 
 
 class IncompressibleFluidModel(CompressibilityModel):
-
     '''Incompressible fluid model  # noqa
     '''
 
@@ -22,7 +21,9 @@ class IncompressibleFluidModel(CompressibilityModel):
         # This is a system-managed, read-only attribute
         self._definition = 'Incompressible fluid model'  # noqa
         # This is a system-managed, read-only attribute
-        self._variables = [CUBA.VELOCITY, CUBA.POSITION, CUBA.DENSITY, CUBA.VISCOSITY]
+        self._variables = [
+            CUBA.VELOCITY, CUBA.POSITION, CUBA.DENSITY, CUBA.VISCOSITY
+        ]
 
     @property
     def data(self):
@@ -34,8 +35,7 @@ class IncompressibleFluidModel(CompressibilityModel):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -43,8 +43,7 @@ class IncompressibleFluidModel(CompressibilityModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -72,4 +71,5 @@ class IncompressibleFluidModel(CompressibilityModel):
 
     @classmethod
     def parents(cls):
-        return (CUBA.COMPRESSIBILITY_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.COMPRESSIBILITY_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

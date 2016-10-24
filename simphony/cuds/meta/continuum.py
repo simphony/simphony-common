@@ -5,7 +5,6 @@ from .computational_model import ComputationalModel
 
 
 class Continuum(ComputationalModel):
-
     '''Continuum model category according to the RoMM  # noqa
     '''
 
@@ -30,8 +29,7 @@ class Continuum(ComputationalModel):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -39,8 +37,7 @@ class Continuum(ComputationalModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 

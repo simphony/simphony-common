@@ -6,13 +6,16 @@ from . import validation
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
-
     '''A constant electrostatic field model  # noqa
     '''
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self, electrostatic_field=None, description=None, name=None, data=None):
+    def __init__(self,
+                 electrostatic_field=None,
+                 description=None,
+                 name=None,
+                 data=None):
 
         if electrostatic_field is None:
             self.electrostatic_field = [0.0, 0.0, 0.0]
@@ -49,8 +52,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -58,8 +60,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -83,8 +84,10 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION,
+                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -6,13 +6,16 @@ from . import validation
 
 
 class GravityModel(PhysicsEquation):
-
     '''A simple gravity model  # noqa
     '''
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, acceleration=None, description=None, name=None, data=None):
+    def __init__(self,
+                 acceleration=None,
+                 description=None,
+                 name=None,
+                 data=None):
 
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]
@@ -49,8 +52,7 @@ class GravityModel(PhysicsEquation):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -58,8 +60,7 @@ class GravityModel(PhysicsEquation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -87,4 +88,5 @@ class GravityModel(PhysicsEquation):
 
     @classmethod
     def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

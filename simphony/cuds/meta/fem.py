@@ -5,7 +5,6 @@ from .computational_method import ComputationalMethod
 
 
 class Fem(ComputationalMethod):
-
     '''Finite element method  # noqa
     '''
 
@@ -32,8 +31,7 @@ class Fem(ComputationalMethod):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -41,8 +39,7 @@ class Fem(ComputationalMethod):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 

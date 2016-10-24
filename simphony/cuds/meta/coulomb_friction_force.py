@@ -6,13 +6,17 @@ from . import validation
 
 
 class CoulombFrictionForce(MaterialRelation):
-
     '''Shear force accounting for the tangential displacement between contacting particles  # noqa
     '''
 
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
-    def __init__(self, material, friction_coefficient=0.0, description=None, name=None, data=None):
+    def __init__(self,
+                 material,
+                 friction_coefficient=0.0,
+                 description=None,
+                 name=None,
+                 data=None):
 
         self.material = material
         self.friction_coefficient = friction_coefficient
@@ -49,8 +53,7 @@ class CoulombFrictionForce(MaterialRelation):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -58,8 +61,7 @@ class CoulombFrictionForce(MaterialRelation):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -83,8 +85,10 @@ class CoulombFrictionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL,
+                CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

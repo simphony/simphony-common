@@ -6,13 +6,17 @@ from . import validation
 
 
 class Neumann(Condition):
-
     '''Neumann boundary condition  # noqa
     '''
 
     cuba_key = CUBA.NEUMANN
 
-    def __init__(self, variable=None, material=None, description=None, name=None, data=None):
+    def __init__(self,
+                 variable=None,
+                 material=None,
+                 description=None,
+                 name=None,
+                 data=None):
 
         if variable is None:
             self.variable = []
@@ -65,8 +69,7 @@ class Neumann(Condition):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -74,8 +77,7 @@ class Neumann(Condition):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
@@ -95,7 +97,8 @@ class Neumann(Condition):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):

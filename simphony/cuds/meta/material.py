@@ -5,7 +5,6 @@ from .cuds_component import CUDSComponent
 
 
 class Material(CUDSComponent):
-
     '''Definition of a material and its parameters  # noqa
     '''
 
@@ -30,8 +29,7 @@ class Material(CUDSComponent):
             data_container = self._data
 
         retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         retvalue.update(data_container)
 
         return retvalue
@@ -39,8 +37,7 @@ class Material(CUDSComponent):
     @data.setter
     def data(self, new_data):
         data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters()
-            )
+            self.supported_parameters())
         data.update(new_data)
         self._data = data
 
