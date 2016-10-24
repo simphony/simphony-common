@@ -1,9 +1,7 @@
-import cPickle
-from io import BytesIO
 import unittest
 
 from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer, create_data_container
+from simphony.core.data_container import DataContainer
 
 
 class TestDataContainer(unittest.TestCase):
@@ -150,66 +148,15 @@ class TestDataContainer(unittest.TestCase):
         with self.assertRaises(ValueError):
             container[100] = 29
 
+    def test_new_with_restricted_keys(self):
+        restricted_keys = frozenset([CUBA.UUID, CUBA.NAME])
+        container = DataContainer.new_with_restricted_keys(restricted_keys)
+        self.assertEqual(container.restricted_keys, restricted_keys)
 
-# Create a container class here for testing pickling
-# As with all dynamically created classes, it needs to be
-# properly named in a module in order for pickling to work
-RestrictedDataContainer = create_data_container(CUBA)
-
-
-class TestRestrictedDataContainer(unittest.TestCase):
-
-    def setUp(self):
-        self.maxDiff = None
-        iter_cuba = iter(CUBA)
-        # The first 9 keys are supported keys
-        self.valid_keys = tuple(iter_cuba.next() for i in range(1, 10))
-        # The rest are not supported
-        self.invalid_keys = tuple(key for key in iter_cuba)
-
-    def test_setitem_with_valid_key(self):
-        container = create_data_container(self.valid_keys)()
-        container[self.valid_keys[0]] = 20
-        self.assertIsInstance(container.keys()[0], CUBA)
-        self.assertEqual(container[self.valid_keys[0]], 20)
-
-    def test_setitem_with_invalid_key(self):
-        container = create_data_container(self.valid_keys)()
-
-        for key in self.invalid_keys:
-            with self.assertRaises(ValueError):
-                container[key] = 1
-
-    def test_update_with_valid_keys(self):
-        data = {key: key+3 for key in self.valid_keys}
-        container = create_data_container(self.valid_keys)(data)
-        self.assertTrue(all(key in self.valid_keys for key in container))
-
-    def test_update_with_some_invalid_keys(self):
-        data = {key: key+3 for key in self.valid_keys}
-        data[self.invalid_keys[0]] = 20
+        container[CUBA.NAME] = "foo"
 
         with self.assertRaises(ValueError):
-            create_data_container(self.valid_keys)(data)
-
-    def test_error_with_non_cuba_keys(self):
-        with self.assertRaises(ValueError):
-            create_data_container((1, 2))
-
-    def test_data_container_can_be_pickled(self):
-        # Create a container with data
-        container = RestrictedDataContainer()
-        for key in CUBA:
-            container[key] = key+3
-
-        # Pickle and write to a buffer
-        stream = BytesIO()
-        cPickle.dump(container, stream)
-        stream.seek(0)
-
-        # Restore the data
-        pickled_data = cPickle.load(stream)
-        self.assertDictEqual(pickled_data, container)
+            container[CUBA.DESCRIPTION] = "hello"
 
 
 if __name__ == '__main__':
