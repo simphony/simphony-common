@@ -7,6 +7,7 @@ import numpy
 import uuid
 
 from simphony.api import CUBA
+from simphony.core import DataContainer
 from simphony.cuds.meta import api as meta_class
 
 
@@ -121,6 +122,16 @@ class TestMetaClass(unittest.TestCase):
 
             # Test properties for CUDSItem
             meta_obj = klass()
+            self.check_cuds_item(meta_obj)
+
+        if errors:
+            self.fail('\n'.join(errors))
+
+    def test_initialization_with_data(self):
+        errors = []
+
+        for name, klass in self.no_required_args_classes:
+            meta_obj = klass(data=DataContainer())
             self.check_cuds_item(meta_obj)
 
         if errors:
