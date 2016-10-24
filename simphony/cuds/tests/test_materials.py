@@ -43,20 +43,10 @@ class TestMaterials(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.materials.remove(uuid.uuid4())
 
-    def test_iter_materials_with_ids(self):
+    def test_iter_all_materials_with_ids(self):
         # given
-        material_subset = [material for material in self.example_materials[:2]]
-        subset_ids = [material.uid for material in material_subset]
         for material in self.example_materials:
             self.materials.add(material)
-
-        # when
-        iterated_with_id_materials = [
-            m for m in self.materials.iter(Material) if m.uid in subset_ids]
-
-        # then
-        for m, r in zip(iterated_with_id_materials, material_subset):
-            self.assertEqual(m, r)
 
         # when
         iterated_all_materials = {material.uid: material for material
@@ -67,6 +57,25 @@ class TestMaterials(unittest.TestCase):
                          len(self.example_materials))
         for material in self.example_materials:
             self.assertEqual(material, iterated_all_materials[material.uid])
+
+    def test_iter_subset_of_materials_with_ids(self):
+        # given
+        material_subset = [material for material in self.example_materials[:2]]
+
+        subset_ids = [material.uid for material in material_subset]
+        for material in self.example_materials:
+            self.materials.add(material)
+
+        # when
+        iterated_materials = {material.uid: material for material
+                              in self.materials.iter(Material)
+                              if material.uid in subset_ids}
+
+        # then
+        self.assertEqual(len(iterated_materials),
+                         len(material_subset))
+        for material in material_subset:
+            self.assertEqual(material, iterated_materials[material.uid])
 
 
 if __name__ == '__main__':
