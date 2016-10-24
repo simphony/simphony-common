@@ -294,7 +294,6 @@ class CodeGenerator(object):
                 self.system_variables[key] = contents
 
             elif isinstance(contents, dict) and 'default' in contents:
-                print("optional ", key)
                 self.optional_user_defined[key] = contents
 
             else:
@@ -927,8 +926,6 @@ def meta_class(yaml_file, out_path, overwrite):
     with make_temporary_directory() as temp_dir:
 
         for key, class_data in yml_data['CUDS_KEYS'].items():
-            print("cuds keys ", key, class_data)
-
             # Catch inconsistent definitions that would choke the generator
             parent = class_data['parent']
             if (parent and
