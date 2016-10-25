@@ -15,7 +15,6 @@ from simphony.testing.abc_check_lattice import (
 
 
 class CustomRecord(tables.IsDescription):
-
     class data(tables.IsDescription):
 
         velocity = tables.Float64Col(pos=1, shape=3)
