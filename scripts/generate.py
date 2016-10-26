@@ -1067,7 +1067,7 @@ def keywords(cuba_input, cuds_input, output):
         content['type'] = "None"
         content['name'] = to_camel_case(keyword)
         content['key'] = keyword
-        content['shape'] = None
+        content['shape'] = [1]
         lines.extend(template.format(**content))
     lines.append('}\n')
 
