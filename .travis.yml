@@ -3,7 +3,7 @@ sudo: false
 python:
 - '2.7'
 virtualenv:
-  system_site_packages: true
+  system_site_packages: false
 addons:
   apt:
     packages:
