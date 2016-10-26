@@ -26,7 +26,7 @@ install:
 - popd
 script:
 - flake8 .
-- coverage run -m unittest discover -p test*
+- py.test -v
 - sphinx-build -W doc/source doc/build/sphinx
 after_success:
 - pip install codecov
