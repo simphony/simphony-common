@@ -1141,11 +1141,5 @@ KEYWORDS = {
         definition='Multiphase model',  # noqa
         key='MULTIPHASE_MODEL',
         shape=[1],
-        dtype=None),
-    'MATERIAL_ID': Keyword(
-        name='MaterialId',
-        definition='Material identification number',  # noqa
-        key='MATERIAL_ID',
-        shape=[1],
-        dtype=numpy.int32),
+        dtype=None)
 }
