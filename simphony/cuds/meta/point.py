@@ -1,26 +1,24 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from .cuds_item import CUDSItem
 from . import validation
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class Point(CUDSItem):
+    '''A point in a 3D space system  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.POINT
 
-    def __init__(self, description=None, name=None, data=None, position=None):
+    def __init__(self, data=None, position=None):
 
-        self.description = description
-        self.name = name
         if data:
             self.data = data
         if position is None:
             self.position = [0, 0, 0]
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._definition = 'A point in a 3D space system'  # noqa
 
     @property
     def data(self):
@@ -66,8 +64,8 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.POSITION)
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.CUDS_ITEM, )

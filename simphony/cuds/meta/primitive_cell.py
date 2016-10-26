@@ -5,22 +5,27 @@ from .cuds_component import CUDSComponent
 from . import validation
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class PrimitiveCell(CUDSComponent):
+    '''A lattice primitive cell  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.PRIMITIVE_CELL
 
-    def __init__(self, description=None, name=None, data=None, position=None):
+    def __init__(self,
+                 description=None,
+                 name=None,
+                 data=None,
+                 lattice_vectors=None):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
-        if position is None:
-            self.position = [0, 0, 0]
+        if lattice_vectors is None:
+            self.lattice_vectors = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
+                                    [0.0, 0.0, 1.0]]
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._definition = 'A lattice primitive cell'  # noqa
 
     @property
     def data(self):
@@ -45,14 +50,14 @@ class Origin(CUDSComponent):
             self._data = DataContainer(new_data)
 
     @property
-    def position(self):
-        return self.data[CUBA.POSITION]
+    def lattice_vectors(self):
+        return self.data[CUBA.LATTICE_VECTORS]
 
-    @position.setter
-    def position(self, value):
-        value = validation.cast_data_type(value, 'position')
-        validation.validate_cuba_keyword(value, 'position')
-        self.data[CUBA.POSITION] = value
+    @lattice_vectors.setter
+    def lattice_vectors(self, value):
+        value = validation.cast_data_type(value, 'lattice_vectors')
+        validation.validate_cuba_keyword(value, 'lattice_vectors')
+        self.data[CUBA.LATTICE_VECTORS] = value
 
     @property
     def definition(self):
@@ -66,7 +71,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.LATTICE_VECTORS, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

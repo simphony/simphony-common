@@ -5,22 +5,31 @@ from .cuds_component import CUDSComponent
 from . import validation
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class Node(CUDSComponent):
+    '''A node on a structured grid like lattice  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.NODE
 
-    def __init__(self, description=None, name=None, data=None, position=None):
+    def __init__(self, index, description=None, name=None, data=None):
 
+        self.index = index
         self.description = description
         self.name = name
         if data:
             self.data = data
-        if position is None:
-            self.position = [0, 0, 0]
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._definition = 'A node on a structured grid like lattice'  # noqa
+
+    @property
+    def index(self):
+        return self.data[CUBA.INDEX]
+
+    @index.setter
+    def index(self, value):
+        value = validation.cast_data_type(value, 'index')
+        validation.validate_cuba_keyword(value, 'index')
+        self.data[CUBA.INDEX] = value
 
     @property
     def data(self):
@@ -45,16 +54,6 @@ class Origin(CUDSComponent):
             self._data = DataContainer(new_data)
 
     @property
-    def position(self):
-        return self.data[CUBA.POSITION]
-
-    @position.setter
-    def position(self, value):
-        value = validation.cast_data_type(value, 'position')
-        validation.validate_cuba_keyword(value, 'position')
-        self.data[CUBA.POSITION] = value
-
-    @property
     def definition(self):
         return self._definition
 
@@ -66,7 +65,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):
