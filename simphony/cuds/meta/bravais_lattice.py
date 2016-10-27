@@ -12,27 +12,35 @@ class BravaisLattice(Lattice):
     cuba_key = CUBA.BRAVAIS_LATTICE
 
     def __init__(self,
+                 primitive_cell,
                  description=None,
                  name=None,
                  data=None,
-                 lattice_parameter=None,
-                 primitive_cell=None):
+                 lattice_parameter=None):
 
+        self.primitive_cell = primitive_cell
         self.description = description
         self.name = name
         if data:
             self.data = data
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
-        if primitive_cell is None:
-            self.primitive_cell = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
-                                   [0.0, 0.0, 1.0]]
         # This is a system-managed, read-only attribute
         self._origin = None
         # This is a system-managed, read-only attribute
         self._definition = 'A Bravais lattice'  # noqa
         # This is a system-managed, read-only attribute
         self._size = [1, 1, 1]
+
+    @property
+    def primitive_cell(self):
+        return self.data[CUBA.PRIMITIVE_CELL]
+
+    @primitive_cell.setter
+    def primitive_cell(self, value):
+        value = validation.cast_data_type(value, 'primitive_cell')
+        validation.validate_cuba_keyword(value, 'primitive_cell')
+        self.data[CUBA.PRIMITIVE_CELL] = value
 
     @property
     def data(self):
@@ -67,16 +75,6 @@ class BravaisLattice(Lattice):
         for item in value:
             validation.validate_cuba_keyword(item, 'lattice_parameter')
         self.data[CUBA.LATTICE_PARAMETER] = value
-
-    @property
-    def primitive_cell(self):
-        return self.data[CUBA.PRIMITIVE_CELL]
-
-    @primitive_cell.setter
-    def primitive_cell(self, value):
-        value = validation.cast_data_type(value, 'primitive_cell')
-        validation.validate_cuba_keyword(value, 'primitive_cell')
-        self.data[CUBA.PRIMITIVE_CELL] = value
 
     @property
     def origin(self):

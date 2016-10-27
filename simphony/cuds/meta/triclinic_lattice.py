@@ -11,15 +11,13 @@ class TriclinicLattice(BravaisLattice):
     cuba_key = CUBA.TRICLINIC_LATTICE
 
     def __init__(self,
-                 primitive_cell=None,
+                 primitive_cell,
                  lattice_parameter=None,
                  description=None,
                  name=None,
                  data=None):
 
-        if primitive_cell is None:
-            self.primitive_cell = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
-                                   [0.0, 0.0, 1.0]]
+        self.primitive_cell = primitive_cell
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
         self.description = description
