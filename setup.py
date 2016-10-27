@@ -17,6 +17,7 @@ VERSION = '0.3.1.dev0'
 
 class BuildMeta(Command):
     user_options = []
+
     def initialize_options(self):
         self.simphony_metadata_path = None
 
