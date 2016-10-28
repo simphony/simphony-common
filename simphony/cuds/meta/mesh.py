@@ -2,25 +2,30 @@ import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
-from . import validation
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class Mesh(CUDSComponent):
+    '''A mesh  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.MESH
 
-    def __init__(self, description=None, name=None, data=None, position=None):
+    def __init__(self, description=None, name=None, data=None):
 
         self.description = description
         self.name = name
         if data:
             self.data = data
-        if position is None:
-            self.position = [0, 0, 0]
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._cell = None
+        # This is a system-managed, read-only attribute
+        self._definition = 'A mesh'  # noqa
+        # This is a system-managed, read-only attribute
+        self._face = None
+        # This is a system-managed, read-only attribute
+        self._edge = None
+        # This is a system-managed, read-only attribute
+        self._point = None
 
     @property
     def data(self):
@@ -45,18 +50,24 @@ class Origin(CUDSComponent):
             self._data = DataContainer(new_data)
 
     @property
-    def position(self):
-        return self.data[CUBA.POSITION]
-
-    @position.setter
-    def position(self, value):
-        value = validation.cast_data_type(value, 'position')
-        validation.validate_cuba_keyword(value, 'position')
-        self.data[CUBA.POSITION] = value
+    def cell(self):
+        return self._cell
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def face(self):
+        return self._face
+
+    @property
+    def edge(self):
+        return self._edge
+
+    @property
+    def point(self):
+        return self._point
 
     @property
     def uid(self):
@@ -66,7 +77,8 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.POINT, CUBA.UUID, CUBA.FACE, CUBA.CELL,
+                CUBA.EDGE, CUBA.NAME)
 
     @classmethod
     def parents(cls):

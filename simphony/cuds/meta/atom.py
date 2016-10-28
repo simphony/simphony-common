@@ -1,26 +1,25 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from .particle import Particle
 from . import validation
 
 
-class Origin(CUDSComponent):
-    '''The origin of a space system  # noqa
+class Atom(Particle):
+    '''An atom  # noqa
     '''
 
-    cuba_key = CUBA.ORIGIN
+    cuba_key = CUBA.ATOM
 
-    def __init__(self, description=None, name=None, data=None, position=None):
+    def __init__(self, position=None, data=None, mass=1.0):
 
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
         if position is None:
             self.position = [0, 0, 0]
+        if data:
+            self.data = data
+        self.mass = mass
         # This is a system-managed, read-only attribute
-        self._definition = 'The origin of a space system'  # noqa
+        self._definition = 'An atom'  # noqa
 
     @property
     def data(self):
@@ -45,14 +44,14 @@ class Origin(CUDSComponent):
             self._data = DataContainer(new_data)
 
     @property
-    def position(self):
-        return self.data[CUBA.POSITION]
+    def mass(self):
+        return self.data[CUBA.MASS]
 
-    @position.setter
-    def position(self, value):
-        value = validation.cast_data_type(value, 'position')
-        validation.validate_cuba_keyword(value, 'position')
-        self.data[CUBA.POSITION] = value
+    @mass.setter
+    def mass(self, value):
+        value = validation.cast_data_type(value, 'mass')
+        validation.validate_cuba_keyword(value, 'mass')
+        self.data[CUBA.MASS] = value
 
     @property
     def definition(self):
@@ -66,8 +65,8 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.POSITION, CUBA.MASS, CUBA.UUID)
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.PARTICLE, CUBA.POINT, CUBA.CUDS_ITEM)

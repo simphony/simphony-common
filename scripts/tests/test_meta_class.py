@@ -317,7 +317,7 @@ class TestMetaClass(unittest.TestCase):
 
     def test_Origin(self):
         origin = meta_class.Origin()
-        arr = origin.point == numpy.array([0, 0, 0])
+        arr = origin.position == numpy.array([0, 0, 0])
         self.assertTrue(arr.all())
 
     def test_Box(self):
