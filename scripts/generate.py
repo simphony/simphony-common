@@ -8,7 +8,7 @@ import warnings
 
 from collections import OrderedDict, MutableSequence
 from contextlib import contextmanager
-from itertools import chain, count
+from itertools import chain
 
 import click
 import yaml
