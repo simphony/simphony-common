@@ -356,10 +356,10 @@ def dummy_cuba_value(cuba, constant=None):
             shape = [random.randint(2, 10)]
 
         if shape == [1]:
-            return keyword.dtype(cuba+constant)
+            return keyword.dtype(constant)
         else:
             data = numpy.arange(numpy.prod(shape),
-                                dtype=keyword.dtype)*(cuba+constant)
+                                dtype=keyword.dtype)*constant
             return data.reshape(shape)
     elif keyword.dtype in (bool, numpy.bool):
         return bool(constant)
