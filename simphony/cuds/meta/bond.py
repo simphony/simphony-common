@@ -30,7 +30,9 @@ class Bond(CUDSItem):
             validation.check_shape(value, '(:)')
             for item in value:
                 validation.validate_cuba_keyword(item, 'particle')
-        self.data[CUBA.PARTICLE] = value
+        data = self.data
+        data[CUBA.PARTICLE] = value
+        self.data = data
 
     @property
     def data(self):
@@ -38,21 +40,13 @@ class Bond(CUDSItem):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

@@ -11,10 +11,10 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, point=None, description=None, name=None, data=None):
+    def __init__(self, position=None, description=None, name=None, data=None):
 
-        if point is None:
-            self.point = [0, 0, 0]
+        if position is None:
+            self.position = [0, 0, 0]
         self.description = description
         self.name = name
         if data:
@@ -23,15 +23,15 @@ class Origin(CUDSComponent):
         self._definition = 'The origin of a space system'  # noqa
 
     @property
-    def point(self):
-        return self.data[CUBA.POINT]
+    def position(self):
+        return self.data[CUBA.POSITION]
 
-    @point.setter
-    def point(self, value):
-        value = validation.cast_data_type(value, 'point')
-        validation.validate_cuba_keyword(value, 'point')
+    @position.setter
+    def position(self, value):
+        value = validation.cast_data_type(value, 'position')
+        validation.validate_cuba_keyword(value, 'position')
         data = self.data
-        data[CUBA.POINT] = value
+        data[CUBA.POSITION] = value
         self.data = data
 
     @property
@@ -39,22 +39,14 @@ class Origin(CUDSComponent):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer.new_with_restricted_keys(
-                self.supported_parameters())
+            self._data = DataContainer()
             data_container = self._data
 
-        retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        retvalue.update(data_container)
-
-        return retvalue
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        data.update(new_data)
-        self._data = data
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -68,7 +60,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POINT, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

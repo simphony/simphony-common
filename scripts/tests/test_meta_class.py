@@ -131,12 +131,9 @@ class TestMetaClass(unittest.TestCase):
         errors = []
 
         for name, klass in self.no_required_args_classes:
-            if CUBA.NAME not in klass.supported_parameters():
-                continue
-
             meta_obj = klass(data=DataContainer(NAME="foobar"))
             self.check_cuds_item(meta_obj)
-            self.assertEqual(meta_obj.name, "foobar")
+            self.assertEqual(meta_obj.data[CUBA.NAME], "foobar")
 
         if errors:
             self.fail('\n'.join(errors))

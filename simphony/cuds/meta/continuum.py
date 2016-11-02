@@ -24,22 +24,14 @@ class Continuum(ComputationalModel):
         try:
             data_container = self._data
         except AttributeError:
-            self._data = DataContainer.new_with_restricted_keys(
-                self.supported_parameters())
+            self._data = DataContainer()
             data_container = self._data
 
-        retvalue = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        retvalue.update(data_container)
-
-        return retvalue
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        data = DataContainer.new_with_restricted_keys(
-            self.supported_parameters())
-        data.update(new_data)
-        self._data = data
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
