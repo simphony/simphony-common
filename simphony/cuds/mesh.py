@@ -6,6 +6,7 @@ and modify a mesh
 """
 import uuid
 
+import simphony.core.data_container as dc
 from simphony.core.cuds_item import CUDSItem
 from simphony.cuds.abc_mesh import ABCMesh
 from simphony.cuds.mesh_items import Edge, Face, Cell, Point
@@ -49,12 +50,14 @@ class Mesh(ABCMesh):
     """
 
     def __init__(self, name):
-        super(Mesh, self).__init__(name=name)
+        self.name = name
 
         self._points = {}
         self._edges = {}
         self._faces = {}
         self._cells = {}
+
+        self._data = dc.DataContainer()
 
         self._items_count = {
             CUDSItem.POINT: lambda: self._points,
@@ -62,6 +65,14 @@ class Mesh(ABCMesh):
             CUDSItem.FACE: lambda: self._faces,
             CUDSItem.CELL: lambda: self._cells
         }
+
+    @property
+    def data(self):
+        return dc.DataContainer(self._data)
+
+    @data.setter
+    def data(self, value):
+        self._data = dc.DataContainer(value)
 
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
