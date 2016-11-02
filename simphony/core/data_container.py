@@ -33,29 +33,6 @@ class DataContainer(dict):
 
         self.update(*args, **kwargs)
 
-    @classmethod
-    def new_with_restricted_keys(cls, restricted_keys):
-        """Instantiate a DataContainer with the given restricted keys
-
-        Parameters
-        ----------
-        restricted_keys : sequence
-            CUBA IntEnum
-
-        Returns
-        -------
-        new instance of DataContainer.
-        """
-        # Make sure all restricted keys are CUBA keys
-        if any(not isinstance(key, CUBA) for key in restricted_keys):
-            raise ValueError('All restricted keys should be CUBA IntEnum')
-
-        self = super(DataContainer, cls).__new__(cls)
-        self.restricted_keys = frozenset(restricted_keys)
-        self._restricted_mapping = {key.name: key for key in restricted_keys}
-
-        return self
-
     def __setitem__(self, key, value):
         """ Set/Update the key value only when the key is a CUBA key.
 

@@ -11,38 +11,19 @@ class Basis(CUDSComponent):
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, description=None, name=None, data=None, vector=None):
+    def __init__(self, data=None, description=None, name=None, vector=None):
 
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Space basis vectors (row wise)'  # noqa
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
 
     @property
     def vector(self):
@@ -54,7 +35,23 @@ class Basis(CUDSComponent):
         validation.check_shape(value, '(3, 3)')
         for item in value:
             validation.validate_cuba_keyword(item, 'vector')
-        self.data[CUBA.VECTOR] = value
+        data = self.data
+        data[CUBA.VECTOR] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

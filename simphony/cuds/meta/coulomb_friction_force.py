@@ -13,45 +13,26 @@ class CoulombFrictionForce(MaterialRelation):
 
     def __init__(self,
                  material,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None,
                  friction_coefficient=0.0):
 
         self.material = material
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
         self.friction_coefficient = friction_coefficient
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Shear force accounting for the tangential displacement between contacting particles'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
 
     @property
     def friction_coefficient(self):
@@ -61,7 +42,23 @@ class CoulombFrictionForce(MaterialRelation):
     def friction_coefficient(self, value):
         value = validation.cast_data_type(value, 'friction_coefficient')
         validation.validate_cuba_keyword(value, 'friction_coefficient')
-        self.data[CUBA.FRICTION_COEFFICIENT] = value
+        data = self.data
+        data[CUBA.FRICTION_COEFFICIENT] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def models(self):

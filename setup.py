@@ -4,8 +4,6 @@ from subprocess import check_call
 
 from setuptools import setup, find_packages
 from distutils.cmd import Command
-from distutils.command.build import build
-from distutils.command.install import install
 
 # Read description
 with open('README.rst', 'r') as readme:
@@ -91,18 +89,6 @@ class BuildMeta(Command):
             raise
 
 
-class CustomBuild(build):
-    sub_commands = build.sub_commands + [
-        ('build_meta', None)
-    ]
-
-
-class CustomInstall(install):
-    sub_commands = install.sub_commands + [
-        ('build_meta', None)
-    ]
-
-
 def write_version_py(filename=None):
     if filename is None:
         filename = os.path.join(
@@ -134,8 +120,6 @@ setup(
     packages=find_packages(),
     cmdclass={
         'build_meta': BuildMeta,
-        'build': CustomBuild,
-        'install': CustomInstall,
     },
     entry_points={
         'console_scripts': [

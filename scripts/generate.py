@@ -393,10 +393,20 @@ class CodeGenerator(object):
     def populate_user_variable_code(self):
         ''' Populate code for user-defined attributes '''
 
-        for key, contents in chain(self.inherited_required.items(),
-                                   self.required_user_defined.items(),
-                                   self.inherited_optional.items(),
-                                   self.optional_user_defined.items()):
+        # populate them in reverse, because we want the root base class
+        # attributes filled at the very end. This is to prevent
+        # data to be overwritten by the defaults
+        for key, contents in chain(
+                reversed(list(chain(
+                    self.inherited_required.items(),
+                    self.required_user_defined.items()
+                    ))
+                ),
+                reversed(list(chain(
+                    self.inherited_optional.items(),
+                    self.optional_user_defined.items()
+                    )),
+                )):
             if hasattr(self, 'populate_'+key):
                 getattr(self, 'populate_'+key)(contents)
                 continue
@@ -489,12 +499,20 @@ class CodeGenerator(object):
         # If the key is a CUBA key, store it in the DataContainer
         cuba_key = 'CUBA.'+key.upper()
         if cuba_key in self.class_data:
-            target = 'self.data[{cuba_key}]'.format(cuba_key=cuba_key)
+            self.methods.append('''
+    @{key}.setter
+    def {key}(self, value):
+        {validation_code}
+        data = self.data
+        data[{cuba_key}] = value
+        self.data = data'''.format(key=key,
+                                   cuba_key=cuba_key,
+                                   validation_code=validation_code))
         else:
             target = 'self._{key}'.format(key=key)
 
-        # default property setter
-        self.methods.append('''
+            # default property setter
+            self.methods.append('''
     @{key}.setter
     def {key}(self, value):
         {validation_code}
@@ -628,7 +646,10 @@ class CodeGenerator(object):
         self.imports.append(IMPORT_PATHS['DataContainer'])
 
         self.init_body.append('''if data:
-            self.data = data''')
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+            ''')
 
         self.methods.append('''
     @property
@@ -637,22 +658,16 @@ class CodeGenerator(object):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container''')
+            data_container = self._data
+
+        return DataContainer(data_container)
+        ''')
 
         self.methods.append('''
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)''')
+        self._data = DataContainer(new_data)
+        ''')
 
     def collect_parents_to_mro(self, generators):
         ''' Recursively collect all the inherited into CodeGenerator.mro
@@ -713,7 +728,7 @@ class CodeGenerator(object):
                     'inherited_optional': 'optional_user_defined',
                     'inherited_sys_vars': 'system_variables'}
 
-        for parent_name in self.mro:
+        for parent_name in reversed(self.mro):
             parent = generators[parent_name]
 
             # Update the known attribute
@@ -814,8 +829,10 @@ class CodeGenerator(object):
         '''
         # __init__ keyword arguments
         kwargs = []
-        for key, content in chain(self.inherited_optional.items(),
-                                  self.optional_user_defined.items()):
+        for key, content in chain(
+                self.inherited_optional.items(),
+                self.optional_user_defined.items(),
+        ):
             # Since it is optional, it must have a default entry
             # However if the default value is a CUBA key,
             # we set it to None in the init
@@ -905,7 +922,6 @@ def meta_class(yaml_file, out_path, overwrite):
     with make_temporary_directory() as temp_dir:
 
         for key, class_data in yml_data['CUDS_KEYS'].items():
-
             # Catch inconsistent definitions that would choke the generator
             parent = class_data['parent']
             if (parent and

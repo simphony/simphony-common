@@ -11,37 +11,18 @@ class Atom(Particle):
 
     cuba_key = CUBA.ATOM
 
-    def __init__(self, position=None, data=None, mass=1.0):
+    def __init__(self, data=None, position=None, mass=1.0):
 
+        self.mass = mass
         if position is None:
             self.position = [0, 0, 0]
         if data:
-            self.data = data
-        self.mass = mass
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'An atom'  # noqa
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
 
     @property
     def mass(self):
@@ -51,7 +32,23 @@ class Atom(Particle):
     def mass(self, value):
         value = validation.cast_data_type(value, 'mass')
         validation.validate_cuba_keyword(value, 'mass')
-        self.data[CUBA.MASS] = value
+        data = self.data
+        data[CUBA.MASS] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
