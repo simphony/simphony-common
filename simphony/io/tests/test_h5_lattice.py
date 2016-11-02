@@ -15,10 +15,8 @@ from simphony.testing.abc_check_lattice import (
 
 
 class CustomRecord(tables.IsDescription):
-
     class data(tables.IsDescription):
 
-        material_id = tables.Int32Col(pos=0)
         velocity = tables.Float64Col(pos=1, shape=3)
         density = tables.Float64Col(pos=2)
 
@@ -130,7 +128,7 @@ class TestH5LatticeNodeCustomCoordinates(
                                     origin, record=CustomRecord)
 
     def supported_cuba(self):
-        return [CUBA.VELOCITY, CUBA.MATERIAL_ID, CUBA.DENSITY]
+        return [CUBA.VELOCITY, CUBA.DENSITY]
 
 
 class TestH5LatticeCustomNodeOperations(
@@ -154,7 +152,7 @@ class TestH5LatticeCustomNodeOperations(
                                     origin, record=CustomRecord)
 
     def supported_cuba(self):
-        return [CUBA.VELOCITY, CUBA.MATERIAL_ID, CUBA.DENSITY]
+        return [CUBA.VELOCITY, CUBA.DENSITY]
 
 
 class TestH5LatticeVersions(unittest.TestCase):
