@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
-from simphony.cuds.meta.data_set import DataSet as MetaDataSet
 
 
-class ABCDataSet(MetaDataSet):
-    """Abstract base class defining the additional methods for the
-    Meta-generated DataSet to provide containment.
+class ABCDataset(object):
+    """Abstract base class for a dataset.
     """
     __metaclass__ = ABCMeta
 
