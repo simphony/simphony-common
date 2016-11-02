@@ -147,16 +147,6 @@ class TestDataContainer(unittest.TestCase):
         with self.assertRaises(ValueError):
             container[100] = 29
 
-    def test_new_with_restricted_keys(self):
-        restricted_keys = frozenset([CUBA.UUID, CUBA.NAME])
-        container = DataContainer.new_with_restricted_keys(restricted_keys)
-        self.assertEqual(container.restricted_keys, restricted_keys)
-
-        container[CUBA.NAME] = "foo"
-
-        with self.assertRaises(ValueError):
-            container[CUBA.DESCRIPTION] = "hello"
-
 
 if __name__ == '__main__':
     unittest.main()

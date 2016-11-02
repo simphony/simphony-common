@@ -12,58 +12,27 @@ class Empty(Condition):
     cuba_key = CUBA.EMPTY
 
     def __init__(self,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None,
                  variable=None,
                  material=None):
 
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
-        if variable is None:
-            self.variable = []
         if material is None:
             self.material = []
+        if variable is None:
+            self.variable = []
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Empty boundary condition'  # noqa
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
-
-    @property
-    def variable(self):
-        return self.data[CUBA.VARIABLE]
-
-    @variable.setter
-    def variable(self, value):
-        value = validation.cast_data_type(value, 'variable')
-        validation.check_shape(value, '(:)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'variable')
-        self.data[CUBA.VARIABLE] = value
 
     @property
     def material(self):
@@ -75,7 +44,37 @@ class Empty(Condition):
         validation.check_shape(value, '(:)')
         for item in value:
             validation.validate_cuba_keyword(item, 'material')
-        self.data[CUBA.MATERIAL] = value
+        data = self.data
+        data[CUBA.MATERIAL] = value
+        self.data = data
+
+    @property
+    def variable(self):
+        return self.data[CUBA.VARIABLE]
+
+    @variable.setter
+    def variable(self, value):
+        value = validation.cast_data_type(value, 'variable')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'variable')
+        data = self.data
+        data[CUBA.VARIABLE] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def models(self):

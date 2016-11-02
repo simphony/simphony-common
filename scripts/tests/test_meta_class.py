@@ -7,6 +7,7 @@ import numpy
 import uuid
 
 from simphony.api import CUBA
+from simphony.core import DataContainer
 from simphony.cuds.meta import api as meta_class
 
 
@@ -122,6 +123,17 @@ class TestMetaClass(unittest.TestCase):
             # Test properties for CUDSItem
             meta_obj = klass()
             self.check_cuds_item(meta_obj)
+
+        if errors:
+            self.fail('\n'.join(errors))
+
+    def test_initialization_with_data(self):
+        errors = []
+
+        for name, klass in self.no_required_args_classes:
+            meta_obj = klass(data=DataContainer(NAME="foobar"))
+            self.check_cuds_item(meta_obj)
+            self.assertEqual(meta_obj.data[CUBA.NAME], "foobar")
 
         if errors:
             self.fail('\n'.join(errors))
@@ -324,6 +336,31 @@ class TestMetaClass(unittest.TestCase):
         box = meta_class.Box()
         arr = box.vector == numpy.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         self.assertTrue(arr.all())
+
+    def test_Berendsen(self):
+        material = meta_class.Material()
+        berendsen = meta_class.Berendsen(material=[material])
+
+        self.assertIsNotNone(berendsen.material)
+
+    def test_IntegrationStep(self):
+        integration_step = meta_class.IntegrationStep(10, 10)
+        self.assertIsNotNone(integration_step.data)
+
+    def test_TemperatureRescaling(self):
+        material = meta_class.Material()
+        temp_rescaling = meta_class.TemperatureRescaling([material])
+        self.assertIsNotNone(temp_rescaling.data)
+
+    def test_Thermostat(self):
+        material = meta_class.Material()
+        thermostat = meta_class.Thermostat([material])
+        self.assertIsNotNone(thermostat.data)
+
+    def test_NoseHooverBoundary(self):
+        material = meta_class.Material()
+        nose_hoover = meta_class.NoseHoover([material])
+        self.assertIsNotNone(nose_hoover.data)
 
     def test_not_sharing_mutable(self):
         box1 = meta_class.Box()

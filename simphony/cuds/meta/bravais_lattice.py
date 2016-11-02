@@ -13,18 +13,21 @@ class BravaisLattice(Lattice):
 
     def __init__(self,
                  primitive_cell,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None,
                  lattice_parameter=None):
 
         self.primitive_cell = primitive_cell
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._origin = None
         # This is a system-managed, read-only attribute
@@ -40,29 +43,9 @@ class BravaisLattice(Lattice):
     def primitive_cell(self, value):
         value = validation.cast_data_type(value, 'primitive_cell')
         validation.validate_cuba_keyword(value, 'primitive_cell')
-        self.data[CUBA.PRIMITIVE_CELL] = value
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        data = self.data
+        data[CUBA.PRIMITIVE_CELL] = value
+        self.data = data
 
     @property
     def lattice_parameter(self):
@@ -74,7 +57,23 @@ class BravaisLattice(Lattice):
         validation.check_shape(value, '(3)')
         for item in value:
             validation.validate_cuba_keyword(item, 'lattice_parameter')
-        self.data[CUBA.LATTICE_PARAMETER] = value
+        data = self.data
+        data[CUBA.LATTICE_PARAMETER] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def origin(self):

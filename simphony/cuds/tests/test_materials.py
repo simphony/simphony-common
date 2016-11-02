@@ -4,8 +4,7 @@ from functools import partial
 
 from simphony.cuds.model import CUDS
 from simphony.cuds.meta.api import Material
-from simphony.testing.utils import (compare_material,
-                                    create_data_container)
+from simphony.testing.utils import compare_material
 
 
 class TestMaterials(unittest.TestCase):
@@ -17,8 +16,7 @@ class TestMaterials(unittest.TestCase):
         self.materials = CUDS()
         self.example_materials = []
         for i in xrange(5):
-            m = Material(description="Material {}".format(i),
-                         data=create_data_container())
+            m = Material(description="Material {}".format(i))
             m.name = None
             self.example_materials.append(m)
 
