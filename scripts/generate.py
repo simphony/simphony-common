@@ -841,7 +841,8 @@ class CodeGenerator(object):
                 if default.startswith('CUBA.'):
                     kwargs.append('{key}=None'.format(key=key))
                 else:
-                    kwargs.append('{key}=\"{value}\"'.format(key=key, value=default))
+                    kwargs.append('{key}=\"{value}\"'.format(
+                        key=key, value=default))
             elif isinstance(default, MutableSequence):
                 # Should not use mutable in the signature
                 kwargs.append('{key}=None'.format(key=key))
