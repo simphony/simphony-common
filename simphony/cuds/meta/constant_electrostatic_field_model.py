@@ -12,17 +12,20 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
     def __init__(self,
-                 electrostatic_field=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 electrostatic_field=None):
 
         if electrostatic_field is None:
             self.electrostatic_field = [0.0, 0.0, 0.0]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute

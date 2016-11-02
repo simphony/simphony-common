@@ -14,35 +14,25 @@ class IntegrationStep(ComputationalMethod):
     def __init__(self,
                  size,
                  final,
-                 current=0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 current=0):
 
-        self.size = size
         self.final = final
+        self.size = size
         self.current = current
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
         self._physics_equation = []
-
-    @property
-    def size(self):
-        return self.data[CUBA.SIZE]
-
-    @size.setter
-    def size(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'size')
-            validation.validate_cuba_keyword(value, 'size')
-        data = self.data
-        data[CUBA.SIZE] = value
-        self.data = data
 
     @property
     def final(self):
@@ -55,6 +45,19 @@ class IntegrationStep(ComputationalMethod):
             validation.validate_cuba_keyword(value, 'final')
         data = self.data
         data[CUBA.FINAL] = value
+        self.data = data
+
+    @property
+    def size(self):
+        return self.data[CUBA.SIZE]
+
+    @size.setter
+    def size(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'size')
+            validation.validate_cuba_keyword(value, 'size')
+        data = self.data
+        data[CUBA.SIZE] = value
         self.data = data
 
     @property

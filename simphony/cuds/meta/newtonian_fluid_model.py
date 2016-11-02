@@ -10,12 +10,15 @@ class NewtonianFluidModel(RheologyModel):
 
     cuba_key = CUBA.NEWTONIAN_FLUID_MODEL
 
-    def __init__(self, description=None, name=None, data=None):
+    def __init__(self, data=None, description=None, name=None):
 
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute

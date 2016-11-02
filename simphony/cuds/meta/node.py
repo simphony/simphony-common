@@ -11,13 +11,16 @@ class Node(CUDSComponent):
 
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, description=None, name=None, data=None):
+    def __init__(self, index, data=None, description=None, name=None):
 
         self.index = index
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'A node on a structured grid like lattice'  # noqa
 

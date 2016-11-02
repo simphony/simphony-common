@@ -11,13 +11,16 @@ class Boundary(CUDSComponent):
 
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, condition, description=None, name=None, data=None):
+    def __init__(self, condition, data=None, description=None, name=None):
 
         self.condition = condition
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'System boundary'  # noqa
 

@@ -14,7 +14,10 @@ class Edge(MeshElement):
 
         self.point = point
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Element for storing 1D geometrical objects'  # noqa
 

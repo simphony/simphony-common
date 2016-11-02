@@ -12,35 +12,38 @@ class IntegrationTime(ComputationalMethod):
     cuba_key = CUBA.INTEGRATION_TIME
 
     def __init__(self,
-                 current=0.0,
-                 size=0.0,
-                 final=0.0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 current=0.0,
+                 size=0.0,
+                 final=0.0):
 
-        self.current = current
-        self.size = size
         self.final = final
-        self.description = description
+        self.size = size
+        self.current = current
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'the current time, time step, and final time for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
         self._physics_equation = []
 
     @property
-    def current(self):
-        return self.data[CUBA.CURRENT]
+    def final(self):
+        return self.data[CUBA.FINAL]
 
-    @current.setter
-    def current(self, value):
-        value = validation.cast_data_type(value, 'current')
-        validation.validate_cuba_keyword(value, 'current')
+    @final.setter
+    def final(self, value):
+        value = validation.cast_data_type(value, 'final')
+        validation.validate_cuba_keyword(value, 'final')
         data = self.data
-        data[CUBA.CURRENT] = value
+        data[CUBA.FINAL] = value
         self.data = data
 
     @property
@@ -56,15 +59,15 @@ class IntegrationTime(ComputationalMethod):
         self.data = data
 
     @property
-    def final(self):
-        return self.data[CUBA.FINAL]
+    def current(self):
+        return self.data[CUBA.CURRENT]
 
-    @final.setter
-    def final(self, value):
-        value = validation.cast_data_type(value, 'final')
-        validation.validate_cuba_keyword(value, 'final')
+    @current.setter
+    def current(self, value):
+        value = validation.cast_data_type(value, 'current')
+        validation.validate_cuba_keyword(value, 'current')
         data = self.data
-        data[CUBA.FINAL] = value
+        data[CUBA.CURRENT] = value
         self.data = data
 
     @property

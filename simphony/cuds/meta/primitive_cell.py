@@ -12,18 +12,21 @@ class PrimitiveCell(CUDSComponent):
     cuba_key = CUBA.PRIMITIVE_CELL
 
     def __init__(self,
-                 lattice_vectors=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 lattice_vectors=None):
 
         if lattice_vectors is None:
             self.lattice_vectors = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
                                     [0.0, 0.0, 1.0]]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'A lattice primitive cell'  # noqa
 

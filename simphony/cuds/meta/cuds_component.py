@@ -11,27 +11,17 @@ class CUDSComponent(CUDSItem):
 
     cuba_key = CUBA.CUDS_COMPONENT
 
-    def __init__(self, description=None, name=None, data=None):
+    def __init__(self, data=None, description=None, name=None):
 
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Base data type for the CUDS components'  # noqa
-
-    @property
-    def description(self):
-        return self.data[CUBA.DESCRIPTION]
-
-    @description.setter
-    def description(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'description')
-            validation.validate_cuba_keyword(value, 'description')
-        data = self.data
-        data[CUBA.DESCRIPTION] = value
-        self.data = data
 
     @property
     def name(self):
@@ -44,6 +34,19 @@ class CUDSComponent(CUDSItem):
             validation.validate_cuba_keyword(value, 'name')
         data = self.data
         data[CUBA.NAME] = value
+        self.data = data
+
+    @property
+    def description(self):
+        return self.data[CUBA.DESCRIPTION]
+
+    @description.setter
+    def description(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'description')
+            validation.validate_cuba_keyword(value, 'description')
+        data = self.data
+        data[CUBA.DESCRIPTION] = value
         self.data = data
 
     @property

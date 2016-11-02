@@ -12,21 +12,38 @@ class Box(Boundary):
     cuba_key = CUBA.BOX
 
     def __init__(self,
-                 condition=None,
-                 vector=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 condition=None,
+                 vector=None):
 
-        self.condition = condition
         if vector is None:
             self.vector = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.description = description
+        self.condition = condition
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).'  # noqa
+
+    @property
+    def vector(self):
+        return self.data[CUBA.VECTOR]
+
+    @vector.setter
+    def vector(self, value):
+        value = validation.cast_data_type(value, 'vector')
+        validation.check_shape(value, '(3,3)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'vector')
+        data = self.data
+        data[CUBA.VECTOR] = value
+        self.data = data
 
     @property
     def condition(self):
@@ -41,20 +58,6 @@ class Box(Boundary):
                 validation.validate_cuba_keyword(item, 'condition')
         data = self.data
         data[CUBA.CONDITION] = value
-        self.data = data
-
-    @property
-    def vector(self):
-        return self.data[CUBA.VECTOR]
-
-    @vector.setter
-    def vector(self, value):
-        value = validation.cast_data_type(value, 'vector')
-        validation.check_shape(value, '(3,3)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'vector')
-        data = self.data
-        data[CUBA.VECTOR] = value
         self.data = data
 
     @property

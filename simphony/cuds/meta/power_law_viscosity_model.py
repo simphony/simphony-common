@@ -12,22 +12,25 @@ class PowerLawViscosityModel(RheologyModel):
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
+                 data=None,
+                 description=None,
+                 name=None,
                  linear_constant=1e-5,
                  minimum_viscosity=1e-5,
                  maximum_viscosity=1e-3,
-                 power_law_index=1.0,
-                 description=None,
-                 name=None,
-                 data=None):
+                 power_law_index=1.0):
 
-        self.linear_constant = linear_constant
-        self.minimum_viscosity = minimum_viscosity
-        self.maximum_viscosity = maximum_viscosity
         self.power_law_index = power_law_index
-        self.description = description
+        self.maximum_viscosity = maximum_viscosity
+        self.minimum_viscosity = minimum_viscosity
+        self.linear_constant = linear_constant
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -36,27 +39,15 @@ class PowerLawViscosityModel(RheologyModel):
         self._variables = []
 
     @property
-    def linear_constant(self):
-        return self.data[CUBA.LINEAR_CONSTANT]
+    def power_law_index(self):
+        return self.data[CUBA.POWER_LAW_INDEX]
 
-    @linear_constant.setter
-    def linear_constant(self, value):
-        value = validation.cast_data_type(value, 'linear_constant')
-        validation.validate_cuba_keyword(value, 'linear_constant')
+    @power_law_index.setter
+    def power_law_index(self, value):
+        value = validation.cast_data_type(value, 'power_law_index')
+        validation.validate_cuba_keyword(value, 'power_law_index')
         data = self.data
-        data[CUBA.LINEAR_CONSTANT] = value
-        self.data = data
-
-    @property
-    def minimum_viscosity(self):
-        return self.data[CUBA.MINIMUM_VISCOSITY]
-
-    @minimum_viscosity.setter
-    def minimum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'minimum_viscosity')
-        validation.validate_cuba_keyword(value, 'minimum_viscosity')
-        data = self.data
-        data[CUBA.MINIMUM_VISCOSITY] = value
+        data[CUBA.POWER_LAW_INDEX] = value
         self.data = data
 
     @property
@@ -72,15 +63,27 @@ class PowerLawViscosityModel(RheologyModel):
         self.data = data
 
     @property
-    def power_law_index(self):
-        return self.data[CUBA.POWER_LAW_INDEX]
+    def minimum_viscosity(self):
+        return self.data[CUBA.MINIMUM_VISCOSITY]
 
-    @power_law_index.setter
-    def power_law_index(self, value):
-        value = validation.cast_data_type(value, 'power_law_index')
-        validation.validate_cuba_keyword(value, 'power_law_index')
+    @minimum_viscosity.setter
+    def minimum_viscosity(self, value):
+        value = validation.cast_data_type(value, 'minimum_viscosity')
+        validation.validate_cuba_keyword(value, 'minimum_viscosity')
         data = self.data
-        data[CUBA.POWER_LAW_INDEX] = value
+        data[CUBA.MINIMUM_VISCOSITY] = value
+        self.data = data
+
+    @property
+    def linear_constant(self):
+        return self.data[CUBA.LINEAR_CONSTANT]
+
+    @linear_constant.setter
+    def linear_constant(self, value):
+        value = validation.cast_data_type(value, 'linear_constant')
+        validation.validate_cuba_keyword(value, 'linear_constant')
+        data = self.data
+        data[CUBA.LINEAR_CONSTANT] = value
         self.data = data
 
     @property

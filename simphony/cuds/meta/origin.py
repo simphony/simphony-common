@@ -11,14 +11,17 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, position=None, description=None, name=None, data=None):
+    def __init__(self, data=None, description=None, name=None, position=None):
 
         if position is None:
             self.position = [0, 0, 0]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'The origin of a space system'  # noqa
 

@@ -393,11 +393,20 @@ class CodeGenerator(object):
     def populate_user_variable_code(self):
         ''' Populate code for user-defined attributes '''
 
-        for key, contents in chain(self.required_user_defined.items(),
-                                   self.inherited_required.items(),
-                                   self.optional_user_defined.items(),
-                                   self.inherited_optional.items(),
-                                   ):
+        # populate them in reverse, because we want the root base class
+        # attributes filled at the very end. This is to prevent
+        # data to be overwritten by the defaults
+        for key, contents in chain(
+                reversed(list(chain(
+                    self.inherited_required.items(),
+                    self.required_user_defined.items()
+                    ))
+                ),
+                reversed(list(chain(
+                    self.inherited_optional.items(),
+                    self.optional_user_defined.items()
+                    )),
+                )):
             if hasattr(self, 'populate_'+key):
                 getattr(self, 'populate_'+key)(contents)
                 continue
@@ -637,7 +646,10 @@ class CodeGenerator(object):
         self.imports.append(IMPORT_PATHS['DataContainer'])
 
         self.init_body.append('''if data:
-            self.data = data''')
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+            ''')
 
         self.methods.append('''
     @property
@@ -716,7 +728,7 @@ class CodeGenerator(object):
                     'inherited_optional': 'optional_user_defined',
                     'inherited_sys_vars': 'system_variables'}
 
-        for parent_name in self.mro:
+        for parent_name in reversed(self.mro):
             parent = generators[parent_name]
 
             # Update the known attribute
@@ -818,8 +830,8 @@ class CodeGenerator(object):
         # __init__ keyword arguments
         kwargs = []
         for key, content in chain(
-                self.optional_user_defined.items(),
                 self.inherited_optional.items(),
+                self.optional_user_defined.items(),
         ):
             # Since it is optional, it must have a default entry
             # However if the default value is a CUBA key,

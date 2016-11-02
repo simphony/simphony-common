@@ -11,13 +11,16 @@ class PairPotential(InteratomicPotential):
 
     cuba_key = CUBA.PAIR_POTENTIAL
 
-    def __init__(self, material, description=None, name=None, data=None):
+    def __init__(self, material, data=None, description=None, name=None):
 
         self.material = material
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute

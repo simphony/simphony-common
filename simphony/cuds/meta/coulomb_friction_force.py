@@ -13,17 +13,20 @@ class CoulombFrictionForce(MaterialRelation):
 
     def __init__(self,
                  material,
-                 friction_coefficient=0.0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 friction_coefficient=0.0):
 
         self.material = material
         self.friction_coefficient = friction_coefficient
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute

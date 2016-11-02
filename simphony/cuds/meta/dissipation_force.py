@@ -13,17 +13,20 @@ class DissipationForce(MaterialRelation):
 
     def __init__(self,
                  material,
-                 restitution_coefficient=1.0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 restitution_coefficient=1.0):
 
         self.material = material
         self.restitution_coefficient = restitution_coefficient
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute

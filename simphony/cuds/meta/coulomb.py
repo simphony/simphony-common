@@ -13,37 +13,28 @@ class Coulomb(PairPotential):
 
     def __init__(self,
                  material,
-                 cutoff_distance=1.0,
-                 dielectric_constant=1.0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 cutoff_distance=1.0,
+                 dielectric_constant=1.0):
 
         self.material = material
-        self.cutoff_distance = cutoff_distance
         self.dielectric_constant = dielectric_constant
-        self.description = description
+        self.cutoff_distance = cutoff_distance
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'The standard electrostatic Coulombic interaction potential between a pair of point charges'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def cutoff_distance(self):
-        return self.data[CUBA.CUTOFF_DISTANCE]
-
-    @cutoff_distance.setter
-    def cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'cutoff_distance')
-        validation.validate_cuba_keyword(value, 'cutoff_distance')
-        data = self.data
-        data[CUBA.CUTOFF_DISTANCE] = value
-        self.data = data
 
     @property
     def dielectric_constant(self):
@@ -55,6 +46,18 @@ class Coulomb(PairPotential):
         validation.validate_cuba_keyword(value, 'dielectric_constant')
         data = self.data
         data[CUBA.DIELECTRIC_CONSTANT] = value
+        self.data = data
+
+    @property
+    def cutoff_distance(self):
+        return self.data[CUBA.CUTOFF_DISTANCE]
+
+    @cutoff_distance.setter
+    def cutoff_distance(self, value):
+        value = validation.cast_data_type(value, 'cutoff_distance')
+        validation.validate_cuba_keyword(value, 'cutoff_distance')
+        data = self.data
+        data[CUBA.CUTOFF_DISTANCE] = value
         self.data = data
 
     @property

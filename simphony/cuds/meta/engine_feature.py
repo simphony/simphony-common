@@ -13,7 +13,10 @@ class EngineFeature(CUDSItem):
     def __init__(self, data=None):
 
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._physics_equation = None
         # This is a system-managed, read-only attribute

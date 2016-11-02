@@ -13,38 +13,29 @@ class NoseHoover(Thermostat):
 
     def __init__(self,
                  material,
-                 coupling_time=1.0,
-                 temperature=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 coupling_time=1.0,
+                 temperature=None):
 
         self.material = material
-        self.coupling_time = coupling_time
         if temperature is None:
             self.temperature = [0.0, 0.0]
-        self.description = description
+        self.coupling_time = coupling_time
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def coupling_time(self):
-        return self.data[CUBA.COUPLING_TIME]
-
-    @coupling_time.setter
-    def coupling_time(self, value):
-        value = validation.cast_data_type(value, 'coupling_time')
-        validation.validate_cuba_keyword(value, 'coupling_time')
-        data = self.data
-        data[CUBA.COUPLING_TIME] = value
-        self.data = data
 
     @property
     def temperature(self):
@@ -58,6 +49,18 @@ class NoseHoover(Thermostat):
             validation.validate_cuba_keyword(item, 'temperature')
         data = self.data
         data[CUBA.TEMPERATURE] = value
+        self.data = data
+
+    @property
+    def coupling_time(self):
+        return self.data[CUBA.COUPLING_TIME]
+
+    @coupling_time.setter
+    def coupling_time(self, value):
+        value = validation.cast_data_type(value, 'coupling_time')
+        validation.validate_cuba_keyword(value, 'coupling_time')
+        data = self.data
+        data[CUBA.COUPLING_TIME] = value
         self.data = data
 
     @property

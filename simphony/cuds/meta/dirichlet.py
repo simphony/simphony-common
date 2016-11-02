@@ -12,38 +12,27 @@ class Dirichlet(Condition):
     cuba_key = CUBA.DIRICHLET
 
     def __init__(self,
-                 variable=None,
-                 material=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 variable=None,
+                 material=None):
 
-        if variable is None:
-            self.variable = []
         if material is None:
             self.material = []
-        self.description = description
+        if variable is None:
+            self.variable = []
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Dirichlet boundary condition'  # noqa
-
-    @property
-    def variable(self):
-        return self.data[CUBA.VARIABLE]
-
-    @variable.setter
-    def variable(self, value):
-        value = validation.cast_data_type(value, 'variable')
-        validation.check_shape(value, '(:)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'variable')
-        data = self.data
-        data[CUBA.VARIABLE] = value
-        self.data = data
 
     @property
     def material(self):
@@ -57,6 +46,20 @@ class Dirichlet(Condition):
             validation.validate_cuba_keyword(item, 'material')
         data = self.data
         data[CUBA.MATERIAL] = value
+        self.data = data
+
+    @property
+    def variable(self):
+        return self.data[CUBA.VARIABLE]
+
+    @variable.setter
+    def variable(self, value):
+        value = validation.cast_data_type(value, 'variable')
+        validation.check_shape(value, '(:)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'variable')
+        data = self.data
+        data[CUBA.VARIABLE] = value
         self.data = data
 
     @property

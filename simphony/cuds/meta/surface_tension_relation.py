@@ -13,17 +13,20 @@ class SurfaceTensionRelation(MaterialRelation):
 
     def __init__(self,
                  material,
-                 surface_tension=0.07,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 surface_tension=0.07):
 
         self.material = material
         self.surface_tension = surface_tension
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute

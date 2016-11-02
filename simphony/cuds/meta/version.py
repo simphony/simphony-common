@@ -13,37 +13,28 @@ class Version(CUDSItem):
 
     def __init__(self, minor, patch, major, full, data=None):
 
-        self.minor = minor
-        self.patch = patch
-        self.major = major
         self.full = full
+        self.major = major
+        self.patch = patch
+        self.minor = minor
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Version of a software tool used in a simulation'  # noqa
 
     @property
-    def minor(self):
-        return self.data[CUBA.MINOR]
+    def full(self):
+        return self.data[CUBA.FULL]
 
-    @minor.setter
-    def minor(self, value):
-        value = validation.cast_data_type(value, 'minor')
-        validation.validate_cuba_keyword(value, 'minor')
+    @full.setter
+    def full(self, value):
+        value = validation.cast_data_type(value, 'full')
+        validation.validate_cuba_keyword(value, 'full')
         data = self.data
-        data[CUBA.MINOR] = value
-        self.data = data
-
-    @property
-    def patch(self):
-        return self.data[CUBA.PATCH]
-
-    @patch.setter
-    def patch(self, value):
-        value = validation.cast_data_type(value, 'patch')
-        validation.validate_cuba_keyword(value, 'patch')
-        data = self.data
-        data[CUBA.PATCH] = value
+        data[CUBA.FULL] = value
         self.data = data
 
     @property
@@ -59,15 +50,27 @@ class Version(CUDSItem):
         self.data = data
 
     @property
-    def full(self):
-        return self.data[CUBA.FULL]
+    def patch(self):
+        return self.data[CUBA.PATCH]
 
-    @full.setter
-    def full(self, value):
-        value = validation.cast_data_type(value, 'full')
-        validation.validate_cuba_keyword(value, 'full')
+    @patch.setter
+    def patch(self, value):
+        value = validation.cast_data_type(value, 'patch')
+        validation.validate_cuba_keyword(value, 'patch')
         data = self.data
-        data[CUBA.FULL] = value
+        data[CUBA.PATCH] = value
+        self.data = data
+
+    @property
+    def minor(self):
+        return self.data[CUBA.MINOR]
+
+    @minor.setter
+    def minor(self, value):
+        value = validation.cast_data_type(value, 'minor')
+        validation.validate_cuba_keyword(value, 'minor')
+        data = self.data
+        data[CUBA.MINOR] = value
         self.data = data
 
     @property

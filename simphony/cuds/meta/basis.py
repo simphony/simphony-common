@@ -11,14 +11,17 @@ class Basis(CUDSComponent):
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, vector=None, description=None, name=None, data=None):
+    def __init__(self, data=None, description=None, name=None, vector=None):
 
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Space basis vectors (row wise)'  # noqa
 

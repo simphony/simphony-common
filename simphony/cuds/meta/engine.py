@@ -10,11 +10,14 @@ class Engine(SoftwareTool):
 
     cuba_key = CUBA.ENGINE
 
-    def __init__(self, version=None, data=None):
+    def __init__(self, data=None, version=None):
 
         self.version = version
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the physics equation'  # noqa
         # This is a system-managed, read-only attribute

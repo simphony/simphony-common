@@ -10,13 +10,16 @@ class Thermostat(MaterialRelation):
 
     cuba_key = CUBA.THERMOSTAT
 
-    def __init__(self, material, description=None, name=None, data=None):
+    def __init__(self, material, data=None, description=None, name=None):
 
         self.material = material
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
         # This is a system-managed, read-only attribute

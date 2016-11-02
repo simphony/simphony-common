@@ -13,18 +13,21 @@ class BravaisLattice(Lattice):
 
     def __init__(self,
                  primitive_cell,
-                 lattice_parameter=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 lattice_parameter=None):
 
         self.primitive_cell = primitive_cell
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._origin = None
         # This is a system-managed, read-only attribute

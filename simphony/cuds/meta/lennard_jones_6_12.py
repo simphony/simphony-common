@@ -13,21 +13,24 @@ class LennardJones_6_12(PairPotential):
 
     def __init__(self,
                  material,
-                 van_der_waals_radius=1.0,
-                 cutoff_distance=1.0,
-                 energy_well_depth=1.0,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 van_der_waals_radius=1.0,
+                 cutoff_distance=1.0,
+                 energy_well_depth=1.0):
 
         self.material = material
-        self.van_der_waals_radius = van_der_waals_radius
-        self.cutoff_distance = cutoff_distance
         self.energy_well_depth = energy_well_depth
-        self.description = description
+        self.cutoff_distance = cutoff_distance
+        self.van_der_waals_radius = van_der_waals_radius
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
@@ -36,15 +39,15 @@ class LennardJones_6_12(PairPotential):
         self._variables = [CUBA.POSITION, CUBA.POTENTIAL_ENERGY]
 
     @property
-    def van_der_waals_radius(self):
-        return self.data[CUBA.VAN_DER_WAALS_RADIUS]
+    def energy_well_depth(self):
+        return self.data[CUBA.ENERGY_WELL_DEPTH]
 
-    @van_der_waals_radius.setter
-    def van_der_waals_radius(self, value):
-        value = validation.cast_data_type(value, 'van_der_waals_radius')
-        validation.validate_cuba_keyword(value, 'van_der_waals_radius')
+    @energy_well_depth.setter
+    def energy_well_depth(self, value):
+        value = validation.cast_data_type(value, 'energy_well_depth')
+        validation.validate_cuba_keyword(value, 'energy_well_depth')
         data = self.data
-        data[CUBA.VAN_DER_WAALS_RADIUS] = value
+        data[CUBA.ENERGY_WELL_DEPTH] = value
         self.data = data
 
     @property
@@ -60,15 +63,15 @@ class LennardJones_6_12(PairPotential):
         self.data = data
 
     @property
-    def energy_well_depth(self):
-        return self.data[CUBA.ENERGY_WELL_DEPTH]
+    def van_der_waals_radius(self):
+        return self.data[CUBA.VAN_DER_WAALS_RADIUS]
 
-    @energy_well_depth.setter
-    def energy_well_depth(self, value):
-        value = validation.cast_data_type(value, 'energy_well_depth')
-        validation.validate_cuba_keyword(value, 'energy_well_depth')
+    @van_der_waals_radius.setter
+    def van_der_waals_radius(self, value):
+        value = validation.cast_data_type(value, 'van_der_waals_radius')
+        validation.validate_cuba_keyword(value, 'van_der_waals_radius')
         data = self.data
-        data[CUBA.ENERGY_WELL_DEPTH] = value
+        data[CUBA.VAN_DER_WAALS_RADIUS] = value
         self.data = data
 
     @property

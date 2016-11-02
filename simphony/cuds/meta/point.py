@@ -11,12 +11,15 @@ class Point(CUDSItem):
 
     cuba_key = CUBA.POINT
 
-    def __init__(self, position=None, data=None):
+    def __init__(self, data=None, position=None):
 
         if position is None:
             self.position = [0, 0, 0]
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'A point in a 3D space system'  # noqa
 

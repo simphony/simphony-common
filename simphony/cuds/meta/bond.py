@@ -15,7 +15,10 @@ class Bond(CUDSItem):
 
         self.particle = particle
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'A bond between two or more atoms or particles'  # noqa
 

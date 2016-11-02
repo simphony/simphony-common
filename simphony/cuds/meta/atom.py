@@ -11,13 +11,16 @@ class Atom(Particle):
 
     cuba_key = CUBA.ATOM
 
-    def __init__(self, mass=1.0, position=None, data=None):
+    def __init__(self, data=None, position=None, mass=1.0):
 
         self.mass = mass
         if position is None:
             self.position = [0, 0, 0]
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'An atom'  # noqa
 

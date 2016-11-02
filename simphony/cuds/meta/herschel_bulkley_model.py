@@ -12,22 +12,25 @@ class HerschelBulkleyModel(RheologyModel):
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
 
     def __init__(self,
+                 data=None,
+                 description=None,
+                 name=None,
                  initial_viscosity=1e-3,
                  relaxation_time=1.0,
                  linear_constant=1e-5,
-                 power_law_index=1.0,
-                 description=None,
-                 name=None,
-                 data=None):
+                 power_law_index=1.0):
 
-        self.initial_viscosity = initial_viscosity
-        self.relaxation_time = relaxation_time
-        self.linear_constant = linear_constant
         self.power_law_index = power_law_index
-        self.description = description
+        self.linear_constant = linear_constant
+        self.relaxation_time = relaxation_time
+        self.initial_viscosity = initial_viscosity
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -36,27 +39,15 @@ class HerschelBulkleyModel(RheologyModel):
         self._variables = []
 
     @property
-    def initial_viscosity(self):
-        return self.data[CUBA.INITIAL_VISCOSITY]
+    def power_law_index(self):
+        return self.data[CUBA.POWER_LAW_INDEX]
 
-    @initial_viscosity.setter
-    def initial_viscosity(self, value):
-        value = validation.cast_data_type(value, 'initial_viscosity')
-        validation.validate_cuba_keyword(value, 'initial_viscosity')
+    @power_law_index.setter
+    def power_law_index(self, value):
+        value = validation.cast_data_type(value, 'power_law_index')
+        validation.validate_cuba_keyword(value, 'power_law_index')
         data = self.data
-        data[CUBA.INITIAL_VISCOSITY] = value
-        self.data = data
-
-    @property
-    def relaxation_time(self):
-        return self.data[CUBA.RELAXATION_TIME]
-
-    @relaxation_time.setter
-    def relaxation_time(self, value):
-        value = validation.cast_data_type(value, 'relaxation_time')
-        validation.validate_cuba_keyword(value, 'relaxation_time')
-        data = self.data
-        data[CUBA.RELAXATION_TIME] = value
+        data[CUBA.POWER_LAW_INDEX] = value
         self.data = data
 
     @property
@@ -72,15 +63,27 @@ class HerschelBulkleyModel(RheologyModel):
         self.data = data
 
     @property
-    def power_law_index(self):
-        return self.data[CUBA.POWER_LAW_INDEX]
+    def relaxation_time(self):
+        return self.data[CUBA.RELAXATION_TIME]
 
-    @power_law_index.setter
-    def power_law_index(self, value):
-        value = validation.cast_data_type(value, 'power_law_index')
-        validation.validate_cuba_keyword(value, 'power_law_index')
+    @relaxation_time.setter
+    def relaxation_time(self, value):
+        value = validation.cast_data_type(value, 'relaxation_time')
+        validation.validate_cuba_keyword(value, 'relaxation_time')
         data = self.data
-        data[CUBA.POWER_LAW_INDEX] = value
+        data[CUBA.RELAXATION_TIME] = value
+        self.data = data
+
+    @property
+    def initial_viscosity(self):
+        return self.data[CUBA.INITIAL_VISCOSITY]
+
+    @initial_viscosity.setter
+    def initial_viscosity(self, value):
+        value = validation.cast_data_type(value, 'initial_viscosity')
+        validation.validate_cuba_keyword(value, 'initial_viscosity')
+        data = self.data
+        data[CUBA.INITIAL_VISCOSITY] = value
         self.data = data
 
     @property

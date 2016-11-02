@@ -12,22 +12,25 @@ class BirdCarreauModel(RheologyModel):
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
     def __init__(self,
+                 data=None,
+                 description=None,
+                 name=None,
                  initial_viscosity=1e-3,
                  linear_constant=1.0,
                  maximum_viscosity=1e-5,
-                 power_law_index=0.5,
-                 description=None,
-                 name=None,
-                 data=None):
+                 power_law_index=0.5):
 
-        self.initial_viscosity = initial_viscosity
-        self.linear_constant = linear_constant
-        self.maximum_viscosity = maximum_viscosity
         self.power_law_index = power_law_index
-        self.description = description
+        self.maximum_viscosity = maximum_viscosity
+        self.linear_constant = linear_constant
+        self.initial_viscosity = initial_viscosity
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -36,27 +39,15 @@ class BirdCarreauModel(RheologyModel):
         self._variables = []
 
     @property
-    def initial_viscosity(self):
-        return self.data[CUBA.INITIAL_VISCOSITY]
+    def power_law_index(self):
+        return self.data[CUBA.POWER_LAW_INDEX]
 
-    @initial_viscosity.setter
-    def initial_viscosity(self, value):
-        value = validation.cast_data_type(value, 'initial_viscosity')
-        validation.validate_cuba_keyword(value, 'initial_viscosity')
+    @power_law_index.setter
+    def power_law_index(self, value):
+        value = validation.cast_data_type(value, 'power_law_index')
+        validation.validate_cuba_keyword(value, 'power_law_index')
         data = self.data
-        data[CUBA.INITIAL_VISCOSITY] = value
-        self.data = data
-
-    @property
-    def linear_constant(self):
-        return self.data[CUBA.LINEAR_CONSTANT]
-
-    @linear_constant.setter
-    def linear_constant(self, value):
-        value = validation.cast_data_type(value, 'linear_constant')
-        validation.validate_cuba_keyword(value, 'linear_constant')
-        data = self.data
-        data[CUBA.LINEAR_CONSTANT] = value
+        data[CUBA.POWER_LAW_INDEX] = value
         self.data = data
 
     @property
@@ -72,15 +63,27 @@ class BirdCarreauModel(RheologyModel):
         self.data = data
 
     @property
-    def power_law_index(self):
-        return self.data[CUBA.POWER_LAW_INDEX]
+    def linear_constant(self):
+        return self.data[CUBA.LINEAR_CONSTANT]
 
-    @power_law_index.setter
-    def power_law_index(self, value):
-        value = validation.cast_data_type(value, 'power_law_index')
-        validation.validate_cuba_keyword(value, 'power_law_index')
+    @linear_constant.setter
+    def linear_constant(self, value):
+        value = validation.cast_data_type(value, 'linear_constant')
+        validation.validate_cuba_keyword(value, 'linear_constant')
         data = self.data
-        data[CUBA.POWER_LAW_INDEX] = value
+        data[CUBA.LINEAR_CONSTANT] = value
+        self.data = data
+
+    @property
+    def initial_viscosity(self):
+        return self.data[CUBA.INITIAL_VISCOSITY]
+
+    @initial_viscosity.setter
+    def initial_viscosity(self, value):
+        value = validation.cast_data_type(value, 'initial_viscosity')
+        validation.validate_cuba_keyword(value, 'initial_viscosity')
+        data = self.data
+        data[CUBA.INITIAL_VISCOSITY] = value
         self.data = data
 
     @property

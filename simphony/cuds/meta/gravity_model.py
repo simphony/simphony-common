@@ -12,17 +12,20 @@ class GravityModel(PhysicsEquation):
     cuba_key = CUBA.GRAVITY_MODEL
 
     def __init__(self,
-                 acceleration=None,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None):
+                 acceleration=None):
 
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]
-        self.description = description
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute

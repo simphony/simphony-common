@@ -18,51 +18,54 @@ class Cfd(PhysicsEquation):
     cuba_key = CUBA.CFD
 
     def __init__(self,
+                 data=None,
+                 description=None,
+                 name=None,
                  multiphase_model=None,
                  rheology_model=None,
                  turbulence_model=None,
                  gravity_model=None,
                  thermal_model=None,
                  compressibility_model=None,
-                 electrostatic_model=None,
-                 description=None,
-                 name=None,
-                 data=None):
+                 electrostatic_model=None):
 
-        if multiphase_model:
-            self.multiphase_model = multiphase_model
+        if electrostatic_model:
+            self.electrostatic_model = electrostatic_model
         else:
-            self.multiphase_model = SinglePhaseModel()
-
-        if rheology_model:
-            self.rheology_model = rheology_model
-        else:
-            self.rheology_model = NewtonianFluidModel()
-
-        if turbulence_model:
-            self.turbulence_model = turbulence_model
-        else:
-            self.turbulence_model = LaminarFlowModel()
-        self.gravity_model = gravity_model
-
-        if thermal_model:
-            self.thermal_model = thermal_model
-        else:
-            self.thermal_model = IsothermalModel()
+            self.electrostatic_model = ConstantElectrostaticFieldModel()
 
         if compressibility_model:
             self.compressibility_model = compressibility_model
         else:
             self.compressibility_model = IncompressibleFluidModel()
 
-        if electrostatic_model:
-            self.electrostatic_model = electrostatic_model
+        if thermal_model:
+            self.thermal_model = thermal_model
         else:
-            self.electrostatic_model = ConstantElectrostaticFieldModel()
-        self.description = description
+            self.thermal_model = IsothermalModel()
+        self.gravity_model = gravity_model
+
+        if turbulence_model:
+            self.turbulence_model = turbulence_model
+        else:
+            self.turbulence_model = LaminarFlowModel()
+
+        if rheology_model:
+            self.rheology_model = rheology_model
+        else:
+            self.rheology_model = NewtonianFluidModel()
+
+        if multiphase_model:
+            self.multiphase_model = multiphase_model
+        else:
+            self.multiphase_model = SinglePhaseModel()
         self.name = name
+        self.description = description
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -75,39 +78,39 @@ class Cfd(PhysicsEquation):
         ]
 
     @property
-    def multiphase_model(self):
-        return self.data[CUBA.MULTIPHASE_MODEL]
+    def electrostatic_model(self):
+        return self.data[CUBA.ELECTROSTATIC_MODEL]
 
-    @multiphase_model.setter
-    def multiphase_model(self, value):
-        value = validation.cast_data_type(value, 'multiphase_model')
-        validation.validate_cuba_keyword(value, 'multiphase_model')
+    @electrostatic_model.setter
+    def electrostatic_model(self, value):
+        value = validation.cast_data_type(value, 'electrostatic_model')
+        validation.validate_cuba_keyword(value, 'electrostatic_model')
         data = self.data
-        data[CUBA.MULTIPHASE_MODEL] = value
+        data[CUBA.ELECTROSTATIC_MODEL] = value
         self.data = data
 
     @property
-    def rheology_model(self):
-        return self.data[CUBA.RHEOLOGY_MODEL]
+    def compressibility_model(self):
+        return self.data[CUBA.COMPRESSIBILITY_MODEL]
 
-    @rheology_model.setter
-    def rheology_model(self, value):
-        value = validation.cast_data_type(value, 'rheology_model')
-        validation.validate_cuba_keyword(value, 'rheology_model')
+    @compressibility_model.setter
+    def compressibility_model(self, value):
+        value = validation.cast_data_type(value, 'compressibility_model')
+        validation.validate_cuba_keyword(value, 'compressibility_model')
         data = self.data
-        data[CUBA.RHEOLOGY_MODEL] = value
+        data[CUBA.COMPRESSIBILITY_MODEL] = value
         self.data = data
 
     @property
-    def turbulence_model(self):
-        return self.data[CUBA.TURBULENCE_MODEL]
+    def thermal_model(self):
+        return self.data[CUBA.THERMAL_MODEL]
 
-    @turbulence_model.setter
-    def turbulence_model(self, value):
-        value = validation.cast_data_type(value, 'turbulence_model')
-        validation.validate_cuba_keyword(value, 'turbulence_model')
+    @thermal_model.setter
+    def thermal_model(self, value):
+        value = validation.cast_data_type(value, 'thermal_model')
+        validation.validate_cuba_keyword(value, 'thermal_model')
         data = self.data
-        data[CUBA.TURBULENCE_MODEL] = value
+        data[CUBA.THERMAL_MODEL] = value
         self.data = data
 
     @property
@@ -124,39 +127,39 @@ class Cfd(PhysicsEquation):
         self.data = data
 
     @property
-    def thermal_model(self):
-        return self.data[CUBA.THERMAL_MODEL]
+    def turbulence_model(self):
+        return self.data[CUBA.TURBULENCE_MODEL]
 
-    @thermal_model.setter
-    def thermal_model(self, value):
-        value = validation.cast_data_type(value, 'thermal_model')
-        validation.validate_cuba_keyword(value, 'thermal_model')
+    @turbulence_model.setter
+    def turbulence_model(self, value):
+        value = validation.cast_data_type(value, 'turbulence_model')
+        validation.validate_cuba_keyword(value, 'turbulence_model')
         data = self.data
-        data[CUBA.THERMAL_MODEL] = value
+        data[CUBA.TURBULENCE_MODEL] = value
         self.data = data
 
     @property
-    def compressibility_model(self):
-        return self.data[CUBA.COMPRESSIBILITY_MODEL]
+    def rheology_model(self):
+        return self.data[CUBA.RHEOLOGY_MODEL]
 
-    @compressibility_model.setter
-    def compressibility_model(self, value):
-        value = validation.cast_data_type(value, 'compressibility_model')
-        validation.validate_cuba_keyword(value, 'compressibility_model')
+    @rheology_model.setter
+    def rheology_model(self, value):
+        value = validation.cast_data_type(value, 'rheology_model')
+        validation.validate_cuba_keyword(value, 'rheology_model')
         data = self.data
-        data[CUBA.COMPRESSIBILITY_MODEL] = value
+        data[CUBA.RHEOLOGY_MODEL] = value
         self.data = data
 
     @property
-    def electrostatic_model(self):
-        return self.data[CUBA.ELECTROSTATIC_MODEL]
+    def multiphase_model(self):
+        return self.data[CUBA.MULTIPHASE_MODEL]
 
-    @electrostatic_model.setter
-    def electrostatic_model(self, value):
-        value = validation.cast_data_type(value, 'electrostatic_model')
-        validation.validate_cuba_keyword(value, 'electrostatic_model')
+    @multiphase_model.setter
+    def multiphase_model(self, value):
+        value = validation.cast_data_type(value, 'multiphase_model')
+        validation.validate_cuba_keyword(value, 'multiphase_model')
         data = self.data
-        data[CUBA.ELECTROSTATIC_MODEL] = value
+        data[CUBA.MULTIPHASE_MODEL] = value
         self.data = data
 
     @property
