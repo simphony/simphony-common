@@ -2,8 +2,8 @@ import unittest
 import uuid
 from functools import partial
 
-from simphony.cuds.materials import Materials
-from simphony.cuds.material import Material
+from simphony.cuds.model import CUDS
+from simphony.cuds.meta.api import Material
 from simphony.testing.utils import (compare_material,
                                     create_data_container)
 
@@ -14,58 +14,68 @@ class TestMaterials(unittest.TestCase):
     def setUp(self):
         self.addTypeEqualityFunc(Material,
                                  partial(compare_material, testcase=self))
-        self.materials = Materials()
+        self.materials = CUDS()
         self.example_materials = []
         for i in xrange(5):
-            self.example_materials.append(
-                Material(description="Material {}".format(i),
-                         data=create_data_container()))
+            m = Material(description="Material {}".format(i),
+                         data=create_data_container())
+            m.name = None
+            self.example_materials.append(m)
 
     def test_add_get_material(self):
-        self.materials.add_material(self.example_materials[0])
-        self.assertEqual(self.materials.get_material(
+        self.materials.add(self.example_materials[0])
+        self.assertEqual(self.materials.get_by_uid(
             self.example_materials[0].uid),
             self.example_materials[0])
 
     def test_add_existing_material(self):
-        self.materials.add_material(self.example_materials[0])
+        # Adding the same material has no effect
+        self.materials.add(self.example_materials[0])
+        self.materials.add(self.example_materials[0])
 
-        with self.assertRaises(ValueError):
-            self.materials.add_material(self.example_materials[0])
+        # API not there yet...
+        # self.assertEqual(self.materials.count_of(Material), 1)
 
     def test_get_missing_material(self):
-        with self.assertRaises(KeyError):
-            self.materials.get_material(uuid.uuid4())
+        self.assertIsNone(self.materials.get(uuid.uuid4()))
 
     def test_remove_missing_material(self):
         with self.assertRaises(KeyError):
-            self.materials.remove_material(uuid.uuid4())
+            self.materials.remove(uuid.uuid4())
 
-    def test_iter_materials_with_ids(self):
+    def test_iter_all_materials_with_ids(self):
         # given
-        material_subset = [material for material in self.example_materials[:2]]
-        subset_ids = [material.uid for material in material_subset]
         for material in self.example_materials:
-            self.materials.add_material(material)
-
-        # when
-        iterated_with_id_materials = [
-            material for material in self.materials.iter_materials(
-                subset_ids)]
-
-        # then
-        for m, r in zip(iterated_with_id_materials, material_subset):
-            self.assertEqual(m, r)
+            self.materials.add(material)
 
         # when
         iterated_all_materials = {material.uid: material for material
-                                  in self.materials.iter_materials()}
+                                  in self.materials.iter(Material)}
 
         # then
         self.assertEqual(len(iterated_all_materials),
                          len(self.example_materials))
         for material in self.example_materials:
             self.assertEqual(material, iterated_all_materials[material.uid])
+
+    def test_iter_subset_of_materials_with_ids(self):
+        # given
+        material_subset = [material for material in self.example_materials[:2]]
+
+        subset_ids = [material.uid for material in material_subset]
+        for material in self.example_materials:
+            self.materials.add(material)
+
+        # when
+        iterated_materials = {material.uid: material for material
+                              in self.materials.iter(Material)
+                              if material.uid in subset_ids}
+
+        # then
+        self.assertEqual(len(iterated_materials),
+                         len(material_subset))
+        for material in material_subset:
+            self.assertEqual(material, iterated_materials[material.uid])
 
 
 if __name__ == '__main__':
