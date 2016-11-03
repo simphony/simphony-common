@@ -58,35 +58,35 @@ class ABCParticles(ABCDataset):
         return uids
 
     def update(self, iterable):
-        """Updates a set of particles from the provided iterable.
+        """Updates objects from the provided iterable.
 
-        Takes the uids of the particles and searches inside the container for
-        those particles. If the particles exists, they are replaced in the
-        container. If any particle doesn't exist, it will raise an exception.
+        Takes the uids of the objects and searches inside the container for
+        those objects. If they exists, they are replaced in the
+        container. If any object doesn't exist, it will raise an exception.
 
         Parameters
         ----------
 
-        iterable : iterable of Particle objects
-            the particles that will be replaced.
+        iterable : iterable
+            the objects (Particle or Bond) that will be replaced.
 
         Raises
         ------
         ValueError :
-            If any particle inside the iterable does not exist.
+            If any object inside the iterable does not exist.
 
         Examples
         --------
-        Given a set of Particle objects that already exists in the container
+        Given a set of objects that already exists in the container
         (taken with the 'get_particle' method for example), just call the
         function passing the Particle items as parameter.
 
         >>> part_container = Particles(name="foo")
         >>> ...
-        >>> part1 = part_container.get_particle(uid1)
-        >>> part2 = part_container.get_particle(uid2)
+        >>> part1 = part_container.get(uid1)
+        >>> part2 = part_container.get(uid2)
         >>> ... #do whatever you want with the particles
-        >>> part_container.update_particles([part1, part2])
+        >>> part_container.update([part1, part2])
         """
         for item in iterable:
             if isinstance(item, Particle):
@@ -97,7 +97,7 @@ class ABCParticles(ABCDataset):
                 raise TypeError("Unrecognised item type")
 
     def get(self, uid):
-        """Returns a copy of the bond with the 'bond_id' id.
+        """Returns a copy of the object with the specified uid
 
         Parameters
         ----------
@@ -107,12 +107,12 @@ class ABCParticles(ABCDataset):
         Raises
         ------
         KeyError :
-           when the bond is not in the container.
+           when the object is not in the container.
 
         Returns
         -------
-        bond : Bond
-            A copy of the internally stored bond info.
+        object : Particle or Bond
+            A copy of the internally stored object.
         """
         try:
             return self._get_particle(uid)
@@ -127,7 +127,7 @@ class ABCParticles(ABCDataset):
         raise KeyError("Unknown uid {}".format(uid))
 
     def remove(self, uids):
-        """Remove the particles with the provided uids from the container.
+        """Remove the object with the provided uids from the container.
 
         The uids inside the iterable should exists in the container. Otherwise
         an exception will be raised.
@@ -135,25 +135,25 @@ class ABCParticles(ABCDataset):
         Parameters
         ----------
         uids : iterable of uuid.UUID
-            the uids of the particles to be removed.
+            the uids of the objects to be removed.
 
         Raises
         ------
         KeyError :
-           If any particle doesn't exist.
+           If any object doesn't exist.
 
         Examples
         --------
-        Having a set of uids of existing particles, pass it to the method.
+        Having a set of uids of existing objects, pass it to the method.
 
         >>> particles = Particles(name="foo")
         >>> ...
-        >>> particle1 = particles.get_particle(uid1)
-        >>> particle2 = particles.get_particle(uid2)
+        >>> particle1 = particles.get(uid1)
+        >>> particle2 = particles.get(uid2)
         >>> ...
-        >>> particles.remove_particles([part1.uid, part2.uid)
+        >>> particles.remove([part1.uid, part2.uid)
         or directly
-        >>> particles.remove_particles([uid1, uid2])
+        >>> particles.remove([uid1, uid2])
         """
         for uid in uids:
             try:
@@ -171,25 +171,29 @@ class ABCParticles(ABCDataset):
             raise KeyError("uid {} not found".format(uid))
 
     def iter(self, uids=None, item_type=None):
-        """Generator method for iterating over the particles of the container.
+        """Generator method for iterating over the objects of the container.
 
-        It can receive any kind of sequence of particle uids to iterate over
-        those concrete particles. If nothing is passed as parameter, it will
-        iterate over all the particles.
+        It can receive any kind of sequence of uids to iterate over
+        those concrete objects. If nothing is passed as parameter, it will
+        iterate over all the objects in undefined order.
 
         Parameters
         ----------
         uids : iterable of uuid.UUID, optional
-            sequence containing the uids of the particles that will be
-            iterated. When the uids are provided, then the particles are
+            sequence containing the uids of the objects that will be
+            iterated. When the uids are provided, then the objects are
             returned in the same order the uids are returned by the iterable.
             If uids is None, then all particles are returned by the iterable
             and there is no restriction on the order that they are returned.
 
+        item_type: CUDSItem enum
+            Restricts iteration only to the specified item type.
+            e.g. CUDSItem.PARTICLE will only iterate over particles.
+
         Yields
         ------
-        particle : Particle
-            The Particle item.
+        object : Particle or Bond
+            The Particle or Bond item.
 
         Raises
         ------
@@ -202,17 +206,17 @@ class ABCParticles(ABCDataset):
 
         >>> part_container = Particles(name="foo")
         >>> ...
-        >>> for particle in part_container.iter_particles([uid1, uid2, uid3]):
+        >>> for particle in part_container.iter([uid1, uid2, uid3]):
                 ...  #do stuff
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particles([particle])
+                part_container.update([particle])
 
-        >>> for particle in part_container.iter_particles():
+        >>> for particle in part_container.iter():
                 ...  #do stuff; it will iterate over all the particles
                 #take the particle back to the container so it will be updated
                 #in case we need it
-                part_container.update_particles([particle])
+                part_container.update([particle])
         """
 
         if item_type == CUDSItem.PARTICLE:
@@ -228,12 +232,43 @@ class ABCParticles(ABCDataset):
                 return self._iter_uids(uids)
 
     def has(self, uid):
+        """Checks if an object with the given uid already exists
+        in the dataset.
+
+        Parameters
+        ----------
+        uid : uuid.UUID
+            the uid of the object
+
+        Returns
+        -------
+        True if the uid is found, False otherwise.
+        """
         return self._has_particle(uid) or self._has_bond(uid)
 
     def has_type(self, item_type):
+        """Checks if the specified CUDSItem type is present
+        in the dataset.
+
+        Parameters
+        ----------
+        item_type : CUDSItem
+            The CUDSItem enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        True if the type is present, False otherwise.
+        """
         raise NotImplementedError()
 
     def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items in the dataset.
+        """
         return sum(map(lambda x: self.count_of(x),
                        [CUDSItem.PARTICLE, CUDSItem.BOND]))
 
