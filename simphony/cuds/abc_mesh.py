@@ -1,21 +1,269 @@
-from abc import ABCMeta, abstractmethod
+import itertools
+from abc import abstractmethod
+
+from simphony.core.cuds_item import CUDSItem
+from simphony.cuds.abc_dataset import ABCDataset
+from simphony.cuds.utils import deprecated
+
+from simphony.cuds.mesh_items import Point, Edge, Face, Cell
 
 
-class ABCMesh(object):
+class ABCMesh(ABCDataset):
     """Abstract base class for mesh.
 
     Attributes
     ----------
     name : str
         name of mesh
-
     """
 
-    __metaclass__ = ABCMeta
+    # Implements ABCDataset interface
+    def get(self, uid):
+        """Returns a copy of the object with the 'uid' id.
 
-    @abstractmethod
+        Parameters
+        ----------
+
+        uid : uuid.UUID
+            the uid of the object
+
+        Raises
+        ------
+        KeyError :
+            when the object is not in the container.
+
+        Returns
+        -------
+        object :
+            A copy of the internally stored info.
+        """
+        try:
+            return self._get_point(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_edge(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_face(uid)
+        except KeyError:
+            pass
+
+        try:
+            return self._get_cell(uid)
+        except KeyError:
+            pass
+
+        raise KeyError("Unknown uid {}".format(uid))
+
+    def add(self, items):
+        """Adds a set of objects from the provided iterable
+        to the dataset.
+
+        If any object has no uids, the dataset will generate a new
+        uid for it. If the object has already an uid, it won't add the
+        object if an object with the same type uid already exists.
+        If the user wants to replace an existing object in the container
+        there is an 'update' method for that purpose.
+
+        Parameters
+        ----------
+        iterable : iterable of objects
+            the new set of objects that will be included in the container.
+
+        Returns
+        -------
+        uids : list of uuid.UUID
+            The uids of the added objects.
+
+        Raises
+        ------
+        ValueError :
+            when there is an object with an uids that already exists
+            in the dataset.
+        """
+        uids = []
+        for item in items:
+            if isinstance(item, Point):
+                uids.extend(self._add_points([item]))
+            elif isinstance(item, Edge):
+                uids.extend(self._add_edges([item]))
+            elif isinstance(item, Face):
+                uids.extend(self._add_faces([item]))
+            elif isinstance(item, Cell):
+                uids.extend(self._add_cells([item]))
+            else:
+                raise TypeError(
+                    "Unrecognised item type {!r}".format(item)
+                )
+        return uids
+
+    def update(self, items):
+        """Updates a set of objects from the provided iterable.
+
+        Takes the uids of the objects and searches inside the dataset for
+        those objects. If the object exists, they are replaced in the
+        dataset. If any object doesn't exist, it will raise an exception.
+
+        Parameters
+        ----------
+
+        iterable : iterable of objects
+            the objects that will be replaced.
+
+        Raises
+        ------
+        ValueError :
+            If any object inside the iterable does not exist.
+        """
+        for item in items:
+            if isinstance(item, Point):
+                self._update_points([item])
+            elif isinstance(item, Edge):
+                self._update_edges([item])
+            elif isinstance(item, Face):
+                self._update_faces([item])
+            elif isinstance(item, Cell):
+                self._update_cells([item])
+            else:
+                raise TypeError(
+                    "Unrecognised item type {!r}".format(item)
+                )
+
+    def remove(self, uids):
+        """Remove the object with the provided uids from the container.
+
+        The uids inside the iterable should exists in the container. Otherwise
+        an exception will be raised.
+
+        Parameters
+        ----------
+        uids : iterable of uuid.UUID
+            the uids of the objects to be removed.
+
+        Raises
+        ------
+        KeyError :
+            If any object doesn't exist.
+        """
+        raise NotImplementedError("Remove is not implemented for Mesh")
+
+    def iter(self, uids=None, item_type=None):
+        """Generator method for iterating over the objects of the container.
+
+        It can receive any kind of sequence of uids to iterate over
+        those concrete objects. If nothing is passed as parameter, it will
+        iterate over all the objects.
+
+        Parameters
+        ----------
+        uids : iterable of uuid.UUID, optional
+            sequence containing the uids of the objects that will be
+            iterated. When the uids are provided, then the objects are
+            returned in the same order the uids are returned by the iterable.
+            If uids is None, then all objects are returned by the iterable
+            and there is no restriction on the order that they are returned.
+
+        item_type: CUDSItem
+            Restricts the iteration to the specified type
+
+        Yields
+        ------
+        object : Particle
+            The object item.
+
+        Raises
+        ------
+        KeyError :
+            if any of the ids passed as parameters are not in the dataset.
+        """
+        if item_type == CUDSItem.POINT:
+            return self._iter_points(uids)
+        elif item_type == CUDSItem.EDGE:
+            return self._iter_edges(uids)
+        elif item_type == CUDSItem.FACE:
+            return self._iter_faces(uids)
+        elif item_type == CUDSItem.CELL:
+            return self._iter_cells(uids)
+        else:
+            if uids is None:
+                return itertools.chain(
+                    self._iter_points(),
+                    self._iter_edges(),
+                    self._iter_faces(),
+                    self._iter_cells(),
+                )
+            else:
+                return self._iter_uids(uids)
+
+    def has(self, uid):
+        """Checks if an object with the given uid already exists
+        in the dataset.
+
+        Parameters
+        ----------
+        uid : uuid.UUID
+            the uid of the object
+
+        Returns
+        -------
+        True if the uid is found, False otherwise.
+        """
+        try:
+            self.get(uid)
+        except KeyError:
+            return False
+
+        return True
+
+    def has_type(self, item_type):
+        """Checks if the specified CUDSItem type is present
+        in the dataset.
+
+        Parameters
+        ----------
+        item_type : CUDSItem
+            The CUDSItem enum of the type.
+
+        Returns
+        -------
+        True if the type is present, False otherwise.
+        """
+        if item_type == CUDSItem.POINT:
+            return self._has_points()
+        elif item_type == CUDSItem.EDGE:
+            return self._has_edges()
+        elif item_type == CUDSItem.FACE:
+            return self._has_faces()
+        elif item_type == CUDSItem.CELL:
+            return self._has_cells()
+        else:
+            raise ValueError("Unknown item_type "
+                             "{}".format(item_type))
+
+    def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the dataset.
+        """
+        return sum(map(lambda x: self.count_of(x),
+                       [CUDSItem.POINT, CUDSItem.EDGE,
+                        CUDSItem.FACE, CUDSItem.CELL]))
+
+    # Deprecated methods.
+
+    @deprecated
     def get_point(self, uid):  # pragma: no cover
-        """ Returns a point with a given uid.
+        """
+        Deprecated. Use get() instead.
+
+        Returns a point with a given uid.
 
         Returns the point stored in the mesh
         identified by uid. If such point do not
@@ -39,8 +287,9 @@ class ABCMesh(object):
             When ``uid`` is not uuid.UUID
 
         """
+        return self.get(uid)
 
-    @abstractmethod
+    @deprecated
     def get_edge(self, uid):  # pragma: no cover
         """ Returns an edge with a given uid.
 
@@ -66,10 +315,14 @@ class ABCMesh(object):
             When ``uid`` is not uuid.UUID
 
         """
+        return self.get(uid)
 
-    @abstractmethod
+    @deprecated
     def get_face(self, uid):  # pragma: no cover
-        """ Returns a face with a given uid.
+        """
+        Deprecated. Use get() instead.
+
+        Returns a face with a given uid.
 
         Returns the face stored in the mesh
         identified by uid. If such a face does
@@ -91,12 +344,15 @@ class ABCMesh(object):
             If the face identified by uid was not found
         TypeError :
             When ``uid`` is not uuid.UUID
-
         """
+        return self.get(uid)
 
-    @abstractmethod
+    @deprecated
     def get_cell(self, uid):  # pragma: no cover
-        """ Returns a cell with a given uid.
+        """
+        Deprecated. Use get() instead.
+
+        Returns a cell with a given uid.
 
         Returns the cell stored in the mesh
         identified by uid. If such a cell does not
@@ -118,12 +374,15 @@ class ABCMesh(object):
             If the cell identified by uuid was not found
         TypeError :
             When ``uid`` is not uuid.UUID
-
         """
+        return self.get(uid)
 
-    @abstractmethod
+    @deprecated
     def add_points(self, points):  # pragma: no cover
-        """ Adds a set of new points to the mesh.
+        """
+        Deprecated. use add() instead.
+
+        Adds a set of new points to the mesh.
 
         Parameters
         ----------
@@ -135,12 +394,15 @@ class ABCMesh(object):
         ValueError :
             If other point with a duplicated uid was already
             in the mesh.
-
         """
+        return self.add(points)
 
-    @abstractmethod
-    def add_edges(self, edge):
-        """ Adds a set of new edges to the mesh.
+    @deprecated
+    def add_edges(self, edges):
+        """
+        Deprecated. Use add() instead.
+
+        Adds a set of new edges to the mesh.
 
         Parameters
         ----------
@@ -152,12 +414,15 @@ class ABCMesh(object):
         ValueError :
             If other edge with a duplicated uid was already
             in the mesh
-
         """
+        return self.add(edges)
 
-    @abstractmethod
-    def add_faces(self, face):  # pragma: no cover
-        """ Adds a set of new faces to the mesh.
+    @deprecated
+    def add_faces(self, faces):  # pragma: no cover
+        """
+        Deprecated. Use add() instead.
+
+        Adds a set of new faces to the mesh.
 
         Parameters
         ----------
@@ -169,12 +434,15 @@ class ABCMesh(object):
         ValueError :
             If other face with a duplicated uid was already
             in the mesh
-
         """
+        return self.add(faces)
 
-    @abstractmethod
-    def add_cells(self, cell):  # pragma: no cover
-        """ Adds a set of new cells to the mesh.
+    @deprecated
+    def add_cells(self, cells):  # pragma: no cover
+        """
+        Deprecated. Use add() instead.
+
+        Adds a set of new cells to the mesh.
 
         Parameters
         ----------
@@ -186,12 +454,15 @@ class ABCMesh(object):
         ValueError :
             If other cell with a duplicated uid was already
             in the mesh
-
         """
+        return self.add(cells)
 
-    @abstractmethod
-    def update_points(self, point):  # pragma: no cover
-        """ Updates the information of a set of points.
+    @deprecated
+    def update_points(self, points):  # pragma: no cover
+        """
+        Deprecated. Use update() instead.
+
+        Updates the information of a set of points.
 
         Gets the mesh point identified by the same
         uid as the provided point and updates its information
@@ -206,12 +477,15 @@ class ABCMesh(object):
         ------
         ValueError :
             If the any point was not found in the mesh
-
         """
+        self.update(points)
 
-    @abstractmethod
-    def update_edges(self, edge):  # pragma: no cover
-        """ Updates the information of a set of edges.
+    @deprecated
+    def update_edges(self, edges):  # pragma: no cover
+        """
+        Deprecated. Use update() instead.
+
+        Updates the information of a set of edges.
 
         Gets the mesh edge identified by the same
         uid as the provided edge and updates its information
@@ -226,12 +500,15 @@ class ABCMesh(object):
         ------
         ValueError :
             If the any edge was not found in the mesh
-
         """
+        self.update(edges)
 
-    @abstractmethod
-    def update_faces(self, face):  # pragma: no cover
-        """ Updates the information of a set of faces.
+    @deprecated
+    def update_faces(self, faces):  # pragma: no cover
+        """
+        Deprecated. Use update() instead.
+
+        Updates the information of a set of faces.
 
         Gets the mesh face identified by the same
         uid as the provided face and updates its information
@@ -246,12 +523,15 @@ class ABCMesh(object):
         ------
         ValueError :
             If the any face was not found in the mesh
-
         """
+        self.update(faces)
 
-    @abstractmethod
-    def update_cells(self, cell):  # pragma: no cover
-        """ Updates the information of a set of cells.
+    @deprecated
+    def update_cells(self, cells):  # pragma: no cover
+        """
+        Deprecated. Use update() instead.
+
+        Updates the information of a set of cells.
 
         Gets the mesh cell identified by the same
         uid as the provided cell and updates its information
@@ -266,12 +546,15 @@ class ABCMesh(object):
         ------
         ValueError :
             If the any cell was not found in the mesh
-
         """
+        self.update(cells)
 
-    @abstractmethod
+    @deprecated
     def iter_points(self, uids=None):  # pragma: no cover
-        """ Returns an iterator over points.
+        """
+        Deprecated. Use iter() instead.
+
+        Returns an iterator over points.
 
         Parameters
         ----------
@@ -284,12 +567,15 @@ class ABCMesh(object):
         Yields
         ------
         point : Point
-
         """
+        return self.iter(uids, CUDSItem.POINT)
 
-    @abstractmethod
+    @deprecated
     def iter_edges(self, uids=None):  # pragma: no cover
-        """ Returns an iterator over edges.
+        """
+        Deprecated. Use iter() instead.
+
+        Returns an iterator over edges.
 
         Parameters
         ----------
@@ -304,10 +590,14 @@ class ABCMesh(object):
         edge : Edge
 
         """
+        return self.iter(uids, CUDSItem.EDGE)
 
-    @abstractmethod
+    @deprecated
     def iter_faces(self, uids=None):  # pragma: no cover
-        """ Returns an iterator over faces.
+        """
+        Deprecated. Use iter() instead.
+
+        Returns an iterator over faces.
 
         Parameters
         ----------
@@ -322,10 +612,14 @@ class ABCMesh(object):
         face : Face
 
         """
+        return self.iter(uids, item_type=CUDSItem.FACE)
 
-    @abstractmethod
+    @deprecated
     def iter_cells(self, uids=None):  # pragma: no cover
-        """ Returns an iterator over cells.
+        """
+        Deprecated. Use iter() instead.
+
+        Returns an iterator over cells.
 
         Parameters
         ----------
@@ -340,8 +634,21 @@ class ABCMesh(object):
         cell : Cell
 
         """
+        return self.iter(uids, item_type=CUDSItem.CELL)
 
-    @abstractmethod
+    @deprecated
+    def has_points(self):  # pragma: no cover
+        """ Check if the mesh has points
+
+        Returns
+        -------
+        result : bool
+            True of there are points inside the mesh,
+            False otherwise
+        """
+        return self.has_type(CUDSItem.POINT)
+
+    @deprecated
     def has_edges(self):  # pragma: no cover
         """ Check if the mesh has edges
 
@@ -350,10 +657,10 @@ class ABCMesh(object):
         result : bool
             True of there are edges inside the mesh,
             False otherwise
-
         """
+        return self.has_type(CUDSItem.EDGE)
 
-    @abstractmethod
+    @deprecated
     def has_faces(self):  # pragma: no cover
         """ Check if the mesh has faces
 
@@ -362,10 +669,10 @@ class ABCMesh(object):
         result : bool
             True of there are faces inside the mesh,
             False otherwise
-
         """
+        return self.has_type(CUDSItem.FACE)
 
-    @abstractmethod
+    @deprecated
     def has_cells(self):  # pragma: no cover
         """ Check if the mesh has cells
 
@@ -374,27 +681,108 @@ class ABCMesh(object):
         result : bool
             True of there are cells inside the mesh,
             False otherwise
-
         """
+        return self.has_type(CUDSItem.CELL)
+
+    # Private. Need to be reimplemented by subclasses
+    #
+    # These methods documented behavior is as the deprecated
+    # variants above. They are used temporarily as a shim to expose
+    # the old interface through the new one without too many changes.
 
     @abstractmethod
-    def count_of(self, item_type):  # pragma: no cover
-        """ Return the count of item_type in the container.
+    def _get_point(self, uid):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _get_edge(self, uid):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _get_face(self, uid):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _get_cell(self, uid):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _add_points(self, points):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _add_edges(self, edges):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _add_faces(self, faces):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _add_cells(self, cells):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _update_points(self, points):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _update_edges(self, edges):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _update_faces(self, faces):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _update_cells(self, cells):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _iter_points(self, uids=None):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _iter_edges(self, uids=None):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _iter_faces(self, uids=None):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _iter_cells(self, uids=None):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _has_points(self):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _has_edges(self):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _has_faces(self):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def _has_cells(self):  # pragma: no cover
+        pass
+
+    # Private, with implementation
+
+    def _iter_uids(self, uids):
+        """Iterates over a series of uids
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        uids: iterable
+            iterable with the uids to return
 
-        Returns
-        -------
-        count : int
-            The number of items of item_type in the container.
-
-        Raises
+        Yields
         ------
-        ValueError :
-            If the type of the item is not supported in the current
-            container.
-
+        The items corresponding to the uids.
         """
+        for uid in uids:
+            yield self.get(uid)

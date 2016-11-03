@@ -12,7 +12,8 @@ from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_mesh import H5Mesh
 from simphony.io.h5_particles import H5Particles
 from simphony.io.h5_lattice import H5Lattice
-from simphony.cuds import Mesh, Particles, Point, Edge, Face, Cell
+from simphony.cuds import Mesh, Particles
+from simphony.cuds.mesh_items import Edge, Face, Cell, Point
 from simphony.cuds.lattice import make_cubic_lattice
 
 from simphony.testing.abc_check_engine import (

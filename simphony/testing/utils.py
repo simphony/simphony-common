@@ -9,7 +9,7 @@ from simphony.core.keywords import KEYWORDS
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.cuds.particles import Particle, Bond
-from simphony.cuds.mesh import Point, Edge, Face, Cell
+from simphony.cuds.mesh_items import Edge, Face, Cell, Point
 
 
 def compare_particles_datasets(particles, reference, testcase=None):
