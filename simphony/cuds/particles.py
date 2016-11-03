@@ -74,7 +74,7 @@ class Particles(ABCParticles):
         try:
             return len(self._items_count[item_type]())
         except KeyError:
-            error_str = "Trying to obtain count a of non-supported item: {}"
+            error_str = "Trying to obtain count of a non-supported item: {}"
             raise ValueError(error_str.format(item_type))
 
     # Subtype specific methods ###############################################
