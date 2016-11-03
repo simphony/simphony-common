@@ -172,3 +172,18 @@ class ABCDataset(object):
             If the type of the item is not supported in the current
             dataset.
         """
+
+    @abstractmethod
+    def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the dataset.
+        """
+
+    def __contains__(self, item):
+        """Implements the `in` interface. Behaves as the has() method.
+        """
+        return self.has(item)

@@ -402,6 +402,14 @@ class CheckMeshItemOperations(object):
                 self.get_operation(container, uids[index]), expected)
         self.assertEqual(container.data, DataContainer())
 
+    def test_contains(self):
+        container = self.container
+        self.assertFalse(uuid.uuid4() in self.container)
+
+        uids = self._add_items(container)
+        for uid in uids:
+            self.assertTrue(uid in self.container)
+
 
 class CheckMeshPointOperations(CheckMeshItemOperations):
 
@@ -447,6 +455,16 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
             self.count_items_operation(container, CUDSItem.POINT),
             num_items
         )
+
+    def test_length(self):
+        container = self.container
+
+        total = sum(
+            self.count_items_operation(container, x)
+            for x in [
+                CUDSItem.POINT, CUDSItem.EDGE, CUDSItem.FACE, CUDSItem.CELL]
+        )
+        self.assertEqual(len(container), total)
 
     def test_count_items_with_unsupported_item(self):
         container = self.container
@@ -550,7 +568,6 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
             self.count_items_operation(container, self.item_type),
             0
         )
-
         # container with items
         num_items = len(self.item_list)
         self.add_operation(container, self.item_list)
