@@ -233,6 +233,10 @@ class ABCParticles(ABCDataset):
     def has_type(self, item_type):
         raise NotImplementedError()
 
+    def __len__(self):
+        return sum(map(lambda x: self.count_of(x),
+                       [CUDSItem.PARTICLE, CUDSItem.BOND]))
+
     # Deprecated API. Will go away. Uses the generic API instead of direct
     # call to the internal methods to guarantee the behavior is unchanged
     # through the generic interface.
