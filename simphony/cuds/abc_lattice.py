@@ -46,6 +46,16 @@ class ABCLattice(ABCDataset):
     def has_type(self, item_type):
         raise NotImplementedError()
 
+    def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items of item_type in the dataset.
+        """
+        return self.count_of(CUDSItem.NODE)
+
     @deprecated
     def get_node(self, index):  # pragma: no cover
         """
