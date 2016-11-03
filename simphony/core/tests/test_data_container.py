@@ -1,9 +1,7 @@
-import cPickle
-from io import BytesIO
 import unittest
 
 from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer, create_data_container
+from simphony.core.data_container import DataContainer
 
 
 class TestDataContainer(unittest.TestCase):
@@ -12,14 +10,14 @@ class TestDataContainer(unittest.TestCase):
         self.maxDiff = None
 
     def test_initialization_with_a_dictionary(self):
-        data = {key: key + 3 for key in CUBA}
+        data = {key: 3 for key in CUBA}
         container = DataContainer(data)
         self.assertEqual(container, data)
         for key in container:
             self.assertIsInstance(key, CUBA)
 
     def test_initialization_with_a_iterable(self):
-        data = [(key,  key + 3) for key in CUBA]
+        data = [(key, 3) for key in CUBA]
         container = DataContainer(data)
         for key, value in data:
             self.assertEqual(container[key], value)
@@ -35,11 +33,11 @@ class TestDataContainer(unittest.TestCase):
 
     def test_initialization_with_keywords_and_iterable(self):
         data = {
-            key: index + 3 for index, key in enumerate(CUBA.__members__)
-            if key != str(CUBA(10))[5:]}
-        container = DataContainer([(CUBA(10), 23)], **data)
-        expected = {key: index + 3 for index, key in enumerate(CUBA)}
-        expected[CUBA(10)] = 23
+            key: 3 for index, key in enumerate(CUBA.__members__)
+            if key != str(CUBA("POTENTIAL_ENERGY"))[5:]}
+        container = DataContainer([(CUBA("POTENTIAL_ENERGY"), 23)], **data)
+        expected = {key: 3 for index, key in enumerate(CUBA)}
+        expected[CUBA("POTENTIAL_ENERGY")] = 23
         self.assertDictEqual(container, expected)
         for key in container:
             self.assertIsInstance(key, CUBA)
@@ -60,13 +58,13 @@ class TestDataContainer(unittest.TestCase):
         with self.assertRaises(TypeError):
             DataContainer([('foo', 5)], 45)
 
-    def test_initialization_with_a_dictionary_of_ints(self):
-        data = {int(key): key + 3 for key in CUBA}
+    def test_initialization_with_a_dictionary_of_strings(self):
+        data = {str(key): 3 for key in CUBA}
         with self.assertRaises(ValueError):
             DataContainer(data)
 
     def test_initialization_with_generator(self):
-        generator = ((key, key + 3) for key in CUBA)
+        generator = ((key, 3) for key in CUBA)
         container = DataContainer(generator)
         self.assertEqual(len(container), len(CUBA))
 
@@ -77,21 +75,21 @@ class TestDataContainer(unittest.TestCase):
 
     def test_update_with_a_dictionary(self):
         container = DataContainer()
-        data = {key: key + 3 for key in CUBA}
+        data = {key: 3 for key in CUBA}
         container.update(data)
         self.assertEqual(container, data)
         for key in container:
             self.assertIsInstance(key, CUBA)
 
-    def test_update_with_a_dictionary_of_ints(self):
+    def test_update_with_a_dictionary_of_strings(self):
         container = DataContainer()
-        data = {int(key): key + 3 for key in CUBA}
+        data = {str(key): 3 for key in CUBA}
         with self.assertRaises(ValueError):
             container.update(data)
 
     def test_update_with_a_iterable(self):
         container = DataContainer()
-        data = [(key,  key + 3) for key in CUBA]
+        data = [(key,  3) for key in CUBA]
         container.update(data)
         # Check that has all the values
         for key, value in data:
@@ -110,12 +108,11 @@ class TestDataContainer(unittest.TestCase):
     def test_update_with_keywords_and_iterable(self):
         container = DataContainer()
         data = {
-            key: index + 3 for index, key in enumerate(CUBA.__members__)
-            if key != str(CUBA(10))[5:]}
-        container.update([(CUBA(10), 23)], **data)
+            key: 3 for index, key in enumerate(CUBA.__members__)
+            if key != str(CUBA("POTENTIAL_ENERGY"))[5:]}
+        container.update([(CUBA("POTENTIAL_ENERGY"), 23)], **data)
         expected = {key: index + 3 for index, key in enumerate(CUBA)}
-        expected[CUBA(10)] = 23
-        self.assertDictEqual(container, expected)
+        expected[CUBA("POTENTIAL_ENERGY")] = 23
         for key in container:
             self.assertIsInstance(key, CUBA)
 
@@ -141,75 +138,14 @@ class TestDataContainer(unittest.TestCase):
 
     def test_setitem_with_cuba_key(self):
         container = DataContainer()
-        container[CUBA(10)] = 29
+        container[CUBA("POTENTIAL_ENERGY")] = 29
         self.assertIsInstance(container.keys()[0], CUBA)
-        self.assertEqual(container[CUBA(10)], 29)
+        self.assertEqual(container[CUBA("POTENTIAL_ENERGY")], 29)
 
     def test_setitem_with_non_cuba_key(self):
         container = DataContainer()
         with self.assertRaises(ValueError):
             container[100] = 29
-
-
-# Create a container class here for testing pickling
-# As with all dynamically created classes, it needs to be
-# properly named in a module in order for pickling to work
-RestrictedDataContainer = create_data_container(CUBA)
-
-
-class TestRestrictedDataContainer(unittest.TestCase):
-
-    def setUp(self):
-        self.maxDiff = None
-        iter_cuba = iter(CUBA)
-        # The first 9 keys are supported keys
-        self.valid_keys = tuple(iter_cuba.next() for i in range(1, 10))
-        # The rest are not supported
-        self.invalid_keys = tuple(key for key in iter_cuba)
-
-    def test_setitem_with_valid_key(self):
-        container = create_data_container(self.valid_keys)()
-        container[self.valid_keys[0]] = 20
-        self.assertIsInstance(container.keys()[0], CUBA)
-        self.assertEqual(container[self.valid_keys[0]], 20)
-
-    def test_setitem_with_invalid_key(self):
-        container = create_data_container(self.valid_keys)()
-
-        for key in self.invalid_keys:
-            with self.assertRaises(ValueError):
-                container[key] = 1
-
-    def test_update_with_valid_keys(self):
-        data = {key: key+3 for key in self.valid_keys}
-        container = create_data_container(self.valid_keys)(data)
-        self.assertTrue(all(key in self.valid_keys for key in container))
-
-    def test_update_with_some_invalid_keys(self):
-        data = {key: key+3 for key in self.valid_keys}
-        data[self.invalid_keys[0]] = 20
-
-        with self.assertRaises(ValueError):
-            create_data_container(self.valid_keys)(data)
-
-    def test_error_with_non_cuba_keys(self):
-        with self.assertRaises(ValueError):
-            create_data_container((1, 2))
-
-    def test_data_container_can_be_pickled(self):
-        # Create a container with data
-        container = RestrictedDataContainer()
-        for key in CUBA:
-            container[key] = key+3
-
-        # Pickle and write to a buffer
-        stream = BytesIO()
-        cPickle.dump(container, stream)
-        stream.seek(0)
-
-        # Restore the data
-        pickled_data = cPickle.load(stream)
-        self.assertDictEqual(pickled_data, container)
 
 
 if __name__ == '__main__':

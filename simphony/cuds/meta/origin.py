@@ -11,16 +11,31 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, description=None, name=None, data=None, point=None):
+    def __init__(self, data=None, description=None, name=None, position=None):
 
-        self.description = description
+        if position is None:
+            self.position = [0, 0, 0]
         self.name = name
+        self.description = description
         if data:
-            self.data = data
-        if point is None:
-            self.point = [0, 0, 0]
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'The origin of a space system'  # noqa
+
+    @property
+    def position(self):
+        return self.data[CUBA.POSITION]
+
+    @position.setter
+    def position(self, value):
+        value = validation.cast_data_type(value, 'position')
+        validation.validate_cuba_keyword(value, 'position')
+        data = self.data
+        data[CUBA.POSITION] = value
+        self.data = data
 
     @property
     def data(self):
@@ -28,31 +43,13 @@ class Origin(CUDSComponent):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
-
-    @property
-    def point(self):
-        return self.data[CUBA.POINT]
-
-    @point.setter
-    def point(self, value):
-        value = validation.cast_data_type(value, 'point')
-        validation.validate_cuba_keyword(value, 'point')
-        self.data[CUBA.POINT] = value
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -66,7 +63,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POINT, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

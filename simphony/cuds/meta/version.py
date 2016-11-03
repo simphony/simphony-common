@@ -13,44 +13,17 @@ class Version(CUDSItem):
 
     def __init__(self, minor, patch, major, full, data=None):
 
-        self.minor = minor
-        self.patch = patch
-        self.major = major
         self.full = full
+        self.major = major
+        self.patch = patch
+        self.minor = minor
         if data:
-            self.data = data
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._definition = 'Version of a software tool used in a simulation'  # noqa
-
-    @property
-    def minor(self):
-        return self.data[CUBA.MINOR]
-
-    @minor.setter
-    def minor(self, value):
-        value = validation.cast_data_type(value, 'minor')
-        validation.validate_cuba_keyword(value, 'minor')
-        self.data[CUBA.MINOR] = value
-
-    @property
-    def patch(self):
-        return self.data[CUBA.PATCH]
-
-    @patch.setter
-    def patch(self, value):
-        value = validation.cast_data_type(value, 'patch')
-        validation.validate_cuba_keyword(value, 'patch')
-        self.data[CUBA.PATCH] = value
-
-    @property
-    def major(self):
-        return self.data[CUBA.MAJOR]
-
-    @major.setter
-    def major(self, value):
-        value = validation.cast_data_type(value, 'major')
-        validation.validate_cuba_keyword(value, 'major')
-        self.data[CUBA.MAJOR] = value
 
     @property
     def full(self):
@@ -60,7 +33,45 @@ class Version(CUDSItem):
     def full(self, value):
         value = validation.cast_data_type(value, 'full')
         validation.validate_cuba_keyword(value, 'full')
-        self.data[CUBA.FULL] = value
+        data = self.data
+        data[CUBA.FULL] = value
+        self.data = data
+
+    @property
+    def major(self):
+        return self.data[CUBA.MAJOR]
+
+    @major.setter
+    def major(self, value):
+        value = validation.cast_data_type(value, 'major')
+        validation.validate_cuba_keyword(value, 'major')
+        data = self.data
+        data[CUBA.MAJOR] = value
+        self.data = data
+
+    @property
+    def patch(self):
+        return self.data[CUBA.PATCH]
+
+    @patch.setter
+    def patch(self, value):
+        value = validation.cast_data_type(value, 'patch')
+        validation.validate_cuba_keyword(value, 'patch')
+        data = self.data
+        data[CUBA.PATCH] = value
+        self.data = data
+
+    @property
+    def minor(self):
+        return self.data[CUBA.MINOR]
+
+    @minor.setter
+    def minor(self, value):
+        value = validation.cast_data_type(value, 'minor')
+        validation.validate_cuba_keyword(value, 'minor')
+        data = self.data
+        data[CUBA.MINOR] = value
+        self.data = data
 
     @property
     def data(self):
@@ -68,21 +79,13 @@ class Version(CUDSItem):
             data_container = self._data
         except AttributeError:
             self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
+            data_container = self._data
+
+        return DataContainer(data_container)
 
     @data.setter
     def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

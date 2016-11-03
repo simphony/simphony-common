@@ -15,7 +15,6 @@ class CustomData(tables.IsDescription):
     direction = tables.Float64Col(pos=1, shape=3)
     status = tables.Int32Col(pos=2)
     label = tables.Int32Col(pos=3)
-    material_id = tables.Int32Col(pos=4)
     chemical_specie = tables.StringCol(pos=5, itemsize=20)
     rolling_friction = tables.Float64Col(pos=6)
     volume_fraction = tables.Float64Col(pos=7)

@@ -13,58 +13,29 @@ class Berendsen(Thermostat):
 
     def __init__(self,
                  material,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None,
                  coupling_time=0.0001,
                  temperature=None):
 
         self.material = material
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
-        self.coupling_time = coupling_time
         if temperature is None:
             self.temperature = [0.0, 0.0]
+        self.coupling_time = coupling_time
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
         # This is a system-managed, read-only attribute
         self._definition = 'The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath.'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
-
-    @property
-    def coupling_time(self):
-        return self.data[CUBA.COUPLING_TIME]
-
-    @coupling_time.setter
-    def coupling_time(self, value):
-        value = validation.cast_data_type(value, 'coupling_time')
-        validation.validate_cuba_keyword(value, 'coupling_time')
-        self.data[CUBA.COUPLING_TIME] = value
 
     @property
     def temperature(self):
@@ -76,7 +47,35 @@ class Berendsen(Thermostat):
         validation.check_shape(value, '(2)')
         for item in value:
             validation.validate_cuba_keyword(item, 'temperature')
-        self.data[CUBA.TEMPERATURE] = value
+        data = self.data
+        data[CUBA.TEMPERATURE] = value
+        self.data = data
+
+    @property
+    def coupling_time(self):
+        return self.data[CUBA.COUPLING_TIME]
+
+    @coupling_time.setter
+    def coupling_time(self, value):
+        value = validation.cast_data_type(value, 'coupling_time')
+        validation.validate_cuba_keyword(value, 'coupling_time')
+        data = self.data
+        data[CUBA.COUPLING_TIME] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def models(self):
