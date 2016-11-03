@@ -6,9 +6,9 @@ from .util import bench
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 
-dict_data = {key: key + 3 for key in CUBA}
+dict_data = {key: 3 for key in CUBA}
 data_container = DataContainer(dict_data)
-indices = [int(key) for key in CUBA]
+indices = [key for key in CUBA]
 random.shuffle(indices)
 
 
@@ -27,7 +27,7 @@ def getitem_access(data, indices):
 
 def setitem_with_CUBA_keys(data):
     for item in CUBA:
-        data[item] = int(item)
+        data[item] = str(item)
     return data
 
 

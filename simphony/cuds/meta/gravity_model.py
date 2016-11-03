@@ -12,45 +12,26 @@ class GravityModel(PhysicsEquation):
     cuba_key = CUBA.GRAVITY_MODEL
 
     def __init__(self,
+                 data=None,
                  description=None,
                  name=None,
-                 data=None,
                  acceleration=None):
 
-        self.description = description
-        self.name = name
-        if data:
-            self.data = data
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]
+        self.name = name
+        self.description = description
+        if data:
+            internal_data = self.data
+            internal_data.update(data)
+            self.data = internal_data
+
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'A simple gravity model'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = [CUBA.ACCELERATION]
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            return self._data
-        else:
-            # One more check in case the
-            # property setter is by-passed
-            if not isinstance(data_container, DataContainer):
-                raise TypeError("data is not a DataContainer. "
-                                "data.setter is by-passed.")
-            return data_container
-
-    @data.setter
-    def data(self, new_data):
-        if isinstance(new_data, DataContainer):
-            self._data = new_data
-        else:
-            self._data = DataContainer(new_data)
 
     @property
     def acceleration(self):
@@ -60,7 +41,23 @@ class GravityModel(PhysicsEquation):
     def acceleration(self, value):
         value = validation.cast_data_type(value, 'acceleration')
         validation.validate_cuba_keyword(value, 'acceleration')
-        self.data[CUBA.ACCELERATION] = value
+        data = self.data
+        data[CUBA.ACCELERATION] = value
+        self.data = data
+
+    @property
+    def data(self):
+        try:
+            data_container = self._data
+        except AttributeError:
+            self._data = DataContainer()
+            data_container = self._data
+
+        return DataContainer(data_container)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def models(self):

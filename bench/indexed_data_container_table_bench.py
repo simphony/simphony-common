@@ -22,8 +22,10 @@ n = 1000
 
 dict_data = create_data_container()
 dict_data_half = create_data_container()
-for i in range(min(CUBA), max(CUBA), 2):
-    del dict_data_half[CUBA(i)]
+for i, cuba in enumerate(CUBA):
+    if i % 2:
+        continue
+    del dict_data_half[cuba]
 
 data_container = DataContainer(dict_data)
 data_container_half = DataContainer(dict_data_half)
