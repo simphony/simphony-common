@@ -23,27 +23,108 @@ class ABCLattice(ABCDataset):
     """
 
     def get(self, index):
+        """Returns a copy of the node with the given index
+
+        Parameters
+        ----------
+
+        index : int[3]
+            node index coordinate
+
+        Raises
+        ------
+        KeyError :
+            when the node is not in the container.
+
+        Returns
+        -------
+        object :
+            A copy of the internally stored info.
+        """
         return self._get_node(index)
 
     def add(self, iterable):
+        """Adds a set of objects from the provided iterable
+        to the dataset.
+
+        Currently not implemented.
+        """
         raise NotImplementedError()
 
     def update(self, iterable):
+        """Updates a set of nodes from the provided iterable.
+
+        Takes the indexes of the nodes and searches inside the dataset for
+        those nodes objects. If the node exists, they are replaced in the
+        dataset. If any node doesn't exist, it will raise an exception.
+
+        Parameters
+        ----------
+
+        iterable : iterable of nodes
+            the nodes that will be replaced.
+
+        Raises
+        ------
+        ValueError :
+            If any node inside the iterable does not exist.
+        """
         self._update_nodes(iterable)
 
-    def remove(self, uids):
+    def remove(self, index):
+        """Removes a set of nodes with the provided indexes
+        from the dataset.
+
+        Currently not implemented.
+        """
         raise NotImplementedError()
 
-    def iter(self, uids=None, item_type=None):
+    def iter(self, indices=None, item_type=None):
+        """Generator method for iterating over the objects of the container.
+
+        It can receive any kind of sequence of indices to iterate over
+        those concrete objects. If nothing is passed as parameter, it will
+        iterate over all the objects.
+
+        Parameters
+        ----------
+        indices : list of int[3] or None
+            sequence containing the indices of the objects that will be
+            iterated. When the indices are provided, then the objects are
+            returned in the same order the indices are returned by the
+            iterable.
+            If indices is None, then all objects are returned by the iterable
+            and there is no restriction on the order that they are returned.
+
+        Yields
+        ------
+        object : Node
+            The Node item.
+
+        Raises
+        ------
+        KeyError :
+            if any of the indices passed as parameters are not in the dataset.
+        """
         if item_type is not None and item_type != CUDSItem.NODE:
             raise ValueError("item_type must be CUDSItem.NODE")
 
-        return self._iter_nodes(uids)
+        return self._iter_nodes(indices)
 
-    def has(self, uid):
+    def has(self, index):
+        """iChecks if an object with the given index already exists
+        in the dataset.
+
+        Not implemented.
+        """
         raise NotImplementedError()
 
     def has_type(self, item_type):
+        """Checks if the specified CUDSItem type is present
+        in the dataset.
+
+        Not implemented
+        """
         raise NotImplementedError()
 
     def __len__(self):
