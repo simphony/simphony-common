@@ -397,22 +397,14 @@ class CodeGenerator(object):
 
         self.imports.append(IMPORT_PATHS['DataContainer'])
 
-        self.init_body.append('''if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-            ''')
+        self.init_body.append('''
+        self._data = DataContainer()
+        ''')
 
         self.methods.append('''
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
         ''')
 
         self.methods.append('''

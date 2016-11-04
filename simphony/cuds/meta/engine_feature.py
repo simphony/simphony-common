@@ -10,12 +10,9 @@ class EngineFeature(CUDSItem):
 
     cuba_key = CUBA.ENGINE_FEATURE
 
-    def __init__(self, data=None):
+    def __init__(self):
 
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
+        self._data = DataContainer()
 
         # This is a system-managed, read-only attribute
         self._physics_equation = None
@@ -26,13 +23,7 @@ class EngineFeature(CUDSItem):
 
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):

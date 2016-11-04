@@ -11,18 +11,23 @@ class Boundary(CUDSComponent):
 
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, condition, data=None, description=None, name=None):
+    def __init__(self, condition, description="", name=""):
+
+        self._data = DataContainer()
 
         self.condition = condition
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'System boundary'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def condition(self):
@@ -40,20 +45,6 @@ class Boundary(CUDSComponent):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -65,7 +56,7 @@ class Boundary(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION, CUBA.NAME)
+        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.CONDITION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

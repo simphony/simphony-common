@@ -11,12 +11,9 @@ class Empty(Condition):
 
     cuba_key = CUBA.EMPTY
 
-    def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 variable=None,
-                 material=None):
+    def __init__(self, description="", name="", variable=None, material=None):
+
+        self._data = DataContainer()
 
         if material is None:
             self.material = []
@@ -24,15 +21,18 @@ class Empty(Condition):
             self.variable = []
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Empty boundary condition'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def material(self):
@@ -61,20 +61,6 @@ class Empty(Condition):
         data = self.data
         data[CUBA.VARIABLE] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):

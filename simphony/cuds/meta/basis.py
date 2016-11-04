@@ -11,19 +11,24 @@ class Basis(CUDSComponent):
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, data=None, description=None, name=None, vector=None):
+    def __init__(self, description="", name="", vector=None):
+
+        self._data = DataContainer()
 
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Space basis vectors (row wise)'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def vector(self):
@@ -40,20 +45,6 @@ class Basis(CUDSComponent):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -65,7 +56,7 @@ class Basis(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

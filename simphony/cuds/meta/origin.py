@@ -11,19 +11,24 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, data=None, description=None, name=None, position=None):
+    def __init__(self, description="", name="", position=None):
+
+        self._data = DataContainer()
 
         if position is None:
             self.position = [0, 0, 0]
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'The origin of a space system'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def position(self):
@@ -38,20 +43,6 @@ class Origin(CUDSComponent):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -63,7 +54,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.POSITION, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

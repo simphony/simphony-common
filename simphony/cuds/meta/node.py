@@ -11,18 +11,23 @@ class Node(CUDSComponent):
 
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, data=None, description=None, name=None):
+    def __init__(self, index, description="", name=""):
+
+        self._data = DataContainer()
 
         self.index = index
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'A node on a structured grid like lattice'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def index(self):
@@ -37,20 +42,6 @@ class Node(CUDSComponent):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -62,7 +53,7 @@ class Node(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.INDEX, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

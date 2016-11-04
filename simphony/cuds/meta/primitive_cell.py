@@ -11,24 +11,25 @@ class PrimitiveCell(CUDSComponent):
 
     cuba_key = CUBA.PRIMITIVE_CELL
 
-    def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 lattice_vectors=None):
+    def __init__(self, description="", name="", lattice_vectors=None):
+
+        self._data = DataContainer()
 
         if lattice_vectors is None:
             self.lattice_vectors = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
                                     [0.0, 0.0, 1.0]]
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'A lattice primitive cell'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def lattice_vectors(self):
@@ -43,20 +44,6 @@ class PrimitiveCell(CUDSComponent):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -68,7 +55,7 @@ class PrimitiveCell(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.LATTICE_VECTORS, CUBA.UUID, CUBA.NAME)
+        return (CUBA.LATTICE_VECTORS, CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

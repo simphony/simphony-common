@@ -12,13 +12,14 @@ class BirdCarreauModel(RheologyModel):
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
     def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 initial_viscosity=1e-3,
+                 description="",
+                 name="",
+                 initial_viscosity="1e-3",
                  linear_constant=1.0,
-                 maximum_viscosity=1e-5,
+                 maximum_viscosity="1e-5",
                  power_law_index=0.5):
+
+        self._data = DataContainer()
 
         self.power_law_index = power_law_index
         self.maximum_viscosity = maximum_viscosity
@@ -26,17 +27,20 @@ class BirdCarreauModel(RheologyModel):
         self.initial_viscosity = initial_viscosity
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Bird-Carreau model'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def power_law_index(self):
@@ -85,20 +89,6 @@ class BirdCarreauModel(RheologyModel):
         data = self.data
         data[CUBA.INITIAL_VISCOSITY] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):

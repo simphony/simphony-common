@@ -11,16 +11,21 @@ class SoftwareTool(CUDSItem):
 
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, data=None, version=None):
+    def __init__(self, version=None):
+
+        self._data = DataContainer()
 
         self.version = version
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Represents a software tool which is used to solve the model or in pre/post processing'  # noqa
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def version(self):
@@ -34,20 +39,6 @@ class SoftwareTool(CUDSItem):
         data = self.data
         data[CUBA.VERSION] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

@@ -10,27 +10,18 @@ class Particle(Point):
 
     cuba_key = CUBA.PARTICLE
 
-    def __init__(self, data=None, position=None):
+    def __init__(self, position=None):
+
+        self._data = DataContainer()
 
         if position is None:
             self.position = [0, 0, 0]
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'A particle in a 3D space system'  # noqa
 
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):

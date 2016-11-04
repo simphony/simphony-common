@@ -10,15 +10,12 @@ class DataSet(CUDSComponent):
 
     cuba_key = CUBA.DATA_SET
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, description="", name=""):
+
+        self._data = DataContainer()
 
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = []
         # This is a system-managed, read-only attribute
@@ -26,13 +23,7 @@ class DataSet(CUDSComponent):
 
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
@@ -54,7 +45,7 @@ class DataSet(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

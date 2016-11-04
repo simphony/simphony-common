@@ -13,26 +13,30 @@ class DissipationForce(MaterialRelation):
 
     def __init__(self,
                  material,
-                 data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  restitution_coefficient=1.0):
+
+        self._data = DataContainer()
 
         self.material = material
         self.restitution_coefficient = restitution_coefficient
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def restitution_coefficient(self):
@@ -45,20 +49,6 @@ class DissipationForce(MaterialRelation):
         data = self.data
         data[CUBA.RESTITUTION_COEFFICIENT] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):

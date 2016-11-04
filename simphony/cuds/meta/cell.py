@@ -10,26 +10,17 @@ class Cell(MeshElement):
 
     cuba_key = CUBA.CELL
 
-    def __init__(self, point, data=None):
+    def __init__(self, point):
+
+        self._data = DataContainer()
 
         self.point = point
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Element for storing 3D geometrical objects'  # noqa
 
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):

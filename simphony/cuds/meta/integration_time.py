@@ -12,27 +12,31 @@ class IntegrationTime(ComputationalMethod):
     cuba_key = CUBA.INTEGRATION_TIME
 
     def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  current=0.0,
                  size=0.0,
                  final=0.0):
+
+        self._data = DataContainer()
 
         self.final = final
         self.size = size
         self.current = current
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'the current time, time step, and final time for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
         self._physics_equation = []
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def final(self):
@@ -69,20 +73,6 @@ class IntegrationTime(ComputationalMethod):
         data = self.data
         data[CUBA.CURRENT] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def definition(self):

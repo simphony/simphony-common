@@ -11,27 +11,28 @@ class GravityModel(PhysicsEquation):
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 acceleration=None):
+    def __init__(self, description="", name="", acceleration=None):
+
+        self._data = DataContainer()
 
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'A simple gravity model'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = [CUBA.ACCELERATION]
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def acceleration(self):
@@ -44,20 +45,6 @@ class GravityModel(PhysicsEquation):
         data = self.data
         data[CUBA.ACCELERATION] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):

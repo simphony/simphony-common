@@ -12,13 +12,14 @@ class PowerLawViscosityModel(RheologyModel):
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
-                 data=None,
-                 description=None,
-                 name=None,
-                 linear_constant=1e-5,
-                 minimum_viscosity=1e-5,
-                 maximum_viscosity=1e-3,
+                 description="",
+                 name="",
+                 linear_constant="1e-5",
+                 minimum_viscosity="1e-5",
+                 maximum_viscosity="1e-3",
                  power_law_index=1.0):
+
+        self._data = DataContainer()
 
         self.power_law_index = power_law_index
         self.maximum_viscosity = maximum_viscosity
@@ -26,17 +27,20 @@ class PowerLawViscosityModel(RheologyModel):
         self.linear_constant = linear_constant
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
         self._definition = 'Power law model for a variable viscosity function that is limited by minimum and maximum values'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def power_law_index(self):
@@ -85,20 +89,6 @@ class PowerLawViscosityModel(RheologyModel):
         data = self.data
         data[CUBA.LINEAR_CONSTANT] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):

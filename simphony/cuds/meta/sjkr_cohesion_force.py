@@ -13,26 +13,30 @@ class SjkrCohesionForce(MaterialRelation):
 
     def __init__(self,
                  material,
-                 data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  cohesion_energy_density=0.0):
+
+        self._data = DataContainer()
 
         self.material = material
         self.cohesion_energy_density = cohesion_energy_density
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.ATOMISTIC]
         # This is a system-managed, read-only attribute
         self._definition = 'Additional normal force tending to maintain the contact'  # noqa
         # This is a system-managed, read-only attribute
         self._variables = []
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def cohesion_energy_density(self):
@@ -45,20 +49,6 @@ class SjkrCohesionForce(MaterialRelation):
         data = self.data
         data[CUBA.COHESION_ENERGY_DENSITY] = value
         self.data = data
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def models(self):
