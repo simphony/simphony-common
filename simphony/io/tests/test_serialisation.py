@@ -6,18 +6,14 @@ import os
 import shutil
 from contextlib import closing
 import tempfile
-import numpy
-import string
-import random
-from importlib import import_module
 
 from simphony.cuds.meta.cuds_component import CUDSComponent
+from simphony.cuds.meta.material import Material
+from simphony.cuds.meta.material_relation import MaterialRelation
 from simphony.cuds.model import CUDS
 from simphony.core.keywords import KEYWORDS
 from simphony.core.cuba import CUBA
 from simphony.io.serialisation import save_CUDS, load_CUDS
-from simphony.cuds.meta.validation import to_camel_case
-from simphony.cuds.meta import api
 
 class TestSerialisation(unittest.TestCase):
     """Tests for CUDS Yaml serialisation functions."""
@@ -69,14 +65,14 @@ class TestSerialisation(unittest.TestCase):
         C = CUDS(name='full',
                  description='model with crossreferenced components')
 
-        M1 = Material(name = 'steel',
-                      description = 'FCC steel sphere structure')
-        M2 = Material(name = 'epoxy', description = '')
-        M3 = Material(name = 'iron', description = 'sheet metal container')
-        MR1 = MaterialRelation(name = 'steel spheres in epoxy',
-                              material = [M1,M2])
-        MR2 = MaterialRelation(name = 'epoxy in sheet metal container',
-                               material = [M2,M3])
+        M1 = Material(name='steel',
+                      description='FCC steel sphere structure')
+        M2 = Material(name='epoxy', description='')
+        M3 = Material(name='iron', description='sheet metal container')
+        MR1 = MaterialRelation(name='steel spheres in epoxy',
+                               material=[M1, M2])
+        MR2 = MaterialRelation(name='epoxy in sheet metal container',
+                               material=[M2, M3])
         # M1 is not added
         C.add(M2)
         C.add(M3)

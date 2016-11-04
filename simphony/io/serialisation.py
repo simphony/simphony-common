@@ -263,7 +263,7 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
                     if key.lower() in init_params:
                         init_kwargs[key.lower()] = tmp
                     else:
-                        cubaname = eval('CUBA.' + key)
+                        cubaname = CUBA[key]
                         system_managed_keys[cubaname] = tmp
                 elif type(value) is dict:
                     _dict_to_CUDSComponent(key, value, comp_dict)
@@ -275,15 +275,13 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
                 if key.lower() in init_params:
                     init_kwargs[key.lower()] = tmp
                 else:
-                    cubaname = eval('CUBA.' + key)
+                    cubaname = CUBA[key]
                     system_managed_keys[cubaname] = tmp
 
             else:
                 message = 'Unknown CUDSComponent "{}" as a subcomponent'
                 raise ValueError(message.format(key))
 
-        #if 'name' not in init_kwargs.keys():
-        #    init_kwargs['name'] = None
         # Instantiate component with its subcomponents
         comp_inst = comp_class(**init_kwargs)
         # Add system managed components by updating the DataContainer
