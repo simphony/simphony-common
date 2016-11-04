@@ -7,7 +7,6 @@ import numpy
 import uuid
 
 from simphony.api import CUBA
-from simphony.core import DataContainer
 from simphony.cuds.meta import api as meta_class
 
 
