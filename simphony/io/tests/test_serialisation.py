@@ -11,9 +11,8 @@ from simphony.cuds.meta.cuds_component import CUDSComponent
 from simphony.cuds.meta.material import Material
 from simphony.cuds.meta.material_relation import MaterialRelation
 from simphony.cuds.model import CUDS
-from simphony.core.keywords import KEYWORDS
-from simphony.core.cuba import CUBA
 from simphony.io.serialisation import save_CUDS, load_CUDS
+
 
 class TestSerialisation(unittest.TestCase):
     """Tests for CUDS Yaml serialisation functions."""
