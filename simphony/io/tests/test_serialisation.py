@@ -17,7 +17,7 @@ from simphony.core.keywords import KEYWORDS
 from simphony.core.cuba import CUBA
 from simphony.io.serialisation import save_CUDS, load_CUDS
 from simphony.cuds.meta.validation import to_camel_case
-
+from simphony.cuds.meta import api
 
 class TestSerialisation(unittest.TestCase):
     """Tests for CUDS Yaml serialisation functions."""
@@ -64,15 +64,24 @@ class TestSerialisation(unittest.TestCase):
         for item in CC.iter(CUDSComponent):
             self.assertEqual(item, None)
 
-    def test_save_CUDS_full(self):
+    def test_save_CUDS_complicated_data(self):
         filename = os.path.join(self.temp_dir, 'test_full.yml')
-        C = CUDS(name='full', description='fully randomized model')
+        C = CUDS(name='full',
+                 description='model with crossreferenced components')
 
-        for key in KEYWORDS.keys():
-            if key not in ['VERSION']:
-                comp = self._create_random_comp(key)
-                if comp:
-                    C.add(comp)
+        M1 = Material(name = 'steel',
+                      description = 'FCC steel sphere structure')
+        M2 = Material(name = 'epoxy', description = '')
+        M3 = Material(name = 'iron', description = 'sheet metal container')
+        MR1 = MaterialRelation(name = 'steel spheres in epoxy',
+                              material = [M1,M2])
+        MR2 = MaterialRelation(name = 'epoxy in sheet metal container',
+                               material = [M2,M3])
+        # M1 is not added
+        C.add(M2)
+        C.add(M3)
+        C.add(MR1)
+        C.add(MR2)
 
         with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, C)
@@ -84,7 +93,8 @@ class TestSerialisation(unittest.TestCase):
         self.assertEqual(CC.description, C.description)
 
         # Iterate over components in the original model and check
-        # that they are present in the loaded model
+        # that they are present in the loaded model. Loaded model
+        # has additionally material 'M1' included.
         for Citem in C.iter(CUDSComponent):
             # Check items that have name parameter defined
             if Citem.name is not None:
@@ -92,56 +102,3 @@ class TestSerialisation(unittest.TestCase):
                 self.assertEqual(CCitem.name, Citem.name)
                 for key in Citem.data:
                     self.assertEqual(Citem.data[key], CCitem.data[key])
-
-    def _ran(self, dtype, shape):
-        if dtype == numpy.int32:
-            if shape == []:
-                shape = [1]
-            return numpy.random.randint(-9999999, 9999999, size=shape)
-        elif dtype == numpy.float64:
-            if shape == [] or shape is None:
-                return numpy.random.rand(3)
-            elif len(shape) == 2:
-                return numpy.random.rand(shape[0], shape[1])
-            elif len(shape) == 1:
-                if shape[0] == 1:
-                    return numpy.random.rand(1)[0]
-                else:
-                    return numpy.random.rand(shape[0])
-        elif dtype == str:
-            randstr = ''.join(random.choice(string.ascii_uppercase)
-                              for _ in range(shape[0]))
-            return randstr
-        elif dtype == bool:
-            return random.choice([True, False])
-
-    def _create_random_comp(self, key):
-        api = import_module('simphony.cuds.meta.api')
-        if to_camel_case(key) in dir(api):
-            mod = import_module('simphony.cuds.meta.%s' % key.lower())
-            comp_class = getattr(mod, to_camel_case(key))
-
-            if issubclass(comp_class, CUDSComponent):
-                comp_inst = comp_class(None, None)
-                data_dict = {}
-                for prm in comp_inst.supported_parameters():
-                    if prm is not CUBA.UUID:
-                        name = str(prm).replace('CUBA.', '')
-                        if numpy.random.randint(2):
-                            if to_camel_case(name) in dir(api):
-                                # Create one or two subcomponents if supported
-                                if numpy.random.randint(2):
-                                    subcomp1 = self._create_random_comp(name)
-                                    data_dict[prm] = subcomp1
-                                else:
-                                    subcomp1 = self._create_random_comp(name)
-                                    subcomp2 = self._create_random_comp(name)
-                                    data_dict[prm] = [subcomp1, subcomp2]
-                            else:
-                                dtype = KEYWORDS[name].dtype
-                                shape = KEYWORDS[name].shape
-                                val = self._ran(dtype, shape)
-                                data_dict[prm] = val
-                comp_inst.data = data_dict
-                return comp_inst
-        return None

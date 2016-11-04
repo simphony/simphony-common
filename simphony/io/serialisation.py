@@ -233,24 +233,20 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
         # Find corresponding module and instantiate the class
         mod = import_module('simphony.cuds.meta.%s' % cubatype.lower())
         comp_class = getattr(mod, to_camel_case(cubatype))
-
-        # Must use (at least) two None parameters here, because currently
-        # there is no (easy) way to read required parameters for
-        # a class that is dynamically instantiated. A solution would be
-        # to define default values, e.g. 'None', for all parameters that
-        # do not have it defined yet.
-        comp_inst = comp_class(None, None)
+        # Get parameter names for __init__ method
+        init_params = comp_class.__init__.func_code.co_varnames
 
         # Go through the keys and values in comp dictionary and
         # add supported ones to data_dict
-        data_dict = {}
+        init_kwargs = {}
+        system_managed_keys = {}
         supp_params = [str(e).replace('CUBA.', '')
-                       for e in comp_inst.supported_parameters()]
+                       for e in comp_class.supported_parameters()]
+        # Don't accept UUID entry from the yaml file
+        supp_params.remove('UUID')
         for key in comp.keys():
-            # Check if it is safe to eval the key
+            # Check if the key is supported
             if key in supp_params:
-                cubakey = eval('CUBA.' + key)
-
                 # Check if value contains other CUDSComponents or data
                 value = comp[key]
                 if type(value) is list:
@@ -264,23 +260,36 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
                         else:
                             # validation.validate_cuba_keyword(subcomp, key)
                             tmp.append(subcomp)
-                    data_dict[cubakey] = tmp
+                    if key.lower() in init_params:
+                        init_kwargs[key.lower()] = tmp
+                    else:
+                        cubaname = eval('CUBA.' + key)
+                        system_managed_keys[cubaname] = tmp
                 elif type(value) is dict:
                     _dict_to_CUDSComponent(key, value, comp_dict)
+                    tmp = value
                 else:
                     # validation.validate_cuba_keyword(value, key)
-                    data_dict[cubakey] = value
+                    tmp = value
+
+                if key.lower() in init_params:
+                    init_kwargs[key.lower()] = tmp
+                else:
+                    cubaname = eval('CUBA.' + key)
+                    system_managed_keys[cubaname] = tmp
+
             else:
                 message = 'Unknown CUDSComponent "{}" as a subcomponent'
                 raise ValueError(message.format(key))
 
-        # CUDSComponent data setter overwrites
-        # existing data attribute with the contents of data_dict,
-        # and removes CUBA.NAME key if it doesn't exist in data_dict
-        if CUBA.NAME not in data_dict.keys():
-            data_dict[CUBA.NAME] = None
-        # Add data to the constructed CUDSComponent
-        comp_inst.data = data_dict
+        #if 'name' not in init_kwargs.keys():
+        #    init_kwargs['name'] = None
+        # Instantiate component with its subcomponents
+        comp_inst = comp_class(**init_kwargs)
+        # Add system managed components by updating the DataContainer
+        data = comp_inst.data
+        data.update(system_managed_keys)
+        comp_inst.data = data
     else:
         message = 'Unknown CUDSComponent "{}"'
         raise ValueError(message.format(cubatype))
