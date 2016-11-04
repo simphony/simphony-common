@@ -14,9 +14,9 @@ class BirdCarreauModel(RheologyModel):
     def __init__(self,
                  description="",
                  name="",
-                 initial_viscosity="1e-3",
+                 initial_viscosity=0.001,
                  linear_constant=1.0,
-                 maximum_viscosity="1e-5",
+                 maximum_viscosity=1e-05,
                  power_law_index=0.5):
 
         self._data = DataContainer()

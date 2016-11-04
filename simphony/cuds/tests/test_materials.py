@@ -17,7 +17,7 @@ class TestMaterials(unittest.TestCase):
         self.example_materials = []
         for i in xrange(5):
             m = Material(description="Material {}".format(i))
-            m.name = None
+            m.name = ""
             self.example_materials.append(m)
 
     def test_add_get_material(self):

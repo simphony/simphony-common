@@ -23,8 +23,10 @@ class TestMetaClass(unittest.TestCase):
             # Inspect the __init__ signature
             init_spec = inspect.getargspec(klass.__init__)
 
+            defaults = init_spec.defaults if init_spec.defaults else []
+
             # Number of required arguments
-            num_required = len(init_spec.args) - len(init_spec.defaults) - 1
+            num_required = (len(init_spec.args) - len(defaults) - 1)
 
             if num_required > 0:
                 if not hasattr(cls, 'test_'+name):
@@ -123,17 +125,6 @@ class TestMetaClass(unittest.TestCase):
             # Test properties for CUDSItem
             meta_obj = klass()
             self.check_cuds_item(meta_obj)
-
-        if errors:
-            self.fail('\n'.join(errors))
-
-    def test_initialization_with_data(self):
-        errors = []
-
-        for name, klass in self.no_required_args_classes:
-            meta_obj = klass(data=DataContainer(NAME="foobar"))
-            self.check_cuds_item(meta_obj)
-            self.assertEqual(meta_obj.data[CUBA.NAME], "foobar")
 
         if errors:
             self.fail('\n'.join(errors))

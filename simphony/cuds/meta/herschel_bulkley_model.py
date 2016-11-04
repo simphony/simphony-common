@@ -14,9 +14,9 @@ class HerschelBulkleyModel(RheologyModel):
     def __init__(self,
                  description="",
                  name="",
-                 initial_viscosity="1e-3",
+                 initial_viscosity=0.001,
                  relaxation_time=1.0,
-                 linear_constant="1e-5",
+                 linear_constant=1e-05,
                  power_law_index=1.0):
 
         self._data = DataContainer()
