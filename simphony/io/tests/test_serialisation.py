@@ -99,11 +99,12 @@ class TestSerialisation(unittest.TestCase):
                     CCi = CCitem.data[key]
                     _compare_components(Ci, CCi, testcase=self)
 
+
 def _compare_components(comp1, comp2, testcase):
     self = testcase
     if type(comp1) == list:
         for i in xrange(len(comp1)):
-            if isinstance(comp1[i], CUDSComponent)
+            if isinstance(comp1[i], CUDSComponent):
                 _compare_components(comp1[i], comp2[i], self)
             else:
                 self.assertEqual(comp1[i], comp2[i])
@@ -111,7 +112,7 @@ def _compare_components(comp1, comp2, testcase):
         for key, value in comp1.data:
             if type(value) == list:
                 for i in xrange(len(value)):
-                    if isinstance(value[i], CUDSComponent)
+                    if isinstance(value[i], CUDSComponent):
                         _compare_components(value[i], comp2.data[key][i],
                                             self)
                     else:
