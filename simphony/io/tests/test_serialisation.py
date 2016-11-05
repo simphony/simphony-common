@@ -94,6 +94,28 @@ class TestSerialisation(unittest.TestCase):
             # Check items that have name parameter defined
             if Citem.name is not None:
                 CCitem = CC.get(Citem.name)
-                self.assertEqual(CCitem.name, Citem.name)
-                for key in Citem.data:
-                    self.assertEqual(Citem.data[key], CCitem.data[key])
+                for key in Citem.data.keys():
+                    Ci = Citem.data[key]
+                    CCi = CCitem.data[key]
+                    _compare_components(Ci, CCi, testcase=self)
+
+def _compare_components(comp1, comp2, testcase):
+    self = testcase
+    if type(comp1) == list:
+        for i in xrange(len(comp1)):
+            if isinstance(comp1[i], CUDSComponent)
+                _compare_components(comp1[i], comp2[i], self)
+            else:
+                self.assertEqual(comp1[i], comp2[i])
+    elif isinstance(comp1, CUDSComponent):
+        for key, value in comp1.data:
+            if type(value) == list:
+                for i in xrange(len(value)):
+                    if isinstance(value[i], CUDSComponent)
+                        _compare_components(value[i], comp2.data[key][i],
+                                            self)
+                    else:
+                        self.assertEqual(value[i], comp2.data[key][i])
+            self.assertEqual(value, comp2.data[key])
+    else:
+        self.assertEqual(comp1, comp2)
