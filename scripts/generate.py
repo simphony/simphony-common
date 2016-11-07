@@ -1021,7 +1021,7 @@ def cuba_enum(cuba_input, cuds_input, output):
 
     all_keys = set(keywords['CUBA_KEYS']) | set(metadata['CUDS_KEYS'])
 
-    for keyword in all_keys:
+    for keyword in sorted(list(all_keys)):
         if keyword in CUBA_DATA_CONTAINER_EXCLUDE:
             continue
         lines.append(template.format(keyword, keyword))
