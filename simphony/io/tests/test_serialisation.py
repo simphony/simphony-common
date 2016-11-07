@@ -109,7 +109,7 @@ def _compare_components(comp1, comp2, testcase):
             else:
                 self.assertEqual(comp1[i], comp2[i])
     elif isinstance(comp1, CUDSComponent):
-        for key, value in comp1.data:
+        for key, value in comp1.data.iteritems():
             if type(value) == list:
                 for i in xrange(len(value)):
                     if isinstance(value[i], CUDSComponent):
