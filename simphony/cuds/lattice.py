@@ -1,10 +1,10 @@
 import numpy as np
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.data_container import DataContainer
-from simphony.cuds.abc_lattice import ABCLattice
-from simphony.cuds.lattice_items import LatticeNode
-from simphony.cuds.primitive_cell import PrimitiveCell
+from ..core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
+from .abc_lattice import ABCLattice
+from .lattice_items import LatticeNode
+from .primitive_cell import PrimitiveCell
 
 
 class Lattice(ABCLattice):

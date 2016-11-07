@@ -5,11 +5,11 @@ import collections
 import numpy
 from numpy.testing import assert_equal
 
-from simphony.core.keywords import KEYWORDS
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from simphony.cuds.particles_items import Particle, Bond
-from simphony.cuds.mesh_items import Edge, Face, Cell, Point
+from ..core.keywords import KEYWORDS
+from ..core.data_container import DataContainer
+from ..core.cuba import CUBA
+from ..cuds.particles_items import Particle, Bond
+from ..cuds.mesh_items import Edge, Face, Cell, Point
 
 
 def compare_particles_datasets(particles, reference, testcase=None):

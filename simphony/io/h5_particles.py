@@ -3,12 +3,12 @@ import uuid
 import tables
 import numpy
 
-from simphony.core.data_container import DataContainer
-from simphony.cuds import ABCParticles
-from simphony.cuds.particles_items import Bond, Particle
-from simphony.core.cuds_item import CUDSItem
-from simphony.io.h5_cuds_items import H5CUDSItems
-from simphony.io.indexed_data_container_table import IndexedDataContainerTable
+from ..core.data_container import DataContainer
+from ..cuds import ABCParticles
+from ..cuds.particles_items import Bond, Particle
+from ..core.cuds_item import CUDSItem
+from .h5_cuds_items import H5CUDSItems
+from .indexed_data_container_table import IndexedDataContainerTable
 
 MAX_NUMBER_PARTICLES_IN_BOND = 20
 

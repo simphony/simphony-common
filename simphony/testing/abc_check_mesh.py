@@ -3,12 +3,12 @@ import uuid
 import random
 from functools import partial
 
-from simphony.testing.utils import (
+from .utils import (
     create_data_container, create_points, compare_points, compare_elements,
     grouper, compare_data_containers)
-from simphony.cuds.mesh_items import Edge, Face, Cell, Point
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.data_container import DataContainer
+from ..cuds.mesh_items import Edge, Face, Cell, Point
+from ..core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
 
 
 class CheckMeshContainer(object):

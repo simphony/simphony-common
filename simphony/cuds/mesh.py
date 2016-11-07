@@ -6,10 +6,10 @@ and modify a mesh
 """
 import uuid
 
-import simphony.core.data_container as dc
-from simphony.core.cuds_item import CUDSItem
-from simphony.cuds.abc_mesh import ABCMesh
-from simphony.cuds.mesh_items import Edge, Face, Cell, Point
+from ..core import data_container as dc
+from ..core.cuds_item import CUDSItem
+from .abc_mesh import ABCMesh
+from .mesh_items import Edge, Face, Cell, Point
 
 
 class Mesh(ABCMesh):

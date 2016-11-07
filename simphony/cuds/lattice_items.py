@@ -1,4 +1,4 @@
-from simphony.core import DataContainer
+from ..core import DataContainer
 
 
 class LatticeNode(object):

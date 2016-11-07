@@ -1,11 +1,11 @@
 import itertools
 from abc import abstractmethod
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.cuds.abc_dataset import ABCDataset
-from simphony.cuds.utils import deprecated
+from ..core.cuds_item import CUDSItem
+from .abc_dataset import ABCDataset
+from .utils import deprecated
 
-from simphony.cuds.mesh_items import Point, Edge, Face, Cell
+from .mesh_items import Point, Edge, Face, Cell
 
 
 class ABCMesh(ABCDataset):

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.data_container import DataContainer
-from simphony.cuds import ABCParticles
-from simphony.cuds.particles_items import Particle, Bond
+from ..core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
+from . import ABCParticles
+from .particles_items import Particle, Bond
 
 
 class Particles(ABCParticles):

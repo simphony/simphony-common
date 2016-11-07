@@ -2,10 +2,10 @@
 from abc import abstractmethod
 import itertools
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.cuds.particles_items import Particle, Bond
-from simphony.cuds.abc_dataset import ABCDataset
-from simphony.cuds.utils import deprecated
+from ..core.cuds_item import CUDSItem
+from .particles_items import Particle, Bond
+from .abc_dataset import ABCDataset
+from .utils import deprecated
 
 
 class ABCParticles(ABCDataset):

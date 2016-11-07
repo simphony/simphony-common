@@ -1,9 +1,9 @@
-from simphony.cuds import ABCLattice, LatticeNode
-from simphony.cuds.primitive_cell import PrimitiveCell, BravaisLattice
-from simphony.io.indexed_data_container_table import IndexedDataContainerTable
-from simphony.io.data_container_description import NoUIDRecord
-from simphony.core.data_container import DataContainer
-from simphony.core.cuds_item import CUDSItem
+from ..cuds import ABCLattice, LatticeNode
+from ..cuds.primitive_cell import PrimitiveCell, BravaisLattice
+from .indexed_data_container_table import IndexedDataContainerTable
+from .data_container_description import NoUIDRecord
+from ..core.data_container import DataContainer
+from ..core.cuds_item import CUDSItem
 
 import numpy as np
 

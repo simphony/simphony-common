@@ -1,12 +1,12 @@
 import tables
 import itertools
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.data_container import DataContainer
-from simphony.cuds import ABCParticles, ABCMesh, ABCLattice
-from simphony.io.h5_particles import H5Particles
-from simphony.io.h5_mesh import H5Mesh
-from simphony.io.h5_lattice import H5Lattice
+from ..core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
+from ..cuds import ABCParticles, ABCMesh, ABCLattice
+from .h5_particles import H5Particles
+from .h5_mesh import H5Mesh
+from .h5_lattice import H5Lattice
 
 H5_FILE_VERSION = 3
 
