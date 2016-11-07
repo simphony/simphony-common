@@ -6,7 +6,7 @@ from simphony.testing.utils import (
     compare_particles, create_particles, compare_bonds, create_bonds,
     create_data_container, compare_data_containers,
     create_particles_with_id, create_bonds_with_id)
-from simphony.cuds.particles import Particle, Bond
+from simphony.cuds.particles_items import Bond, Particle
 from simphony.core.cuds_item import CUDSItem
 from simphony.core.data_container import DataContainer
 

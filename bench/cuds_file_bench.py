@@ -5,7 +5,8 @@ import uuid
 
 from .util import bench
 from simphony.io.h5_cuds import H5CUDS
-from simphony.cuds.particles import Particle, Particles
+from simphony.cuds.particles import Particles
+from simphony.cuds.particles_items import Particle
 
 particles = [
     Particle(coordinates=(0.0, 1.1, 2.2)) for i in range(10000)]
