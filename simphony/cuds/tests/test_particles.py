@@ -1,7 +1,8 @@
 import unittest
 import uuid
 
-from simphony.cuds.particles import Particle, Bond, Particles
+from simphony.cuds.particles import Particles
+from simphony.cuds.particles_items import Bond, Particle
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from simphony.testing.abc_check_particles import (

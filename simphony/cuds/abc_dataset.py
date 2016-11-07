@@ -111,9 +111,14 @@ class ABCDataset(object):
             If uids is None, then all objects are returned by the iterable
             and there is no restriction on the order that they are returned.
 
+        item_type: CUDSItem enum
+            Restricts iteration only to the specified item type.
+            e.g. CUDSItem.PARTICLE will only iterate over particles in
+            a Particles container.
+
         Yields
         ------
-        object : Particle
+        object :
             The object item.
 
         Raises
@@ -180,7 +185,7 @@ class ABCDataset(object):
         Returns
         -------
         count : int
-            The number of items of item_type in the dataset.
+            The number of items in the dataset.
         """
 
     def __contains__(self, item):
