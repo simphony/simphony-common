@@ -26,12 +26,11 @@ def cd(path):
 
 
 class BuildMeta(Command):
-    user_options = [ ('repopath=', None,
-                      "Directory where to look for the local "
-                      "simphony-metadata repository clone"),
-                     ('repourl=', None, "URL to the github repo for cloning"),
-                     ('repotag=', None, "Tag to checkout before building")]
-
+    user_options = [('repopath=', None,
+                     "Directory where to look for the local "
+                     "simphony-metadata repository clone"),
+                    ('repourl=', None, "URL to the github repo for cloning"),
+                    ('repotag=', None, "Tag to checkout before building")]
 
     def initialize_options(self):
         self.repopath = None
