@@ -1,19 +1,19 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_item import CUDSItem
-from . import validation
+from .point import Point
 
 
-class Particle(CUDSItem):
+class Particle(Point):
     '''A particle in a 3D space system  # noqa
     '''
 
     cuba_key = CUBA.PARTICLE
 
-    def __init__(self, position, data=None):
+    def __init__(self, data=None, position=None):
 
-        self.position = position
+        if position is None:
+            self.position = [0, 0, 0]
         if data:
             internal_data = self.data
             internal_data.update(data)
@@ -21,18 +21,6 @@ class Particle(CUDSItem):
 
         # This is a system-managed, read-only attribute
         self._definition = 'A particle in a 3D space system'  # noqa
-
-    @property
-    def position(self):
-        return self.data[CUBA.POSITION]
-
-    @position.setter
-    def position(self, value):
-        value = validation.cast_data_type(value, 'position')
-        validation.validate_cuba_keyword(value, 'position')
-        data = self.data
-        data[CUBA.POSITION] = value
-        self.data = data
 
     @property
     def data(self):
@@ -64,4 +52,4 @@ class Particle(CUDSItem):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return (CUBA.POINT, CUBA.CUDS_ITEM)

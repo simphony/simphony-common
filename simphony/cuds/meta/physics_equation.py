@@ -10,7 +10,7 @@ class PhysicsEquation(ModelEquation):
 
     cuba_key = CUBA.PHYSICS_EQUATION
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, data=None, description="", name=""):
 
         self.name = name
         self.description = description

@@ -15,8 +15,8 @@ class IntegrationStep(ComputationalMethod):
                  size,
                  final,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  current=0):
 
         self.final = final

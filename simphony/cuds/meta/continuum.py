@@ -10,7 +10,7 @@ class Continuum(ComputationalModel):
 
     cuba_key = CUBA.CONTINUUM
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, data=None, description="", name=""):
 
         self.name = name
         self.description = description
