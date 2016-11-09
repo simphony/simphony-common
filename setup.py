@@ -1,6 +1,7 @@
 import os
+import contextlib
 import textwrap
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 
 from setuptools import setup, find_packages
 from distutils.cmd import Command
@@ -13,35 +14,68 @@ with open('README.rst', 'r') as readme:
 VERSION = '0.3.1.dev0'
 
 
+@contextlib.contextmanager
+def cd(path):
+    """Change directory and returns back to cwd once the operation is done."""
+    prev_cwd = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(prev_cwd)
+
+
 class BuildMeta(Command):
-    user_options = []
+    user_options = [ ('repopath=', None,
+                      "Directory where to look for the local "
+                      "simphony-metadata repository clone"),
+                     ('repourl=', None, "URL to the github repo for cloning"),
+                     ('repotag=', None, "Tag to checkout before building")]
+
 
     def initialize_options(self):
-        self.simphony_metadata_path = None
+        self.repopath = None
+        self.repourl = "https://github.com/simphony/simphony-metadata/"
+        self.repotag = "master"
 
     def finalize_options(self):
-        if self.simphony_metadata_path is None:
-            self.simphony_metadata_path = os.path.join(
-                os.getcwd(),
-                "simphony-metadata/")
-            try:
-                if not os.path.exists(self.simphony_metadata_path):
-                    check_call([
-                        "git",
-                        "clone",
-                        "https://github.com/simphony/simphony-metadata/"])
-            except OSError:
-                print (textwrap.dedent("""
-                Failed to run git. Make sure it is installed in your
-                environment"""))
+        if self.repopath is None:
+            self.repopath = os.path.join(os.getcwd(), "simphony-metadata/")
 
     def run(self):
+        try:
+            if not os.path.exists(self.repopath):
+                print("Checking out {}".format(self.repopath))
+                check_call(["git", "clone", self.repourl])
+        except OSError:
+            print("Failed to run git clone. "
+                  "Make sure it is installed in your environment")
+            raise
+        except CalledProcessError:
+            print("Failed to run git clone.")
+            raise
+
+        with cd(self.repopath):
+            try:
+                print("Stashing possible changes.")
+                check_call([ "git", "stash"])
+            except CalledProcessError:
+                print("Failed to run git stash.")
+                raise
+
+            try:
+                print("Checking out {}.".format(self.repotag))
+                check_call(["git", "checkout", self.repotag])
+            except CalledProcessError:
+                print("Failed to checkout {}.".format(self.repotag))
+                raise
+
         metadata_yml = os.path.join(
-            self.simphony_metadata_path,
+            self.repopath,
             "yaml_files",
             "simphony_metadata.yml")
         cuba_yml = os.path.join(
-            self.simphony_metadata_path,
+            self.repopath,
             "yaml_files",
             "cuba.yml")
 
@@ -49,12 +83,9 @@ class BuildMeta(Command):
             print (textwrap.dedent("""
                 Cannot open simphony-metadata YAML files.
                 Please specify an appropriate path to the simphony-metadata
-                git repository in setup.cfg:
-
-                [build]
-                simphony_metadata_path=path/to/simphony-metadata-repo/
+                git repository in setup.cfg.
                 """))
-            raise
+            raise RuntimeError("Unrecoverable error.")
 
         with open(metadata_yml, 'rb') as simphony_metadata:
             from scripts.generate import meta_class
