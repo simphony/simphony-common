@@ -36,7 +36,7 @@ class BuildMeta(Command):
     def initialize_options(self):
         self.repopath = None
         self.repourl = "https://github.com/simphony/simphony-metadata/"
-        self.repotag = "master"
+        self.repotag = None
 
     def finalize_options(self):
         if self.repopath is None:
@@ -55,20 +55,21 @@ class BuildMeta(Command):
             print("Failed to run git clone.")
             raise
 
-        with cd(self.repopath):
-            try:
-                print("Stashing possible changes.")
-                check_call([ "git", "stash"])
-            except CalledProcessError:
-                print("Failed to run git stash.")
-                raise
+        if self.repotag is not None:
+            with cd(self.repopath):
+                try:
+                    print("Stashing possible changes.")
+                    check_call(["git", "stash"])
+                except CalledProcessError:
+                    print("Failed to run git stash.")
+                    raise
 
-            try:
-                print("Checking out {}.".format(self.repotag))
-                check_call(["git", "checkout", self.repotag])
-            except CalledProcessError:
-                print("Failed to checkout {}.".format(self.repotag))
-                raise
+                try:
+                    print("Checking out {}".format(self.repotag))
+                    check_call(["git", "checkout", self.repotag])
+                except CalledProcessError:
+                    print("Failed to checkout {}".format(self.repotag))
+                    raise
 
         metadata_yml = os.path.join(
             self.repopath,
@@ -87,10 +88,12 @@ class BuildMeta(Command):
                 """))
             raise RuntimeError("Unrecoverable error.")
 
+        print("Building classes")
         with open(metadata_yml, 'rb') as simphony_metadata:
             from scripts.generate import meta_class
             meta_class.callback(simphony_metadata, "simphony/cuds/meta/", True)
 
+        print("Building keywords")
         with open(metadata_yml, 'rb') as simphony_metadata, \
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/keywords.py", "wb") as keywords_out:
@@ -98,6 +101,7 @@ class BuildMeta(Command):
             from scripts.generate import keywords
             keywords.callback(cuba, simphony_metadata, keywords_out)
 
+        print("Building enums")
         with open(metadata_yml, 'rb') as simphony_metadata, \
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/cuba.py", "wb") as cuba_out:
@@ -105,6 +109,7 @@ class BuildMeta(Command):
             from scripts.generate import cuba_enum
             cuba_enum.callback(cuba, simphony_metadata, cuba_out)
 
+        print("Running yapf")
         cmd_args = ["yapf", "--style", "pep8", "--in-place"]
         try:
             check_call(cmd_args + ["simphony/core/keywords.py"])
