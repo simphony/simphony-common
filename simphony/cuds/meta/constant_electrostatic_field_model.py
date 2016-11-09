@@ -13,8 +13,8 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     def __init__(self,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  electrostatic_field=None):
 
         if electrostatic_field is None:

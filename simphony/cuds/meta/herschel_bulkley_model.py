@@ -13,11 +13,11 @@ class HerschelBulkleyModel(RheologyModel):
 
     def __init__(self,
                  data=None,
-                 description="",
-                 name="",
-                 initial_viscosity=0.001,
+                 description=None,
+                 name=None,
+                 initial_viscosity="1e-3",
                  relaxation_time=1.0,
-                 linear_constant=1e-05,
+                 linear_constant="1e-5",
                  power_law_index=1.0):
 
         self.power_law_index = power_law_index

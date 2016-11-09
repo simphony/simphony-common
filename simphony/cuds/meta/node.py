@@ -2,18 +2,16 @@ import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
-from . import validation
 
 
 class Node(CUDSComponent):
-    '''A node on a structured grid like lattice  # noqa
+    '''A lattice node  # noqa
     '''
 
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
-        self.index = index
         self.name = name
         self.description = description
         if data:
@@ -22,19 +20,7 @@ class Node(CUDSComponent):
             self.data = internal_data
 
         # This is a system-managed, read-only attribute
-        self._definition = 'A node on a structured grid like lattice'  # noqa
-
-    @property
-    def index(self):
-        return self.data[CUBA.INDEX]
-
-    @index.setter
-    def index(self, value):
-        value = validation.cast_data_type(value, 'index')
-        validation.validate_cuba_keyword(value, 'index')
-        data = self.data
-        data[CUBA.INDEX] = value
-        self.data = data
+        self._definition = 'A lattice node'  # noqa
 
     @property
     def data(self):
@@ -62,7 +48,7 @@ class Node(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.UUID, CUBA.NAME)
+        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

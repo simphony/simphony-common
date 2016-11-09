@@ -10,7 +10,7 @@ class SinglePhaseModel(MultiphaseModel):
 
     cuba_key = CUBA.SINGLE_PHASE_MODEL
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description

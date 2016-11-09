@@ -11,7 +11,7 @@ class CUDSComponent(CUDSItem):
 
     cuba_key = CUBA.CUDS_COMPONENT
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description
@@ -29,8 +29,9 @@ class CUDSComponent(CUDSItem):
 
     @name.setter
     def name(self, value):
-        value = validation.cast_data_type(value, 'name')
-        validation.validate_cuba_keyword(value, 'name')
+        if value is not None:
+            value = validation.cast_data_type(value, 'name')
+            validation.validate_cuba_keyword(value, 'name')
         data = self.data
         data[CUBA.NAME] = value
         self.data = data
@@ -41,8 +42,9 @@ class CUDSComponent(CUDSItem):
 
     @description.setter
     def description(self, value):
-        value = validation.cast_data_type(value, 'description')
-        validation.validate_cuba_keyword(value, 'description')
+        if value is not None:
+            value = validation.cast_data_type(value, 'description')
+            validation.validate_cuba_keyword(value, 'description')
         data = self.data
         data[CUBA.DESCRIPTION] = value
         self.data = data

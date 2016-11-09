@@ -10,7 +10,7 @@ class Thermostat(MaterialRelation):
 
     cuba_key = CUBA.THERMOSTAT
 
-    def __init__(self, material, data=None, description="", name=""):
+    def __init__(self, material, data=None, description=None, name=None):
 
         self.material = material
         self.name = name

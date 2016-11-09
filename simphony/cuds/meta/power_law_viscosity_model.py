@@ -13,11 +13,11 @@ class PowerLawViscosityModel(RheologyModel):
 
     def __init__(self,
                  data=None,
-                 description="",
-                 name="",
-                 linear_constant=1e-05,
-                 minimum_viscosity=1e-05,
-                 maximum_viscosity=0.001,
+                 description=None,
+                 name=None,
+                 linear_constant="1e-5",
+                 minimum_viscosity="1e-5",
+                 maximum_viscosity="1e-3",
                  power_law_index=1.0):
 
         self.power_law_index = power_law_index

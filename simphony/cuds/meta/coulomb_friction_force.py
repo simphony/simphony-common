@@ -14,8 +14,8 @@ class CoulombFrictionForce(MaterialRelation):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  friction_coefficient=0.0):
 
         self.material = material

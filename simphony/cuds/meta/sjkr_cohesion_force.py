@@ -14,8 +14,8 @@ class SjkrCohesionForce(MaterialRelation):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  cohesion_energy_density=0.0):
 
         self.material = material

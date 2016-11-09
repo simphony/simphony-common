@@ -13,8 +13,8 @@ class Neumann(Condition):
 
     def __init__(self,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  variable=None,
                  material=None):
 

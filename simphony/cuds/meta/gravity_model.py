@@ -11,7 +11,11 @@ class GravityModel(PhysicsEquation):
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, data=None, description="", name="", acceleration=None):
+    def __init__(self,
+                 data=None,
+                 description=None,
+                 name=None,
+                 acceleration=None):
 
         if acceleration is None:
             self.acceleration = [0.0, 0.0, 0.0]

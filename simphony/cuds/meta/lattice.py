@@ -10,7 +10,7 @@ class Lattice(CUDSComponent):
 
     cuba_key = CUBA.LATTICE
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description
@@ -20,7 +20,13 @@ class Lattice(CUDSComponent):
             self.data = internal_data
 
         # This is a system-managed, read-only attribute
+        self._origin = None
+        # This is a system-managed, read-only attribute
         self._definition = 'A lattice'  # noqa
+        # This is a system-managed, read-only attribute
+        self._size = None
+        # This is a system-managed, read-only attribute
+        self._primitive_cell = None
 
     @property
     def data(self):
@@ -37,8 +43,20 @@ class Lattice(CUDSComponent):
         self._data = DataContainer(new_data)
 
     @property
+    def origin(self):
+        return self._origin
+
+    @property
     def definition(self):
         return self._definition
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def primitive_cell(self):
+        return self._primitive_cell
 
     @property
     def uid(self):
@@ -48,7 +66,8 @@ class Lattice(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.ORIGIN, CUBA.DESCRIPTION, CUBA.PRIMITIVE_CELL, CUBA.SIZE,
+                CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

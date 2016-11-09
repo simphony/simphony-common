@@ -6,7 +6,7 @@ from . import validation
 
 
 class Bond(CUDSItem):
-    '''A bond between two or more atoms or particles  # noqa
+    '''A bond  # noqa
     '''
 
     cuba_key = CUBA.BOND
@@ -20,7 +20,7 @@ class Bond(CUDSItem):
             self.data = internal_data
 
         # This is a system-managed, read-only attribute
-        self._definition = 'A bond between two or more atoms or particles'  # noqa
+        self._definition = 'A bond'  # noqa
 
     @property
     def particle(self):

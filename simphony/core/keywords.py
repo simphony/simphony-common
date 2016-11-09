@@ -47,12 +47,6 @@ KEYWORDS = {
         key='PATCH',
         shape=[8],
         dtype=numpy.str),
-    'SIMULATION_DOMAIN_ORIGIN': Keyword(
-        name='SimulationDomainOrigin',
-        definition='Offset for the simulation models',  # noqa
-        key='SIMULATION_DOMAIN_ORIGIN',
-        shape=[3],
-        dtype=numpy.float64),
     'NUMBER_OF_TIME_STEPS': Keyword(
         name='NumberOfTimeSteps',
         definition='Number of discrete time steps',  # noqa
@@ -69,7 +63,7 @@ KEYWORDS = {
         name='PotentialEnergy',
         definition='Potential energy',  # noqa
         key='POTENTIAL_ENERGY',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'COHESION_ENERGY_DENSITY': Keyword(
         name='CohesionEnergyDensity',
@@ -177,7 +171,7 @@ KEYWORDS = {
         name='Momentum',
         definition='Momentum',  # noqa
         key='MOMENTUM',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'SHAPE_LENGTH': Keyword(
         name='ShapeLength',
@@ -219,7 +213,7 @@ KEYWORDS = {
         name='Energy',
         definition='Energy',  # noqa
         key='ENERGY',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'MATERIAL_TYPE': Keyword(
         name='MaterialType',
@@ -231,7 +225,7 @@ KEYWORDS = {
         name='Current',
         definition='current value of a parameter',  # noqa
         key='CURRENT',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'PRESSURE': Keyword(
         name='Pressure',
@@ -261,7 +255,7 @@ KEYWORDS = {
         name='MomentInertia',
         definition='Moment inertia',  # noqa
         key='MOMENT_INERTIA',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'BOND_LABEL': Keyword(
         name='BondLabel',
@@ -383,12 +377,12 @@ KEYWORDS = {
         key='ENERGY_WELL_DEPTH',
         shape=[1],
         dtype=numpy.float64),
-    'INDEX': Keyword(
-        name='Index',
-        definition='An integer vector in 3D geometric space',  # noqa
-        key='INDEX',
+    'SIMULATION_DOMAIN_ORIGIN': Keyword(
+        name='SimulationDomainOrigin',
+        definition='Offset for the simulation models',  # noqa
+        key='SIMULATION_DOMAIN_ORIGIN',
         shape=[3],
-        dtype=numpy.int32),
+        dtype=numpy.float64),
     'PROBABILITY_COEFFICIENT': Keyword(
         name='ProbabilityCoefficient',
         definition='For stochastic processes (e.g. sorption)',  # noqa
@@ -471,7 +465,7 @@ KEYWORDS = {
         name='Final',
         definition='final value of a parameter',  # noqa
         key='FINAL',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'ORDER_PARAMETER': Keyword(
         name='OrderParameter',
@@ -495,7 +489,7 @@ KEYWORDS = {
         name='None',
         definition='a general none value',  # noqa
         key='NONE',
-        shape=[1],
+        shape=[],
         dtype=numpy.int32),
     'NAME_UC': Keyword(
         name='NameUc',
@@ -513,7 +507,7 @@ KEYWORDS = {
         name='ElectricField',
         definition='Electric field',  # noqa
         key='ELECTRIC_FIELD',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'HAMAKER_CONSTANT': Keyword(
         name='HamakerConstant',
@@ -531,7 +525,7 @@ KEYWORDS = {
         name='ChargeDensity',
         definition='Charge density',  # noqa
         key='CHARGE_DENSITY',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'POSITION': Keyword(
         name='Position',
@@ -615,7 +609,7 @@ KEYWORDS = {
         name='Variable',
         definition='a list of physics/chemistry variables in a PE or MR',  # noqa
         key='VARIABLE',
-        shape=[1],
+        shape=[],
         dtype=numpy.str),
     'DYNAMIC_VISCOSITY': Keyword(
         name='DynamicViscosity',
@@ -639,7 +633,7 @@ KEYWORDS = {
         name='Size',
         definition='size of a parameter or quantity',  # noqa
         key='SIZE',
-        shape=[1],
+        shape=[],
         dtype=numpy.float64),
     'DESCRIPTION': Keyword(
         name='Description',
@@ -743,18 +737,6 @@ KEYWORDS = {
         key='MODEL_EQUATION',
         shape=[1],
         dtype=None),
-    'ATOM': Keyword(
-        name='Atom',
-        definition='An atom',  # noqa
-        key='ATOM',
-        shape=[1],
-        dtype=None),
-    'RHOMBOHEDRAL_LATTICE': Keyword(
-        name='RhombohedralLattice',
-        definition='A rhombohedral lattice',  # noqa
-        key='RHOMBOHEDRAL_LATTICE',
-        shape=[1],
-        dtype=None),
     'LATTICE': Keyword(
         name='Lattice',
         definition='A lattice',  # noqa
@@ -767,16 +749,10 @@ KEYWORDS = {
         key='THERMAL_MODEL',
         shape=[1],
         dtype=None),
-    'TETRAGONAL_LATTICE': Keyword(
-        name='TetragonalLattice',
-        definition='A tetragonal lattice',  # noqa
-        key='TETRAGONAL_LATTICE',
-        shape=[1],
-        dtype=None),
-    'MESH': Keyword(
-        name='Mesh',
-        definition='A mesh',  # noqa
-        key='MESH',
+    'BIRD_CARREAU_MODEL': Keyword(
+        name='BirdCarreauModel',
+        definition='Bird-Carreau model',  # noqa
+        key='BIRD_CARREAU_MODEL',
         shape=[1],
         dtype=None),
     'ELECTRONIC': Keyword(
@@ -785,16 +761,10 @@ KEYWORDS = {
         key='ELECTRONIC',
         shape=[1],
         dtype=None),
-    'THERMOSTAT': Keyword(
-        name='Thermostat',
-        definition='A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir',  # noqa
-        key='THERMOSTAT',
-        shape=[1],
-        dtype=None),
-    'CELL': Keyword(
-        name='Cell',
-        definition='Element for storing 3D geometrical objects',  # noqa
-        key='CELL',
+    'SOFTWARE_TOOL': Keyword(
+        name='SoftwareTool',
+        definition='Represents a software tool which is used to solve the model or in pre/post processing',  # noqa
+        key='SOFTWARE_TOOL',
         shape=[1],
         dtype=None),
     'FREE_SURFACE_MODEL': Keyword(
@@ -809,34 +779,28 @@ KEYWORDS = {
         key='INCOMPRESSIBLE_FLUID_MODEL',
         shape=[1],
         dtype=None),
-    'POINT': Keyword(
-        name='Point',
-        definition='A point in a 3D space system',  # noqa
-        key='POINT',
+    'COMPUTATIONAL_MODEL': Keyword(
+        name='ComputationalModel',
+        definition='Model category according to the RoMM',  # noqa
+        key='COMPUTATIONAL_MODEL',
         shape=[1],
         dtype=None),
-    'FACE_CENTERED_CUBIC_LATTICE': Keyword(
-        name='FaceCenteredCubicLattice',
-        definition='A face centred cubic lattice',  # noqa
-        key='FACE_CENTERED_CUBIC_LATTICE',
+    'COMPRESSIBILITY_MODEL': Keyword(
+        name='CompressibilityModel',
+        definition='Compressibility model',  # noqa
+        key='COMPRESSIBILITY_MODEL',
         shape=[1],
         dtype=None),
-    'ENGINE_FEATURE': Keyword(
-        name='EngineFeature',
-        definition='Provides a physics equation and methods that engines provides to solve them',  # noqa
-        key='ENGINE_FEATURE',
+    'BASIS': Keyword(
+        name='Basis',
+        definition='Space basis vectors (row wise)',  # noqa
+        key='BASIS',
         shape=[1],
         dtype=None),
     'PAIR_POTENTIAL': Keyword(
         name='PairPotential',
         definition='Pair Interatomic Potentials Category',  # noqa
         key='PAIR_POTENTIAL',
-        shape=[1],
-        dtype=None),
-    'BASE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
-        name='BaseCenteredOrthorhombicLattice',
-        definition='A base centered orthorhombic lattice',  # noqa
-        key='BASE_CENTERED_ORTHORHOMBIC_LATTICE',
         shape=[1],
         dtype=None),
     'LAMINAR_FLOW_MODEL': Keyword(
@@ -857,12 +821,6 @@ KEYWORDS = {
         key='RHEOLOGY_MODEL',
         shape=[1],
         dtype=None),
-    'HEXAGONAL_LATTICE': Keyword(
-        name='HexagonalLattice',
-        definition='A hexagonal lattice',  # noqa
-        key='HEXAGONAL_LATTICE',
-        shape=[1],
-        dtype=None),
     'ELECTROSTATIC_MODEL': Keyword(
         name='ElectrostaticModel',
         definition='Electrostatic model',  # noqa
@@ -877,20 +835,14 @@ KEYWORDS = {
         dtype=None),
     'BOND': Keyword(
         name='Bond',
-        definition='A bond between two or more atoms or particles',  # noqa
+        definition='A bond',  # noqa
         key='BOND',
         shape=[1],
         dtype=None),
-    'ORIGIN': Keyword(
-        name='Origin',
-        definition='The origin of a space system',  # noqa
-        key='ORIGIN',
-        shape=[1],
-        dtype=None),
-    'ORTHORHOMBIC_LATTICE': Keyword(
-        name='OrthorhombicLattice',
-        definition='An orthorhombic lattice',  # noqa
-        key='ORTHORHOMBIC_LATTICE',
+    'TURBULENCE_MODEL': Keyword(
+        name='TurbulenceModel',
+        definition='Turbulence model',  # noqa
+        key='TURBULENCE_MODEL',
         shape=[1],
         dtype=None),
     'FVM': Keyword(
@@ -911,22 +863,10 @@ KEYWORDS = {
         key='FEM',
         shape=[1],
         dtype=None),
-    'INTEGRATION_TIME': Keyword(
-        name='IntegrationTime',
-        definition='the current time, time step, and final time for a simulation stored on each cuds (a specific state).',  # noqa
-        key='INTEGRATION_TIME',
-        shape=[1],
-        dtype=None),
     'FREE': Keyword(
         name='Free',
         definition='Free boundary condition',  # noqa
         key='FREE',
-        shape=[1],
-        dtype=None),
-    'BRAVAIS_LATTICE': Keyword(
-        name='BravaisLattice',
-        definition='A Bravais lattice',  # noqa
-        key='BRAVAIS_LATTICE',
         shape=[1],
         dtype=None),
     'VERSION': Keyword(
@@ -939,18 +879,6 @@ KEYWORDS = {
         name='NewtonianFluidModel',
         definition='Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation',  # noqa
         key='NEWTONIAN_FLUID_MODEL',
-        shape=[1],
-        dtype=None),
-    'BASE_CENTERED_MONOCLINIC_LATTICE': Keyword(
-        name='BaseCenteredMonoclinicLattice',
-        definition='A base centered monoclinic lattice',  # noqa
-        key='BASE_CENTERED_MONOCLINIC_LATTICE',
-        shape=[1],
-        dtype=None),
-    'BODY_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
-        name='BodyCenteredOrthorhombicLattice',
-        definition='A body centered orthorhombic lattice',  # noqa
-        key='BODY_CENTERED_ORTHORHOMBIC_LATTICE',
         shape=[1],
         dtype=None),
     'PARTICLE': Keyword(
@@ -971,12 +899,6 @@ KEYWORDS = {
         key='CUDS_ITEM',
         shape=[1],
         dtype=None),
-    'TRICLINIC_LATTICE': Keyword(
-        name='TriclinicLattice',
-        definition='A triclinic lattice',  # noqa
-        key='TRICLINIC_LATTICE',
-        shape=[1],
-        dtype=None),
     'VERLET': Keyword(
         name='Verlet',
         definition='Newtonian dynamics integration using verlet algorithm',  # noqa
@@ -989,22 +911,22 @@ KEYWORDS = {
         key='BERENDSEN',
         shape=[1],
         dtype=None),
-    'CFD': Keyword(
-        name='Cfd',
-        definition='Computational fluid dynamics general (set of ) equations for momentum, mass and energy',  # noqa
-        key='CFD',
+    'GEOMETRICAL_ELEMENT': Keyword(
+        name='GeometricalElement',
+        definition='Any element in a 3D space system',  # noqa
+        key='GEOMETRICAL_ELEMENT',
         shape=[1],
         dtype=None),
-    'MESH_ELEMENT': Keyword(
-        name='MeshElement',
-        definition='An element for storing geometrical objects',  # noqa
-        key='MESH_ELEMENT',
+    'ORIGIN': Keyword(
+        name='Origin',
+        definition='The origin of a space system',  # noqa
+        key='ORIGIN',
         shape=[1],
         dtype=None),
-    'PERIODIC': Keyword(
-        name='Periodic',
-        definition='Periodic boundary condition (PBC)',  # noqa
-        key='PERIODIC',
+    'NOSE_HOOVER': Keyword(
+        name='NoseHoover',
+        definition='Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.',  # noqa
+        key='NOSE_HOOVER',
         shape=[1],
         dtype=None),
     'SURFACE_TENSION_RELATION': Keyword(
@@ -1013,16 +935,10 @@ KEYWORDS = {
         key='SURFACE_TENSION_RELATION',
         shape=[1],
         dtype=None),
-    'CUBIC_LATTICE': Keyword(
-        name='CubicLattice',
-        definition='A cubic lattice',  # noqa
-        key='CUBIC_LATTICE',
-        shape=[1],
-        dtype=None),
-    'TURBULENCE_MODEL': Keyword(
-        name='TurbulenceModel',
-        definition='Turbulence model',  # noqa
-        key='TURBULENCE_MODEL',
+    'THERMOSTAT': Keyword(
+        name='Thermostat',
+        definition='A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir',  # noqa
+        key='THERMOSTAT',
         shape=[1],
         dtype=None),
     'COULOMB': Keyword(
@@ -1031,10 +947,10 @@ KEYWORDS = {
         key='COULOMB',
         shape=[1],
         dtype=None),
-    'BASIS': Keyword(
-        name='Basis',
-        definition='Space basis vectors (row wise)',  # noqa
-        key='BASIS',
+    'ENGINE_FEATURE': Keyword(
+        name='EngineFeature',
+        definition='Provides a physics equation and methods that engines provides to solve them',  # noqa
+        key='ENGINE_FEATURE',
         shape=[1],
         dtype=None),
     'SINGLE_PHASE_MODEL': Keyword(
@@ -1079,10 +995,10 @@ KEYWORDS = {
         key='DEM',
         shape=[1],
         dtype=None),
-    'MIXTURE_MODEL': Keyword(
-        name='MixtureModel',
-        definition='Mixture (drift flux) model',  # noqa
-        key='MIXTURE_MODEL',
+    'INTERATOMIC_POTENTIAL': Keyword(
+        name='InteratomicPotential',
+        definition='Interatomic Potentials Category',  # noqa
+        key='INTERATOMIC_POTENTIAL',
         shape=[1],
         dtype=None),
     'GRANULAR_DYNAMICS': Keyword(
@@ -1095,12 +1011,6 @@ KEYWORDS = {
         name='Empty',
         definition='Empty boundary condition',  # noqa
         key='EMPTY',
-        shape=[1],
-        dtype=None),
-    'SOFTWARE_TOOL': Keyword(
-        name='SoftwareTool',
-        definition='Represents a software tool which is used to solve the model or in pre/post processing',  # noqa
-        key='SOFTWARE_TOOL',
         shape=[1],
         dtype=None),
     'MOLECULAR_DYNAMICS': Keyword(
@@ -1121,22 +1031,16 @@ KEYWORDS = {
         key='TEMPERATURE_RESCALING',
         shape=[1],
         dtype=None),
-    'BODY_CENTERED_TETRAGONAL_LATTICE': Keyword(
-        name='BodyCenteredTetragonalLattice',
-        definition='A body centered tetragonal lattice',  # noqa
-        key='BODY_CENTERED_TETRAGONAL_LATTICE',
-        shape=[1],
-        dtype=None),
     'HERSCHEL_BULKLEY_MODEL': Keyword(
         name='HerschelBulkleyModel',
         definition='Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid',  # noqa
         key='HERSCHEL_BULKLEY_MODEL',
         shape=[1],
         dtype=None),
-    'PRIMITIVE_CELL': Keyword(
-        name='PrimitiveCell',
-        definition='A lattice primitive cell',  # noqa
-        key='PRIMITIVE_CELL',
+    'CELL': Keyword(
+        name='Cell',
+        definition='Element for storing 3D geometrical objects',  # noqa
+        key='CELL',
         shape=[1],
         dtype=None),
     'DISSIPATION_FORCE': Keyword(
@@ -1151,21 +1055,21 @@ KEYWORDS = {
         key='EDGE',
         shape=[1],
         dtype=None),
+    'MIXTURE_MODEL': Keyword(
+        name='MixtureModel',
+        definition='Mixture (drift flux) model',  # noqa
+        key='MIXTURE_MODEL',
+        shape=[1],
+        dtype=None),
     'MATERIAL_RELATION': Keyword(
         name='MaterialRelation',
         definition='Material relation',  # noqa
         key='MATERIAL_RELATION',
         shape=[1],
         dtype=None),
-    'BODY_CENTERED_CUBIC_LATTICE': Keyword(
-        name='BodyCenteredCubicLattice',
-        definition='A body centred cubic lattice',  # noqa
-        key='BODY_CENTERED_CUBIC_LATTICE',
-        shape=[1],
-        dtype=None),
     'NODE': Keyword(
         name='Node',
-        definition='A node on a structured grid like lattice',  # noqa
+        definition='A lattice node',  # noqa
         key='NODE',
         shape=[1],
         dtype=None),
@@ -1205,22 +1109,16 @@ KEYWORDS = {
         key='ATOMISTIC',
         shape=[1],
         dtype=None),
-    'INTERATOMIC_POTENTIAL': Keyword(
-        name='InteratomicPotential',
-        definition='Interatomic Potentials Category',  # noqa
-        key='INTERATOMIC_POTENTIAL',
+    'MESH': Keyword(
+        name='Mesh',
+        definition='A mesh',  # noqa
+        key='MESH',
         shape=[1],
         dtype=None),
     'INTEGRATION_STEP': Keyword(
         name='IntegrationStep',
         definition='the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).',  # noqa
         key='INTEGRATION_STEP',
-        shape=[1],
-        dtype=None),
-    'MONOCLINIC_LATTICE': Keyword(
-        name='MonoclinicLattice',
-        definition='A monoclinic lattice',  # noqa
-        key='MONOCLINIC_LATTICE',
         shape=[1],
         dtype=None),
     'SJKR_COHESION_FORCE': Keyword(
@@ -1235,10 +1133,10 @@ KEYWORDS = {
         key='LENNARD_JONES_6_12',
         shape=[1],
         dtype=None),
-    'FACE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
-        name='FaceCenteredOrthorhombicLattice',
-        definition='A face centered orthorhombic lattice',  # noqa
-        key='FACE_CENTERED_ORTHORHOMBIC_LATTICE',
+    'INTEGRATION_TIME': Keyword(
+        name='IntegrationTime',
+        definition='the current time, time step, and final time for a simulation stored on each cuds (a specific state).',  # noqa
+        key='INTEGRATION_TIME',
         shape=[1],
         dtype=None),
     'MOLECULAR_STATICS': Keyword(
@@ -1259,16 +1157,16 @@ KEYWORDS = {
         key='ISOTHERMAL_MODEL',
         shape=[1],
         dtype=None),
-    'NOSE_HOOVER': Keyword(
-        name='NoseHoover',
-        definition='Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.',  # noqa
-        key='NOSE_HOOVER',
+    'CFD': Keyword(
+        name='Cfd',
+        definition='Computational fluid dynamics general (set of ) equations for momentum, mass and energy',  # noqa
+        key='CFD',
         shape=[1],
         dtype=None),
-    'COMPUTATIONAL_MODEL': Keyword(
-        name='ComputationalModel',
-        definition='Model category according to the RoMM',  # noqa
-        key='COMPUTATIONAL_MODEL',
+    'POINT': Keyword(
+        name='Point',
+        definition='A point in a 3D space system',  # noqa
+        key='POINT',
         shape=[1],
         dtype=None),
     'FACE': Keyword(
@@ -1277,22 +1175,16 @@ KEYWORDS = {
         key='FACE',
         shape=[1],
         dtype=None),
-    'BIRD_CARREAU_MODEL': Keyword(
-        name='BirdCarreauModel',
-        definition='Bird-Carreau model',  # noqa
-        key='BIRD_CARREAU_MODEL',
+    'PERIODIC': Keyword(
+        name='Periodic',
+        definition='Periodic boundary condition (PBC)',  # noqa
+        key='PERIODIC',
         shape=[1],
         dtype=None),
     'COMPUTATIONAL_METHOD': Keyword(
         name='ComputationalMethod',
         definition='A computational method according to the RoMM',  # noqa
         key='COMPUTATIONAL_METHOD',
-        shape=[1],
-        dtype=None),
-    'COMPRESSIBILITY_MODEL': Keyword(
-        name='CompressibilityModel',
-        definition='Compressibility model',  # noqa
-        key='COMPRESSIBILITY_MODEL',
         shape=[1],
         dtype=None),
     'BOUNDARY': Keyword(

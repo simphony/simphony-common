@@ -10,7 +10,7 @@ class TurbulenceModel(PhysicsEquation):
 
     cuba_key = CUBA.TURBULENCE_MODEL
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description

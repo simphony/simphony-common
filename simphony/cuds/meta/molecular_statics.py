@@ -10,7 +10,7 @@ class MolecularStatics(PhysicsEquation):
 
     cuba_key = CUBA.MOLECULAR_STATICS
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description

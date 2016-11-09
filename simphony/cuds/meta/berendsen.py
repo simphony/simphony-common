@@ -14,8 +14,8 @@ class Berendsen(Thermostat):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  coupling_time=0.0001,
                  temperature=None):
 

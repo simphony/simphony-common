@@ -14,8 +14,8 @@ class SurfaceTensionRelation(MaterialRelation):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  surface_tension=0.07):
 
         self.material = material

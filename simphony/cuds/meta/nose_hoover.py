@@ -14,8 +14,8 @@ class NoseHoover(Thermostat):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  coupling_time=1.0,
                  temperature=None):
 

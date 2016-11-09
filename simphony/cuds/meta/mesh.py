@@ -10,7 +10,7 @@ class Mesh(CUDSComponent):
 
     cuba_key = CUBA.MESH
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description

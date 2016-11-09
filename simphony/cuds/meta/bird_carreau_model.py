@@ -13,11 +13,11 @@ class BirdCarreauModel(RheologyModel):
 
     def __init__(self,
                  data=None,
-                 description="",
-                 name="",
-                 initial_viscosity=0.001,
+                 description=None,
+                 name=None,
+                 initial_viscosity="1e-3",
                  linear_constant=1.0,
-                 maximum_viscosity=1e-05,
+                 maximum_viscosity="1e-5",
                  power_law_index=0.5):
 
         self.power_law_index = power_law_index

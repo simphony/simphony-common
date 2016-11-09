@@ -10,7 +10,7 @@ class GranularDynamics(PhysicsEquation):
 
     cuba_key = CUBA.GRANULAR_DYNAMICS
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, data=None, description=None, name=None):
 
         self.name = name
         self.description = description

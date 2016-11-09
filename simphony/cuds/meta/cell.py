@@ -1,18 +1,19 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .mesh_element import MeshElement
+from .cuds_component import CUDSComponent
 
 
-class Cell(MeshElement):
+class Cell(CUDSComponent):
     '''Element for storing 3D geometrical objects  # noqa
     '''
 
     cuba_key = CUBA.CELL
 
-    def __init__(self, point, data=None):
+    def __init__(self, data=None, description=None, name=None):
 
-        self.point = point
+        self.name = name
+        self.description = description
         if data:
             internal_data = self.data
             internal_data.update(data)
@@ -47,8 +48,8 @@ class Cell(MeshElement):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.POINT)
+        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
 
     @classmethod
     def parents(cls):
-        return (CUBA.MESH_ELEMENT, CUBA.CUDS_ITEM)
+        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

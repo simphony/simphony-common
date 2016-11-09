@@ -11,7 +11,7 @@ class Basis(CUDSComponent):
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, data=None, description="", name="", vector=None):
+    def __init__(self, data=None, description=None, name=None, vector=None):
 
         if vector is None:
             self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

@@ -11,10 +11,9 @@ class Point(CUDSItem):
 
     cuba_key = CUBA.POINT
 
-    def __init__(self, data=None, position=None):
+    def __init__(self, position, data=None):
 
-        if position is None:
-            self.position = [0, 0, 0]
+        self.position = position
         if data:
             internal_data = self.data
             internal_data.update(data)

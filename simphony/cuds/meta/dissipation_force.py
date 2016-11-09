@@ -14,8 +14,8 @@ class DissipationForce(MaterialRelation):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  restitution_coefficient=1.0):
 
         self.material = material

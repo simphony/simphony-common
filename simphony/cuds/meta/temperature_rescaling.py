@@ -14,8 +14,8 @@ class TemperatureRescaling(Thermostat):
     def __init__(self,
                  material,
                  data=None,
-                 description="",
-                 name="",
+                 description=None,
+                 name=None,
                  coupling_time=1e-06,
                  temperature=None):
 
