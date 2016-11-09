@@ -32,14 +32,6 @@ class BravaisLattice(Lattice):
         self._size = [1, 1, 1]
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def primitive_cell(self):
         return self.data[CUBA.PRIMITIVE_CELL]
 
@@ -76,6 +68,14 @@ class BravaisLattice(Lattice):
     @property
     def size(self):
         return self._size
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

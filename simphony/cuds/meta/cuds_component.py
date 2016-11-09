@@ -21,14 +21,6 @@ class CUDSComponent(CUDSItem):
         self._definition = 'Base data type for the CUDS components'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def name(self):
         return self.data[CUBA.NAME]
 
@@ -55,6 +47,14 @@ class CUDSComponent(CUDSItem):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

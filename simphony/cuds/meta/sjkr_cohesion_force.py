@@ -31,14 +31,6 @@ class SjkrCohesionForce(MaterialRelation):
         self._variables = []
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def cohesion_energy_density(self):
         return self.data[CUBA.COHESION_ENERGY_DENSITY]
 
@@ -61,6 +53,14 @@ class SjkrCohesionForce(MaterialRelation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

@@ -23,14 +23,6 @@ class Version(CUDSItem):
         self._definition = 'Version of a software tool used in a simulation'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def full(self):
         return self.data[CUBA.FULL]
 
@@ -81,6 +73,14 @@ class Version(CUDSItem):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

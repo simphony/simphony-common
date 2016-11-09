@@ -28,14 +28,6 @@ class Mesh(CUDSComponent):
         self._point = None
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def cell(self):
         return self._cell
 
@@ -54,6 +46,14 @@ class Mesh(CUDSComponent):
     @property
     def point(self):
         return self._point
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

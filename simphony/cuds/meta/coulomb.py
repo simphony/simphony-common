@@ -33,14 +33,6 @@ class Coulomb(PairPotential):
         self._variables = []
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def dielectric_constant(self):
         return self.data[CUBA.DIELECTRIC_CONSTANT]
 
@@ -75,6 +67,14 @@ class Coulomb(PairPotential):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

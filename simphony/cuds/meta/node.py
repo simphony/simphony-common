@@ -22,14 +22,6 @@ class Node(CUDSComponent):
         self._definition = 'A node on a structured grid like lattice'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def index(self):
         return self.data[CUBA.INDEX]
 
@@ -46,6 +38,14 @@ class Node(CUDSComponent):
         return self._definition
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -53,7 +53,7 @@ class Node(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.INDEX, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

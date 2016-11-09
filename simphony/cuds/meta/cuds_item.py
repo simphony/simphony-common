@@ -17,16 +17,16 @@ class CUDSItem(object):
         self._definition = 'Root of all CUDS types'  # noqa
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

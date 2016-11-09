@@ -26,14 +26,6 @@ class IntegrationStep(ComputationalMethod):
         self._physics_equation = []
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def final(self):
         return self.data[CUBA.FINAL]
 
@@ -78,6 +70,14 @@ class IntegrationStep(ComputationalMethod):
     @property
     def physics_equation(self):
         return self._physics_equation
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

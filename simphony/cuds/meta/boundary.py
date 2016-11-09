@@ -22,14 +22,6 @@ class Boundary(CUDSComponent):
         self._definition = 'System boundary'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def condition(self):
         return self.data[CUBA.CONDITION]
 
@@ -49,6 +41,14 @@ class Boundary(CUDSComponent):
         return self._definition
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -56,7 +56,7 @@ class Boundary(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.CONDITION, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION, CUBA.NAME)
 
     @classmethod
     def parents(cls):

@@ -23,14 +23,6 @@ class Basis(CUDSComponent):
         self._definition = 'Space basis vectors (row wise)'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def vector(self):
         return self.data[CUBA.VECTOR]
 
@@ -49,6 +41,14 @@ class Basis(CUDSComponent):
         return self._definition
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -56,7 +56,7 @@ class Basis(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

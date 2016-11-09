@@ -390,29 +390,6 @@ class CodeGenerator(object):
         return {!r}'''.format(tuple('CUBA.{}'.format(parent)
                                     for parent in self.mro))))
 
-    def _setup_data_member(self):
-        """Sets up the internal self.data which is the DataContainer
-        storage for all non-system variables.
-        """
-
-        self.imports.append(IMPORT_PATHS['DataContainer'])
-
-        self.init_body.append('''
-        self._data = DataContainer()
-        ''')
-
-        self.methods.append('''
-    @property
-    def data(self):
-        return DataContainer(self._data)
-        ''')
-
-        self.methods.append('''
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-        ''')
-
     def _setup_user_variable_code(self):
         ''' Populate code for user-defined attributes '''
 
@@ -654,6 +631,32 @@ class CodeGenerator(object):
             self._uid = uuid.uuid4()
         return self._uid''')
 
+    def populate_data(self, contents):
+        """Sets up the internal self.data which is the DataContainer
+        storage for all non-system variables.
+        """
+
+        self.imports.append(IMPORT_PATHS['DataContainer'])
+
+        # Put it in front because other data depend on it.
+        self.init_body.insert(0, '''
+        self._data = DataContainer()
+        ''')
+
+        self.methods.append('''
+    @property
+    def data(self):
+        return DataContainer(self._data)
+        ''')
+
+        self.methods.append('''
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+        ''')
+
+    # End populate methods
+
     def collect_parents_to_mro(self, generators):
         ''' Recursively collect all the inherited into CodeGenerator.mro
         Assume single inheritence, i.e. no multiple parents
@@ -860,7 +863,6 @@ class CodeGenerator(object):
 
         """
         # Populate codes before writing
-        self._setup_data_member()
         self._setup_user_variable_code()
         self._setup_system_code()
         self._setup_module_variables()

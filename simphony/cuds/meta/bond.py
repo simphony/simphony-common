@@ -20,14 +20,6 @@ class Bond(CUDSItem):
         self._definition = 'A bond between two or more atoms or particles'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def particle(self):
         return self.data[CUBA.PARTICLE]
 
@@ -45,6 +37,14 @@ class Bond(CUDSItem):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

@@ -21,20 +21,20 @@ class Engine(SoftwareTool):
         self._engine_feature = None
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
     @property
     def engine_feature(self):
         return self.data[CUBA.ENGINE_FEATURE]
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

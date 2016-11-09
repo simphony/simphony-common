@@ -22,14 +22,6 @@ class Atom(Particle):
         self._definition = 'An atom'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def mass(self):
         return self.data[CUBA.MASS]
 
@@ -46,6 +38,14 @@ class Atom(Particle):
         return self._definition
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -53,7 +53,7 @@ class Atom(Particle):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.MASS, CUBA.UUID, CUBA.POSITION)
+        return (CUBA.UUID, CUBA.MASS, CUBA.POSITION)
 
     @classmethod
     def parents(cls):

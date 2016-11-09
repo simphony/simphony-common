@@ -20,14 +20,6 @@ class MeshElement(CUDSItem):
         self._definition = 'An element for storing geometrical objects'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def point(self):
         return self.data[CUBA.POINT]
 
@@ -45,6 +37,14 @@ class MeshElement(CUDSItem):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

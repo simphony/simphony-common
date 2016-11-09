@@ -27,14 +27,6 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         self._variables = [CUBA.ELECTRIC_FIELD, CUBA.CHARGE]
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def electrostatic_field(self):
         return self.data[CUBA.ELECTROSTATIC_FIELD]
 
@@ -57,6 +49,14 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

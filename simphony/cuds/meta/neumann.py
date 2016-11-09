@@ -27,14 +27,6 @@ class Neumann(Condition):
         self._definition = 'Neumann boundary condition'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def material(self):
         return self.data[CUBA.MATERIAL]
 
@@ -69,6 +61,14 @@ class Neumann(Condition):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

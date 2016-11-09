@@ -35,14 +35,6 @@ class LennardJones_6_12(PairPotential):
         self._variables = [CUBA.POSITION, CUBA.POTENTIAL_ENERGY]
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def energy_well_depth(self):
         return self.data[CUBA.ENERGY_WELL_DEPTH]
 
@@ -89,6 +81,14 @@ class LennardJones_6_12(PairPotential):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

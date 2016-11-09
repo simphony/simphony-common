@@ -20,14 +20,6 @@ class SoftwareTool(CUDSItem):
         self._definition = 'Represents a software tool which is used to solve the model or in pre/post processing'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def version(self):
         return self.data[CUBA.VERSION]
 
@@ -43,6 +35,14 @@ class SoftwareTool(CUDSItem):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

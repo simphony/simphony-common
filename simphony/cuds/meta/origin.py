@@ -23,14 +23,6 @@ class Origin(CUDSComponent):
         self._definition = 'The origin of a space system'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def position(self):
         return self.data[CUBA.POSITION]
 
@@ -47,6 +39,14 @@ class Origin(CUDSComponent):
         return self._definition
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -54,7 +54,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.POSITION, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
 
     @classmethod
     def parents(cls):

@@ -26,14 +26,6 @@ class MaterialRelation(ModelEquation):
         self._variables = []
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def material(self):
         return self.data[CUBA.MATERIAL]
 
@@ -59,6 +51,14 @@ class MaterialRelation(ModelEquation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):
