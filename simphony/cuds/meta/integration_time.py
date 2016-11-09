@@ -13,8 +13,8 @@ class IntegrationTime(ComputationalMethod):
 
     def __init__(self,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  current=0.0,
                  size=0.0,
                  final=0.0):

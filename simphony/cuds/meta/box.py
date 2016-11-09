@@ -13,8 +13,8 @@ class Box(Boundary):
 
     def __init__(self,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  condition=None,
                  vector=None):
 

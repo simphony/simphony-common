@@ -14,8 +14,8 @@ class Coulomb(PairPotential):
     def __init__(self,
                  material,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  cutoff_distance=1.0,
                  dielectric_constant=1.0):
 

@@ -13,8 +13,8 @@ class PrimitiveCell(CUDSComponent):
 
     def __init__(self,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  lattice_vectors=None):
 
         if lattice_vectors is None:

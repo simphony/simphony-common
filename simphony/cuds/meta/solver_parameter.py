@@ -10,7 +10,7 @@ class SolverParameter(CUDSComponent):
 
     cuba_key = CUBA.SOLVER_PARAMETER
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, data=None, description="", name=""):
 
         self.name = name
         self.description = description

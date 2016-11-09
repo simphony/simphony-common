@@ -10,7 +10,7 @@ class ThermalModel(PhysicsEquation):
 
     cuba_key = CUBA.THERMAL_MODEL
 
-    def __init__(self, data=None, description=None, name=None):
+    def __init__(self, data=None, description="", name=""):
 
         self.name = name
         self.description = description

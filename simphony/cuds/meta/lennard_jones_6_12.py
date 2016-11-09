@@ -14,8 +14,8 @@ class LennardJones_6_12(PairPotential):
     def __init__(self,
                  material,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  van_der_waals_radius=1.0,
                  cutoff_distance=1.0,
                  energy_well_depth=1.0):

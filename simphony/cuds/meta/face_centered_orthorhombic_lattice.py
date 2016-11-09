@@ -13,8 +13,8 @@ class FaceCenteredOrthorhombicLattice(BravaisLattice):
     def __init__(self,
                  primitive_cell,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  lattice_parameter=None):
 
         self.primitive_cell = primitive_cell
