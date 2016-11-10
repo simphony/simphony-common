@@ -11,7 +11,7 @@ class Version(CUDSItem):
 
     cuba_key = CUBA.VERSION
 
-    def __init__(self, minor, patch, major, full, data=None):
+    def __init__(self, minor, patch, major, full):
 
         self._data = DataContainer()
 
@@ -71,16 +71,16 @@ class Version(CUDSItem):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

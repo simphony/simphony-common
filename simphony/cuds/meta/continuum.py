@@ -10,7 +10,7 @@ class Continuum(ComputationalModel):
 
     cuba_key = CUBA.CONTINUUM
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, description="", name=""):
 
         self._data = DataContainer()
 
@@ -20,16 +20,16 @@ class Continuum(ComputationalModel):
         self._definition = 'Continuum model category according to the RoMM'  # noqa
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

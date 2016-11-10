@@ -11,12 +11,7 @@ class Dirichlet(Condition):
 
     cuba_key = CUBA.DIRICHLET
 
-    def __init__(self,
-                 data=None,
-                 description="",
-                 name="",
-                 variable=None,
-                 material=None):
+    def __init__(self, description="", name="", variable=None, material=None):
 
         self._data = DataContainer()
 
@@ -60,20 +55,20 @@ class Dirichlet(Condition):
         self.data = data
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

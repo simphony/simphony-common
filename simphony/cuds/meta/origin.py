@@ -11,7 +11,7 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, data=None, description="", name="", position=None):
+    def __init__(self, description="", name="", position=None):
 
         self._data = DataContainer()
 
@@ -35,16 +35,16 @@ class Origin(CUDSComponent):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

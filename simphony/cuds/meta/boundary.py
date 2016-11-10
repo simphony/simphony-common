@@ -11,7 +11,7 @@ class Boundary(CUDSComponent):
 
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, condition, data=None, description="", name=""):
+    def __init__(self, condition, description="", name=""):
 
         self._data = DataContainer()
 
@@ -37,16 +37,16 @@ class Boundary(CUDSComponent):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

@@ -11,7 +11,7 @@ class Node(CUDSComponent):
 
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, data=None, description="", name=""):
+    def __init__(self, index, description="", name=""):
 
         self._data = DataContainer()
 
@@ -34,16 +34,16 @@ class Node(CUDSComponent):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

@@ -10,7 +10,7 @@ class EngineFeature(CUDSItem):
 
     cuba_key = CUBA.ENGINE_FEATURE
 
-    def __init__(self, data=None):
+    def __init__(self):
 
         self._data = DataContainer()
 
@@ -20,14 +20,6 @@ class EngineFeature(CUDSItem):
         self._definition = 'Provides a physics equation and methods that engines provides to solve them'  # noqa
         # This is a system-managed, read-only attribute
         self._computational_method = None
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def physics_equation(self):
@@ -40,6 +32,14 @@ class EngineFeature(CUDSItem):
     @property
     def computational_method(self):
         return self.data[CUBA.COMPUTATIONAL_METHOD]
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

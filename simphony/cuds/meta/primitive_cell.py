@@ -11,11 +11,7 @@ class PrimitiveCell(CUDSComponent):
 
     cuba_key = CUBA.PRIMITIVE_CELL
 
-    def __init__(self,
-                 data=None,
-                 description="",
-                 name="",
-                 lattice_vectors=None):
+    def __init__(self, description="", name="", lattice_vectors=None):
 
         self._data = DataContainer()
 
@@ -40,16 +36,16 @@ class PrimitiveCell(CUDSComponent):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

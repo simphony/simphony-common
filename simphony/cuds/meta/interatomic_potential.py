@@ -10,7 +10,7 @@ class InteratomicPotential(MaterialRelation):
 
     cuba_key = CUBA.INTERATOMIC_POTENTIAL
 
-    def __init__(self, material, data=None, description="", name=""):
+    def __init__(self, material, description="", name=""):
 
         self._data = DataContainer()
 
@@ -25,14 +25,6 @@ class InteratomicPotential(MaterialRelation):
         self._variables = []
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
@@ -43,6 +35,14 @@ class InteratomicPotential(MaterialRelation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

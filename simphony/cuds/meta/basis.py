@@ -11,7 +11,7 @@ class Basis(CUDSComponent):
 
     cuba_key = CUBA.BASIS
 
-    def __init__(self, data=None, description="", name="", vector=None):
+    def __init__(self, description="", name="", vector=None):
 
         self._data = DataContainer()
 
@@ -37,16 +37,16 @@ class Basis(CUDSComponent):
         self.data = data
 
     @property
+    def definition(self):
+        return self._definition
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

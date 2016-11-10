@@ -12,7 +12,6 @@ class PowerLawViscosityModel(RheologyModel):
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
-                 data=None,
                  description="",
                  name="",
                  linear_constant=1e-05,
@@ -84,14 +83,6 @@ class PowerLawViscosityModel(RheologyModel):
         self.data = data
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
@@ -102,6 +93,14 @@ class PowerLawViscosityModel(RheologyModel):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

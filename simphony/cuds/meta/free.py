@@ -10,7 +10,7 @@ class Free(Condition):
 
     cuba_key = CUBA.FREE
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, description="", name=""):
 
         self._data = DataContainer()
 
@@ -24,20 +24,20 @@ class Free(Condition):
         self._definition = 'Free boundary condition'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

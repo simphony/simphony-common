@@ -13,7 +13,6 @@ class DissipationForce(MaterialRelation):
 
     def __init__(self,
                  material,
-                 data=None,
                  description="",
                  name="",
                  restitution_coefficient=1.0):
@@ -44,14 +43,6 @@ class DissipationForce(MaterialRelation):
         self.data = data
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
@@ -62,6 +53,14 @@ class DissipationForce(MaterialRelation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

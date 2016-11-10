@@ -10,7 +10,7 @@ class Dem(ComputationalMethod):
 
     cuba_key = CUBA.DEM
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, description="", name=""):
 
         self._data = DataContainer()
 
@@ -22,20 +22,20 @@ class Dem(ComputationalMethod):
         self._definition = 'Discrete element method'  # noqa
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def physics_equation(self):
         return self._physics_equation
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

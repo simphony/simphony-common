@@ -12,7 +12,6 @@ class IntegrationTime(ComputationalMethod):
     cuba_key = CUBA.INTEGRATION_TIME
 
     def __init__(self,
-                 data=None,
                  description="",
                  name="",
                  current=0.0,
@@ -68,20 +67,20 @@ class IntegrationTime(ComputationalMethod):
         self.data = data
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
     @property
     def physics_equation(self):
         return self._physics_equation
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):
