@@ -11,24 +11,15 @@ class IntegrationStep(ComputationalMethod):
 
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self,
-                 size,
-                 final,
-                 data=None,
-                 description="",
-                 name="",
-                 current=0):
+    def __init__(self, size, final, description="", name="", current=0):
+
+        self._data = DataContainer()
 
         self.final = final
         self.size = size
         self.current = current
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).'  # noqa
         # This is a system-managed, read-only attribute
@@ -73,26 +64,20 @@ class IntegrationStep(ComputationalMethod):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
     @property
     def physics_equation(self):
         return self._physics_equation
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

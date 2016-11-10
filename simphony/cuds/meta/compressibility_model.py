@@ -10,35 +10,18 @@ class CompressibilityModel(PhysicsEquation):
 
     cuba_key = CUBA.COMPRESSIBILITY_MODEL
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, description="", name=""):
+
+        self._data = DataContainer()
 
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Compressibility model'  # noqa
         # This is a system-managed, read-only attribute
         self._models = []
         # This is a system-managed, read-only attribute
         self._variables = []
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -51,6 +34,14 @@ class CompressibilityModel(PhysicsEquation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):
