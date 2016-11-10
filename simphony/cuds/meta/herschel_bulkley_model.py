@@ -110,9 +110,9 @@ class HerschelBulkleyModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME,
-                CUBA.LINEAR_CONSTANT, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.LINEAR_CONSTANT,
+                CUBA.NAME, CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME,
+                CUBA.UUID)
 
     @classmethod
     def parents(cls):

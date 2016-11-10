@@ -54,7 +54,7 @@ class MeshElement(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.POINT)
+        return (CUBA.POINT, CUBA.UUID)
 
     @classmethod
     def parents(cls):

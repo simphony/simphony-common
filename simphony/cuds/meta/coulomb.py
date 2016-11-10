@@ -84,8 +84,8 @@ class Coulomb(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.DIELECTRIC_CONSTANT,
-                CUBA.CUTOFF_DISTANCE, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.CUTOFF_DISTANCE, CUBA.DESCRIPTION,
+                CUBA.DIELECTRIC_CONSTANT, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

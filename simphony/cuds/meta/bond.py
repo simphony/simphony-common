@@ -54,7 +54,7 @@ class Bond(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.PARTICLE)
+        return (CUBA.PARTICLE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

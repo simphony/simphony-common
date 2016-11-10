@@ -63,8 +63,8 @@ class Mesh(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CELL, CUBA.EDGE, CUBA.DESCRIPTION, CUBA.POINT, CUBA.FACE,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.CELL, CUBA.DESCRIPTION, CUBA.EDGE, CUBA.FACE, CUBA.NAME,
+                CUBA.POINT, CUBA.UUID)
 
     @classmethod
     def parents(cls):

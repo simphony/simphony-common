@@ -82,8 +82,8 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.SURFACE_TENSION, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
+                CUBA.SURFACE_TENSION, CUBA.UUID)
 
     @classmethod
     def parents(cls):

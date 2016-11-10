@@ -85,8 +85,8 @@ class BravaisLattice(Lattice):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
-                CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.LATTICE_PARAMETER, CUBA.NAME,
+                CUBA.ORIGIN, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

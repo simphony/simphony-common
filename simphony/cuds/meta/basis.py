@@ -56,7 +56,7 @@ class Basis(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID, CUBA.VECTOR)
 
     @classmethod
     def parents(cls):

@@ -87,8 +87,8 @@ class IntegrationStep(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.UUID, CUBA.DESCRIPTION,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.FINAL, CUBA.NAME)
+        return (CUBA.CURRENT, CUBA.DESCRIPTION, CUBA.FINAL, CUBA.NAME,
+                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

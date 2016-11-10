@@ -58,8 +58,8 @@ class TetragonalLattice(BravaisLattice):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
-                CUBA.UUID, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.LATTICE_PARAMETER, CUBA.NAME,
+                CUBA.ORIGIN, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

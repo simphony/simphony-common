@@ -70,8 +70,8 @@ class SjkrCohesionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.COHESION_ENERGY_DENSITY, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.COHESION_ENERGY_DENSITY, CUBA.DESCRIPTION, CUBA.MATERIAL,
+                CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

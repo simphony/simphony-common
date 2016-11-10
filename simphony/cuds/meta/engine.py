@@ -44,7 +44,7 @@ class Engine(SoftwareTool):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VERSION, CUBA.UUID, CUBA.ENGINE_FEATURE)
+        return (CUBA.ENGINE_FEATURE, CUBA.UUID, CUBA.VERSION)
 
     @classmethod
     def parents(cls):

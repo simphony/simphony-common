@@ -319,7 +319,7 @@ class CodeGenerator(object):
         # They are not CUBA attributes and therefore not supported
         # parameter
         def get_cuba_attribute():
-            for attr in self.all_attributes:
+            for attr in sorted(self.all_attributes):
                 if attr not in EXCLUDE_SUPPORTED_PARAMETERS:
                     yield 'CUBA.'+attr.upper()
 

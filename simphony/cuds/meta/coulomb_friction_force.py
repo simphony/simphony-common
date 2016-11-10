@@ -70,8 +70,8 @@ class CoulombFrictionForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.FRICTION_COEFFICIENT, CUBA.DESCRIPTION, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.FRICTION_COEFFICIENT, CUBA.MATERIAL,
+                CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

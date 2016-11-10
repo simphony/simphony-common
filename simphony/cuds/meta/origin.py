@@ -54,7 +54,7 @@ class Origin(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.POSITION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.POSITION, CUBA.UUID)
 
     @classmethod
     def parents(cls):
