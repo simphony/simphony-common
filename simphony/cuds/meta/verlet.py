@@ -54,7 +54,7 @@ class Verlet(ComputationalMethod):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.PHYSICS_EQUATION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.PHYSICS_EQUATION, CUBA.UUID)
 
     @classmethod
     def parents(cls):

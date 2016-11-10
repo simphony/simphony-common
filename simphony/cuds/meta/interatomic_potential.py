@@ -61,7 +61,7 @@ class InteratomicPotential(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

@@ -65,7 +65,7 @@ class Boundary(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION, CUBA.NAME)
+        return (CUBA.CONDITION, CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

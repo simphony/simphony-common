@@ -48,7 +48,7 @@ class Condition(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.DESCRIPTION, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

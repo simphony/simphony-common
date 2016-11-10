@@ -62,7 +62,7 @@ class Node(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

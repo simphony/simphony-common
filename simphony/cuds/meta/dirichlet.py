@@ -92,8 +92,8 @@ class Dirichlet(Condition):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.VARIABLE, CUBA.MATERIAL, CUBA.UUID,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID,
+                CUBA.VARIABLE)
 
     @classmethod
     def parents(cls):

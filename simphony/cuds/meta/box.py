@@ -86,8 +86,8 @@ class Box(Boundary):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VECTOR, CUBA.DESCRIPTION, CUBA.UUID, CUBA.CONDITION,
-                CUBA.NAME)
+        return (CUBA.CONDITION, CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID,
+                CUBA.VECTOR)
 
     @classmethod
     def parents(cls):

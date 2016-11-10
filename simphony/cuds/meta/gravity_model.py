@@ -75,7 +75,7 @@ class GravityModel(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.ACCELERATION, CUBA.DESCRIPTION, CUBA.UUID, CUBA.NAME)
+        return (CUBA.ACCELERATION, CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

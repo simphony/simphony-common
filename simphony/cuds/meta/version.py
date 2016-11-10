@@ -99,7 +99,7 @@ class Version(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.MAJOR, CUBA.FULL, CUBA.UUID, CUBA.MINOR, CUBA.PATCH)
+        return (CUBA.FULL, CUBA.MAJOR, CUBA.MINOR, CUBA.PATCH, CUBA.UUID)
 
     @classmethod
     def parents(cls):

@@ -80,8 +80,8 @@ class DissipationForce(MaterialRelation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.RESTITUTION_COEFFICIENT, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
+                CUBA.RESTITUTION_COEFFICIENT, CUBA.UUID)
 
     @classmethod
     def parents(cls):

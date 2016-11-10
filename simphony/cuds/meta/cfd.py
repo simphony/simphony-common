@@ -196,10 +196,10 @@ class Cfd(PhysicsEquation):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.TURBULENCE_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-                CUBA.DESCRIPTION, CUBA.GRAVITY_MODEL, CUBA.RHEOLOGY_MODEL,
-                CUBA.THERMAL_MODEL, CUBA.ELECTROSTATIC_MODEL,
-                CUBA.MULTIPHASE_MODEL, CUBA.NAME)
+        return (CUBA.COMPRESSIBILITY_MODEL, CUBA.DESCRIPTION,
+                CUBA.ELECTROSTATIC_MODEL, CUBA.GRAVITY_MODEL,
+                CUBA.MULTIPHASE_MODEL, CUBA.NAME, CUBA.RHEOLOGY_MODEL,
+                CUBA.THERMAL_MODEL, CUBA.TURBULENCE_MODEL, CUBA.UUID)
 
     @classmethod
     def parents(cls):

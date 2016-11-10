@@ -108,9 +108,8 @@ class LennardJones_6_12(PairPotential):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH, CUBA.MATERIAL,
-                CUBA.UUID, CUBA.CUTOFF_DISTANCE, CUBA.VAN_DER_WAALS_RADIUS,
-                CUBA.NAME)
+        return (CUBA.CUTOFF_DISTANCE, CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH,
+                CUBA.MATERIAL, CUBA.NAME, CUBA.UUID, CUBA.VAN_DER_WAALS_RADIUS)
 
     @classmethod
     def parents(cls):

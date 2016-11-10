@@ -58,7 +58,7 @@ class EngineFeature(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.UUID, CUBA.COMPUTATIONAL_METHOD)
+        return (CUBA.COMPUTATIONAL_METHOD, CUBA.PHYSICS_EQUATION, CUBA.UUID)
 
     @classmethod
     def parents(cls):

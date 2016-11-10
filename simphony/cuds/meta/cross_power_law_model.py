@@ -120,9 +120,9 @@ class CrossPowerLawModel(RheologyModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.UUID,
-                CUBA.POWER_LAW_INDEX, CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.LINEAR_CONSTANT,
+                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME, CUBA.POWER_LAW_INDEX,
+                CUBA.UUID)
 
     @classmethod
     def parents(cls):

@@ -60,8 +60,8 @@ class Particles(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.PARTICLE, CUBA.BOND, CUBA.UUID,
-                CUBA.NAME)
+        return (CUBA.BOND, CUBA.DESCRIPTION, CUBA.NAME, CUBA.PARTICLE,
+                CUBA.UUID)
 
     @classmethod
     def parents(cls):

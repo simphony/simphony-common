@@ -68,8 +68,8 @@ class FaceCenteredOrthorhombicLattice(BravaisLattice):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.PRIMITIVE_CELL, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
-                CUBA.SIZE, CUBA.UUID, CUBA.ORIGIN, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.LATTICE_PARAMETER, CUBA.NAME,
+                CUBA.ORIGIN, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

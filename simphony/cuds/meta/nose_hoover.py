@@ -97,8 +97,8 @@ class NoseHoover(Thermostat):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.TEMPERATURE, CUBA.COUPLING_TIME, CUBA.DESCRIPTION,
-                CUBA.MATERIAL, CUBA.UUID, CUBA.NAME)
+        return (CUBA.COUPLING_TIME, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
+                CUBA.TEMPERATURE, CUBA.UUID)
 
     @classmethod
     def parents(cls):

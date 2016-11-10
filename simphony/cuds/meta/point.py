@@ -61,7 +61,7 @@ class Point(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.POSITION)
+        return (CUBA.POSITION, CUBA.UUID)
 
     @classmethod
     def parents(cls):

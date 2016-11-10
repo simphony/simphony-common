@@ -68,7 +68,7 @@ class PrimitiveCell(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.LATTICE_VECTORS, CUBA.UUID, CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.LATTICE_VECTORS, CUBA.NAME, CUBA.UUID)
 
     @classmethod
     def parents(cls):

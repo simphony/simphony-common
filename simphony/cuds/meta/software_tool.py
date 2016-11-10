@@ -61,7 +61,7 @@ class SoftwareTool(CUDSItem):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.VERSION, CUBA.UUID)
+        return (CUBA.UUID, CUBA.VERSION)
 
     @classmethod
     def parents(cls):

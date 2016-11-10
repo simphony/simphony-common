@@ -79,8 +79,8 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.UUID, CUBA.ELECTROSTATIC_FIELD,
-                CUBA.NAME)
+        return (CUBA.DESCRIPTION, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME,
+                CUBA.UUID)
 
     @classmethod
     def parents(cls):

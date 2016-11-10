@@ -62,7 +62,7 @@ class Atom(Particle):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.POSITION, CUBA.MASS, CUBA.UUID)
+        return (CUBA.MASS, CUBA.POSITION, CUBA.UUID)
 
     @classmethod
     def parents(cls):
