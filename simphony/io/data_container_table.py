@@ -4,11 +4,11 @@ import uuid
 import numpy
 import tables
 
-from simphony.io.data_container_description import Record
-from simphony.io.data_conversion import (convert_from_file_type,
-                                         convert_to_file_type)
-from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer
+from .data_container_description import Record
+from .data_conversion import (convert_from_file_type,
+                              convert_to_file_type)
+from ..core.cuba import CUBA
+from ..core import DataContainer
 
 
 class DataContainerTable(MutableMapping):

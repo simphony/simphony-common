@@ -1,8 +1,8 @@
 from abc import abstractmethod
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.cuds.abc_dataset import ABCDataset
-from simphony.cuds.utils import deprecated
+from ..core.cuds_item import CUDSItem
+from .abc_dataset import ABCDataset
+from .utils import deprecated
 
 
 class ABCLattice(ABCDataset):

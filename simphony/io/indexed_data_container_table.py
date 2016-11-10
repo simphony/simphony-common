@@ -2,11 +2,11 @@ from collections import Sequence
 
 import numpy
 
-from simphony.io.data_container_description import NoUIDRecord
-from simphony.io.data_conversion import (convert_from_file_type,
-                                         convert_to_file_type)
-from simphony.core.cuba import CUBA
-from simphony.core.data_container import DataContainer
+from .data_container_description import NoUIDRecord
+from .data_conversion import (convert_from_file_type,
+                              convert_to_file_type)
+from ..core.cuba import CUBA
+from ..core.data_container import DataContainer
 
 
 class IndexedDataContainerTable(Sequence):

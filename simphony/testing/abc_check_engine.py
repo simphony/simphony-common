@@ -1,16 +1,16 @@
 import abc
 import uuid
 
-from simphony.testing.utils import (
+from .utils import (
     compare_particles_datasets, compare_mesh_datasets,
     compare_lattice_datasets)
 
-from simphony.core.cuba import CUBA
-from simphony.cuds.particles import Particles
-from simphony.cuds.particles_items import Particle
-from simphony.cuds.mesh import Mesh
-from simphony.cuds.mesh_items import Edge, Face, Cell, Point
-from simphony.cuds.lattice import make_cubic_lattice
+from ..core.cuba import CUBA
+from ..cuds.particles import Particles
+from ..cuds.particles_items import Particle
+from ..cuds.mesh import Mesh
+from ..cuds.mesh_items import Edge, Face, Cell, Point
+from ..cuds.lattice import make_cubic_lattice
 
 
 def grouper(iterable, group_size):

@@ -1,6 +1,6 @@
 import uuid
 
-from simphony.core import DataContainer
+from ..core import DataContainer
 
 
 class Particle(object):

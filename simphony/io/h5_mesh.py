@@ -7,15 +7,15 @@ and modify a file storing mesh data
 import tables
 import uuid
 
-from simphony.cuds.mesh import ABCMesh
+from ..cuds.mesh import ABCMesh
 
-from simphony.cuds.mesh_items import Edge, Face, Cell, Point
+from ..cuds.mesh_items import Edge, Face, Cell, Point
 
-from simphony.core.data_container import DataContainer
-from simphony.core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
+from ..core.cuds_item import CUDSItem
 
-from simphony.io.data_container_table import DataContainerTable
-from simphony.io.indexed_data_container_table import IndexedDataContainerTable
+from .data_container_table import DataContainerTable
+from .indexed_data_container_table import IndexedDataContainerTable
 
 MAX_POINTS_IN_EDGE = 2
 MAX_POINTS_IN_FACE = 4
