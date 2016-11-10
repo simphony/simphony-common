@@ -10,7 +10,7 @@ class ComputationalMethod(CUDSComponent):
 
     cuba_key = CUBA.COMPUTATIONAL_METHOD
 
-    def __init__(self, description="", name=""):
+    def __init__(self, data=None, description="", name=""):
 
         self._data = DataContainer()
 
@@ -22,20 +22,20 @@ class ComputationalMethod(CUDSComponent):
         self._definition = 'A computational method according to the RoMM'  # noqa
 
     @property
-    def physics_equation(self):
-        return self._physics_equation
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def physics_equation(self):
+        return self._physics_equation
+
+    @property
+    def definition(self):
+        return self._definition
 
     @property
     def uid(self):

@@ -11,7 +11,7 @@ class MeshElement(CUDSItem):
 
     cuba_key = CUBA.MESH_ELEMENT
 
-    def __init__(self, point):
+    def __init__(self, point, data=None):
 
         self._data = DataContainer()
 
@@ -35,16 +35,16 @@ class MeshElement(CUDSItem):
         self.data = data
 
     @property
-    def definition(self):
-        return self._definition
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def definition(self):
+        return self._definition
 
     @property
     def uid(self):

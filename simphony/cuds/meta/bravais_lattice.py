@@ -13,6 +13,7 @@ class BravaisLattice(Lattice):
 
     def __init__(self,
                  primitive_cell,
+                 data=None,
                  description="",
                  name="",
                  lattice_parameter=None):
@@ -58,6 +59,14 @@ class BravaisLattice(Lattice):
         self.data = data
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def origin(self):
         return self._origin
 
@@ -70,14 +79,6 @@ class BravaisLattice(Lattice):
         return self._size
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -86,7 +87,7 @@ class BravaisLattice(Lattice):
     @classmethod
     def supported_parameters(cls):
         return (CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
-                CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.UUID, CUBA.NAME)
+                CUBA.UUID, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.NAME)
 
     @classmethod
     def parents(cls):

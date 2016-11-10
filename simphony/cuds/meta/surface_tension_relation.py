@@ -11,7 +11,11 @@ class SurfaceTensionRelation(MaterialRelation):
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self, material, description="", name="",
+    def __init__(self,
+                 material,
+                 data=None,
+                 description="",
+                 name="",
                  surface_tension=0.07):
 
         self._data = DataContainer()
@@ -55,6 +59,14 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data = data
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def models(self):
         return self._models
 
@@ -65,14 +77,6 @@ class SurfaceTensionRelation(MaterialRelation):
     @property
     def variables(self):
         return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

@@ -11,7 +11,7 @@ class GravityModel(PhysicsEquation):
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, description="", name="", acceleration=None):
+    def __init__(self, data=None, description="", name="", acceleration=None):
 
         self._data = DataContainer()
 
@@ -39,6 +39,14 @@ class GravityModel(PhysicsEquation):
         self.data = data
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def models(self):
         return self._models
 
@@ -49,14 +57,6 @@ class GravityModel(PhysicsEquation):
     @property
     def variables(self):
         return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

@@ -1,27 +1,10 @@
 import numpy as np
-from simphony.cuds.abc_lattice import ABCLattice
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.data_container import DataContainer
-from simphony.cuds.primitive_cell import PrimitiveCell
 
-
-class LatticeNode(object):
-    """A single node of a lattice.
-
-    Attributes
-    ----------
-    index : tuple of int[3]
-        node index coordinate
-    data : DataContainer
-
-    """
-    def __init__(self, index, data=None):
-        self.index = index[0], index[1], index[2]
-
-        if data is None:
-            self.data = DataContainer()
-        else:
-            self.data = DataContainer(data)
+from ..core.cuds_item import CUDSItem
+from ..core.data_container import DataContainer
+from .abc_lattice import ABCLattice
+from .lattice_items import LatticeNode
+from .primitive_cell import PrimitiveCell
 
 
 class Lattice(ABCLattice):
@@ -54,63 +37,6 @@ class Lattice(ABCLattice):
         self._items_count = {
             CUDSItem.NODE: lambda: self._size
         }
-
-    def get_node(self, index):
-        """Get a copy of the node corresponding to the given index.
-
-        Parameters
-        ----------
-        index : int[3]
-            node index coordinate
-
-        Returns
-        -------
-        A reference to a LatticeNode object
-
-        """
-        tuple_index = tuple(index)
-        if tuple_index[0] < 0 or tuple_index[1] < 0 or tuple_index[2] < 0:
-            raise IndexError('invalid index: {}'.format(tuple_index))
-        return LatticeNode(tuple_index, self._dcs[tuple_index])
-
-    def update_nodes(self, nodes):
-        """Update the corresponding lattice nodes (data copied).
-
-        Parameters
-        ----------
-        nodes : iterable of LatticeNode objects
-            reference to LatticeNode objects from where the data is copied
-            to the Lattice
-
-        """
-        for node in nodes:
-            index = node.index
-            if any(value < 0 for value in index):
-                raise IndexError('invalid index: {}'.format(index))
-            self._dcs[index] = DataContainer(node.data)
-
-    def iter_nodes(self, indices=None):
-        """Get an iterator over the LatticeNodes described by the indices.
-
-        Parameters
-        ----------
-        indices : iterable set of int[3], optional
-            When indices (i.e. node index coordinates) are provided, then
-            nodes are returned in the same order of the provided indices.
-            If indices is None, there is no restriction on the order of the
-            returned nodes.
-
-        Returns
-        -------
-        A generator for LatticeNode objects
-
-        """
-        if indices is None:
-            for index, val in np.ndenumerate(self._dcs):
-                yield self.get_node(index)
-        else:
-            for index in indices:
-                yield self.get_node(index)
 
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
@@ -154,6 +80,63 @@ class Lattice(ABCLattice):
     @data.setter
     def data(self, value):
         self._data = DataContainer(value)
+
+    def _get_node(self, index):
+        """Get a copy of the node corresponding to the given index.
+
+        Parameters
+        ----------
+        index : int[3]
+            node index coordinate
+
+        Returns
+        -------
+        A reference to a LatticeNode object
+
+        """
+        tuple_index = tuple(index)
+        if tuple_index[0] < 0 or tuple_index[1] < 0 or tuple_index[2] < 0:
+            raise IndexError('invalid index: {}'.format(tuple_index))
+        return LatticeNode(tuple_index, self._dcs[tuple_index])
+
+    def _update_nodes(self, nodes):
+        """Update the corresponding lattice nodes (data copied).
+
+        Parameters
+        ----------
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects from where the data is copied
+            to the Lattice
+
+        """
+        for node in nodes:
+            index = node.index
+            if any(value < 0 for value in index):
+                raise IndexError('invalid index: {}'.format(index))
+            self._dcs[index] = DataContainer(node.data)
+
+    def _iter_nodes(self, indices=None):
+        """Get an iterator over the LatticeNodes described by the indices.
+
+        Parameters
+        ----------
+        indices : iterable set of int[3], optional
+            When indices (i.e. node index coordinates) are provided, then
+            nodes are returned in the same order of the provided indices.
+            If indices is None, there is no restriction on the order of the
+            returned nodes.
+
+        Returns
+        -------
+        A generator for LatticeNode objects
+
+        """
+        if indices is None:
+            for index, val in np.ndenumerate(self._dcs):
+                yield self.get_node(index)
+        else:
+            for index in indices:
+                yield self.get_node(index)
 
 
 def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):

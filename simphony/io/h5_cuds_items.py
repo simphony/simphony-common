@@ -3,7 +3,7 @@ from collections import MutableMapping
 
 import tables
 
-from simphony.io.data_container_table import DataContainerTable
+from .data_container_table import DataContainerTable
 
 
 class H5CUDSItems(MutableMapping):

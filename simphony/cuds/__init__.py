@@ -3,8 +3,10 @@ from .abc_mesh import ABCMesh
 from .abc_particles import ABCParticles
 from .mesh import Mesh
 from .mesh_items import Point, Element, Edge, Face, Cell
-from .lattice import Lattice, LatticeNode
-from .particles import Particles, Particle, Bond
+from .lattice import Lattice
+from .lattice_items import LatticeNode
+from .particles import Particles
+from .particles_items import Particle, Bond
 from .model import CUDS
 from .simulation import Simulation
 from .meta import api

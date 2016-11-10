@@ -10,7 +10,7 @@ class CompressibilityModel(PhysicsEquation):
 
     cuba_key = CUBA.COMPRESSIBILITY_MODEL
 
-    def __init__(self, description="", name=""):
+    def __init__(self, data=None, description="", name=""):
 
         self._data = DataContainer()
 
@@ -24,6 +24,14 @@ class CompressibilityModel(PhysicsEquation):
         self._variables = []
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def definition(self):
         return self._definition
 
@@ -34,14 +42,6 @@ class CompressibilityModel(PhysicsEquation):
     @property
     def variables(self):
         return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

@@ -10,7 +10,7 @@ class Cell(MeshElement):
 
     cuba_key = CUBA.CELL
 
-    def __init__(self, point):
+    def __init__(self, point, data=None):
 
         self._data = DataContainer()
 
@@ -19,16 +19,16 @@ class Cell(MeshElement):
         self._definition = 'Element for storing 3D geometrical objects'  # noqa
 
     @property
-    def definition(self):
-        return self._definition
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def definition(self):
+        return self._definition
 
     @property
     def uid(self):

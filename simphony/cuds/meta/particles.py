@@ -10,7 +10,7 @@ class Particles(CUDSComponent):
 
     cuba_key = CUBA.PARTICLES
 
-    def __init__(self, description="", name=""):
+    def __init__(self, data=None, description="", name=""):
 
         self._data = DataContainer()
 
@@ -22,6 +22,14 @@ class Particles(CUDSComponent):
         self._particle = None
         # This is a system-managed, read-only attribute
         self._bond = None
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def definition(self):
@@ -36,14 +44,6 @@ class Particles(CUDSComponent):
         return self._bond
 
     @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def uid(self):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
@@ -51,8 +51,8 @@ class Particles(CUDSComponent):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.NAME, CUBA.PARTICLE, CUBA.DESCRIPTION, CUBA.UUID,
-                CUBA.BOND)
+        return (CUBA.DESCRIPTION, CUBA.PARTICLE, CUBA.BOND, CUBA.UUID,
+                CUBA.NAME)
 
     @classmethod
     def parents(cls):

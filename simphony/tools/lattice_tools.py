@@ -1,7 +1,7 @@
 from itertools import permutations, combinations, product
 
 import numpy
-from simphony.cuds.primitive_cell import BravaisLattice
+from ..cuds.primitive_cell import BravaisLattice
 
 
 def vector_len(vec):

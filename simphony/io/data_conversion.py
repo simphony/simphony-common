@@ -1,7 +1,7 @@
 import uuid
 
-from simphony.core.keywords import KEYWORDS
-from simphony.core.cuba import CUBA
+from ..core.keywords import KEYWORDS
+from ..core.cuba import CUBA
 
 
 def convert_to_file_type(value, cuba):

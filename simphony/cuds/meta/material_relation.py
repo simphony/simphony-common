@@ -11,7 +11,7 @@ class MaterialRelation(ModelEquation):
 
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material, description="", name=""):
+    def __init__(self, material, data=None, description="", name=""):
 
         self._data = DataContainer()
 
@@ -41,6 +41,14 @@ class MaterialRelation(ModelEquation):
         self.data = data
 
     @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
+
+    @property
     def definition(self):
         return self._definition
 
@@ -51,14 +59,6 @@ class MaterialRelation(ModelEquation):
     @property
     def variables(self):
         return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

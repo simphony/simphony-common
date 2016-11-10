@@ -1,4 +1,4 @@
-from simphony.core import data_container as dc
+from ..core import data_container as dc
 
 
 class Point(object):

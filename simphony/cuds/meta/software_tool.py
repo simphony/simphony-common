@@ -11,7 +11,7 @@ class SoftwareTool(CUDSItem):
 
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, version=None):
+    def __init__(self, data=None, version=None):
 
         self._data = DataContainer()
 
@@ -33,16 +33,16 @@ class SoftwareTool(CUDSItem):
         self.data = data
 
     @property
-    def definition(self):
-        return self._definition
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def definition(self):
+        return self._definition
 
     @property
     def uid(self):

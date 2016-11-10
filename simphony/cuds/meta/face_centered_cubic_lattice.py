@@ -12,6 +12,7 @@ class FaceCenteredCubicLattice(BravaisLattice):
 
     def __init__(self,
                  primitive_cell,
+                 data=None,
                  description="",
                  name="",
                  lattice_parameter=None):
@@ -31,20 +32,20 @@ class FaceCenteredCubicLattice(BravaisLattice):
         self._size = [1, 1, 1]
 
     @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def origin(self):
-        return self._origin
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def definition(self):
+        return self._definition
+
+    @property
+    def origin(self):
+        return self._origin
 
     @property
     def uid(self):
@@ -58,8 +59,8 @@ class FaceCenteredCubicLattice(BravaisLattice):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
-                CUBA.UUID, CUBA.PRIMITIVE_CELL, CUBA.SIZE, CUBA.NAME)
+        return (CUBA.PRIMITIVE_CELL, CUBA.LATTICE_PARAMETER, CUBA.DESCRIPTION,
+                CUBA.SIZE, CUBA.UUID, CUBA.ORIGIN, CUBA.NAME)
 
     @classmethod
     def parents(cls):

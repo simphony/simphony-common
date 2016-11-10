@@ -1,9 +1,9 @@
-from simphony.cuds import ABCLattice, LatticeNode
-from simphony.cuds.primitive_cell import PrimitiveCell, BravaisLattice
-from simphony.io.indexed_data_container_table import IndexedDataContainerTable
-from simphony.io.data_container_description import NoUIDRecord
-from simphony.core.data_container import DataContainer
-from simphony.core.cuds_item import CUDSItem
+from ..cuds import ABCLattice, LatticeNode
+from ..cuds.primitive_cell import PrimitiveCell, BravaisLattice
+from .indexed_data_container_table import IndexedDataContainerTable
+from .data_container_description import NoUIDRecord
+from ..core.data_container import DataContainer
+from ..core.cuds_item import CUDSItem
 
 import numpy as np
 
@@ -80,64 +80,6 @@ class H5Lattice(ABCLattice):
 
         return cls(group)
 
-    def get_node(self, index):
-        """ Get a copy of the node corresponding to the given index.
-
-        Parameters
-        ----------
-        index : int[3]
-            node index coordinate
-
-        Returns
-        -------
-        node : LatticeNode
-
-        """
-        try:
-            n = np.ravel_multi_index(index, self._size)
-        except ValueError:
-            raise IndexError('invalid index: {}'.format(index))
-        return LatticeNode(index, self._table[n])
-
-    def update_nodes(self, nodes):
-        """ Updates H5Lattice data for a LatticeNode
-
-        Parameters
-        ----------
-        nodes : iterable of LatticeNode objects
-            reference to LatticeNode objects
-
-        """
-        # Find correct row for node
-        for node in nodes:
-            index = node.index
-            try:
-                n = np.ravel_multi_index(index, self._size)
-            except ValueError:
-                raise IndexError('invalid index: {}'.format(index))
-            self._table[n] = node.data
-
-    def iter_nodes(self, indices=None):
-        """ Get an iterator over the LatticeNodes described by the ids.
-
-        Parameters
-        ----------
-        indices : iterable set of int[3], optional
-            node index coordinates
-
-        Returns
-        -------
-        A generator for LatticeNode objects
-
-        """
-        if indices is None:
-            for row_number, data in enumerate(self._table):
-                index = np.unravel_index(row_number, self._size)
-                yield LatticeNode(index, data)
-        else:
-            for index in indices:
-                yield self.get_node(index)
-
     def count_of(self, item_type):
         """ Return the count of item_type in the container.
 
@@ -193,3 +135,63 @@ class H5Lattice(ABCLattice):
             self._data.append(value)
         else:
             self._data[0] = value
+
+    # Private
+
+    def _get_node(self, index):
+        """ Get a copy of the node corresponding to the given index.
+
+        Parameters
+        ----------
+        index : int[3]
+            node index coordinate
+
+        Returns
+        -------
+        node : LatticeNode
+
+        """
+        try:
+            n = np.ravel_multi_index(index, self._size)
+        except ValueError:
+            raise IndexError('invalid index: {}'.format(index))
+        return LatticeNode(index, self._table[n])
+
+    def _update_nodes(self, nodes):
+        """ Updates H5Lattice data for a LatticeNode
+
+        Parameters
+        ----------
+        nodes : iterable of LatticeNode objects
+            reference to LatticeNode objects
+
+        """
+        # Find correct row for node
+        for node in nodes:
+            index = node.index
+            try:
+                n = np.ravel_multi_index(index, self._size)
+            except ValueError:
+                raise IndexError('invalid index: {}'.format(index))
+            self._table[n] = node.data
+
+    def _iter_nodes(self, indices=None):
+        """ Get an iterator over the LatticeNodes described by the ids.
+
+        Parameters
+        ----------
+        indices : iterable set of int[3], optional
+            node index coordinates
+
+        Returns
+        -------
+        A generator for LatticeNode objects
+
+        """
+        if indices is None:
+            for row_number, data in enumerate(self._table):
+                index = np.unravel_index(row_number, self._size)
+                yield LatticeNode(index, data)
+        else:
+            for index in indices:
+                yield self.get_node(index)

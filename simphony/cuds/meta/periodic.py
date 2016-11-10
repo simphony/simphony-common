@@ -10,7 +10,7 @@ class Periodic(Condition):
 
     cuba_key = CUBA.PERIODIC
 
-    def __init__(self, description="", name=""):
+    def __init__(self, data=None, description="", name=""):
 
         self._data = DataContainer()
 
@@ -24,20 +24,20 @@ class Periodic(Condition):
         self._definition = 'Periodic boundary condition (PBC)'  # noqa
 
     @property
-    def models(self):
-        return self._models
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
     def data(self):
         return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    @property
+    def models(self):
+        return self._models
+
+    @property
+    def definition(self):
+        return self._definition
 
     @property
     def uid(self):
