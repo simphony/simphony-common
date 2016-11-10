@@ -10,33 +10,16 @@ class Sph(ComputationalMethod):
 
     cuba_key = CUBA.SPH
 
-    def __init__(self, data=None, description="", name=""):
+    def __init__(self, description="", name=""):
+
+        self._data = DataContainer()
 
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._physics_equation = [CUBA.CFD]
         # This is a system-managed, read-only attribute
         self._definition = 'Smooth particle hydrodynamics'  # noqa
-
-    @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
 
     @property
     def physics_equation(self):
@@ -45,6 +28,14 @@ class Sph(ComputationalMethod):
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

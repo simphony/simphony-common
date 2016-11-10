@@ -12,7 +12,6 @@ class BirdCarreauModel(RheologyModel):
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
     def __init__(self,
-                 data=None,
                  description="",
                  name="",
                  initial_viscosity=0.001,
@@ -20,17 +19,14 @@ class BirdCarreauModel(RheologyModel):
                  maximum_viscosity=1e-05,
                  power_law_index=0.5):
 
+        self._data = DataContainer()
+
         self.power_law_index = power_law_index
         self.maximum_viscosity = maximum_viscosity
         self.linear_constant = linear_constant
         self.initial_viscosity = initial_viscosity
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -87,20 +83,6 @@ class BirdCarreauModel(RheologyModel):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
@@ -111,6 +93,14 @@ class BirdCarreauModel(RheologyModel):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

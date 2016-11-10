@@ -11,16 +11,13 @@ class Atom(Particle):
 
     cuba_key = CUBA.ATOM
 
-    def __init__(self, data=None, position=None, mass=1.0):
+    def __init__(self, position=None, mass=1.0):
+
+        self._data = DataContainer()
 
         self.mass = mass
         if position is None:
             self.position = [0, 0, 0]
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'An atom'  # noqa
 
@@ -37,22 +34,16 @@ class Atom(Particle):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
+    def definition(self):
+        return self._definition
 
-        return DataContainer(data_container)
+    @property
+    def data(self):
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):
@@ -62,7 +53,7 @@ class Atom(Particle):
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.POSITION, CUBA.MASS, CUBA.UUID)
+        return (CUBA.UUID, CUBA.MASS, CUBA.POSITION)
 
     @classmethod
     def parents(cls):

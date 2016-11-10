@@ -325,7 +325,7 @@ class CodeGenerator(object):
 
         return tuple(attr for attr in get_cuba_attribute())
 
-    def populate_system_code(self):
+    def _setup_system_code(self):
         """ Populate code for system-managed (and read-only) attributes"""
 
         for key, contents in chain(self.system_variables.items(),
@@ -337,7 +337,7 @@ class CodeGenerator(object):
                 continue
 
             # Populates self.methods with getter
-            self.populate_getter(key)
+            self._setup_getter(key)
 
             # For CUBA attributes that are read-only, `content`
             # should be a dict.
@@ -357,11 +357,11 @@ class CodeGenerator(object):
             if isinstance(default, str):
                 self.init_body[-1] += '  # noqa'
 
-    def populate_module_variables(self):
+    def _setup_module_variables(self):
         ''' Populate module-level variables '''
         pass
 
-    def populate_class_variables(self):
+    def _setup_class_variables(self):
         ''' Populate class variables
 
         These variables are requested by the user, but they are not
@@ -372,7 +372,7 @@ class CodeGenerator(object):
         self.class_variables.append(
             'cuba_key = CUBA.{}'.format(self.original_key))
 
-    def populate_meta_api(self):
+    def _setup_meta_api(self):
         ''' Populate API for interoperability '''
 
         # Add a supported_parameters as a class method
@@ -390,7 +390,7 @@ class CodeGenerator(object):
         return {!r}'''.format(tuple('CUBA.{}'.format(parent)
                                     for parent in self.mro))))
 
-    def populate_user_variable_code(self):
+    def _setup_user_variable_code(self):
         ''' Populate code for user-defined attributes '''
 
         # populate them in reverse, because we want the root base class
@@ -419,8 +419,8 @@ class CodeGenerator(object):
             if isinstance(default, str) and default.startswith('CUBA.'):
                 # If default value is a CUBA key, it should be an instance
                 # of the corresponding meta class
-                self.populate_init_body_with_cuba_default(key,
-                                                          contents['default'])
+                self._setup_init_body_with_cuba_default(key,
+                                                        contents['default'])
             elif isinstance(default, MutableSequence):
                 # The __init__ signature will replace the default with None
                 self.init_body.extend(('if {key} is None:'.format(key=key),
@@ -436,12 +436,12 @@ class CodeGenerator(object):
             if (key in self.optional_user_defined or
                     key in self.required_user_defined):
                 # Getter
-                self.populate_getter(key)
+                self._setup_getter(key)
 
                 # Setter
-                self.populate_setter_with_validation(key, contents)
+                self._setup_setter_with_validation(key, contents)
 
-    def populate_getter(self, key, value=None, docstring=''):
+    def _setup_getter(self, key, value=None, docstring=''):
         ''' Populate getter descriptor
 
         Parameters
@@ -480,7 +480,7 @@ class CodeGenerator(object):
     def {key}(self):
         return {value}'''.format(key=key, value=value))
 
-    def populate_setter(self, key, check_statements=()):
+    def _setup_setter(self, key, check_statements=()):
         ''' Populate setter descriptor
 
         Parameters
@@ -519,7 +519,7 @@ class CodeGenerator(object):
         {target} = value'''.format(key=key, target=target,
                                    validation_code=validation_code))
 
-    def populate_setter_with_validation(self, key, contents):
+    def _setup_setter_with_validation(self, key, contents):
         ''' Populate setter descriptor with validation codes
 
         Parameters
@@ -581,9 +581,9 @@ class CodeGenerator(object):
                                     for statement in check_statements[1:])
 
         # Populate setter
-        self.populate_setter(key, check_statements)
+        self._setup_setter(key, check_statements)
 
-    def populate_init_body_with_cuba_default(self, key, default):
+    def _setup_init_body_with_cuba_default(self, key, default):
         '''  Populate the body of `__init__` for an attribute
 
         Parameters
@@ -612,6 +612,8 @@ class CodeGenerator(object):
             PATH_TO_CLASSES, default_key,
             to_camel_case(default_key)))
 
+    # Populate methods: they handle special cases for some datatypes
+    # that require non-boilerplate setup.
     def populate_uuid(self, contents):
         """Populate code for CUBA.UUID
 
@@ -630,37 +632,21 @@ class CodeGenerator(object):
         return self._uid''')
 
     def populate_data(self, contents):
-        """Populate code for CUBA.DATA
-
-        Parameters
-        ----------
-        contents : dict
-            meta data for the attribute `data` (not currently used)
+        """Sets up the internal self.data which is the DataContainer
+        storage for all non-system variables.
         """
-        if isinstance(contents, dict) and contents.get('default'):
-            # FIXME: contents is not being used, what should we expect there?
-            message = ("provided default value for DATA is currently ignored. "
-                       "Given: {}")
-            warnings.warn(message.format(contents))
 
         self.imports.append(IMPORT_PATHS['DataContainer'])
 
-        self.init_body.append('''if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-            ''')
+        # Put it in front because other data depend on it.
+        self.init_body.insert(0, '''
+        self._data = DataContainer()
+        ''')
 
         self.methods.append('''
     @property
     def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
+        return DataContainer(self._data)
         ''')
 
         self.methods.append('''
@@ -668,6 +654,8 @@ class CodeGenerator(object):
     def data(self, new_data):
         self._data = DataContainer(new_data)
         ''')
+
+    # End populate methods
 
     def collect_parents_to_mro(self, generators):
         ''' Recursively collect all the inherited into CodeGenerator.mro
@@ -875,11 +863,11 @@ class CodeGenerator(object):
 
         """
         # Populate codes before writing
-        self.populate_user_variable_code()
-        self.populate_system_code()
-        self.populate_module_variables()
-        self.populate_class_variables()
-        self.populate_meta_api()
+        self._setup_user_variable_code()
+        self._setup_system_code()
+        self._setup_module_variables()
+        self._setup_class_variables()
+        self._setup_meta_api()
 
         # Now write to the file output
         self.generate_class_import(file_out)

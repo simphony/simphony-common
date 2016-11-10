@@ -12,7 +12,6 @@ class PowerLawViscosityModel(RheologyModel):
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
-                 data=None,
                  description="",
                  name="",
                  linear_constant=1e-05,
@@ -20,17 +19,14 @@ class PowerLawViscosityModel(RheologyModel):
                  maximum_viscosity=0.001,
                  power_law_index=1.0):
 
+        self._data = DataContainer()
+
         self.power_law_index = power_law_index
         self.maximum_viscosity = maximum_viscosity
         self.minimum_viscosity = minimum_viscosity
         self.linear_constant = linear_constant
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
@@ -87,20 +83,6 @@ class PowerLawViscosityModel(RheologyModel):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def models(self):
         return self._models
 
@@ -111,6 +93,14 @@ class PowerLawViscosityModel(RheologyModel):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

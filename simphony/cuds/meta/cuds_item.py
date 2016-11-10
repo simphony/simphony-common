@@ -9,33 +9,24 @@ class CUDSItem(object):
 
     cuba_key = CUBA.CUDS_ITEM
 
-    def __init__(self, data=None):
+    def __init__(self):
 
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
+        self._data = DataContainer()
 
         # This is a system-managed, read-only attribute
         self._definition = 'Root of all CUDS types'  # noqa
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
+    def definition(self):
+        return self._definition
 
-        return DataContainer(data_container)
+    @property
+    def data(self):
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

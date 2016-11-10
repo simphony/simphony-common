@@ -11,16 +11,13 @@ class MaterialRelation(ModelEquation):
 
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material, data=None, description="", name=""):
+    def __init__(self, material, description="", name=""):
+
+        self._data = DataContainer()
 
         self.material = material
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'Material relation'  # noqa
         # This is a system-managed, read-only attribute
@@ -44,20 +41,6 @@ class MaterialRelation(ModelEquation):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
-
-        return DataContainer(data_container)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
     def definition(self):
         return self._definition
 
@@ -68,6 +51,14 @@ class MaterialRelation(ModelEquation):
     @property
     def variables(self):
         return self._variables
+
+    @property
+    def data(self):
+        return DataContainer(self._data)
+
+    @data.setter
+    def data(self, new_data):
+        self._data = DataContainer(new_data)
 
     @property
     def uid(self):

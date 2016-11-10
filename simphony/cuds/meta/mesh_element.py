@@ -11,14 +11,11 @@ class MeshElement(CUDSItem):
 
     cuba_key = CUBA.MESH_ELEMENT
 
-    def __init__(self, point, data=None):
+    def __init__(self, point):
+
+        self._data = DataContainer()
 
         self.point = point
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'An element for storing geometrical objects'  # noqa
 
@@ -38,22 +35,16 @@ class MeshElement(CUDSItem):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
+    def definition(self):
+        return self._definition
 
-        return DataContainer(data_container)
+    @property
+    def data(self):
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):

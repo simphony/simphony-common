@@ -11,23 +11,15 @@ class Box(Boundary):
 
     cuba_key = CUBA.BOX
 
-    def __init__(self,
-                 data=None,
-                 description="",
-                 name="",
-                 condition=None,
-                 vector=None):
+    def __init__(self, description="", name="", condition=None, vector=None):
+
+        self._data = DataContainer()
 
         if vector is None:
             self.vector = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.condition = condition
         self.name = name
         self.description = description
-        if data:
-            internal_data = self.data
-            internal_data.update(data)
-            self.data = internal_data
-
         # This is a system-managed, read-only attribute
         self._definition = 'A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).'  # noqa
 
@@ -61,22 +53,16 @@ class Box(Boundary):
         self.data = data
 
     @property
-    def data(self):
-        try:
-            data_container = self._data
-        except AttributeError:
-            self._data = DataContainer()
-            data_container = self._data
+    def definition(self):
+        return self._definition
 
-        return DataContainer(data_container)
+    @property
+    def data(self):
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
-
-    @property
-    def definition(self):
-        return self._definition
 
     @property
     def uid(self):
