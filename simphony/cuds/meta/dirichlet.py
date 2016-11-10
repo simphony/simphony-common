@@ -13,8 +13,8 @@ class Dirichlet(Condition):
 
     def __init__(self,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  variable=None,
                  material=None):
 

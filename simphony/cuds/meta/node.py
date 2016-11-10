@@ -11,7 +11,7 @@ class Node(CUDSComponent):
 
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, data=None, description=None, name=None):
+    def __init__(self, index, data=None, description="", name=""):
 
         self.index = index
         self.name = name

@@ -11,7 +11,7 @@ class Origin(CUDSComponent):
 
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, data=None, description=None, name=None, position=None):
+    def __init__(self, data=None, description="", name="", position=None):
 
         if position is None:
             self.position = [0, 0, 0]

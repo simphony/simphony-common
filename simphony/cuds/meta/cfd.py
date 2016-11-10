@@ -19,8 +19,8 @@ class Cfd(PhysicsEquation):
 
     def __init__(self,
                  data=None,
-                 description=None,
-                 name=None,
+                 description="",
+                 name="",
                  multiphase_model=None,
                  rheology_model=None,
                  turbulence_model=None,
