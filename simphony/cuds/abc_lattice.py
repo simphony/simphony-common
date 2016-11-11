@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from .abc_dataset import ABCDataset
 from .utils import deprecated
 
@@ -106,7 +106,7 @@ class ABCLattice(ABCDataset):
         KeyError :
             if any of the indices passed as parameters are not in the dataset.
         """
-        if item_type is not None and item_type != CUDSItem.NODE:
+        if item_type is not None and item_type != CUBA.NODE:
             raise ValueError("item_type must be CUDSItem.NODE")
 
         return self._iter_nodes(indices)
@@ -135,7 +135,7 @@ class ABCLattice(ABCDataset):
         count : int
             The number of items of item_type in the dataset.
         """
-        return self.count_of(CUDSItem.NODE)
+        return self.count_of(CUBA.NODE)
 
     @deprecated
     def get_node(self, index):  # pragma: no cover

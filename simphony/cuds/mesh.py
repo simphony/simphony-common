@@ -7,7 +7,7 @@ and modify a mesh
 import uuid
 
 from ..core import data_container as dc
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from .abc_mesh import ABCMesh
 from .mesh_items import Edge, Face, Cell, Point
 
@@ -60,10 +60,10 @@ class Mesh(ABCMesh):
         self._data = dc.DataContainer()
 
         self._items_count = {
-            CUDSItem.POINT: lambda: self._points,
-            CUDSItem.EDGE: lambda: self._edges,
-            CUDSItem.FACE: lambda: self._faces,
-            CUDSItem.CELL: lambda: self._cells
+            CUBA.POINT: lambda: self._points,
+            CUBA.EDGE: lambda: self._edges,
+            CUBA.FACE: lambda: self._faces,
+            CUBA.CELL: lambda: self._cells
         }
 
     @property
@@ -79,8 +79,8 @@ class Mesh(ABCMesh):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------

@@ -6,7 +6,7 @@ import numpy
 from ..core.data_container import DataContainer
 from ..cuds import ABCParticles
 from ..cuds.particles_items import Bond, Particle
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from .h5_cuds_items import H5CUDSItems
 from .indexed_data_container_table import IndexedDataContainerTable
 
@@ -134,8 +134,8 @@ class H5Particles(ABCParticles):
         self._bonds = H5BondItems(group, 'bonds')
 
         self._items_count = {
-            CUDSItem.PARTICLE: lambda: self._particles,
-            CUDSItem.BOND: lambda: self._bonds
+            CUBA.PARTICLE: lambda: self._particles,
+            CUBA.BOND: lambda: self._bonds
         }
 
     @property
@@ -167,8 +167,8 @@ class H5Particles(ABCParticles):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------

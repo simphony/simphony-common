@@ -8,7 +8,7 @@ from .utils import (
     create_data_container, compare_data_containers, compare_lattice_nodes)
 from ..cuds.lattice import make_triclinic_lattice
 from ..cuds.lattice_items import LatticeNode
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 from ..cuds.primitive_cell import (BravaisLattice, PrimitiveCell)
 
@@ -252,7 +252,7 @@ class CheckLatticeNodeOperations(object):
 
         # then
         count_original = reduce(lambda x, y: x*y, self.size)
-        count_container = container.count_of(CUDSItem.NODE)
+        count_container = container.count_of(CUBA.NODE)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_nodes_passing_unsupported_type(self):
@@ -261,7 +261,7 @@ class CheckLatticeNodeOperations(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUDSItem.EDGE)
+            container.count_of(CUBA.EDGE)
 
 
 class CheckLatticeNodeCoordinates(object):

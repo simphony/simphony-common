@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 from . import ABCParticles
 from .particles_items import Particle, Bond
@@ -39,8 +39,8 @@ class Particles(ABCParticles):
         self.name = name
 
         self._items_count = {
-            CUDSItem.PARTICLE: lambda: self._particles,
-            CUDSItem.BOND: lambda: self._bonds
+            CUBA.PARTICLE: lambda: self._particles,
+            CUBA.BOND: lambda: self._bonds
         }
 
     @property
@@ -56,8 +56,8 @@ class Particles(ABCParticles):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------

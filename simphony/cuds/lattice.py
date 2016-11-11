@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 from .abc_lattice import ABCLattice
 from .lattice_items import LatticeNode
@@ -35,7 +35,7 @@ class Lattice(ABCLattice):
         self._data = DataContainer()
 
         self._items_count = {
-            CUDSItem.NODE: lambda: self._size
+            CUBA.NODE: lambda: self._size
         }
 
     def count_of(self, item_type):
@@ -43,8 +43,8 @@ class Lattice(ABCLattice):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return
+        item_type : CUBA
+            The CUBA enum of the type of the items to return
             the count of.
 
         Returns

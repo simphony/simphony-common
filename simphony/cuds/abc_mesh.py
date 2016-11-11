@@ -1,7 +1,7 @@
 import itertools
 from abc import abstractmethod
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from .abc_dataset import ABCDataset
 from .utils import deprecated
 
@@ -180,13 +180,13 @@ class ABCMesh(ABCDataset):
         KeyError :
             if any of the ids passed as parameters are not in the dataset.
         """
-        if item_type == CUDSItem.POINT:
+        if item_type == CUBA.POINT:
             return self._iter_points(uids)
-        elif item_type == CUDSItem.EDGE:
+        elif item_type == CUBA.EDGE:
             return self._iter_edges(uids)
-        elif item_type == CUDSItem.FACE:
+        elif item_type == CUBA.FACE:
             return self._iter_faces(uids)
-        elif item_type == CUDSItem.CELL:
+        elif item_type == CUBA.CELL:
             return self._iter_cells(uids)
         else:
             if uids is None:
@@ -232,13 +232,13 @@ class ABCMesh(ABCDataset):
         -------
         True if the type is present, False otherwise.
         """
-        if item_type == CUDSItem.POINT:
+        if item_type == CUBA.POINT:
             return self._has_points()
-        elif item_type == CUDSItem.EDGE:
+        elif item_type == CUBA.EDGE:
             return self._has_edges()
-        elif item_type == CUDSItem.FACE:
+        elif item_type == CUBA.FACE:
             return self._has_faces()
-        elif item_type == CUDSItem.CELL:
+        elif item_type == CUBA.CELL:
             return self._has_cells()
         else:
             raise ValueError("Unknown item_type "
@@ -253,8 +253,8 @@ class ABCMesh(ABCDataset):
             The number of items of item_type in the dataset.
         """
         return sum(map(lambda x: self.count_of(x),
-                       [CUDSItem.POINT, CUDSItem.EDGE,
-                        CUDSItem.FACE, CUDSItem.CELL]))
+                       [CUBA.POINT, CUBA.EDGE,
+                        CUBA.FACE, CUBA.CELL]))
 
     # Deprecated methods.
 
@@ -568,7 +568,7 @@ class ABCMesh(ABCDataset):
         ------
         point : Point
         """
-        return self.iter(uids, CUDSItem.POINT)
+        return self.iter(uids, CUBA.POINT)
 
     @deprecated
     def iter_edges(self, uids=None):  # pragma: no cover
@@ -590,7 +590,7 @@ class ABCMesh(ABCDataset):
         edge : Edge
 
         """
-        return self.iter(uids, CUDSItem.EDGE)
+        return self.iter(uids, CUBA.EDGE)
 
     @deprecated
     def iter_faces(self, uids=None):  # pragma: no cover
@@ -612,7 +612,7 @@ class ABCMesh(ABCDataset):
         face : Face
 
         """
-        return self.iter(uids, item_type=CUDSItem.FACE)
+        return self.iter(uids, item_type=CUBA.FACE)
 
     @deprecated
     def iter_cells(self, uids=None):  # pragma: no cover
@@ -634,7 +634,7 @@ class ABCMesh(ABCDataset):
         cell : Cell
 
         """
-        return self.iter(uids, item_type=CUDSItem.CELL)
+        return self.iter(uids, item_type=CUBA.CELL)
 
     @deprecated
     def has_points(self):  # pragma: no cover
@@ -646,7 +646,7 @@ class ABCMesh(ABCDataset):
             True of there are points inside the mesh,
             False otherwise
         """
-        return self.has_type(CUDSItem.POINT)
+        return self.has_type(CUBA.POINT)
 
     @deprecated
     def has_edges(self):  # pragma: no cover
@@ -658,7 +658,7 @@ class ABCMesh(ABCDataset):
             True of there are edges inside the mesh,
             False otherwise
         """
-        return self.has_type(CUDSItem.EDGE)
+        return self.has_type(CUBA.EDGE)
 
     @deprecated
     def has_faces(self):  # pragma: no cover
@@ -670,7 +670,7 @@ class ABCMesh(ABCDataset):
             True of there are faces inside the mesh,
             False otherwise
         """
-        return self.has_type(CUDSItem.FACE)
+        return self.has_type(CUBA.FACE)
 
     @deprecated
     def has_cells(self):  # pragma: no cover
@@ -682,7 +682,7 @@ class ABCMesh(ABCDataset):
             True of there are cells inside the mesh,
             False otherwise
         """
-        return self.has_type(CUDSItem.CELL)
+        return self.has_type(CUBA.CELL)
 
     # Private. Need to be reimplemented by subclasses
     #

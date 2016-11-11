@@ -5,7 +5,7 @@ import numpy
 from .data_container_description import NoUIDRecord
 from .data_conversion import (convert_from_file_type,
                               convert_to_file_type)
-from ..core.cuba import CUBA
+from ..core import CUBA
 from ..core.data_container import DataContainer
 
 

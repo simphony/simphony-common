@@ -4,7 +4,7 @@
 import unittest
 from numpy.testing import assert_array_equal
 
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.testing.abc_check_lattice import (
     CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)
