@@ -1063,13 +1063,15 @@ def keywords(cuba_input, cuds_input, output):
         "        key='{key}',\n"
         "        shape={shape},\n"
         "        dtype={type}),\n")
-    for keyword, content in keywords['CUBA_KEYS'].items():
+    for keyword, content in sorted(keywords['CUBA_KEYS'].items(),
+                                   key=lambda x: x[0]):
         content['type'] = data_types[content['type']]
         content['name'] = to_camel_case(keyword)
         content['key'] = keyword
         lines.extend(template.format(**content))
 
-    for keyword, content in metadata['CUDS_KEYS'].items():
+    for keyword, content in sorted(metadata['CUDS_KEYS'].items(),
+                                   key=lambda x: x[0]):
         content['type'] = "None"
         content['name'] = to_camel_case(keyword)
         content['key'] = keyword
