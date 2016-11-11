@@ -3,7 +3,7 @@ from ..cuds.primitive_cell import PrimitiveCell, BravaisLattice
 from .indexed_data_container_table import IndexedDataContainerTable
 from .data_container_description import NoUIDRecord
 from ..core.data_container import DataContainer
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 
 import numpy as np
 
@@ -40,7 +40,7 @@ class H5Lattice(ABCLattice):
         self._table = IndexedDataContainerTable(group, 'lattice')
         self._data = IndexedDataContainerTable(group, 'data')
 
-        self._items_count = {CUDSItem.NODE: lambda: self._table}
+        self._items_count = {CUBA.NODE: lambda: self._table}
 
     @classmethod
     def create_new(cls, group, primitive_cell, size, origin, record=None):
@@ -85,8 +85,8 @@ class H5Lattice(ABCLattice):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------

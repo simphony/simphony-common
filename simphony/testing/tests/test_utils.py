@@ -12,7 +12,7 @@ from simphony.cuds.particles_items import Bond, Particle
 from simphony.cuds.mesh import Mesh
 from simphony.cuds.mesh_items import Element, Edge, Face, Cell, Point
 from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.core.keywords import KEYWORDS
 from simphony.testing.utils import (
     compare_particles, create_data_container, compare_bonds,

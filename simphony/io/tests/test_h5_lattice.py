@@ -8,7 +8,7 @@ from simphony.io.h5_lattice import H5Lattice
 from simphony.io.data_container_description import SUPPORTED_CUBA
 from simphony.cuds.primitive_cell import (PrimitiveCell, BravaisLattice)
 from numpy.testing import (assert_array_equal, assert_array_almost_equal)
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.testing.abc_check_lattice import (
     CheckLatticeContainer, CheckLatticeNodeOperations,
     CheckLatticeNodeCoordinates)

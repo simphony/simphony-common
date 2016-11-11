@@ -5,7 +5,7 @@ from .utils import (
     compare_particles_datasets, compare_mesh_datasets,
     compare_lattice_datasets)
 
-from ..core.cuba import CUBA
+from ..core import CUBA
 from ..cuds.particles import Particles
 from ..cuds.particles_items import Particle
 from ..cuds.mesh import Mesh

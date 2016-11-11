@@ -5,7 +5,7 @@ from numpy.testing import assert_array_equal
 
 from simphony.io.data_conversion import (convert_to_file_type,
                                          convert_from_file_type)
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.testing.utils import dummy_cuba_value
 
 

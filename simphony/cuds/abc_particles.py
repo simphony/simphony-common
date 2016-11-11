@@ -2,7 +2,7 @@
 from abc import abstractmethod
 import itertools
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from .particles_items import Particle, Bond
 from .abc_dataset import ABCDataset
 from .utils import deprecated
@@ -219,9 +219,9 @@ class ABCParticles(ABCDataset):
                 part_container.update([particle])
         """
 
-        if item_type == CUDSItem.PARTICLE:
+        if item_type == CUBA.PARTICLE:
             return self._iter_particles(uids)
-        elif item_type == CUDSItem.BOND:
+        elif item_type == CUBA.BOND:
             return self._iter_bonds(uids)
         else:
             if uids is None:
@@ -270,7 +270,7 @@ class ABCParticles(ABCDataset):
             The number of items in the dataset.
         """
         return sum(map(lambda x: self.count_of(x),
-                       [CUDSItem.PARTICLE, CUDSItem.BOND]))
+                       [CUBA.PARTICLE, CUBA.BOND]))
 
     # Deprecated API. Will go away. Uses the generic API instead of direct
     # call to the internal methods to guarantee the behavior is unchanged
@@ -578,7 +578,7 @@ class ABCParticles(ABCDataset):
         >>> for particle in particles.iter_particles():
             ...  #do stuff
         """
-        return self.iter(uids, item_type=CUDSItem.PARTICLE)
+        return self.iter(uids, item_type=CUBA.PARTICLE)
 
     @deprecated
     def iter_bonds(self, uids=None):  # pragma: no cover
@@ -623,7 +623,7 @@ class ABCParticles(ABCDataset):
         >>> for bond in particles.iter_bond():
                 ...  #do stuff; it will iterate over all the bond
         """
-        return self.iter(uids, item_type=CUDSItem.BOND)
+        return self.iter(uids, item_type=CUBA.BOND)
 
     @deprecated
     def has_particle(self, uid):  # pragma: no cover

@@ -7,7 +7,7 @@ from numpy.testing import assert_equal
 
 from ..core.keywords import KEYWORDS
 from ..core.data_container import DataContainer
-from ..core.cuba import CUBA
+from ..core import CUBA
 from ..cuds.particles_items import Particle, Bond
 from ..cuds.mesh_items import Edge, Face, Cell, Point
 

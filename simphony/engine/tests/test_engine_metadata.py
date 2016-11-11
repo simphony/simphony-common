@@ -2,7 +2,7 @@
 import unittest
 from mock import patch
 
-from simphony.api import CUDS
+from simphony.cuds import CUDS
 from simphony.cuds.abc_modeling_engine import ABCModelingEngine
 from simphony.engine import ABCEngineExtension,\
     EngineInterface, get_engine_manager, get_supported_engine_names

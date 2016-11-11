@@ -1,7 +1,7 @@
 import tables
 import itertools
 
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 from ..cuds import ABCParticles, ABCMesh, ABCLattice
 from .h5_particles import H5Particles
@@ -110,8 +110,8 @@ class H5CUDS(object):
         ----------
         container : {ABCMesh, ABCParticles, ABCLattice}
             The CUDS container to be added.
-        cuba_keys : dict of CUDSItems (optional)
-            Dictionary of CUDSItems with lists of CUBA keys that
+        cuba_keys : dict of CUBAs (optional)
+            Dictionary of CUBAs with lists of CUBA keys that
             are added to the H5CUDS container. All keys in the container
             are stored by default
 
@@ -246,7 +246,7 @@ class H5CUDS(object):
         particles : ABCParticles
             Particle container to be added.
         cuba_keys : dict
-            Dictionary of CUDSItems with their related CUBA keys that
+            Dictionary of CUBAs with their related CUBA keys that
             are added to the H5CUDS container.
 
         Returns
@@ -266,13 +266,13 @@ class H5CUDS(object):
             for item in particles.iter_particles():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.PARTICLE]})
+                     if key in cuba_keys[CUBA.PARTICLE]})
                 h5_particles.add_particles([item])
 
             for item in particles.iter_bonds():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.BOND]})
+                     if key in cuba_keys[CUBA.BOND]})
                 h5_particles.add_bonds([item])
         else:
             h5_particles.add_particles(particles.iter_particles())
@@ -287,7 +287,7 @@ class H5CUDS(object):
             mesh to be added. If none is give,
             then an empty mesh is added.
         cuba_keys : dict
-            Dictionary of CUDSItems with their related CUBA keys that
+            Dictionary of CUBAs with their related CUBA keys that
             are added to the H5CUDS container.
 
         Returns
@@ -307,25 +307,25 @@ class H5CUDS(object):
             for item in mesh.iter_points():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.POINT]})
+                     if key in cuba_keys[CUBA.POINT]})
                 h5_mesh.add_points([item])
 
             for item in mesh.iter_edges():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.EDGE]})
+                     if key in cuba_keys[CUBA.EDGE]})
                 h5_mesh.add_edges([item])
 
             for item in mesh.iter_faces():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.FACE]})
+                     if key in cuba_keys[CUBA.FACE]})
                 h5_mesh.add_faces([item])
 
             for item in mesh.iter_cells():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.CELL]})
+                     if key in cuba_keys[CUBA.CELL]})
                 h5_mesh.add_cells([item])
         else:
             h5_mesh.add_points(mesh.iter_points())
@@ -341,7 +341,7 @@ class H5CUDS(object):
         lattice : Lattice
             lattice to be added
         cuba_keys : dict
-            Dictionary of CUDSItems with their related CUBA keys that
+            Dictionary of CUBAs with their related CUBA keys that
             are added to the H5CUDS container.
 
         Returns
@@ -362,7 +362,7 @@ class H5CUDS(object):
             for item in lattice.iter_nodes():
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
-                     if key in cuba_keys[CUDSItem.NODE]})
+                     if key in cuba_keys[CUBA.NODE]})
                 h5_lattice.update_nodes([item])
         else:
             h5_lattice.update_nodes(lattice.iter_nodes())

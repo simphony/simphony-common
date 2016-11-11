@@ -12,7 +12,7 @@ from ..cuds.mesh import ABCMesh
 from ..cuds.mesh_items import Edge, Face, Cell, Point
 
 from ..core.data_container import DataContainer
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 
 from .data_container_table import DataContainerTable
 from .indexed_data_container_table import IndexedDataContainerTable
@@ -152,10 +152,10 @@ class H5Mesh(ABCMesh):
             self._create_cells_table()
 
         self._items_count = {
-            CUDSItem.POINT: lambda: self._group.points,
-            CUDSItem.EDGE: lambda: self._group.edges,
-            CUDSItem.FACE: lambda: self._group.faces,
-            CUDSItem.CELL: lambda: self._group.cells
+            CUBA.POINT: lambda: self._group.points,
+            CUBA.EDGE: lambda: self._group.edges,
+            CUBA.FACE: lambda: self._group.faces,
+            CUBA.CELL: lambda: self._group.cells
         }
 
     @property
@@ -185,8 +185,8 @@ class H5Mesh(ABCMesh):
 
         Parameters
         ----------
-        item_type : CUDSItem
-            The CUDSItem enum of the type of the items to return the count of.
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
 
         Returns
         -------

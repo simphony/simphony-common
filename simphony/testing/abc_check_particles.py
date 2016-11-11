@@ -7,7 +7,7 @@ from .utils import (
     create_data_container, compare_data_containers,
     create_particles_with_id, create_bonds_with_id)
 from ..cuds.particles_items import Bond, Particle
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 
 
@@ -421,7 +421,7 @@ class CheckManipulatingParticles(object):
 
         # then
         count_original = len(particle_list)
-        count_container = container.count_of(CUDSItem.PARTICLE)
+        count_container = container.count_of(CUBA.PARTICLE)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_particles_passing_unsupported_type(self):
@@ -430,7 +430,7 @@ class CheckManipulatingParticles(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUDSItem.EDGE)
+            container.count_of(CUBA.EDGE)
 
 
 class CheckAddingBonds(object):
@@ -790,7 +790,7 @@ class CheckManipulatingBonds(object):
 
         # then
         count_original = len(bond_list)
-        count_container = container.count_of(CUDSItem.BOND)
+        count_container = container.count_of(CUBA.BOND)
         self.assertEqual(count_original, count_container)
 
     def test_count_of_bonds_passing_unsupported_type(self):
@@ -799,4 +799,4 @@ class CheckManipulatingBonds(object):
 
         # then
         with self.assertRaises(ValueError):
-            container.count_of(CUDSItem.EDGE)
+            container.count_of(CUBA.EDGE)

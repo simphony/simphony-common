@@ -5,8 +5,7 @@ import shutil
 import tempfile
 import tables
 
-from simphony.core.cuds_item import CUDSItem
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.core.data_container import DataContainer
 from simphony.io.h5_cuds import H5CUDS
 from simphony.io.h5_mesh import H5Mesh
@@ -148,7 +147,7 @@ class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
             reference.add_particles([particle])
 
         # Store reference dataset along with its data
-        engine.add_dataset(reference, {CUDSItem.PARTICLE: [CUBA.VELOCITY]})
+        engine.add_dataset(reference, {CUBA.PARTICLE: [CUBA.VELOCITY]})
 
         # Closing and reopening the file
         engine.close()
@@ -208,7 +207,7 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
             reference.add_cells([cell])
 
         # Store reference dataset along with its data
-        engine.add_dataset(reference, {CUDSItem.POINT: [CUBA.VELOCITY]})
+        engine.add_dataset(reference, {CUBA.POINT: [CUBA.VELOCITY]})
 
         # Closing and reopening the file
         engine.close()
@@ -255,7 +254,7 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
             reference.update_nodes([node])
 
         # Store reference dataset along with its data
-        engine.add_dataset(reference, {CUDSItem.NODE: [CUBA.NAME]})
+        engine.add_dataset(reference, {CUBA.NODE: [CUBA.NAME]})
 
         # Closing and reopening the file
         engine.close()

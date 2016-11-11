@@ -3,7 +3,7 @@ import tables
 import warnings
 
 from simphony.core.keywords import KEYWORDS
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 
 
 # This is a non-exhaustive mapping between

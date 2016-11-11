@@ -1,6 +1,6 @@
 import unittest
 
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.cuds.mesh import Mesh
 from simphony.testing.abc_check_mesh import (
     CheckMeshPointOperations, CheckMeshEdgeOperations,

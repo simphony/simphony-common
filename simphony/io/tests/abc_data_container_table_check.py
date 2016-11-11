@@ -10,7 +10,7 @@ from collections import OrderedDict
 import tables
 from numpy.testing import assert_equal
 
-from simphony.core.cuba import CUBA
+from simphony.core import CUBA
 from simphony.core.data_container import DataContainer
 from simphony.io.data_container_table import DataContainerTable
 from simphony.testing.utils import create_data_container, dummy_cuba_value

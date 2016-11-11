@@ -7,7 +7,7 @@ from .utils import (
     create_data_container, create_points, compare_points, compare_elements,
     grouper, compare_data_containers)
 from ..cuds.mesh_items import Edge, Face, Cell, Point
-from ..core.cuds_item import CUDSItem
+from ..core import CUBA
 from ..core.data_container import DataContainer
 
 
@@ -443,7 +443,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
 
         # container without items
         self.assertEqual(
-            self.count_items_operation(container, CUDSItem.POINT),
+            self.count_items_operation(container, CUBA.POINT),
             0
         )
 
@@ -452,7 +452,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
         self.add_operation(container, self.item_list)
 
         self.assertEqual(
-            self.count_items_operation(container, CUDSItem.POINT),
+            self.count_items_operation(container, CUBA.POINT),
             num_items
         )
 
@@ -462,7 +462,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
         total = sum(
             self.count_items_operation(container, x)
             for x in [
-                CUDSItem.POINT, CUDSItem.EDGE, CUDSItem.FACE, CUDSItem.CELL]
+                CUBA.POINT, CUBA.EDGE, CUBA.FACE, CUBA.CELL]
         )
         self.assertEqual(len(container), total)
 
@@ -471,7 +471,7 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
 
         # container without items
         with self.assertRaises(ValueError):
-            self.count_items_operation(container, CUDSItem.NODE)
+            self.count_items_operation(container, CUBA.NODE)
 
     def test_update_item_coordniates(self):
         # given
@@ -582,7 +582,7 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
 
         # container without items
         with self.assertRaises(ValueError):
-            self.count_items_operation(container, CUDSItem.NODE)
+            self.count_items_operation(container, CUBA.NODE)
 
     def test_update_item_points(self):
         # given
@@ -676,7 +676,7 @@ class CheckMeshEdgeOperations(CheckMeshElementOperations):
 
     point_groups = [1, 2]
 
-    item_type = CUDSItem.EDGE
+    item_type = CUBA.EDGE
 
     def create_items(self):
         uids = self.uids
@@ -712,7 +712,7 @@ class CheckMeshFaceOperations(CheckMeshElementOperations):
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUDSItem.FACE
+    item_type = CUBA.FACE
 
     def create_items(self):
         uids = self.uids
@@ -748,7 +748,7 @@ class CheckMeshCellOperations(CheckMeshElementOperations):
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUDSItem.CELL
+    item_type = CUBA.CELL
 
     def create_items(self):
         uids = self.uids
