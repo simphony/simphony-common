@@ -6,7 +6,7 @@ from . import validation
 
 
 class Neumann(Condition):
-    '''Neumann boundary condition  # noqa
+    '''Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.  # noqa
     '''
 
     cuba_key = CUBA.NEUMANN
@@ -24,7 +24,7 @@ class Neumann(Condition):
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
-        self._definition = 'Neumann boundary condition'  # noqa
+        self._definition = 'Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.'  # noqa
 
     @property
     def material(self):

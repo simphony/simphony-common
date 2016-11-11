@@ -5,7 +5,7 @@ from .cuds_component import CUDSComponent
 
 
 class Material(CUDSComponent):
-    '''Definition of a material and its parameters  # noqa
+    '''Definition of a material and its properties in the data container  # noqa
     '''
 
     cuba_key = CUBA.MATERIAL
@@ -17,7 +17,7 @@ class Material(CUDSComponent):
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
-        self._definition = 'Definition of a material and its parameters'  # noqa
+        self._definition = 'Definition of a material and its properties in the data container'  # noqa
 
     @property
     def definition(self):

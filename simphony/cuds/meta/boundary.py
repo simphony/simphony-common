@@ -6,7 +6,7 @@ from . import validation
 
 
 class Boundary(CUDSComponent):
-    '''System boundary  # noqa
+    '''A computational boundary in the system, it includes translated physical boundaries to computational boundaries.  # noqa
     '''
 
     cuba_key = CUBA.BOUNDARY
@@ -19,7 +19,7 @@ class Boundary(CUDSComponent):
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
-        self._definition = 'System boundary'  # noqa
+        self._definition = 'A computational boundary in the system, it includes translated physical boundaries to computational boundaries.'  # noqa
 
     @property
     def condition(self):

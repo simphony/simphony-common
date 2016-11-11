@@ -5,7 +5,7 @@ from .cuds_component import CUDSComponent
 
 
 class DataSet(CUDSComponent):
-    '''Data set  # noqa
+    '''A representation of the computational entities of the model equations  # noqa
     '''
 
     cuba_key = CUBA.DATA_SET
@@ -19,7 +19,7 @@ class DataSet(CUDSComponent):
         # This is a system-managed, read-only attribute
         self._models = []
         # This is a system-managed, read-only attribute
-        self._definition = 'Data set'  # noqa
+        self._definition = 'A representation of the computational entities of the model equations'  # noqa
 
     @property
     def models(self):
