@@ -12,31 +12,28 @@ class MonoclinicLattice(BravaisLattice):
 
     def __init__(self,
                  primitive_cell,
+                 origin,
                  description="",
                  name="",
-                 lattice_parameter=None):
+                 lattice_parameter=None,
+                 size=None):
 
         self._data = DataContainer()
 
+        self.origin = origin
         self.primitive_cell = primitive_cell
+        if size is None:
+            self.size = [1, 1, 1]
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A monoclinic lattice'  # noqa
-        # This is a system-managed, read-only attribute
-        self._origin = None
-        # This is a system-managed, read-only attribute
-        self._size = [1, 1, 1]
 
     @property
     def definition(self):
         return self._definition
-
-    @property
-    def origin(self):
-        return self._origin
 
     @property
     def data(self):
@@ -51,10 +48,6 @@ class MonoclinicLattice(BravaisLattice):
         if not hasattr(self, '_uid') or self._uid is None:
             self._uid = uuid.uuid4()
         return self._uid
-
-    @property
-    def size(self):
-        return self._size
 
     @classmethod
     def supported_parameters(cls):

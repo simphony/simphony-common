@@ -2,6 +2,7 @@ import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
+from . import validation
 
 
 class Particles(CUDSComponent):
@@ -10,30 +11,50 @@ class Particles(CUDSComponent):
 
     cuba_key = CUBA.PARTICLES
 
-    def __init__(self, description="", name=""):
+    def __init__(self, particle, bond, description="", name=""):
 
         self._data = DataContainer()
 
+        self.bond = bond
+        self.particle = particle
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A collection of particles'  # noqa
-        # This is a system-managed, read-only attribute
-        self._particle = None
-        # This is a system-managed, read-only attribute
-        self._bond = None
+
+    @property
+    def bond(self):
+        return self.data[CUBA.BOND]
+
+    @bond.setter
+    def bond(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'bond')
+            validation.check_shape(value, '(:)')
+            for item in value:
+                validation.validate_cuba_keyword(item, 'bond')
+        data = self.data
+        data[CUBA.BOND] = value
+        self.data = data
+
+    @property
+    def particle(self):
+        return self.data[CUBA.PARTICLE]
+
+    @particle.setter
+    def particle(self, value):
+        if value is not None:
+            value = validation.cast_data_type(value, 'particle')
+            validation.check_shape(value, '(:)')
+            for item in value:
+                validation.validate_cuba_keyword(item, 'particle')
+        data = self.data
+        data[CUBA.PARTICLE] = value
+        self.data = data
 
     @property
     def definition(self):
         return self._definition
-
-    @property
-    def particle(self):
-        return self._particle
-
-    @property
-    def bond(self):
-        return self._bond
 
     @property
     def data(self):

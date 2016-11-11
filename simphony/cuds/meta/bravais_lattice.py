@@ -13,23 +13,36 @@ class BravaisLattice(Lattice):
 
     def __init__(self,
                  primitive_cell,
+                 origin,
                  description="",
                  name="",
-                 lattice_parameter=None):
+                 lattice_parameter=None,
+                 size=None):
 
         self._data = DataContainer()
 
+        self.origin = origin
         self.primitive_cell = primitive_cell
+        if size is None:
+            self.size = [1, 1, 1]
         if lattice_parameter is None:
             self.lattice_parameter = [1.0, 1.0, 1.0]
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
-        self._origin = None
-        # This is a system-managed, read-only attribute
         self._definition = 'A Bravais lattice'  # noqa
-        # This is a system-managed, read-only attribute
-        self._size = [1, 1, 1]
+
+    @property
+    def origin(self):
+        return self.data[CUBA.ORIGIN]
+
+    @origin.setter
+    def origin(self, value):
+        value = validation.cast_data_type(value, 'origin')
+        validation.validate_cuba_keyword(value, 'origin')
+        data = self.data
+        data[CUBA.ORIGIN] = value
+        self.data = data
 
     @property
     def primitive_cell(self):
@@ -41,6 +54,20 @@ class BravaisLattice(Lattice):
         validation.validate_cuba_keyword(value, 'primitive_cell')
         data = self.data
         data[CUBA.PRIMITIVE_CELL] = value
+        self.data = data
+
+    @property
+    def size(self):
+        return self.data[CUBA.SIZE]
+
+    @size.setter
+    def size(self, value):
+        value = validation.cast_data_type(value, 'size')
+        validation.check_shape(value, '(3)')
+        for item in value:
+            validation.validate_cuba_keyword(item, 'size')
+        data = self.data
+        data[CUBA.SIZE] = value
         self.data = data
 
     @property
@@ -58,16 +85,8 @@ class BravaisLattice(Lattice):
         self.data = data
 
     @property
-    def origin(self):
-        return self._origin
-
-    @property
     def definition(self):
         return self._definition
-
-    @property
-    def size(self):
-        return self._size
 
     @property
     def data(self):
