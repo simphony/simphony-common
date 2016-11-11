@@ -1,5 +1,5 @@
-from .engine import Engine  # noqa
 from .box import Box  # noqa
+from .engine import Engine  # noqa
 from .rhombohedral_lattice import RhombohedralLattice  # noqa
 from .thermal_model import ThermalModel  # noqa
 from .free_surface_model import FreeSurfaceModel  # noqa
@@ -35,7 +35,7 @@ from .nose_hoover import NoseHoover  # noqa
 from .computational_model import ComputationalModel  # noqa
 from .bird_carreau_model import BirdCarreauModel  # noqa
 from .computational_method import ComputationalMethod  # noqa
-from .compressibility_model import CompressibilityModel  # noqa
+from .face_centered_cubic_lattice import FaceCenteredCubicLattice  # noqa
 from .boundary import Boundary  # noqa
 from .ks_dft import KsDft  # noqa
 from .mesoscopic import Mesoscopic  # noqa
@@ -45,8 +45,8 @@ from .tetragonal_lattice import TetragonalLattice  # noqa
 from .electronic import Electronic  # noqa
 from .turbulence_model import TurbulenceModel  # noqa
 from .point import Point  # noqa
-from .face_centered_cubic_lattice import FaceCenteredCubicLattice  # noqa
-from .basis import Basis  # noqa
+from .compressibility_model import CompressibilityModel  # noqa
+from .engine_feature import EngineFeature  # noqa
 from .pair_potential import PairPotential  # noqa
 from .base_centered_orthorhombic_lattice import BaseCenteredOrthorhombicLattice  # noqa
 from .lennard_jones_6_12 import LennardJones_6_12  # noqa
@@ -64,7 +64,7 @@ from .particle import Particle  # noqa
 from .triclinic_lattice import TriclinicLattice  # noqa
 from .berendsen import Berendsen  # noqa
 from .mesh_element import MeshElement  # noqa
-from .engine_feature import EngineFeature  # noqa
+from .basis import Basis  # noqa
 from .single_phase_model import SinglePhaseModel  # noqa
 from .material import Material  # noqa
 from .gravity_model import GravityModel  # noqa

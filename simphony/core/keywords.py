@@ -713,16 +713,16 @@ KEYWORDS = {
         key='SHAPE_CENTER',
         shape=[3],
         dtype=numpy.float64),
-    'ENGINE': Keyword(
-        name='Engine',
-        definition='Represents a software tool which is used to solve the physics equation',  # noqa
-        key='ENGINE',
-        shape=[1],
-        dtype=None),
     'BOX': Keyword(
         name='Box',
         definition='A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).',  # noqa
         key='BOX',
+        shape=[1],
+        dtype=None),
+    'ENGINE': Keyword(
+        name='Engine',
+        definition='Represents a software tool which is used to solve the physics equation',  # noqa
+        key='ENGINE',
         shape=[1],
         dtype=None),
     'KS_DFT': Keyword(
@@ -815,16 +815,16 @@ KEYWORDS = {
         key='POINT',
         shape=[1],
         dtype=None),
-    'FACE_CENTERED_CUBIC_LATTICE': Keyword(
-        name='FaceCenteredCubicLattice',
-        definition='A face centred cubic lattice',  # noqa
-        key='FACE_CENTERED_CUBIC_LATTICE',
+    'COMPRESSIBILITY_MODEL': Keyword(
+        name='CompressibilityModel',
+        definition='Compressibility model',  # noqa
+        key='COMPRESSIBILITY_MODEL',
         shape=[1],
         dtype=None),
-    'ENGINE_FEATURE': Keyword(
-        name='EngineFeature',
-        definition='Provides a physics equation and methods that engines provides to solve them',  # noqa
-        key='ENGINE_FEATURE',
+    'BASIS': Keyword(
+        name='Basis',
+        definition='Space basis vectors (row wise)',  # noqa
+        key='BASIS',
         shape=[1],
         dtype=None),
     'PAIR_POTENTIAL': Keyword(
@@ -1031,10 +1031,10 @@ KEYWORDS = {
         key='COULOMB',
         shape=[1],
         dtype=None),
-    'BASIS': Keyword(
-        name='Basis',
-        definition='Space basis vectors (row wise)',  # noqa
-        key='BASIS',
+    'ENGINE_FEATURE': Keyword(
+        name='EngineFeature',
+        definition='Provides a physics equation and methods that engines provides to solve them',  # noqa
+        key='ENGINE_FEATURE',
         shape=[1],
         dtype=None),
     'SINGLE_PHASE_MODEL': Keyword(
@@ -1051,7 +1051,7 @@ KEYWORDS = {
         dtype=None),
     'MATERIAL': Keyword(
         name='Material',
-        definition='Definition of a material and its parameters',  # noqa
+        definition='Definition of a material and its properties in the data container',  # noqa
         key='MATERIAL',
         shape=[1],
         dtype=None),
@@ -1153,7 +1153,7 @@ KEYWORDS = {
         dtype=None),
     'MATERIAL_RELATION': Keyword(
         name='MaterialRelation',
-        definition='Material relation',  # noqa
+        definition='Material relation which together with the Physics equation gives the model equation',  # noqa
         key='MATERIAL_RELATION',
         shape=[1],
         dtype=None),
@@ -1171,7 +1171,7 @@ KEYWORDS = {
         dtype=None),
     'DIRICHLET': Keyword(
         name='Dirichlet',
-        definition='Dirichlet boundary condition',  # noqa
+        definition='Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain',  # noqa
         key='DIRICHLET',
         shape=[1],
         dtype=None),
@@ -1195,7 +1195,7 @@ KEYWORDS = {
         dtype=None),
     'DATA_SET': Keyword(
         name='DataSet',
-        definition='Data set',  # noqa
+        definition='A representation of the computational entities of the model equations',  # noqa
         key='DATA_SET',
         shape=[1],
         dtype=None),
@@ -1249,7 +1249,7 @@ KEYWORDS = {
         dtype=None),
     'NEUMANN': Keyword(
         name='Neumann',
-        definition='Neumann boundary condition',  # noqa
+        definition='Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.',  # noqa
         key='NEUMANN',
         shape=[1],
         dtype=None),
@@ -1289,15 +1289,15 @@ KEYWORDS = {
         key='COMPUTATIONAL_METHOD',
         shape=[1],
         dtype=None),
-    'COMPRESSIBILITY_MODEL': Keyword(
-        name='CompressibilityModel',
-        definition='Compressibility model',  # noqa
-        key='COMPRESSIBILITY_MODEL',
+    'FACE_CENTERED_CUBIC_LATTICE': Keyword(
+        name='FaceCenteredCubicLattice',
+        definition='A face centred cubic lattice',  # noqa
+        key='FACE_CENTERED_CUBIC_LATTICE',
         shape=[1],
         dtype=None),
     'BOUNDARY': Keyword(
         name='Boundary',
-        definition='System boundary',  # noqa
+        definition='A computational boundary in the system, it includes translated physical boundaries to computational boundaries.',  # noqa
         key='BOUNDARY',
         shape=[1],
         dtype=None),

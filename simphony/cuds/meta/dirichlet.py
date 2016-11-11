@@ -6,7 +6,7 @@ from . import validation
 
 
 class Dirichlet(Condition):
-    '''Dirichlet boundary condition  # noqa
+    '''Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain  # noqa
     '''
 
     cuba_key = CUBA.DIRICHLET
@@ -24,7 +24,7 @@ class Dirichlet(Condition):
         # This is a system-managed, read-only attribute
         self._models = [CUBA.CONTINUUM]
         # This is a system-managed, read-only attribute
-        self._definition = 'Dirichlet boundary condition'  # noqa
+        self._definition = 'Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain'  # noqa
 
     @property
     def material(self):

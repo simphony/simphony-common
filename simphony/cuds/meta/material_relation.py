@@ -6,7 +6,7 @@ from . import validation
 
 
 class MaterialRelation(ModelEquation):
-    '''Material relation  # noqa
+    '''Material relation which together with the Physics equation gives the model equation  # noqa
     '''
 
     cuba_key = CUBA.MATERIAL_RELATION
@@ -19,7 +19,7 @@ class MaterialRelation(ModelEquation):
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
-        self._definition = 'Material relation'  # noqa
+        self._definition = 'Material relation which together with the Physics equation gives the model equation'  # noqa
         # This is a system-managed, read-only attribute
         self._models = []
         # This is a system-managed, read-only attribute
