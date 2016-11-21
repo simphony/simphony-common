@@ -138,6 +138,7 @@ version = '%s'
         fh.close()
 write_version_py()
 
+
 # main setup configuration class
 setup(
     name='simphony',
