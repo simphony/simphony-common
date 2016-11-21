@@ -10,3 +10,4 @@ coverage
 flake8
 numpy >= 1.4.1
 hypothesis
+yapf
