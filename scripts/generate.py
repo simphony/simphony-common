@@ -646,7 +646,7 @@ class CodeGenerator(object):
         self.methods.append('''
     @property
     def data(self):
-        return DataContainer(self._data)
+        return self._data
         ''')
 
         self.methods.append('''
