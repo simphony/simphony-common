@@ -1,11 +1,11 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .computational_method import ComputationalMethod
+from .solver_parameter import SolverParameter
 from . import validation
 
 
-class IntegrationTime(ComputationalMethod):
+class IntegrationTime(SolverParameter):
     '''the current time, time step, and final time for a simulation stored on each cuds (a specific state).  # noqa
     '''
 
@@ -27,8 +27,6 @@ class IntegrationTime(ComputationalMethod):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'the current time, time step, and final time for a simulation stored on each cuds (a specific state).'  # noqa
-        # This is a system-managed, read-only attribute
-        self._physics_equation = []
 
     @property
     def final(self):
@@ -71,10 +69,6 @@ class IntegrationTime(ComputationalMethod):
         return self._definition
 
     @property
-    def physics_equation(self):
-        return self._physics_equation
-
-    @property
     def data(self):
         return self._data
 
@@ -91,8 +85,8 @@ class IntegrationTime(ComputationalMethod):
     @classmethod
     def supported_parameters(cls):
         return (CUBA.CURRENT, CUBA.DESCRIPTION, CUBA.FINAL, CUBA.NAME,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.UUID)
+                CUBA.SIZE, CUBA.UUID)
 
     @classmethod
     def parents(cls):
-        return (CUBA.COMPUTATIONAL_METHOD, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.SOLVER_PARAMETER, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -6,7 +6,7 @@ from . import validation
 
 
 class Box(Boundary):
-    '''A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).  # noqa
+    '''A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).  # noqa
     '''
 
     cuba_key = CUBA.BOX
@@ -16,12 +16,12 @@ class Box(Boundary):
         self._data = DataContainer()
 
         if vector is None:
-            self.vector = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+            self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         self.condition = condition
         self.name = name
         self.description = description
         # This is a system-managed, read-only attribute
-        self._definition = 'A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).'  # noqa
+        self._definition = 'A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).'  # noqa
 
     @property
     def vector(self):

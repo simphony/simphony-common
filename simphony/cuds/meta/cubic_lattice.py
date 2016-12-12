@@ -30,10 +30,16 @@ class CubicLattice(TetragonalLattice):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A cubic lattice'  # noqa
+        # This is a system-managed, read-only attribute
+        self._models = []
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def models(self):
+        return self._models
 
     @property
     def data(self):
@@ -57,4 +63,4 @@ class CubicLattice(TetragonalLattice):
     @classmethod
     def parents(cls):
         return (CUBA.TETRAGONAL_LATTICE, CUBA.BRAVAIS_LATTICE, CUBA.LATTICE,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+                CUBA.DATA_SET, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

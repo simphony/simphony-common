@@ -49,4 +49,5 @@ class Dem(ComputationalMethod):
 
     @classmethod
     def parents(cls):
-        return (CUBA.COMPUTATIONAL_METHOD, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.COMPUTATIONAL_METHOD, CUBA.SOLVER_PARAMETER,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
