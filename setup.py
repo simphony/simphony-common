@@ -80,7 +80,7 @@ class BuildMeta(Command):
             "cuba.yml")
 
         if not (os.path.exists(cuba_yml) and os.path.exists(metadata_yml)):
-            print (textwrap.dedent("""
+            print(textwrap.dedent("""
                 Cannot open simphony-metadata YAML files.
                 Please specify an appropriate path to the simphony-metadata
                 git repository in setup.cfg.
@@ -115,7 +115,7 @@ class BuildMeta(Command):
             check_call(cmd_args + ["simphony/core/keywords.py"])
             check_call(cmd_args + ["--recursive", "simphony/cuds/meta/"])
         except OSError:
-            print (textwrap.dedent("""
+            print(textwrap.dedent("""
                 Failed to run yapf. Make sure it is installed in your
                 python environment, by running
 
@@ -136,6 +136,8 @@ version = '%s'
         fh.write(ver % VERSION)
     finally:
         fh.close()
+
+
 write_version_py()
 
 # main setup configuration class
