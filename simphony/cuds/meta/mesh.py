@@ -1,11 +1,11 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from .data_set import DataSet
 from . import validation
 
 
-class Mesh(CUDSComponent):
+class Mesh(DataSet):
     '''A mesh  # noqa
     '''
 
@@ -23,6 +23,8 @@ class Mesh(CUDSComponent):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A mesh'  # noqa
+        # This is a system-managed, read-only attribute
+        self._models = []
 
     @property
     def edge(self):
@@ -89,6 +91,10 @@ class Mesh(CUDSComponent):
         return self._definition
 
     @property
+    def models(self):
+        return self._models
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
@@ -109,4 +115,4 @@ class Mesh(CUDSComponent):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.DATA_SET, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

@@ -233,12 +233,6 @@ KEYWORDS = {
         key='EXTERNAL_FORCING',
         shape=[1],
         dtype=bool),
-    'FACE': Keyword(
-        name='Face',
-        definition='A face of a three dimensional object defined by the nodes',  # noqa
-        key='FACE',
-        shape=[1],
-        dtype=numpy.float64),
     'FINAL': Keyword(
         name='Final',
         definition='final value of a parameter',  # noqa
@@ -787,7 +781,7 @@ KEYWORDS = {
         dtype=None),
     'BOX': Keyword(
         name='Box',
-        definition='A simple hexahedron (with six faces) simulation box defined by the three vectors and three directions. The condition should be specified for each direction (two faces at a time).',  # noqa
+        definition='A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).',  # noqa
         key='BOX',
         shape=[1],
         dtype=None),

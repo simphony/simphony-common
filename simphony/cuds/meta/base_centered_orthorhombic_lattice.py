@@ -30,10 +30,16 @@ class BaseCenteredOrthorhombicLattice(BravaisLattice):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A base centered orthorhombic lattice'  # noqa
+        # This is a system-managed, read-only attribute
+        self._models = []
 
     @property
     def definition(self):
         return self._definition
+
+    @property
+    def models(self):
+        return self._models
 
     @property
     def data(self):
@@ -56,5 +62,5 @@ class BaseCenteredOrthorhombicLattice(BravaisLattice):
 
     @classmethod
     def parents(cls):
-        return (CUBA.BRAVAIS_LATTICE, CUBA.LATTICE, CUBA.CUDS_COMPONENT,
-                CUBA.CUDS_ITEM)
+        return (CUBA.BRAVAIS_LATTICE, CUBA.LATTICE, CUBA.DATA_SET,
+                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

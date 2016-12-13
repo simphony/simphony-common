@@ -31,6 +31,8 @@ class BravaisLattice(Lattice):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A Bravais lattice'  # noqa
+        # This is a system-managed, read-only attribute
+        self._models = []
 
     @property
     def origin(self):
@@ -89,6 +91,10 @@ class BravaisLattice(Lattice):
         return self._definition
 
     @property
+    def models(self):
+        return self._models
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
@@ -109,4 +115,5 @@ class BravaisLattice(Lattice):
 
     @classmethod
     def parents(cls):
-        return (CUBA.LATTICE, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.LATTICE, CUBA.DATA_SET, CUBA.CUDS_COMPONENT,
+                CUBA.CUDS_ITEM)
