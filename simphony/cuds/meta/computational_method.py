@@ -1,10 +1,10 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from .solver_parameter import SolverParameter
 
 
-class ComputationalMethod(CUDSComponent):
+class ComputationalMethod(SolverParameter):
     '''A computational method according to the RoMM  # noqa
     '''
 
@@ -49,4 +49,4 @@ class ComputationalMethod(CUDSComponent):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.SOLVER_PARAMETER, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

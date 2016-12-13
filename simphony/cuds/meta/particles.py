@@ -1,11 +1,11 @@
 import uuid
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from .data_set import DataSet
 from . import validation
 
 
-class Particles(CUDSComponent):
+class Particles(DataSet):
     '''A collection of particles  # noqa
     '''
 
@@ -21,6 +21,8 @@ class Particles(CUDSComponent):
         self.description = description
         # This is a system-managed, read-only attribute
         self._definition = 'A collection of particles'  # noqa
+        # This is a system-managed, read-only attribute
+        self._models = []
 
     @property
     def bond(self):
@@ -57,6 +59,10 @@ class Particles(CUDSComponent):
         return self._definition
 
     @property
+    def models(self):
+        return self._models
+
+    @property
     def data(self):
         return DataContainer(self._data)
 
@@ -77,4 +83,4 @@ class Particles(CUDSComponent):
 
     @classmethod
     def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return (CUBA.DATA_SET, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

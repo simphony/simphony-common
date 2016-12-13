@@ -64,6 +64,13 @@ class BuildMeta(Command):
                     raise
 
                 try:
+                    print("Fetching")
+                    check_call(["git", "fetch"])
+                except CalledProcessError:
+                    print("Failed to fetch")
+                    raise
+
+                try:
                     print("Checking out {}".format(self.repotag))
                     check_call(["git", "checkout", self.repotag])
                 except CalledProcessError:
