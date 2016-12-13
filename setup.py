@@ -11,7 +11,7 @@ with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
 # Setup version
-VERSION = '0.3.1.dev0'
+VERSION = '0.5.0.dev0'
 
 
 @contextlib.contextmanager
@@ -61,6 +61,13 @@ class BuildMeta(Command):
                     check_call(["git", "stash"])
                 except CalledProcessError:
                     print("Failed to run git stash.")
+                    raise
+
+                try:
+                    print("Fetching")
+                    check_call(["git", "fetch"])
+                except CalledProcessError:
+                    print("Failed to fetch")
                     raise
 
                 try:
