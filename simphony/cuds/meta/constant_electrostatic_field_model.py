@@ -52,7 +52,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @property
     def data(self):
-        return DataContainer(self._data)
+        return self._data
 
     @data.setter
     def data(self, new_data):
