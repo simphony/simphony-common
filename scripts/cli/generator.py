@@ -1,22 +1,17 @@
 from __future__ import print_function
 
-import os
-import re
-import shutil
-import warnings
-
 import yaml
 import click
 
-from ..generate import (
-    CodeGenerator,
-    IMPORT_PATHS, CUBA_DATA_CONTAINER_EXCLUDE)
-from scripts.utils import make_temporary_directory, to_camel_case
+from scripts.cuba_enum_generator import CUBAEnumGenerator
+from scripts.keywords_generator import KeywordsGenerator
+from scripts.meta_class_generator import MetaClassGenerator
 
 
 @click.group()
 def cli():
     """ Auto-generate code from simphony-metadata yaml description. """
+
 
 @cli.command()
 @click.argument('yaml_file', type=click.File('rb'))
