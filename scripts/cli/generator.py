@@ -1,11 +1,9 @@
 from __future__ import print_function
 
-import re
 import yaml
 import click
 
 from scripts.cuba_enum_generator import CUBAEnumGenerator
-from scripts.generate import CodeGenerator, IMPORT_PATHS
 from scripts.keywords_generator import KeywordsGenerator
 from scripts.meta_class_generator import MetaClassGenerator
 

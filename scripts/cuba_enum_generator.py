@@ -15,8 +15,8 @@ class CUBAEnumGenerator(object):
             '\n']
         template = '    {} = "{}"\n'
 
-        all_keys = set(cuba_dict['CUBA_KEYS']) | \
-                   set(simphony_metadata_dict['CUDS_KEYS'])
+        all_keys = set(
+            cuba_dict['CUBA_KEYS']) | set(simphony_metadata_dict['CUDS_KEYS'])
 
         for keyword in sorted(list(all_keys)):
             if keyword in CUBA_DATA_CONTAINER_EXCLUDE:

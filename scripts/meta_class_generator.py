@@ -15,14 +15,16 @@ class MetaClassGenerator(object):
 
         YAML_FILE  - path to the simphony_metadata yaml file
 
-        OUT_PATH   - path to the directory where the output files should be placed
+        OUT_PATH   - path to the directory where the output files should be
+                     placed
         """
 
         if os.path.exists(out_path):
             if overwrite:
                 shutil.rmtree(out_path)
             else:
-                raise OSError('Destination already exists: {!r}'.format(out_path))
+                raise OSError('Destination already exists: {!r}'.format(
+                    out_path))
 
         all_generators = {}
 
@@ -32,8 +34,8 @@ class MetaClassGenerator(object):
             for key, class_data in simphony_metadata_dict['CUDS_KEYS'].items():
                 # Catch inconsistent definitions that would choke the generator
                 parent = class_data['parent']
-                if (parent and
-                            parent.replace('CUBA.', '') not in simphony_metadata_dict['CUDS_KEYS']):
+                if (parent and parent.replace('CUBA.', '')
+                        not in simphony_metadata_dict['CUDS_KEYS']):
                     message = ('{0} is SKIPPED because its parent {1} '
                                'is not defined in CUDS_KEYS')
                     warnings.warn(message.format(key, class_data['parent']))
@@ -54,8 +56,9 @@ class MetaClassGenerator(object):
                 gen.collect_attributes_from_parents(all_generators)
 
                 # Target .py file
-                filename = os.path.join(temp_dir,
-                                        "{}.py".format(gen.original_key.lower()))
+                filename = os.path.join(
+                    temp_dir,
+                    "{}.py".format(gen.original_key.lower()))
 
                 # Now write the code
                 with open(filename, 'wb') as generated_file:
@@ -63,9 +66,14 @@ class MetaClassGenerator(object):
 
                 # Print to the api.py
                 with open(os.path.join(temp_dir, "api.py"), 'ab') as api_file:
-                    print('from .{} import {}   # noqa'.format(key.lower(),
-                                                               to_camel_case(key)),
-                          sep='\n', file=api_file)
+                    print(
+                        'from .{} import {}   # noqa'.format(
+                            key.lower(),
+                            to_camel_case(key)
+                        ),
+                        sep='\n',
+                        file=api_file
+                    )
 
             # Create an empty __init__.py
             init_path = os.path.join(temp_dir, '__init__.py')
