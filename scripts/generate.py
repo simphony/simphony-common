@@ -203,6 +203,34 @@ class CodeGenerator(object):
             else:
                 self.required_user_defined[key] = contents
 
+    def generate(self, file_out):
+        """ Populate and generate the code in the right order.
+
+        Parameters
+        ----------
+        file_out : file object
+
+        """
+        # Populate codes before writing
+        self._setup_user_variable_code()
+        self._setup_system_code()
+        self._setup_module_variables()
+        self._setup_class_variables()
+        self._setup_meta_api()
+
+        # Now write to the file output
+        self.generate_class_import(file_out)
+        self.generate_module_variables(file_out)
+        self.generate_class_header(file_out)
+        self.generate_class_docstring(file_out)
+        self.generate_class_attributes_docstring(file_out)
+        self.generate_class_variables(file_out)
+        self.generate_initializer(file_out)
+
+        # methods (including descriptors)
+        print(*self.methods, sep="\n", file=file_out)
+
+
     @property
     def all_non_inherited_attributes(self):
         ''' All attributes that are not inherited '''
@@ -762,33 +790,6 @@ class CodeGenerator(object):
             self.init_body.append("pass")
 
         print(*self.init_body, sep="\n        ", file=file_out)
-
-    def generate(self, file_out):
-        """ Populate and generate the code in the right order.
-
-        Parameters
-        ----------
-        file_out : file object
-
-        """
-        # Populate codes before writing
-        self._setup_user_variable_code()
-        self._setup_system_code()
-        self._setup_module_variables()
-        self._setup_class_variables()
-        self._setup_meta_api()
-
-        # Now write to the file output
-        self.generate_class_import(file_out)
-        self.generate_module_variables(file_out)
-        self.generate_class_header(file_out)
-        self.generate_class_docstring(file_out)
-        self.generate_class_attributes_docstring(file_out)
-        self.generate_class_variables(file_out)
-        self.generate_initializer(file_out)
-
-        # methods (including descriptors)
-        print(*self.methods, sep="\n", file=file_out)
 
 
 def transform_cuba_string(code):
