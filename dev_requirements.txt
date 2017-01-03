@@ -10,4 +10,6 @@ coverage
 flake8<3
 numpy >= 1.4.1
 hypothesis
-yapf
+# Pinned because older versions return status 2 for successful
+# operation, which is considered an error by setup.py
+yapf==0.14.0
