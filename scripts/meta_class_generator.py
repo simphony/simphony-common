@@ -5,7 +5,7 @@ import os
 import warnings
 import re
 
-from scripts.generate import CodeGenerator, IMPORT_PATHS
+from scripts.single_meta_class_generator import SingleMetaClassGenerator, IMPORT_PATHS
 from scripts.utils import make_temporary_directory, to_camel_case
 
 
@@ -48,7 +48,7 @@ class MetaClassGenerator(object):
                 # Create the generator object, on init, it identifies its own
                 # required/optional user-defined attributes and
                 # system-managed attributes
-                all_generators[key] = CodeGenerator(key, class_data)
+                all_generators[key] = SingleMetaClassGenerator(key, class_data)
 
             for key, gen in all_generators.items():
                 # Collect parents and attributes inherited from parents

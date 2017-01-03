@@ -26,7 +26,7 @@ EXCLUDE_SUPPORTED_PARAMETERS = ('definition', 'models', 'variables', 'data',)
 CUBA_DATA_CONTAINER_EXCLUDE = ['Id', 'Position']
 
 
-class CodeGenerator(object):
+class SingleMetaClassGenerator(object):
     ''' Generator for SimPhoNy Metadata classes
 
     On initialisation, the generator will identify which attributes
@@ -50,7 +50,7 @@ class CodeGenerator(object):
 
     Examples
     --------
-    >>> gen = CodeGenerator(key, class_data)
+    >>> gen = SingleMetaClassGenerator(key, class_data)
 
     >>> # if class should inherit other classes
     >>> # you should call `collect_parents_to_mro`

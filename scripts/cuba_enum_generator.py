@@ -1,4 +1,4 @@
-from scripts.generate import CUBA_DATA_CONTAINER_EXCLUDE
+from scripts.single_meta_class_generator import CUBA_DATA_CONTAINER_EXCLUDE
 
 
 class CUBAEnumGenerator(object):
