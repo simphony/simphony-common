@@ -1,37 +1,9 @@
-import warnings
 import re
+import warnings
 
 import numpy
 
-
-def to_camel_case(text, special={'cuds': 'CUDS'}):
-    """ Convert text to CamelCase (for class name)
-
-    Parameters
-    ----------
-    text : str
-        The text to be converted
-
-    special : dict
-        If any substring of text (lower case) matches a key of `special`,
-        the substring is replaced by the value
-
-    Returns
-    -------
-    result : str
-    """
-
-    def replace_func(matched):
-        # word should be lower case already
-        word = matched.group(0).strip("_")
-        if word in special:
-            # Handle special case
-            return special[word]
-        else:
-            # Capitalise the first character
-            return word[0].upper()+word[1:]
-
-    return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
+from scripts.utils import to_camel_case
 
 
 def decode_shape(shape_code):

@@ -9,9 +9,9 @@ import yaml
 import click
 
 from ..generate import (
-    make_temporary_directory, CodeGenerator, to_camel_case,
+    CodeGenerator,
     IMPORT_PATHS, CUBA_DATA_CONTAINER_EXCLUDE)
-
+from scripts.utils import make_temporary_directory, to_camel_case
 
 
 @click.group()

@@ -1,13 +1,11 @@
 from __future__ import print_function
 
 import re
-import shutil
-import tempfile
 import warnings
-
 from collections import OrderedDict, MutableSequence
-from contextlib import contextmanager
 from itertools import chain
+
+from scripts.utils import to_camel_case
 
 # May be 'simphony.meta', we can make this as a command-line attribute
 PATH_TO_CLASSES = ''
@@ -26,91 +24,6 @@ EXCLUDE_SUPPORTED_PARAMETERS = ('definition', 'models', 'variables', 'data',)
 
 # keywords that are excludes from DataContainers
 CUBA_DATA_CONTAINER_EXCLUDE = ['Id', 'Position']
-
-
-@contextmanager
-def make_temporary_directory():
-    ''' Context Manager for creating a temporary directory
-    and remove the tree on exit
-
-    Yields
-    ------
-    temp_dir : str
-        absolute path to temporary directory
-    '''
-    try:
-        temp_dir = tempfile.mkdtemp()
-        yield temp_dir
-    finally:
-        shutil.rmtree(temp_dir)
-
-
-def to_camel_case(text, special={'cuds': 'CUDS'}):
-    """ Convert text to CamelCase (for class name)
-
-    Parameters
-    ----------
-    text : str
-        The text to be converted
-
-    special : dict
-        If any substring of text (lower case) matches a key of `special`,
-        the substring is replaced by the value
-
-    Returns
-    -------
-    result : str
-    """
-
-    def replace_func(matched):
-        # word should be lower case already
-        word = matched.group(0).strip("_")
-        if word in special:
-            # Handle special case
-            return special[word]
-        else:
-            # Capitalise the first character
-            return word[0].upper()+word[1:]
-
-    return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
-
-
-def transform_cuba_string(code):
-    ''' Tranform any \'CUBA.SOMETHING\' in a string to CUBA.SOMETHING
-
-    Parameters
-    ----------
-    code : str
-
-    Returns
-    -------
-    transformed_code : str
-       with any \'CUBA.SOMETHING\' converted to CUBA.SOMETHING
-    '''
-    return re.sub('\'(CUBA.\w+)\'', lambda x: x.group(0).strip("'"), code)
-
-
-def is_system_managed(key, contents):
-    ''' Return True is `key` is a system-managed attribute
-
-    Criteria:
-    (1) the key does not start with "CUBA." OR
-    (2) contents['scope'] is CUBA.SYSTEM
-
-    Parameters
-    ----------
-    key : str
-    '''
-    if isinstance(contents, dict):
-        if contents.get('scope') == 'CUBA.SYSTEM':
-            return True
-        if contents.get('scope') == 'CUBA.USER':
-            return False
-
-    if not key.upper().startswith('CUBA.'):
-        return True
-
-    return False
 
 
 class CodeGenerator(object):
@@ -877,3 +790,40 @@ class CodeGenerator(object):
         # methods (including descriptors)
         print(*self.methods, sep="\n", file=file_out)
 
+
+def transform_cuba_string(code):
+    ''' Tranform any \'CUBA.SOMETHING\' in a string to CUBA.SOMETHING
+
+    Parameters
+    ----------
+    code : str
+
+    Returns
+    -------
+    transformed_code : str
+       with any \'CUBA.SOMETHING\' converted to CUBA.SOMETHING
+    '''
+    return re.sub('\'(CUBA.\w+)\'', lambda x: x.group(0).strip("'"), code)
+
+
+def is_system_managed(key, contents):
+    ''' Return True is `key` is a system-managed attribute
+
+    Criteria:
+    (1) the key does not start with "CUBA." OR
+    (2) contents['scope'] is CUBA.SYSTEM
+
+    Parameters
+    ----------
+    key : str
+    '''
+    if isinstance(contents, dict):
+        if contents.get('scope') == 'CUBA.SYSTEM':
+            return True
+        if contents.get('scope') == 'CUBA.USER':
+            return False
+
+    if not key.upper().startswith('CUBA.'):
+        return True
+
+    return False
