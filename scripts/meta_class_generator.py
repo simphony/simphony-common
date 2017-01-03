@@ -101,5 +101,3 @@ class MetaClassGenerator(object):
 
             # Copy everything to the output directory
             shutil.copytree(temp_dir, out_path)
-
-
