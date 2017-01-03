@@ -5,7 +5,8 @@ import os
 import warnings
 import re
 
-from scripts.single_meta_class_generator import SingleMetaClassGenerator, IMPORT_PATHS
+from scripts.single_meta_class_generator import (
+    SingleMetaClassGenerator, IMPORT_PATHS)
 from scripts.utils import make_temporary_directory, to_camel_case
 
 
