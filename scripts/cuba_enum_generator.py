@@ -1,4 +1,4 @@
-from scripts.single_meta_class_generator import CUBA_DATA_CONTAINER_EXCLUDE
+from scripts.old_single_meta_class_generator import CUBA_DATA_CONTAINER_EXCLUDE
 
 
 class CUBAEnumGenerator(object):
@@ -18,8 +18,8 @@ class CUBAEnumGenerator(object):
             '\n',
             '\n',
             '@unique\n',
-            'class CUBA(Enum):\n',
-            '\n']
+            'class CUBA(Enum):\n'
+            ]
         template = '    {} = "{}"\n'
 
         all_keys = set(
