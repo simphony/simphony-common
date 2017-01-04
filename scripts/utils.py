@@ -59,7 +59,7 @@ def indent(text, level=1):
     """
     dedent_text = textwrap.dedent(text)
     spaces = 4 * level * " "
-    return "".join((spaces + line) for line in dedent_text.splitlines())
+    return "\n".join((spaces + line) for line in dedent_text.splitlines())
 
 
 def with_cuba_prefix(string):
@@ -76,3 +76,20 @@ def without_cuba_prefix(string):
         return string[5:]
 
     return string
+
+
+def cuba_key_to_meta_class_name(string):
+    return to_camel_case(without_cuba_prefix(string))
+
+
+def cuba_key_to_meta_class_module_name(string):
+    return without_cuba_prefix(string).lower()
+
+
+def meta_class_name_to_module_name(string):
+    def replace_func(matched):
+        word = matched.group(0).strip("_")
+        res = "_"+word.lower()
+        return res
+
+    return re.sub(r'([A-Z]+)', replace_func, string).lstrip("_")
