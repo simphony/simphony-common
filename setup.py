@@ -96,7 +96,7 @@ class BuildMeta(Command):
 
         print("Building classes")
         with open(metadata_yml, 'rb') as simphony_metadata:
-            from scripts.generate import meta_class
+            from scripts.cli.generator import meta_class
             meta_class.callback(simphony_metadata, "simphony/cuds/meta/", True)
 
         print("Building keywords")
@@ -104,7 +104,7 @@ class BuildMeta(Command):
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/keywords.py", "wb") as keywords_out:
 
-            from scripts.generate import keywords
+            from scripts.cli.generator import keywords
             keywords.callback(cuba, simphony_metadata, keywords_out)
 
         print("Building enums")
@@ -112,7 +112,7 @@ class BuildMeta(Command):
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/cuba.py", "wb") as cuba_out:
 
-            from scripts.generate import cuba_enum
+            from scripts.cli.generator import cuba_enum
             cuba_enum.callback(cuba, simphony_metadata, cuba_out)
 
         print("Running yapf")
@@ -168,5 +168,5 @@ setup(
     entry_points={
         'console_scripts': [
             ('simphony-meta-generate = '
-             'scripts.generate:cli')]},
+             'scripts.cli.generator:cli')]},
     )

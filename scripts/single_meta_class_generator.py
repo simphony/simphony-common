@@ -1,17 +1,11 @@
 from __future__ import print_function
 
-import os
 import re
-import shutil
-import tempfile
 import warnings
-
 from collections import OrderedDict, MutableSequence
-from contextlib import contextmanager
 from itertools import chain
 
-import click
-import yaml
+from scripts.utils import to_camel_case
 
 # May be 'simphony.meta', we can make this as a command-line attribute
 PATH_TO_CLASSES = ''
@@ -32,93 +26,8 @@ EXCLUDE_SUPPORTED_PARAMETERS = ('definition', 'models', 'variables', 'data',)
 CUBA_DATA_CONTAINER_EXCLUDE = ['Id', 'Position']
 
 
-@contextmanager
-def make_temporary_directory():
-    ''' Context Manager for creating a temporary directory
-    and remove the tree on exit
-
-    Yields
-    ------
-    temp_dir : str
-        absolute path to temporary directory
-    '''
-    try:
-        temp_dir = tempfile.mkdtemp()
-        yield temp_dir
-    finally:
-        shutil.rmtree(temp_dir)
-
-
-def to_camel_case(text, special={'cuds': 'CUDS'}):
-    """ Convert text to CamelCase (for class name)
-
-    Parameters
-    ----------
-    text : str
-        The text to be converted
-
-    special : dict
-        If any substring of text (lower case) matches a key of `special`,
-        the substring is replaced by the value
-
-    Returns
-    -------
-    result : str
-    """
-
-    def replace_func(matched):
-        # word should be lower case already
-        word = matched.group(0).strip("_")
-        if word in special:
-            # Handle special case
-            return special[word]
-        else:
-            # Capitalise the first character
-            return word[0].upper()+word[1:]
-
-    return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
-
-
-def transform_cuba_string(code):
-    ''' Tranform any \'CUBA.SOMETHING\' in a string to CUBA.SOMETHING
-
-    Parameters
-    ----------
-    code : str
-
-    Returns
-    -------
-    transformed_code : str
-       with any \'CUBA.SOMETHING\' converted to CUBA.SOMETHING
-    '''
-    return re.sub('\'(CUBA.\w+)\'', lambda x: x.group(0).strip("'"), code)
-
-
-def is_system_managed(key, contents):
-    ''' Return True is `key` is a system-managed attribute
-
-    Criteria:
-    (1) the key does not start with "CUBA." OR
-    (2) contents['scope'] is CUBA.SYSTEM
-
-    Parameters
-    ----------
-    key : str
-    '''
-    if isinstance(contents, dict):
-        if contents.get('scope') == 'CUBA.SYSTEM':
-            return True
-        if contents.get('scope') == 'CUBA.USER':
-            return False
-
-    if not key.upper().startswith('CUBA.'):
-        return True
-
-    return False
-
-
-class CodeGenerator(object):
-    ''' Generator for SimPhoNy Metadata classes
+class SingleMetaClassGenerator(object):
+    """ Generator for SimPhoNy Metadata classes
 
     On initialisation, the generator will identify which attributes
     are managed by the system etc. (i.e. `system_variables`,
@@ -141,7 +50,7 @@ class CodeGenerator(object):
 
     Examples
     --------
-    >>> gen = CodeGenerator(key, class_data)
+    >>> gen = SingleMetaClassGenerator(key, class_data)
 
     >>> # if class should inherit other classes
     >>> # you should call `collect_parents_to_mro`
@@ -200,10 +109,10 @@ class CodeGenerator(object):
 
     mro_completed : boolean
         Whether the mro is completed
-    '''
+    """
 
     def __init__(self, key, class_data):
-        ''' Initialisation
+        """ Initialisation
 
         Parameters
         ----------
@@ -214,7 +123,7 @@ class CodeGenerator(object):
             meta data of the class, generally the result from
             the pyyaml parser.  Keys are the attributes of the
             generated class
-        '''
+        """
         # We keep a record of the original key
         self.original_key = key
 
@@ -294,16 +203,43 @@ class CodeGenerator(object):
             else:
                 self.required_user_defined[key] = contents
 
+    def generate(self, file_out):
+        """ Populate and generate the code in the right order.
+
+        Parameters
+        ----------
+        file_out : file object
+
+        """
+        # Populate codes before writing
+        self._setup_user_variable_code()
+        self._setup_system_code()
+        self._setup_module_variables()
+        self._setup_class_variables()
+        self._setup_meta_api()
+
+        # Now write to the file output
+        self.generate_class_import(file_out)
+        self.generate_module_variables(file_out)
+        self.generate_class_header(file_out)
+        self.generate_class_docstring(file_out)
+        self.generate_class_attributes_docstring(file_out)
+        self.generate_class_variables(file_out)
+        self.generate_initializer(file_out)
+
+        # methods (including descriptors)
+        print(*self.methods, sep="\n", file=file_out)
+
     @property
     def all_non_inherited_attributes(self):
-        ''' All attributes that are not inherited '''
+        """ All attributes that are not inherited """
         return (set(self.system_variables) |
                 set(self.optional_user_defined) |
                 set(self.required_user_defined))
 
     @property
     def all_attributes(self):
-        ''' All attributes, inherited and non-inherited '''
+        """ All attributes, inherited and non-inherited """
         return (self.all_non_inherited_attributes |
                 set(self.inherited_required) |
                 set(self.inherited_optional) |
@@ -311,8 +247,8 @@ class CodeGenerator(object):
 
     @property
     def supported_parameters(self):
-        ''' Return a tuple of supported CUBA IntEnum
-        '''
+        """ Return a tuple of supported CUBA IntEnum
+        """
         # We loop over `self.all_attributes` which include
         # inherited attributes.  These attributes are lower-case
         # without 'CUBA.' in front.  If they are in the yaml-file,
@@ -358,22 +294,22 @@ class CodeGenerator(object):
                 self.init_body[-1] += '  # noqa'
 
     def _setup_module_variables(self):
-        ''' Populate module-level variables '''
+        """ Populate module-level variables """
         pass
 
     def _setup_class_variables(self):
-        ''' Populate class variables
+        """ Populate class variables
 
         These variables are requested by the user, but they are not
         directly specified in the yaml file
-        '''
+        """
 
         # Add cuba_key as a class variable
         self.class_variables.append(
             'cuba_key = CUBA.{}'.format(self.original_key))
 
     def _setup_meta_api(self):
-        ''' Populate API for interoperability '''
+        """ Populate API for interoperability """
 
         # Add a supported_parameters as a class method
         self.methods.append(
@@ -391,7 +327,7 @@ class CodeGenerator(object):
                                     for parent in self.mro))))
 
     def _setup_user_variable_code(self):
-        ''' Populate code for user-defined attributes '''
+        """ Populate code for user-defined attributes """
 
         # populate them in reverse, because we want the root base class
         # attributes filled at the very end. This is to prevent
@@ -442,7 +378,7 @@ class CodeGenerator(object):
                 self._setup_setter_with_validation(key, contents)
 
     def _setup_getter(self, key, value=None, docstring=''):
-        ''' Populate getter descriptor
+        """ Populate getter descriptor
 
         Parameters
         ----------
@@ -454,7 +390,7 @@ class CodeGenerator(object):
 
         docstring : str
             Documentation for the getter
-        '''
+        """
         # default property getter
         if value is None:
             # Where is the value stored
@@ -481,7 +417,7 @@ class CodeGenerator(object):
         return {value}'''.format(key=key, value=value))
 
     def _setup_setter(self, key, check_statements=()):
-        ''' Populate setter descriptor
+        """ Populate setter descriptor
 
         Parameters
         ----------
@@ -490,7 +426,7 @@ class CodeGenerator(object):
 
         check_statements : sequence
             sequence of strings (code)
-        '''
+        """
         # Get the indentation right
         validation_code = '''
         '''.join(check_statements)
@@ -520,7 +456,7 @@ class CodeGenerator(object):
                                    validation_code=validation_code))
 
     def _setup_setter_with_validation(self, key, contents):
-        ''' Populate setter descriptor with validation codes
+        """ Populate setter descriptor with validation codes
 
         Parameters
         ----------
@@ -529,7 +465,7 @@ class CodeGenerator(object):
 
         contents : dict
             metadata of the attribute
-        '''
+        """
         self.imports.append(IMPORT_PATHS['validation'])
 
         # Validation code for the setter
@@ -584,7 +520,7 @@ class CodeGenerator(object):
         self._setup_setter(key, check_statements)
 
     def _setup_init_body_with_cuba_default(self, key, default):
-        '''  Populate the body of `__init__` for an attribute
+        """  Populate the body of `__init__` for an attribute
 
         Parameters
         ----------
@@ -597,7 +533,7 @@ class CodeGenerator(object):
             as a metadata class and an instance of that class
             would be created on initialisation.  The corresponding
             import statement would be added.
-        '''
+        """
         default_key = default.lower().replace('cuba.', '')
         class_name = to_camel_case(default_key)
         # __init__ body
@@ -658,7 +594,7 @@ class CodeGenerator(object):
     # End populate methods
 
     def collect_parents_to_mro(self, generators):
-        ''' Recursively collect all the inherited into CodeGenerator.mro
+        """ Recursively collect all the inherited into CodeGenerator.mro
         Assume single inheritence, i.e. no multiple parents
 
         Parameters
@@ -666,7 +602,7 @@ class CodeGenerator(object):
         generators : dict
             keys are the names of classes (all upper case)
             values are the cooresponding CodeGenerator objects
-        '''
+        """
         # If its mro is already completed, return
         if self.mro_completed:
             return
@@ -687,7 +623,7 @@ class CodeGenerator(object):
         self.mro_completed = True
 
     def collect_attributes_from_parents(self, generators):
-        ''' Given the MRO is populated, collect all the
+        """ Given the MRO is populated, collect all the
         attributes inherited from the parents and thus populate
         `inherited_required`, `inherited_optional` and `inherited_sys_vars`
 
@@ -700,7 +636,7 @@ class CodeGenerator(object):
         See Also
         --------
         collect_parents_to_mro
-        '''
+        """
         if not self.mro_completed:
             raise RuntimeError(
                 'MRO is not yet populated for {}.'.format(self.original_key))
@@ -730,35 +666,35 @@ class CodeGenerator(object):
                     getattr(self, to_save)[key] = getattr(parent, to_get)[key]
 
     def generate_class_import(self, file_out):
-        ''' Print import statements to the file output
+        """ Print import statements to the file output
 
         Parameters
         ----------
         file_out : file object
-        '''
+        """
         # import statements
         print(*sorted(set(self.imports), reverse=True),
               sep="\n", file=file_out)
 
     def generate_module_variables(self, file_out):
-        ''' Print module-level variables to the file output
+        """ Print module-level variables to the file output
 
         Parameters
         ----------
         file_out : file object
-        '''
+        """
         if self.module_variables and len(self.module_variables) > 0:
             print("", file=file_out)
             print(*self.module_variables,
                   sep="\n", file=file_out)
 
     def generate_class_header(self, file_out):
-        ''' Print class definition to the file output
+        """ Print class definition to the file output
 
         Parameters
         ----------
         file_out : file object
-        '''
+        """
         # class header
         if self.parent != 'object':
             parent_class_name = to_camel_case(self.parent)
@@ -770,14 +706,14 @@ class CodeGenerator(object):
               file=file_out)
 
     def generate_class_docstring(self, file_out):
-        ''' Generates the description block of the generated class.
+        """ Generates the description block of the generated class.
 
         This block does not include individual attribute documentation
 
         Parameters
         ----------
         file_out : File object
-        '''
+        """
 
         definition = self.class_data.get('definition', 'Missing definition')
 
@@ -786,35 +722,35 @@ class CodeGenerator(object):
     \'\'\''''.format(DOC_DESCRIPTION=definition), file=file_out)
 
     def generate_class_attributes_docstring(self, file_out):
-        ''' Generates the description block of the generated class.
+        """ Generates the description block of the generated class.
 
         This block does not include individual attribute documentation
 
         Parameters
         ----------
         file_out : File object
-        '''
+        """
         # Not yet implemented
         pass
 
     def generate_class_variables(self, file_out):
-        ''' Print class-level variables
+        """ Print class-level variables
 
         Parameters
         ----------
         file_out : file object
-        '''
+        """
         # class-level variables
         print(*self.class_variables,
               sep="\n    ", file=file_out)
 
     def generate_initializer(self, file_out):
-        ''' Generate the entire __init__ method of the generated class.
+        """ Generate the entire __init__ method of the generated class.
 
         Parameters
         ----------
         file_out : File object
-        '''
+        """
         # __init__ keyword arguments
         kwargs = []
         for key, content in chain(
@@ -854,233 +790,40 @@ class CodeGenerator(object):
 
         print(*self.init_body, sep="\n        ", file=file_out)
 
-    def generate(self, file_out):
-        """ Populate and generate the code in the right order.
 
-        Parameters
-        ----------
-        file_out : file object
+def transform_cuba_string(code):
+    """ Tranform any \'CUBA.SOMETHING\' in a string to CUBA.SOMETHING
 
-        """
-        # Populate codes before writing
-        self._setup_user_variable_code()
-        self._setup_system_code()
-        self._setup_module_variables()
-        self._setup_class_variables()
-        self._setup_meta_api()
+    Parameters
+    ----------
+    code : str
 
-        # Now write to the file output
-        self.generate_class_import(file_out)
-        self.generate_module_variables(file_out)
-        self.generate_class_header(file_out)
-        self.generate_class_docstring(file_out)
-        self.generate_class_attributes_docstring(file_out)
-        self.generate_class_variables(file_out)
-        self.generate_initializer(file_out)
-
-        # methods (including descriptors)
-        print(*self.methods, sep="\n", file=file_out)
-
-
-@click.group()
-def cli():
-    """ Auto-generate code from simphony-metadata yaml description. """
-
-
-@cli.command()
-@click.argument('yaml_file', type=click.File('rb'))
-@click.argument('out_path', type=click.Path())
-@click.option('-O', '--overwrite', is_flag=True, default=False,
-              help='Overwrite OUT_PATH')
-def meta_class(yaml_file, out_path, overwrite):
-    """ Create the Simphony Metadata classes
-
-    YAML_FILE  - path to the simphony_metadata yaml file
-
-    OUT_PATH   - path to the directory where the output files should be placed
+    Returns
+    -------
+    transformed_code : str
+       with any \'CUBA.SOMETHING\' converted to CUBA.SOMETHING
     """
-
-    if os.path.exists(out_path):
-        if overwrite:
-            shutil.rmtree(out_path)
-        else:
-            raise OSError('Destination already exists: {!r}'.format(out_path))
-
-    yml_data = yaml.safe_load(yaml_file)
-
-    all_generators = {}
-
-    # Temporary directory that stores the output
-    with make_temporary_directory() as temp_dir:
-
-        for key, class_data in yml_data['CUDS_KEYS'].items():
-            # Catch inconsistent definitions that would choke the generator
-            parent = class_data['parent']
-            if (parent and
-                    parent.replace('CUBA.', '') not in yml_data['CUDS_KEYS']):
-                message = ('{0} is SKIPPED because its parent {1} '
-                           'is not defined in CUDS_KEYS')
-                warnings.warn(message.format(key, class_data['parent']))
-                continue
-
-            if key.lower() in ('validation', 'api'):
-                message = 'Name crashes with utility modules: '+key.lower()
-                raise ValueError(message)
-
-            # Create the generator object, on init, it identifies its own
-            # required/optional user-defined attributes and
-            # system-managed attributes
-            all_generators[key] = CodeGenerator(key, class_data)
-
-        for key, gen in all_generators.items():
-            # Collect parents and attributes inherited from parents
-            gen.collect_parents_to_mro(all_generators)
-            gen.collect_attributes_from_parents(all_generators)
-
-            # Target .py file
-            filename = os.path.join(temp_dir,
-                                    "{}.py".format(gen.original_key.lower()))
-
-            # Now write the code
-            with open(filename, 'wb') as generated_file:
-                gen.generate(file_out=generated_file)
-
-            # Print to the api.py
-            with open(os.path.join(temp_dir, "api.py"), 'ab') as api_file:
-                print('from .{} import {}   # noqa'.format(key.lower(),
-                                                           to_camel_case(key)),
-                      sep='\n', file=api_file)
-
-        # Create an empty __init__.py
-        init_path = os.path.join(temp_dir, '__init__.py')
-        open(init_path, 'a').close()
-
-        # Create validation.py
-        validation_path = os.path.join(temp_dir, 'validation.py')
-
-        from . import validation
-        # validation.py for validation codes.
-        validation_py_path = os.path.splitext(validation.__file__)[0]+'.py'
-
-        with open(validation_path, 'wb') as dst_file, \
-                open(validation_py_path, 'rb') as src_file:
-
-            # Replace import path for KEYWORDS
-            def read_lines(src_file):
-                while True:
-                    line = src_file.next()
-                    yield re.sub(r'(\s*).+import KEYWORDS',
-                                 "\\1"+IMPORT_PATHS['KEYWORDS'], line)
-
-            # Copy the rest of the file
-            print(*read_lines(src_file), file=dst_file, sep='')
-
-        # Copy everything to the output directory
-        shutil.copytree(temp_dir, out_path)
+    return re.sub('\'(CUBA.\w+)\'', lambda x: x.group(0).strip("'"), code)
 
 
-@cli.command()
-@click.argument('cuba_input', type=click.File('rb'))
-@click.argument('cuds_input', type=click.File('rb'))
-@click.argument('output', type=click.File('wb'))
-def cuba_enum(cuba_input, cuds_input, output):
-    """ Create the CUBA Enum
+def is_system_managed(key, contents):
+    """ Return True is `key` is a system-managed attribute
 
-    CUBA_INPUT  - Path to the cuba.yml
+    Criteria:
+    (1) the key does not start with "CUBA." OR
+    (2) contents['scope'] is CUBA.SYSTEM
 
-    CUDS_INPUT  - Path to the simphony_metadata.yml
-
-    OUTPUT      - Path to the output cuba.py file
+    Parameters
+    ----------
+    key : str
     """
-    keywords = yaml.safe_load(cuba_input)
-    metadata = yaml.safe_load(cuds_input)
+    if isinstance(contents, dict):
+        if contents.get('scope') == 'CUBA.SYSTEM':
+            return True
+        if contents.get('scope') == 'CUBA.USER':
+            return False
 
-    lines = [
-        '# code auto-generated by the\n',
-        '# simphony-metadata/scripts/generate.py script.\n',
-        '# cuba.yml VERSION: {}\n'.format(keywords['VERSION']),
-        'from enum import Enum, unique\n',
-        '\n',
-        '\n',
-        '@unique\n',
-        'class CUBA(Enum):\n',
-        '\n']
-    template = '    {} = "{}"\n'
+    if not key.upper().startswith('CUBA.'):
+        return True
 
-    all_keys = set(keywords['CUBA_KEYS']) | set(metadata['CUDS_KEYS'])
-
-    for keyword in sorted(list(all_keys)):
-        if keyword in CUBA_DATA_CONTAINER_EXCLUDE:
-            continue
-        lines.append(template.format(keyword, keyword))
-
-    output.writelines(lines)
-
-
-@cli.command()
-@click.argument('cuba_input', type=click.File('rb'))
-@click.argument('cuds_input', type=click.File('rb'))
-@click.argument('output', type=click.File('wb'))
-def keywords(cuba_input, cuds_input, output):
-    """ Create a dictionary of CUDS keywords.
-
-    CUBA_INPUT  - Path to the cuba.yml
-
-    CUDS_INPUT  - Path to the simphony_metadata.yml
-
-    OUTPUT      - Path to the output cuba.py file
-    """
-    keywords = yaml.safe_load(cuba_input)
-    metadata = yaml.safe_load(cuds_input)
-
-    lines = [
-        '# code auto-generated by the\n',
-        '# simphony-metadata/scripts/generate.py script.\n',
-        '# cuba.yml VERSION: {}\n'.format(keywords['VERSION']),
-        '# simphony_metadata.yml VERSION: {}\n'.format(metadata['VERSION']),
-        'from collections import namedtuple\n',
-        '\n',
-        'import numpy\n',
-        'import uuid  # noqa\n',
-        '\n',
-        '\n',
-        'ATTRIBUTES = [\n'
-        '    "name", "definition", "key", "shape", "dtype"]\n'  # noqa
-        'Keyword = namedtuple("Keyword", ATTRIBUTES)\n',
-        '\n',
-        '\n',
-        'KEYWORDS = {\n']
-    data_types = {
-        'uuid': 'uuid.UUID',
-        'string': 'numpy.str',
-        'double': 'numpy.float64',
-        'integer': 'numpy.int32',
-        'boolean': 'bool'}
-    template = (
-        "    '{key}': Keyword(\n"
-        "        name='{name}',\n"
-        "        definition='{definition}',  # noqa\n"
-        "        key='{key}',\n"
-        "        shape={shape},\n"
-        "        dtype={type}),\n")
-    for keyword, content in sorted(keywords['CUBA_KEYS'].items(),
-                                   key=lambda x: x[0]):
-        content['type'] = data_types[content['type']]
-        content['name'] = to_camel_case(keyword)
-        content['key'] = keyword
-        lines.extend(template.format(**content))
-
-    for keyword, content in sorted(metadata['CUDS_KEYS'].items(),
-                                   key=lambda x: x[0]):
-        content['type'] = "None"
-        content['name'] = to_camel_case(keyword)
-        content['key'] = keyword
-        content['shape'] = [1]
-        lines.extend(template.format(**content))
-    lines.append('}\n')
-
-    output.writelines(lines)
-
-
-if __name__ == '__main__':
-    cli()
+    return False
