@@ -21,9 +21,14 @@ def cli():
 def meta_class(yaml_file, out_path, overwrite):
     """ Create the Simphony Metadata classes
 
-    YAML_FILE  - path to the simphony_metadata yaml file
+    yaml_file:
+        path to the simphony_metadata yaml file
 
-    OUT_PATH   - path to the directory where the output files should be placed
+    out_path:
+        path to the directory where the output files should be placed
+
+    overwrite:
+        Allow overwrite of the file.
     """
     simphony_metadata_dict = yaml.safe_load(yaml_file)
 
@@ -38,11 +43,14 @@ def meta_class(yaml_file, out_path, overwrite):
 def cuba_enum(cuba_input, cuds_input, output):
     """ Create the CUBA Enum
 
-    CUBA_INPUT  - Path to the cuba.yml
+    cuba_input:
+        Path to the cuba.yml
 
-    CUDS_INPUT  - Path to the simphony_metadata.yml
+    cuds_input:
+        Path to the simphony_metadata.yml
 
-    OUTPUT      - Path to the output cuba.py file
+    output:
+        Path to the output cuba.py file
     """
     cuba_dict = yaml.safe_load(cuba_input)
     simphony_metadata_dict = yaml.safe_load(cuds_input)
@@ -56,13 +64,16 @@ def cuba_enum(cuba_input, cuds_input, output):
 @click.argument('cuds_input', type=click.File('rb'))
 @click.argument('output', type=click.File('wb'))
 def keywords(cuba_input, cuds_input, output):
-    """ Create a dictionary of CUDS keywords.
+    """ Create a dictionary of keywords.
 
-    CUBA_INPUT  - Path to the cuba.yml
+    cuba_input:
+        Path to the cuba.yml
 
-    CUDS_INPUT  - Path to the simphony_metadata.yml
+    cuds_input:
+        Path to the simphony_metadata.yml
 
-    OUTPUT      - Path to the output cuba.py file
+    output:
+        Path to the output keywords.py file
     """
     cuba_dict = yaml.safe_load(cuba_input)
     simphony_metadata_dict = yaml.safe_load(cuds_input)

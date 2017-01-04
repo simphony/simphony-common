@@ -11,13 +11,14 @@ from scripts.utils import make_temporary_directory, to_camel_case
 
 
 class MetaClassGenerator(object):
-    def generate(self, simphony_metadata_dict, out_path, overwrite):
-        """ Create the Simphony Metadata classes
+    def generate(self, simphony_metadata_dict, out_path, overwrite=True):
+        """
+        Create the Simphony Metadata classes in the directory specified by
+        out_path, starting from the yaml-extracted data in
+        simphony_metadata_dict.
 
-        YAML_FILE  - path to the simphony_metadata yaml file
-
-        OUT_PATH   - path to the directory where the output files should be
-                     placed
+        If the optional overwrite flag is True, the directory will be
+        emptied first.
         """
 
         if os.path.exists(out_path):
