@@ -2,10 +2,14 @@ from __future__ import print_function
 
 import yaml
 import click
+import os
+import shutil
 
+from scripts.api_generator import APIGenerator
 from scripts.cuba_enum_generator import CUBAEnumGenerator
 from scripts.keywords_generator import KeywordsGenerator
 from scripts.meta_class_generator import MetaClassGenerator
+from scripts.validation_generator import ValidationGenerator
 
 
 @click.group()
@@ -32,8 +36,21 @@ def meta_class(yaml_file, out_path, overwrite):
     """
     simphony_metadata_dict = yaml.safe_load(yaml_file)
 
-    generator = MetaClassGenerator()
-    generator.generate(simphony_metadata_dict, out_path, overwrite)
+    if os.path.exists(out_path):
+        if overwrite:
+            shutil.rmtree(out_path)
+        else:
+            raise OSError('Destination already exists: {!r}'.format(
+                out_path))
+
+    os.mkdir(out_path)
+
+    meta_class_generator = MetaClassGenerator()
+    meta_class_generator.generate(simphony_metadata_dict, out_path)
+    api_generator = APIGenerator()
+    api_generator.generate(simphony_metadata_dict, out_path)
+    validation_generator = ValidationGenerator()
+    validation_generator.generate(out_path)
 
 
 @cli.command()
