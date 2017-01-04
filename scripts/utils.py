@@ -1,6 +1,8 @@
 import re
 import shutil
 import tempfile
+import textwrap
+
 from contextlib import contextmanager
 
 
@@ -49,3 +51,28 @@ def to_camel_case(text, special={'cuds': 'CUDS'}):
             return word[0].upper()+word[1:]
 
     return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
+
+
+def indent(text, level=1):
+    """Indents a body of text of a given amount of levels, where each level
+    is the standard indentation space of 4 spaces.
+    """
+    dedent_text = textwrap.dedent(text)
+    spaces = 4 * level * " "
+    return "".join((spaces + line) for line in dedent_text.splitlines())
+
+
+def with_cuba_prefix(string):
+    """Adds the CUBA. prefix to the string if not there."""
+    if string.startswith("CUBA."):
+        return string
+
+    return "CUBA." + string
+
+
+def without_cuba_prefix(string):
+    """Removes the CUBA. prefix to the string if there."""
+    if string.startswith("CUBA."):
+        return string[5:]
+
+    return string
