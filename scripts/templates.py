@@ -4,6 +4,7 @@ import textwrap
 from . import utils
 
 
+
 class File(object):
     def __init__(self):
         self.imports = set()
@@ -230,13 +231,15 @@ class ABCProperty(object):
 
 
 class Property(ABCProperty):
-    def import_required(self):
-        return [ShortcutImport("Default")]
-
-    def __init__(self, name, default=None, docstring=""):
+    def __init__(self, name, default=utils.NoDefault, docstring=""):
         super(Property, self).__init__(name)
         self.default = default
         self.docstring = docstring
+
+    def import_required(self):
+        imp = [ShortcutImport("Default")]
+
+        return imp
 
     def _render_setter(self):
         return textwrap.dedent("""
@@ -245,7 +248,7 @@ class Property(ABCProperty):
                 \"\"\"
                 {docstring}
                 \"\"\"
-                self._validate_{name}(value)
+                value = self._validate_{name}(value)
                 self._{name} = value
         """).format(name=self.name,
                     docstring=self.docstring)
@@ -258,6 +261,25 @@ class Property(ABCProperty):
         """).format(name=self.name)
 
     def _render_init(self):
+        if self.default == utils.NoDefault:
+            return textwrap.dedent("""
+            def _init_{name}(self, value):
+                if value == Default:
+                    raise TypeError("Value for {name} must be specified")
+
+                self.{name} = value
+
+            """).format(name=self.name)
+
+        if utils.is_cuba_key(self.default):
+            default = "{cuba_meta_class_name}()".format(
+                cuba_meta_class_name=utils.cuba_key_to_meta_class_name(
+                    self.default
+                )
+            )
+        else:
+            default = utils.quoted_if_string(self.default)
+
         return textwrap.dedent("""
         def _init_{name}(self, value):
             if value == Default:
@@ -266,12 +288,12 @@ class Property(ABCProperty):
             self.{name} = value
 
         """).format(name=self.name,
-                    default=utils.quoted_if_string(self.default))
+                    default=default)
 
     def _render_validation(self):
         return textwrap.dedent("""
         def _validate_{name}(value):
-            pass
+            return value
         """).format(name=self.name)
 
 
@@ -280,7 +302,6 @@ class FixedProperty(Property):
         return textwrap.dedent("""
         def _init_{name}(self):
             self._{name} = {default}
-
         """).format(name=self.name,
                     default=utils.quoted_if_string(self.default))
 
@@ -293,18 +314,29 @@ class FixedProperty(Property):
 
 class VariableProperty(Property):
     def import_required(self):
-        return [ShortcutImport("validation")]
+        imp = [ShortcutImport("validation")]
 
-    def __init__(self, qual_cuba_key):
+        if utils.is_cuba_key(self.default):
+            imp.append(
+                MetaClassImport(
+                    meta_class_name=utils.cuba_key_to_meta_class_name(
+                        self.default)
+                )
+            )
+        return imp
+
+    def __init__(self, qual_cuba_key, default):
         prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
-        super(VariableProperty, self).__init__(name=prop_name)
+        super(VariableProperty, self).__init__(
+            name=prop_name,
+            default=default)
         self.qual_cuba_key = qual_cuba_key
 
     def _render_setter(self):
         return textwrap.dedent("""
             @{prop_name}.setter
             def {prop_name}(self, value):
-                self._validate_{prop_name}(value)
+                value = self._validate_{prop_name}(value)
                 self.data[{qual_cuba_key}] = value
         """).format(
             prop_name=self.name,
@@ -322,9 +354,11 @@ class VariableProperty(Property):
     def _render_validation(self):
         return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
-                pass
-        """.format(prop_name=self.name))
-        # value = validation.cast_data_type(value, {!r})
+                value = validation.cast_data_type(value, '{qual_cuba_key}')
+                validation.validate_cuba_keyword(value, '{qual_cuba_key}')
+                return value
+        """.format(prop_name=self.name,
+                   qual_cuba_key=self.qual_cuba_key))
 
 
 class DataProperty(ABCProperty):

@@ -6,6 +6,10 @@ import textwrap
 from contextlib import contextmanager
 
 
+class NoDefault(object):
+    pass
+
+
 @contextmanager
 def make_temporary_directory():
     ''' Context Manager for creating a temporary directory
@@ -64,7 +68,7 @@ def indent(text, level=1):
 
 def with_cuba_prefix(string):
     """Adds the CUBA. prefix to the string if not there."""
-    if string.startswith("CUBA."):
+    if is_cuba_key(string):
         return string
 
     return "CUBA." + string
@@ -72,10 +76,14 @@ def with_cuba_prefix(string):
 
 def without_cuba_prefix(string):
     """Removes the CUBA. prefix to the string if there."""
-    if string.startswith("CUBA."):
+    if is_cuba_key(string):
         return string[5:]
 
     return string
+
+
+def is_cuba_key(value):
+    return isinstance(value, (str, unicode)) and value.startswith("CUBA.")
 
 
 def cuba_key_to_meta_class_name(string):

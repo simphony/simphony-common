@@ -67,9 +67,14 @@ class SingleMetaClassGenerator(object):
 
             elif prop_key.startswith("CUBA."):
                 print ("  Adding variable property {}".format(prop_key))
+                property_entry = self.class_data[prop_key]
+                if property_entry is None:
+                    property_entry = {}
                 class_.properties.append(
                     templates.VariableProperty(
-                        prop_key
+                        prop_key,
+                        default=property_entry.get("default",
+                                                   utils.NoDefault)
                     )
                 )
             else:
