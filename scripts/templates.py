@@ -1,3 +1,4 @@
+import abc
 import textwrap
 
 from . import utils
@@ -5,14 +6,15 @@ from . import utils
 
 class File(object):
     def __init__(self):
-        self.imports = []
+        self.imports = set()
         self.classes = []
         self.methods = []
 
     def render(self, out, indent_level=0):
-        imports = self.imports
+        imports = set(self.imports)
         for cls in self.classes:
-            imports += cls.import_required()
+            for imp in cls.import_required():
+                imports.add(imp)
 
         for imp in imports:
             imp.render(out, indent_level)
@@ -31,7 +33,8 @@ class ShortcutImport(object):
         'create_data_container': 'from simphony.core.data_container import create_data_container',  # noqa
         'KEYWORDS': 'from simphony.core.keywords import KEYWORDS',
         'validation': 'from . import validation',
-        'uuid': 'import uuid'
+        'uuid': 'import uuid',
+        'Default': 'from simphony.core import Default'
     }
 
     def __init__(self, module_shortcut):
@@ -40,10 +43,19 @@ class ShortcutImport(object):
     def render(self, out, indent_level=0):
         out.write(
             utils.indent(
-                self.IMPORT_PATHS[self.module_shortcut],
+                self._render_import(),
                 indent_level
             )+'\n'
         )
+
+    def _render_import(self):
+        return self.IMPORT_PATHS[self.module_shortcut]
+
+    def __hash__(self):
+        return hash(self._render_import())
+
+    def __eq__(self, other):
+        return hash(other) == hash(self)
 
 
 class MetaClassImport(object):
@@ -53,15 +65,24 @@ class MetaClassImport(object):
     def render(self, out, indent_level=0):
         out.write(
             utils.indent(
-                "from .{meta_class_module_name} import {meta_class_name}".format(  # noqa
-                    meta_class_module_name=utils.meta_class_name_to_module_name(  # noqa
-                    self.meta_class_name
-                    ),
-                meta_class_name=self.meta_class_name
-                ),
+                self._render_import(),
                 indent_level
             ) + '\n'
         )
+
+    def _render_import(self):
+        return "from .{meta_class_module_name} import {meta_class_name}".format(  # noqa
+                    meta_class_module_name=utils.meta_class_name_to_module_name(  # noqa
+                        self.meta_class_name
+                    ),
+                    meta_class_name=self.meta_class_name
+                )
+
+    def __hash__(self):
+        return hash(self._render_import())
+
+    def __eq__(self, other):
+        return hash(other) == hash(self)
 
 
 class Class(object):
@@ -80,14 +101,15 @@ class Class(object):
     def import_required(self):
         required = []
         if self.parent_class_name is not None:
-            required = [MetaClassImport(self.parent_class_name)]
+            required += [
+                MetaClassImport(self.parent_class_name)
+            ]
 
         return required + sum(
             (prop.import_required() for prop in self.properties),
             [])
 
     def render(self, out, indent_level=0):
-        init_args = []
         parent_class_name = (self.parent_class_name
                              if self.parent_class_name is not None
                              else "object")
@@ -110,28 +132,49 @@ class Class(object):
             )
         )
 
-        init_args_str = ""
-        if len(init_args):
-            init_args_str = (", ".join(init_args))+', '
-
-        out.write(
-            utils.indent(
-                """
-                def __init__(self, {init_args_str}*args, **kwargs):
-                    super({class_name}, self).__init__(*args, **kwargs)
-                """.format(
-                        class_name=self.class_name,
-                        init_args_str=init_args_str
-                    ),
-                indent_level+1
-            )
-        )
+        out.write(utils.indent(self._render_init_method(), indent_level+1))
 
         for method in self.methods:
             method.render(out, indent_level=indent_level+1)
 
         for prop in self.properties:
             prop.render(out, indent_level=indent_level+1)
+
+    def _render_init_method(self):
+        init_args = []
+        for prop in self.properties:
+            if isinstance(prop, VariableProperty):
+                init_args.append(prop.name)
+
+        init_args_str = ""
+        if len(init_args):
+            init_args_str = (
+                ", ".join([
+                    "{}=Default".format(arg)
+                    for arg in init_args])
+                            )+', '
+
+        s = textwrap.dedent("""
+            def __init__(self, {init_args_str}*args, **kwargs):
+                super({class_name}, self).__init__(*args, **kwargs)
+            """.format(
+                class_name=self.class_name,
+                init_args_str=init_args_str)
+        )
+
+        for prop in self.properties:
+            if isinstance(prop, FixedProperty):
+                s += utils.indent(
+                    textwrap.dedent("""
+                    self._init_{prop_name}()
+                    """.format(prop_name=prop.name)))
+            else:
+                s += utils.indent(
+                    textwrap.dedent("""
+                    self._init_{prop_name}({prop_name})
+                    """.format(prop_name=prop.name)))
+
+        return s
 
 
 class MetaAPIMethods(object):
@@ -151,21 +194,49 @@ class MetaAPIMethods(object):
         )
 
 
-class Property(object):
-    def import_required(self):
-        return []
+class ABCProperty(object):
+    __metaclass__ = abc.ABCMeta
 
-    def __init__(self, name, docstring=""):
+    def __init__(self, name):
         self.name = name
-        self.docstring = docstring
+
+    @abc.abstractmethod
+    def import_required(self):
+        pass
+
+    @abc.abstractmethod
+    def _render_init(self):
+        pass
+
+    @abc.abstractmethod
+    def _render_setter(self):
+        pass
+
+    @abc.abstractmethod
+    def _render_getter(self):
+        pass
+
+    @abc.abstractmethod
+    def _render_validation(self):
+        pass
 
     def render(self, out, indent_level=0):
         s = self._render_init()
-        s += self._render_setter()
         s += self._render_getter()
+        s += self._render_setter()
         s += self._render_validation()
 
         out.write(utils.indent(s, indent_level))
+
+
+class Property(ABCProperty):
+    def import_required(self):
+        return [ShortcutImport("Default")]
+
+    def __init__(self, name, default=None, docstring=""):
+        super(Property, self).__init__(name)
+        self.default = default
+        self.docstring = docstring
 
     def _render_setter(self):
         return textwrap.dedent("""
@@ -188,9 +259,14 @@ class Property(object):
 
     def _render_init(self):
         return textwrap.dedent("""
-        def _init_{name}(value):
-            pass
-        """).format(name=self.name)
+        def _init_{name}(self, value):
+            if value == Default:
+                value = {default}
+
+            self.{name} = value
+
+        """).format(name=self.name,
+                    default=utils.quoted_if_string(self.default))
 
     def _render_validation(self):
         return textwrap.dedent("""
@@ -199,48 +275,65 @@ class Property(object):
         """).format(name=self.name)
 
 
+class FixedProperty(Property):
+    def _render_init(self):
+        return textwrap.dedent("""
+        def _init_{name}(self):
+            self._{name} = {default}
+
+        """).format(name=self.name,
+                    default=utils.quoted_if_string(self.default))
+
+    def _render_setter(self):
+        return ""
+
+    def _render_validation(self):
+        return ""
+
+
 class VariableProperty(Property):
     def import_required(self):
         return [ShortcutImport("validation")]
 
-    def __init__(self,
-                 qual_cuba_key,
-                 shape,
-                 allow_none):
+    def __init__(self, qual_cuba_key):
+        prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
+        super(VariableProperty, self).__init__(name=prop_name)
         self.qual_cuba_key = qual_cuba_key
-        self.shape = shape
-        self.allow_none = allow_none
 
     def _render_setter(self):
-        lowercase_cuba_key = (self.qual_cuba_key.split(".")[1]).lower()
         return textwrap.dedent("""
-            @{lowercase_cuba_key}.setter
-                def {lowercase_cuba_key}(self, value):
-                self._validate_{lowercase_cuba_key}(value)
+            @{prop_name}.setter
+            def {prop_name}(self, value):
+                self._validate_{prop_name}(value)
                 self.data[{qual_cuba_key}] = value
         """).format(
-            lowercase_cuba_key=lowercase_cuba_key,
+            prop_name=self.name,
             qual_cuba_key=self.qual_cuba_key)
 
     def _render_getter(self):
-        pass
+        return textwrap.dedent("""
+            @property
+            def {prop_name}(self):
+                return self.data[{qual_cuba_key}]
+        """).format(
+            prop_name=self.name,
+            qual_cuba_key=self.qual_cuba_key)
 
     def _render_validation(self):
         return textwrap.dedent("""
-            def _validate_{lowercase_cuba_key}(self, value):
-                value = validation.cast_data_type(value, {!r})
+            def _validate_{prop_name}(self, value):
+                pass
+        """.format(prop_name=self.name))
+        # value = validation.cast_data_type(value, {!r})
 
-        """)
 
-
-class DataProperty(Property):
+class DataProperty(ABCProperty):
     """Special data property is handled slightly different"""
+    def __init__(self):
+        super(DataProperty, self).__init__("data")
 
     def import_required(self):
         return [ShortcutImport("DataContainer")]
-
-    def __init__(self):
-        super(DataProperty, self).__init__("data")
 
     def _render_getter(self):
         return textwrap.dedent("""
@@ -258,22 +351,36 @@ class DataProperty(Property):
 
     def _render_init(self):
         return textwrap.dedent("""
-            @data.setter
             def _init_data(self, new_data):
                 self._data = DataContainer()
         """)
 
+    def _render_validation(self):
+        return ""
 
-class UUIDProperty(Property):
-    def import_required(self):
-        return [ShortcutImport('uuid')]
 
+class UUIDProperty(ABCProperty):
     def __init__(self):
         super(UUIDProperty, self).__init__("uuid")
 
+    def import_required(self):
+        return [ShortcutImport('uuid')]
+
     def _render_init(self):
         return textwrap.dedent("""
-            @property
             def _init_uuid(self):
-                self._uuid = uuid.uuid4()
+                self.data[CUBA.UUID] = uuid.uuid4()
         """)
+
+    def _render_getter(self):
+        return textwrap.dedent("""
+            @property
+            def uuid(self):
+                return self.data[CUBA.UUID]
+        """)
+
+    def _render_setter(self):
+        return ""
+
+    def _render_validation(self):
+        return ""
