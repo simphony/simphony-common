@@ -46,7 +46,7 @@ class KeywordsGenerator(object):
             content['name'] = to_camel_case(keyword)
             content['key'] = keyword
             content['shape'] = content.get("shape", [1])
-            content['length'] = content.get("length", [1])
+            content['length'] = content.get("length", None)
             lines.extend(template.format(**content))
 
         for keyword, content in sorted(
@@ -55,7 +55,7 @@ class KeywordsGenerator(object):
             content['type'] = "None"
             content['name'] = to_camel_case(keyword)
             content['key'] = keyword
-            content['shape'] = [1]
+            content['shape'] = content.get("shape", [1])
             content['length'] = "None"
             lines.extend(template.format(**content))
         lines.append('}\n')
