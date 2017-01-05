@@ -1,4 +1,4 @@
-from scripts.utils import to_camel_case
+from . import utils
 
 
 class KeywordsGenerator(object):
@@ -43,8 +43,8 @@ class KeywordsGenerator(object):
         for keyword, content in sorted(cuba_dict['CUBA_KEYS'].items(),
                                        key=lambda x: x[0]):
             content['type'] = data_types[content['type']]
-            content['name'] = to_camel_case(keyword)
-            content['key'] = keyword
+            content['name'] = utils.to_camel_case(keyword)
+            content['key'] = utils.with_cuba_prefix(keyword)
             content['shape'] = content.get("shape", [1])
             content['length'] = content.get("length", None)
             lines.extend(template.format(**content))
@@ -53,8 +53,8 @@ class KeywordsGenerator(object):
                 simphony_metadata_dict['CUDS_KEYS'].items(),
                 key=lambda x: x[0]):
             content['type'] = "None"
-            content['name'] = to_camel_case(keyword)
-            content['key'] = keyword
+            content['name'] = utils.to_camel_case(keyword)
+            content['key'] = utils.with_cuba_prefix(keyword)
             content['shape'] = content.get("shape", [1])
             content['length'] = "None"
             lines.extend(template.format(**content))
