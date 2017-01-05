@@ -86,10 +86,28 @@ def cuba_key_to_meta_class_module_name(string):
     return without_cuba_prefix(string).lower()
 
 
-def meta_class_name_to_module_name(string):
+def cuba_key_to_property_name(string):
+    return without_cuba_prefix(string).lower()
+
+
+def meta_class_name_to_module_name(string, special={"CUDS": "Cuds"}):
+    for search, replace in special.items():
+        string = re.sub(search, replace, string)
+
     def replace_func(matched):
         word = matched.group(0).strip("_")
         res = "_"+word.lower()
         return res
 
     return re.sub(r'([A-Z]+)', replace_func, string).lstrip("_")
+
+
+def quoted_if_string(value):
+    """
+    returns the same value if not a string, otherwise adds quotes before
+    and after.
+    """
+    if isinstance(value, (str, unicode)):
+        return '"{}"'.format(value)
+
+    return value
