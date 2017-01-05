@@ -4,7 +4,6 @@ import textwrap
 from . import utils
 
 
-
 class File(object):
     def __init__(self):
         self.imports = set()
