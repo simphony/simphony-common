@@ -50,7 +50,7 @@ def create_data_table(class_name, supported_cuba=CUBA):
 
         column_meta = {'pos': ikey}
 
-        if column_type is tables.StringCol:
+        if column_type is tables.StringCol and keyword.length is not None:
             column_meta['itemsize'] = keyword.length
 
         column_meta['shape'] = tuple(keyword.shape)
