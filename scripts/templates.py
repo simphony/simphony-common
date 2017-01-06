@@ -199,7 +199,9 @@ class Class(object):
         s = textwrap.dedent("""
             def supported_parameters(self):
                 try:
-                    base_params = super({class_name}, self).supported_parameters()
+                    base_params = super(
+                        {class_name},
+                        self).supported_parameters()
                 except AttributeError:
                     base_params = ()
 
