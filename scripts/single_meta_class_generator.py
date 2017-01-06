@@ -73,8 +73,8 @@ class SingleMetaClassGenerator(object):
                 class_.properties.append(
                     templates.VariableProperty(
                         prop_key,
-                        default=property_entry.get("default",
-                                                   utils.NoDefault)
+                        default=property_entry.get("default", utils.NoDefault),
+                        shape=utils.parse_shape(property_entry.get("shape")),
                     )
                 )
             else:

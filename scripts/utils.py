@@ -119,3 +119,39 @@ def quoted_if_string(value):
         return '"{}"'.format(value)
 
     return value
+
+
+def parse_shape(shape_spec):
+    if shape_spec is None:
+        return shape_spec
+
+    elif isinstance(shape_spec, (str, unicode)):
+        shape_spec = shape_spec.strip()
+        if shape_spec[0] not in "[(" or shape_spec[-1] not in "])":
+            raise ValueError("Shape specification {} not "
+                             "compliant to required format".format(shape_spec))
+
+        elems = shape_spec[1:-1].split(",")
+
+        def transform(el):
+            el = el.strip()
+            if el == ':':
+                return None
+            else:
+                return int(el)
+
+        shape = map(transform, elems)
+    else:
+        shape = shape_spec
+
+    if not isinstance(shape, list):
+        raise TypeError(
+            "Shape not compliant with required type. Got {}".format(
+                shape_spec
+            ))
+
+    if not all([x is None or x > 0 for x in shape]):
+        raise ValueError("shape must be a list of positive or None values. "
+                         "Got {}".format(shape))
+
+    return shape

@@ -1,6 +1,7 @@
 import abc
 import textwrap
 
+from scripts.utils import NoDefault
 from . import utils
 
 
@@ -132,7 +133,10 @@ class Class(object):
             )
         )
 
-        out.write(utils.indent(self._render_init_method(), indent_level+1))
+        out.write(utils.indent(self._render_init_method(),
+                               indent_level+1))
+        out.write(utils.indent(self._render_supported_parameters(),
+                               indent_level+1))
 
         for method in self.methods:
             method.render(out, indent_level=indent_level+1)
@@ -141,18 +145,26 @@ class Class(object):
             prop.render(out, indent_level=indent_level+1)
 
     def _render_init_method(self):
-        init_args = []
-        for prop in self.properties:
-            if isinstance(prop, VariableProperty):
-                init_args.append(prop.name)
+        mandatory_init_args = []
+        optional_init_args = []
+        for prop in [p for p in self.properties
+                     if isinstance(p, VariableProperty)]:
+
+            if prop.default is NoDefault:
+                mandatory_init_args.append(prop.name)
+            else:
+                optional_init_args.append(prop.name)
 
         init_args_str = ""
-        if len(init_args):
+        if len(mandatory_init_args) + len(optional_init_args):
             init_args_str = (
                 ", ".join([
+                    "{}".format(arg)
+                    for arg in mandatory_init_args
+                ] + [
                     "{}=Default".format(arg)
-                    for arg in init_args])
-                            )+', '
+                    for arg in optional_init_args]
+                )+', ')
 
         s = textwrap.dedent("""
             def __init__(self, {init_args_str}*args, **kwargs):
@@ -163,16 +175,38 @@ class Class(object):
         )
 
         for prop in self.properties:
-            if isinstance(prop, FixedProperty):
-                s += utils.indent(
-                    textwrap.dedent("""
-                    self._init_{prop_name}()
-                    """.format(prop_name=prop.name)))
-            else:
+            if isinstance(prop, VariableProperty):
                 s += utils.indent(
                     textwrap.dedent("""
                     self._init_{prop_name}({prop_name})
                     """.format(prop_name=prop.name)))
+            else:
+                s += utils.indent(
+                    textwrap.dedent("""
+                    self._init_{prop_name}()
+                    """.format(prop_name=prop.name)))
+
+        return s
+
+    def _render_supported_parameters(self):
+        params = []
+        for prop in self.properties:
+            if isinstance(prop, VariableProperty):
+                params.append(prop.qual_cuba_key)
+            elif isinstance(prop, UUIDProperty):
+                params.append("CUBA.UUID")
+
+        s = textwrap.dedent("""
+            def supported_parameters(self):
+                try:
+                    base_params = super({class_name}, self).supported_parameters()
+                except AttributeError:
+                    base_params = ()
+
+                return ({params}) + base_params
+            """.format(class_name=self.class_name,
+                       params="".join([p+", " for p in params]))
+        )
 
         return s
 
@@ -263,7 +297,7 @@ class Property(ABCProperty):
         if self.default == utils.NoDefault:
             return textwrap.dedent("""
             def _init_{name}(self, value):
-                if value == Default:
+                if value is Default:
                     raise TypeError("Value for {name} must be specified")
 
                 self.{name} = value
@@ -281,7 +315,7 @@ class Property(ABCProperty):
 
         return textwrap.dedent("""
         def _init_{name}(self, value):
-            if value == Default:
+            if value is Default:
                 value = {default}
 
             self.{name} = value
@@ -310,10 +344,15 @@ class FixedProperty(Property):
     def _render_validation(self):
         return ""
 
+    def import_required(self):
+        imp = []
+        return imp
+
 
 class VariableProperty(Property):
     def import_required(self):
-        imp = [ShortcutImport("validation")]
+        imp = super(VariableProperty, self).import_required()
+        imp += [ShortcutImport("validation")]
 
         if utils.is_cuba_key(self.default):
             imp.append(
@@ -324,12 +363,13 @@ class VariableProperty(Property):
             )
         return imp
 
-    def __init__(self, qual_cuba_key, default):
+    def __init__(self, qual_cuba_key, default, shape):
         prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
         super(VariableProperty, self).__init__(
             name=prop_name,
             default=default)
         self.qual_cuba_key = qual_cuba_key
+        self.shape = shape
 
     def _render_setter(self):
         return textwrap.dedent("""
@@ -355,12 +395,14 @@ class VariableProperty(Property):
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{qual_cuba_key}')
                 validation.validate_cuba_keyword(value, '{qual_cuba_key}')
+                validation.check_shape(value, {shape})
                 return value
         """.format(prop_name=self.name,
-                   qual_cuba_key=self.qual_cuba_key))
+                   qual_cuba_key=self.qual_cuba_key,
+                   shape=self.shape))
 
 
-class DataProperty(ABCProperty):
+class DataProperty(FixedProperty):
     """Special data property is handled slightly different"""
     def __init__(self):
         super(DataProperty, self).__init__("data")
@@ -384,7 +426,7 @@ class DataProperty(ABCProperty):
 
     def _render_init(self):
         return textwrap.dedent("""
-            def _init_data(self, new_data):
+            def _init_data(self):
                 self._data = DataContainer()
         """)
 
@@ -392,7 +434,7 @@ class DataProperty(ABCProperty):
         return ""
 
 
-class UUIDProperty(ABCProperty):
+class UUIDProperty(FixedProperty):
     def __init__(self):
         super(UUIDProperty, self).__init__("uuid")
 
