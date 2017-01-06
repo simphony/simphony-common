@@ -1,30 +1,59 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .electrostatic_model import ElectrostaticModel
 from . import validation
+from simphony.core import Default
+from .electrostatic_model import ElectrostaticModel
+from simphony.core.cuba import CUBA
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
-    '''A constant electrostatic field model  # noqa
-    '''
+    """
+    A constant electrostatic field model
+    """
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self, description="", name="", electrostatic_field=None):
+    def __init__(self, electrostatic_field=Default, *args, **kwargs):
+        super(ConstantElectrostaticFieldModel, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_variables()
+        self._init_electrostatic_field(electrostatic_field)
 
-        if electrostatic_field is None:
-            self.electrostatic_field = [0.0, 0.0, 0.0]
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'A constant electrostatic field model'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = [CUBA.ELECTRIC_FIELD, CUBA.CHARGE]
+    def supported_parameters(self):
+        try:
+            base_params = super(ConstantElectrostaticFieldModel,
+                                self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.ELECTROSTATIC_FIELD, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']
+
+    @property
+    def models(self):
+        return self._models
+
+    def _init_definition(self):
+        self._definition = "A constant electrostatic field model"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_variables(self):
+        self._variables = ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def _init_electrostatic_field(self, value):
+        if value is Default:
+            value = [0.0, 0.0, 0.0]
+
+        self.electrostatic_field = value
 
     @property
     def electrostatic_field(self):
@@ -32,44 +61,17 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     @electrostatic_field.setter
     def electrostatic_field(self, value):
-        value = validation.cast_data_type(value, 'electrostatic_field')
-        validation.validate_cuba_keyword(value, 'electrostatic_field')
-        data = self.data
-        data[CUBA.ELECTROSTATIC_FIELD] = value
-        self.data = data
+        value = self._validate_electrostatic_field(value)
+        self.data[CUBA.ELECTROSTATIC_FIELD] = value
 
-    @property
-    def models(self):
-        return self._models
+    def _validate_electrostatic_field(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.ELECTROSTATIC_FIELD')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.ELECTROSTATIC_FIELD')
 
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.ELECTROSTATIC_FIELD, CUBA.NAME,
-                CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.ELECTROSTATIC_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

@@ -1,34 +1,50 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class DissipationForce(MaterialRelation):
-    '''Viscous normal force describing the inelasticity of particle collisions  # noqa
-    '''
+    """
+    Viscous normal force describing the inelasticity of particle collisions
+    """
 
     cuba_key = CUBA.DISSIPATION_FORCE
 
-    def __init__(self,
-                 material,
-                 description="",
-                 name="",
-                 restitution_coefficient=1.0):
+    def __init__(self, restitution_coefficient=Default, *args, **kwargs):
+        super(DissipationForce, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_restitution_coefficient(restitution_coefficient)
 
-        self.material = material
-        self.restitution_coefficient = restitution_coefficient
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Viscous normal force describing the inelasticity of particle collisions'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(DissipationForce, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.RESTITUTION_COEFFICIENT, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.ATOMISTIC']
+
+    @property
+    def models(self):
+        return self._models
+
+    def _init_definition(self):
+        self._definition = "Viscous normal force describing the inelasticity of particle collisions"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_restitution_coefficient(self, value):
+        if value is Default:
+            value = 1.0
+
+        self.restitution_coefficient = value
 
     @property
     def restitution_coefficient(self):
@@ -36,44 +52,19 @@ class DissipationForce(MaterialRelation):
 
     @restitution_coefficient.setter
     def restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'restitution_coefficient')
-        validation.validate_cuba_keyword(value, 'restitution_coefficient')
-        data = self.data
-        data[CUBA.RESTITUTION_COEFFICIENT] = value
-        self.data = data
+        value = self._validate_restitution_coefficient(value)
+        self.data[CUBA.RESTITUTION_COEFFICIENT] = value
 
-    @property
-    def models(self):
-        return self._models
+    def _validate_restitution_coefficient(self, value):
+        import itertools
+        value = validation.cast_data_type(value,
+                                          'CUBA.RESTITUTION_COEFFICIENT')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry,
+                                             'CUBA.RESTITUTION_COEFFICIENT')
 
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
-                CUBA.RESTITUTION_COEFFICIENT, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

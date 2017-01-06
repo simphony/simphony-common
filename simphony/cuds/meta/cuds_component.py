@@ -1,36 +1,38 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class CUDSComponent(CUDSItem):
-    '''Base data type for the CUDS components  # noqa
-    '''
+    """
+    Base data type for the CUDS components
+    """
 
     cuba_key = CUBA.CUDS_COMPONENT
 
-    def __init__(self, description="", name=""):
+    def __init__(self, description=Default, name=Default, *args, **kwargs):
+        super(CUDSComponent, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_description(description)
+        self._init_definition()
+        self._init_name(name)
 
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Base data type for the CUDS components'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(CUDSComponent, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def name(self):
-        return self.data[CUBA.NAME]
+        return (
+            CUBA.DESCRIPTION,
+            CUBA.NAME, ) + base_params
 
-    @name.setter
-    def name(self, value):
-        value = validation.cast_data_type(value, 'name')
-        validation.validate_cuba_keyword(value, 'name')
-        data = self.data
-        data[CUBA.NAME] = value
-        self.data = data
+    def _init_description(self, value):
+        if value is Default:
+            value = ""
+
+        self.description = value
 
     @property
     def description(self):
@@ -38,34 +40,51 @@ class CUDSComponent(CUDSItem):
 
     @description.setter
     def description(self, value):
-        value = validation.cast_data_type(value, 'description')
-        validation.validate_cuba_keyword(value, 'description')
-        data = self.data
-        data[CUBA.DESCRIPTION] = value
-        self.data = data
+        value = self._validate_description(value)
+        self.data[CUBA.DESCRIPTION] = value
+
+    def _validate_description(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.DESCRIPTION')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.DESCRIPTION')
+
+        return value
+
+    def _init_definition(self):
+        self._definition = "Base data type for the CUDS components"
 
     @property
     def definition(self):
         return self._definition
 
-    @property
-    def data(self):
-        return self._data
+    def _init_name(self, value):
+        if value is Default:
+            value = ""
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+        self.name = value
 
     @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def name(self):
+        return self.data[CUBA.NAME]
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
+    @name.setter
+    def name(self, value):
+        value = self._validate_name(value)
+        self.data[CUBA.NAME] = value
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+    def _validate_name(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.NAME')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.NAME')
+
+        return value

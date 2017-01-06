@@ -1,23 +1,42 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class SoftwareTool(CUDSItem):
-    '''Represents a software tool which is used to solve the model or in pre/post processing  # noqa
-    '''
+    """
+    Represents a software tool which is used to solve the model or in pre/post processing
+    """
 
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, version=None):
+    def __init__(self, version=Default, *args, **kwargs):
+        super(SoftwareTool, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_version(version)
 
-        self.version = version
-        # This is a system-managed, read-only attribute
-        self._definition = 'Represents a software tool which is used to solve the model or in pre/post processing'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(SoftwareTool, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.VERSION, ) + base_params
+
+    def _init_definition(self):
+        self._definition = "Represents a software tool which is used to solve the model or in pre/post processing"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_version(self, value):
+        if value is Default:
+            value = None
+
+        self.version = value
 
     @property
     def version(self):
@@ -25,35 +44,17 @@ class SoftwareTool(CUDSItem):
 
     @version.setter
     def version(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'version')
-            validation.validate_cuba_keyword(value, 'version')
-        data = self.data
-        data[CUBA.VERSION] = value
-        self.data = data
+        value = self._validate_version(value)
+        self.data[CUBA.VERSION] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_version(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.VERSION')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.VERSION')
 
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.UUID, CUBA.VERSION)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return value

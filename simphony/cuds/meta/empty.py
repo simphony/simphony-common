@@ -1,44 +1,53 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .condition import Condition
+from simphony.core import Default
 from . import validation
+from .condition import Condition
+from simphony.core.cuba import CUBA
 
 
 class Empty(Condition):
-    '''Empty boundary condition  # noqa
-    '''
+    """
+    Empty boundary condition
+    """
 
     cuba_key = CUBA.EMPTY
 
-    def __init__(self, description="", name="", variable=None, material=None):
+    def __init__(self, variable=Default, material=Default, *args, **kwargs):
+        super(Empty, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_variable(variable)
+        self._init_material(material)
 
-        if material is None:
-            self.material = []
-        if variable is None:
-            self.variable = []
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Empty boundary condition'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(Empty, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (
+            CUBA.VARIABLE,
+            CUBA.MATERIAL, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.CONTINUUM']
 
     @property
-    def material(self):
-        return self.data[CUBA.MATERIAL]
+    def models(self):
+        return self._models
 
-    @material.setter
-    def material(self, value):
-        value = validation.cast_data_type(value, 'material')
-        validation.check_shape(value, '(:)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'material')
-        data = self.data
-        data[CUBA.MATERIAL] = value
-        self.data = data
+    def _init_definition(self):
+        self._definition = "Empty boundary condition"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_variable(self, value):
+        if value is Default:
+            value = []
+
+        self.variable = value
 
     @property
     def variable(self):
@@ -46,41 +55,44 @@ class Empty(Condition):
 
     @variable.setter
     def variable(self, value):
-        value = validation.cast_data_type(value, 'variable')
-        validation.check_shape(value, '(:)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'variable')
-        data = self.data
-        data[CUBA.VARIABLE] = value
-        self.data = data
+        value = self._validate_variable(value)
+        self.data[CUBA.VARIABLE] = value
+
+    def _validate_variable(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.VARIABLE')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.VARIABLE')
+
+        return value
+
+    def _init_material(self, value):
+        if value is Default:
+            value = []
+
+        self.material = value
 
     @property
-    def models(self):
-        return self._models
+    def material(self):
+        return self.data[CUBA.MATERIAL]
 
-    @property
-    def definition(self):
-        return self._definition
+    @material.setter
+    def material(self, value):
+        value = self._validate_material(value)
+        self.data[CUBA.MATERIAL] = value
 
-    @property
-    def data(self):
-        return self._data
+    def _validate_material(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.MATERIAL')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.MATERIAL')
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID,
-                CUBA.VARIABLE)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CONDITION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

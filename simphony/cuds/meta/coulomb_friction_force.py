@@ -1,34 +1,51 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class CoulombFrictionForce(MaterialRelation):
-    '''Shear force accounting for the tangential displacement between contacting particles  # noqa
-    '''
+    """
+    Shear force accounting for the tangential displacement between contacting particles
+    """
 
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
-    def __init__(self,
-                 material,
-                 description="",
-                 name="",
-                 friction_coefficient=0.0):
+    def __init__(self, friction_coefficient=Default, *args, **kwargs):
+        super(CoulombFrictionForce, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_friction_coefficient(friction_coefficient)
 
-        self.material = material
-        self.friction_coefficient = friction_coefficient
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Shear force accounting for the tangential displacement between contacting particles'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(CoulombFrictionForce,
+                                self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.FRICTION_COEFFICIENT, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.ATOMISTIC']
+
+    @property
+    def models(self):
+        return self._models
+
+    def _init_definition(self):
+        self._definition = "Shear force accounting for the tangential displacement between contacting particles"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_friction_coefficient(self, value):
+        if value is Default:
+            value = 0.0
+
+        self.friction_coefficient = value
 
     @property
     def friction_coefficient(self):
@@ -36,44 +53,18 @@ class CoulombFrictionForce(MaterialRelation):
 
     @friction_coefficient.setter
     def friction_coefficient(self, value):
-        value = validation.cast_data_type(value, 'friction_coefficient')
-        validation.validate_cuba_keyword(value, 'friction_coefficient')
-        data = self.data
-        data[CUBA.FRICTION_COEFFICIENT] = value
-        self.data = data
+        value = self._validate_friction_coefficient(value)
+        self.data[CUBA.FRICTION_COEFFICIENT] = value
 
-    @property
-    def models(self):
-        return self._models
+    def _validate_friction_coefficient(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.FRICTION_COEFFICIENT')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry,
+                                             'CUBA.FRICTION_COEFFICIENT')
 
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.FRICTION_COEFFICIENT, CUBA.MATERIAL,
-                CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

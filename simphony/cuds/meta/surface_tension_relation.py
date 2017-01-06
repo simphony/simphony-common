@@ -1,31 +1,54 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class SurfaceTensionRelation(MaterialRelation):
-    '''Surface tension relation between two fluids  # noqa
-    '''
+    """
+    Surface tension relation between two fluids
+    """
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self, material, description="", name="",
-                 surface_tension=0.07):
+    def __init__(self, material, surface_tension=Default, *args, **kwargs):
+        super(SurfaceTensionRelation, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_material(material)
+        self._init_surface_tension(surface_tension)
 
-        self.material = material
-        self.surface_tension = surface_tension
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Surface tension relation between two fluids'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(SurfaceTensionRelation,
+                                self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (
+            CUBA.MATERIAL,
+            CUBA.SURFACE_TENSION, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.CONTINUUM']
+
+    @property
+    def models(self):
+        return self._models
+
+    def _init_definition(self):
+        self._definition = "Surface tension relation between two fluids"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_material(self, value):
+        if value is Default:
+            raise TypeError("Value for material must be specified")
+
+        self.material = value
 
     @property
     def material(self):
@@ -33,14 +56,26 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @material.setter
     def material(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'material')
-            validation.check_shape(value, '(2)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'material')
-        data = self.data
-        data[CUBA.MATERIAL] = value
-        self.data = data
+        value = self._validate_material(value)
+        self.data[CUBA.MATERIAL] = value
+
+    def _validate_material(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.MATERIAL')
+        validation.check_shape(value, [2])
+        for tuple_ in itertools.product(*[range(x) for x in [2]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.MATERIAL')
+
+        return value
+
+    def _init_surface_tension(self, value):
+        if value is Default:
+            value = 0.07
+
+        self.surface_tension = value
 
     @property
     def surface_tension(self):
@@ -48,44 +83,17 @@ class SurfaceTensionRelation(MaterialRelation):
 
     @surface_tension.setter
     def surface_tension(self, value):
-        value = validation.cast_data_type(value, 'surface_tension')
-        validation.validate_cuba_keyword(value, 'surface_tension')
-        data = self.data
-        data[CUBA.SURFACE_TENSION] = value
-        self.data = data
+        value = self._validate_surface_tension(value)
+        self.data[CUBA.SURFACE_TENSION] = value
 
-    @property
-    def models(self):
-        return self._models
+    def _validate_surface_tension(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.SURFACE_TENSION')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.SURFACE_TENSION')
 
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
-                CUBA.SURFACE_TENSION, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

@@ -1,23 +1,42 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class MeshElement(CUDSItem):
-    '''An element for storing geometrical objects  # noqa
-    '''
+    """
+    An element for storing geometrical objects
+    """
 
     cuba_key = CUBA.MESH_ELEMENT
 
-    def __init__(self, point):
+    def __init__(self, point, *args, **kwargs):
+        super(MeshElement, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_point(point)
 
-        self.point = point
-        # This is a system-managed, read-only attribute
-        self._definition = 'An element for storing geometrical objects'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(MeshElement, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.POINT, ) + base_params
+
+    def _init_definition(self):
+        self._definition = "An element for storing geometrical objects"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_point(self, value):
+        if value is Default:
+            raise TypeError("Value for point must be specified")
+
+        self.point = value
 
     @property
     def point(self):
@@ -25,37 +44,17 @@ class MeshElement(CUDSItem):
 
     @point.setter
     def point(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'point')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'point')
-        data = self.data
-        data[CUBA.POINT] = value
-        self.data = data
+        value = self._validate_point(value)
+        self.data[CUBA.POINT] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_point(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.POINT')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.POINT')
 
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.POINT, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+        return value

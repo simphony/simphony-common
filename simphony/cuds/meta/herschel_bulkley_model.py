@@ -1,74 +1,57 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .rheology_model import RheologyModel
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class HerschelBulkleyModel(RheologyModel):
-    '''Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid  # noqa
-    '''
+    """
+    Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid
+    """
 
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
 
     def __init__(self,
-                 description="",
-                 name="",
-                 initial_viscosity=0.001,
-                 relaxation_time=1.0,
-                 linear_constant=1e-05,
-                 power_law_index=1.0):
+                 initial_viscosity=Default,
+                 relaxation_time=Default,
+                 linear_constant=Default,
+                 power_law_index=Default,
+                 *args,
+                 **kwargs):
+        super(HerschelBulkleyModel, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_initial_viscosity(initial_viscosity)
+        self._init_models()
+        self._init_relaxation_time(relaxation_time)
+        self._init_linear_constant(linear_constant)
+        self._init_power_law_index(power_law_index)
 
-        self.power_law_index = power_law_index
-        self.linear_constant = linear_constant
-        self.relaxation_time = relaxation_time
-        self.initial_viscosity = initial_viscosity
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(HerschelBulkleyModel,
+                                self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def power_law_index(self):
-        return self.data[CUBA.POWER_LAW_INDEX]
+        return (
+            CUBA.INITIAL_VISCOSITY,
+            CUBA.RELAXATION_TIME,
+            CUBA.LINEAR_CONSTANT,
+            CUBA.POWER_LAW_INDEX, ) + base_params
 
-    @power_law_index.setter
-    def power_law_index(self, value):
-        value = validation.cast_data_type(value, 'power_law_index')
-        validation.validate_cuba_keyword(value, 'power_law_index')
-        data = self.data
-        data[CUBA.POWER_LAW_INDEX] = value
-        self.data = data
+    def _init_definition(self):
+        self._definition = "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"
 
     @property
-    def linear_constant(self):
-        return self.data[CUBA.LINEAR_CONSTANT]
+    def definition(self):
+        return self._definition
 
-    @linear_constant.setter
-    def linear_constant(self, value):
-        value = validation.cast_data_type(value, 'linear_constant')
-        validation.validate_cuba_keyword(value, 'linear_constant')
-        data = self.data
-        data[CUBA.LINEAR_CONSTANT] = value
-        self.data = data
+    def _init_initial_viscosity(self, value):
+        if value is Default:
+            value = 0.001
 
-    @property
-    def relaxation_time(self):
-        return self.data[CUBA.RELAXATION_TIME]
-
-    @relaxation_time.setter
-    def relaxation_time(self, value):
-        value = validation.cast_data_type(value, 'relaxation_time')
-        validation.validate_cuba_keyword(value, 'relaxation_time')
-        data = self.data
-        data[CUBA.RELAXATION_TIME] = value
-        self.data = data
+        self.initial_viscosity = value
 
     @property
     def initial_viscosity(self):
@@ -76,45 +59,105 @@ class HerschelBulkleyModel(RheologyModel):
 
     @initial_viscosity.setter
     def initial_viscosity(self, value):
-        value = validation.cast_data_type(value, 'initial_viscosity')
-        validation.validate_cuba_keyword(value, 'initial_viscosity')
-        data = self.data
-        data[CUBA.INITIAL_VISCOSITY] = value
-        self.data = data
+        value = self._validate_initial_viscosity(value)
+        self.data[CUBA.INITIAL_VISCOSITY] = value
+
+    def _validate_initial_viscosity(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.INITIAL_VISCOSITY')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.INITIAL_VISCOSITY')
+
+        return value
+
+    def _init_models(self):
+        self._models = ['CUBA.CONTINUUM']
 
     @property
     def models(self):
         return self._models
 
-    @property
-    def definition(self):
-        return self._definition
+    def _init_relaxation_time(self, value):
+        if value is Default:
+            value = 1.0
+
+        self.relaxation_time = value
 
     @property
-    def variables(self):
-        return self._variables
+    def relaxation_time(self):
+        return self.data[CUBA.RELAXATION_TIME]
+
+    @relaxation_time.setter
+    def relaxation_time(self, value):
+        value = self._validate_relaxation_time(value)
+        self.data[CUBA.RELAXATION_TIME] = value
+
+    def _validate_relaxation_time(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.RELAXATION_TIME')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.RELAXATION_TIME')
+
+        return value
+
+    def _init_linear_constant(self, value):
+        if value is Default:
+            value = 1e-05
+
+        self.linear_constant = value
 
     @property
-    def data(self):
-        return self._data
+    def linear_constant(self):
+        return self.data[CUBA.LINEAR_CONSTANT]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @linear_constant.setter
+    def linear_constant(self, value):
+        value = self._validate_linear_constant(value)
+        self.data[CUBA.LINEAR_CONSTANT] = value
+
+    def _validate_linear_constant(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.LINEAR_CONSTANT')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.LINEAR_CONSTANT')
+
+        return value
+
+    def _init_power_law_index(self, value):
+        if value is Default:
+            value = 1.0
+
+        self.power_law_index = value
 
     @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def power_law_index(self):
+        return self.data[CUBA.POWER_LAW_INDEX]
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.LINEAR_CONSTANT,
-                CUBA.NAME, CUBA.POWER_LAW_INDEX, CUBA.RELAXATION_TIME,
-                CUBA.UUID)
+    @power_law_index.setter
+    def power_law_index(self, value):
+        value = self._validate_power_law_index(value)
+        self.data[CUBA.POWER_LAW_INDEX] = value
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _validate_power_law_index(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.POWER_LAW_INDEX')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.POWER_LAW_INDEX')
+
+        return value

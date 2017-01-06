@@ -1,56 +1,92 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
+from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class EngineFeature(CUDSItem):
-    '''Provides a physics equation and methods that engines provides to solve them  # noqa
-    '''
+    """
+    Provides a physics equation and methods that engines provides to solve them
+    """
 
     cuba_key = CUBA.ENGINE_FEATURE
 
-    def __init__(self):
+    def __init__(self, computational_method, physics_equation, *args,
+                 **kwargs):
+        super(EngineFeature, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_computational_method(computational_method)
+        self._init_definition()
+        self._init_physics_equation(physics_equation)
 
-        # This is a system-managed, read-only attribute
-        self._physics_equation = None
-        # This is a system-managed, read-only attribute
-        self._definition = 'Provides a physics equation and methods that engines provides to solve them'  # noqa
-        # This is a system-managed, read-only attribute
-        self._computational_method = None
+    def supported_parameters(self):
+        try:
+            base_params = super(EngineFeature, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def physics_equation(self):
-        return self.data[CUBA.PHYSICS_EQUATION]
+        return (
+            CUBA.COMPUTATIONAL_METHOD,
+            CUBA.PHYSICS_EQUATION, ) + base_params
 
-    @property
-    def definition(self):
-        return self._definition
+    def _init_computational_method(self, value):
+        if value is Default:
+            raise TypeError("Value for computational_method must be specified")
+
+        self.computational_method = value
 
     @property
     def computational_method(self):
         return self.data[CUBA.COMPUTATIONAL_METHOD]
 
+    @computational_method.setter
+    def computational_method(self, value):
+        value = self._validate_computational_method(value)
+        self.data[CUBA.COMPUTATIONAL_METHOD] = value
+
+    def _validate_computational_method(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.COMPUTATIONAL_METHOD')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry,
+                                             'CUBA.COMPUTATIONAL_METHOD')
+
+        return value
+
+    def _init_definition(self):
+        self._definition = "Provides a physics equation and methods that engines provides to solve them"
+
     @property
-    def data(self):
-        return self._data
+    def definition(self):
+        return self._definition
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    def _init_physics_equation(self, value):
+        if value is Default:
+            raise TypeError("Value for physics_equation must be specified")
+
+        self.physics_equation = value
 
     @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def physics_equation(self):
+        return self.data[CUBA.PHYSICS_EQUATION]
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.COMPUTATIONAL_METHOD, CUBA.PHYSICS_EQUATION, CUBA.UUID)
+    @physics_equation.setter
+    def physics_equation(self, value):
+        value = self._validate_physics_equation(value)
+        self.data[CUBA.PHYSICS_EQUATION] = value
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+    def _validate_physics_equation(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.PHYSICS_EQUATION')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.PHYSICS_EQUATION')
+
+        return value

@@ -1,30 +1,58 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .physics_equation import PhysicsEquation
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class GravityModel(PhysicsEquation):
-    '''A simple gravity model  # noqa
-    '''
+    """
+    A simple gravity model
+    """
 
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, description="", name="", acceleration=None):
+    def __init__(self, acceleration=Default, *args, **kwargs):
+        super(GravityModel, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_variables()
+        self._init_acceleration(acceleration)
 
-        if acceleration is None:
-            self.acceleration = [0.0, 0.0, 0.0]
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.MESOSCOPIC, CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'A simple gravity model'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = [CUBA.ACCELERATION]
+    def supported_parameters(self):
+        try:
+            base_params = super(GravityModel, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.ACCELERATION, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']
+
+    @property
+    def models(self):
+        return self._models
+
+    def _init_definition(self):
+        self._definition = "A simple gravity model"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_variables(self):
+        self._variables = ['CUBA.ACCELERATION']
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def _init_acceleration(self, value):
+        if value is Default:
+            value = [0.0, 0.0, 0.0]
+
+        self.acceleration = value
 
     @property
     def acceleration(self):
@@ -32,43 +60,17 @@ class GravityModel(PhysicsEquation):
 
     @acceleration.setter
     def acceleration(self, value):
-        value = validation.cast_data_type(value, 'acceleration')
-        validation.validate_cuba_keyword(value, 'acceleration')
-        data = self.data
-        data[CUBA.ACCELERATION] = value
-        self.data = data
+        value = self._validate_acceleration(value)
+        self.data[CUBA.ACCELERATION] = value
 
-    @property
-    def models(self):
-        return self._models
+    def _validate_acceleration(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.ACCELERATION')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.ACCELERATION')
 
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.ACCELERATION, CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

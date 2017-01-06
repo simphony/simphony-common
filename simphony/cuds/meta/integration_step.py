@@ -1,53 +1,52 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .solver_parameter import SolverParameter
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class IntegrationStep(SolverParameter):
-    '''the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).  # noqa
-    '''
+    """
+    the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).
+    """
 
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self, size, final, description="", name="", current=0):
+    def __init__(self,
+                 current=Default,
+                 size=Default,
+                 final=Default,
+                 *args,
+                 **kwargs):
+        super(IntegrationStep, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_current(current)
+        self._init_size(size)
+        self._init_final(final)
 
-        self.final = final
-        self.size = size
-        self.current = current
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(IntegrationStep, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (
+            CUBA.CURRENT,
+            CUBA.SIZE,
+            CUBA.FINAL, ) + base_params
+
+    def _init_definition(self):
+        self._definition = "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."
 
     @property
-    def final(self):
-        return self.data[CUBA.FINAL]
+    def definition(self):
+        return self._definition
 
-    @final.setter
-    def final(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'final')
-            validation.validate_cuba_keyword(value, 'final')
-        data = self.data
-        data[CUBA.FINAL] = value
-        self.data = data
+    def _init_current(self, value):
+        if value is Default:
+            value = 0
 
-    @property
-    def size(self):
-        return self.data[CUBA.SIZE]
-
-    @size.setter
-    def size(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'size')
-            validation.validate_cuba_keyword(value, 'size')
-        data = self.data
-        data[CUBA.SIZE] = value
-        self.data = data
+        self.current = value
 
     @property
     def current(self):
@@ -55,35 +54,71 @@ class IntegrationStep(SolverParameter):
 
     @current.setter
     def current(self, value):
-        value = validation.cast_data_type(value, 'current')
-        validation.validate_cuba_keyword(value, 'current')
-        data = self.data
-        data[CUBA.CURRENT] = value
-        self.data = data
+        value = self._validate_current(value)
+        self.data[CUBA.CURRENT] = value
+
+    def _validate_current(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.CURRENT')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.CURRENT')
+
+        return value
+
+    def _init_size(self, value):
+        if value is Default:
+            value = 0
+
+        self.size = value
 
     @property
-    def definition(self):
-        return self._definition
+    def size(self):
+        return self.data[CUBA.SIZE]
+
+    @size.setter
+    def size(self, value):
+        value = self._validate_size(value)
+        self.data[CUBA.SIZE] = value
+
+    def _validate_size(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.SIZE')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.SIZE')
+
+        return value
+
+    def _init_final(self, value):
+        if value is Default:
+            value = 0
+
+        self.final = value
 
     @property
-    def data(self):
-        return self._data
+    def final(self):
+        return self.data[CUBA.FINAL]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @final.setter
+    def final(self, value):
+        value = self._validate_final(value)
+        self.data[CUBA.FINAL] = value
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def _validate_final(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.FINAL')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.FINAL')
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.DESCRIPTION, CUBA.FINAL, CUBA.NAME,
-                CUBA.SIZE, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.SOLVER_PARAMETER, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

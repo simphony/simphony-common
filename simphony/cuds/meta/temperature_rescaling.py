@@ -1,51 +1,58 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .thermostat import Thermostat
 from . import validation
+from simphony.core import Default
+from .thermostat import Thermostat
+from simphony.core.cuba import CUBA
 
 
 class TemperatureRescaling(Thermostat):
-    '''A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.  # noqa
-    '''
+    """
+    A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.
+    """
 
     cuba_key = CUBA.TEMPERATURE_RESCALING
 
     def __init__(self,
-                 material,
-                 description="",
-                 name="",
-                 coupling_time=1e-06,
-                 temperature=None):
+                 coupling_time=Default,
+                 temperature=Default,
+                 *args,
+                 **kwargs):
+        super(TemperatureRescaling, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_coupling_time(coupling_time)
+        self._init_temperature(temperature)
 
-        self.material = material
-        if temperature is None:
-            self.temperature = [0.0, 0.0]
-        self.coupling_time = coupling_time
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC, CUBA.MESOSCOPIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(TemperatureRescaling,
+                                self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (
+            CUBA.COUPLING_TIME,
+            CUBA.TEMPERATURE, ) + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']
 
     @property
-    def temperature(self):
-        return self.data[CUBA.TEMPERATURE]
+    def models(self):
+        return self._models
 
-    @temperature.setter
-    def temperature(self, value):
-        value = validation.cast_data_type(value, 'temperature')
-        validation.check_shape(value, '(2)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'temperature')
-        data = self.data
-        data[CUBA.TEMPERATURE] = value
-        self.data = data
+    def _init_definition(self):
+        self._definition = "A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath."
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_coupling_time(self, value):
+        if value is Default:
+            value = 1e-06
+
+        self.coupling_time = value
 
     @property
     def coupling_time(self):
@@ -53,44 +60,44 @@ class TemperatureRescaling(Thermostat):
 
     @coupling_time.setter
     def coupling_time(self, value):
-        value = validation.cast_data_type(value, 'coupling_time')
-        validation.validate_cuba_keyword(value, 'coupling_time')
-        data = self.data
-        data[CUBA.COUPLING_TIME] = value
-        self.data = data
+        value = self._validate_coupling_time(value)
+        self.data[CUBA.COUPLING_TIME] = value
+
+    def _validate_coupling_time(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.COUPLING_TIME')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.COUPLING_TIME')
+
+        return value
+
+    def _init_temperature(self, value):
+        if value is Default:
+            value = [0.0, 0.0]
+
+        self.temperature = value
 
     @property
-    def models(self):
-        return self._models
+    def temperature(self):
+        return self.data[CUBA.TEMPERATURE]
 
-    @property
-    def definition(self):
-        return self._definition
+    @temperature.setter
+    def temperature(self, value):
+        value = self._validate_temperature(value)
+        self.data[CUBA.TEMPERATURE] = value
 
-    @property
-    def variables(self):
-        return self._variables
+    def _validate_temperature(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.TEMPERATURE')
+        validation.check_shape(value, [2])
+        for tuple_ in itertools.product(*[range(x) for x in [2]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.TEMPERATURE')
 
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.COUPLING_TIME, CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME,
-                CUBA.TEMPERATURE, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.THERMOSTAT, CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

@@ -1,75 +1,49 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .data_set import DataSet
+from simphony.core import Default
 from . import validation
+from .data_set import DataSet
+from simphony.core.cuba import CUBA
 
 
 class Mesh(DataSet):
-    '''A mesh  # noqa
-    '''
+    """
+    A mesh
+    """
 
     cuba_key = CUBA.MESH
 
-    def __init__(self, point, face, cell, edge, description="", name=""):
+    def __init__(self, point, face, cell, edge, *args, **kwargs):
+        super(Mesh, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_point(point)
+        self._init_face(face)
+        self._init_cell(cell)
+        self._init_edge(edge)
 
-        self.edge = edge
-        self.cell = cell
-        self.face = face
-        self.point = point
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A mesh'  # noqa
-        # This is a system-managed, read-only attribute
-        self._models = []
+    def supported_parameters(self):
+        try:
+            base_params = super(Mesh, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def edge(self):
-        return self.data[CUBA.EDGE]
+        return (
+            CUBA.POINT,
+            CUBA.FACE,
+            CUBA.CELL,
+            CUBA.EDGE, ) + base_params
 
-    @edge.setter
-    def edge(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'edge')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'edge')
-        data = self.data
-        data[CUBA.EDGE] = value
-        self.data = data
+    def _init_definition(self):
+        self._definition = "A mesh"
 
     @property
-    def cell(self):
-        return self.data[CUBA.CELL]
+    def definition(self):
+        return self._definition
 
-    @cell.setter
-    def cell(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'cell')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'cell')
-        data = self.data
-        data[CUBA.CELL] = value
-        self.data = data
+    def _init_point(self, value):
+        if value is Default:
+            raise TypeError("Value for point must be specified")
 
-    @property
-    def face(self):
-        return self.data[CUBA.FACE]
-
-    @face.setter
-    def face(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'face')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'face')
-        data = self.data
-        data[CUBA.FACE] = value
-        self.data = data
+        self.point = value
 
     @property
     def point(self):
@@ -77,42 +51,98 @@ class Mesh(DataSet):
 
     @point.setter
     def point(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'point')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'point')
-        data = self.data
-        data[CUBA.POINT] = value
-        self.data = data
+        value = self._validate_point(value)
+        self.data[CUBA.POINT] = value
+
+    def _validate_point(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.POINT')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.POINT')
+
+        return value
+
+    def _init_face(self, value):
+        if value is Default:
+            raise TypeError("Value for face must be specified")
+
+        self.face = value
 
     @property
-    def definition(self):
-        return self._definition
+    def face(self):
+        return self.data[CUBA.FACE]
+
+    @face.setter
+    def face(self, value):
+        value = self._validate_face(value)
+        self.data[CUBA.FACE] = value
+
+    def _validate_face(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.FACE')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.FACE')
+
+        return value
+
+    def _init_cell(self, value):
+        if value is Default:
+            raise TypeError("Value for cell must be specified")
+
+        self.cell = value
 
     @property
-    def models(self):
-        return self._models
+    def cell(self):
+        return self.data[CUBA.CELL]
+
+    @cell.setter
+    def cell(self, value):
+        value = self._validate_cell(value)
+        self.data[CUBA.CELL] = value
+
+    def _validate_cell(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.CELL')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.CELL')
+
+        return value
+
+    def _init_edge(self, value):
+        if value is Default:
+            raise TypeError("Value for edge must be specified")
+
+        self.edge = value
 
     @property
-    def data(self):
-        return self._data
+    def edge(self):
+        return self.data[CUBA.EDGE]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @edge.setter
+    def edge(self, value):
+        value = self._validate_edge(value)
+        self.data[CUBA.EDGE] = value
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def _validate_edge(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.EDGE')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.EDGE')
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CELL, CUBA.DESCRIPTION, CUBA.EDGE, CUBA.FACE, CUBA.NAME,
-                CUBA.POINT, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.DATA_SET, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

@@ -1,74 +1,56 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .rheology_model import RheologyModel
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class BirdCarreauModel(RheologyModel):
-    '''Bird-Carreau model  # noqa
-    '''
+    """
+    Bird-Carreau model
+    """
 
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
     def __init__(self,
-                 description="",
-                 name="",
-                 initial_viscosity=0.001,
-                 linear_constant=1.0,
-                 maximum_viscosity=1e-05,
-                 power_law_index=0.5):
+                 initial_viscosity=Default,
+                 linear_constant=Default,
+                 maximum_viscosity=Default,
+                 power_law_index=Default,
+                 *args,
+                 **kwargs):
+        super(BirdCarreauModel, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_initial_viscosity(initial_viscosity)
+        self._init_models()
+        self._init_linear_constant(linear_constant)
+        self._init_maximum_viscosity(maximum_viscosity)
+        self._init_power_law_index(power_law_index)
 
-        self.power_law_index = power_law_index
-        self.maximum_viscosity = maximum_viscosity
-        self.linear_constant = linear_constant
-        self.initial_viscosity = initial_viscosity
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Bird-Carreau model'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    def supported_parameters(self):
+        try:
+            base_params = super(BirdCarreauModel, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def power_law_index(self):
-        return self.data[CUBA.POWER_LAW_INDEX]
+        return (
+            CUBA.INITIAL_VISCOSITY,
+            CUBA.LINEAR_CONSTANT,
+            CUBA.MAXIMUM_VISCOSITY,
+            CUBA.POWER_LAW_INDEX, ) + base_params
 
-    @power_law_index.setter
-    def power_law_index(self, value):
-        value = validation.cast_data_type(value, 'power_law_index')
-        validation.validate_cuba_keyword(value, 'power_law_index')
-        data = self.data
-        data[CUBA.POWER_LAW_INDEX] = value
-        self.data = data
+    def _init_definition(self):
+        self._definition = "Bird-Carreau model"
 
     @property
-    def maximum_viscosity(self):
-        return self.data[CUBA.MAXIMUM_VISCOSITY]
+    def definition(self):
+        return self._definition
 
-    @maximum_viscosity.setter
-    def maximum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'maximum_viscosity')
-        validation.validate_cuba_keyword(value, 'maximum_viscosity')
-        data = self.data
-        data[CUBA.MAXIMUM_VISCOSITY] = value
-        self.data = data
+    def _init_initial_viscosity(self, value):
+        if value is Default:
+            value = 0.001
 
-    @property
-    def linear_constant(self):
-        return self.data[CUBA.LINEAR_CONSTANT]
-
-    @linear_constant.setter
-    def linear_constant(self, value):
-        value = validation.cast_data_type(value, 'linear_constant')
-        validation.validate_cuba_keyword(value, 'linear_constant')
-        data = self.data
-        data[CUBA.LINEAR_CONSTANT] = value
-        self.data = data
+        self.initial_viscosity = value
 
     @property
     def initial_viscosity(self):
@@ -76,45 +58,105 @@ class BirdCarreauModel(RheologyModel):
 
     @initial_viscosity.setter
     def initial_viscosity(self, value):
-        value = validation.cast_data_type(value, 'initial_viscosity')
-        validation.validate_cuba_keyword(value, 'initial_viscosity')
-        data = self.data
-        data[CUBA.INITIAL_VISCOSITY] = value
-        self.data = data
+        value = self._validate_initial_viscosity(value)
+        self.data[CUBA.INITIAL_VISCOSITY] = value
+
+    def _validate_initial_viscosity(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.INITIAL_VISCOSITY')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.INITIAL_VISCOSITY')
+
+        return value
+
+    def _init_models(self):
+        self._models = ['CUBA.CONTINUUM']
 
     @property
     def models(self):
         return self._models
 
-    @property
-    def definition(self):
-        return self._definition
+    def _init_linear_constant(self, value):
+        if value is Default:
+            value = 1.0
+
+        self.linear_constant = value
 
     @property
-    def variables(self):
-        return self._variables
+    def linear_constant(self):
+        return self.data[CUBA.LINEAR_CONSTANT]
+
+    @linear_constant.setter
+    def linear_constant(self, value):
+        value = self._validate_linear_constant(value)
+        self.data[CUBA.LINEAR_CONSTANT] = value
+
+    def _validate_linear_constant(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.LINEAR_CONSTANT')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.LINEAR_CONSTANT')
+
+        return value
+
+    def _init_maximum_viscosity(self, value):
+        if value is Default:
+            value = 1e-05
+
+        self.maximum_viscosity = value
 
     @property
-    def data(self):
-        return self._data
+    def maximum_viscosity(self):
+        return self.data[CUBA.MAXIMUM_VISCOSITY]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @maximum_viscosity.setter
+    def maximum_viscosity(self, value):
+        value = self._validate_maximum_viscosity(value)
+        self.data[CUBA.MAXIMUM_VISCOSITY] = value
+
+    def _validate_maximum_viscosity(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.MAXIMUM_VISCOSITY')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.MAXIMUM_VISCOSITY')
+
+        return value
+
+    def _init_power_law_index(self, value):
+        if value is Default:
+            value = 0.5
+
+        self.power_law_index = value
 
     @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def power_law_index(self):
+        return self.data[CUBA.POWER_LAW_INDEX]
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INITIAL_VISCOSITY, CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY, CUBA.NAME, CUBA.POWER_LAW_INDEX,
-                CUBA.UUID)
+    @power_law_index.setter
+    def power_law_index(self, value):
+        value = self._validate_power_law_index(value)
+        self.data[CUBA.POWER_LAW_INDEX] = value
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _validate_power_law_index(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.POWER_LAW_INDEX')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.POWER_LAW_INDEX')
+
+        return value

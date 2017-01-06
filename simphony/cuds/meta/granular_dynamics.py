@@ -1,62 +1,50 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .physics_equation import PhysicsEquation
+from simphony.core.cuba import CUBA
 
 
 class GranularDynamics(PhysicsEquation):
-    '''Granular dynamics of spherical particles using DEM  # noqa
-    '''
+    """
+    Granular dynamics of spherical particles using DEM
+    """
 
     cuba_key = CUBA.GRANULAR_DYNAMICS
 
-    def __init__(self, description="", name=""):
+    def __init__(self, *args, **kwargs):
+        super(GranularDynamics, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_models()
+        self._init_definition()
+        self._init_variables()
 
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.MESOSCOPIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Granular dynamics of spherical particles using DEM'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = [
-            CUBA.POSITION, CUBA.VELOCITY, CUBA.MOMENTUM, CUBA.ACCELERATION,
-            CUBA.MOMENT_INERTIA, CUBA.TORQUE, CUBA.ANGULAR_VELOCITY
-        ]
+    def supported_parameters(self):
+        try:
+            base_params = super(GranularDynamics, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return () + base_params
+
+    def _init_models(self):
+        self._models = ['CUBA.MESOSCOPIC']
 
     @property
     def models(self):
         return self._models
 
+    def _init_definition(self):
+        self._definition = "Granular dynamics of spherical particles using DEM"
+
     @property
     def definition(self):
         return self._definition
 
+    def _init_variables(self):
+        self._variables = [
+            'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM',
+            'CUBA.ACCELERATION', 'CUBA.MOMENT_INERTIA', 'CUBA.TORQUE',
+            'CUBA.ANGULAR_VELOCITY'
+        ]
+
     @property
     def variables(self):
         return self._variables
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PHYSICS_EQUATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

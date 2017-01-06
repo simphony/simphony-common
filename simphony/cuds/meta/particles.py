@@ -1,43 +1,38 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .data_set import DataSet
+from simphony.core import Default
 from . import validation
+from .data_set import DataSet
+from simphony.core.cuba import CUBA
 
 
 class Particles(DataSet):
-    '''A collection of particles  # noqa
-    '''
+    """
+    A collection of particles
+    """
 
     cuba_key = CUBA.PARTICLES
 
-    def __init__(self, particle, bond, description="", name=""):
+    def __init__(self, particle, bond, *args, **kwargs):
+        super(Particles, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_particle(particle)
+        self._init_definition()
+        self._init_bond(bond)
 
-        self.bond = bond
-        self.particle = particle
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A collection of particles'  # noqa
-        # This is a system-managed, read-only attribute
-        self._models = []
+    def supported_parameters(self):
+        try:
+            base_params = super(Particles, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def bond(self):
-        return self.data[CUBA.BOND]
+        return (
+            CUBA.PARTICLE,
+            CUBA.BOND, ) + base_params
 
-    @bond.setter
-    def bond(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'bond')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'bond')
-        data = self.data
-        data[CUBA.BOND] = value
-        self.data = data
+    def _init_particle(self, value):
+        if value is Default:
+            raise TypeError("Value for particle must be specified")
+
+        self.particle = value
 
     @property
     def particle(self):
@@ -45,42 +40,51 @@ class Particles(DataSet):
 
     @particle.setter
     def particle(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'particle')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'particle')
-        data = self.data
-        data[CUBA.PARTICLE] = value
-        self.data = data
+        value = self._validate_particle(value)
+        self.data[CUBA.PARTICLE] = value
+
+    def _validate_particle(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.PARTICLE')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.PARTICLE')
+
+        return value
+
+    def _init_definition(self):
+        self._definition = "A collection of particles"
 
     @property
     def definition(self):
         return self._definition
 
-    @property
-    def models(self):
-        return self._models
+    def _init_bond(self, value):
+        if value is Default:
+            raise TypeError("Value for bond must be specified")
+
+        self.bond = value
 
     @property
-    def data(self):
-        return self._data
+    def bond(self):
+        return self.data[CUBA.BOND]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @bond.setter
+    def bond(self, value):
+        value = self._validate_bond(value)
+        self.data[CUBA.BOND] = value
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def _validate_bond(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.BOND')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.BOND')
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.BOND, CUBA.DESCRIPTION, CUBA.NAME, CUBA.PARTICLE,
-                CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.DATA_SET, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return value

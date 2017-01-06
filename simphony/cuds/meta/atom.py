@@ -1,25 +1,42 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .particle import Particle
 from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class Atom(Particle):
-    '''An atom  # noqa
-    '''
+    """
+    An atom
+    """
 
     cuba_key = CUBA.ATOM
 
-    def __init__(self, position=None, mass=1.0):
+    def __init__(self, mass=Default, *args, **kwargs):
+        super(Atom, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_mass(mass)
 
-        self.mass = mass
-        if position is None:
-            self.position = [0, 0, 0]
-        # This is a system-managed, read-only attribute
-        self._definition = 'An atom'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(Atom, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.MASS, ) + base_params
+
+    def _init_definition(self):
+        self._definition = "An atom"
+
+    @property
+    def definition(self):
+        return self._definition
+
+    def _init_mass(self, value):
+        if value is Default:
+            value = 1.0
+
+        self.mass = value
 
     @property
     def mass(self):
@@ -27,34 +44,17 @@ class Atom(Particle):
 
     @mass.setter
     def mass(self, value):
-        value = validation.cast_data_type(value, 'mass')
-        validation.validate_cuba_keyword(value, 'mass')
-        data = self.data
-        data[CUBA.MASS] = value
-        self.data = data
+        value = self._validate_mass(value)
+        self.data[CUBA.MASS] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_mass(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.MASS')
+        validation.check_shape(value, None)
+        for tuple_ in itertools.product(*[range(x) for x in None]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.MASS')
 
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.MASS, CUBA.POSITION, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PARTICLE, CUBA.POINT, CUBA.CUDS_ITEM)
+        return value

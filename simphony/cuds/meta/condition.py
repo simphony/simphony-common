@@ -1,46 +1,30 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .cuds_component import CUDSComponent
+from simphony.core.cuba import CUBA
 
 
 class Condition(CUDSComponent):
-    '''Condition on boundaries or model entities  # noqa
-    '''
+    """
+    Condition on boundaries or model entities
+    """
 
     cuba_key = CUBA.CONDITION
 
-    def __init__(self, description="", name=""):
+    def __init__(self, *args, **kwargs):
+        super(Condition, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
 
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Condition on boundaries or model entities'  # noqa
+    def supported_parameters(self):
+        try:
+            base_params = super(Condition, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return () + base_params
+
+    def _init_definition(self):
+        self._definition = "Condition on boundaries or model entities"
 
     @property
     def definition(self):
         return self._definition
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)

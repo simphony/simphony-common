@@ -1,51 +1,60 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
 from .software_tool import SoftwareTool
+from . import validation
+from simphony.core import Default
+from simphony.core.cuba import CUBA
 
 
 class Engine(SoftwareTool):
-    '''Represents a software tool which is used to solve the physics equation  # noqa
-    '''
+    """
+    Represents a software tool which is used to solve the physics equation
+    """
 
     cuba_key = CUBA.ENGINE
 
-    def __init__(self, version=None):
+    def __init__(self, engine_feature, *args, **kwargs):
+        super(Engine, self).__init__(*args, **kwargs)
 
-        self._data = DataContainer()
+        self._init_definition()
+        self._init_engine_feature(engine_feature)
 
-        self.version = version
-        # This is a system-managed, read-only attribute
-        self._definition = 'Represents a software tool which is used to solve the physics equation'  # noqa
-        # This is a system-managed, read-only attribute
-        self._engine_feature = None
+    def supported_parameters(self):
+        try:
+            base_params = super(Engine, self).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.ENGINE_FEATURE, ) + base_params
+
+    def _init_definition(self):
+        self._definition = "Represents a software tool which is used to solve the physics equation"
 
     @property
     def definition(self):
         return self._definition
 
+    def _init_engine_feature(self, value):
+        if value is Default:
+            raise TypeError("Value for engine_feature must be specified")
+
+        self.engine_feature = value
+
     @property
     def engine_feature(self):
         return self.data[CUBA.ENGINE_FEATURE]
 
-    @property
-    def data(self):
-        return self._data
+    @engine_feature.setter
+    def engine_feature(self, value):
+        value = self._validate_engine_feature(value)
+        self.data[CUBA.ENGINE_FEATURE] = value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    def _validate_engine_feature(self, value):
+        import itertools
+        value = validation.cast_data_type(value, 'CUBA.ENGINE_FEATURE')
+        validation.check_shape(value, [None])
+        for tuple_ in itertools.product(*[range(x) for x in [None]]):
+            entry = value
+            for idx in tuple_:
+                entry = entry[idx]
+            validation.validate_cuba_keyword(entry, 'CUBA.ENGINE_FEATURE')
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.ENGINE_FEATURE, CUBA.UUID, CUBA.VERSION)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.SOFTWARE_TOOL, CUBA.CUDS_ITEM)
+        return value
