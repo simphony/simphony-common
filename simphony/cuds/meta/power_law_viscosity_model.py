@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class PowerLawViscosityModel(RheologyModel):
     """
-    ['Power law model for a variable viscosity function that is', 'limited by minimum and maximum values']
+    Power law model for a variable viscosity function that is
+    limited by minimum and maximum values
     """
-
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
@@ -63,15 +63,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.LINEAR_CONSTANT')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.LINEAR_CONSTANT')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.LINEAR_CONSTANT')
         return value
 
     def _init_models(self):
@@ -97,15 +91,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MINIMUM_VISCOSITY] = value
 
     def _validate_minimum_viscosity(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MINIMUM_VISCOSITY')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MINIMUM_VISCOSITY')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MINIMUM_VISCOSITY')
         return value
 
     def _init_maximum_viscosity(self, value):
@@ -124,15 +112,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MAXIMUM_VISCOSITY] = value
 
     def _validate_maximum_viscosity(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MAXIMUM_VISCOSITY')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MAXIMUM_VISCOSITY')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MAXIMUM_VISCOSITY')
         return value
 
     def _init_power_law_index(self, value):
@@ -151,13 +133,7 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.POWER_LAW_INDEX] = value
 
     def _validate_power_law_index(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.POWER_LAW_INDEX')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.POWER_LAW_INDEX')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.POWER_LAW_INDEX')
         return value

@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Point(CUDSItem):
     """
-    ['A point in a 3D space system']
+    A point in a 3D space system
     """
-
     cuba_key = CUBA.POINT
 
     def __init__(self, position=Default, *args, **kwargs):
@@ -48,13 +47,7 @@ class Point(CUDSItem):
         self.data[CUBA.POSITION] = value
 
     def _validate_position(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.POSITION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.POSITION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.POSITION')
         return value

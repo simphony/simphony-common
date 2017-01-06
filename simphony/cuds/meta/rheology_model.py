@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class RheologyModel(PhysicsEquation):
     """
-    ['Rheology model of a CFD fluid']
+    Rheology model of a CFD fluid
     """
-
     cuba_key = CUBA.RHEOLOGY_MODEL
 
     def __init__(self, *args, **kwargs):

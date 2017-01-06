@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class InteratomicPotential(MaterialRelation):
     """
-    ['Interatomic Potentials Category']
+    Interatomic Potentials Category
     """
-
     cuba_key = CUBA.INTERATOMIC_POTENTIAL
 
     def __init__(self, *args, **kwargs):

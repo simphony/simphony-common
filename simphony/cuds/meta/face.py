@@ -4,9 +4,8 @@ from .mesh_element import MeshElement
 
 class Face(MeshElement):
     """
-    ['Element for storing 2D geometrical objects']
+    Element for storing 2D geometrical objects
     """
-
     cuba_key = CUBA.FACE
 
     def __init__(self, *args, **kwargs):

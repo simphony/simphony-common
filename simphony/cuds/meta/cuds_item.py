@@ -5,9 +5,8 @@ import uuid
 
 class CUDSItem(object):
     """
-    ['Root of all CUDS types']
+    Root of all CUDS types
     """
-
     cuba_key = CUBA.CUDS_ITEM
 
     def __init__(self, *args, **kwargs):

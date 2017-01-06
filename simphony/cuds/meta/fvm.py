@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Fvm(ComputationalMethod):
     """
-    ['Finite volume method']
+    Finite volume method
     """
-
     cuba_key = CUBA.FVM
 
     def __init__(self, *args, **kwargs):

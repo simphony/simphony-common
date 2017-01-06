@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class TurbulenceModel(PhysicsEquation):
     """
-    ['Turbulence model']
+    Turbulence model
     """
-
     cuba_key = CUBA.TURBULENCE_MODEL
 
     def __init__(self, *args, **kwargs):

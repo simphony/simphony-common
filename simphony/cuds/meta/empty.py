@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Empty(Condition):
     """
-    ['Empty boundary condition']
+    Empty boundary condition
     """
-
     cuba_key = CUBA.EMPTY
 
     def __init__(self, variable=Default, material=Default, *args, **kwargs):

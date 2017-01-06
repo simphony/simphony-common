@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class MixtureModel(PhysicsEquation):
     """
-    ['Mixture (drift flux) model']
+    Mixture (drift flux) model
     """
-
     cuba_key = CUBA.MIXTURE_MODEL
 
     def __init__(self, *args, **kwargs):

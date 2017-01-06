@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class GravityModel(PhysicsEquation):
     """
-    ['A simple gravity model']
+    A simple gravity model
     """
-
     cuba_key = CUBA.GRAVITY_MODEL
 
     def __init__(self, acceleration=Default, *args, **kwargs):
@@ -64,13 +63,7 @@ class GravityModel(PhysicsEquation):
         self.data[CUBA.ACCELERATION] = value
 
     def _validate_acceleration(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.ACCELERATION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ACCELERATION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.ACCELERATION')
         return value

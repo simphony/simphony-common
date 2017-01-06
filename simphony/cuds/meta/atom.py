@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Atom(Particle):
     """
-    ['An atom']
+    An atom
     """
-
     cuba_key = CUBA.ATOM
 
     def __init__(self, mass=Default, *args, **kwargs):
@@ -48,13 +47,7 @@ class Atom(Particle):
         self.data[CUBA.MASS] = value
 
     def _validate_mass(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MASS')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MASS')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MASS')
         return value

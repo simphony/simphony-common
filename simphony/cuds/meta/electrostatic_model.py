@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class ElectrostaticModel(PhysicsEquation):
     """
-    ['Electrostatic model']
+    Electrostatic model
     """
-
     cuba_key = CUBA.ELECTROSTATIC_MODEL
 
     def __init__(self, *args, **kwargs):

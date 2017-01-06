@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class TetragonalLattice(BravaisLattice):
     """
-    ['A tetragonal lattice']
+    A tetragonal lattice
     """
-
     cuba_key = CUBA.TETRAGONAL_LATTICE
 
     def __init__(self, *args, **kwargs):

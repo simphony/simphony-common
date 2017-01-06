@@ -6,9 +6,9 @@ from .pair_potential import PairPotential
 
 class Coulomb(PairPotential):
     """
-    ['The standard electrostatic Coulombic interaction potential', 'between a pair of point charges']
+    The standard electrostatic Coulombic interaction potential
+    between a pair of point charges
     """
-
     cuba_key = CUBA.COULOMB
 
     def __init__(self,
@@ -63,15 +63,9 @@ class Coulomb(PairPotential):
         self.data[CUBA.CUTOFF_DISTANCE] = value
 
     def _validate_cutoff_distance(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.CUTOFF_DISTANCE')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.CUTOFF_DISTANCE')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.CUTOFF_DISTANCE')
         return value
 
     def _init_dielectric_constant(self, value):
@@ -90,13 +84,7 @@ class Coulomb(PairPotential):
         self.data[CUBA.DIELECTRIC_CONSTANT] = value
 
     def _validate_dielectric_constant(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.DIELECTRIC_CONSTANT')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.DIELECTRIC_CONSTANT')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.DIELECTRIC_CONSTANT')
         return value

@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Mesh(DataSet):
     """
-    ['A mesh']
+    A mesh
     """
-
     cuba_key = CUBA.MESH
 
     def __init__(self, point, face, cell, edge, *args, **kwargs):

@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class KsDft(PhysicsEquation):
     """
-    ['Kohn-Sham DFT equations']
+    Kohn-Sham DFT equations
     """
-
     cuba_key = CUBA.KS_DFT
 
     def __init__(self, *args, **kwargs):

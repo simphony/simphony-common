@@ -4,9 +4,8 @@ from .mesh_element import MeshElement
 
 class Cell(MeshElement):
     """
-    ['Element for storing 3D geometrical objects']
+    Element for storing 3D geometrical objects
     """
-
     cuba_key = CUBA.CELL
 
     def __init__(self, *args, **kwargs):

@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class DissipationForce(MaterialRelation):
     """
-    ['Viscous normal force describing the inelasticity of particle', 'collisions']
+    Viscous normal force describing the inelasticity of particle
+    collisions
     """
-
     cuba_key = CUBA.DISSIPATION_FORCE
 
     def __init__(self, restitution_coefficient=Default, *args, **kwargs):
@@ -56,15 +56,8 @@ class DissipationForce(MaterialRelation):
         self.data[CUBA.RESTITUTION_COEFFICIENT] = value
 
     def _validate_restitution_coefficient(self, value):
-        import itertools
         value = validation.cast_data_type(value,
                                           'CUBA.RESTITUTION_COEFFICIENT')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.RESTITUTION_COEFFICIENT')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.RESTITUTION_COEFFICIENT')
         return value

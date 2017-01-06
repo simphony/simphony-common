@@ -6,9 +6,8 @@ from .interatomic_potential import InteratomicPotential
 
 class PairPotential(InteratomicPotential):
     """
-    ['Pair Interatomic Potentials Category']
+    Pair Interatomic Potentials Category
     """
-
     cuba_key = CUBA.PAIR_POTENTIAL
 
     def __init__(self, material, *args, **kwargs):

@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class GranularDynamics(PhysicsEquation):
     """
-    ['Granular dynamics of spherical particles using DEM']
+    Granular dynamics of spherical particles using DEM
     """
-
     cuba_key = CUBA.GRANULAR_DYNAMICS
 
     def __init__(self, *args, **kwargs):

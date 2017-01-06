@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class MolecularStatics(PhysicsEquation):
     """
-    ['Classical atomistic static molecular model']
+    Classical atomistic static molecular model
     """
-
     cuba_key = CUBA.MOLECULAR_STATICS
 
     def __init__(self, *args, **kwargs):

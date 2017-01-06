@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class IncompressibleFluidModel(CompressibilityModel):
     """
-    ['Incompressible fluid model']
+    Incompressible fluid model
     """
-
     cuba_key = CUBA.INCOMPRESSIBLE_FLUID_MODEL
 
     def __init__(self, *args, **kwargs):

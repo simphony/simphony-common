@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Particles(DataSet):
     """
-    ['A collection of particles']
+    A collection of particles
     """
-
     cuba_key = CUBA.PARTICLES
 
     def __init__(self, particle, bond, *args, **kwargs):

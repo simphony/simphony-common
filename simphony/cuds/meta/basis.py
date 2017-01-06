@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Basis(CUDSComponent):
     """
-    ['Space basis vectors (row wise)']
+    Space basis vectors (row wise)
     """
-
     cuba_key = CUBA.BASIS
 
     def __init__(self, vector=Default, *args, **kwargs):

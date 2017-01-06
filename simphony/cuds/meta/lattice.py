@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Lattice(DataSet):
     """
-    ['A lattice']
+    A lattice
     """
-
     cuba_key = CUBA.LATTICE
 
     def __init__(self, *args, **kwargs):

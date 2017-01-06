@@ -4,9 +4,9 @@ from simphony.core.cuba import CUBA
 
 class NewtonianFluidModel(RheologyModel):
     """
-    ['Newtonian fluid model assuming the viscous stresses are', 'proportional to the rates of deformation']
+    Newtonian fluid model assuming the viscous stresses are
+    proportional to the rates of deformation
     """
-
     cuba_key = CUBA.NEWTONIAN_FLUID_MODEL
 
     def __init__(self, *args, **kwargs):

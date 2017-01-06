@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Fem(ComputationalMethod):
     """
-    ['Finite element method']
+    Finite element method
     """
-
     cuba_key = CUBA.FEM
 
     def __init__(self, *args, **kwargs):

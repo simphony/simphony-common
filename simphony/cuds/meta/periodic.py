@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Periodic(Condition):
     """
-    ['Periodic boundary condition (PBC)']
+    Periodic boundary condition (PBC)
     """
-
     cuba_key = CUBA.PERIODIC
 
     def __init__(self, *args, **kwargs):

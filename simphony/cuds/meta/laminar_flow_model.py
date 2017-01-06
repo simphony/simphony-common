@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class LaminarFlowModel(TurbulenceModel):
     """
-    ['Laminar model']
+    Laminar model
     """
-
     cuba_key = CUBA.LAMINAR_FLOW_MODEL
 
     def __init__(self, *args, **kwargs):

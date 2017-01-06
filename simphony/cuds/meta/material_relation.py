@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class MaterialRelation(ModelEquation):
     """
-    ['Material relation which together with the Physics equation', 'gives the model equation']
+    Material relation which together with the Physics equation
+    gives the model equation
     """
-
     cuba_key = CUBA.MATERIAL_RELATION
 
     def __init__(self, material, *args, **kwargs):

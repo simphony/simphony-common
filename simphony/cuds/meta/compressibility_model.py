@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class CompressibilityModel(PhysicsEquation):
     """
-    ['Compressibility model']
+    Compressibility model
     """
-
     cuba_key = CUBA.COMPRESSIBILITY_MODEL
 
     def __init__(self, *args, **kwargs):

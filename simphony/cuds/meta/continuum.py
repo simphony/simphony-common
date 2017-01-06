@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Continuum(ComputationalModel):
     """
-    ['Continuum model category according to the RoMM']
+    Continuum model category according to the RoMM
     """
-
     cuba_key = CUBA.CONTINUUM
 
     def __init__(self, *args, **kwargs):

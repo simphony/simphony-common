@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Verlet(ComputationalMethod):
     """
-    ['Newtonian dynamics integration using verlet algorithm']
+    Newtonian dynamics integration using verlet algorithm
     """
-
     cuba_key = CUBA.VERLET
 
     def __init__(self, *args, **kwargs):

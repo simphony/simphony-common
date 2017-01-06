@@ -4,9 +4,8 @@ from .tetragonal_lattice import TetragonalLattice
 
 class CubicLattice(TetragonalLattice):
     """
-    ['A cubic lattice']
+    A cubic lattice
     """
-
     cuba_key = CUBA.CUBIC_LATTICE
 
     def __init__(self, *args, **kwargs):

@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class SurfaceTensionRelation(MaterialRelation):
     """
-    ['Surface tension relation between two fluids']
+    Surface tension relation between two fluids
     """
-
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
     def __init__(self, material, surface_tension=Default, *args, **kwargs):
@@ -87,13 +86,7 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.SURFACE_TENSION] = value
 
     def _validate_surface_tension(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.SURFACE_TENSION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.SURFACE_TENSION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.SURFACE_TENSION')
         return value

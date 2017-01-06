@@ -4,9 +4,9 @@ from simphony.core.cuba import CUBA
 
 class MolecularDynamics(PhysicsEquation):
     """
-    ['Classical atomistic molecular dynamics using Newtons', 'equations of motion']
+    Classical atomistic molecular dynamics using Newtons
+    equations of motion
     """
-
     cuba_key = CUBA.MOLECULAR_DYNAMICS
 
     def __init__(self, *args, **kwargs):

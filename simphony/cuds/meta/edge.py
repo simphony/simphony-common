@@ -4,9 +4,8 @@ from .mesh_element import MeshElement
 
 class Edge(MeshElement):
     """
-    ['Element for storing 1D geometrical objects']
+    Element for storing 1D geometrical objects
     """
-
     cuba_key = CUBA.EDGE
 
     def __init__(self, *args, **kwargs):

@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Version(CUDSItem):
     """
-    ['Version of a software tool used in a simulation']
+    Version of a software tool used in a simulation
     """
-
     cuba_key = CUBA.VERSION
 
     def __init__(self, minor, patch, major, full, *args, **kwargs):
@@ -48,15 +47,9 @@ class Version(CUDSItem):
         self.data[CUBA.MINOR] = value
 
     def _validate_minor(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MINOR')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MINOR')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MINOR')
         return value
 
     def _init_definition(self):
@@ -82,15 +75,9 @@ class Version(CUDSItem):
         self.data[CUBA.PATCH] = value
 
     def _validate_patch(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.PATCH')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.PATCH')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.PATCH')
         return value
 
     def _init_major(self, value):
@@ -109,15 +96,9 @@ class Version(CUDSItem):
         self.data[CUBA.MAJOR] = value
 
     def _validate_major(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MAJOR')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MAJOR')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MAJOR')
         return value
 
     def _init_full(self, value):
@@ -136,13 +117,7 @@ class Version(CUDSItem):
         self.data[CUBA.FULL] = value
 
     def _validate_full(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.FULL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.FULL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.FULL')
         return value

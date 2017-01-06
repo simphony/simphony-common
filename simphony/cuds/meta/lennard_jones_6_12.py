@@ -6,9 +6,8 @@ from .pair_potential import PairPotential
 
 class LennardJones_6_12(PairPotential):
     """
-    ['A Lennard-Jones 6-12 Potential']
+    A Lennard-Jones 6-12 Potential
     """
-
     cuba_key = CUBA.LENNARD_JONES_6_12
 
     def __init__(self,
@@ -60,16 +59,9 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.VAN_DER_WAALS_RADIUS] = value
 
     def _validate_van_der_waals_radius(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.VAN_DER_WAALS_RADIUS')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.VAN_DER_WAALS_RADIUS')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.VAN_DER_WAALS_RADIUS')
         return value
 
     def _init_models(self):
@@ -102,15 +94,9 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.CUTOFF_DISTANCE] = value
 
     def _validate_cutoff_distance(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.CUTOFF_DISTANCE')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.CUTOFF_DISTANCE')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.CUTOFF_DISTANCE')
         return value
 
     def _init_energy_well_depth(self, value):
@@ -129,13 +115,7 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.ENERGY_WELL_DEPTH] = value
 
     def _validate_energy_well_depth(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.ENERGY_WELL_DEPTH')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ENERGY_WELL_DEPTH')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.ENERGY_WELL_DEPTH')
         return value

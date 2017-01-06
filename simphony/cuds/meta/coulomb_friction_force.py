@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class CoulombFrictionForce(MaterialRelation):
     """
-    ['Shear force accounting for the tangential displacement', 'between contacting particles']
+    Shear force accounting for the tangential displacement
+    between contacting particles
     """
-
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
     def __init__(self, friction_coefficient=Default, *args, **kwargs):
@@ -57,14 +57,7 @@ class CoulombFrictionForce(MaterialRelation):
         self.data[CUBA.FRICTION_COEFFICIENT] = value
 
     def _validate_friction_coefficient(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.FRICTION_COEFFICIENT')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.FRICTION_COEFFICIENT')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.FRICTION_COEFFICIENT')
         return value

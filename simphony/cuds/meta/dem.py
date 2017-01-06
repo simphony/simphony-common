@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Dem(ComputationalMethod):
     """
-    ['Discrete element method']
+    Discrete element method
     """
-
     cuba_key = CUBA.DEM
 
     def __init__(self, *args, **kwargs):

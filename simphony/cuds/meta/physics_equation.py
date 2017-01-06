@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class PhysicsEquation(ModelEquation):
     """
-    ['Physics equation']
+    Physics equation
     """
-
     cuba_key = CUBA.PHYSICS_EQUATION
 
     def __init__(self, *args, **kwargs):

@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class SoftwareTool(CUDSItem):
     """
-    ['Represents a software tool which is used to solve the model', 'or in pre/post processing']
+    Represents a software tool which is used to solve the model
+    or in pre/post processing
     """
-
     cuba_key = CUBA.SOFTWARE_TOOL
 
     def __init__(self, version=Default, *args, **kwargs):
@@ -48,13 +48,7 @@ class SoftwareTool(CUDSItem):
         self.data[CUBA.VERSION] = value
 
     def _validate_version(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.VERSION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.VERSION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.VERSION')
         return value

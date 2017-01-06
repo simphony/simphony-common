@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class PrimitiveCell(CUDSComponent):
     """
-    ['A lattice primitive cell']
+    A lattice primitive cell
     """
-
     cuba_key = CUBA.PRIMITIVE_CELL
 
     def __init__(self, lattice_vectors=Default, *args, **kwargs):
@@ -48,13 +47,7 @@ class PrimitiveCell(CUDSComponent):
         self.data[CUBA.LATTICE_VECTORS] = value
 
     def _validate_lattice_vectors(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.LATTICE_VECTORS')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.LATTICE_VECTORS')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.LATTICE_VECTORS')
         return value

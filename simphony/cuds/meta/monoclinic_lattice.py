@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class MonoclinicLattice(BravaisLattice):
     """
-    ['A monoclinic lattice']
+    A monoclinic lattice
     """
-
     cuba_key = CUBA.MONOCLINIC_LATTICE
 
     def __init__(self, *args, **kwargs):

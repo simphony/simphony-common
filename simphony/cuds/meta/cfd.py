@@ -12,9 +12,9 @@ from .incompressible_fluid_model import IncompressibleFluidModel
 
 class Cfd(PhysicsEquation):
     """
-    ['Computational fluid dynamics general (set of ) equations for', 'momentum, mass and energy']
+    Computational fluid dynamics general (set of ) equations for
+    momentum, mass and energy
     """
-
     cuba_key = CUBA.CFD
 
     def __init__(self,
@@ -71,15 +71,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.MULTIPHASE_MODEL] = value
 
     def _validate_multiphase_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.MULTIPHASE_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MULTIPHASE_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.MULTIPHASE_MODEL')
         return value
 
     def _init_definition(self):
@@ -105,15 +99,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.RHEOLOGY_MODEL] = value
 
     def _validate_rheology_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.RHEOLOGY_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.RHEOLOGY_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.RHEOLOGY_MODEL')
         return value
 
     def _init_turbulence_model(self, value):
@@ -132,15 +120,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.TURBULENCE_MODEL] = value
 
     def _validate_turbulence_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.TURBULENCE_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.TURBULENCE_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.TURBULENCE_MODEL')
         return value
 
     def _init_models(self):
@@ -177,15 +159,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.GRAVITY_MODEL] = value
 
     def _validate_gravity_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.GRAVITY_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.GRAVITY_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.GRAVITY_MODEL')
         return value
 
     def _init_thermal_model(self, value):
@@ -204,15 +180,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.THERMAL_MODEL] = value
 
     def _validate_thermal_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.THERMAL_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.THERMAL_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.THERMAL_MODEL')
         return value
 
     def _init_compressibility_model(self, value):
@@ -231,16 +201,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.COMPRESSIBILITY_MODEL] = value
 
     def _validate_compressibility_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.COMPRESSIBILITY_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.COMPRESSIBILITY_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.COMPRESSIBILITY_MODEL')
         return value
 
     def _init_electrostatic_model(self, value):
@@ -259,13 +222,7 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.ELECTROSTATIC_MODEL] = value
 
     def _validate_electrostatic_model(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.ELECTROSTATIC_MODEL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ELECTROSTATIC_MODEL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.ELECTROSTATIC_MODEL')
         return value

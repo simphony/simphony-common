@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class MultiphaseModel(PhysicsEquation):
     """
-    ['Multiphase model']
+    Multiphase model
     """
-
     cuba_key = CUBA.MULTIPHASE_MODEL
 
     def __init__(self, *args, **kwargs):

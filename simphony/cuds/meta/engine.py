@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class Engine(SoftwareTool):
     """
-    ['Represents a software tool which is used to solve the', 'physics equation']
+    Represents a software tool which is used to solve the
+    physics equation
     """
-
     cuba_key = CUBA.ENGINE
 
     def __init__(self, engine_feature, *args, **kwargs):

@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Electronic(ComputationalModel):
     """
-    ['Electronic model category according to the RoMM']
+    Electronic model category according to the RoMM
     """
-
     cuba_key = CUBA.ELECTRONIC
 
     def __init__(self, *args, **kwargs):

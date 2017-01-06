@@ -6,9 +6,10 @@ from simphony.core.cuba import CUBA
 
 class Neumann(Condition):
     """
-    ['Neumann boundary condition, it specifies the values that the', 'derivative of a solution is to take on the boundary of the', 'domain.']
+    Neumann boundary condition, it specifies the values that the
+    derivative of a solution is to take on the boundary of the
+    domain.
     """
-
     cuba_key = CUBA.NEUMANN
 
     def __init__(self, variable=Default, material=Default, *args, **kwargs):

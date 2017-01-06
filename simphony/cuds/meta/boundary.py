@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class Boundary(CUDSComponent):
     """
-    ['A computational boundary in the system, it includes', 'translated physical boundaries to computational boundaries.']
+    A computational boundary in the system, it includes
+    translated physical boundaries to computational boundaries.
     """
-
     cuba_key = CUBA.BOUNDARY
 
     def __init__(self, condition, *args, **kwargs):

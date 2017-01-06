@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Free(Condition):
     """
-    ['Free boundary condition']
+    Free boundary condition
     """
-
     cuba_key = CUBA.FREE
 
     def __init__(self, *args, **kwargs):

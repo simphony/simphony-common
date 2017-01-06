@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Bond(CUDSItem):
     """
-    ['A bond between two or more atoms or particles']
+    A bond between two or more atoms or particles
     """
-
     cuba_key = CUBA.BOND
 
     def __init__(self, particle, *args, **kwargs):

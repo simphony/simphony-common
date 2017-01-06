@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class Node(CUDSComponent):
     """
-    ['A node on a structured grid like lattice']
+    A node on a structured grid like lattice
     """
-
     cuba_key = CUBA.NODE
 
     def __init__(self, index, *args, **kwargs):
@@ -48,13 +47,7 @@ class Node(CUDSComponent):
         self.data[CUBA.INDEX] = value
 
     def _validate_index(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.INDEX')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.INDEX')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.INDEX')
         return value

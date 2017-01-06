@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class CUDSComponent(CUDSItem):
     """
-    ['Base data type for the CUDS components']
+    Base data type for the CUDS components
     """
-
     cuba_key = CUBA.CUDS_COMPONENT
 
     def __init__(self, description=Default, name=Default, *args, **kwargs):
@@ -44,15 +43,9 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.DESCRIPTION] = value
 
     def _validate_description(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.DESCRIPTION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.DESCRIPTION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.DESCRIPTION')
         return value
 
     def _init_definition(self):
@@ -78,13 +71,7 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.NAME] = value
 
     def _validate_name(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.NAME')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.NAME')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.NAME')
         return value

@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class EngineFeature(CUDSItem):
     """
-    ['Provides a physics equation and methods that engines', 'provides to solve them']
+    Provides a physics equation and methods that engines
+    provides to solve them
     """
-
     cuba_key = CUBA.ENGINE_FEATURE
 
     def __init__(self, computational_method, physics_equation, *args,
@@ -80,13 +80,7 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.PHYSICS_EQUATION] = value
 
     def _validate_physics_equation(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.PHYSICS_EQUATION')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.PHYSICS_EQUATION')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.PHYSICS_EQUATION')
         return value

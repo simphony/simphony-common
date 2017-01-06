@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class FreeSurfaceModel(PhysicsEquation):
     """
-    ['Free surface model']
+    Free surface model
     """
-
     cuba_key = CUBA.FREE_SURFACE_MODEL
 
     def __init__(self, *args, **kwargs):

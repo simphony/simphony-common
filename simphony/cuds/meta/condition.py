@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Condition(CUDSComponent):
     """
-    ['Condition on boundaries or model entities']
+    Condition on boundaries or model entities
     """
-
     cuba_key = CUBA.CONDITION
 
     def __init__(self, *args, **kwargs):

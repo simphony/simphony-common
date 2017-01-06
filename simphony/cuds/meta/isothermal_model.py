@@ -4,9 +4,9 @@ from .thermal_model import ThermalModel
 
 class IsothermalModel(ThermalModel):
     """
-    ['Isothermal heat transport model, no transport of heat is', 'assumed']
+    Isothermal heat transport model, no transport of heat is
+    assumed
     """
-
     cuba_key = CUBA.ISOTHERMAL_MODEL
 
     def __init__(self, *args, **kwargs):

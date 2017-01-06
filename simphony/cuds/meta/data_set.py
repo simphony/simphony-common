@@ -4,9 +4,9 @@ from simphony.core.cuba import CUBA
 
 class DataSet(CUDSComponent):
     """
-    ['A representation of the computational entities of the model', 'equations']
+    A representation of the computational entities of the model
+    equations
     """
-
     cuba_key = CUBA.DATA_SET
 
     def __init__(self, *args, **kwargs):

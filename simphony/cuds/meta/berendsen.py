@@ -6,9 +6,10 @@ from simphony.core.cuba import CUBA
 
 class Berendsen(Thermostat):
     """
-    ['The Berendsen thermostat model for temperature rescaling of', 'all particles. The coupling time specifies how rapidly the', 'temperature should be relaxed or coupled to the bath.']
+    The Berendsen thermostat model for temperature rescaling of
+    all particles. The coupling time specifies how rapidly the
+    temperature should be relaxed or coupled to the bath.
     """
-
     cuba_key = CUBA.BERENDSEN
 
     def __init__(self,
@@ -63,15 +64,9 @@ class Berendsen(Thermostat):
         self.data[CUBA.COUPLING_TIME] = value
 
     def _validate_coupling_time(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.COUPLING_TIME')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.COUPLING_TIME')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.COUPLING_TIME')
         return value
 
     def _init_temperature(self, value):

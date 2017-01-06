@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
     """
-    ['A constant electrostatic field model']
+    A constant electrostatic field model
     """
-
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
     def __init__(self, electrostatic_field=Default, *args, **kwargs):
@@ -65,13 +64,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         self.data[CUBA.ELECTROSTATIC_FIELD] = value
 
     def _validate_electrostatic_field(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.ELECTROSTATIC_FIELD')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ELECTROSTATIC_FIELD')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.ELECTROSTATIC_FIELD')
         return value

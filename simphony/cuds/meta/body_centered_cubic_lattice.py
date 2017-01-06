@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class BodyCenteredCubicLattice(BravaisLattice):
     """
-    ['A body centred cubic lattice']
+    A body centred cubic lattice
     """
-
     cuba_key = CUBA.BODY_CENTERED_CUBIC_LATTICE
 
     def __init__(self, *args, **kwargs):

@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class Dirichlet(Condition):
     """
-    ['Dirichlet boundary condition, specify the value the', 'solutions takes on the boundary of the domain']
+    Dirichlet boundary condition, specify the value the
+    solutions takes on the boundary of the domain
     """
-
     cuba_key = CUBA.DIRICHLET
 
     def __init__(self, variable=Default, material=Default, *args, **kwargs):

@@ -6,9 +6,9 @@ from simphony.core.cuba import CUBA
 
 class IntegrationTime(SolverParameter):
     """
-    ['the current time, time step, and final time for a simulation', 'stored on each cuds (a specific state).']
+    the current time, time step, and final time for a simulation
+    stored on each cuds (a specific state).
     """
-
     cuba_key = CUBA.INTEGRATION_TIME
 
     def __init__(self,
@@ -58,15 +58,9 @@ class IntegrationTime(SolverParameter):
         self.data[CUBA.CURRENT] = value
 
     def _validate_current(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.CURRENT')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.CURRENT')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.CURRENT')
         return value
 
     def _init_size(self, value):
@@ -85,15 +79,9 @@ class IntegrationTime(SolverParameter):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.SIZE')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.SIZE')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.SIZE')
         return value
 
     def _init_final(self, value):
@@ -112,13 +100,7 @@ class IntegrationTime(SolverParameter):
         self.data[CUBA.FINAL] = value
 
     def _validate_final(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.FINAL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.FINAL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.FINAL')
         return value

@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class Sph(ComputationalMethod):
     """
-    ['Smooth particle hydrodynamics']
+    Smooth particle hydrodynamics
     """
-
     cuba_key = CUBA.SPH
 
     def __init__(self, *args, **kwargs):

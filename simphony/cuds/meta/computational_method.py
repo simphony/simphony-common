@@ -4,9 +4,8 @@ from simphony.core.cuba import CUBA
 
 class ComputationalMethod(SolverParameter):
     """
-    ['A computational method according to the RoMM']
+    A computational method according to the RoMM
     """
-
     cuba_key = CUBA.COMPUTATIONAL_METHOD
 
     def __init__(self, *args, **kwargs):

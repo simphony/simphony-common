@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class SjkrCohesionForce(MaterialRelation):
     """
-    ['Additional normal force tending to maintain the contact']
+    Additional normal force tending to maintain the contact
     """
-
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
     def __init__(self, cohesion_energy_density=Default, *args, **kwargs):
@@ -56,15 +55,8 @@ class SjkrCohesionForce(MaterialRelation):
         self.data[CUBA.COHESION_ENERGY_DENSITY] = value
 
     def _validate_cohesion_energy_density(self, value):
-        import itertools
         value = validation.cast_data_type(value,
                                           'CUBA.COHESION_ENERGY_DENSITY')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.COHESION_ENERGY_DENSITY')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.COHESION_ENERGY_DENSITY')
         return value

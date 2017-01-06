@@ -6,9 +6,8 @@ from simphony.core.cuba import CUBA
 
 class BravaisLattice(Lattice):
     """
-    ['A Bravais lattice']
+    A Bravais lattice
     """
-
     cuba_key = CUBA.BRAVAIS_LATTICE
 
     def __init__(self,
@@ -88,15 +87,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.PRIMITIVE_CELL] = value
 
     def _validate_primitive_cell(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.PRIMITIVE_CELL')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.PRIMITIVE_CELL')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.PRIMITIVE_CELL')
         return value
 
     def _init_size(self, value):
@@ -142,13 +135,7 @@ class BravaisLattice(Lattice):
         self.data[CUBA.ORIGIN] = value
 
     def _validate_origin(self, value):
-        import itertools
         value = validation.cast_data_type(value, 'CUBA.ORIGIN')
-        validation.check_shape(value, None)
-        for tuple_ in itertools.product(*[range(x) for x in None]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ORIGIN')
-
+        validation.check_shape(value, [1])
+        validation.validate_cuba_keyword(value, 'CUBA.ORIGIN')
         return value
