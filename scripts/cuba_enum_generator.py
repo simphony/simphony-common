@@ -1,4 +1,4 @@
-from scripts.old_single_meta_class_generator import CUBA_DATA_CONTAINER_EXCLUDE
+from scripts import utils
 
 
 class CUBAEnumGenerator(object):
@@ -26,8 +26,7 @@ class CUBAEnumGenerator(object):
             cuba_dict['CUBA_KEYS']) | set(simphony_metadata_dict['CUDS_KEYS'])
 
         for keyword in sorted(list(all_keys)):
-            if keyword in CUBA_DATA_CONTAINER_EXCLUDE:
-                continue
-            lines.append(template.format(keyword, keyword))
+            lines.append(template.format(keyword,
+                                         utils.with_cuba_prefix(keyword)))
 
         output.writelines(lines)
