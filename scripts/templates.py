@@ -114,24 +114,16 @@ class Class(object):
         parent_class_name = (self.parent_class_name
                              if self.parent_class_name is not None
                              else "object")
-        out.write(
-            utils.indent(
-                """
-                class {class_name}({parent_class_name}):
-                    \"\"\"
-                    {docstring}
-                    \"\"\"
 
-                    cuba_key = {qualified_cuba_key}
-                """.format(
-                        class_name=self.class_name,
-                        parent_class_name=parent_class_name,
-                        docstring="\n".join(textwrap.wrap(self.docstring, 60)),
-                        qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)  # noqa
-                    ),
-                indent_level
-            )
+        s = "class {class_name}({parent_class_name}):\n".format(
+            class_name=self.class_name,
+            parent_class_name=parent_class_name,
         )
+        s += utils.indent(utils.format_docstring(self.docstring))+'\n'
+        s += utils.indent("cuba_key = {qualified_cuba_key}".format(
+            qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)))+'\n'
+
+        out.write(utils.indent(s, indent_level))
 
         out.write(utils.indent(self._render_init_method(),
                                indent_level+1))
