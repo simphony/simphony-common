@@ -126,7 +126,7 @@ class Class(object):
                 """.format(
                         class_name=self.class_name,
                         parent_class_name=parent_class_name,
-                        docstring=textwrap.wrap(self.docstring, 60),
+                        docstring="\n".join(textwrap.wrap(self.docstring, 60)),
                         qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)  # noqa
                     ),
                 indent_level
