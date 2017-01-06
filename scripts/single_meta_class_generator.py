@@ -51,10 +51,10 @@ class SingleMetaClassGenerator(object):
                 continue
             if prop_key == "data":
                 print ("  Adding data property")
-                class_.properties.append(templates.UUIDProperty())
+                class_.properties.append(templates.DataProperty())
             elif prop_key == "CUBA.UUID":
                 print ("  Adding UUID property")
-                class_.properties.append(templates.DataProperty())
+                class_.properties.append(templates.UUIDProperty())
             elif prop_key in KNOWN_FIXED_PROPERTIES:
                 print ("  Adding fixed property {}".format(prop_key))
                 if prop_key in self.class_data:
