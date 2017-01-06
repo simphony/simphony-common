@@ -126,7 +126,7 @@ class Class(object):
                 """.format(
                         class_name=self.class_name,
                         parent_class_name=parent_class_name,
-                        docstring=self.docstring,
+                        docstring=textwrap.wrap(self.docstring, 60),
                         qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)  # noqa
                     ),
                 indent_level
@@ -336,7 +336,7 @@ class FixedProperty(Property):
     def _render_init(self):
         return textwrap.dedent("""
         def _init_{name}(self):
-            self._{name} = {default}
+            self._{name} = {default}  # noqa
         """).format(name=self.name,
                     default=utils.quoted_if_string(self.default))
 
