@@ -391,15 +391,33 @@ class VariableProperty(Property):
             qual_cuba_key=self.qual_cuba_key)
 
     def _render_validation(self):
-        return textwrap.dedent("""
+
+        if self.shape == [1]:
+            return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{qual_cuba_key}')
-                validation.validate_cuba_keyword(value, '{qual_cuba_key}')
                 validation.check_shape(value, {shape})
+                validation.validate_cuba_keyword(value, '{qual_cuba_key}')
                 return value
-        """.format(prop_name=self.name,
-                   qual_cuba_key=self.qual_cuba_key,
-                   shape=self.shape))
+            """.format(prop_name=self.name,
+                       qual_cuba_key=self.qual_cuba_key,
+                       shape=self.shape))
+        else:
+            return textwrap.dedent("""
+            def _validate_{prop_name}(self, value):
+                import itertools
+                value = validation.cast_data_type(value, '{qual_cuba_key}')
+                validation.check_shape(value, {shape})
+                for tuple_ in itertools.product(*[range(x) for x in {shape}]):
+                    entry = value
+                    for idx in tuple_:
+                        entry = entry[idx]
+                    validation.validate_cuba_keyword(entry, '{qual_cuba_key}')
+
+                return value
+            """.format(prop_name=self.name,
+                       qual_cuba_key=self.qual_cuba_key,
+                       shape=self.shape))
 
 
 class DataProperty(FixedProperty):
