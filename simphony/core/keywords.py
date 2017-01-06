@@ -11,1515 +11,1515 @@ ATTRIBUTES = ["name", "definition", "key", "shape", "length", "dtype"]
 Keyword = namedtuple("Keyword", ATTRIBUTES)
 
 KEYWORDS = {
-    'CUBA.ACCELERATION': Keyword(
+    'ACCELERATION': Keyword(
         name='Acceleration',
         definition='Acceleration of a point or node',  # noqa
-        key='CUBA.ACCELERATION',
+        key='ACCELERATION',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.AMPHIPHILICITY': Keyword(
+    'AMPHIPHILICITY': Keyword(
         name='Amphiphilicity',
         definition='Hydrophilic/-phile behaviour of a particle',  # noqa
-        key='CUBA.AMPHIPHILICITY',
+        key='AMPHIPHILICITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ANGULAR_ACCELERATION': Keyword(
+    'ANGULAR_ACCELERATION': Keyword(
         name='AngularAcceleration',
         definition='Angular acceleration of a point or node',  # noqa
-        key='CUBA.ANGULAR_ACCELERATION',
+        key='ANGULAR_ACCELERATION',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ANGULAR_VELOCITY': Keyword(
+    'ANGULAR_VELOCITY': Keyword(
         name='AngularVelocity',
         definition='Angular velocity of a point or node',  # noqa
-        key='CUBA.ANGULAR_VELOCITY',
+        key='ANGULAR_VELOCITY',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.BOND_LABEL': Keyword(
+    'BOND_LABEL': Keyword(
         name='BondLabel',
         definition='Unique ID of atoms',  # noqa
-        key='CUBA.BOND_LABEL',
+        key='BOND_LABEL',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.BOND_TYPE': Keyword(
+    'BOND_TYPE': Keyword(
         name='BondType',
         definition='Type of label',  # noqa
-        key='CUBA.BOND_TYPE',
+        key='BOND_TYPE',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.CHARGE': Keyword(
+    'CHARGE': Keyword(
         name='Charge',
         definition='Charge',  # noqa
-        key='CUBA.CHARGE',
+        key='CHARGE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.CHARGE_DENSITY': Keyword(
+    'CHARGE_DENSITY': Keyword(
         name='ChargeDensity',
         definition='Charge density',  # noqa
-        key='CUBA.CHARGE_DENSITY',
+        key='CHARGE_DENSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.CHEMICAL_SPECIE': Keyword(
+    'CHEMICAL_SPECIE': Keyword(
         name='ChemicalSpecie',
         definition='Chemical specie',  # noqa
-        key='CUBA.CHEMICAL_SPECIE',
+        key='CHEMICAL_SPECIE',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.COHESION_ENERGY_DENSITY': Keyword(
+    'COHESION_ENERGY_DENSITY': Keyword(
         name='CohesionEnergyDensity',
         definition='Work of adhesion per unit contact area',  # noqa
-        key='CUBA.COHESION_ENERGY_DENSITY',
+        key='COHESION_ENERGY_DENSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.COLLISION_OPERATOR': Keyword(
+    'COLLISION_OPERATOR': Keyword(
         name='CollisionOperator',
         definition='Collision operator of a model Boltzmann equation',  # noqa
-        key='CUBA.COLLISION_OPERATOR',
+        key='COLLISION_OPERATOR',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.CONCENTRATION': Keyword(
+    'CONCENTRATION': Keyword(
         name='Concentration',
         definition='Concentration of a substance',  # noqa
-        key='CUBA.CONCENTRATION',
+        key='CONCENTRATION',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.CONTACT_ANGLE': Keyword(
+    'CONTACT_ANGLE': Keyword(
         name='ContactAngle',
         definition='Wettability in multiphase flows',  # noqa
-        key='CUBA.CONTACT_ANGLE',
+        key='CONTACT_ANGLE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.COUPLING_TIME': Keyword(
+    'COUPLING_TIME': Keyword(
         name='CouplingTime',
         definition='coupling time',  # noqa
-        key='CUBA.COUPLING_TIME',
+        key='COUPLING_TIME',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.CRYSTAL_STORAGE': Keyword(
+    'CRYSTAL_STORAGE': Keyword(
         name='CrystalStorage',
         definition='Additional information for visualization',  # noqa
-        key='CUBA.CRYSTAL_STORAGE',
+        key='CRYSTAL_STORAGE',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.CURRENT': Keyword(
+    'CURRENT': Keyword(
         name='Current',
         definition='current value of a parameter',  # noqa
-        key='CUBA.CURRENT',
+        key='CURRENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.CUTOFF_DISTANCE': Keyword(
+    'CUTOFF_DISTANCE': Keyword(
         name='CutoffDistance',
         definition='Distance where force is no longer taken into account',  # noqa
-        key='CUBA.CUTOFF_DISTANCE',
+        key='CUTOFF_DISTANCE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DEBYE_LENGTH': Keyword(
+    'DEBYE_LENGTH': Keyword(
         name='DebyeLength',
         definition='Electrostatic effects of particles in solution',  # noqa
-        key='CUBA.DEBYE_LENGTH',
+        key='DEBYE_LENGTH',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DELTA_DISPLACEMENT': Keyword(
+    'DELTA_DISPLACEMENT': Keyword(
         name='DeltaDisplacement',
         definition='Displacement during the last time step',  # noqa
-        key='CUBA.DELTA_DISPLACEMENT',
+        key='DELTA_DISPLACEMENT',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DENSITY': Keyword(
+    'DENSITY': Keyword(
         name='Density',
         definition='Density',  # noqa
-        key='CUBA.DENSITY',
+        key='DENSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DESCRIPTION': Keyword(
+    'DESCRIPTION': Keyword(
         name='Description',
         definition='Description text',  # noqa
-        key='CUBA.DESCRIPTION',
+        key='DESCRIPTION',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.DIELECTRIC_CONSTANT': Keyword(
+    'DIELECTRIC_CONSTANT': Keyword(
         name='DielectricConstant',
         definition='Ratio of the permittivity of a substance to the permittivity of free space or vacuum',  # noqa
-        key='CUBA.DIELECTRIC_CONSTANT',
+        key='DIELECTRIC_CONSTANT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DIFFUSION_COEFFICIENT': Keyword(
+    'DIFFUSION_COEFFICIENT': Keyword(
         name='DiffusionCoefficient',
         definition='Diffusion coefficient',  # noqa
-        key='CUBA.DIFFUSION_COEFFICIENT',
+        key='DIFFUSION_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DIFFUSION_VELOCITY': Keyword(
+    'DIFFUSION_VELOCITY': Keyword(
         name='DiffusionVelocity',
         definition='Diffusion velocity',  # noqa
-        key='CUBA.DIFFUSION_VELOCITY',
+        key='DIFFUSION_VELOCITY',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DIRECTION': Keyword(
+    'DIRECTION': Keyword(
         name='Direction',
         definition='Geometric (more general than, e.g., velocity) could be used for spin',  # noqa
-        key='CUBA.DIRECTION',
+        key='DIRECTION',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DISTRIBUTION': Keyword(
+    'DISTRIBUTION': Keyword(
         name='Distribution',
         definition='Single-particle distribution function',  # noqa
-        key='CUBA.DISTRIBUTION',
+        key='DISTRIBUTION',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DYNAMIC_PRESSURE': Keyword(
+    'DYNAMIC_PRESSURE': Keyword(
         name='DynamicPressure',
         definition='Dynamic pressure',  # noqa
-        key='CUBA.DYNAMIC_PRESSURE',
+        key='DYNAMIC_PRESSURE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.DYNAMIC_VISCOSITY': Keyword(
+    'DYNAMIC_VISCOSITY': Keyword(
         name='DynamicViscosity',
         definition='Dynamic viscosity of fluid',  # noqa
-        key='CUBA.DYNAMIC_VISCOSITY',
+        key='DYNAMIC_VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ELECTRIC_FIELD': Keyword(
+    'ELECTRIC_FIELD': Keyword(
         name='ElectricField',
         definition='Electric field',  # noqa
-        key='CUBA.ELECTRIC_FIELD',
+        key='ELECTRIC_FIELD',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ELECTRON_MASS': Keyword(
+    'ELECTRON_MASS': Keyword(
         name='ElectronMass',
         definition='Electron mass',  # noqa
-        key='CUBA.ELECTRON_MASS',
+        key='ELECTRON_MASS',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ELECTROSTATIC_FIELD': Keyword(
+    'ELECTROSTATIC_FIELD': Keyword(
         name='ElectrostaticField',
         definition='Electrostatic field',  # noqa
-        key='CUBA.ELECTROSTATIC_FIELD',
+        key='ELECTROSTATIC_FIELD',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ENERGY': Keyword(
+    'ENERGY': Keyword(
         name='Energy',
         definition='Energy',  # noqa
-        key='CUBA.ENERGY',
+        key='ENERGY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ENERGY_WELL_DEPTH': Keyword(
+    'ENERGY_WELL_DEPTH': Keyword(
         name='EnergyWellDepth',
         definition='Measurement of how strongly the two particles attract each other',  # noqa
-        key='CUBA.ENERGY_WELL_DEPTH',
+        key='ENERGY_WELL_DEPTH',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.EQUATION_OF_STATE_COEFFICIENT': Keyword(
+    'EQUATION_OF_STATE_COEFFICIENT': Keyword(
         name='EquationOfStateCoefficient',
         definition='Equation of state for multiphase fluids',  # noqa
-        key='CUBA.EQUATION_OF_STATE_COEFFICIENT',
+        key='EQUATION_OF_STATE_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.EULER_ANGLES': Keyword(
+    'EULER_ANGLES': Keyword(
         name='EulerAngles',
         definition='Euler angles',  # noqa
-        key='CUBA.EULER_ANGLES',
+        key='EULER_ANGLES',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.EXTERNAL_APPLIED_FORCE': Keyword(
+    'EXTERNAL_APPLIED_FORCE': Keyword(
         name='ExternalAppliedForce',
         definition='Externally applied force (force fields, interactions, etc)',  # noqa
-        key='CUBA.EXTERNAL_APPLIED_FORCE',
+        key='EXTERNAL_APPLIED_FORCE',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.EXTERNAL_FORCING': Keyword(
+    'EXTERNAL_FORCING': Keyword(
         name='ExternalForcing',
         definition='Toggle for an external force',  # noqa
-        key='CUBA.EXTERNAL_FORCING',
+        key='EXTERNAL_FORCING',
         shape=[1],
         length=None,
         dtype=bool),
-    'CUBA.FINAL': Keyword(
+    'FINAL': Keyword(
         name='Final',
         definition='final value of a parameter',  # noqa
-        key='CUBA.FINAL',
+        key='FINAL',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.FLOW_TYPE': Keyword(
+    'FLOW_TYPE': Keyword(
         name='FlowType',
         definition='Classification of a fluid flow type',  # noqa
-        key='CUBA.FLOW_TYPE',
+        key='FLOW_TYPE',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.FLUX': Keyword(
+    'FLUX': Keyword(
         name='Flux',
         definition='Flux',  # noqa
-        key='CUBA.FLUX',
+        key='FLUX',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.FORCE': Keyword(
+    'FORCE': Keyword(
         name='Force',
         definition='Force',  # noqa
-        key='CUBA.FORCE',
+        key='FORCE',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.FRICTION_COEFFICIENT': Keyword(
+    'FRICTION_COEFFICIENT': Keyword(
         name='FrictionCoefficient',
         definition='Control particle friction',  # noqa
-        key='CUBA.FRICTION_COEFFICIENT',
+        key='FRICTION_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.FULL': Keyword(
+    'FULL': Keyword(
         name='Full',
         definition='Full attribute of an entity.',  # noqa
-        key='CUBA.FULL',
+        key='FULL',
         shape=[1],
         length=128,
         dtype=numpy.str),
-    'CUBA.HAMAKER_CONSTANT': Keyword(
+    'HAMAKER_CONSTANT': Keyword(
         name='HamakerConstant',
         definition='Van der Waals body-body interaction',  # noqa
-        key='CUBA.HAMAKER_CONSTANT',
+        key='HAMAKER_CONSTANT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.HEAT_CONDUCTIVITY': Keyword(
+    'HEAT_CONDUCTIVITY': Keyword(
         name='HeatConductivity',
         definition='Heat conductivity',  # noqa
-        key='CUBA.HEAT_CONDUCTIVITY',
+        key='HEAT_CONDUCTIVITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.HOMOGENIZED_STRESS_TENSOR': Keyword(
+    'HOMOGENIZED_STRESS_TENSOR': Keyword(
         name='HomogenizedStressTensor',
         definition='Homogenized stress tensor',  # noqa
-        key='CUBA.HOMOGENIZED_STRESS_TENSOR',
+        key='HOMOGENIZED_STRESS_TENSOR',
         shape=[9],
         length=None,
         dtype=numpy.float64),
-    'CUBA.INDEX': Keyword(
+    'INDEX': Keyword(
         name='Index',
         definition='An integer vector in 3D geometric space',  # noqa
-        key='CUBA.INDEX',
+        key='INDEX',
         shape=[3],
         length=None,
         dtype=numpy.int32),
-    'CUBA.INITIAL_VISCOSITY': Keyword(
+    'INITIAL_VISCOSITY': Keyword(
         name='InitialViscosity',
         definition='Initial viscosity',  # noqa
-        key='CUBA.INITIAL_VISCOSITY',
+        key='INITIAL_VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ION_VALENCE_EFFECT': Keyword(
+    'ION_VALENCE_EFFECT': Keyword(
         name='IonValenceEffect',
         definition='Coulomb interaction between particles',  # noqa
-        key='CUBA.ION_VALENCE_EFFECT',
+        key='ION_VALENCE_EFFECT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.KINEMATIC_VISCOSITY': Keyword(
+    'KINEMATIC_VISCOSITY': Keyword(
         name='KinematicViscosity',
         definition='Kinematic viscosity of fluid',  # noqa
-        key='CUBA.KINEMATIC_VISCOSITY',
+        key='KINEMATIC_VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.LABEL': Keyword(
+    'LABEL': Keyword(
         name='Label',
         definition='Label for a point or node',  # noqa
-        key='CUBA.LABEL',
+        key='LABEL',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.LATTICE_PARAMETER': Keyword(
+    'LATTICE_PARAMETER': Keyword(
         name='LatticeParameter',
         definition='A lattice parameter to define a Bravais Lattice',  # noqa
-        key='CUBA.LATTICE_PARAMETER',
+        key='LATTICE_PARAMETER',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.LATTICE_SPACING': Keyword(
+    'LATTICE_SPACING': Keyword(
         name='LatticeSpacing',
         definition='Distance between adjacent lattice nodes',  # noqa
-        key='CUBA.LATTICE_SPACING',
+        key='LATTICE_SPACING',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.LATTICE_VECTORS': Keyword(
+    'LATTICE_VECTORS': Keyword(
         name='LatticeVectors',
         definition='Lattice vectors of unit cell of the component',  # noqa
-        key='CUBA.LATTICE_VECTORS',
+        key='LATTICE_VECTORS',
         shape=[3, 3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.LINEAR_CONSTANT': Keyword(
+    'LINEAR_CONSTANT': Keyword(
         name='LinearConstant',
         definition='Linear constant',  # noqa
-        key='CUBA.LINEAR_CONSTANT',
+        key='LINEAR_CONSTANT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.MAJOR': Keyword(
+    'MAJOR': Keyword(
         name='Major',
         definition='Major attribute of an entity.',  # noqa
-        key='CUBA.MAJOR',
+        key='MAJOR',
         shape=[1],
         length=8,
         dtype=numpy.str),
-    'CUBA.MASS': Keyword(
+    'MASS': Keyword(
         name='Mass',
         definition='Particle mass',  # noqa
-        key='CUBA.MASS',
+        key='MASS',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.MATERIAL_TYPE': Keyword(
+    'MATERIAL_TYPE': Keyword(
         name='MaterialType',
         definition='Material dimension and type',  # noqa
-        key='CUBA.MATERIAL_TYPE',
+        key='MATERIAL_TYPE',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.MAXIMUM_VISCOSITY': Keyword(
+    'MAXIMUM_VISCOSITY': Keyword(
         name='MaximumViscosity',
         definition='Maximum viscosity',  # noqa
-        key='CUBA.MAXIMUM_VISCOSITY',
+        key='MAXIMUM_VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.MINIMUM_VISCOSITY': Keyword(
+    'MINIMUM_VISCOSITY': Keyword(
         name='MinimumViscosity',
         definition='Minimum viscosity',  # noqa
-        key='CUBA.MINIMUM_VISCOSITY',
+        key='MINIMUM_VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.MINOR': Keyword(
+    'MINOR': Keyword(
         name='Minor',
         definition='Minor attribute of an entity.',  # noqa
-        key='CUBA.MINOR',
+        key='MINOR',
         shape=[1],
         length=8,
         dtype=numpy.str),
-    'CUBA.MOMENTUM': Keyword(
+    'MOMENTUM': Keyword(
         name='Momentum',
         definition='Momentum',  # noqa
-        key='CUBA.MOMENTUM',
+        key='MOMENTUM',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.MOMENT_INERTIA': Keyword(
+    'MOMENT_INERTIA': Keyword(
         name='MomentInertia',
         definition='Moment inertia',  # noqa
-        key='CUBA.MOMENT_INERTIA',
+        key='MOMENT_INERTIA',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.NAME': Keyword(
+    'NAME': Keyword(
         name='Name',
         definition='Naming of high-level objects (e.g. solver models)',  # noqa
-        key='CUBA.NAME',
+        key='NAME',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.NAME_UC': Keyword(
+    'NAME_UC': Keyword(
         name='NameUc',
         definition='Name of the unit cell of the component',  # noqa
-        key='CUBA.NAME_UC',
+        key='NAME_UC',
         shape=[1],
         length=20,
         dtype=numpy.str),
-    'CUBA.NONE': Keyword(
+    'NONE': Keyword(
         name='None',
         definition='a general none value',  # noqa
-        key='CUBA.NONE',
+        key='NONE',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.NUMBER_OF_POINTS': Keyword(
+    'NUMBER_OF_POINTS': Keyword(
         name='NumberOfPoints',
         definition='Number of points or nodes',  # noqa
-        key='CUBA.NUMBER_OF_POINTS',
+        key='NUMBER_OF_POINTS',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.NUMBER_OF_TIME_STEPS': Keyword(
+    'NUMBER_OF_TIME_STEPS': Keyword(
         name='NumberOfTimeSteps',
         definition='Number of discrete time steps',  # noqa
-        key='CUBA.NUMBER_OF_TIME_STEPS',
+        key='NUMBER_OF_TIME_STEPS',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.OCCUPANCY': Keyword(
+    'OCCUPANCY': Keyword(
         name='Occupancy',
         definition='Occupancy of an atomic position',  # noqa
-        key='CUBA.OCCUPANCY',
+        key='OCCUPANCY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ORDER_PARAMETER': Keyword(
+    'ORDER_PARAMETER': Keyword(
         name='OrderParameter',
         definition='Phase field in multiphase flows',  # noqa
-        key='CUBA.ORDER_PARAMETER',
+        key='ORDER_PARAMETER',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ORIGINAL_POSITION': Keyword(
+    'ORIGINAL_POSITION': Keyword(
         name='OriginalPosition',
         definition='Position at the beginning of the calculation',  # noqa
-        key='CUBA.ORIGINAL_POSITION',
+        key='ORIGINAL_POSITION',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.PATCH': Keyword(
+    'PATCH': Keyword(
         name='Patch',
         definition='Patch attribute of an entity.',  # noqa
-        key='CUBA.PATCH',
+        key='PATCH',
         shape=[1],
         length=8,
         dtype=numpy.str),
-    'CUBA.PHASE_INTERACTION_STRENGTH': Keyword(
+    'PHASE_INTERACTION_STRENGTH': Keyword(
         name='PhaseInteractionStrength',
         definition='Strength of phase interactions on a particle',  # noqa
-        key='CUBA.PHASE_INTERACTION_STRENGTH',
+        key='PHASE_INTERACTION_STRENGTH',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.POISSON_RATIO': Keyword(
+    'POISSON_RATIO': Keyword(
         name='PoissonRatio',
         definition='Poisson ratio',  # noqa
-        key='CUBA.POISSON_RATIO',
+        key='POISSON_RATIO',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.POSITION': Keyword(
+    'POSITION': Keyword(
         name='Position',
         definition='Position of a point or node or atom',  # noqa
-        key='CUBA.POSITION',
+        key='POSITION',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.POTENTIAL_ENERGY': Keyword(
+    'POTENTIAL_ENERGY': Keyword(
         name='PotentialEnergy',
         definition='Potential energy',  # noqa
-        key='CUBA.POTENTIAL_ENERGY',
+        key='POTENTIAL_ENERGY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.POWER_LAW_INDEX': Keyword(
+    'POWER_LAW_INDEX': Keyword(
         name='PowerLawIndex',
         definition='Power law index',  # noqa
-        key='CUBA.POWER_LAW_INDEX',
+        key='POWER_LAW_INDEX',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.PRESSURE': Keyword(
+    'PRESSURE': Keyword(
         name='Pressure',
         definition='Pressure',  # noqa
-        key='CUBA.PRESSURE',
+        key='PRESSURE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.PROBABILITY_COEFFICIENT': Keyword(
+    'PROBABILITY_COEFFICIENT': Keyword(
         name='ProbabilityCoefficient',
         definition='For stochastic processes (e.g. sorption)',  # noqa
-        key='CUBA.PROBABILITY_COEFFICIENT',
+        key='PROBABILITY_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.RADIUS': Keyword(
+    'RADIUS': Keyword(
         name='Radius',
         definition='Particle radius',  # noqa
-        key='CUBA.RADIUS',
+        key='RADIUS',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.REFERENCE_DENSITY': Keyword(
+    'REFERENCE_DENSITY': Keyword(
         name='ReferenceDensity',
         definition='Reference value for density',  # noqa
-        key='CUBA.REFERENCE_DENSITY',
+        key='REFERENCE_DENSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.RELATIVE_VELOCITY': Keyword(
+    'RELATIVE_VELOCITY': Keyword(
         name='RelativeVelocity',
         definition='Relative velocity',  # noqa
-        key='CUBA.RELATIVE_VELOCITY',
+        key='RELATIVE_VELOCITY',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.RELAXATION_TIME': Keyword(
+    'RELAXATION_TIME': Keyword(
         name='RelaxationTime',
         definition='Relaxation time',  # noqa
-        key='CUBA.RELAXATION_TIME',
+        key='RELAXATION_TIME',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.RESTITUTION_COEFFICIENT': Keyword(
+    'RESTITUTION_COEFFICIENT': Keyword(
         name='RestitutionCoefficient',
         definition='Restitution coefficient',  # noqa
-        key='CUBA.RESTITUTION_COEFFICIENT',
+        key='RESTITUTION_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ROLLING_FRICTION': Keyword(
+    'ROLLING_FRICTION': Keyword(
         name='RollingFriction',
         definition='Rolling friction coefficient',  # noqa
-        key='CUBA.ROLLING_FRICTION',
+        key='ROLLING_FRICTION',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SCALING_COEFFICIENT': Keyword(
+    'SCALING_COEFFICIENT': Keyword(
         name='ScalingCoefficient',
         definition='Coarsening or time-scale bridging',  # noqa
-        key='CUBA.SCALING_COEFFICIENT',
+        key='SCALING_COEFFICIENT',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SHAPE_CENTER': Keyword(
+    'SHAPE_CENTER': Keyword(
         name='ShapeCenter',
         definition='Geometrical center of the shape of the material',  # noqa
-        key='CUBA.SHAPE_CENTER',
+        key='SHAPE_CENTER',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SHAPE_LENGTH': Keyword(
+    'SHAPE_LENGTH': Keyword(
         name='ShapeLength',
         definition='Length in angstroms of the shape of the materials',  # noqa
-        key='CUBA.SHAPE_LENGTH',
+        key='SHAPE_LENGTH',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SHAPE_LENGTH_UC': Keyword(
+    'SHAPE_LENGTH_UC': Keyword(
         name='ShapeLengthUc',
         definition='Length in units cells of the shape of the material',  # noqa
-        key='CUBA.SHAPE_LENGTH_UC',
+        key='SHAPE_LENGTH_UC',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SHAPE_RADIUS': Keyword(
+    'SHAPE_RADIUS': Keyword(
         name='ShapeRadius',
         definition='Radius for a spherical material',  # noqa
-        key='CUBA.SHAPE_RADIUS',
+        key='SHAPE_RADIUS',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SHAPE_SIDE': Keyword(
+    'SHAPE_SIDE': Keyword(
         name='ShapeSide',
         definition='Side length for a hexagonal material',  # noqa
-        key='CUBA.SHAPE_SIDE',
+        key='SHAPE_SIDE',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SIMULATION_DOMAIN_DIMENSIONS': Keyword(
+    'SIMULATION_DOMAIN_DIMENSIONS': Keyword(
         name='SimulationDomainDimensions',
         definition='Size of the simulation models',  # noqa
-        key='CUBA.SIMULATION_DOMAIN_DIMENSIONS',
+        key='SIMULATION_DOMAIN_DIMENSIONS',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SIMULATION_DOMAIN_ORIGIN': Keyword(
+    'SIMULATION_DOMAIN_ORIGIN': Keyword(
         name='SimulationDomainOrigin',
         definition='Offset for the simulation models',  # noqa
-        key='CUBA.SIMULATION_DOMAIN_ORIGIN',
+        key='SIMULATION_DOMAIN_ORIGIN',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SIZE': Keyword(
+    'SIZE': Keyword(
         name='Size',
         definition='size of a parameter or quantity',  # noqa
-        key='CUBA.SIZE',
+        key='SIZE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SMOOTHING_LENGTH': Keyword(
+    'SMOOTHING_LENGTH': Keyword(
         name='SmoothingLength',
         definition='Half of kernel cut-off for all splines',  # noqa
-        key='CUBA.SMOOTHING_LENGTH',
+        key='SMOOTHING_LENGTH',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SPHERICITY': Keyword(
+    'SPHERICITY': Keyword(
         name='Sphericity',
         definition='Sphericity of the particle',  # noqa
-        key='CUBA.SPHERICITY',
+        key='SPHERICITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.STATUS': Keyword(
+    'STATUS': Keyword(
         name='Status',
         definition='Status of a point or node',  # noqa
-        key='CUBA.STATUS',
+        key='STATUS',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.STRAIN_TENSOR': Keyword(
+    'STRAIN_TENSOR': Keyword(
         name='StrainTensor',
         definition='Strain tensor',  # noqa
-        key='CUBA.STRAIN_TENSOR',
+        key='STRAIN_TENSOR',
         shape=[9],
         length=None,
         dtype=numpy.float64),
-    'CUBA.STRESS_TENSOR': Keyword(
+    'STRESS_TENSOR': Keyword(
         name='StressTensor',
         definition='Stress tensor',  # noqa
-        key='CUBA.STRESS_TENSOR',
+        key='STRESS_TENSOR',
         shape=[9],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SURFACE_TENSION': Keyword(
+    'SURFACE_TENSION': Keyword(
         name='SurfaceTension',
         definition='Surface tension',  # noqa
-        key='CUBA.SURFACE_TENSION',
+        key='SURFACE_TENSION',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.SYMMETRY_LATTICE_VECTORS': Keyword(
+    'SYMMETRY_LATTICE_VECTORS': Keyword(
         name='SymmetryLatticeVectors',
         definition='Symmetry group',  # noqa
-        key='CUBA.SYMMETRY_LATTICE_VECTORS',
+        key='SYMMETRY_LATTICE_VECTORS',
         shape=[1],
         length=None,
         dtype=numpy.int32),
-    'CUBA.TEMPERATURE': Keyword(
+    'TEMPERATURE': Keyword(
         name='Temperature',
         definition='Temperature',  # noqa
-        key='CUBA.TEMPERATURE',
+        key='TEMPERATURE',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.THERMODYNAMIC_ENSEMBLE': Keyword(
+    'THERMODYNAMIC_ENSEMBLE': Keyword(
         name='ThermodynamicEnsemble',
         definition='Thermodynamic ensemble',  # noqa
-        key='CUBA.THERMODYNAMIC_ENSEMBLE',
+        key='THERMODYNAMIC_ENSEMBLE',
         shape=[1],
         length=None,
         dtype=numpy.str),
-    'CUBA.TIME': Keyword(
+    'TIME': Keyword(
         name='Time',
         definition='Time',  # noqa
-        key='CUBA.TIME',
+        key='TIME',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.TIME_STEP': Keyword(
+    'TIME_STEP': Keyword(
         name='TimeStep',
         definition='Length of a discrete time step',  # noqa
-        key='CUBA.TIME_STEP',
+        key='TIME_STEP',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.TORQUE': Keyword(
+    'TORQUE': Keyword(
         name='Torque',
         definition='Torque',  # noqa
-        key='CUBA.TORQUE',
+        key='TORQUE',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.UUID': Keyword(
+    'UUID': Keyword(
         name='Uuid',
         definition='Universal unique id represented as a hex string size 32',  # noqa
-        key='CUBA.UUID',
+        key='UUID',
         shape=[1],
         length=32,
         dtype=numpy.str),
-    'CUBA.VAN_DER_WAALS_RADIUS': Keyword(
+    'VAN_DER_WAALS_RADIUS': Keyword(
         name='VanDerWaalsRadius',
         definition='Distance at which the intermolecular potential between the two particles is zero',  # noqa
-        key='CUBA.VAN_DER_WAALS_RADIUS',
+        key='VAN_DER_WAALS_RADIUS',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VARIABLE': Keyword(
+    'VARIABLE': Keyword(
         name='Variable',
         definition='a list of physics/chemistry variables in a PE or MR',  # noqa
-        key='CUBA.VARIABLE',
+        key='VARIABLE',
         shape=[1],
         length=None,
         dtype=numpy.str),
-    'CUBA.VECTOR': Keyword(
+    'VECTOR': Keyword(
         name='Vector',
         definition='A vector in 3D geometric space',  # noqa
-        key='CUBA.VECTOR',
+        key='VECTOR',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VELOCITY': Keyword(
+    'VELOCITY': Keyword(
         name='Velocity',
         definition='Velocity of a point or node',  # noqa
-        key='CUBA.VELOCITY',
+        key='VELOCITY',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VISCOSITY': Keyword(
+    'VISCOSITY': Keyword(
         name='Viscosity',
         definition='Viscosity',  # noqa
-        key='CUBA.VISCOSITY',
+        key='VISCOSITY',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VOLUME': Keyword(
+    'VOLUME': Keyword(
         name='Volume',
         definition='Volume of a particle, cell, etc.',  # noqa
-        key='CUBA.VOLUME',
+        key='VOLUME',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VOLUME_FRACTION': Keyword(
+    'VOLUME_FRACTION': Keyword(
         name='VolumeFraction',
         definition='Volume fraction',  # noqa
-        key='CUBA.VOLUME_FRACTION',
+        key='VOLUME_FRACTION',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.VOLUME_FRACTION_GRADIENT': Keyword(
+    'VOLUME_FRACTION_GRADIENT': Keyword(
         name='VolumeFractionGradient',
         definition='Volume fraction gradient',  # noqa
-        key='CUBA.VOLUME_FRACTION_GRADIENT',
+        key='VOLUME_FRACTION_GRADIENT',
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'CUBA.YOUNG_MODULUS': Keyword(
+    'YOUNG_MODULUS': Keyword(
         name='YoungModulus',
         definition='Young modulus',  # noqa
-        key='CUBA.YOUNG_MODULUS',
+        key='YOUNG_MODULUS',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ZETA_POTENTIAL': Keyword(
+    'ZETA_POTENTIAL': Keyword(
         name='ZetaPotential',
         definition='Coulomb interaction between particles',  # noqa
-        key='CUBA.ZETA_POTENTIAL',
+        key='ZETA_POTENTIAL',
         shape=[1],
         length=None,
         dtype=numpy.float64),
-    'CUBA.ATOM': Keyword(
+    'ATOM': Keyword(
         name='Atom',
         definition='An atom',  # noqa
-        key='CUBA.ATOM',
+        key='ATOM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ATOMISTIC': Keyword(
+    'ATOMISTIC': Keyword(
         name='Atomistic',
         definition='Atomistic model category according to the RoMM',  # noqa
-        key='CUBA.ATOMISTIC',
+        key='ATOMISTIC',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BASE_CENTERED_MONOCLINIC_LATTICE': Keyword(
+    'BASE_CENTERED_MONOCLINIC_LATTICE': Keyword(
         name='BaseCenteredMonoclinicLattice',
         definition='A base centered monoclinic lattice',  # noqa
-        key='CUBA.BASE_CENTERED_MONOCLINIC_LATTICE',
+        key='BASE_CENTERED_MONOCLINIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BASE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
+    'BASE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
         name='BaseCenteredOrthorhombicLattice',
         definition='A base centered orthorhombic lattice',  # noqa
-        key='CUBA.BASE_CENTERED_ORTHORHOMBIC_LATTICE',
+        key='BASE_CENTERED_ORTHORHOMBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BASIS': Keyword(
+    'BASIS': Keyword(
         name='Basis',
         definition='Space basis vectors (row wise)',  # noqa
-        key='CUBA.BASIS',
+        key='BASIS',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BERENDSEN': Keyword(
+    'BERENDSEN': Keyword(
         name='Berendsen',
         definition='The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath.',  # noqa
-        key='CUBA.BERENDSEN',
+        key='BERENDSEN',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BIRD_CARREAU_MODEL': Keyword(
+    'BIRD_CARREAU_MODEL': Keyword(
         name='BirdCarreauModel',
         definition='Bird-Carreau model',  # noqa
-        key='CUBA.BIRD_CARREAU_MODEL',
+        key='BIRD_CARREAU_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BODY_CENTERED_CUBIC_LATTICE': Keyword(
+    'BODY_CENTERED_CUBIC_LATTICE': Keyword(
         name='BodyCenteredCubicLattice',
         definition='A body centred cubic lattice',  # noqa
-        key='CUBA.BODY_CENTERED_CUBIC_LATTICE',
+        key='BODY_CENTERED_CUBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BODY_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
+    'BODY_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
         name='BodyCenteredOrthorhombicLattice',
         definition='A body centered orthorhombic lattice',  # noqa
-        key='CUBA.BODY_CENTERED_ORTHORHOMBIC_LATTICE',
+        key='BODY_CENTERED_ORTHORHOMBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BODY_CENTERED_TETRAGONAL_LATTICE': Keyword(
+    'BODY_CENTERED_TETRAGONAL_LATTICE': Keyword(
         name='BodyCenteredTetragonalLattice',
         definition='A body centered tetragonal lattice',  # noqa
-        key='CUBA.BODY_CENTERED_TETRAGONAL_LATTICE',
+        key='BODY_CENTERED_TETRAGONAL_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BOND': Keyword(
+    'BOND': Keyword(
         name='Bond',
         definition='A bond between two or more atoms or particles',  # noqa
-        key='CUBA.BOND',
+        key='BOND',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BOUNDARY': Keyword(
+    'BOUNDARY': Keyword(
         name='Boundary',
         definition='A computational boundary in the system, it includes translated physical boundaries to computational boundaries.',  # noqa
-        key='CUBA.BOUNDARY',
+        key='BOUNDARY',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BOX': Keyword(
+    'BOX': Keyword(
         name='Box',
         definition='A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).',  # noqa
-        key='CUBA.BOX',
+        key='BOX',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.BRAVAIS_LATTICE': Keyword(
+    'BRAVAIS_LATTICE': Keyword(
         name='BravaisLattice',
         definition='A Bravais lattice',  # noqa
-        key='CUBA.BRAVAIS_LATTICE',
+        key='BRAVAIS_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CELL': Keyword(
+    'CELL': Keyword(
         name='Cell',
         definition='Element for storing 3D geometrical objects',  # noqa
-        key='CUBA.CELL',
+        key='CELL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CFD': Keyword(
+    'CFD': Keyword(
         name='Cfd',
         definition='Computational fluid dynamics general (set of ) equations for momentum, mass and energy',  # noqa
-        key='CUBA.CFD',
+        key='CFD',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.COMPRESSIBILITY_MODEL': Keyword(
+    'COMPRESSIBILITY_MODEL': Keyword(
         name='CompressibilityModel',
         definition='Compressibility model',  # noqa
-        key='CUBA.COMPRESSIBILITY_MODEL',
+        key='COMPRESSIBILITY_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.COMPUTATIONAL_METHOD': Keyword(
+    'COMPUTATIONAL_METHOD': Keyword(
         name='ComputationalMethod',
         definition='A computational method according to the RoMM',  # noqa
-        key='CUBA.COMPUTATIONAL_METHOD',
+        key='COMPUTATIONAL_METHOD',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.COMPUTATIONAL_MODEL': Keyword(
+    'COMPUTATIONAL_MODEL': Keyword(
         name='ComputationalModel',
         definition='Model category according to the RoMM',  # noqa
-        key='CUBA.COMPUTATIONAL_MODEL',
+        key='COMPUTATIONAL_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CONDITION': Keyword(
+    'CONDITION': Keyword(
         name='Condition',
         definition='Condition on boundaries or model entities',  # noqa
-        key='CUBA.CONDITION',
+        key='CONDITION',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL': Keyword(
+    'CONSTANT_ELECTROSTATIC_FIELD_MODEL': Keyword(
         name='ConstantElectrostaticFieldModel',
         definition='A constant electrostatic field model',  # noqa
-        key='CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL',
+        key='CONSTANT_ELECTROSTATIC_FIELD_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CONTINUUM': Keyword(
+    'CONTINUUM': Keyword(
         name='Continuum',
         definition='Continuum model category according to the RoMM',  # noqa
-        key='CUBA.CONTINUUM',
+        key='CONTINUUM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.COULOMB': Keyword(
+    'COULOMB': Keyword(
         name='Coulomb',
         definition='The standard electrostatic Coulombic interaction potential between a pair of point charges',  # noqa
-        key='CUBA.COULOMB',
+        key='COULOMB',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.COULOMB_FRICTION_FORCE': Keyword(
+    'COULOMB_FRICTION_FORCE': Keyword(
         name='CoulombFrictionForce',
         definition='Shear force accounting for the tangential displacement between contacting particles',  # noqa
-        key='CUBA.COULOMB_FRICTION_FORCE',
+        key='COULOMB_FRICTION_FORCE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CROSS_POWER_LAW_MODEL': Keyword(
+    'CROSS_POWER_LAW_MODEL': Keyword(
         name='CrossPowerLawModel',
         definition='Viscosity Cross power law model',  # noqa
-        key='CUBA.CROSS_POWER_LAW_MODEL',
+        key='CROSS_POWER_LAW_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CUBIC_LATTICE': Keyword(
+    'CUBIC_LATTICE': Keyword(
         name='CubicLattice',
         definition='A cubic lattice',  # noqa
-        key='CUBA.CUBIC_LATTICE',
+        key='CUBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CUDS_COMPONENT': Keyword(
+    'CUDS_COMPONENT': Keyword(
         name='CUDSComponent',
         definition='Base data type for the CUDS components',  # noqa
-        key='CUBA.CUDS_COMPONENT',
+        key='CUDS_COMPONENT',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.CUDS_ITEM': Keyword(
+    'CUDS_ITEM': Keyword(
         name='CUDSItem',
         definition='Root of all CUDS types',  # noqa
-        key='CUBA.CUDS_ITEM',
+        key='CUDS_ITEM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.DATA_SET': Keyword(
+    'DATA_SET': Keyword(
         name='DataSet',
         definition='A representation of the computational entities of the model equations',  # noqa
-        key='CUBA.DATA_SET',
+        key='DATA_SET',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.DEM': Keyword(
+    'DEM': Keyword(
         name='Dem',
         definition='Discrete element method',  # noqa
-        key='CUBA.DEM',
+        key='DEM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.DIRICHLET': Keyword(
+    'DIRICHLET': Keyword(
         name='Dirichlet',
         definition='Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain',  # noqa
-        key='CUBA.DIRICHLET',
+        key='DIRICHLET',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.DISSIPATION_FORCE': Keyword(
+    'DISSIPATION_FORCE': Keyword(
         name='DissipationForce',
         definition='Viscous normal force describing the inelasticity of particle collisions',  # noqa
-        key='CUBA.DISSIPATION_FORCE',
+        key='DISSIPATION_FORCE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.EDGE': Keyword(
+    'EDGE': Keyword(
         name='Edge',
         definition='Element for storing 1D geometrical objects',  # noqa
-        key='CUBA.EDGE',
+        key='EDGE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ELECTRONIC': Keyword(
+    'ELECTRONIC': Keyword(
         name='Electronic',
         definition='Electronic model category according to the RoMM',  # noqa
-        key='CUBA.ELECTRONIC',
+        key='ELECTRONIC',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ELECTROSTATIC_MODEL': Keyword(
+    'ELECTROSTATIC_MODEL': Keyword(
         name='ElectrostaticModel',
         definition='Electrostatic model',  # noqa
-        key='CUBA.ELECTROSTATIC_MODEL',
+        key='ELECTROSTATIC_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.EMPTY': Keyword(
+    'EMPTY': Keyword(
         name='Empty',
         definition='Empty boundary condition',  # noqa
-        key='CUBA.EMPTY',
+        key='EMPTY',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ENGINE': Keyword(
+    'ENGINE': Keyword(
         name='Engine',
         definition='Represents a software tool which is used to solve the physics equation',  # noqa
-        key='CUBA.ENGINE',
+        key='ENGINE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ENGINE_FEATURE': Keyword(
+    'ENGINE_FEATURE': Keyword(
         name='EngineFeature',
         definition='Provides a physics equation and methods that engines provides to solve them',  # noqa
-        key='CUBA.ENGINE_FEATURE',
+        key='ENGINE_FEATURE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FACE': Keyword(
+    'FACE': Keyword(
         name='Face',
         definition='Element for storing 2D geometrical objects',  # noqa
-        key='CUBA.FACE',
+        key='FACE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FACE_CENTERED_CUBIC_LATTICE': Keyword(
+    'FACE_CENTERED_CUBIC_LATTICE': Keyword(
         name='FaceCenteredCubicLattice',
         definition='A face centred cubic lattice',  # noqa
-        key='CUBA.FACE_CENTERED_CUBIC_LATTICE',
+        key='FACE_CENTERED_CUBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FACE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
+    'FACE_CENTERED_ORTHORHOMBIC_LATTICE': Keyword(
         name='FaceCenteredOrthorhombicLattice',
         definition='A face centered orthorhombic lattice',  # noqa
-        key='CUBA.FACE_CENTERED_ORTHORHOMBIC_LATTICE',
+        key='FACE_CENTERED_ORTHORHOMBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FEM': Keyword(
+    'FEM': Keyword(
         name='Fem',
         definition='Finite element method',  # noqa
-        key='CUBA.FEM',
+        key='FEM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FREE': Keyword(
+    'FREE': Keyword(
         name='Free',
         definition='Free boundary condition',  # noqa
-        key='CUBA.FREE',
+        key='FREE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FREE_SURFACE_MODEL': Keyword(
+    'FREE_SURFACE_MODEL': Keyword(
         name='FreeSurfaceModel',
         definition='Free surface model',  # noqa
-        key='CUBA.FREE_SURFACE_MODEL',
+        key='FREE_SURFACE_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.FVM': Keyword(
+    'FVM': Keyword(
         name='Fvm',
         definition='Finite volume method',  # noqa
-        key='CUBA.FVM',
+        key='FVM',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.GRANULAR_DYNAMICS': Keyword(
+    'GRANULAR_DYNAMICS': Keyword(
         name='GranularDynamics',
         definition='Granular dynamics of spherical particles using DEM',  # noqa
-        key='CUBA.GRANULAR_DYNAMICS',
+        key='GRANULAR_DYNAMICS',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.GRAVITY_MODEL': Keyword(
+    'GRAVITY_MODEL': Keyword(
         name='GravityModel',
         definition='A simple gravity model',  # noqa
-        key='CUBA.GRAVITY_MODEL',
+        key='GRAVITY_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.HERSCHEL_BULKLEY_MODEL': Keyword(
+    'HERSCHEL_BULKLEY_MODEL': Keyword(
         name='HerschelBulkleyModel',
         definition='Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid',  # noqa
-        key='CUBA.HERSCHEL_BULKLEY_MODEL',
+        key='HERSCHEL_BULKLEY_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.HEXAGONAL_LATTICE': Keyword(
+    'HEXAGONAL_LATTICE': Keyword(
         name='HexagonalLattice',
         definition='A hexagonal lattice',  # noqa
-        key='CUBA.HEXAGONAL_LATTICE',
+        key='HEXAGONAL_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.INCOMPRESSIBLE_FLUID_MODEL': Keyword(
+    'INCOMPRESSIBLE_FLUID_MODEL': Keyword(
         name='IncompressibleFluidModel',
         definition='Incompressible fluid model',  # noqa
-        key='CUBA.INCOMPRESSIBLE_FLUID_MODEL',
+        key='INCOMPRESSIBLE_FLUID_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.INTEGRATION_STEP': Keyword(
+    'INTEGRATION_STEP': Keyword(
         name='IntegrationStep',
         definition='the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).',  # noqa
-        key='CUBA.INTEGRATION_STEP',
+        key='INTEGRATION_STEP',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.INTEGRATION_TIME': Keyword(
+    'INTEGRATION_TIME': Keyword(
         name='IntegrationTime',
         definition='the current time, time step, and final time for a simulation stored on each cuds (a specific state).',  # noqa
-        key='CUBA.INTEGRATION_TIME',
+        key='INTEGRATION_TIME',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.INTERATOMIC_POTENTIAL': Keyword(
+    'INTERATOMIC_POTENTIAL': Keyword(
         name='InteratomicPotential',
         definition='Interatomic Potentials Category',  # noqa
-        key='CUBA.INTERATOMIC_POTENTIAL',
+        key='INTERATOMIC_POTENTIAL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ISOTHERMAL_MODEL': Keyword(
+    'ISOTHERMAL_MODEL': Keyword(
         name='IsothermalModel',
         definition='Isothermal heat transport model, no transport of heat is assumed',  # noqa
-        key='CUBA.ISOTHERMAL_MODEL',
+        key='ISOTHERMAL_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.KS_DFT': Keyword(
+    'KS_DFT': Keyword(
         name='KsDft',
         definition='Kohn-Sham DFT equations',  # noqa
-        key='CUBA.KS_DFT',
+        key='KS_DFT',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.LAMINAR_FLOW_MODEL': Keyword(
+    'LAMINAR_FLOW_MODEL': Keyword(
         name='LaminarFlowModel',
         definition='Laminar model',  # noqa
-        key='CUBA.LAMINAR_FLOW_MODEL',
+        key='LAMINAR_FLOW_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.LATTICE': Keyword(
+    'LATTICE': Keyword(
         name='Lattice',
         definition='A lattice',  # noqa
-        key='CUBA.LATTICE',
+        key='LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.LENNARD_JONES_6_12': Keyword(
+    'LENNARD_JONES_6_12': Keyword(
         name='LennardJones_6_12',
         definition='A Lennard-Jones 6-12 Potential',  # noqa
-        key='CUBA.LENNARD_JONES_6_12',
+        key='LENNARD_JONES_6_12',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MATERIAL': Keyword(
+    'MATERIAL': Keyword(
         name='Material',
         definition='Definition of a material and its properties in the data container',  # noqa
-        key='CUBA.MATERIAL',
+        key='MATERIAL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MATERIAL_RELATION': Keyword(
+    'MATERIAL_RELATION': Keyword(
         name='MaterialRelation',
         definition='Material relation which together with the Physics equation gives the model equation',  # noqa
-        key='CUBA.MATERIAL_RELATION',
+        key='MATERIAL_RELATION',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MESH': Keyword(
+    'MESH': Keyword(
         name='Mesh',
         definition='A mesh',  # noqa
-        key='CUBA.MESH',
+        key='MESH',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MESH_ELEMENT': Keyword(
+    'MESH_ELEMENT': Keyword(
         name='MeshElement',
         definition='An element for storing geometrical objects',  # noqa
-        key='CUBA.MESH_ELEMENT',
+        key='MESH_ELEMENT',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MESOSCOPIC': Keyword(
+    'MESOSCOPIC': Keyword(
         name='Mesoscopic',
         definition='Mesoscopic model category according to the RoMM',  # noqa
-        key='CUBA.MESOSCOPIC',
+        key='MESOSCOPIC',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MIXTURE_MODEL': Keyword(
+    'MIXTURE_MODEL': Keyword(
         name='MixtureModel',
         definition='Mixture (drift flux) model',  # noqa
-        key='CUBA.MIXTURE_MODEL',
+        key='MIXTURE_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MODEL_EQUATION': Keyword(
+    'MODEL_EQUATION': Keyword(
         name='ModelEquation',
         definition='The model equations are represented by all physics equations and material relations according to the RoMM',  # noqa
-        key='CUBA.MODEL_EQUATION',
+        key='MODEL_EQUATION',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MOLECULAR_DYNAMICS': Keyword(
+    'MOLECULAR_DYNAMICS': Keyword(
         name='MolecularDynamics',
         definition='Classical atomistic molecular dynamics using Newtons equations of motion',  # noqa
-        key='CUBA.MOLECULAR_DYNAMICS',
+        key='MOLECULAR_DYNAMICS',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MOLECULAR_STATICS': Keyword(
+    'MOLECULAR_STATICS': Keyword(
         name='MolecularStatics',
         definition='Classical atomistic static molecular model',  # noqa
-        key='CUBA.MOLECULAR_STATICS',
+        key='MOLECULAR_STATICS',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MONOCLINIC_LATTICE': Keyword(
+    'MONOCLINIC_LATTICE': Keyword(
         name='MonoclinicLattice',
         definition='A monoclinic lattice',  # noqa
-        key='CUBA.MONOCLINIC_LATTICE',
+        key='MONOCLINIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.MULTIPHASE_MODEL': Keyword(
+    'MULTIPHASE_MODEL': Keyword(
         name='MultiphaseModel',
         definition='Multiphase model',  # noqa
-        key='CUBA.MULTIPHASE_MODEL',
+        key='MULTIPHASE_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.NEUMANN': Keyword(
+    'NEUMANN': Keyword(
         name='Neumann',
         definition='Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.',  # noqa
-        key='CUBA.NEUMANN',
+        key='NEUMANN',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.NEWTONIAN_FLUID_MODEL': Keyword(
+    'NEWTONIAN_FLUID_MODEL': Keyword(
         name='NewtonianFluidModel',
         definition='Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation',  # noqa
-        key='CUBA.NEWTONIAN_FLUID_MODEL',
+        key='NEWTONIAN_FLUID_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.NODE': Keyword(
+    'NODE': Keyword(
         name='Node',
         definition='A node on a structured grid like lattice',  # noqa
-        key='CUBA.NODE',
+        key='NODE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.NOSE_HOOVER': Keyword(
+    'NOSE_HOOVER': Keyword(
         name='NoseHoover',
         definition='Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.',  # noqa
-        key='CUBA.NOSE_HOOVER',
+        key='NOSE_HOOVER',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ORIGIN': Keyword(
+    'ORIGIN': Keyword(
         name='Origin',
         definition='The origin of a space system',  # noqa
-        key='CUBA.ORIGIN',
+        key='ORIGIN',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.ORTHORHOMBIC_LATTICE': Keyword(
+    'ORTHORHOMBIC_LATTICE': Keyword(
         name='OrthorhombicLattice',
         definition='An orthorhombic lattice',  # noqa
-        key='CUBA.ORTHORHOMBIC_LATTICE',
+        key='ORTHORHOMBIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PAIR_POTENTIAL': Keyword(
+    'PAIR_POTENTIAL': Keyword(
         name='PairPotential',
         definition='Pair Interatomic Potentials Category',  # noqa
-        key='CUBA.PAIR_POTENTIAL',
+        key='PAIR_POTENTIAL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PARTICLE': Keyword(
+    'PARTICLE': Keyword(
         name='Particle',
         definition='A particle in a 3D space system',  # noqa
-        key='CUBA.PARTICLE',
+        key='PARTICLE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PARTICLES': Keyword(
+    'PARTICLES': Keyword(
         name='Particles',
         definition='A collection of particles',  # noqa
-        key='CUBA.PARTICLES',
+        key='PARTICLES',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PERIODIC': Keyword(
+    'PERIODIC': Keyword(
         name='Periodic',
         definition='Periodic boundary condition (PBC)',  # noqa
-        key='CUBA.PERIODIC',
+        key='PERIODIC',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PHYSICS_EQUATION': Keyword(
+    'PHYSICS_EQUATION': Keyword(
         name='PhysicsEquation',
         definition='Physics equation',  # noqa
-        key='CUBA.PHYSICS_EQUATION',
+        key='PHYSICS_EQUATION',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.POINT': Keyword(
+    'POINT': Keyword(
         name='Point',
         definition='A point in a 3D space system',  # noqa
-        key='CUBA.POINT',
+        key='POINT',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.POWER_LAW_VISCOSITY_MODEL': Keyword(
+    'POWER_LAW_VISCOSITY_MODEL': Keyword(
         name='PowerLawViscosityModel',
         definition='Power law model for a variable viscosity function that is limited by minimum and maximum values',  # noqa
-        key='CUBA.POWER_LAW_VISCOSITY_MODEL',
+        key='POWER_LAW_VISCOSITY_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.PRIMITIVE_CELL': Keyword(
+    'PRIMITIVE_CELL': Keyword(
         name='PrimitiveCell',
         definition='A lattice primitive cell',  # noqa
-        key='CUBA.PRIMITIVE_CELL',
+        key='PRIMITIVE_CELL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.RHEOLOGY_MODEL': Keyword(
+    'RHEOLOGY_MODEL': Keyword(
         name='RheologyModel',
         definition='Rheology model of a CFD fluid',  # noqa
-        key='CUBA.RHEOLOGY_MODEL',
+        key='RHEOLOGY_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.RHOMBOHEDRAL_LATTICE': Keyword(
+    'RHOMBOHEDRAL_LATTICE': Keyword(
         name='RhombohedralLattice',
         definition='A rhombohedral lattice',  # noqa
-        key='CUBA.RHOMBOHEDRAL_LATTICE',
+        key='RHOMBOHEDRAL_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SINGLE_PHASE_MODEL': Keyword(
+    'SINGLE_PHASE_MODEL': Keyword(
         name='SinglePhaseModel',
         definition='A single phase fluid model',  # noqa
-        key='CUBA.SINGLE_PHASE_MODEL',
+        key='SINGLE_PHASE_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SJKR_COHESION_FORCE': Keyword(
+    'SJKR_COHESION_FORCE': Keyword(
         name='SjkrCohesionForce',
         definition='Additional normal force tending to maintain the contact',  # noqa
-        key='CUBA.SJKR_COHESION_FORCE',
+        key='SJKR_COHESION_FORCE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SOFTWARE_TOOL': Keyword(
+    'SOFTWARE_TOOL': Keyword(
         name='SoftwareTool',
         definition='Represents a software tool which is used to solve the model or in pre/post processing',  # noqa
-        key='CUBA.SOFTWARE_TOOL',
+        key='SOFTWARE_TOOL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SOLVER_PARAMETER': Keyword(
+    'SOLVER_PARAMETER': Keyword(
         name='SolverParameter',
         definition='Solver parameter and metadata',  # noqa
-        key='CUBA.SOLVER_PARAMETER',
+        key='SOLVER_PARAMETER',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SPH': Keyword(
+    'SPH': Keyword(
         name='Sph',
         definition='Smooth particle hydrodynamics',  # noqa
-        key='CUBA.SPH',
+        key='SPH',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.SURFACE_TENSION_RELATION': Keyword(
+    'SURFACE_TENSION_RELATION': Keyword(
         name='SurfaceTensionRelation',
         definition='Surface tension relation between two fluids',  # noqa
-        key='CUBA.SURFACE_TENSION_RELATION',
+        key='SURFACE_TENSION_RELATION',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.TEMPERATURE_RESCALING': Keyword(
+    'TEMPERATURE_RESCALING': Keyword(
         name='TemperatureRescaling',
         definition='A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath.',  # noqa
-        key='CUBA.TEMPERATURE_RESCALING',
+        key='TEMPERATURE_RESCALING',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.TETRAGONAL_LATTICE': Keyword(
+    'TETRAGONAL_LATTICE': Keyword(
         name='TetragonalLattice',
         definition='A tetragonal lattice',  # noqa
-        key='CUBA.TETRAGONAL_LATTICE',
+        key='TETRAGONAL_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.THERMAL_MODEL': Keyword(
+    'THERMAL_MODEL': Keyword(
         name='ThermalModel',
         definition='Non-isothermal heat transport model',  # noqa
-        key='CUBA.THERMAL_MODEL',
+        key='THERMAL_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.THERMOSTAT': Keyword(
+    'THERMOSTAT': Keyword(
         name='Thermostat',
         definition='A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir',  # noqa
-        key='CUBA.THERMOSTAT',
+        key='THERMOSTAT',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.TRICLINIC_LATTICE': Keyword(
+    'TRICLINIC_LATTICE': Keyword(
         name='TriclinicLattice',
         definition='A triclinic lattice',  # noqa
-        key='CUBA.TRICLINIC_LATTICE',
+        key='TRICLINIC_LATTICE',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.TURBULENCE_MODEL': Keyword(
+    'TURBULENCE_MODEL': Keyword(
         name='TurbulenceModel',
         definition='Turbulence model',  # noqa
-        key='CUBA.TURBULENCE_MODEL',
+        key='TURBULENCE_MODEL',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.VERLET': Keyword(
+    'VERLET': Keyword(
         name='Verlet',
         definition='Newtonian dynamics integration using verlet algorithm',  # noqa
-        key='CUBA.VERLET',
+        key='VERLET',
         shape=[1],
         length=None,
         dtype=None),
-    'CUBA.VERSION': Keyword(
+    'VERSION': Keyword(
         name='Version',
         definition='Version of a software tool used in a simulation',  # noqa
-        key='CUBA.VERSION',
+        key='VERSION',
         shape=[1],
         length=None,
         dtype=None),
