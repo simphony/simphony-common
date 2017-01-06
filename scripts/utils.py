@@ -123,7 +123,7 @@ def quoted_if_string(value):
 
 def parse_shape(shape_spec):
     if shape_spec is None:
-        return shape_spec
+        return [1]
 
     elif isinstance(shape_spec, (str, unicode)):
         shape_spec = shape_spec.strip()
@@ -155,3 +155,14 @@ def parse_shape(shape_spec):
                          "Got {}".format(shape))
 
     return shape
+
+
+def format_docstring(docstring):
+    lines = docstring.splitlines()
+
+    out_lines = []
+    for line in lines:
+        out_lines.extend(textwrap.wrap(line.strip(), 60))
+
+    out_lines = ['"""'] + out_lines + ['"""']
+    return "\n".join(out_lines)

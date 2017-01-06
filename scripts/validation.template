@@ -6,6 +6,7 @@ import numpy
 from scripts.utils import to_camel_case
 
 
+# deprecated. do not use
 def decode_shape(shape_code):
     """ Decode the 'shape' attribute in the metadata schema
 
@@ -45,7 +46,7 @@ def check_shape(value, shape):
 
     Parameters
     ----------
-    shape : str
+    shape : list or tuple
 
     Returns
     -------
@@ -56,11 +57,6 @@ def check_shape(value, shape):
     ValueError
         if the `value` does not comply with the required `shape`
     """
-    decoded_shape = decode_shape(shape)
-    if len(decoded_shape) == 0:
-        # Any shape is allowed
-        return
-
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
     value_shape = numpy.asarray(value).shape or (1,)
 
@@ -69,12 +65,8 @@ def check_shape(value, shape):
     error_message = msg_fmt.format(value_shape=value_shape,
                                    shape=shape)
 
-    if len(decoded_shape) != len(value_shape):
+    if len(shape) != len(value_shape):
         raise ValueError(error_message)
-
-    for (min_size, max_size), size in zip(decoded_shape, value_shape):
-        if not (size >= min_size and size <= max_size):
-            raise ValueError(error_message)
 
 
 def validate_cuba_keyword(value, key):
