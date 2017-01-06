@@ -27,6 +27,6 @@ class CUBAEnumGenerator(object):
 
         for keyword in sorted(list(all_keys)):
             lines.append(template.format(keyword,
-                                         utils.with_cuba_prefix(keyword)))
+                                         keyword))
 
         output.writelines(lines)

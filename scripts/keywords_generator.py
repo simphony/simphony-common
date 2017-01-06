@@ -44,7 +44,7 @@ class KeywordsGenerator(object):
                                        key=lambda x: x[0]):
             content['type'] = data_types[content['type']]
             content['name'] = utils.to_camel_case(keyword)
-            content['key'] = utils.with_cuba_prefix(keyword)
+            content['key'] = keyword
             content['shape'] = content.get("shape", [1])
             content['length'] = content.get("length", None)
             lines.extend(template.format(**content))
@@ -54,7 +54,7 @@ class KeywordsGenerator(object):
                 key=lambda x: x[0]):
             content['type'] = "None"
             content['name'] = utils.to_camel_case(keyword)
-            content['key'] = utils.with_cuba_prefix(keyword)
+            content['key'] = keyword
             content['shape'] = content.get("shape", [1])
             content['length'] = "None"
             lines.extend(template.format(**content))
