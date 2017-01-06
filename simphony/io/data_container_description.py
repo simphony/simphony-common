@@ -49,11 +49,11 @@ def create_data_table(class_name, supported_cuba=CUBA):
         column_type = _TYPE_MAPPINGS[dtype]
 
         column_meta = {'pos': ikey}
-        shape = keyword.shape
+
         if column_type is tables.StringCol:
-            column_meta['itemsize'] = shape[0]
-        else:
-            column_meta['shape'] = tuple(shape)
+            column_meta['itemsize'] = keyword.length
+
+        column_meta['shape'] = tuple(keyword.shape)
 
         table_meta[cuba_key.name.lower()] = column_type(**column_meta)
 
