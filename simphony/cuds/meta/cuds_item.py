@@ -14,8 +14,8 @@ class CUDSItem(object):
         super(CUDSItem, self).__init__(*args, **kwargs)
 
         self._init_definition()
-        self._init_uuid()
         self._init_data()
+        self._init_uuid()
 
     def supported_parameters(self):
         try:
@@ -37,13 +37,6 @@ class CUDSItem(object):
     def definition(self):
         return self._definition
 
-    def _init_uuid(self):
-        self.data[CUBA.UUID] = uuid.uuid4()
-
-    @property
-    def uuid(self):
-        return self.data[CUBA.UUID]
-
     def _init_data(self):
         self._data = DataContainer()
 
@@ -54,3 +47,10 @@ class CUDSItem(object):
     @data.setter
     def data(self, new_data):
         self._data = DataContainer(new_data)
+
+    def _init_uuid(self):
+        self.data[CUBA.UUID] = uuid.uuid4()
+
+    @property
+    def uuid(self):
+        return self.data[CUBA.UUID]
