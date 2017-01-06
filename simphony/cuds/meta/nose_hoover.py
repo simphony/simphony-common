@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class NoseHoover(Thermostat):
     """
-    Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath.
+    ['Add an extra term to the equation of motion to model the', 'interaction with an external heat bath. The coupling time', 'specifies how rapidly the temperature should be coupled to', 'the bath.']
     """
 
     cuba_key = CUBA.NOSE_HOOVER
@@ -34,14 +34,14 @@ class NoseHoover(Thermostat):
             CUBA.TEMPERATURE, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']
+        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath."
+        self._definition = "Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath."  # noqa
 
     @property
     def definition(self):

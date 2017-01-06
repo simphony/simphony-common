@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class TetragonalLattice(BravaisLattice):
     """
-    A tetragonal lattice
+    ['A tetragonal lattice']
     """
 
     cuba_key = CUBA.TETRAGONAL_LATTICE
@@ -23,7 +23,7 @@ class TetragonalLattice(BravaisLattice):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A tetragonal lattice"
+        self._definition = "A tetragonal lattice"  # noqa
 
     @property
     def definition(self):

@@ -6,7 +6,7 @@ from .pair_potential import PairPotential
 
 class Coulomb(PairPotential):
     """
-    The standard electrostatic Coulombic interaction potential between a pair of point charges
+    ['The standard electrostatic Coulombic interaction potential', 'between a pair of point charges']
     """
 
     cuba_key = CUBA.COULOMB
@@ -34,14 +34,14 @@ class Coulomb(PairPotential):
             CUBA.DIELECTRIC_CONSTANT, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "The standard electrostatic Coulombic interaction potential between a pair of point charges"
+        self._definition = "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa
 
     @property
     def definition(self):

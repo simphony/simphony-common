@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class KsDft(PhysicsEquation):
     """
-    Kohn-Sham DFT equations
+    ['Kohn-Sham DFT equations']
     """
 
     cuba_key = CUBA.KS_DFT
@@ -25,14 +25,14 @@ class KsDft(PhysicsEquation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ELECTRONIC']
+        self._models = ['CUBA.ELECTRONIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Kohn-Sham DFT equations"
+        self._definition = "Kohn-Sham DFT equations"  # noqa
 
     @property
     def definition(self):
@@ -42,7 +42,7 @@ class KsDft(PhysicsEquation):
         self._variables = [
             'CUBA.POSITION', 'CUBA.CHEMICAL_SPECIE', 'CUBA.ELECTRON_MASS',
             'CUBA.CHARGE_DENSITY', 'CUBA.ENERGY'
-        ]
+        ]  # noqa
 
     @property
     def variables(self):

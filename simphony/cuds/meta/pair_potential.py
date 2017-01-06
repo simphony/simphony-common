@@ -6,7 +6,7 @@ from .interatomic_potential import InteratomicPotential
 
 class PairPotential(InteratomicPotential):
     """
-    Pair Interatomic Potentials Category
+    ['Pair Interatomic Potentials Category']
     """
 
     cuba_key = CUBA.PAIR_POTENTIAL
@@ -27,14 +27,14 @@ class PairPotential(InteratomicPotential):
         return (CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Pair Interatomic Potentials Category"
+        self._definition = "Pair Interatomic Potentials Category"  # noqa
 
     @property
     def definition(self):

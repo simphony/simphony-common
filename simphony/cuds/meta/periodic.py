@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Periodic(Condition):
     """
-    Periodic boundary condition (PBC)
+    ['Periodic boundary condition (PBC)']
     """
 
     cuba_key = CUBA.PERIODIC
@@ -27,14 +27,14 @@ class Periodic(Condition):
         self._models = [
             'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
             'CUBA.CONTINUUM'
-        ]
+        ]  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Periodic boundary condition (PBC)"
+        self._definition = "Periodic boundary condition (PBC)"  # noqa
 
     @property
     def definition(self):

@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Empty(Condition):
     """
-    Empty boundary condition
+    ['Empty boundary condition']
     """
 
     cuba_key = CUBA.EMPTY
@@ -30,14 +30,14 @@ class Empty(Condition):
             CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Empty boundary condition"
+        self._definition = "Empty boundary condition"  # noqa
 
     @property
     def definition(self):

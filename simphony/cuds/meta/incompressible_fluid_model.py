@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class IncompressibleFluidModel(CompressibilityModel):
     """
-    Incompressible fluid model
+    ['Incompressible fluid model']
     """
 
     cuba_key = CUBA.INCOMPRESSIBLE_FLUID_MODEL
@@ -26,14 +26,14 @@ class IncompressibleFluidModel(CompressibilityModel):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Incompressible fluid model"
+        self._definition = "Incompressible fluid model"  # noqa
 
     @property
     def definition(self):
@@ -42,7 +42,7 @@ class IncompressibleFluidModel(CompressibilityModel):
     def _init_variables(self):
         self._variables = [
             'CUBA.VELOCITY', 'CUBA.POSITION', 'CUBA.DENSITY', 'CUBA.VISCOSITY'
-        ]
+        ]  # noqa
 
     @property
     def variables(self):

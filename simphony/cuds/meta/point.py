@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Point(CUDSItem):
     """
-    A point in a 3D space system
+    ['A point in a 3D space system']
     """
 
     cuba_key = CUBA.POINT
@@ -26,7 +26,7 @@ class Point(CUDSItem):
         return (CUBA.POSITION, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A point in a 3D space system"
+        self._definition = "A point in a 3D space system"  # noqa
 
     @property
     def definition(self):

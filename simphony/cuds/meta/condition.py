@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Condition(CUDSComponent):
     """
-    Condition on boundaries or model entities
+    ['Condition on boundaries or model entities']
     """
 
     cuba_key = CUBA.CONDITION
@@ -23,7 +23,7 @@ class Condition(CUDSComponent):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Condition on boundaries or model entities"
+        self._definition = "Condition on boundaries or model entities"  # noqa
 
     @property
     def definition(self):

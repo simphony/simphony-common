@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class SjkrCohesionForce(MaterialRelation):
     """
-    Additional normal force tending to maintain the contact
+    ['Additional normal force tending to maintain the contact']
     """
 
     cuba_key = CUBA.SJKR_COHESION_FORCE
@@ -27,14 +27,14 @@ class SjkrCohesionForce(MaterialRelation):
         return (CUBA.COHESION_ENERGY_DENSITY, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Additional normal force tending to maintain the contact"
+        self._definition = "Additional normal force tending to maintain the contact"  # noqa
 
     @property
     def definition(self):

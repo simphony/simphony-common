@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Bond(CUDSItem):
     """
-    A bond between two or more atoms or particles
+    ['A bond between two or more atoms or particles']
     """
 
     cuba_key = CUBA.BOND
@@ -53,7 +53,7 @@ class Bond(CUDSItem):
         return value
 
     def _init_definition(self):
-        self._definition = "A bond between two or more atoms or particles"
+        self._definition = "A bond between two or more atoms or particles"  # noqa
 
     @property
     def definition(self):

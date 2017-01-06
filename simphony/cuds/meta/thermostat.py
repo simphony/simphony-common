@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Thermostat(MaterialRelation):
     """
-    A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir
+    ['A thermostat is a model that describes the thermal', 'interaction of a material with the environment or a heat', 'reservoir']
     """
 
     cuba_key = CUBA.THERMOSTAT
@@ -24,14 +24,14 @@ class Thermostat(MaterialRelation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']
+        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir"
+        self._definition = "A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir"  # noqa
 
     @property
     def definition(self):

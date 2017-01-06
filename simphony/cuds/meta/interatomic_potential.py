@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class InteratomicPotential(MaterialRelation):
     """
-    Interatomic Potentials Category
+    ['Interatomic Potentials Category']
     """
 
     cuba_key = CUBA.INTERATOMIC_POTENTIAL
@@ -25,14 +25,14 @@ class InteratomicPotential(MaterialRelation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Interatomic Potentials Category"
+        self._definition = "Interatomic Potentials Category"  # noqa
 
     @property
     def definition(self):

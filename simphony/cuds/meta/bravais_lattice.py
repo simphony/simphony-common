@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class BravaisLattice(Lattice):
     """
-    A Bravais lattice
+    ['A Bravais lattice']
     """
 
     cuba_key = CUBA.BRAVAIS_LATTICE
@@ -39,7 +39,7 @@ class BravaisLattice(Lattice):
             CUBA.ORIGIN, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A Bravais lattice"
+        self._definition = "A Bravais lattice"  # noqa
 
     @property
     def definition(self):

@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class ThermalModel(PhysicsEquation):
     """
-    Non-isothermal heat transport model
+    ['Non-isothermal heat transport model']
     """
 
     cuba_key = CUBA.THERMAL_MODEL
@@ -25,21 +25,22 @@ class ThermalModel(PhysicsEquation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Non-isothermal heat transport model"
+        self._definition = "Non-isothermal heat transport model"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_variables(self):
-        self._variables = ['CUBA.TEMPERATURE', 'CUBA.HEAT_CONDUCTIVITY']
+        self._variables = ['CUBA.TEMPERATURE',
+                           'CUBA.HEAT_CONDUCTIVITY']  # noqa
 
     @property
     def variables(self):

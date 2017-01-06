@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class RheologyModel(PhysicsEquation):
     """
-    Rheology model of a CFD fluid
+    ['Rheology model of a CFD fluid']
     """
 
     cuba_key = CUBA.RHEOLOGY_MODEL
@@ -24,14 +24,14 @@ class RheologyModel(PhysicsEquation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Rheology model of a CFD fluid"
+        self._definition = "Rheology model of a CFD fluid"  # noqa
 
     @property
     def definition(self):

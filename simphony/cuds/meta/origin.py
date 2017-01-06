@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Origin(CUDSComponent):
     """
-    The origin of a space system
+    ['The origin of a space system']
     """
 
     cuba_key = CUBA.ORIGIN
@@ -26,7 +26,7 @@ class Origin(CUDSComponent):
         return (CUBA.POSITION, ) + base_params
 
     def _init_definition(self):
-        self._definition = "The origin of a space system"
+        self._definition = "The origin of a space system"  # noqa
 
     @property
     def definition(self):

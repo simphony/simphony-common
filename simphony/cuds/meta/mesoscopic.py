@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Mesoscopic(ComputationalModel):
     """
-    Mesoscopic model category according to the RoMM
+    ['Mesoscopic model category according to the RoMM']
     """
 
     cuba_key = CUBA.MESOSCOPIC
@@ -23,7 +23,7 @@ class Mesoscopic(ComputationalModel):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Mesoscopic model category according to the RoMM"
+        self._definition = "Mesoscopic model category according to the RoMM"  # noqa
 
     @property
     def definition(self):

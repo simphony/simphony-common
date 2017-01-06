@@ -4,7 +4,7 @@ from .tetragonal_lattice import TetragonalLattice
 
 class CubicLattice(TetragonalLattice):
     """
-    A cubic lattice
+    ['A cubic lattice']
     """
 
     cuba_key = CUBA.CUBIC_LATTICE
@@ -23,7 +23,7 @@ class CubicLattice(TetragonalLattice):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A cubic lattice"
+        self._definition = "A cubic lattice"  # noqa
 
     @property
     def definition(self):

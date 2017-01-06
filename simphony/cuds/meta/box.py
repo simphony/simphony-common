@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Box(Boundary):
     """
-    A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).
+    ['A simple hexahedron simulation box defining six boundary', 'faces that are defined by three box vectors. The same', 'boundary condition should be specified for each direction', '(two faces at a time).']
     """
 
     cuba_key = CUBA.BOX
@@ -29,7 +29,7 @@ class Box(Boundary):
             CUBA.VECTOR, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."
+        self._definition = "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa
 
     @property
     def definition(self):

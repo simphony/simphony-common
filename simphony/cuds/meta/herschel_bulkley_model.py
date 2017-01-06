@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class HerschelBulkleyModel(RheologyModel):
     """
-    Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid
+    ['Herschel-Bulkley model combines the effects of Bingham', 'plastic and power-law behavior in a fluid']
     """
 
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
@@ -41,7 +41,7 @@ class HerschelBulkleyModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"
+        self._definition = "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa
 
     @property
     def definition(self):
@@ -75,7 +75,7 @@ class HerschelBulkleyModel(RheologyModel):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):

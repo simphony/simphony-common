@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class MonoclinicLattice(BravaisLattice):
     """
-    A monoclinic lattice
+    ['A monoclinic lattice']
     """
 
     cuba_key = CUBA.MONOCLINIC_LATTICE
@@ -23,7 +23,7 @@ class MonoclinicLattice(BravaisLattice):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A monoclinic lattice"
+        self._definition = "A monoclinic lattice"  # noqa
 
     @property
     def definition(self):

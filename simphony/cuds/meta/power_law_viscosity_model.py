@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class PowerLawViscosityModel(RheologyModel):
     """
-    Power law model for a variable viscosity function that is limited by minimum and maximum values
+    ['Power law model for a variable viscosity function that is', 'limited by minimum and maximum values']
     """
 
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
@@ -41,7 +41,7 @@ class PowerLawViscosityModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Power law model for a variable viscosity function that is limited by minimum and maximum values"
+        self._definition = "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa
 
     @property
     def definition(self):
@@ -75,7 +75,7 @@ class PowerLawViscosityModel(RheologyModel):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):

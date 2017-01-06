@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class BirdCarreauModel(RheologyModel):
     """
-    Bird-Carreau model
+    ['Bird-Carreau model']
     """
 
     cuba_key = CUBA.BIRD_CARREAU_MODEL
@@ -40,7 +40,7 @@ class BirdCarreauModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Bird-Carreau model"
+        self._definition = "Bird-Carreau model"  # noqa
 
     @property
     def definition(self):
@@ -74,7 +74,7 @@ class BirdCarreauModel(RheologyModel):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):

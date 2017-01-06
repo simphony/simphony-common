@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class MaterialRelation(ModelEquation):
     """
-    Material relation which together with the Physics equation gives the model equation
+    ['Material relation which together with the Physics equation', 'gives the model equation']
     """
 
     cuba_key = CUBA.MATERIAL_RELATION
@@ -26,7 +26,7 @@ class MaterialRelation(ModelEquation):
         return (CUBA.MATERIAL, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Material relation which together with the Physics equation gives the model equation"
+        self._definition = "Material relation which together with the Physics equation gives the model equation"  # noqa
 
     @property
     def definition(self):

@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Electronic(ComputationalModel):
     """
-    Electronic model category according to the RoMM
+    ['Electronic model category according to the RoMM']
     """
 
     cuba_key = CUBA.ELECTRONIC
@@ -23,7 +23,7 @@ class Electronic(ComputationalModel):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Electronic model category according to the RoMM"
+        self._definition = "Electronic model category according to the RoMM"  # noqa
 
     @property
     def definition(self):

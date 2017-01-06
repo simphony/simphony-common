@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class CrossPowerLawModel(RheologyModel):
     """
-    Viscosity Cross power law model
+    ['Viscosity Cross power law model']
     """
 
     cuba_key = CUBA.CROSS_POWER_LAW_MODEL
@@ -41,7 +41,7 @@ class CrossPowerLawModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Viscosity Cross power law model"
+        self._definition = "Viscosity Cross power law model"  # noqa
 
     @property
     def definition(self):
@@ -75,7 +75,7 @@ class CrossPowerLawModel(RheologyModel):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):

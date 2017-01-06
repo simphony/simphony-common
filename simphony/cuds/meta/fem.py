@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Fem(ComputationalMethod):
     """
-    Finite element method
+    ['Finite element method']
     """
 
     cuba_key = CUBA.FEM
@@ -24,14 +24,14 @@ class Fem(ComputationalMethod):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Finite element method"
+        self._definition = "Finite element method"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.CFD']
+        self._physics_equations = ['CUBA.CFD']  # noqa
 
     @property
     def physics_equations(self):

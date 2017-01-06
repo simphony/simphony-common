@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class GranularDynamics(PhysicsEquation):
     """
-    Granular dynamics of spherical particles using DEM
+    ['Granular dynamics of spherical particles using DEM']
     """
 
     cuba_key = CUBA.GRANULAR_DYNAMICS
@@ -25,14 +25,14 @@ class GranularDynamics(PhysicsEquation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.MESOSCOPIC']
+        self._models = ['CUBA.MESOSCOPIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Granular dynamics of spherical particles using DEM"
+        self._definition = "Granular dynamics of spherical particles using DEM"  # noqa
 
     @property
     def definition(self):
@@ -43,7 +43,7 @@ class GranularDynamics(PhysicsEquation):
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM',
             'CUBA.ACCELERATION', 'CUBA.MOMENT_INERTIA', 'CUBA.TORQUE',
             'CUBA.ANGULAR_VELOCITY'
-        ]
+        ]  # noqa
 
     @property
     def variables(self):

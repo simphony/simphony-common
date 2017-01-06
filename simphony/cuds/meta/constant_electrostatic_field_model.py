@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
     """
-    A constant electrostatic field model
+    ['A constant electrostatic field model']
     """
 
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
@@ -29,21 +29,21 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         return (CUBA.ELECTROSTATIC_FIELD, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']
+        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "A constant electrostatic field model"
+        self._definition = "A constant electrostatic field model"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_variables(self):
-        self._variables = ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']
+        self._variables = ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']  # noqa
 
     @property
     def variables(self):

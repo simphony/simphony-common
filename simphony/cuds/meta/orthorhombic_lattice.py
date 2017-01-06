@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class OrthorhombicLattice(BravaisLattice):
     """
-    An orthorhombic lattice
+    ['An orthorhombic lattice']
     """
 
     cuba_key = CUBA.ORTHORHOMBIC_LATTICE
@@ -24,7 +24,7 @@ class OrthorhombicLattice(BravaisLattice):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "An orthorhombic lattice"
+        self._definition = "An orthorhombic lattice"  # noqa
 
     @property
     def definition(self):

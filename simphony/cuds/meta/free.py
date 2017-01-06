@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Free(Condition):
     """
-    Free boundary condition
+    ['Free boundary condition']
     """
 
     cuba_key = CUBA.FREE
@@ -27,14 +27,14 @@ class Free(Condition):
         self._models = [
             'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
             'CUBA.CONTINUUM'
-        ]
+        ]  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Free boundary condition"
+        self._definition = "Free boundary condition"  # noqa
 
     @property
     def definition(self):

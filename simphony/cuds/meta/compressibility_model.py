@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class CompressibilityModel(PhysicsEquation):
     """
-    Compressibility model
+    ['Compressibility model']
     """
 
     cuba_key = CUBA.COMPRESSIBILITY_MODEL
@@ -24,7 +24,7 @@ class CompressibilityModel(PhysicsEquation):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Compressibility model"
+        self._definition = "Compressibility model"  # noqa
 
     @property
     def definition(self):

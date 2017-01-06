@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Particle(Point):
     """
-    A particle in a 3D space system
+    ['A particle in a 3D space system']
     """
 
     cuba_key = CUBA.PARTICLE
@@ -23,7 +23,7 @@ class Particle(Point):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A particle in a 3D space system"
+        self._definition = "A particle in a 3D space system"  # noqa
 
     @property
     def definition(self):

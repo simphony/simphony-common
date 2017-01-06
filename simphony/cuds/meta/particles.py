@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Particles(DataSet):
     """
-    A collection of particles
+    ['A collection of particles']
     """
 
     cuba_key = CUBA.PARTICLES
@@ -56,7 +56,7 @@ class Particles(DataSet):
         return value
 
     def _init_definition(self):
-        self._definition = "A collection of particles"
+        self._definition = "A collection of particles"  # noqa
 
     @property
     def definition(self):

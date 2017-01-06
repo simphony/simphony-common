@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Atomistic(ComputationalModel):
     """
-    Atomistic model category according to the RoMM
+    ['Atomistic model category according to the RoMM']
     """
 
     cuba_key = CUBA.ATOMISTIC
@@ -23,7 +23,7 @@ class Atomistic(ComputationalModel):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Atomistic model category according to the RoMM"
+        self._definition = "Atomistic model category according to the RoMM"  # noqa
 
     @property
     def definition(self):

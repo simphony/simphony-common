@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Lattice(DataSet):
     """
-    A lattice
+    ['A lattice']
     """
 
     cuba_key = CUBA.LATTICE
@@ -23,7 +23,7 @@ class Lattice(DataSet):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A lattice"
+        self._definition = "A lattice"  # noqa
 
     @property
     def definition(self):

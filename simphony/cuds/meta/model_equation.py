@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class ModelEquation(CUDSComponent):
     """
-    The model equations are represented by all physics equations and material relations according to the RoMM
+    ['The model equations are represented by all physics equations', 'and material relations according to the RoMM']
     """
 
     cuba_key = CUBA.MODEL_EQUATION
@@ -25,21 +25,21 @@ class ModelEquation(CUDSComponent):
         return () + base_params
 
     def _init_models(self):
-        self._models = []
+        self._models = []  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "The model equations are represented by all physics equations and material relations according to the RoMM"
+        self._definition = "The model equations are represented by all physics equations and material relations according to the RoMM"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_variables(self):
-        self._variables = []
+        self._variables = []  # noqa
 
     @property
     def variables(self):

@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Version(CUDSItem):
     """
-    Version of a software tool used in a simulation
+    ['Version of a software tool used in a simulation']
     """
 
     cuba_key = CUBA.VERSION
@@ -60,7 +60,7 @@ class Version(CUDSItem):
         return value
 
     def _init_definition(self):
-        self._definition = "Version of a software tool used in a simulation"
+        self._definition = "Version of a software tool used in a simulation"  # noqa
 
     @property
     def definition(self):

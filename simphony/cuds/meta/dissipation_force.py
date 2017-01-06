@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class DissipationForce(MaterialRelation):
     """
-    Viscous normal force describing the inelasticity of particle collisions
+    ['Viscous normal force describing the inelasticity of particle', 'collisions']
     """
 
     cuba_key = CUBA.DISSIPATION_FORCE
@@ -27,14 +27,14 @@ class DissipationForce(MaterialRelation):
         return (CUBA.RESTITUTION_COEFFICIENT, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Viscous normal force describing the inelasticity of particle collisions"
+        self._definition = "Viscous normal force describing the inelasticity of particle collisions"  # noqa
 
     @property
     def definition(self):

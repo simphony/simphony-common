@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class PrimitiveCell(CUDSComponent):
     """
-    A lattice primitive cell
+    ['A lattice primitive cell']
     """
 
     cuba_key = CUBA.PRIMITIVE_CELL
@@ -26,7 +26,7 @@ class PrimitiveCell(CUDSComponent):
         return (CUBA.LATTICE_VECTORS, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A lattice primitive cell"
+        self._definition = "A lattice primitive cell"  # noqa
 
     @property
     def definition(self):

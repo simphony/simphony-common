@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Mesh(DataSet):
     """
-    A mesh
+    ['A mesh']
     """
 
     cuba_key = CUBA.MESH
@@ -33,7 +33,7 @@ class Mesh(DataSet):
             CUBA.EDGE, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A mesh"
+        self._definition = "A mesh"  # noqa
 
     @property
     def definition(self):

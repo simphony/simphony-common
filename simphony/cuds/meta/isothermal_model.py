@@ -4,7 +4,7 @@ from .thermal_model import ThermalModel
 
 class IsothermalModel(ThermalModel):
     """
-    Isothermal heat transport model, no transport of heat is assumed
+    ['Isothermal heat transport model, no transport of heat is', 'assumed']
     """
 
     cuba_key = CUBA.ISOTHERMAL_MODEL
@@ -25,21 +25,21 @@ class IsothermalModel(ThermalModel):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Isothermal heat transport model, no transport of heat is assumed"
+        self._definition = "Isothermal heat transport model, no transport of heat is assumed"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_variables(self):
-        self._variables = []
+        self._variables = []  # noqa
 
     @property
     def variables(self):

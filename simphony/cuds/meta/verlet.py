@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Verlet(ComputationalMethod):
     """
-    Newtonian dynamics integration using verlet algorithm
+    ['Newtonian dynamics integration using verlet algorithm']
     """
 
     cuba_key = CUBA.VERLET
@@ -24,14 +24,14 @@ class Verlet(ComputationalMethod):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Newtonian dynamics integration using verlet algorithm"
+        self._definition = "Newtonian dynamics integration using verlet algorithm"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.MOLECULAR_DYNAMICS']
+        self._physics_equations = ['CUBA.MOLECULAR_DYNAMICS']  # noqa
 
     @property
     def physics_equations(self):

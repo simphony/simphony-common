@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class MolecularDynamics(PhysicsEquation):
     """
-    Classical atomistic molecular dynamics using Newtons equations of motion
+    ['Classical atomistic molecular dynamics using Newtons', 'equations of motion']
     """
 
     cuba_key = CUBA.MOLECULAR_DYNAMICS
@@ -25,14 +25,14 @@ class MolecularDynamics(PhysicsEquation):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Classical atomistic molecular dynamics using Newtons equations of motion"
+        self._definition = "Classical atomistic molecular dynamics using Newtons equations of motion"  # noqa
 
     @property
     def definition(self):
@@ -42,7 +42,7 @@ class MolecularDynamics(PhysicsEquation):
         self._variables = [
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM',
             'CUBA.ACCELERATION', 'CUBA.FORCE'
-        ]
+        ]  # noqa
 
     @property
     def variables(self):

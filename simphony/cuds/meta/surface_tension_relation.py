@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class SurfaceTensionRelation(MaterialRelation):
     """
-    Surface tension relation between two fluids
+    ['Surface tension relation between two fluids']
     """
 
     cuba_key = CUBA.SURFACE_TENSION_RELATION
@@ -31,14 +31,14 @@ class SurfaceTensionRelation(MaterialRelation):
             CUBA.SURFACE_TENSION, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Surface tension relation between two fluids"
+        self._definition = "Surface tension relation between two fluids"  # noqa
 
     @property
     def definition(self):

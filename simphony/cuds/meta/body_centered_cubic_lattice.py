@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class BodyCenteredCubicLattice(BravaisLattice):
     """
-    A body centred cubic lattice
+    ['A body centred cubic lattice']
     """
 
     cuba_key = CUBA.BODY_CENTERED_CUBIC_LATTICE
@@ -24,7 +24,7 @@ class BodyCenteredCubicLattice(BravaisLattice):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A body centred cubic lattice"
+        self._definition = "A body centred cubic lattice"  # noqa
 
     @property
     def definition(self):

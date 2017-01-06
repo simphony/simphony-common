@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class IntegrationStep(SolverParameter):
     """
-    the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).
+    ['the current step, integration step, and final number of', 'steps for a simulation stored on each cuds (a specific', 'state).']
     """
 
     cuba_key = CUBA.INTEGRATION_STEP
@@ -36,7 +36,7 @@ class IntegrationStep(SolverParameter):
             CUBA.FINAL, ) + base_params
 
     def _init_definition(self):
-        self._definition = "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."
+        self._definition = "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa
 
     @property
     def definition(self):

@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Sph(ComputationalMethod):
     """
-    Smooth particle hydrodynamics
+    ['Smooth particle hydrodynamics']
     """
 
     cuba_key = CUBA.SPH
@@ -24,14 +24,14 @@ class Sph(ComputationalMethod):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Smooth particle hydrodynamics"
+        self._definition = "Smooth particle hydrodynamics"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.CFD']
+        self._physics_equations = ['CUBA.CFD']  # noqa
 
     @property
     def physics_equations(self):

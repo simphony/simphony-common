@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class Material(CUDSComponent):
     """
-    Definition of a material and its properties in the data container
+    ['Definition of a material and its properties in the data', 'container']
     """
 
     cuba_key = CUBA.MATERIAL
@@ -23,7 +23,7 @@ class Material(CUDSComponent):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Definition of a material and its properties in the data container"
+        self._definition = "Definition of a material and its properties in the data container"  # noqa
 
     @property
     def definition(self):

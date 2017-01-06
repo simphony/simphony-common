@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class ComputationalModel(CUDSComponent):
     """
-    Model category according to the RoMM
+    ['Model category according to the RoMM']
     """
 
     cuba_key = CUBA.COMPUTATIONAL_MODEL
@@ -24,7 +24,7 @@ class ComputationalModel(CUDSComponent):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Model category according to the RoMM"
+        self._definition = "Model category according to the RoMM"  # noqa
 
     @property
     def definition(self):

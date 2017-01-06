@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class SinglePhaseModel(MultiphaseModel):
     """
-    A single phase fluid model
+    ['A single phase fluid model']
     """
 
     cuba_key = CUBA.SINGLE_PHASE_MODEL
@@ -24,14 +24,14 @@ class SinglePhaseModel(MultiphaseModel):
         return () + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "A single phase fluid model"
+        self._definition = "A single phase fluid model"  # noqa
 
     @property
     def definition(self):

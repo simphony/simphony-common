@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Node(CUDSComponent):
     """
-    A node on a structured grid like lattice
+    ['A node on a structured grid like lattice']
     """
 
     cuba_key = CUBA.NODE
@@ -26,7 +26,7 @@ class Node(CUDSComponent):
         return (CUBA.INDEX, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A node on a structured grid like lattice"
+        self._definition = "A node on a structured grid like lattice"  # noqa
 
     @property
     def definition(self):

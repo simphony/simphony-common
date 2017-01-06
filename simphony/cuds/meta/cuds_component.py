@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class CUDSComponent(CUDSItem):
     """
-    Base data type for the CUDS components
+    ['Base data type for the CUDS components']
     """
 
     cuba_key = CUBA.CUDS_COMPONENT
@@ -56,7 +56,7 @@ class CUDSComponent(CUDSItem):
         return value
 
     def _init_definition(self):
-        self._definition = "Base data type for the CUDS components"
+        self._definition = "Base data type for the CUDS components"  # noqa
 
     @property
     def definition(self):

@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class IntegrationTime(SolverParameter):
     """
-    the current time, time step, and final time for a simulation stored on each cuds (a specific state).
+    ['the current time, time step, and final time for a simulation', 'stored on each cuds (a specific state).']
     """
 
     cuba_key = CUBA.INTEGRATION_TIME
@@ -36,7 +36,7 @@ class IntegrationTime(SolverParameter):
             CUBA.FINAL, ) + base_params
 
     def _init_definition(self):
-        self._definition = "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."
+        self._definition = "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."  # noqa
 
     @property
     def definition(self):

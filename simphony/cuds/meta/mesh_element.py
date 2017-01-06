@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class MeshElement(CUDSItem):
     """
-    An element for storing geometrical objects
+    ['An element for storing geometrical objects']
     """
 
     cuba_key = CUBA.MESH_ELEMENT
@@ -26,7 +26,7 @@ class MeshElement(CUDSItem):
         return (CUBA.POINT, ) + base_params
 
     def _init_definition(self):
-        self._definition = "An element for storing geometrical objects"
+        self._definition = "An element for storing geometrical objects"  # noqa
 
     @property
     def definition(self):

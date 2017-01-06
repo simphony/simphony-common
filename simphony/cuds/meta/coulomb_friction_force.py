@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class CoulombFrictionForce(MaterialRelation):
     """
-    Shear force accounting for the tangential displacement between contacting particles
+    ['Shear force accounting for the tangential displacement', 'between contacting particles']
     """
 
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
@@ -28,14 +28,14 @@ class CoulombFrictionForce(MaterialRelation):
         return (CUBA.FRICTION_COEFFICIENT, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Shear force accounting for the tangential displacement between contacting particles"
+        self._definition = "Shear force accounting for the tangential displacement between contacting particles"  # noqa
 
     @property
     def definition(self):

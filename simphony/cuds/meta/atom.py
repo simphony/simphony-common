@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Atom(Particle):
     """
-    An atom
+    ['An atom']
     """
 
     cuba_key = CUBA.ATOM
@@ -26,7 +26,7 @@ class Atom(Particle):
         return (CUBA.MASS, ) + base_params
 
     def _init_definition(self):
-        self._definition = "An atom"
+        self._definition = "An atom"  # noqa
 
     @property
     def definition(self):

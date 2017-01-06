@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Neumann(Condition):
     """
-    Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.
+    ['Neumann boundary condition, it specifies the values that the', 'derivative of a solution is to take on the boundary of the', 'domain.']
     """
 
     cuba_key = CUBA.NEUMANN
@@ -30,14 +30,14 @@ class Neumann(Condition):
             CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."
+        self._definition = "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."  # noqa
 
     @property
     def definition(self):

@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class GravityModel(PhysicsEquation):
     """
-    A simple gravity model
+    ['A simple gravity model']
     """
 
     cuba_key = CUBA.GRAVITY_MODEL
@@ -28,21 +28,21 @@ class GravityModel(PhysicsEquation):
         return (CUBA.ACCELERATION, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']
+        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "A simple gravity model"
+        self._definition = "A simple gravity model"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_variables(self):
-        self._variables = ['CUBA.ACCELERATION']
+        self._variables = ['CUBA.ACCELERATION']  # noqa
 
     @property
     def variables(self):

@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class PhysicsEquation(ModelEquation):
     """
-    Physics equation
+    ['Physics equation']
     """
 
     cuba_key = CUBA.PHYSICS_EQUATION
@@ -23,7 +23,7 @@ class PhysicsEquation(ModelEquation):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Physics equation"
+        self._definition = "Physics equation"  # noqa
 
     @property
     def definition(self):

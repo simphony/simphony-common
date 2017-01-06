@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class SolverParameter(CUDSComponent):
     """
-    Solver parameter and metadata
+    ['Solver parameter and metadata']
     """
 
     cuba_key = CUBA.SOLVER_PARAMETER
@@ -23,7 +23,7 @@ class SolverParameter(CUDSComponent):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "Solver parameter and metadata"
+        self._definition = "Solver parameter and metadata"  # noqa
 
     @property
     def definition(self):

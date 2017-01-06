@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Dirichlet(Condition):
     """
-    Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain
+    ['Dirichlet boundary condition, specify the value the', 'solutions takes on the boundary of the domain']
     """
 
     cuba_key = CUBA.DIRICHLET
@@ -30,14 +30,14 @@ class Dirichlet(Condition):
             CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_definition(self):
-        self._definition = "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"
+        self._definition = "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa
 
     @property
     def definition(self):

@@ -12,7 +12,7 @@ from .incompressible_fluid_model import IncompressibleFluidModel
 
 class Cfd(PhysicsEquation):
     """
-    Computational fluid dynamics general (set of ) equations for momentum, mass and energy
+    ['Computational fluid dynamics general (set of ) equations for', 'momentum, mass and energy']
     """
 
     cuba_key = CUBA.CFD
@@ -83,7 +83,7 @@ class Cfd(PhysicsEquation):
         return value
 
     def _init_definition(self):
-        self._definition = "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"
+        self._definition = "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa
 
     @property
     def definition(self):
@@ -144,7 +144,7 @@ class Cfd(PhysicsEquation):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']
+        self._models = ['CUBA.CONTINUUM']  # noqa
 
     @property
     def models(self):
@@ -155,7 +155,7 @@ class Cfd(PhysicsEquation):
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM', 'CUBA.DENSITY',
             'CUBA.VISCOSITY', 'CUBA.TIME', 'CUBA.STRESS_TENSOR',
             'CUBA.PRESSURE', 'CUBA.DYNAMIC_PRESSURE', 'CUBA.VOLUME_FRACTION'
-        ]
+        ]  # noqa
 
     @property
     def variables(self):

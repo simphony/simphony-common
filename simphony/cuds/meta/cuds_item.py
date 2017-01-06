@@ -5,7 +5,7 @@ import uuid
 
 class CUDSItem(object):
     """
-    Root of all CUDS types
+    ['Root of all CUDS types']
     """
 
     cuba_key = CUBA.CUDS_ITEM
@@ -31,7 +31,7 @@ class CUDSItem(object):
                      if hasattr(c, "cuba_key"))
 
     def _init_definition(self):
-        self._definition = "Root of all CUDS types"
+        self._definition = "Root of all CUDS types"  # noqa
 
     @property
     def definition(self):

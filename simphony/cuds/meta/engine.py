@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class Engine(SoftwareTool):
     """
-    Represents a software tool which is used to solve the physics equation
+    ['Represents a software tool which is used to solve the', 'physics equation']
     """
 
     cuba_key = CUBA.ENGINE
@@ -26,7 +26,7 @@ class Engine(SoftwareTool):
         return (CUBA.ENGINE_FEATURE, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Represents a software tool which is used to solve the physics equation"
+        self._definition = "Represents a software tool which is used to solve the physics equation"  # noqa
 
     @property
     def definition(self):

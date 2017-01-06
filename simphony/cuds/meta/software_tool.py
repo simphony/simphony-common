@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class SoftwareTool(CUDSItem):
     """
-    Represents a software tool which is used to solve the model or in pre/post processing
+    ['Represents a software tool which is used to solve the model', 'or in pre/post processing']
     """
 
     cuba_key = CUBA.SOFTWARE_TOOL
@@ -26,7 +26,7 @@ class SoftwareTool(CUDSItem):
         return (CUBA.VERSION, ) + base_params
 
     def _init_definition(self):
-        self._definition = "Represents a software tool which is used to solve the model or in pre/post processing"
+        self._definition = "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa
 
     @property
     def definition(self):

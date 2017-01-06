@@ -6,7 +6,7 @@ from simphony.core.cuba import CUBA
 
 class EngineFeature(CUDSItem):
     """
-    Provides a physics equation and methods that engines provides to solve them
+    ['Provides a physics equation and methods that engines', 'provides to solve them']
     """
 
     cuba_key = CUBA.ENGINE_FEATURE
@@ -58,7 +58,7 @@ class EngineFeature(CUDSItem):
         return value
 
     def _init_definition(self):
-        self._definition = "Provides a physics equation and methods that engines provides to solve them"
+        self._definition = "Provides a physics equation and methods that engines provides to solve them"  # noqa
 
     @property
     def definition(self):

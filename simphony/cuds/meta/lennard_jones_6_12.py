@@ -6,7 +6,7 @@ from .pair_potential import PairPotential
 
 class LennardJones_6_12(PairPotential):
     """
-    A Lennard-Jones 6-12 Potential
+    ['A Lennard-Jones 6-12 Potential']
     """
 
     cuba_key = CUBA.LENNARD_JONES_6_12
@@ -38,7 +38,7 @@ class LennardJones_6_12(PairPotential):
             CUBA.ENERGY_WELL_DEPTH, ) + base_params
 
     def _init_definition(self):
-        self._definition = "A Lennard-Jones 6-12 Potential"
+        self._definition = "A Lennard-Jones 6-12 Potential"  # noqa
 
     @property
     def definition(self):
@@ -73,14 +73,14 @@ class LennardJones_6_12(PairPotential):
         return value
 
     def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']
+        self._models = ['CUBA.ATOMISTIC']  # noqa
 
     @property
     def models(self):
         return self._models
 
     def _init_variables(self):
-        self._variables = ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']
+        self._variables = ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa
 
     @property
     def variables(self):

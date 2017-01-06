@@ -4,7 +4,7 @@ from simphony.core.cuba import CUBA
 
 class ComputationalMethod(SolverParameter):
     """
-    A computational method according to the RoMM
+    ['A computational method according to the RoMM']
     """
 
     cuba_key = CUBA.COMPUTATIONAL_METHOD
@@ -25,14 +25,14 @@ class ComputationalMethod(SolverParameter):
         return () + base_params
 
     def _init_definition(self):
-        self._definition = "A computational method according to the RoMM"
+        self._definition = "A computational method according to the RoMM"  # noqa
 
     @property
     def definition(self):
         return self._definition
 
     def _init_physics_equations(self):
-        self._physics_equations = []
+        self._physics_equations = []  # noqa
 
     @property
     def physics_equations(self):
