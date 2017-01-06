@@ -1,6 +1,3 @@
-from scripts import utils
-
-
 class CUBAEnumGenerator(object):
     """Generator class for cuba.py enumeration.
     """
@@ -20,13 +17,12 @@ class CUBAEnumGenerator(object):
             '@unique\n',
             'class CUBA(Enum):\n'
             ]
-        template = '    {} = "{}"\n'
+        template = '    {keyword} = "{keyword}"\n'
 
         all_keys = set(
             cuba_dict['CUBA_KEYS']) | set(simphony_metadata_dict['CUDS_KEYS'])
 
         for keyword in sorted(list(all_keys)):
-            lines.append(template.format(keyword,
-                                         keyword))
+            lines.append(template.format(keyword=keyword))
 
         output.writelines(lines)
