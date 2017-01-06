@@ -730,7 +730,7 @@ KEYWORDS = {
         definition='Thermodynamic ensemble',  # noqa
         key='THERMODYNAMIC_ENSEMBLE',
         shape=[1],
-        length=None,
+        length=4096,
         dtype=numpy.str),
     'TIME': Keyword(
         name='Time',
@@ -772,7 +772,7 @@ KEYWORDS = {
         definition='a list of physics/chemistry variables in a PE or MR',  # noqa
         key='VARIABLE',
         shape=[1],
-        length=None,
+        length=4096,
         dtype=numpy.str),
     'VECTOR': Keyword(
         name='Vector',
