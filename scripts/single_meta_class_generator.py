@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-import warnings
-
 from . import templates
 from . import utils
 
