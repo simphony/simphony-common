@@ -1,5 +1,5 @@
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from .electrostatic_model import ElectrostaticModel
 from simphony.core.cuba import CUBA
 

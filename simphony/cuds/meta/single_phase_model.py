@@ -1,5 +1,6 @@
-from .multiphase_model import MultiphaseModel
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .multiphase_model import MultiphaseModel
 
 
 class SinglePhaseModel(MultiphaseModel):

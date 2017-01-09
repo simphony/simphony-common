@@ -1,5 +1,6 @@
-from .rheology_model import RheologyModel
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .rheology_model import RheologyModel
 
 
 class NewtonianFluidModel(RheologyModel):

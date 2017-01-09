@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .mesh_element import MeshElement
 

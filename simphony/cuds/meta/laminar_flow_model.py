@@ -1,5 +1,6 @@
-from .turbulence_model import TurbulenceModel
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .turbulence_model import TurbulenceModel
 
 
 class LaminarFlowModel(TurbulenceModel):

@@ -1,5 +1,6 @@
-from .computational_model import ComputationalModel
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .computational_model import ComputationalModel
 
 
 class Electronic(ComputationalModel):

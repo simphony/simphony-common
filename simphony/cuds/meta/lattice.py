@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from .data_set import DataSet
 from simphony.core.cuba import CUBA
 

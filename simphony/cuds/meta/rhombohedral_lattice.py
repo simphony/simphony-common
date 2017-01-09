@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from .bravais_lattice import BravaisLattice
 from simphony.core.cuba import CUBA
 

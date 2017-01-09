@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from .condition import Condition
 from simphony.core.cuba import CUBA
 

@@ -1,5 +1,5 @@
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
 

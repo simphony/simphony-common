@@ -1,7 +1,7 @@
-from .particle import Particle
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from simphony.core.cuba import CUBA
+from .particle import Particle
 
 
 class Atom(Particle):

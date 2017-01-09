@@ -1,5 +1,5 @@
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from .lattice import Lattice
 from simphony.core.cuba import CUBA
 

@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from .computational_method import ComputationalMethod
 from simphony.core.cuba import CUBA
 

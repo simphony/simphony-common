@@ -1,5 +1,5 @@
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
 

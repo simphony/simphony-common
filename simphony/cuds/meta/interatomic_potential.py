@@ -1,5 +1,6 @@
-from .material_relation import MaterialRelation
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .material_relation import MaterialRelation
 
 
 class InteratomicPotential(MaterialRelation):

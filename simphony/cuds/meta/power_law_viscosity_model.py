@@ -1,7 +1,7 @@
-from .rheology_model import RheologyModel
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from simphony.core.cuba import CUBA
+from .rheology_model import RheologyModel
 
 
 class PowerLawViscosityModel(RheologyModel):

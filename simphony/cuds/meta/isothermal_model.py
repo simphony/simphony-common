@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .thermal_model import ThermalModel
 

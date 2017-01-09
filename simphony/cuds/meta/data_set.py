@@ -1,3 +1,4 @@
+from simphony.core import Default  # noqa
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
 

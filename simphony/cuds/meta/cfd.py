@@ -1,11 +1,11 @@
-from .physics_equation import PhysicsEquation
+from simphony.core import Default  # noqa
 from .newtonian_fluid_model import NewtonianFluidModel
 from .constant_electrostatic_field_model import ConstantElectrostaticFieldModel
 from .isothermal_model import IsothermalModel
 from simphony.core.cuba import CUBA
 from . import validation
-from simphony.core import Default
 from .laminar_flow_model import LaminarFlowModel
+from .physics_equation import PhysicsEquation
 from .single_phase_model import SinglePhaseModel
 from .incompressible_fluid_model import IncompressibleFluidModel
 

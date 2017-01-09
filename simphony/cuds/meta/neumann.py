@@ -1,4 +1,4 @@
-from simphony.core import Default
+from simphony.core import Default  # noqa
 from . import validation
 from .condition import Condition
 from simphony.core.cuba import CUBA

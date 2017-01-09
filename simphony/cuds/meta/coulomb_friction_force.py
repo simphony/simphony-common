@@ -1,7 +1,7 @@
-from .material_relation import MaterialRelation
+from simphony.core import Default  # noqa
 from . import validation
-from simphony.core import Default
 from simphony.core.cuba import CUBA
+from .material_relation import MaterialRelation
 
 
 class CoulombFrictionForce(MaterialRelation):

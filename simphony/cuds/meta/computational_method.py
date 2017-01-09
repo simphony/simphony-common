@@ -1,5 +1,6 @@
-from .solver_parameter import SolverParameter
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .solver_parameter import SolverParameter
 
 
 class ComputationalMethod(SolverParameter):

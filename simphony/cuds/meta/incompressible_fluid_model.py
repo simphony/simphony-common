@@ -1,5 +1,6 @@
-from .compressibility_model import CompressibilityModel
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .compressibility_model import CompressibilityModel
 
 
 class IncompressibleFluidModel(CompressibilityModel):

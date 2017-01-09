@@ -1,4 +1,5 @@
 from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 import uuid
 

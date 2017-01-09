@@ -1,5 +1,6 @@
-from .physics_equation import PhysicsEquation
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
+from .physics_equation import PhysicsEquation
 
 
 class CompressibilityModel(PhysicsEquation):
