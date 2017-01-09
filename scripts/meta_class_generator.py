@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import os
-import warnings
 
 from .single_meta_class_generator import SingleMetaClassGenerator
 from . import utils
