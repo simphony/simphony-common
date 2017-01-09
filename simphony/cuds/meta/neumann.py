@@ -63,7 +63,7 @@ class Neumann(Condition):
 
     def _validate_variable(self, value):
         value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -103,7 +103,7 @@ class Neumann(Condition):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

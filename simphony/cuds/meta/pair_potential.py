@@ -46,7 +46,7 @@ class PairPotential(InteratomicPotential):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape(value, [2])
+        validation.check_shape_at_least(value, [2])
 
         def flatten(container):
             for i in container:

@@ -44,7 +44,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_computational_method(self, value):
         value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -87,7 +87,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_physics_equation(self, value):
         value = validation.cast_data_type(value, 'PHYSICS_EQUATION')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value
 

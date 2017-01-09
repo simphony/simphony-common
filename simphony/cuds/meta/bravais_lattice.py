@@ -57,7 +57,7 @@ class BravaisLattice(Lattice):
 
     def _validate_lattice_parameter(self, value):
         value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
-        validation.check_shape(value, [3])
+        validation.check_shape_at_least(value, [3])
 
         def flatten(container):
             for i in container:
@@ -97,7 +97,7 @@ class BravaisLattice(Lattice):
 
     def _validate_primitive_cell(self, value):
         value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
@@ -121,7 +121,7 @@ class BravaisLattice(Lattice):
 
     def _validate_size(self, value):
         value = validation.cast_data_type(value, 'SIZE')
-        validation.check_shape(value, [3])
+        validation.check_shape_at_least(value, [3])
 
         def flatten(container):
             for i in container:
@@ -161,7 +161,7 @@ class BravaisLattice(Lattice):
 
     def _validate_origin(self, value):
         value = validation.cast_data_type(value, 'ORIGIN')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'ORIGIN')
         return value
 

@@ -44,7 +44,7 @@ class Boundary(CUDSComponent):
 
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

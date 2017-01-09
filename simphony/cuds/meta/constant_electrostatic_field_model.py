@@ -54,7 +54,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
     def _validate_electrostatic_field(self, value):
         value = validation.cast_data_type(value, 'ELECTROSTATIC_FIELD')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'ELECTROSTATIC_FIELD')
         return value
 

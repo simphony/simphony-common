@@ -44,7 +44,7 @@ class Engine(SoftwareTool):
 
     def _validate_engine_feature(self, value):
         value = validation.cast_data_type(value, 'ENGINE_FEATURE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

@@ -54,7 +54,7 @@ class SurfaceTensionRelation(MaterialRelation):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape(value, [2])
+        validation.check_shape_at_least(value, [2])
 
         def flatten(container):
             for i in container:
@@ -94,7 +94,7 @@ class SurfaceTensionRelation(MaterialRelation):
 
     def _validate_surface_tension(self, value):
         value = validation.cast_data_type(value, 'SURFACE_TENSION')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
         return value
 

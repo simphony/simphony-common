@@ -56,7 +56,7 @@ class Mesh(DataSet):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -96,7 +96,7 @@ class Mesh(DataSet):
 
     def _validate_face(self, value):
         value = validation.cast_data_type(value, 'FACE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -136,7 +136,7 @@ class Mesh(DataSet):
 
     def _validate_cell(self, value):
         value = validation.cast_data_type(value, 'CELL')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -176,7 +176,7 @@ class Mesh(DataSet):
 
     def _validate_edge(self, value):
         value = validation.cast_data_type(value, 'EDGE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

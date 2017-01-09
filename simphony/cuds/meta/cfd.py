@@ -69,7 +69,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_multiphase_model(self, value):
         value = validation.cast_data_type(value, 'MULTIPHASE_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'MULTIPHASE_MODEL')
         return value
 
@@ -96,7 +96,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_rheology_model(self, value):
         value = validation.cast_data_type(value, 'RHEOLOGY_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
         return value
 
@@ -120,7 +120,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_turbulence_model(self, value):
         value = validation.cast_data_type(value, 'TURBULENCE_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'TURBULENCE_MODEL')
         return value
 
@@ -154,7 +154,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_gravity_model(self, value):
         value = validation.cast_data_type(value, 'GRAVITY_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
         return value
 
@@ -178,7 +178,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_thermal_model(self, value):
         value = validation.cast_data_type(value, 'THERMAL_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'THERMAL_MODEL')
         return value
 
@@ -202,7 +202,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_compressibility_model(self, value):
         value = validation.cast_data_type(value, 'COMPRESSIBILITY_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'COMPRESSIBILITY_MODEL')
         return value
 
@@ -226,7 +226,7 @@ class Cfd(PhysicsEquation):
 
     def _validate_electrostatic_model(self, value):
         value = validation.cast_data_type(value, 'ELECTROSTATIC_MODEL')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'ELECTROSTATIC_MODEL')
         return value
 

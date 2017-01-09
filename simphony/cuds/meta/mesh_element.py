@@ -43,7 +43,7 @@ class MeshElement(CUDSItem):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

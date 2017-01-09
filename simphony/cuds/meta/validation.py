@@ -5,7 +5,7 @@ import numpy
 from scripts.utils import to_camel_case
 
 
-def check_shape(value, shape):
+def check_shape_at_least(value, shape):
     """ Check if `value` is a sequence that comply with `shape`
 
     Parameters
@@ -28,7 +28,7 @@ def check_shape(value, shape):
                "which does not comply with shape: {shape}")
     error_message = msg_fmt.format(value_shape=value_shape, shape=shape)
 
-    if len(shape) != len(value_shape):
+    if len(shape) >= len(value_shape):
         raise ValueError(error_message)
 
 

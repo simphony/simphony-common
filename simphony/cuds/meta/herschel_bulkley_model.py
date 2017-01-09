@@ -59,7 +59,7 @@ class HerschelBulkleyModel(RheologyModel):
 
     def _validate_initial_viscosity(self, value):
         value = validation.cast_data_type(value, 'INITIAL_VISCOSITY')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'INITIAL_VISCOSITY')
         return value
 
@@ -86,7 +86,7 @@ class HerschelBulkleyModel(RheologyModel):
 
     def _validate_relaxation_time(self, value):
         value = validation.cast_data_type(value, 'RELAXATION_TIME')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'RELAXATION_TIME')
         return value
 
@@ -110,7 +110,7 @@ class HerschelBulkleyModel(RheologyModel):
 
     def _validate_linear_constant(self, value):
         value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
@@ -134,7 +134,7 @@ class HerschelBulkleyModel(RheologyModel):
 
     def _validate_power_law_index(self, value):
         value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
 

@@ -40,7 +40,7 @@ class Bond(CUDSItem):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

@@ -43,7 +43,7 @@ class Basis(CUDSComponent):
 
     def _validate_vector(self, value):
         value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_shape(value, [3])
+        validation.check_shape_at_least(value, [3])
 
         def flatten(container):
             for i in container:

@@ -43,7 +43,7 @@ class Particles(DataSet):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:
@@ -86,7 +86,7 @@ class Particles(DataSet):
 
     def _validate_bond(self, value):
         value = validation.cast_data_type(value, 'BOND')
-        validation.check_shape(value, [None])
+        validation.check_shape_at_least(value, [None])
 
         def flatten(container):
             for i in container:

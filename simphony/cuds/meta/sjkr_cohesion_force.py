@@ -51,7 +51,7 @@ class SjkrCohesionForce(MaterialRelation):
 
     def _validate_cohesion_energy_density(self, value):
         value = validation.cast_data_type(value, 'COHESION_ENERGY_DENSITY')
-        validation.check_shape(value, [1])
+        validation.check_shape_at_least(value, [1])
         validation.validate_cuba_keyword(value, 'COHESION_ENERGY_DENSITY')
         return value
 
