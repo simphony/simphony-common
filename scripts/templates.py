@@ -470,7 +470,7 @@ class VariableProperty(Property):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_shape(value, {shape})
+                validation.check_shape_at_least(value, {shape})
                 validation.validate_cuba_keyword(value, '{cuba_key}')
                 return value
             """.format(prop_name=self.name,
@@ -480,7 +480,7 @@ class VariableProperty(Property):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_shape(value, {shape})
+                validation.check_shape_at_least(value, {shape})
 
                 def flatten(container):
                     for i in container:
