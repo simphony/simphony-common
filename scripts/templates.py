@@ -137,36 +137,57 @@ class Class(object):
             prop.render(out, indent_level=indent_level+1)
 
     def _render_init_method(self):
-        mandatory_init_args = []
-        optional_init_args = []
+
+        # We have various types of properties.
+        # with/without default = optional/mandatory
+        # reimplemented/not reimplemented.
+        # We need to take care of the combinations
+        # so that the init is well behaved
+
+        mandatory_properties = []
+        optional_properties = []
+        reimplemented_properties = []
         for prop in [p for p in self.properties
                      if isinstance(p, VariableProperty)]:
 
             if prop.default is NoDefault:
-                mandatory_init_args.append(prop.name)
+                mandatory_properties.append(prop.name)
             else:
-                optional_init_args.append(prop.name)
+                optional_properties.append(prop.name)
 
-        init_args_str = ""
-        if len(mandatory_init_args) + len(optional_init_args):
-            init_args_str = (
-                ", ".join([
-                    "{}".format(arg)
-                    for arg in mandatory_init_args
-                ] + [
-                    "{}=Default".format(arg)
-                    for arg in optional_init_args]
-                )+', ')
+            if prop.reimplemented:
+                reimplemented_properties.append(prop.name)
+
+        init_args = ['self']
+        init_args.extend(["{}".format(arg)
+                          for arg in mandatory_properties])
+        init_args.extend(["{}=Default".format(arg)
+                          for arg in optional_properties])
+        init_args.extend(['*args', '**kwargs'])
+
+        # Those we have to pass to the super()
+        super_init_args = []
+        super_init_args.extend(["{}".format(arg)
+                                for arg in reimplemented_properties])
+        super_init_args.extend(['*args', '**kwargs'])
 
         s = textwrap.dedent("""
-            def __init__(self, {init_args_str}*args, **kwargs):
-                super({class_name}, self).__init__(*args, **kwargs)
+            def __init__({init_args_str}):
             """.format(
-                class_name=self.class_name,
-                init_args_str=init_args_str)
+            init_args_str=", ".join(init_args))
         )
 
+        s += utils.indent(textwrap.dedent("""
+                super({class_name}, self).__init__({super_init_args_str})
+            """.format(
+                class_name=self.class_name,
+                super_init_args_str=", ".join(super_init_args))
+        ))
+
         for prop in self.properties:
+            if prop.name in reimplemented_properties:
+                continue
+
             if isinstance(prop, VariableProperty):
                 s += utils.indent(
                     textwrap.dedent("""
@@ -248,11 +269,16 @@ class ABCProperty(object):
     def _render_validation(self):
         pass
 
+    @abc.abstractmethod
+    def _render_default(self):
+        pass
+
     def render(self, out, indent_level=0):
         s = self._render_init()
         s += self._render_getter()
         s += self._render_setter()
         s += self._render_validation()
+        s += self._render_default()
 
         out.write(utils.indent(s, indent_level))
 
@@ -288,14 +314,25 @@ class Property(ABCProperty):
         """).format(name=self.name)
 
     def _render_init(self):
+        return textwrap.dedent("""
+        def _init_{name}(self, value):
+            if value is Default:
+                value = self._default_{name}()
+
+            self.{name} = value
+        """).format(name=self.name)
+
+    def _render_validation(self):
+        return textwrap.dedent("""
+        def _validate_{name}(value):
+            return value
+        """).format(name=self.name)
+
+    def _render_default(self):
         if self.default == utils.NoDefault:
             return textwrap.dedent("""
-            def _init_{name}(self, value):
-                if value is Default:
-                    raise TypeError("Value for {name} must be specified")
-
-                self.{name} = value
-
+            def _default_{name}(self):
+                raise TypeError("No default for {name}")
             """).format(name=self.name)
 
         if utils.is_cuba_key(self.default):
@@ -308,27 +345,23 @@ class Property(ABCProperty):
             default = utils.quoted_if_string(self.default)
 
         return textwrap.dedent("""
-        def _init_{name}(self, value):
-            if value is Default:
-                value = {default}
-
-            self.{name} = value
-
+        def _default_{name}(self):
+            return {default}
         """).format(name=self.name,
                     default=default)
-
-    def _render_validation(self):
-        return textwrap.dedent("""
-        def _validate_{name}(value):
-            return value
-        """).format(name=self.name)
 
 
 class FixedProperty(Property):
     def _render_init(self):
         return textwrap.dedent("""
         def _init_{name}(self):
-            self._{name} = {default}  # noqa
+            self._{name} = self._default_{name}()  # noqa
+        """).format(name=self.name)
+
+    def _render_default(self):
+        return textwrap.dedent("""
+        def _default_{name}(self):
+            return {default}  # noqa
         """).format(name=self.name,
                     default=utils.quoted_if_string(self.default))
 
@@ -357,7 +390,7 @@ class VariableProperty(Property):
             )
         return imp
 
-    def __init__(self, qual_cuba_key, default, shape):
+    def __init__(self, qual_cuba_key, default, shape, reimplemented):
         if shape is None:
             raise ValueError("shape cannot be None")
 
@@ -367,6 +400,7 @@ class VariableProperty(Property):
             default=default)
         self.qual_cuba_key = qual_cuba_key
         self.shape = shape
+        self.reimplemented = reimplemented
 
     def _render_setter(self):
         return textwrap.dedent("""
@@ -459,6 +493,9 @@ class DataProperty(FixedProperty):
     def _render_validation(self):
         return ""
 
+    def _render_default(self):
+        return ""
+
 
 class UUIDProperty(FixedProperty):
     def __init__(self):
@@ -484,4 +521,7 @@ class UUIDProperty(FixedProperty):
         return ""
 
     def _render_validation(self):
+        return ""
+
+    def _render_default(self):
         return ""
