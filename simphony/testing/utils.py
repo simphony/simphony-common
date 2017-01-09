@@ -380,3 +380,39 @@ def grouper(iterable, n):
     iterator = iter(iterable)
     while True:
         yield [next(iterator) for _ in range(n)]
+
+
+def decode_shape(shape_code):
+    """ Decode the 'shape' attribute in the metadata schema
+
+    Parameters
+    ----------
+    shape_code : str
+
+    Returns
+    -------
+    tuple
+
+    Examples
+    --------
+    >>> decode_shape("(1:)")
+    ((1, inf),)
+
+    >>> decode_shape("(:, :10)")
+    ((-inf, inf), (-inf, 10))
+    """
+    matched = re.finditer(
+        r'([0-9+]):([0-9]+)|([0-9]+):|:([0-9]+)|([0-9]+)|[^0-9](:)[^0-9]',
+        shape_code)
+
+    shapes = []
+
+    for code in matched:
+        min_size = code.group(1) or code.group(3) or code.group(5)
+        min_size = int(min_size) if min_size else -numpy.inf
+        max_size = code.group(2) or code.group(4) or code.group(5)
+        max_size = int(max_size) if max_size else numpy.inf
+        shapes.append((min_size, max_size))
+    return tuple(shapes)
+
+
