@@ -62,7 +62,8 @@ class SingleMetaClassGenerator(object):
         for idx, parent_key in enumerate(parent_keys):
             if parent_key is None:
                 break
-            parent_class_data = cuds_keys[utils.without_cuba_prefix(parent_key)]
+            parent_class_data = cuds_keys[
+                utils.without_cuba_prefix(parent_key)]
             hierarchy_properties += self._extract_properties(parent_class_data,
                                                              parent_keys[idx:])
 
@@ -146,4 +147,3 @@ def all_parent_keys(key, simphony_metadata_dict):
         yield (utils.with_cuba_prefix(parent_key)
                if parent_key is not None else None)
         cur_key = parent_key
-
