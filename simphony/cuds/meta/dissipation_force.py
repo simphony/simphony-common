@@ -56,8 +56,7 @@ class DissipationForce(MaterialRelation):
         self.data[CUBA.RESTITUTION_COEFFICIENT] = value
 
     def _validate_restitution_coefficient(self, value):
-        value = validation.cast_data_type(value,
-                                          'CUBA.RESTITUTION_COEFFICIENT')
+        value = validation.cast_data_type(value, 'RESTITUTION_COEFFICIENT')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.RESTITUTION_COEFFICIENT')
+        validation.validate_cuba_keyword(value, 'RESTITUTION_COEFFICIENT')
         return value

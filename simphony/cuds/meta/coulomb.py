@@ -63,9 +63,9 @@ class Coulomb(PairPotential):
         self.data[CUBA.CUTOFF_DISTANCE] = value
 
     def _validate_cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'CUBA.CUTOFF_DISTANCE')
+        value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.CUTOFF_DISTANCE')
+        validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
     def _init_dielectric_constant(self, value):
@@ -84,7 +84,7 @@ class Coulomb(PairPotential):
         self.data[CUBA.DIELECTRIC_CONSTANT] = value
 
     def _validate_dielectric_constant(self, value):
-        value = validation.cast_data_type(value, 'CUBA.DIELECTRIC_CONSTANT')
+        value = validation.cast_data_type(value, 'DIELECTRIC_CONSTANT')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.DIELECTRIC_CONSTANT')
+        validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
         return value

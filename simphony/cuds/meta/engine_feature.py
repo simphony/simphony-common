@@ -45,15 +45,25 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.COMPUTATIONAL_METHOD] = value
 
     def _validate_computational_method(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.COMPUTATIONAL_METHOD')
+
+        value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry,
-                                             'CUBA.COMPUTATIONAL_METHOD')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'COMPUTATIONAL_METHOD')
 
         return value
 
@@ -80,7 +90,7 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.PHYSICS_EQUATION] = value
 
     def _validate_physics_equation(self, value):
-        value = validation.cast_data_type(value, 'CUBA.PHYSICS_EQUATION')
+        value = validation.cast_data_type(value, 'PHYSICS_EQUATION')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.PHYSICS_EQUATION')
+        validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value

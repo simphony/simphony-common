@@ -53,14 +53,25 @@ class Box(Boundary):
         self.data[CUBA.CONDITION] = value
 
     def _validate_condition(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.CONDITION')
+
+        value = validation.cast_data_type(value, 'CONDITION')
         validation.check_shape(value, [3])
-        for tuple_ in itertools.product(*[range(x) for x in [3]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.CONDITION')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'CONDITION')
 
         return value
 
@@ -80,13 +91,24 @@ class Box(Boundary):
         self.data[CUBA.VECTOR] = value
 
     def _validate_vector(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.VECTOR')
+
+        value = validation.cast_data_type(value, 'VECTOR')
         validation.check_shape(value, [3])
-        for tuple_ in itertools.product(*[range(x) for x in [3]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.VECTOR')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'VECTOR')
 
         return value

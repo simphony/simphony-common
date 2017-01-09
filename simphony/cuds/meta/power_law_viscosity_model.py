@@ -63,9 +63,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        value = validation.cast_data_type(value, 'CUBA.LINEAR_CONSTANT')
+        value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.LINEAR_CONSTANT')
+        validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
     def _init_models(self):
@@ -91,9 +91,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MINIMUM_VISCOSITY] = value
 
     def _validate_minimum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'CUBA.MINIMUM_VISCOSITY')
+        value = validation.cast_data_type(value, 'MINIMUM_VISCOSITY')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.MINIMUM_VISCOSITY')
+        validation.validate_cuba_keyword(value, 'MINIMUM_VISCOSITY')
         return value
 
     def _init_maximum_viscosity(self, value):
@@ -112,9 +112,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MAXIMUM_VISCOSITY] = value
 
     def _validate_maximum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'CUBA.MAXIMUM_VISCOSITY')
+        value = validation.cast_data_type(value, 'MAXIMUM_VISCOSITY')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.MAXIMUM_VISCOSITY')
+        validation.validate_cuba_keyword(value, 'MAXIMUM_VISCOSITY')
         return value
 
     def _init_power_law_index(self, value):
@@ -133,7 +133,7 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.POWER_LAW_INDEX] = value
 
     def _validate_power_law_index(self, value):
-        value = validation.cast_data_type(value, 'CUBA.POWER_LAW_INDEX')
+        value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.POWER_LAW_INDEX')
+        validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value

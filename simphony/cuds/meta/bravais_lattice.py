@@ -60,14 +60,25 @@ class BravaisLattice(Lattice):
         self.data[CUBA.LATTICE_PARAMETER] = value
 
     def _validate_lattice_parameter(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.LATTICE_PARAMETER')
+
+        value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
         validation.check_shape(value, [3])
-        for tuple_ in itertools.product(*[range(x) for x in [3]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.LATTICE_PARAMETER')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'LATTICE_PARAMETER')
 
         return value
 
@@ -87,9 +98,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.PRIMITIVE_CELL] = value
 
     def _validate_primitive_cell(self, value):
-        value = validation.cast_data_type(value, 'CUBA.PRIMITIVE_CELL')
+        value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.PRIMITIVE_CELL')
+        validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
     def _init_size(self, value):
@@ -108,14 +119,25 @@ class BravaisLattice(Lattice):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.SIZE')
+
+        value = validation.cast_data_type(value, 'SIZE')
         validation.check_shape(value, [3])
-        for tuple_ in itertools.product(*[range(x) for x in [3]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.SIZE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'SIZE')
 
         return value
 
@@ -135,7 +157,7 @@ class BravaisLattice(Lattice):
         self.data[CUBA.ORIGIN] = value
 
     def _validate_origin(self, value):
-        value = validation.cast_data_type(value, 'CUBA.ORIGIN')
+        value = validation.cast_data_type(value, 'ORIGIN')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.ORIGIN')
+        validation.validate_cuba_keyword(value, 'ORIGIN')
         return value

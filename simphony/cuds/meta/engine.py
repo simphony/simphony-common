@@ -48,13 +48,24 @@ class Engine(SoftwareTool):
         self.data[CUBA.ENGINE_FEATURE] = value
 
     def _validate_engine_feature(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.ENGINE_FEATURE')
+
+        value = validation.cast_data_type(value, 'ENGINE_FEATURE')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.ENGINE_FEATURE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'ENGINE_FEATURE')
 
         return value

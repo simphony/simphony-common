@@ -54,14 +54,25 @@ class Mesh(DataSet):
         self.data[CUBA.POINT] = value
 
     def _validate_point(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.POINT')
+
+        value = validation.cast_data_type(value, 'POINT')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.POINT')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'POINT')
 
         return value
 
@@ -81,14 +92,25 @@ class Mesh(DataSet):
         self.data[CUBA.FACE] = value
 
     def _validate_face(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.FACE')
+
+        value = validation.cast_data_type(value, 'FACE')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.FACE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'FACE')
 
         return value
 
@@ -108,14 +130,25 @@ class Mesh(DataSet):
         self.data[CUBA.CELL] = value
 
     def _validate_cell(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.CELL')
+
+        value = validation.cast_data_type(value, 'CELL')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.CELL')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'CELL')
 
         return value
 
@@ -135,13 +168,24 @@ class Mesh(DataSet):
         self.data[CUBA.EDGE] = value
 
     def _validate_edge(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.EDGE')
+
+        value = validation.cast_data_type(value, 'EDGE')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.EDGE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'EDGE')
 
         return value

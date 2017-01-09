@@ -65,9 +65,9 @@ class TemperatureRescaling(Thermostat):
         self.data[CUBA.COUPLING_TIME] = value
 
     def _validate_coupling_time(self, value):
-        value = validation.cast_data_type(value, 'CUBA.COUPLING_TIME')
+        value = validation.cast_data_type(value, 'COUPLING_TIME')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.COUPLING_TIME')
+        validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
     def _init_temperature(self, value):
@@ -86,13 +86,24 @@ class TemperatureRescaling(Thermostat):
         self.data[CUBA.TEMPERATURE] = value
 
     def _validate_temperature(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.TEMPERATURE')
+
+        value = validation.cast_data_type(value, 'TEMPERATURE')
         validation.check_shape(value, [2])
-        for tuple_ in itertools.product(*[range(x) for x in [2]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.TEMPERATURE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'TEMPERATURE')
 
         return value

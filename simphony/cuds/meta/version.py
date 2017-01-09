@@ -47,9 +47,9 @@ class Version(CUDSItem):
         self.data[CUBA.MINOR] = value
 
     def _validate_minor(self, value):
-        value = validation.cast_data_type(value, 'CUBA.MINOR')
+        value = validation.cast_data_type(value, 'MINOR')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.MINOR')
+        validation.validate_cuba_keyword(value, 'MINOR')
         return value
 
     def _init_definition(self):
@@ -75,9 +75,9 @@ class Version(CUDSItem):
         self.data[CUBA.PATCH] = value
 
     def _validate_patch(self, value):
-        value = validation.cast_data_type(value, 'CUBA.PATCH')
+        value = validation.cast_data_type(value, 'PATCH')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.PATCH')
+        validation.validate_cuba_keyword(value, 'PATCH')
         return value
 
     def _init_major(self, value):
@@ -96,9 +96,9 @@ class Version(CUDSItem):
         self.data[CUBA.MAJOR] = value
 
     def _validate_major(self, value):
-        value = validation.cast_data_type(value, 'CUBA.MAJOR')
+        value = validation.cast_data_type(value, 'MAJOR')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.MAJOR')
+        validation.validate_cuba_keyword(value, 'MAJOR')
         return value
 
     def _init_full(self, value):
@@ -117,7 +117,7 @@ class Version(CUDSItem):
         self.data[CUBA.FULL] = value
 
     def _validate_full(self, value):
-        value = validation.cast_data_type(value, 'CUBA.FULL')
+        value = validation.cast_data_type(value, 'FULL')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.FULL')
+        validation.validate_cuba_keyword(value, 'FULL')
         return value

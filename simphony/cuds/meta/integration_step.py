@@ -59,9 +59,9 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.CURRENT] = value
 
     def _validate_current(self, value):
-        value = validation.cast_data_type(value, 'CUBA.CURRENT')
+        value = validation.cast_data_type(value, 'CURRENT')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.CURRENT')
+        validation.validate_cuba_keyword(value, 'CURRENT')
         return value
 
     def _init_size(self, value):
@@ -80,9 +80,9 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-        value = validation.cast_data_type(value, 'CUBA.SIZE')
+        value = validation.cast_data_type(value, 'SIZE')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.SIZE')
+        validation.validate_cuba_keyword(value, 'SIZE')
         return value
 
     def _init_final(self, value):
@@ -101,7 +101,7 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.FINAL] = value
 
     def _validate_final(self, value):
-        value = validation.cast_data_type(value, 'CUBA.FINAL')
+        value = validation.cast_data_type(value, 'FINAL')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.FINAL')
+        validation.validate_cuba_keyword(value, 'FINAL')
         return value

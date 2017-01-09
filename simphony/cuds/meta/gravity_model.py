@@ -63,7 +63,7 @@ class GravityModel(PhysicsEquation):
         self.data[CUBA.ACCELERATION] = value
 
     def _validate_acceleration(self, value):
-        value = validation.cast_data_type(value, 'CUBA.ACCELERATION')
+        value = validation.cast_data_type(value, 'ACCELERATION')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.ACCELERATION')
+        validation.validate_cuba_keyword(value, 'ACCELERATION')
         return value

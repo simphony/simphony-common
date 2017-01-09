@@ -43,14 +43,25 @@ class Particles(DataSet):
         self.data[CUBA.PARTICLE] = value
 
     def _validate_particle(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.PARTICLE')
+
+        value = validation.cast_data_type(value, 'PARTICLE')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.PARTICLE')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'PARTICLE')
 
         return value
 
@@ -77,13 +88,24 @@ class Particles(DataSet):
         self.data[CUBA.BOND] = value
 
     def _validate_bond(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.BOND')
+
+        value = validation.cast_data_type(value, 'BOND')
         validation.check_shape(value, [None])
-        for tuple_ in itertools.product(*[range(x) for x in [None]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.BOND')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'BOND')
 
         return value

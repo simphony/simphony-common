@@ -43,9 +43,9 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.DESCRIPTION] = value
 
     def _validate_description(self, value):
-        value = validation.cast_data_type(value, 'CUBA.DESCRIPTION')
+        value = validation.cast_data_type(value, 'DESCRIPTION')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.DESCRIPTION')
+        validation.validate_cuba_keyword(value, 'DESCRIPTION')
         return value
 
     def _init_definition(self):
@@ -71,7 +71,7 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.NAME] = value
 
     def _validate_name(self, value):
-        value = validation.cast_data_type(value, 'CUBA.NAME')
+        value = validation.cast_data_type(value, 'NAME')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.NAME')
+        validation.validate_cuba_keyword(value, 'NAME')
         return value

@@ -59,14 +59,25 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-        import itertools
-        value = validation.cast_data_type(value, 'CUBA.MATERIAL')
+
+        value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape(value, [2])
-        for tuple_ in itertools.product(*[range(x) for x in [2]]):
-            entry = value
-            for idx in tuple_:
-                entry = entry[idx]
-            validation.validate_cuba_keyword(entry, 'CUBA.MATERIAL')
+
+        def flatten(container):
+            for i in container:
+                if isinstance(i, (list, tuple)):
+                    for j in flatten(i):
+                        yield j
+                else:
+                    yield i
+
+        if has_attr(container, "flatten"):
+            flat_array = container.flatten()
+        else:
+            flat_array = flatten(value)
+
+        for entry in flat_array:
+            validation.validate_cuba_keyword(entry, 'MATERIAL')
 
         return value
 
@@ -86,7 +97,7 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.SURFACE_TENSION] = value
 
     def _validate_surface_tension(self, value):
-        value = validation.cast_data_type(value, 'CUBA.SURFACE_TENSION')
+        value = validation.cast_data_type(value, 'SURFACE_TENSION')
         validation.check_shape(value, [1])
-        validation.validate_cuba_keyword(value, 'CUBA.SURFACE_TENSION')
+        validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
         return value
