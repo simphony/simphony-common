@@ -1,6 +1,5 @@
 import abc
 import textwrap
-from collections import OrderedDict, namedtuple
 
 from scripts.utils import NoDefault
 from . import utils
@@ -36,7 +35,7 @@ class ShortcutImport(object):
         'KEYWORDS': 'from simphony.core.keywords import KEYWORDS',
         'validation': 'from . import validation',
         'uuid': 'import uuid',
-        'Default': 'from simphony.core import Default'
+        'Default': 'from simphony.core import Default  # noqa'
     }
 
     def __init__(self, module_shortcut):
@@ -104,7 +103,7 @@ class Class(object):
         self.properties = []
 
     def import_required(self):
-        required = []
+        required = [ShortcutImport("Default")]
         if self.parent_class_name is not None:
             required += [
                 MetaClassImport(self.parent_class_name)
