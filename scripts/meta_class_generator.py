@@ -19,20 +19,7 @@ class MetaClassGenerator(object):
         """
 
         for key, class_data in simphony_metadata_dict['CUDS_KEYS'].items():
-            # Catch inconsistent definitions that would choke the generator
-            parent = class_data['parent']
-            if (parent and parent.replace('CUBA.', '')
-                    not in simphony_metadata_dict['CUDS_KEYS']):
-                message = ('{0} is SKIPPED because its parent {1} '
-                           'is not defined in CUDS_KEYS')
-                warnings.warn(message.format(key, class_data['parent']))
-                continue
-
-            if key.lower() in ('validation', 'api'):
-                message = 'Name crashes with utility modules: '+key.lower()
-                raise ValueError(message)
-
-            gen = SingleMetaClassGenerator(key, class_data)
+            gen = SingleMetaClassGenerator(key, simphony_metadata_dict)
 
             filename = os.path.join(
                 out_path,
@@ -45,3 +32,5 @@ class MetaClassGenerator(object):
         # Create an empty __init__.py
         init_path = os.path.join(out_path, '__init__.py')
         open(init_path, 'a').close()
+
+
