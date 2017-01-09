@@ -185,7 +185,7 @@ class Class(object):
         ))
 
         for prop in self.properties:
-            if prop.name in reimplemented_properties:
+            if prop.reimplemented:
                 continue
 
             if isinstance(prop, VariableProperty):
@@ -449,7 +449,6 @@ class VariableProperty(Property):
         else:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
-
                 value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_shape(value, {shape})
 
