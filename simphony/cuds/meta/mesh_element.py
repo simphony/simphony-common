@@ -59,8 +59,8 @@ class MeshElement(CUDSItem):
                 else:
                     yield i
 
-        if has_attr(container, "flatten"):
-            flat_array = container.flatten()
+        if hasattr(container, "flatten"):
+            flat_array = value.flatten()
         else:
             flat_array = flatten(value)
 
