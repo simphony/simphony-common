@@ -358,6 +358,9 @@ class VariableProperty(Property):
         return imp
 
     def __init__(self, qual_cuba_key, default, shape):
+        if shape is None:
+            raise ValueError("shape cannot be None")
+
         prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
         super(VariableProperty, self).__init__(
             name=prop_name,
@@ -385,32 +388,43 @@ class VariableProperty(Property):
             qual_cuba_key=self.qual_cuba_key)
 
     def _render_validation(self):
-
+        cuba_key = utils.without_cuba_prefix(self.qual_cuba_key)
         if self.shape == [1]:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
-                value = validation.cast_data_type(value, '{qual_cuba_key}')
+                value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_shape(value, {shape})
-                validation.validate_cuba_keyword(value, '{qual_cuba_key}')
+                validation.validate_cuba_keyword(value, '{cuba_key}')
                 return value
             """.format(prop_name=self.name,
-                       qual_cuba_key=self.qual_cuba_key,
+                       cuba_key=cuba_key,
                        shape=self.shape))
         else:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
-                import itertools
-                value = validation.cast_data_type(value, '{qual_cuba_key}')
+
+                value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_shape(value, {shape})
-                for tuple_ in itertools.product(*[range(x) for x in {shape}]):
-                    entry = value
-                    for idx in tuple_:
-                        entry = entry[idx]
-                    validation.validate_cuba_keyword(entry, '{qual_cuba_key}')
+
+                def flatten(container):
+                    for i in container:
+                        if isinstance(i, (list,tuple)):
+                            for j in flatten(i):
+                                yield j
+                        else:
+                            yield i
+
+                if has_attr(container, "flatten"):
+                    flat_array = container.flatten()
+                else:
+                    flat_array = flatten(value)
+
+                for entry in flat_array:
+                    validation.validate_cuba_keyword(entry, '{cuba_key}')
 
                 return value
             """.format(prop_name=self.name,
-                       qual_cuba_key=self.qual_cuba_key,
+                       cuba_key=cuba_key,
                        shape=self.shape))
 
 
