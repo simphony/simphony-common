@@ -27,10 +27,10 @@ class DissipationForce(MaterialRelation):
         return (CUBA.RESTITUTION_COEFFICIENT, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_definition(self):
-        return "Viscous normal force describing the inelasticity of particle collisions"  # noqa    
+        return "Viscous normal force describing the inelasticity of particle collisions"  # noqa
 
     def _init_restitution_coefficient(self, value):
         if value is Default:

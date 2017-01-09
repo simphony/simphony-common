@@ -37,7 +37,7 @@ class IntegrationStep(SolverParameter):
             CUBA.FINAL, ) + base_params
 
     def _default_definition(self):
-        return "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa    
+        return "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa
 
     def _init_current(self, value):
         if value is Default:

@@ -36,10 +36,10 @@ class NoseHoover(Thermostat):
             CUBA.TEMPERATURE, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa    
+        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
 
     def _default_definition(self):
-        return "Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath."  # noqa    
+        return "Add an extra term to the equation of motion to model the interaction with an external heat bath. The coupling time specifies how rapidly the temperature should be coupled to the bath."  # noqa
 
     def _init_coupling_time(self, value):
         if value is Default:

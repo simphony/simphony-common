@@ -30,7 +30,7 @@ class Box(Boundary):
             CUBA.VECTOR, ) + base_params
 
     def _default_definition(self):
-        return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa    
+        return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa
 
     def _init_condition(self, value):
         if value is Default:

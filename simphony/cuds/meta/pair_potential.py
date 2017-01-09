@@ -25,10 +25,10 @@ class PairPotential(InteratomicPotential):
         return (CUBA.MATERIAL, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_definition(self):
-        return "Pair Interatomic Potentials Category"  # noqa    
+        return "Pair Interatomic Potentials Category"  # noqa
 
     def _init_material(self, value):
         if value is Default:

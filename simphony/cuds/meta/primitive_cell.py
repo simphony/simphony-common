@@ -25,7 +25,7 @@ class PrimitiveCell(CUDSComponent):
         return (CUBA.LATTICE_VECTORS, ) + base_params
 
     def _default_definition(self):
-        return "A lattice primitive cell"  # noqa    
+        return "A lattice primitive cell"  # noqa
 
     def _init_lattice_vectors(self, value):
         if value is Default:

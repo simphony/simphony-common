@@ -23,7 +23,7 @@ class Dem(ComputationalMethod):
         return () + base_params
 
     def _default_definition(self):
-        return "Discrete element method"  # noqa    
+        return "Discrete element method"  # noqa
 
     def _default_physics_equations(self):
         return ['CUBA.GRANULAR_DYNAMICS']  # noqa

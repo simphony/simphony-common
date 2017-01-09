@@ -33,7 +33,7 @@ class Free(Condition):
         return [
             'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
             'CUBA.CONTINUUM'
-        ]  # noqa    
+        ]  # noqa
 
     def _default_definition(self):
         return "Free boundary condition"  # noqa

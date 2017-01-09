@@ -26,7 +26,7 @@ class Engine(SoftwareTool):
         return (CUBA.ENGINE_FEATURE, ) + base_params
 
     def _default_definition(self):
-        return "Represents a software tool which is used to solve the physics equation"  # noqa    
+        return "Represents a software tool which is used to solve the physics equation"  # noqa
 
     def _init_engine_feature(self, value):
         if value is Default:

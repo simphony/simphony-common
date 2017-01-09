@@ -32,10 +32,10 @@ class ModelEquation(CUDSComponent):
         return self._models
 
     def _default_models(self):
-        return []  # noqa    
+        return []  # noqa
 
     def _default_definition(self):
-        return "The model equations are represented by all physics equations and material relations according to the RoMM"  # noqa    
+        return "The model equations are represented by all physics equations and material relations according to the RoMM"  # noqa
 
     def _init_variables(self):
         self._variables = self._default_variables()  # noqa

@@ -29,10 +29,10 @@ class SurfaceTensionRelation(MaterialRelation):
             CUBA.SURFACE_TENSION, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Surface tension relation between two fluids"  # noqa    
+        return "Surface tension relation between two fluids"  # noqa
 
     def _init_material(self, value):
         if value is Default:

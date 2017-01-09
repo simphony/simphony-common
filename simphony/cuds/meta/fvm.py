@@ -23,7 +23,7 @@ class Fvm(ComputationalMethod):
         return () + base_params
 
     def _default_definition(self):
-        return "Finite volume method"  # noqa    
+        return "Finite volume method"  # noqa
 
     def _default_physics_equations(self):
         return ['CUBA.CFD']  # noqa

@@ -56,7 +56,7 @@ class Version(CUDSItem):
         raise TypeError("No default for minor")
 
     def _default_definition(self):
-        return "Version of a software tool used in a simulation"  # noqa    
+        return "Version of a software tool used in a simulation"  # noqa
 
     def _init_patch(self, value):
         if value is Default:

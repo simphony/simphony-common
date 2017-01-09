@@ -36,10 +36,10 @@ class Empty(Condition):
         return self._models
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Empty boundary condition"  # noqa    
+        return "Empty boundary condition"  # noqa
 
     def _init_variable(self, value):
         if value is Default:

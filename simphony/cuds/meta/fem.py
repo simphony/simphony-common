@@ -23,7 +23,7 @@ class Fem(ComputationalMethod):
         return () + base_params
 
     def _default_definition(self):
-        return "Finite element method"  # noqa    
+        return "Finite element method"  # noqa
 
     def _default_physics_equations(self):
         return ['CUBA.CFD']  # noqa

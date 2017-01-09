@@ -23,7 +23,7 @@ class Sph(ComputationalMethod):
         return () + base_params
 
     def _default_definition(self):
-        return "Smooth particle hydrodynamics"  # noqa    
+        return "Smooth particle hydrodynamics"  # noqa
 
     def _default_physics_equations(self):
         return ['CUBA.CFD']  # noqa

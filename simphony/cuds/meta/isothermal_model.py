@@ -25,10 +25,10 @@ class IsothermalModel(ThermalModel):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Isothermal heat transport model, no transport of heat is assumed"  # noqa    
+        return "Isothermal heat transport model, no transport of heat is assumed"  # noqa
 
     def _default_variables(self):
         return []  # noqa

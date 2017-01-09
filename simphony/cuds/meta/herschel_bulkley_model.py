@@ -41,7 +41,7 @@ class HerschelBulkleyModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _default_definition(self):
-        return "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa    
+        return "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa
 
     def _init_initial_viscosity(self, value):
         if value is Default:
@@ -68,7 +68,7 @@ class HerschelBulkleyModel(RheologyModel):
         return 0.001
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _init_relaxation_time(self, value):
         if value is Default:

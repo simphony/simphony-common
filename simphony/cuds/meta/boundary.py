@@ -26,7 +26,7 @@ class Boundary(CUDSComponent):
         return (CUBA.CONDITION, ) + base_params
 
     def _default_definition(self):
-        return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa    
+        return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa
 
     def _init_condition(self, value):
         if value is Default:

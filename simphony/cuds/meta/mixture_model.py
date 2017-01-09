@@ -23,7 +23,7 @@ class MixtureModel(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
         return "Mixture (drift flux) model"  # noqa

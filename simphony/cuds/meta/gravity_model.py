@@ -27,13 +27,13 @@ class GravityModel(PhysicsEquation):
         return (CUBA.ACCELERATION, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "A simple gravity model"  # noqa    
+        return "A simple gravity model"  # noqa
 
     def _default_variables(self):
-        return ['CUBA.ACCELERATION']  # noqa    
+        return ['CUBA.ACCELERATION']  # noqa
 
     def _init_acceleration(self, value):
         if value is Default:

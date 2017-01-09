@@ -25,7 +25,7 @@ class Basis(CUDSComponent):
         return (CUBA.VECTOR, ) + base_params
 
     def _default_definition(self):
-        return "Space basis vectors (row wise)"  # noqa    
+        return "Space basis vectors (row wise)"  # noqa
 
     def _init_vector(self, value):
         if value is Default:

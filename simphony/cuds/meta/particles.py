@@ -69,7 +69,7 @@ class Particles(DataSet):
         raise TypeError("No default for particle")
 
     def _default_definition(self):
-        return "A collection of particles"  # noqa    
+        return "A collection of particles"  # noqa
 
     def _init_bond(self, value):
         if value is Default:

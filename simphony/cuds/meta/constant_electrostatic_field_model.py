@@ -28,13 +28,13 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         return (CUBA.ELECTROSTATIC_FIELD, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "A constant electrostatic field model"  # noqa    
+        return "A constant electrostatic field model"  # noqa
 
     def _default_variables(self):
-        return ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']  # noqa    
+        return ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']  # noqa
 
     def _init_electrostatic_field(self, value):
         if value is Default:

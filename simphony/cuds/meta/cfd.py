@@ -80,7 +80,7 @@ class Cfd(PhysicsEquation):
         return SinglePhaseModel()
 
     def _default_definition(self):
-        return "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa    
+        return "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa
 
     def _init_rheology_model(self, value):
         if value is Default:
@@ -131,14 +131,14 @@ class Cfd(PhysicsEquation):
         return LaminarFlowModel()
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_variables(self):
         return [
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM', 'CUBA.DENSITY',
             'CUBA.VISCOSITY', 'CUBA.TIME', 'CUBA.STRESS_TENSOR',
             'CUBA.PRESSURE', 'CUBA.DYNAMIC_PRESSURE', 'CUBA.VOLUME_FRACTION'
-        ]  # noqa    
+        ]  # noqa
 
     def _init_gravity_model(self, value):
         if value is Default:

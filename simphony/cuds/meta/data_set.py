@@ -31,7 +31,7 @@ class DataSet(CUDSComponent):
         return self._models
 
     def _default_models(self):
-        return []  # noqa    
+        return []  # noqa
 
     def _default_definition(self):
         return "A representation of the computational entities of the model equations"  # noqa

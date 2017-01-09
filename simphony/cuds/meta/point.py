@@ -25,7 +25,7 @@ class Point(CUDSItem):
         return (CUBA.POSITION, ) + base_params
 
     def _default_definition(self):
-        return "A point in a 3D space system"  # noqa    
+        return "A point in a 3D space system"  # noqa
 
     def _init_position(self, value):
         if value is Default:

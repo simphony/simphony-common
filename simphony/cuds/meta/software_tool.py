@@ -26,7 +26,7 @@ class SoftwareTool(CUDSItem):
         return (CUBA.VERSION, ) + base_params
 
     def _default_definition(self):
-        return "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa    
+        return "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa
 
     def _init_version(self, value):
         if value is Default:

@@ -33,7 +33,7 @@ class Periodic(Condition):
         return [
             'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
             'CUBA.CONTINUUM'
-        ]  # noqa    
+        ]  # noqa
 
     def _default_definition(self):
         return "Periodic boundary condition (PBC)"  # noqa

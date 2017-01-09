@@ -25,10 +25,10 @@ class IncompressibleFluidModel(CompressibilityModel):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Incompressible fluid model"  # noqa    
+        return "Incompressible fluid model"  # noqa
 
     def _default_variables(self):
         return [

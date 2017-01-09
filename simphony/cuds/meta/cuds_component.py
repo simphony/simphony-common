@@ -52,7 +52,7 @@ class CUDSComponent(CUDSItem):
         return ""
 
     def _default_definition(self):
-        return "Base data type for the CUDS components"  # noqa    
+        return "Base data type for the CUDS components"  # noqa
 
     def _init_name(self, value):
         if value is Default:

@@ -25,7 +25,7 @@ class Origin(CUDSComponent):
         return (CUBA.POSITION, ) + base_params
 
     def _default_definition(self):
-        return "The origin of a space system"  # noqa    
+        return "The origin of a space system"  # noqa
 
     def _init_position(self, value):
         if value is Default:

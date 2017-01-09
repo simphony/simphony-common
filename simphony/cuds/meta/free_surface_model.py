@@ -24,10 +24,10 @@ class FreeSurfaceModel(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Free surface model"  # noqa    
+        return "Free surface model"  # noqa
 
     def _default_variables(self):
         return ['CUBA.SURFACE_TENSION']  # noqa

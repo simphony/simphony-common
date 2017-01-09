@@ -24,10 +24,10 @@ class GranularDynamics(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.MESOSCOPIC']  # noqa    
+        return ['CUBA.MESOSCOPIC']  # noqa
 
     def _default_definition(self):
-        return "Granular dynamics of spherical particles using DEM"  # noqa    
+        return "Granular dynamics of spherical particles using DEM"  # noqa
 
     def _default_variables(self):
         return [

@@ -25,7 +25,7 @@ class Node(CUDSComponent):
         return (CUBA.INDEX, ) + base_params
 
     def _default_definition(self):
-        return "A node on a structured grid like lattice"  # noqa    
+        return "A node on a structured grid like lattice"  # noqa
 
     def _init_index(self, value):
         if value is Default:

@@ -38,10 +38,10 @@ class Neumann(Condition):
         return self._models
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."  # noqa    
+        return "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."  # noqa
 
     def _init_variable(self, value):
         if value is Default:

@@ -25,10 +25,10 @@ class MolecularDynamics(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_definition(self):
-        return "Classical atomistic molecular dynamics using Newtons equations of motion"  # noqa    
+        return "Classical atomistic molecular dynamics using Newtons equations of motion"  # noqa
 
     def _default_variables(self):
         return [

@@ -24,10 +24,10 @@ class MolecularStatics(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_definition(self):
-        return "Classical atomistic static molecular model"  # noqa    
+        return "Classical atomistic static molecular model"  # noqa
 
     def _default_variables(self):
         return ['CUBA.POSITION', 'CUBA.FORCE']  # noqa

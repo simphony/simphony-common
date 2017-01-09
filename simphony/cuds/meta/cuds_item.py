@@ -37,7 +37,7 @@ class CUDSItem(object):
         return self._definition
 
     def _default_definition(self):
-        return "Root of all CUDS types"  # noqa    
+        return "Root of all CUDS types"  # noqa
 
     def _init_data(self):
         self._data = DataContainer()

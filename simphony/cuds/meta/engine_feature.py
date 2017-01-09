@@ -71,7 +71,7 @@ class EngineFeature(CUDSItem):
         raise TypeError("No default for computational_method")
 
     def _default_definition(self):
-        return "Provides a physics equation and methods that engines provides to solve them"  # noqa    
+        return "Provides a physics equation and methods that engines provides to solve them"  # noqa
 
     def _init_physics_equation(self, value):
         if value is Default:

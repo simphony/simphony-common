@@ -25,7 +25,7 @@ class Atom(Particle):
         return (CUBA.MASS, ) + base_params
 
     def _default_definition(self):
-        return "An atom"  # noqa    
+        return "An atom"  # noqa
 
     def _init_mass(self, value):
         if value is Default:

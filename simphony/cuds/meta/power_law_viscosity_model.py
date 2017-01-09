@@ -41,7 +41,7 @@ class PowerLawViscosityModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _default_definition(self):
-        return "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa    
+        return "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa
 
     def _init_linear_constant(self, value):
         if value is Default:
@@ -68,7 +68,7 @@ class PowerLawViscosityModel(RheologyModel):
         return 1e-05
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _init_minimum_viscosity(self, value):
         if value is Default:

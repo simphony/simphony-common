@@ -24,10 +24,10 @@ class ThermalModel(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Non-isothermal heat transport model"  # noqa    
+        return "Non-isothermal heat transport model"  # noqa
 
     def _default_variables(self):
         return ['CUBA.TEMPERATURE', 'CUBA.HEAT_CONDUCTIVITY']  # noqa

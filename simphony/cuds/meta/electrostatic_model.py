@@ -24,7 +24,7 @@ class ElectrostaticModel(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return []  # noqa    
+        return []  # noqa
 
     def _default_definition(self):
         return "Electrostatic model"  # noqa

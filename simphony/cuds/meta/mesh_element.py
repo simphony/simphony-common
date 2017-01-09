@@ -25,7 +25,7 @@ class MeshElement(CUDSItem):
         return (CUBA.POINT, ) + base_params
 
     def _default_definition(self):
-        return "An element for storing geometrical objects"  # noqa    
+        return "An element for storing geometrical objects"  # noqa
 
     def _init_point(self, value):
         if value is Default:

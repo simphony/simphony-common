@@ -36,10 +36,10 @@ class TemperatureRescaling(Thermostat):
             CUBA.TEMPERATURE, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa    
+        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
 
     def _default_definition(self):
-        return "A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath."  # noqa    
+        return "A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath."  # noqa
 
     def _init_coupling_time(self, value):
         if value is Default:

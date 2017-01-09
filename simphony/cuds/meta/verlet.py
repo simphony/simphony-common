@@ -23,7 +23,7 @@ class Verlet(ComputationalMethod):
         return () + base_params
 
     def _default_definition(self):
-        return "Newtonian dynamics integration using verlet algorithm"  # noqa    
+        return "Newtonian dynamics integration using verlet algorithm"  # noqa
 
     def _default_physics_equations(self):
         return ['CUBA.MOLECULAR_DYNAMICS']  # noqa

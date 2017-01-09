@@ -40,7 +40,7 @@ class CrossPowerLawModel(RheologyModel):
             CUBA.POWER_LAW_INDEX, ) + base_params
 
     def _default_definition(self):
-        return "Viscosity Cross power law model"  # noqa    
+        return "Viscosity Cross power law model"  # noqa
 
     def _init_initial_viscosity(self, value):
         if value is Default:
@@ -67,7 +67,7 @@ class CrossPowerLawModel(RheologyModel):
         return 0.001
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _init_linear_constant(self, value):
         if value is Default:

@@ -37,7 +37,7 @@ class LennardJones_6_12(PairPotential):
             CUBA.ENERGY_WELL_DEPTH, ) + base_params
 
     def _default_definition(self):
-        return "A Lennard-Jones 6-12 Potential"  # noqa    
+        return "A Lennard-Jones 6-12 Potential"  # noqa
 
     def _init_van_der_waals_radius(self, value):
         if value is Default:
@@ -64,10 +64,10 @@ class LennardJones_6_12(PairPotential):
         return 1.0
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_variables(self):
-        return ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa    
+        return ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa
 
     def _init_cutoff_distance(self, value):
         if value is Default:

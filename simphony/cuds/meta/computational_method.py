@@ -24,7 +24,7 @@ class ComputationalMethod(SolverParameter):
         return () + base_params
 
     def _default_definition(self):
-        return "A computational method according to the RoMM"  # noqa    
+        return "A computational method according to the RoMM"  # noqa
 
     def _init_physics_equations(self):
         self._physics_equations = self._default_physics_equations()  # noqa

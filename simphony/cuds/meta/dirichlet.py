@@ -37,10 +37,10 @@ class Dirichlet(Condition):
         return self._models
 
     def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa    
+        return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa    
+        return "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa
 
     def _init_variable(self, value):
         if value is Default:

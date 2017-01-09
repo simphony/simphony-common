@@ -26,7 +26,7 @@ class MaterialRelation(ModelEquation):
         return (CUBA.MATERIAL, ) + base_params
 
     def _default_definition(self):
-        return "Material relation which together with the Physics equation gives the model equation"  # noqa    
+        return "Material relation which together with the Physics equation gives the model equation"  # noqa
 
     def _init_material(self, value):
         if value is Default:

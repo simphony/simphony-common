@@ -38,7 +38,7 @@ class BravaisLattice(Lattice):
             CUBA.ORIGIN, ) + base_params
 
     def _default_definition(self):
-        return "A Bravais lattice"  # noqa    
+        return "A Bravais lattice"  # noqa
 
     def _init_lattice_parameter(self, value):
         if value is Default:

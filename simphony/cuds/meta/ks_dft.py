@@ -24,10 +24,10 @@ class KsDft(PhysicsEquation):
         return () + base_params
 
     def _default_models(self):
-        return ['CUBA.ELECTRONIC']  # noqa    
+        return ['CUBA.ELECTRONIC']  # noqa
 
     def _default_definition(self):
-        return "Kohn-Sham DFT equations"  # noqa    
+        return "Kohn-Sham DFT equations"  # noqa
 
     def _default_variables(self):
         return [

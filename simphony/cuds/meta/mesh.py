@@ -32,7 +32,7 @@ class Mesh(DataSet):
             CUBA.EDGE, ) + base_params
 
     def _default_definition(self):
-        return "A mesh"  # noqa    
+        return "A mesh"  # noqa
 
     def _init_point(self, value):
         if value is Default:

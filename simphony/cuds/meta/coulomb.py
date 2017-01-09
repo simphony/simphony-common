@@ -34,10 +34,10 @@ class Coulomb(PairPotential):
             CUBA.DIELECTRIC_CONSTANT, ) + base_params
 
     def _default_models(self):
-        return ['CUBA.ATOMISTIC']  # noqa    
+        return ['CUBA.ATOMISTIC']  # noqa
 
     def _default_definition(self):
-        return "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa    
+        return "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa
 
     def _init_cutoff_distance(self, value):
         if value is Default:
