@@ -81,7 +81,12 @@ class SingleMetaClassGenerator(object):
                     class_.properties.append(
                         templates.FixedProperty(
                             prop_key,
-                            default=class_data[prop_key]
+                            default=class_data[prop_key],
+                            reimplemented=is_variable_reimplemented(
+                                prop_key,
+                                parent_keys,
+                                self.simphony_metadata_dict
+                            )
                         )
                     )
 

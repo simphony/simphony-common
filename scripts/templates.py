@@ -352,7 +352,14 @@ class Property(ABCProperty):
 
 
 class FixedProperty(Property):
+    def __init__(self, name, default, reimplemented):
+        super(FixedProperty, self).__init__(name, default)
+
+        self.reimplemented = reimplemented
+
     def _render_init(self):
+        if self.reimplemented:
+            return ""
         return textwrap.dedent("""
         def _init_{name}(self):
             self._{name} = self._default_{name}()  # noqa
@@ -370,6 +377,11 @@ class FixedProperty(Property):
 
     def _render_validation(self):
         return ""
+
+    def _render_getter(self):
+        if self.reimplemented:
+            return ""
+        return super(FixedProperty, self)._render_getter()
 
     def import_required(self):
         imp = []
