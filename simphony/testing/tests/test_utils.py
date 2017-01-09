@@ -23,7 +23,7 @@ from simphony.testing.utils import (
     compare_lattice_datasets, create_particles_with_id,
     create_points_with_id, create_edges, create_faces,
     create_cells, create_edges_with_id, create_faces_with_id,
-    create_cells_with_id)
+    create_cells_with_id, decode_shape)
 
 
 class TestCompareParticlesDatasets(unittest.TestCase):
@@ -968,6 +968,20 @@ class TestGrouper(unittest.TestCase):
 
         groups = [group for group in grouper(iterable, 3)]
         self.assertEqual(groups, [])
+
+
+class TestDecodeShape(unittest.TestCase):
+    def test_decode_shape(self):
+        self.assertEqual(decode_shape('(:)'), ((-numpy.inf, numpy.inf),))
+        self.assertEqual(decode_shape('()'), ())
+        self.assertEqual(decode_shape('(1,)'), ((1, 1),))
+        self.assertEqual(decode_shape('(:, 10:, 1:2, :5)'),
+                         ((-numpy.inf, numpy.inf),
+                          (10, numpy.inf),
+                          (1, 2),
+                          (-numpy.inf, 5)))
+        self.assertEqual(decode_shape('(-anything:anything)'),
+                         ((-numpy.inf, numpy.inf),))
 
 
 if __name__ == '__main__':
