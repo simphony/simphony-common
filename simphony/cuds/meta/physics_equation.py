@@ -11,7 +11,6 @@ class PhysicsEquation(ModelEquation):
     def __init__(self, *args, **kwargs):
 
         super(PhysicsEquation, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

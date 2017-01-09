@@ -14,7 +14,6 @@ class SoftwareTool(CUDSItem):
     def __init__(self, version=Default, *args, **kwargs):
 
         super(SoftwareTool, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_version(version)
 
     def supported_parameters(self):

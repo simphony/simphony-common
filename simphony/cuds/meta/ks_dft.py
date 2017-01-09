@@ -11,9 +11,6 @@ class KsDft(PhysicsEquation):
     def __init__(self, *args, **kwargs):
 
         super(KsDft, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
-        self._init_variables()
 
     def supported_parameters(self):
         try:

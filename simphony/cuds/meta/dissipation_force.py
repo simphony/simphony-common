@@ -14,8 +14,6 @@ class DissipationForce(MaterialRelation):
     def __init__(self, restitution_coefficient=Default, *args, **kwargs):
 
         super(DissipationForce, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_restitution_coefficient(restitution_coefficient)
 
     def supported_parameters(self):

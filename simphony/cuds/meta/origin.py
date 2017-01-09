@@ -13,7 +13,6 @@ class Origin(CUDSComponent):
     def __init__(self, position=Default, *args, **kwargs):
 
         super(Origin, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_position(position)
 
     def supported_parameters(self):

@@ -14,8 +14,6 @@ class CoulombFrictionForce(MaterialRelation):
     def __init__(self, friction_coefficient=Default, *args, **kwargs):
 
         super(CoulombFrictionForce, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_friction_coefficient(friction_coefficient)
 
     def supported_parameters(self):

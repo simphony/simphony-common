@@ -11,8 +11,6 @@ class Sph(ComputationalMethod):
     def __init__(self, *args, **kwargs):
 
         super(Sph, self).__init__(*args, **kwargs)
-        self._init_definition()
-        self._init_physics_equations()
 
     def supported_parameters(self):
         try:

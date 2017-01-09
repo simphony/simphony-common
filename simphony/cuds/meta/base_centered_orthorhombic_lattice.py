@@ -11,7 +11,6 @@ class BaseCenteredOrthorhombicLattice(BravaisLattice):
     def __init__(self, *args, **kwargs):
 
         super(BaseCenteredOrthorhombicLattice, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

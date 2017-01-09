@@ -20,9 +20,7 @@ class HerschelBulkleyModel(RheologyModel):
                  **kwargs):
 
         super(HerschelBulkleyModel, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_initial_viscosity(initial_viscosity)
-        self._init_models()
         self._init_relaxation_time(relaxation_time)
         self._init_linear_constant(linear_constant)
         self._init_power_law_index(power_law_index)

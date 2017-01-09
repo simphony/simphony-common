@@ -13,7 +13,6 @@ class PrimitiveCell(CUDSComponent):
     def __init__(self, lattice_vectors=Default, *args, **kwargs):
 
         super(PrimitiveCell, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_lattice_vectors(lattice_vectors)
 
     def supported_parameters(self):

@@ -11,7 +11,6 @@ class TurbulenceModel(PhysicsEquation):
     def __init__(self, *args, **kwargs):
 
         super(TurbulenceModel, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

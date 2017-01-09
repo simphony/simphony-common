@@ -11,7 +11,6 @@ class CubicLattice(TetragonalLattice):
     def __init__(self, *args, **kwargs):
 
         super(CubicLattice, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

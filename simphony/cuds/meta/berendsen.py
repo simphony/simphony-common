@@ -19,8 +19,6 @@ class Berendsen(Thermostat):
                  **kwargs):
 
         super(Berendsen, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_coupling_time(coupling_time)
         self._init_temperature(temperature)
 
@@ -80,7 +78,6 @@ class Berendsen(Thermostat):
         self.data[CUBA.TEMPERATURE] = value
 
     def _validate_temperature(self, value):
-
         value = validation.cast_data_type(value, 'TEMPERATURE')
         validation.check_shape(value, [2])
 

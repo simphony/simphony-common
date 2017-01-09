@@ -13,7 +13,6 @@ class MeshElement(CUDSItem):
     def __init__(self, point, *args, **kwargs):
 
         super(MeshElement, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_point(point)
 
     def supported_parameters(self):
@@ -43,7 +42,6 @@ class MeshElement(CUDSItem):
         self.data[CUBA.POINT] = value
 
     def _validate_point(self, value):
-
         value = validation.cast_data_type(value, 'POINT')
         validation.check_shape(value, [None])
 

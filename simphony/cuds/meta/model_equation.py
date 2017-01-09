@@ -13,7 +13,6 @@ class ModelEquation(CUDSComponent):
 
         super(ModelEquation, self).__init__(*args, **kwargs)
         self._init_models()
-        self._init_definition()
         self._init_variables()
 
     def supported_parameters(self):

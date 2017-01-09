@@ -20,7 +20,6 @@ class IntegrationStep(SolverParameter):
                  **kwargs):
 
         super(IntegrationStep, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_current(current)
         self._init_size(size)
         self._init_final(final)

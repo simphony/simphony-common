@@ -14,7 +14,6 @@ class CUDSComponent(CUDSItem):
 
         super(CUDSComponent, self).__init__(*args, **kwargs)
         self._init_description(description)
-        self._init_definition()
         self._init_name(name)
 
     def supported_parameters(self):

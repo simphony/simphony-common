@@ -11,8 +11,6 @@ class Dem(ComputationalMethod):
     def __init__(self, *args, **kwargs):
 
         super(Dem, self).__init__(*args, **kwargs)
-        self._init_definition()
-        self._init_physics_equations()
 
     def supported_parameters(self):
         try:

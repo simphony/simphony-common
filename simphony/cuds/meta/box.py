@@ -16,7 +16,6 @@ class Box(Boundary):
     def __init__(self, condition=Default, vector=Default, *args, **kwargs):
 
         super(Box, self).__init__(condition, *args, **kwargs)
-        self._init_definition()
         self._init_vector(vector)
 
     def supported_parameters(self):
@@ -48,7 +47,6 @@ class Box(Boundary):
         self.data[CUBA.CONDITION] = value
 
     def _validate_condition(self, value):
-
         value = validation.cast_data_type(value, 'CONDITION')
         validation.check_shape(value, [3])
 
@@ -89,7 +87,6 @@ class Box(Boundary):
         self.data[CUBA.VECTOR] = value
 
     def _validate_vector(self, value):
-
         value = validation.cast_data_type(value, 'VECTOR')
         validation.check_shape(value, [3])
 

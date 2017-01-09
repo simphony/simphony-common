@@ -12,7 +12,6 @@ class Free(Condition):
 
         super(Free, self).__init__(*args, **kwargs)
         self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:

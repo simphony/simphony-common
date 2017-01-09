@@ -15,7 +15,6 @@ class Dirichlet(Condition):
 
         super(Dirichlet, self).__init__(*args, **kwargs)
         self._init_models()
-        self._init_definition()
         self._init_variable(variable)
         self._init_material(material)
 
@@ -58,7 +57,6 @@ class Dirichlet(Condition):
         self.data[CUBA.VARIABLE] = value
 
     def _validate_variable(self, value):
-
         value = validation.cast_data_type(value, 'VARIABLE')
         validation.check_shape(value, [None])
 
@@ -99,7 +97,6 @@ class Dirichlet(Condition):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape(value, [None])
 

@@ -11,7 +11,6 @@ class Condition(CUDSComponent):
     def __init__(self, *args, **kwargs):
 
         super(Condition, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

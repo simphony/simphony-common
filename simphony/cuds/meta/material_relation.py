@@ -14,7 +14,6 @@ class MaterialRelation(ModelEquation):
     def __init__(self, material, *args, **kwargs):
 
         super(MaterialRelation, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_material(material)
 
     def supported_parameters(self):
@@ -44,7 +43,6 @@ class MaterialRelation(ModelEquation):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape(value, [None])
 

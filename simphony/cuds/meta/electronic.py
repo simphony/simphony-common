@@ -11,7 +11,6 @@ class Electronic(ComputationalModel):
     def __init__(self, *args, **kwargs):
 
         super(Electronic, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

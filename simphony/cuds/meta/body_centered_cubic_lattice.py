@@ -11,7 +11,6 @@ class BodyCenteredCubicLattice(BravaisLattice):
     def __init__(self, *args, **kwargs):
 
         super(BodyCenteredCubicLattice, self).__init__(*args, **kwargs)
-        self._init_definition()
 
     def supported_parameters(self):
         try:

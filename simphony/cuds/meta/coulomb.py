@@ -18,8 +18,6 @@ class Coulomb(PairPotential):
                  **kwargs):
 
         super(Coulomb, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_cutoff_distance(cutoff_distance)
         self._init_dielectric_constant(dielectric_constant)
 

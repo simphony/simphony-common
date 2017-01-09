@@ -11,8 +11,6 @@ class InteratomicPotential(MaterialRelation):
     def __init__(self, *args, **kwargs):
 
         super(InteratomicPotential, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:

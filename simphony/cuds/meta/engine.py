@@ -14,7 +14,6 @@ class Engine(SoftwareTool):
     def __init__(self, engine_feature, *args, **kwargs):
 
         super(Engine, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_engine_feature(engine_feature)
 
     def supported_parameters(self):
@@ -44,7 +43,6 @@ class Engine(SoftwareTool):
         self.data[CUBA.ENGINE_FEATURE] = value
 
     def _validate_engine_feature(self, value):
-
         value = validation.cast_data_type(value, 'ENGINE_FEATURE')
         validation.check_shape(value, [None])
 

@@ -14,7 +14,6 @@ class Version(CUDSItem):
 
         super(Version, self).__init__(*args, **kwargs)
         self._init_minor(minor)
-        self._init_definition()
         self._init_patch(patch)
         self._init_major(major)
         self._init_full(full)

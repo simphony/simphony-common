@@ -13,8 +13,6 @@ class SurfaceTensionRelation(MaterialRelation):
     def __init__(self, material, surface_tension=Default, *args, **kwargs):
 
         super(SurfaceTensionRelation, self).__init__(material, *args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_surface_tension(surface_tension)
 
     def supported_parameters(self):
@@ -50,7 +48,6 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape(value, [2])
 

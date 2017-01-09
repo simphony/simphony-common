@@ -13,7 +13,6 @@ class Node(CUDSComponent):
     def __init__(self, index, *args, **kwargs):
 
         super(Node, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_index(index)
 
     def supported_parameters(self):

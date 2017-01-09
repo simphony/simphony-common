@@ -14,7 +14,6 @@ class Boundary(CUDSComponent):
     def __init__(self, condition, *args, **kwargs):
 
         super(Boundary, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_condition(condition)
 
     def supported_parameters(self):
@@ -44,7 +43,6 @@ class Boundary(CUDSComponent):
         self.data[CUBA.CONDITION] = value
 
     def _validate_condition(self, value):
-
         value = validation.cast_data_type(value, 'CONDITION')
         validation.check_shape(value, [None])
 

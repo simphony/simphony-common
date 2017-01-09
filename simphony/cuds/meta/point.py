@@ -13,7 +13,6 @@ class Point(CUDSItem):
     def __init__(self, position=Default, *args, **kwargs):
 
         super(Point, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_position(position)
 
     def supported_parameters(self):

@@ -13,7 +13,6 @@ class Basis(CUDSComponent):
     def __init__(self, vector=Default, *args, **kwargs):
 
         super(Basis, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_vector(vector)
 
     def supported_parameters(self):
@@ -43,7 +42,6 @@ class Basis(CUDSComponent):
         self.data[CUBA.VECTOR] = value
 
     def _validate_vector(self, value):
-
         value = validation.cast_data_type(value, 'VECTOR')
         validation.check_shape(value, [3])
 

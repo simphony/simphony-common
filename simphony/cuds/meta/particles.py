@@ -14,7 +14,6 @@ class Particles(DataSet):
 
         super(Particles, self).__init__(*args, **kwargs)
         self._init_particle(particle)
-        self._init_definition()
         self._init_bond(bond)
 
     def supported_parameters(self):
@@ -43,7 +42,6 @@ class Particles(DataSet):
         self.data[CUBA.PARTICLE] = value
 
     def _validate_particle(self, value):
-
         value = validation.cast_data_type(value, 'PARTICLE')
         validation.check_shape(value, [None])
 
@@ -87,7 +85,6 @@ class Particles(DataSet):
         self.data[CUBA.BOND] = value
 
     def _validate_bond(self, value):
-
         value = validation.cast_data_type(value, 'BOND')
         validation.check_shape(value, [None])
 

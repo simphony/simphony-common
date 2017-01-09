@@ -18,10 +18,7 @@ class LennardJones_6_12(PairPotential):
                  **kwargs):
 
         super(LennardJones_6_12, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_van_der_waals_radius(van_der_waals_radius)
-        self._init_models()
-        self._init_variables()
         self._init_cutoff_distance(cutoff_distance)
         self._init_energy_well_depth(energy_well_depth)
 

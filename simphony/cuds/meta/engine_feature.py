@@ -16,7 +16,6 @@ class EngineFeature(CUDSItem):
 
         super(EngineFeature, self).__init__(*args, **kwargs)
         self._init_computational_method(computational_method)
-        self._init_definition()
         self._init_physics_equation(physics_equation)
 
     def supported_parameters(self):
@@ -45,7 +44,6 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.COMPUTATIONAL_METHOD] = value
 
     def _validate_computational_method(self, value):
-
         value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
         validation.check_shape(value, [None])
 

@@ -19,7 +19,6 @@ class BravaisLattice(Lattice):
                  **kwargs):
 
         super(BravaisLattice, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_lattice_parameter(lattice_parameter)
         self._init_primitive_cell(primitive_cell)
         self._init_size(size)
@@ -56,7 +55,6 @@ class BravaisLattice(Lattice):
         self.data[CUBA.LATTICE_PARAMETER] = value
 
     def _validate_lattice_parameter(self, value):
-
         value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
         validation.check_shape(value, [3])
 
@@ -121,7 +119,6 @@ class BravaisLattice(Lattice):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-
         value = validation.cast_data_type(value, 'SIZE')
         validation.check_shape(value, [3])
 

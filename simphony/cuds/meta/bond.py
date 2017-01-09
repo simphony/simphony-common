@@ -14,7 +14,6 @@ class Bond(CUDSItem):
 
         super(Bond, self).__init__(*args, **kwargs)
         self._init_particle(particle)
-        self._init_definition()
 
     def supported_parameters(self):
         try:
@@ -40,7 +39,6 @@ class Bond(CUDSItem):
         self.data[CUBA.PARTICLE] = value
 
     def _validate_particle(self, value):
-
         value = validation.cast_data_type(value, 'PARTICLE')
         validation.check_shape(value, [None])
 

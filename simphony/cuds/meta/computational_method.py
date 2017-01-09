@@ -11,7 +11,6 @@ class ComputationalMethod(SolverParameter):
     def __init__(self, *args, **kwargs):
 
         super(ComputationalMethod, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_physics_equations()
 
     def supported_parameters(self):

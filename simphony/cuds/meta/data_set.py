@@ -13,7 +13,6 @@ class DataSet(CUDSComponent):
 
         super(DataSet, self).__init__(*args, **kwargs)
         self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:

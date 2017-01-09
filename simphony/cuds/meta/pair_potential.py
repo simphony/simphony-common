@@ -13,8 +13,6 @@ class PairPotential(InteratomicPotential):
     def __init__(self, material, *args, **kwargs):
 
         super(PairPotential, self).__init__(material, *args, **kwargs)
-        self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:
@@ -46,7 +44,6 @@ class PairPotential(InteratomicPotential):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape(value, [2])
 

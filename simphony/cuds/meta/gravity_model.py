@@ -13,9 +13,6 @@ class GravityModel(PhysicsEquation):
     def __init__(self, acceleration=Default, *args, **kwargs):
 
         super(GravityModel, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
-        self._init_variables()
         self._init_acceleration(acceleration)
 
     def supported_parameters(self):

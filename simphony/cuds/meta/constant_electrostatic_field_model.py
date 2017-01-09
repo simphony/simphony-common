@@ -13,9 +13,6 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     def __init__(self, electrostatic_field=Default, *args, **kwargs):
 
         super(ConstantElectrostaticFieldModel, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
-        self._init_variables()
         self._init_electrostatic_field(electrostatic_field)
 
     def supported_parameters(self):

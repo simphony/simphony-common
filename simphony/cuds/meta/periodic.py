@@ -12,7 +12,6 @@ class Periodic(Condition):
 
         super(Periodic, self).__init__(*args, **kwargs)
         self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:

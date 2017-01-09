@@ -11,8 +11,6 @@ class RheologyModel(PhysicsEquation):
     def __init__(self, *args, **kwargs):
 
         super(RheologyModel, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
 
     def supported_parameters(self):
         try:

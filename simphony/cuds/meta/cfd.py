@@ -30,11 +30,8 @@ class Cfd(PhysicsEquation):
 
         super(Cfd, self).__init__(*args, **kwargs)
         self._init_multiphase_model(multiphase_model)
-        self._init_definition()
         self._init_rheology_model(rheology_model)
         self._init_turbulence_model(turbulence_model)
-        self._init_models()
-        self._init_variables()
         self._init_gravity_model(gravity_model)
         self._init_thermal_model(thermal_model)
         self._init_compressibility_model(compressibility_model)

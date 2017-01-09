@@ -13,7 +13,6 @@ class Mesh(DataSet):
     def __init__(self, point, face, cell, edge, *args, **kwargs):
 
         super(Mesh, self).__init__(*args, **kwargs)
-        self._init_definition()
         self._init_point(point)
         self._init_face(face)
         self._init_cell(cell)
@@ -50,7 +49,6 @@ class Mesh(DataSet):
         self.data[CUBA.POINT] = value
 
     def _validate_point(self, value):
-
         value = validation.cast_data_type(value, 'POINT')
         validation.check_shape(value, [None])
 
@@ -91,7 +89,6 @@ class Mesh(DataSet):
         self.data[CUBA.FACE] = value
 
     def _validate_face(self, value):
-
         value = validation.cast_data_type(value, 'FACE')
         validation.check_shape(value, [None])
 
@@ -132,7 +129,6 @@ class Mesh(DataSet):
         self.data[CUBA.CELL] = value
 
     def _validate_cell(self, value):
-
         value = validation.cast_data_type(value, 'CELL')
         validation.check_shape(value, [None])
 
@@ -173,7 +169,6 @@ class Mesh(DataSet):
         self.data[CUBA.EDGE] = value
 
     def _validate_edge(self, value):
-
         value = validation.cast_data_type(value, 'EDGE')
         validation.check_shape(value, [None])
 

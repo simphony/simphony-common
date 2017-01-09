@@ -13,8 +13,6 @@ class SjkrCohesionForce(MaterialRelation):
     def __init__(self, cohesion_energy_density=Default, *args, **kwargs):
 
         super(SjkrCohesionForce, self).__init__(*args, **kwargs)
-        self._init_models()
-        self._init_definition()
         self._init_cohesion_energy_density(cohesion_energy_density)
 
     def supported_parameters(self):
