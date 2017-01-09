@@ -414,7 +414,7 @@ class VariableProperty(Property):
                         else:
                             yield i
 
-                if hasattr(container, "flatten"):
+                if hasattr(value, "flatten"):
                     flat_array = value.flatten()
                 else:
                     flat_array = flatten(value)
