@@ -358,7 +358,7 @@ class VariableProperty(Property):
         return imp
 
     def __init__(self, qual_cuba_key, default, shape):
-        if self.shape is None:
+        if shape is None:
             raise ValueError("shape cannot be None")
 
         prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
