@@ -1,6 +1,7 @@
 import uuid
 import random
 import collections
+import re
 
 import numpy
 from numpy.testing import assert_equal
@@ -414,5 +415,3 @@ def decode_shape(shape_code):
         max_size = int(max_size) if max_size else numpy.inf
         shapes.append((min_size, max_size))
     return tuple(shapes)
-
-

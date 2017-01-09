@@ -279,6 +279,7 @@ class ABCProperty(object):
         s += self._render_setter()
         s += self._render_validation()
         s += self._render_default()
+        s += '\n'
 
         out.write(utils.indent(s, indent_level))
 
