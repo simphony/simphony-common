@@ -13,9 +13,9 @@ class Berendsen(Thermostat):
     cuba_key = CUBA.BERENDSEN
 
     def __init__(self,
-                 coupling_time,
-                 temperature,
                  material,
+                 coupling_time=Default,
+                 temperature=Default,
                  description=Default,
                  name=Default):
 

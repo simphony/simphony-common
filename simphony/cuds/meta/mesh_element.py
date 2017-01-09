@@ -10,7 +10,7 @@ class MeshElement(CUDSItem):
     """
     cuba_key = CUBA.MESH_ELEMENT
 
-    def __init__(self, point=Default):
+    def __init__(self, point):
 
         super(MeshElement, self).__init__()
         self._init_point(point)

@@ -10,7 +10,10 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     """
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
-    def __init__(self, electrostatic_field, description=Default, name=Default):
+    def __init__(self,
+                 electrostatic_field=Default,
+                 description=Default,
+                 name=Default):
 
         super(ConstantElectrostaticFieldModel, self).__init__(
             description=description, name=name)

@@ -11,7 +11,7 @@ class EngineFeature(CUDSItem):
     """
     cuba_key = CUBA.ENGINE_FEATURE
 
-    def __init__(self, computational_method=Default, physics_equation=Default):
+    def __init__(self, computational_method, physics_equation):
 
         super(EngineFeature, self).__init__()
         self._init_computational_method(computational_method)

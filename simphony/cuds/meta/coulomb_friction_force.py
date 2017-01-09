@@ -12,8 +12,8 @@ class CoulombFrictionForce(MaterialRelation):
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
     def __init__(self,
-                 friction_coefficient,
                  material,
+                 friction_coefficient=Default,
                  description=Default,
                  name=Default):
 

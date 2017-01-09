@@ -14,8 +14,8 @@ class Box(Boundary):
     cuba_key = CUBA.BOX
 
     def __init__(self,
-                 vector,
                  condition=Default,
+                 vector=Default,
                  description=Default,
                  name=Default):
 

@@ -12,7 +12,11 @@ class Neumann(Condition):
     """
     cuba_key = CUBA.NEUMANN
 
-    def __init__(self, variable, material, description=Default, name=Default):
+    def __init__(self,
+                 variable=Default,
+                 material=Default,
+                 description=Default,
+                 name=Default):
 
         super(Neumann, self).__init__(description=description, name=name)
         self._init_models()

@@ -10,7 +10,7 @@ class CUDSComponent(CUDSItem):
     """
     cuba_key = CUBA.CUDS_COMPONENT
 
-    def __init__(self, description, name):
+    def __init__(self, description=Default, name=Default):
 
         super(CUDSComponent, self).__init__()
         self._init_description(description)

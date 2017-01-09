@@ -10,11 +10,7 @@ class Particles(DataSet):
     """
     cuba_key = CUBA.PARTICLES
 
-    def __init__(self,
-                 particle=Default,
-                 bond=Default,
-                 description=Default,
-                 name=Default):
+    def __init__(self, particle, bond, description=Default, name=Default):
 
         super(Particles, self).__init__(description=description, name=name)
         self._init_particle(particle)

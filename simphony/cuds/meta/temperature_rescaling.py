@@ -13,9 +13,9 @@ class TemperatureRescaling(Thermostat):
     cuba_key = CUBA.TEMPERATURE_RESCALING
 
     def __init__(self,
-                 coupling_time,
-                 temperature,
                  material,
+                 coupling_time=Default,
+                 temperature=Default,
                  description=Default,
                  name=Default):
 

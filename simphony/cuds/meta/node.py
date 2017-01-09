@@ -10,7 +10,7 @@ class Node(CUDSComponent):
     """
     cuba_key = CUBA.NODE
 
-    def __init__(self, index=Default, description=Default, name=Default):
+    def __init__(self, index, description=Default, name=Default):
 
         super(Node, self).__init__(description=description, name=name)
         self._init_index(index)

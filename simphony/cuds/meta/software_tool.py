@@ -11,7 +11,7 @@ class SoftwareTool(CUDSItem):
     """
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, version):
+    def __init__(self, version=Default):
 
         super(SoftwareTool, self).__init__()
         self._init_version(version)

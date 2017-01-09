@@ -10,7 +10,7 @@ class Origin(CUDSComponent):
     """
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, position, description=Default, name=Default):
+    def __init__(self, position=Default, description=Default, name=Default):
 
         super(Origin, self).__init__(description=description, name=name)
         self._init_position(position)

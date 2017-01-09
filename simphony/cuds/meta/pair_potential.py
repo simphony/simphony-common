@@ -10,11 +10,7 @@ class PairPotential(InteratomicPotential):
     """
     cuba_key = CUBA.PAIR_POTENTIAL
 
-    def __init__(self,
-                 material,
-                 material=Default,
-                 description=Default,
-                 name=Default):
+    def __init__(self, material, description=Default, name=Default):
 
         super(PairPotential, self).__init__(
             material=material, description=description, name=name)

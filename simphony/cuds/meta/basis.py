@@ -10,7 +10,7 @@ class Basis(CUDSComponent):
     """
     cuba_key = CUBA.BASIS
 
-    def __init__(self, vector, description=Default, name=Default):
+    def __init__(self, vector=Default, description=Default, name=Default):
 
         super(Basis, self).__init__(description=description, name=name)
         self._init_vector(vector)

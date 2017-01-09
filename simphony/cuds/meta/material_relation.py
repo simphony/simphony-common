@@ -11,7 +11,7 @@ class MaterialRelation(ModelEquation):
     """
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material=Default, description=Default, name=Default):
+    def __init__(self, material, description=Default, name=Default):
 
         super(MaterialRelation, self).__init__(
             description=description, name=name)

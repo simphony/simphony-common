@@ -10,7 +10,7 @@ class Point(CUDSItem):
     """
     cuba_key = CUBA.POINT
 
-    def __init__(self, position):
+    def __init__(self, position=Default):
 
         super(Point, self).__init__()
         self._init_position(position)

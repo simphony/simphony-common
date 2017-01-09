@@ -11,10 +11,10 @@ class Mesh(DataSet):
     cuba_key = CUBA.MESH
 
     def __init__(self,
-                 point=Default,
-                 face=Default,
-                 cell=Default,
-                 edge=Default,
+                 point,
+                 face,
+                 cell,
+                 edge,
                  description=Default,
                  name=Default):
 

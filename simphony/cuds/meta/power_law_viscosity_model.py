@@ -12,10 +12,10 @@ class PowerLawViscosityModel(RheologyModel):
     cuba_key = CUBA.POWER_LAW_VISCOSITY_MODEL
 
     def __init__(self,
-                 linear_constant,
-                 minimum_viscosity,
-                 maximum_viscosity,
-                 power_law_index,
+                 linear_constant=Default,
+                 minimum_viscosity=Default,
+                 maximum_viscosity=Default,
+                 power_law_index=Default,
                  description=Default,
                  name=Default):
 

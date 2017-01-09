@@ -11,10 +11,10 @@ class BravaisLattice(Lattice):
     cuba_key = CUBA.BRAVAIS_LATTICE
 
     def __init__(self,
-                 lattice_parameter,
-                 size,
-                 primitive_cell=Default,
-                 origin=Default,
+                 primitive_cell,
+                 origin,
+                 lattice_parameter=Default,
+                 size=Default,
                  description=Default,
                  name=Default):
 
