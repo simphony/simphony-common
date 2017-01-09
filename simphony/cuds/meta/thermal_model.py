@@ -9,8 +9,8 @@ class ThermalModel(PhysicsEquation):
     cuba_key = CUBA.THERMAL_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(ThermalModel, self).__init__(*args, **kwargs)
 
+        super(ThermalModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -23,24 +23,11 @@ class ThermalModel(PhysicsEquation):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "Non-isothermal heat transport model"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "Non-isothermal heat transport model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = ['CUBA.TEMPERATURE',
-                           'CUBA.HEAT_CONDUCTIVITY']  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return ['CUBA.TEMPERATURE', 'CUBA.HEAT_CONDUCTIVITY']  # noqa

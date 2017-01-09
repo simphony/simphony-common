@@ -18,8 +18,8 @@ class PowerLawViscosityModel(RheologyModel):
                  power_law_index=Default,
                  *args,
                  **kwargs):
-        super(PowerLawViscosityModel, self).__init__(*args, **kwargs)
 
+        super(PowerLawViscosityModel, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_linear_constant(linear_constant)
         self._init_models()
@@ -40,16 +40,12 @@ class PowerLawViscosityModel(RheologyModel):
             CUBA.MAXIMUM_VISCOSITY,
             CUBA.POWER_LAW_INDEX, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa    
 
     def _init_linear_constant(self, value):
         if value is Default:
-            value = 1e-05
+            value = self._default_linear_constant()
 
         self.linear_constant = value
 
@@ -68,16 +64,15 @@ class PowerLawViscosityModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_linear_constant(self):
+        return 1e-05
 
-    @property
-    def models(self):
-        return self._models
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
     def _init_minimum_viscosity(self, value):
         if value is Default:
-            value = 1e-05
+            value = self._default_minimum_viscosity()
 
         self.minimum_viscosity = value
 
@@ -96,9 +91,12 @@ class PowerLawViscosityModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'MINIMUM_VISCOSITY')
         return value
 
+    def _default_minimum_viscosity(self):
+        return 1e-05
+
     def _init_maximum_viscosity(self, value):
         if value is Default:
-            value = 0.001
+            value = self._default_maximum_viscosity()
 
         self.maximum_viscosity = value
 
@@ -117,9 +115,12 @@ class PowerLawViscosityModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'MAXIMUM_VISCOSITY')
         return value
 
+    def _default_maximum_viscosity(self):
+        return 0.001
+
     def _init_power_law_index(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_power_law_index()
 
         self.power_law_index = value
 
@@ -137,3 +138,6 @@ class PowerLawViscosityModel(RheologyModel):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
+
+    def _default_power_law_index(self):
+        return 1.0

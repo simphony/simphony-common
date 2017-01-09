@@ -9,8 +9,8 @@ class Face(MeshElement):
     cuba_key = CUBA.FACE
 
     def __init__(self, *args, **kwargs):
-        super(Face, self).__init__(*args, **kwargs)
 
+        super(Face, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Face(MeshElement):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Element for storing 2D geometrical objects"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Element for storing 2D geometrical objects"  # noqa

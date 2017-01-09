@@ -9,8 +9,8 @@ class MixtureModel(PhysicsEquation):
     cuba_key = CUBA.MIXTURE_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(MixtureModel, self).__init__(*args, **kwargs)
 
+        super(MixtureModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
 
@@ -22,16 +22,8 @@ class MixtureModel(PhysicsEquation):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Mixture (drift flux) model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Mixture (drift flux) model"  # noqa

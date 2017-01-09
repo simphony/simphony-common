@@ -10,8 +10,8 @@ class IsothermalModel(ThermalModel):
     cuba_key = CUBA.ISOTHERMAL_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(IsothermalModel, self).__init__(*args, **kwargs)
 
+        super(IsothermalModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -24,23 +24,11 @@ class IsothermalModel(ThermalModel):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "Isothermal heat transport model, no transport of heat is assumed"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "Isothermal heat transport model, no transport of heat is assumed"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = []  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return []  # noqa

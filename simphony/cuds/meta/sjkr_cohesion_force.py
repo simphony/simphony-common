@@ -11,8 +11,8 @@ class SjkrCohesionForce(MaterialRelation):
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
     def __init__(self, cohesion_energy_density=Default, *args, **kwargs):
-        super(SjkrCohesionForce, self).__init__(*args, **kwargs)
 
+        super(SjkrCohesionForce, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_cohesion_energy_density(cohesion_energy_density)
@@ -25,23 +25,15 @@ class SjkrCohesionForce(MaterialRelation):
 
         return (CUBA.COHESION_ENERGY_DENSITY, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Additional normal force tending to maintain the contact"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Additional normal force tending to maintain the contact"  # noqa    
 
     def _init_cohesion_energy_density(self, value):
         if value is Default:
-            value = 0.0
+            value = self._default_cohesion_energy_density()
 
         self.cohesion_energy_density = value
 
@@ -59,3 +51,6 @@ class SjkrCohesionForce(MaterialRelation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'COHESION_ENERGY_DENSITY')
         return value
+
+    def _default_cohesion_energy_density(self):
+        return 0.0

@@ -9,8 +9,8 @@ class SinglePhaseModel(MultiphaseModel):
     cuba_key = CUBA.SINGLE_PHASE_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(SinglePhaseModel, self).__init__(*args, **kwargs)
 
+        super(SinglePhaseModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
 
@@ -22,16 +22,8 @@ class SinglePhaseModel(MultiphaseModel):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "A single phase fluid model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A single phase fluid model"  # noqa

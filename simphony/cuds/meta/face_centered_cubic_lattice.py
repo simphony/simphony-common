@@ -9,8 +9,8 @@ class FaceCenteredCubicLattice(BravaisLattice):
     cuba_key = CUBA.FACE_CENTERED_CUBIC_LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(FaceCenteredCubicLattice, self).__init__(*args, **kwargs)
 
+        super(FaceCenteredCubicLattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class FaceCenteredCubicLattice(BravaisLattice):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A face centred cubic lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A face centred cubic lattice"  # noqa

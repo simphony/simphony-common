@@ -9,8 +9,8 @@ class Verlet(ComputationalMethod):
     cuba_key = CUBA.VERLET
 
     def __init__(self, *args, **kwargs):
-        super(Verlet, self).__init__(*args, **kwargs)
 
+        super(Verlet, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_physics_equations()
 
@@ -22,16 +22,8 @@ class Verlet(ComputationalMethod):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Newtonian dynamics integration using verlet algorithm"  # noqa
+    def _default_definition(self):
+        return "Newtonian dynamics integration using verlet algorithm"  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.MOLECULAR_DYNAMICS']  # noqa
-
-    @property
-    def physics_equations(self):
-        return self._physics_equations
+    def _default_physics_equations(self):
+        return ['CUBA.MOLECULAR_DYNAMICS']  # noqa

@@ -10,8 +10,8 @@ class ModelEquation(CUDSComponent):
     cuba_key = CUBA.MODEL_EQUATION
 
     def __init__(self, *args, **kwargs):
-        super(ModelEquation, self).__init__(*args, **kwargs)
 
+        super(ModelEquation, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -25,22 +25,24 @@ class ModelEquation(CUDSComponent):
         return () + base_params
 
     def _init_models(self):
-        self._models = []  # noqa
+        self._models = self._default_models()  # noqa
 
     @property
     def models(self):
         return self._models
 
-    def _init_definition(self):
-        self._definition = "The model equations are represented by all physics equations and material relations according to the RoMM"  # noqa
+    def _default_models(self):
+        return []  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "The model equations are represented by all physics equations and material relations according to the RoMM"  # noqa    
 
     def _init_variables(self):
-        self._variables = []  # noqa
+        self._variables = self._default_variables()  # noqa
 
     @property
     def variables(self):
         return self._variables
+
+    def _default_variables(self):
+        return []  # noqa

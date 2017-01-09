@@ -16,8 +16,8 @@ class LennardJones_6_12(PairPotential):
                  energy_well_depth=Default,
                  *args,
                  **kwargs):
-        super(LennardJones_6_12, self).__init__(*args, **kwargs)
 
+        super(LennardJones_6_12, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_van_der_waals_radius(van_der_waals_radius)
         self._init_models()
@@ -36,16 +36,12 @@ class LennardJones_6_12(PairPotential):
             CUBA.CUTOFF_DISTANCE,
             CUBA.ENERGY_WELL_DEPTH, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A Lennard-Jones 6-12 Potential"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A Lennard-Jones 6-12 Potential"  # noqa    
 
     def _init_van_der_waals_radius(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_van_der_waals_radius()
 
         self.van_der_waals_radius = value
 
@@ -64,23 +60,18 @@ class LennardJones_6_12(PairPotential):
         validation.validate_cuba_keyword(value, 'VAN_DER_WAALS_RADIUS')
         return value
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_van_der_waals_radius(self):
+        return 1.0
 
-    @property
-    def models(self):
-        return self._models
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    def _init_variables(self):
-        self._variables = ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa    
 
     def _init_cutoff_distance(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_cutoff_distance()
 
         self.cutoff_distance = value
 
@@ -99,9 +90,12 @@ class LennardJones_6_12(PairPotential):
         validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
+    def _default_cutoff_distance(self):
+        return 1.0
+
     def _init_energy_well_depth(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_energy_well_depth()
 
         self.energy_well_depth = value
 
@@ -119,3 +113,6 @@ class LennardJones_6_12(PairPotential):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ENERGY_WELL_DEPTH')
         return value
+
+    def _default_energy_well_depth(self):
+        return 1.0

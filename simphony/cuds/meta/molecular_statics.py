@@ -9,8 +9,8 @@ class MolecularStatics(PhysicsEquation):
     cuba_key = CUBA.MOLECULAR_STATICS
 
     def __init__(self, *args, **kwargs):
-        super(MolecularStatics, self).__init__(*args, **kwargs)
 
+        super(MolecularStatics, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -23,23 +23,11 @@ class MolecularStatics(PhysicsEquation):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "Classical atomistic static molecular model"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "Classical atomistic static molecular model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = ['CUBA.POSITION', 'CUBA.FORCE']  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return ['CUBA.POSITION', 'CUBA.FORCE']  # noqa

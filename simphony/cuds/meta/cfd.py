@@ -27,8 +27,8 @@ class Cfd(PhysicsEquation):
                  electrostatic_model=Default,
                  *args,
                  **kwargs):
-        super(Cfd, self).__init__(*args, **kwargs)
 
+        super(Cfd, self).__init__(*args, **kwargs)
         self._init_multiphase_model(multiphase_model)
         self._init_definition()
         self._init_rheology_model(rheology_model)
@@ -57,7 +57,7 @@ class Cfd(PhysicsEquation):
 
     def _init_multiphase_model(self, value):
         if value is Default:
-            value = SinglePhaseModel()
+            value = self._default_multiphase_model()
 
         self.multiphase_model = value
 
@@ -76,16 +76,15 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'MULTIPHASE_MODEL')
         return value
 
-    def _init_definition(self):
-        self._definition = "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa
+    def _default_multiphase_model(self):
+        return SinglePhaseModel()
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa    
 
     def _init_rheology_model(self, value):
         if value is Default:
-            value = NewtonianFluidModel()
+            value = self._default_rheology_model()
 
         self.rheology_model = value
 
@@ -104,9 +103,12 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
         return value
 
+    def _default_rheology_model(self):
+        return NewtonianFluidModel()
+
     def _init_turbulence_model(self, value):
         if value is Default:
-            value = LaminarFlowModel()
+            value = self._default_turbulence_model()
 
         self.turbulence_model = value
 
@@ -125,27 +127,22 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'TURBULENCE_MODEL')
         return value
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_turbulence_model(self):
+        return LaminarFlowModel()
 
-    @property
-    def models(self):
-        return self._models
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    def _init_variables(self):
-        self._variables = [
+    def _default_variables(self):
+        return [
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM', 'CUBA.DENSITY',
             'CUBA.VISCOSITY', 'CUBA.TIME', 'CUBA.STRESS_TENSOR',
             'CUBA.PRESSURE', 'CUBA.DYNAMIC_PRESSURE', 'CUBA.VOLUME_FRACTION'
-        ]  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+        ]  # noqa    
 
     def _init_gravity_model(self, value):
         if value is Default:
-            value = None
+            value = self._default_gravity_model()
 
         self.gravity_model = value
 
@@ -164,9 +161,12 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
         return value
 
+    def _default_gravity_model(self):
+        return None
+
     def _init_thermal_model(self, value):
         if value is Default:
-            value = IsothermalModel()
+            value = self._default_thermal_model()
 
         self.thermal_model = value
 
@@ -185,9 +185,12 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'THERMAL_MODEL')
         return value
 
+    def _default_thermal_model(self):
+        return IsothermalModel()
+
     def _init_compressibility_model(self, value):
         if value is Default:
-            value = IncompressibleFluidModel()
+            value = self._default_compressibility_model()
 
         self.compressibility_model = value
 
@@ -206,9 +209,12 @@ class Cfd(PhysicsEquation):
         validation.validate_cuba_keyword(value, 'COMPRESSIBILITY_MODEL')
         return value
 
+    def _default_compressibility_model(self):
+        return IncompressibleFluidModel()
+
     def _init_electrostatic_model(self, value):
         if value is Default:
-            value = ConstantElectrostaticFieldModel()
+            value = self._default_electrostatic_model()
 
         self.electrostatic_model = value
 
@@ -226,3 +232,6 @@ class Cfd(PhysicsEquation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ELECTROSTATIC_MODEL')
         return value
+
+    def _default_electrostatic_model(self):
+        return ConstantElectrostaticFieldModel()

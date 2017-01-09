@@ -9,8 +9,8 @@ class Cell(MeshElement):
     cuba_key = CUBA.CELL
 
     def __init__(self, *args, **kwargs):
-        super(Cell, self).__init__(*args, **kwargs)
 
+        super(Cell, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Cell(MeshElement):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Element for storing 3D geometrical objects"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Element for storing 3D geometrical objects"  # noqa

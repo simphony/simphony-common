@@ -9,8 +9,8 @@ class ComputationalModel(CUDSComponent):
     cuba_key = CUBA.COMPUTATIONAL_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(ComputationalModel, self).__init__(*args, **kwargs)
 
+        super(ComputationalModel, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class ComputationalModel(CUDSComponent):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Model category according to the RoMM"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Model category according to the RoMM"  # noqa

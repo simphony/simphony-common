@@ -9,8 +9,8 @@ class Particle(Point):
     cuba_key = CUBA.PARTICLE
 
     def __init__(self, *args, **kwargs):
-        super(Particle, self).__init__(*args, **kwargs)
 
+        super(Particle, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Particle(Point):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A particle in a 3D space system"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A particle in a 3D space system"  # noqa

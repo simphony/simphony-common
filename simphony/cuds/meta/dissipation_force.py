@@ -12,8 +12,8 @@ class DissipationForce(MaterialRelation):
     cuba_key = CUBA.DISSIPATION_FORCE
 
     def __init__(self, restitution_coefficient=Default, *args, **kwargs):
-        super(DissipationForce, self).__init__(*args, **kwargs)
 
+        super(DissipationForce, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_restitution_coefficient(restitution_coefficient)
@@ -26,23 +26,15 @@ class DissipationForce(MaterialRelation):
 
         return (CUBA.RESTITUTION_COEFFICIENT, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Viscous normal force describing the inelasticity of particle collisions"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Viscous normal force describing the inelasticity of particle collisions"  # noqa    
 
     def _init_restitution_coefficient(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_restitution_coefficient()
 
         self.restitution_coefficient = value
 
@@ -60,3 +52,6 @@ class DissipationForce(MaterialRelation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'RESTITUTION_COEFFICIENT')
         return value
+
+    def _default_restitution_coefficient(self):
+        return 1.0

@@ -9,8 +9,8 @@ class ElectrostaticModel(PhysicsEquation):
     cuba_key = CUBA.ELECTROSTATIC_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(ElectrostaticModel, self).__init__(*args, **kwargs)
 
+        super(ElectrostaticModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
 
@@ -23,16 +23,8 @@ class ElectrostaticModel(PhysicsEquation):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = []  # noqa
+    def _default_models(self):
+        return []  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Electrostatic model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Electrostatic model"  # noqa

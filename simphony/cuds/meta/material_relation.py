@@ -12,8 +12,8 @@ class MaterialRelation(ModelEquation):
     cuba_key = CUBA.MATERIAL_RELATION
 
     def __init__(self, material, *args, **kwargs):
-        super(MaterialRelation, self).__init__(*args, **kwargs)
 
+        super(MaterialRelation, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_material(material)
 
@@ -25,16 +25,12 @@ class MaterialRelation(ModelEquation):
 
         return (CUBA.MATERIAL, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Material relation which together with the Physics equation gives the model equation"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Material relation which together with the Physics equation gives the model equation"  # noqa    
 
     def _init_material(self, value):
         if value is Default:
-            raise TypeError("Value for material must be specified")
+            value = self._default_material()
 
         self.material = value
 
@@ -60,7 +56,7 @@ class MaterialRelation(ModelEquation):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -69,3 +65,6 @@ class MaterialRelation(ModelEquation):
             validation.validate_cuba_keyword(entry, 'MATERIAL')
 
         return value
+
+    def _default_material(self):
+        raise TypeError("No default for material")

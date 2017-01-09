@@ -9,8 +9,8 @@ class LaminarFlowModel(TurbulenceModel):
     cuba_key = CUBA.LAMINAR_FLOW_MODEL
 
     def __init__(self, *args, **kwargs):
-        super(LaminarFlowModel, self).__init__(*args, **kwargs)
 
+        super(LaminarFlowModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
 
@@ -22,16 +22,8 @@ class LaminarFlowModel(TurbulenceModel):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Laminar model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Laminar model"  # noqa

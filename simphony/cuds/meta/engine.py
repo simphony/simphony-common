@@ -12,8 +12,8 @@ class Engine(SoftwareTool):
     cuba_key = CUBA.ENGINE
 
     def __init__(self, engine_feature, *args, **kwargs):
-        super(Engine, self).__init__(*args, **kwargs)
 
+        super(Engine, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_engine_feature(engine_feature)
 
@@ -25,16 +25,12 @@ class Engine(SoftwareTool):
 
         return (CUBA.ENGINE_FEATURE, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Represents a software tool which is used to solve the physics equation"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Represents a software tool which is used to solve the physics equation"  # noqa    
 
     def _init_engine_feature(self, value):
         if value is Default:
-            raise TypeError("Value for engine_feature must be specified")
+            value = self._default_engine_feature()
 
         self.engine_feature = value
 
@@ -60,7 +56,7 @@ class Engine(SoftwareTool):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -69,3 +65,6 @@ class Engine(SoftwareTool):
             validation.validate_cuba_keyword(entry, 'ENGINE_FEATURE')
 
         return value
+
+    def _default_engine_feature(self):
+        raise TypeError("No default for engine_feature")

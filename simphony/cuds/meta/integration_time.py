@@ -17,8 +17,8 @@ class IntegrationTime(SolverParameter):
                  final=Default,
                  *args,
                  **kwargs):
-        super(IntegrationTime, self).__init__(*args, **kwargs)
 
+        super(IntegrationTime, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_current(current)
         self._init_size(size)
@@ -35,16 +35,12 @@ class IntegrationTime(SolverParameter):
             CUBA.SIZE,
             CUBA.FINAL, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."  # noqa    
 
     def _init_current(self, value):
         if value is Default:
-            value = 0.0
+            value = self._default_current()
 
         self.current = value
 
@@ -63,9 +59,12 @@ class IntegrationTime(SolverParameter):
         validation.validate_cuba_keyword(value, 'CURRENT')
         return value
 
+    def _default_current(self):
+        return 0.0
+
     def _init_size(self, value):
         if value is Default:
-            value = 0.0
+            value = self._default_size()
 
         self.size = value
 
@@ -84,9 +83,12 @@ class IntegrationTime(SolverParameter):
         validation.validate_cuba_keyword(value, 'SIZE')
         return value
 
+    def _default_size(self):
+        return 0.0
+
     def _init_final(self, value):
         if value is Default:
-            value = 0.0
+            value = self._default_final()
 
         self.final = value
 
@@ -104,3 +106,6 @@ class IntegrationTime(SolverParameter):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'FINAL')
         return value
+
+    def _default_final(self):
+        return 0.0

@@ -13,8 +13,8 @@ class EngineFeature(CUDSItem):
 
     def __init__(self, computational_method, physics_equation, *args,
                  **kwargs):
-        super(EngineFeature, self).__init__(*args, **kwargs)
 
+        super(EngineFeature, self).__init__(*args, **kwargs)
         self._init_computational_method(computational_method)
         self._init_definition()
         self._init_physics_equation(physics_equation)
@@ -31,7 +31,7 @@ class EngineFeature(CUDSItem):
 
     def _init_computational_method(self, value):
         if value is Default:
-            raise TypeError("Value for computational_method must be specified")
+            value = self._default_computational_method()
 
         self.computational_method = value
 
@@ -57,7 +57,7 @@ class EngineFeature(CUDSItem):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -67,16 +67,15 @@ class EngineFeature(CUDSItem):
 
         return value
 
-    def _init_definition(self):
-        self._definition = "Provides a physics equation and methods that engines provides to solve them"  # noqa
+    def _default_computational_method(self):
+        raise TypeError("No default for computational_method")
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Provides a physics equation and methods that engines provides to solve them"  # noqa    
 
     def _init_physics_equation(self, value):
         if value is Default:
-            raise TypeError("Value for physics_equation must be specified")
+            value = self._default_physics_equation()
 
         self.physics_equation = value
 
@@ -94,3 +93,6 @@ class EngineFeature(CUDSItem):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value
+
+    def _default_physics_equation(self):
+        raise TypeError("No default for physics_equation")

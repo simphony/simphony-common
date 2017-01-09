@@ -9,8 +9,8 @@ class Condition(CUDSComponent):
     cuba_key = CUBA.CONDITION
 
     def __init__(self, *args, **kwargs):
-        super(Condition, self).__init__(*args, **kwargs)
 
+        super(Condition, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Condition(CUDSComponent):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Condition on boundaries or model entities"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Condition on boundaries or model entities"  # noqa

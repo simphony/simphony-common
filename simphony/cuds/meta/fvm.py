@@ -9,8 +9,8 @@ class Fvm(ComputationalMethod):
     cuba_key = CUBA.FVM
 
     def __init__(self, *args, **kwargs):
-        super(Fvm, self).__init__(*args, **kwargs)
 
+        super(Fvm, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_physics_equations()
 
@@ -22,16 +22,8 @@ class Fvm(ComputationalMethod):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Finite volume method"  # noqa
+    def _default_definition(self):
+        return "Finite volume method"  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.CFD']  # noqa
-
-    @property
-    def physics_equations(self):
-        return self._physics_equations
+    def _default_physics_equations(self):
+        return ['CUBA.CFD']  # noqa

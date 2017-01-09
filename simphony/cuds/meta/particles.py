@@ -11,8 +11,8 @@ class Particles(DataSet):
     cuba_key = CUBA.PARTICLES
 
     def __init__(self, particle, bond, *args, **kwargs):
-        super(Particles, self).__init__(*args, **kwargs)
 
+        super(Particles, self).__init__(*args, **kwargs)
         self._init_particle(particle)
         self._init_definition()
         self._init_bond(bond)
@@ -29,7 +29,7 @@ class Particles(DataSet):
 
     def _init_particle(self, value):
         if value is Default:
-            raise TypeError("Value for particle must be specified")
+            value = self._default_particle()
 
         self.particle = value
 
@@ -55,7 +55,7 @@ class Particles(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -65,16 +65,15 @@ class Particles(DataSet):
 
         return value
 
-    def _init_definition(self):
-        self._definition = "A collection of particles"  # noqa
+    def _default_particle(self):
+        raise TypeError("No default for particle")
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A collection of particles"  # noqa    
 
     def _init_bond(self, value):
         if value is Default:
-            raise TypeError("Value for bond must be specified")
+            value = self._default_bond()
 
         self.bond = value
 
@@ -100,7 +99,7 @@ class Particles(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -109,3 +108,6 @@ class Particles(DataSet):
             validation.validate_cuba_keyword(entry, 'BOND')
 
         return value
+
+    def _default_bond(self):
+        raise TypeError("No default for bond")

@@ -11,8 +11,8 @@ class GravityModel(PhysicsEquation):
     cuba_key = CUBA.GRAVITY_MODEL
 
     def __init__(self, acceleration=Default, *args, **kwargs):
-        super(GravityModel, self).__init__(*args, **kwargs)
 
+        super(GravityModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -26,30 +26,18 @@ class GravityModel(PhysicsEquation):
 
         return (CUBA.ACCELERATION, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "A simple gravity model"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "A simple gravity model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = ['CUBA.ACCELERATION']  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return ['CUBA.ACCELERATION']  # noqa    
 
     def _init_acceleration(self, value):
         if value is Default:
-            value = [0.0, 0.0, 0.0]
+            value = self._default_acceleration()
 
         self.acceleration = value
 
@@ -67,3 +55,6 @@ class GravityModel(PhysicsEquation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ACCELERATION')
         return value
+
+    def _default_acceleration(self):
+        return [0.0, 0.0, 0.0]

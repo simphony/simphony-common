@@ -11,11 +11,10 @@ class PairPotential(InteratomicPotential):
     cuba_key = CUBA.PAIR_POTENTIAL
 
     def __init__(self, material, *args, **kwargs):
-        super(PairPotential, self).__init__(*args, **kwargs)
 
+        super(PairPotential, self).__init__(material, *args, **kwargs)
         self._init_models()
         self._init_definition()
-        self._init_material(material)
 
     def supported_parameters(self):
         try:
@@ -25,23 +24,15 @@ class PairPotential(InteratomicPotential):
 
         return (CUBA.MATERIAL, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Pair Interatomic Potentials Category"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Pair Interatomic Potentials Category"  # noqa    
 
     def _init_material(self, value):
         if value is Default:
-            raise TypeError("Value for material must be specified")
+            value = self._default_material()
 
         self.material = value
 
@@ -67,7 +58,7 @@ class PairPotential(InteratomicPotential):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -76,3 +67,6 @@ class PairPotential(InteratomicPotential):
             validation.validate_cuba_keyword(entry, 'MATERIAL')
 
         return value
+
+    def _default_material(self):
+        raise TypeError("No default for material")

@@ -9,8 +9,8 @@ class Dem(ComputationalMethod):
     cuba_key = CUBA.DEM
 
     def __init__(self, *args, **kwargs):
-        super(Dem, self).__init__(*args, **kwargs)
 
+        super(Dem, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_physics_equations()
 
@@ -22,16 +22,8 @@ class Dem(ComputationalMethod):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Discrete element method"  # noqa
+    def _default_definition(self):
+        return "Discrete element method"  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.GRANULAR_DYNAMICS']  # noqa
-
-    @property
-    def physics_equations(self):
-        return self._physics_equations
+    def _default_physics_equations(self):
+        return ['CUBA.GRANULAR_DYNAMICS']  # noqa

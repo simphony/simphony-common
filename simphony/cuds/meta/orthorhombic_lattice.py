@@ -9,8 +9,8 @@ class OrthorhombicLattice(BravaisLattice):
     cuba_key = CUBA.ORTHORHOMBIC_LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(OrthorhombicLattice, self).__init__(*args, **kwargs)
 
+        super(OrthorhombicLattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class OrthorhombicLattice(BravaisLattice):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "An orthorhombic lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "An orthorhombic lattice"  # noqa

@@ -11,8 +11,8 @@ class Atom(Particle):
     cuba_key = CUBA.ATOM
 
     def __init__(self, mass=Default, *args, **kwargs):
-        super(Atom, self).__init__(*args, **kwargs)
 
+        super(Atom, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_mass(mass)
 
@@ -24,16 +24,12 @@ class Atom(Particle):
 
         return (CUBA.MASS, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "An atom"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "An atom"  # noqa    
 
     def _init_mass(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_mass()
 
         self.mass = value
 
@@ -51,3 +47,6 @@ class Atom(Particle):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'MASS')
         return value
+
+    def _default_mass(self):
+        return 1.0

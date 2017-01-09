@@ -12,8 +12,8 @@ class Dirichlet(Condition):
     cuba_key = CUBA.DIRICHLET
 
     def __init__(self, variable=Default, material=Default, *args, **kwargs):
-        super(Dirichlet, self).__init__(*args, **kwargs)
 
+        super(Dirichlet, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variable(variable)
@@ -30,22 +30,21 @@ class Dirichlet(Condition):
             CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+        self._models = self._default_models()  # noqa
 
     @property
     def models(self):
         return self._models
 
-    def _init_definition(self):
-        self._definition = "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa    
 
     def _init_variable(self, value):
         if value is Default:
-            value = []
+            value = self._default_variable()
 
         self.variable = value
 
@@ -71,7 +70,7 @@ class Dirichlet(Condition):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -81,9 +80,12 @@ class Dirichlet(Condition):
 
         return value
 
+    def _default_variable(self):
+        return []
+
     def _init_material(self, value):
         if value is Default:
-            value = []
+            value = self._default_material()
 
         self.material = value
 
@@ -109,7 +111,7 @@ class Dirichlet(Condition):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -118,3 +120,6 @@ class Dirichlet(Condition):
             validation.validate_cuba_keyword(entry, 'MATERIAL')
 
         return value
+
+    def _default_material(self):
+        return []

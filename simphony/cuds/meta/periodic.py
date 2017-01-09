@@ -9,8 +9,8 @@ class Periodic(Condition):
     cuba_key = CUBA.PERIODIC
 
     def __init__(self, *args, **kwargs):
-        super(Periodic, self).__init__(*args, **kwargs)
 
+        super(Periodic, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
 
@@ -23,18 +23,17 @@ class Periodic(Condition):
         return () + base_params
 
     def _init_models(self):
-        self._models = [
-            'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
-            'CUBA.CONTINUUM'
-        ]  # noqa
+        self._models = self._default_models()  # noqa
 
     @property
     def models(self):
         return self._models
 
-    def _init_definition(self):
-        self._definition = "Periodic boundary condition (PBC)"  # noqa
+    def _default_models(self):
+        return [
+            'CUBA.ELECTRONIC', 'CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC',
+            'CUBA.CONTINUUM'
+        ]  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Periodic boundary condition (PBC)"  # noqa

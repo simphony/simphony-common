@@ -11,8 +11,8 @@ class Mesh(DataSet):
     cuba_key = CUBA.MESH
 
     def __init__(self, point, face, cell, edge, *args, **kwargs):
-        super(Mesh, self).__init__(*args, **kwargs)
 
+        super(Mesh, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_point(point)
         self._init_face(face)
@@ -31,16 +31,12 @@ class Mesh(DataSet):
             CUBA.CELL,
             CUBA.EDGE, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A mesh"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A mesh"  # noqa    
 
     def _init_point(self, value):
         if value is Default:
-            raise TypeError("Value for point must be specified")
+            value = self._default_point()
 
         self.point = value
 
@@ -66,7 +62,7 @@ class Mesh(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -76,9 +72,12 @@ class Mesh(DataSet):
 
         return value
 
+    def _default_point(self):
+        raise TypeError("No default for point")
+
     def _init_face(self, value):
         if value is Default:
-            raise TypeError("Value for face must be specified")
+            value = self._default_face()
 
         self.face = value
 
@@ -104,7 +103,7 @@ class Mesh(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -114,9 +113,12 @@ class Mesh(DataSet):
 
         return value
 
+    def _default_face(self):
+        raise TypeError("No default for face")
+
     def _init_cell(self, value):
         if value is Default:
-            raise TypeError("Value for cell must be specified")
+            value = self._default_cell()
 
         self.cell = value
 
@@ -142,7 +144,7 @@ class Mesh(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -152,9 +154,12 @@ class Mesh(DataSet):
 
         return value
 
+    def _default_cell(self):
+        raise TypeError("No default for cell")
+
     def _init_edge(self, value):
         if value is Default:
-            raise TypeError("Value for edge must be specified")
+            value = self._default_edge()
 
         self.edge = value
 
@@ -180,7 +185,7 @@ class Mesh(DataSet):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -189,3 +194,6 @@ class Mesh(DataSet):
             validation.validate_cuba_keyword(entry, 'EDGE')
 
         return value
+
+    def _default_edge(self):
+        raise TypeError("No default for edge")

@@ -9,8 +9,8 @@ class Sph(ComputationalMethod):
     cuba_key = CUBA.SPH
 
     def __init__(self, *args, **kwargs):
-        super(Sph, self).__init__(*args, **kwargs)
 
+        super(Sph, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_physics_equations()
 
@@ -22,16 +22,8 @@ class Sph(ComputationalMethod):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Smooth particle hydrodynamics"  # noqa
+    def _default_definition(self):
+        return "Smooth particle hydrodynamics"  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_physics_equations(self):
-        self._physics_equations = ['CUBA.CFD']  # noqa
-
-    @property
-    def physics_equations(self):
-        return self._physics_equations
+    def _default_physics_equations(self):
+        return ['CUBA.CFD']  # noqa

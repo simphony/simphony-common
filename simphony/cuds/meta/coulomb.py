@@ -16,8 +16,8 @@ class Coulomb(PairPotential):
                  dielectric_constant=Default,
                  *args,
                  **kwargs):
-        super(Coulomb, self).__init__(*args, **kwargs)
 
+        super(Coulomb, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_cutoff_distance(cutoff_distance)
@@ -33,23 +33,15 @@ class Coulomb(PairPotential):
             CUBA.CUTOFF_DISTANCE,
             CUBA.DIELECTRIC_CONSTANT, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa    
 
     def _init_cutoff_distance(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_cutoff_distance()
 
         self.cutoff_distance = value
 
@@ -68,9 +60,12 @@ class Coulomb(PairPotential):
         validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
+    def _default_cutoff_distance(self):
+        return 1.0
+
     def _init_dielectric_constant(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_dielectric_constant()
 
         self.dielectric_constant = value
 
@@ -88,3 +83,6 @@ class Coulomb(PairPotential):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
         return value
+
+    def _default_dielectric_constant(self):
+        return 1.0

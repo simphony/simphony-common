@@ -12,8 +12,8 @@ class SoftwareTool(CUDSItem):
     cuba_key = CUBA.SOFTWARE_TOOL
 
     def __init__(self, version=Default, *args, **kwargs):
-        super(SoftwareTool, self).__init__(*args, **kwargs)
 
+        super(SoftwareTool, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_version(version)
 
@@ -25,16 +25,12 @@ class SoftwareTool(CUDSItem):
 
         return (CUBA.VERSION, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa    
 
     def _init_version(self, value):
         if value is Default:
-            value = None
+            value = self._default_version()
 
         self.version = value
 
@@ -52,3 +48,6 @@ class SoftwareTool(CUDSItem):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'VERSION')
         return value
+
+    def _default_version(self):
+        return None

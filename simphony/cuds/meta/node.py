@@ -11,8 +11,8 @@ class Node(CUDSComponent):
     cuba_key = CUBA.NODE
 
     def __init__(self, index, *args, **kwargs):
-        super(Node, self).__init__(*args, **kwargs)
 
+        super(Node, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_index(index)
 
@@ -24,16 +24,12 @@ class Node(CUDSComponent):
 
         return (CUBA.INDEX, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A node on a structured grid like lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A node on a structured grid like lattice"  # noqa    
 
     def _init_index(self, value):
         if value is Default:
-            raise TypeError("Value for index must be specified")
+            value = self._default_index()
 
         self.index = value
 
@@ -51,3 +47,6 @@ class Node(CUDSComponent):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'INDEX')
         return value
+
+    def _default_index(self):
+        raise TypeError("No default for index")

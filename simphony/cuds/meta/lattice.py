@@ -9,8 +9,8 @@ class Lattice(DataSet):
     cuba_key = CUBA.LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(Lattice, self).__init__(*args, **kwargs)
 
+        super(Lattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Lattice(DataSet):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A lattice"  # noqa

@@ -9,8 +9,8 @@ class BaseCenteredOrthorhombicLattice(BravaisLattice):
     cuba_key = CUBA.BASE_CENTERED_ORTHORHOMBIC_LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(BaseCenteredOrthorhombicLattice, self).__init__(*args, **kwargs)
 
+        super(BaseCenteredOrthorhombicLattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class BaseCenteredOrthorhombicLattice(BravaisLattice):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A base centered orthorhombic lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A base centered orthorhombic lattice"  # noqa

@@ -9,8 +9,8 @@ class BaseCenteredMonoclinicLattice(BravaisLattice):
     cuba_key = CUBA.BASE_CENTERED_MONOCLINIC_LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(BaseCenteredMonoclinicLattice, self).__init__(*args, **kwargs)
 
+        super(BaseCenteredMonoclinicLattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class BaseCenteredMonoclinicLattice(BravaisLattice):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A base centered monoclinic lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A base centered monoclinic lattice"  # noqa

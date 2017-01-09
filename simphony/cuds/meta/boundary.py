@@ -12,8 +12,8 @@ class Boundary(CUDSComponent):
     cuba_key = CUBA.BOUNDARY
 
     def __init__(self, condition, *args, **kwargs):
-        super(Boundary, self).__init__(*args, **kwargs)
 
+        super(Boundary, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_condition(condition)
 
@@ -25,16 +25,12 @@ class Boundary(CUDSComponent):
 
         return (CUBA.CONDITION, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa    
 
     def _init_condition(self, value):
         if value is Default:
-            raise TypeError("Value for condition must be specified")
+            value = self._default_condition()
 
         self.condition = value
 
@@ -60,7 +56,7 @@ class Boundary(CUDSComponent):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -69,3 +65,6 @@ class Boundary(CUDSComponent):
             validation.validate_cuba_keyword(entry, 'CONDITION')
 
         return value
+
+    def _default_condition(self):
+        raise TypeError("No default for condition")

@@ -9,8 +9,8 @@ class Continuum(ComputationalModel):
     cuba_key = CUBA.CONTINUUM
 
     def __init__(self, *args, **kwargs):
-        super(Continuum, self).__init__(*args, **kwargs)
 
+        super(Continuum, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Continuum(ComputationalModel):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Continuum model category according to the RoMM"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Continuum model category according to the RoMM"  # noqa

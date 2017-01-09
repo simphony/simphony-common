@@ -9,8 +9,8 @@ class Atomistic(ComputationalModel):
     cuba_key = CUBA.ATOMISTIC
 
     def __init__(self, *args, **kwargs):
-        super(Atomistic, self).__init__(*args, **kwargs)
 
+        super(Atomistic, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Atomistic(ComputationalModel):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Atomistic model category according to the RoMM"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Atomistic model category according to the RoMM"  # noqa

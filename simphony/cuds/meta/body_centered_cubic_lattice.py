@@ -9,8 +9,8 @@ class BodyCenteredCubicLattice(BravaisLattice):
     cuba_key = CUBA.BODY_CENTERED_CUBIC_LATTICE
 
     def __init__(self, *args, **kwargs):
-        super(BodyCenteredCubicLattice, self).__init__(*args, **kwargs)
 
+        super(BodyCenteredCubicLattice, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class BodyCenteredCubicLattice(BravaisLattice):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "A body centred cubic lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A body centred cubic lattice"  # noqa

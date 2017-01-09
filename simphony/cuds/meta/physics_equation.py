@@ -9,8 +9,8 @@ class PhysicsEquation(ModelEquation):
     cuba_key = CUBA.PHYSICS_EQUATION
 
     def __init__(self, *args, **kwargs):
-        super(PhysicsEquation, self).__init__(*args, **kwargs)
 
+        super(PhysicsEquation, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class PhysicsEquation(ModelEquation):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Physics equation"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Physics equation"  # noqa

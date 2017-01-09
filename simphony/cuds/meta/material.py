@@ -10,8 +10,8 @@ class Material(CUDSComponent):
     cuba_key = CUBA.MATERIAL
 
     def __init__(self, *args, **kwargs):
-        super(Material, self).__init__(*args, **kwargs)
 
+        super(Material, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -22,9 +22,5 @@ class Material(CUDSComponent):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Definition of a material and its properties in the data container"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Definition of a material and its properties in the data container"  # noqa

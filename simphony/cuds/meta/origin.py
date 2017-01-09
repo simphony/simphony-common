@@ -11,8 +11,8 @@ class Origin(CUDSComponent):
     cuba_key = CUBA.ORIGIN
 
     def __init__(self, position=Default, *args, **kwargs):
-        super(Origin, self).__init__(*args, **kwargs)
 
+        super(Origin, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_position(position)
 
@@ -24,16 +24,12 @@ class Origin(CUDSComponent):
 
         return (CUBA.POSITION, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "The origin of a space system"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "The origin of a space system"  # noqa    
 
     def _init_position(self, value):
         if value is Default:
-            value = [0, 0, 0]
+            value = self._default_position()
 
         self.position = value
 
@@ -51,3 +47,6 @@ class Origin(CUDSComponent):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'POSITION')
         return value
+
+    def _default_position(self):
+        return [0, 0, 0]

@@ -10,8 +10,8 @@ class MolecularDynamics(PhysicsEquation):
     cuba_key = CUBA.MOLECULAR_DYNAMICS
 
     def __init__(self, *args, **kwargs):
-        super(MolecularDynamics, self).__init__(*args, **kwargs)
 
+        super(MolecularDynamics, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -24,26 +24,14 @@ class MolecularDynamics(PhysicsEquation):
 
         return () + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "Classical atomistic molecular dynamics using Newtons equations of motion"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "Classical atomistic molecular dynamics using Newtons equations of motion"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = [
+    def _default_variables(self):
+        return [
             'CUBA.POSITION', 'CUBA.VELOCITY', 'CUBA.MOMENTUM',
             'CUBA.ACCELERATION', 'CUBA.FORCE'
         ]  # noqa
-
-    @property
-    def variables(self):
-        return self._variables

@@ -11,11 +11,10 @@ class SurfaceTensionRelation(MaterialRelation):
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
     def __init__(self, material, surface_tension=Default, *args, **kwargs):
-        super(SurfaceTensionRelation, self).__init__(*args, **kwargs)
 
+        super(SurfaceTensionRelation, self).__init__(material, *args, **kwargs)
         self._init_models()
         self._init_definition()
-        self._init_material(material)
         self._init_surface_tension(surface_tension)
 
     def supported_parameters(self):
@@ -29,23 +28,15 @@ class SurfaceTensionRelation(MaterialRelation):
             CUBA.MATERIAL,
             CUBA.SURFACE_TENSION, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Surface tension relation between two fluids"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Surface tension relation between two fluids"  # noqa    
 
     def _init_material(self, value):
         if value is Default:
-            raise TypeError("Value for material must be specified")
+            value = self._default_material()
 
         self.material = value
 
@@ -71,7 +62,7 @@ class SurfaceTensionRelation(MaterialRelation):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -81,9 +72,12 @@ class SurfaceTensionRelation(MaterialRelation):
 
         return value
 
+    def _default_material(self):
+        raise TypeError("No default for material")
+
     def _init_surface_tension(self, value):
         if value is Default:
-            value = 0.07
+            value = self._default_surface_tension()
 
         self.surface_tension = value
 
@@ -101,3 +95,6 @@ class SurfaceTensionRelation(MaterialRelation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
         return value
+
+    def _default_surface_tension(self):
+        return 0.07

@@ -14,10 +14,9 @@ class Box(Boundary):
     cuba_key = CUBA.BOX
 
     def __init__(self, condition=Default, vector=Default, *args, **kwargs):
-        super(Box, self).__init__(*args, **kwargs)
 
+        super(Box, self).__init__(condition, *args, **kwargs)
         self._init_definition()
-        self._init_condition(condition)
         self._init_vector(vector)
 
     def supported_parameters(self):
@@ -30,16 +29,12 @@ class Box(Boundary):
             CUBA.CONDITION,
             CUBA.VECTOR, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa    
 
     def _init_condition(self, value):
         if value is Default:
-            value = None
+            value = self._default_condition()
 
         self.condition = value
 
@@ -65,7 +60,7 @@ class Box(Boundary):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -75,9 +70,12 @@ class Box(Boundary):
 
         return value
 
+    def _default_condition(self):
+        return None
+
     def _init_vector(self, value):
         if value is Default:
-            value = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            value = self._default_vector()
 
         self.vector = value
 
@@ -103,7 +101,7 @@ class Box(Boundary):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -112,3 +110,6 @@ class Box(Boundary):
             validation.validate_cuba_keyword(entry, 'VECTOR')
 
         return value
+
+    def _default_vector(self):
+        return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

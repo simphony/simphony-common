@@ -11,8 +11,8 @@ class CUDSComponent(CUDSItem):
     cuba_key = CUBA.CUDS_COMPONENT
 
     def __init__(self, description=Default, name=Default, *args, **kwargs):
-        super(CUDSComponent, self).__init__(*args, **kwargs)
 
+        super(CUDSComponent, self).__init__(*args, **kwargs)
         self._init_description(description)
         self._init_definition()
         self._init_name(name)
@@ -29,7 +29,7 @@ class CUDSComponent(CUDSItem):
 
     def _init_description(self, value):
         if value is Default:
-            value = ""
+            value = self._default_description()
 
         self.description = value
 
@@ -48,16 +48,15 @@ class CUDSComponent(CUDSItem):
         validation.validate_cuba_keyword(value, 'DESCRIPTION')
         return value
 
-    def _init_definition(self):
-        self._definition = "Base data type for the CUDS components"  # noqa
+    def _default_description(self):
+        return ""
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Base data type for the CUDS components"  # noqa    
 
     def _init_name(self, value):
         if value is Default:
-            value = ""
+            value = self._default_name()
 
         self.name = value
 
@@ -75,3 +74,6 @@ class CUDSComponent(CUDSItem):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'NAME')
         return value
+
+    def _default_name(self):
+        return ""

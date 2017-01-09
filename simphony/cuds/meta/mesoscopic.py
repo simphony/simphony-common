@@ -9,8 +9,8 @@ class Mesoscopic(ComputationalModel):
     cuba_key = CUBA.MESOSCOPIC
 
     def __init__(self, *args, **kwargs):
-        super(Mesoscopic, self).__init__(*args, **kwargs)
 
+        super(Mesoscopic, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Mesoscopic(ComputationalModel):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Mesoscopic model category according to the RoMM"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Mesoscopic model category according to the RoMM"  # noqa

@@ -11,8 +11,8 @@ class Version(CUDSItem):
     cuba_key = CUBA.VERSION
 
     def __init__(self, minor, patch, major, full, *args, **kwargs):
-        super(Version, self).__init__(*args, **kwargs)
 
+        super(Version, self).__init__(*args, **kwargs)
         self._init_minor(minor)
         self._init_definition()
         self._init_patch(patch)
@@ -33,7 +33,7 @@ class Version(CUDSItem):
 
     def _init_minor(self, value):
         if value is Default:
-            raise TypeError("Value for minor must be specified")
+            value = self._default_minor()
 
         self.minor = value
 
@@ -52,16 +52,15 @@ class Version(CUDSItem):
         validation.validate_cuba_keyword(value, 'MINOR')
         return value
 
-    def _init_definition(self):
-        self._definition = "Version of a software tool used in a simulation"  # noqa
+    def _default_minor(self):
+        raise TypeError("No default for minor")
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Version of a software tool used in a simulation"  # noqa    
 
     def _init_patch(self, value):
         if value is Default:
-            raise TypeError("Value for patch must be specified")
+            value = self._default_patch()
 
         self.patch = value
 
@@ -80,9 +79,12 @@ class Version(CUDSItem):
         validation.validate_cuba_keyword(value, 'PATCH')
         return value
 
+    def _default_patch(self):
+        raise TypeError("No default for patch")
+
     def _init_major(self, value):
         if value is Default:
-            raise TypeError("Value for major must be specified")
+            value = self._default_major()
 
         self.major = value
 
@@ -101,9 +103,12 @@ class Version(CUDSItem):
         validation.validate_cuba_keyword(value, 'MAJOR')
         return value
 
+    def _default_major(self):
+        raise TypeError("No default for major")
+
     def _init_full(self, value):
         if value is Default:
-            raise TypeError("Value for full must be specified")
+            value = self._default_full()
 
         self.full = value
 
@@ -121,3 +126,6 @@ class Version(CUDSItem):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'FULL')
         return value
+
+    def _default_full(self):
+        raise TypeError("No default for full")

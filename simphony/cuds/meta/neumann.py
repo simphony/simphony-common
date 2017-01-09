@@ -13,8 +13,8 @@ class Neumann(Condition):
     cuba_key = CUBA.NEUMANN
 
     def __init__(self, variable=Default, material=Default, *args, **kwargs):
-        super(Neumann, self).__init__(*args, **kwargs)
 
+        super(Neumann, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variable(variable)
@@ -31,22 +31,21 @@ class Neumann(Condition):
             CUBA.MATERIAL, ) + base_params
 
     def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+        self._models = self._default_models()  # noqa
 
     @property
     def models(self):
         return self._models
 
-    def _init_definition(self):
-        self._definition = "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."  # noqa
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain."  # noqa    
 
     def _init_variable(self, value):
         if value is Default:
-            value = []
+            value = self._default_variable()
 
         self.variable = value
 
@@ -72,7 +71,7 @@ class Neumann(Condition):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -82,9 +81,12 @@ class Neumann(Condition):
 
         return value
 
+    def _default_variable(self):
+        return []
+
     def _init_material(self, value):
         if value is Default:
-            value = []
+            value = self._default_material()
 
         self.material = value
 
@@ -110,7 +112,7 @@ class Neumann(Condition):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -119,3 +121,6 @@ class Neumann(Condition):
             validation.validate_cuba_keyword(entry, 'MATERIAL')
 
         return value
+
+    def _default_material(self):
+        return []

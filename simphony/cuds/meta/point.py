@@ -11,8 +11,8 @@ class Point(CUDSItem):
     cuba_key = CUBA.POINT
 
     def __init__(self, position=Default, *args, **kwargs):
-        super(Point, self).__init__(*args, **kwargs)
 
+        super(Point, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_position(position)
 
@@ -24,16 +24,12 @@ class Point(CUDSItem):
 
         return (CUBA.POSITION, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A point in a 3D space system"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A point in a 3D space system"  # noqa    
 
     def _init_position(self, value):
         if value is Default:
-            value = [0, 0, 0]
+            value = self._default_position()
 
         self.position = value
 
@@ -51,3 +47,6 @@ class Point(CUDSItem):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'POSITION')
         return value
+
+    def _default_position(self):
+        return [0, 0, 0]

@@ -11,8 +11,8 @@ class Bond(CUDSItem):
     cuba_key = CUBA.BOND
 
     def __init__(self, particle, *args, **kwargs):
-        super(Bond, self).__init__(*args, **kwargs)
 
+        super(Bond, self).__init__(*args, **kwargs)
         self._init_particle(particle)
         self._init_definition()
 
@@ -26,7 +26,7 @@ class Bond(CUDSItem):
 
     def _init_particle(self, value):
         if value is Default:
-            raise TypeError("Value for particle must be specified")
+            value = self._default_particle()
 
         self.particle = value
 
@@ -52,7 +52,7 @@ class Bond(CUDSItem):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -62,9 +62,8 @@ class Bond(CUDSItem):
 
         return value
 
-    def _init_definition(self):
-        self._definition = "A bond between two or more atoms or particles"  # noqa
+    def _default_particle(self):
+        raise TypeError("No default for particle")
 
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A bond between two or more atoms or particles"  # noqa

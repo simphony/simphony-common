@@ -11,8 +11,8 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
     cuba_key = CUBA.CONSTANT_ELECTROSTATIC_FIELD_MODEL
 
     def __init__(self, electrostatic_field=Default, *args, **kwargs):
-        super(ConstantElectrostaticFieldModel, self).__init__(*args, **kwargs)
 
+        super(ConstantElectrostaticFieldModel, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_variables()
@@ -27,30 +27,18 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
 
         return (CUBA.ELECTROSTATIC_FIELD, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa
+    def _default_models(self):
+        return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
+    def _default_definition(self):
+        return "A constant electrostatic field model"  # noqa    
 
-    def _init_definition(self):
-        self._definition = "A constant electrostatic field model"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    def _init_variables(self):
-        self._variables = ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']  # noqa
-
-    @property
-    def variables(self):
-        return self._variables
+    def _default_variables(self):
+        return ['CUBA.ELECTRIC_FIELD', 'CUBA.CHARGE']  # noqa    
 
     def _init_electrostatic_field(self, value):
         if value is Default:
-            value = [0.0, 0.0, 0.0]
+            value = self._default_electrostatic_field()
 
         self.electrostatic_field = value
 
@@ -68,3 +56,6 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ELECTROSTATIC_FIELD')
         return value
+
+    def _default_electrostatic_field(self):
+        return [0.0, 0.0, 0.0]

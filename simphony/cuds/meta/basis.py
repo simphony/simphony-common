@@ -11,8 +11,8 @@ class Basis(CUDSComponent):
     cuba_key = CUBA.BASIS
 
     def __init__(self, vector=Default, *args, **kwargs):
-        super(Basis, self).__init__(*args, **kwargs)
 
+        super(Basis, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_vector(vector)
 
@@ -24,16 +24,12 @@ class Basis(CUDSComponent):
 
         return (CUBA.VECTOR, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Space basis vectors (row wise)"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Space basis vectors (row wise)"  # noqa    
 
     def _init_vector(self, value):
         if value is Default:
-            value = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            value = self._default_vector()
 
         self.vector = value
 
@@ -59,7 +55,7 @@ class Basis(CUDSComponent):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -68,3 +64,6 @@ class Basis(CUDSComponent):
             validation.validate_cuba_keyword(entry, 'VECTOR')
 
         return value
+
+    def _default_vector(self):
+        return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

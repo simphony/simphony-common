@@ -17,8 +17,8 @@ class TemperatureRescaling(Thermostat):
                  temperature=Default,
                  *args,
                  **kwargs):
-        super(TemperatureRescaling, self).__init__(*args, **kwargs)
 
+        super(TemperatureRescaling, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_coupling_time(coupling_time)
@@ -35,23 +35,15 @@ class TemperatureRescaling(Thermostat):
             CUBA.COUPLING_TIME,
             CUBA.TEMPERATURE, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath."  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A simple temperature rescaling thermostat. The coupling time specifies how offen the temperature should be relaxed or coupled to the bath."  # noqa    
 
     def _init_coupling_time(self, value):
         if value is Default:
-            value = 1e-06
+            value = self._default_coupling_time()
 
         self.coupling_time = value
 
@@ -70,9 +62,12 @@ class TemperatureRescaling(Thermostat):
         validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
+    def _default_coupling_time(self):
+        return 1e-06
+
     def _init_temperature(self, value):
         if value is Default:
-            value = [0.0, 0.0]
+            value = self._default_temperature()
 
         self.temperature = value
 
@@ -98,7 +93,7 @@ class TemperatureRescaling(Thermostat):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -107,3 +102,6 @@ class TemperatureRescaling(Thermostat):
             validation.validate_cuba_keyword(entry, 'TEMPERATURE')
 
         return value
+
+    def _default_temperature(self):
+        return [0.0, 0.0]

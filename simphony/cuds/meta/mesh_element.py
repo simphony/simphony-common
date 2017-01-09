@@ -11,8 +11,8 @@ class MeshElement(CUDSItem):
     cuba_key = CUBA.MESH_ELEMENT
 
     def __init__(self, point, *args, **kwargs):
-        super(MeshElement, self).__init__(*args, **kwargs)
 
+        super(MeshElement, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_point(point)
 
@@ -24,16 +24,12 @@ class MeshElement(CUDSItem):
 
         return (CUBA.POINT, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "An element for storing geometrical objects"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "An element for storing geometrical objects"  # noqa    
 
     def _init_point(self, value):
         if value is Default:
-            raise TypeError("Value for point must be specified")
+            value = self._default_point()
 
         self.point = value
 
@@ -59,7 +55,7 @@ class MeshElement(CUDSItem):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -68,3 +64,6 @@ class MeshElement(CUDSItem):
             validation.validate_cuba_keyword(entry, 'POINT')
 
         return value
+
+    def _default_point(self):
+        raise TypeError("No default for point")

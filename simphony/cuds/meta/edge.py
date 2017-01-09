@@ -9,8 +9,8 @@ class Edge(MeshElement):
     cuba_key = CUBA.EDGE
 
     def __init__(self, *args, **kwargs):
-        super(Edge, self).__init__(*args, **kwargs)
 
+        super(Edge, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class Edge(MeshElement):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Element for storing 1D geometrical objects"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Element for storing 1D geometrical objects"  # noqa

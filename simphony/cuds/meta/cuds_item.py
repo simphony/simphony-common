@@ -10,8 +10,8 @@ class CUDSItem(object):
     cuba_key = CUBA.CUDS_ITEM
 
     def __init__(self, *args, **kwargs):
-        super(CUDSItem, self).__init__(*args, **kwargs)
 
+        super(CUDSItem, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_data()
         self._init_uuid()
@@ -30,11 +30,14 @@ class CUDSItem(object):
                      if hasattr(c, "cuba_key"))
 
     def _init_definition(self):
-        self._definition = "Root of all CUDS types"  # noqa
+        self._definition = self._default_definition()  # noqa
 
     @property
     def definition(self):
         return self._definition
+
+    def _default_definition(self):
+        return "Root of all CUDS types"  # noqa    
 
     def _init_data(self):
         self._data = DataContainer()

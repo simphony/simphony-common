@@ -12,8 +12,8 @@ class CoulombFrictionForce(MaterialRelation):
     cuba_key = CUBA.COULOMB_FRICTION_FORCE
 
     def __init__(self, friction_coefficient=Default, *args, **kwargs):
-        super(CoulombFrictionForce, self).__init__(*args, **kwargs)
 
+        super(CoulombFrictionForce, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_friction_coefficient(friction_coefficient)
@@ -27,23 +27,15 @@ class CoulombFrictionForce(MaterialRelation):
 
         return (CUBA.FRICTION_COEFFICIENT, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "Shear force accounting for the tangential displacement between contacting particles"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Shear force accounting for the tangential displacement between contacting particles"  # noqa    
 
     def _init_friction_coefficient(self, value):
         if value is Default:
-            value = 0.0
+            value = self._default_friction_coefficient()
 
         self.friction_coefficient = value
 
@@ -61,3 +53,6 @@ class CoulombFrictionForce(MaterialRelation):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'FRICTION_COEFFICIENT')
         return value
+
+    def _default_friction_coefficient(self):
+        return 0.0

@@ -11,8 +11,8 @@ class PrimitiveCell(CUDSComponent):
     cuba_key = CUBA.PRIMITIVE_CELL
 
     def __init__(self, lattice_vectors=Default, *args, **kwargs):
-        super(PrimitiveCell, self).__init__(*args, **kwargs)
 
+        super(PrimitiveCell, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_lattice_vectors(lattice_vectors)
 
@@ -24,16 +24,12 @@ class PrimitiveCell(CUDSComponent):
 
         return (CUBA.LATTICE_VECTORS, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A lattice primitive cell"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A lattice primitive cell"  # noqa    
 
     def _init_lattice_vectors(self, value):
         if value is Default:
-            value = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+            value = self._default_lattice_vectors()
 
         self.lattice_vectors = value
 
@@ -51,3 +47,6 @@ class PrimitiveCell(CUDSComponent):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
         return value
+
+    def _default_lattice_vectors(self):
+        return [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]

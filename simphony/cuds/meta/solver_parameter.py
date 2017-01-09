@@ -9,8 +9,8 @@ class SolverParameter(CUDSComponent):
     cuba_key = CUBA.SOLVER_PARAMETER
 
     def __init__(self, *args, **kwargs):
-        super(SolverParameter, self).__init__(*args, **kwargs)
 
+        super(SolverParameter, self).__init__(*args, **kwargs)
         self._init_definition()
 
     def supported_parameters(self):
@@ -21,9 +21,5 @@ class SolverParameter(CUDSComponent):
 
         return () + base_params
 
-    def _init_definition(self):
-        self._definition = "Solver parameter and metadata"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Solver parameter and metadata"  # noqa

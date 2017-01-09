@@ -17,8 +17,8 @@ class BravaisLattice(Lattice):
                  size=Default,
                  *args,
                  **kwargs):
-        super(BravaisLattice, self).__init__(*args, **kwargs)
 
+        super(BravaisLattice, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_lattice_parameter(lattice_parameter)
         self._init_primitive_cell(primitive_cell)
@@ -37,16 +37,12 @@ class BravaisLattice(Lattice):
             CUBA.SIZE,
             CUBA.ORIGIN, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "A Bravais lattice"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "A Bravais lattice"  # noqa    
 
     def _init_lattice_parameter(self, value):
         if value is Default:
-            value = [1.0, 1.0, 1.0]
+            value = self._default_lattice_parameter()
 
         self.lattice_parameter = value
 
@@ -72,7 +68,7 @@ class BravaisLattice(Lattice):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -82,9 +78,12 @@ class BravaisLattice(Lattice):
 
         return value
 
+    def _default_lattice_parameter(self):
+        return [1.0, 1.0, 1.0]
+
     def _init_primitive_cell(self, value):
         if value is Default:
-            raise TypeError("Value for primitive_cell must be specified")
+            value = self._default_primitive_cell()
 
         self.primitive_cell = value
 
@@ -103,9 +102,12 @@ class BravaisLattice(Lattice):
         validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
+    def _default_primitive_cell(self):
+        raise TypeError("No default for primitive_cell")
+
     def _init_size(self, value):
         if value is Default:
-            value = [1, 1, 1]
+            value = self._default_size()
 
         self.size = value
 
@@ -131,7 +133,7 @@ class BravaisLattice(Lattice):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -141,9 +143,12 @@ class BravaisLattice(Lattice):
 
         return value
 
+    def _default_size(self):
+        return [1, 1, 1]
+
     def _init_origin(self, value):
         if value is Default:
-            raise TypeError("Value for origin must be specified")
+            value = self._default_origin()
 
         self.origin = value
 
@@ -161,3 +166,6 @@ class BravaisLattice(Lattice):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ORIGIN')
         return value
+
+    def _default_origin(self):
+        raise TypeError("No default for origin")

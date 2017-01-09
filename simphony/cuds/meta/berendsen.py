@@ -17,8 +17,8 @@ class Berendsen(Thermostat):
                  temperature=Default,
                  *args,
                  **kwargs):
-        super(Berendsen, self).__init__(*args, **kwargs)
 
+        super(Berendsen, self).__init__(*args, **kwargs)
         self._init_models()
         self._init_definition()
         self._init_coupling_time(coupling_time)
@@ -34,23 +34,15 @@ class Berendsen(Thermostat):
             CUBA.COUPLING_TIME,
             CUBA.TEMPERATURE, ) + base_params
 
-    def _init_models(self):
-        self._models = ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa    
 
-    @property
-    def models(self):
-        return self._models
-
-    def _init_definition(self):
-        self._definition = "The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath."  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath."  # noqa    
 
     def _init_coupling_time(self, value):
         if value is Default:
-            value = 0.0001
+            value = self._default_coupling_time()
 
         self.coupling_time = value
 
@@ -69,9 +61,12 @@ class Berendsen(Thermostat):
         validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
+    def _default_coupling_time(self):
+        return 0.0001
+
     def _init_temperature(self, value):
         if value is Default:
-            value = [0.0, 0.0]
+            value = self._default_temperature()
 
         self.temperature = value
 
@@ -97,7 +92,7 @@ class Berendsen(Thermostat):
                 else:
                     yield i
 
-        if hasattr(container, "flatten"):
+        if hasattr(value, "flatten"):
             flat_array = value.flatten()
         else:
             flat_array = flatten(value)
@@ -106,3 +101,6 @@ class Berendsen(Thermostat):
             validation.validate_cuba_keyword(entry, 'TEMPERATURE')
 
         return value
+
+    def _default_temperature(self):
+        return [0.0, 0.0]

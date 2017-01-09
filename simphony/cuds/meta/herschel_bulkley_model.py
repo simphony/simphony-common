@@ -18,8 +18,8 @@ class HerschelBulkleyModel(RheologyModel):
                  power_law_index=Default,
                  *args,
                  **kwargs):
-        super(HerschelBulkleyModel, self).__init__(*args, **kwargs)
 
+        super(HerschelBulkleyModel, self).__init__(*args, **kwargs)
         self._init_definition()
         self._init_initial_viscosity(initial_viscosity)
         self._init_models()
@@ -40,16 +40,12 @@ class HerschelBulkleyModel(RheologyModel):
             CUBA.LINEAR_CONSTANT,
             CUBA.POWER_LAW_INDEX, ) + base_params
 
-    def _init_definition(self):
-        self._definition = "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
+    def _default_definition(self):
+        return "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa    
 
     def _init_initial_viscosity(self, value):
         if value is Default:
-            value = 0.001
+            value = self._default_initial_viscosity()
 
         self.initial_viscosity = value
 
@@ -68,16 +64,15 @@ class HerschelBulkleyModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'INITIAL_VISCOSITY')
         return value
 
-    def _init_models(self):
-        self._models = ['CUBA.CONTINUUM']  # noqa
+    def _default_initial_viscosity(self):
+        return 0.001
 
-    @property
-    def models(self):
-        return self._models
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa    
 
     def _init_relaxation_time(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_relaxation_time()
 
         self.relaxation_time = value
 
@@ -96,9 +91,12 @@ class HerschelBulkleyModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'RELAXATION_TIME')
         return value
 
+    def _default_relaxation_time(self):
+        return 1.0
+
     def _init_linear_constant(self, value):
         if value is Default:
-            value = 1e-05
+            value = self._default_linear_constant()
 
         self.linear_constant = value
 
@@ -117,9 +115,12 @@ class HerschelBulkleyModel(RheologyModel):
         validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
+    def _default_linear_constant(self):
+        return 1e-05
+
     def _init_power_law_index(self, value):
         if value is Default:
-            value = 1.0
+            value = self._default_power_law_index()
 
         self.power_law_index = value
 
@@ -137,3 +138,6 @@ class HerschelBulkleyModel(RheologyModel):
         validation.check_shape(value, [1])
         validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
+
+    def _default_power_law_index(self):
+        return 1.0
