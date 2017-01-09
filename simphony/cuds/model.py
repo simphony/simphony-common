@@ -5,6 +5,7 @@ based on SimPhoNy metadata.
 """
 import uuid
 
+from simphony.cuds.utils import deprecated
 from .store import MemoryStateDataStore
 from .abc_particles import ABCParticles
 from .abc_lattice import ABCLattice
@@ -159,12 +160,16 @@ class CUDS(object):
         uid = self._name_to_id_map.get(name)
         return self.get_by_uid(uid)
 
+    @deprecated
     def get_by_uid(self, uid):
+        return self.get_by_uuid(uid)
+
+    def get_by_uuid(self, uuid):
         """Get the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        uid: uuid.UUID
+        uuid: uuid.UUID
             uid of the component
 
         Returns
@@ -172,8 +177,8 @@ class CUDS(object):
         component: CUDSComponent
             the corresponding CUDS component
         """
-        if uid in self._map:
-            return self._map[uid]()
+        if uuid in self._map:
+            return self._map[uuid]()
 
     def remove(self, name):
         """Remove the corresponding component from the CUDS computational model.
@@ -201,12 +206,16 @@ class CUDS(object):
         if name in self._name_to_id_map:
             del self._name_to_id_map[name]
 
+    @deprecated
     def remove_by_uid(self, uid):
+        self.remove_by_uuid(uid)
+
+    def remove_by_uuid(self, uuid):
         """Remove the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        uid: uuid.UUID
+        uuid: uuid.UUID
             uid of the component to be removed
 
         Raises
@@ -214,13 +223,13 @@ class CUDS(object):
         KeyError
             if no component exists of the given uid
         """
-        component = self.get_by_uid(uid)
+        component = self.get_by_uid(uuid)
         if not component:
-            raise KeyError('No component exists for %s' % uid)
+            raise KeyError('No component exists for %s' % uuid)
         if self._is_dataset(component):
             self._dataset_store.remove(component.name)
         else:
-            del self._store[uid]
+            del self._store[uuid]
         # Delete object key from the mappings
         if component.name in self._name_to_id_map:
             del self._name_to_id_map[component.name]
