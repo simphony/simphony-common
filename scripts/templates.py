@@ -402,13 +402,24 @@ class VariableProperty(Property):
         else:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
-                import itertools
+
                 value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_shape(value, {shape})
-                for tuple_ in itertools.product(*[range(x) for x in {shape}]):
-                    entry = value
-                    for idx in tuple_:
-                        entry = entry[idx]
+
+                def flatten(container):
+                    for i in container:
+                        if isinstance(i, (list,tuple)):
+                            for j in flatten(i):
+                                yield j
+                        else:
+                            yield i
+
+                if has_attr(container, "flatten"):
+                    flat_array = container.flatten()
+                else:
+                    flat_array = flatten(value)
+
+                for entry in flat_array:
                     validation.validate_cuba_keyword(entry, '{cuba_key}')
 
                 return value
