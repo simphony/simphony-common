@@ -2,6 +2,7 @@ import re
 import shutil
 import tempfile
 import textwrap
+from collections import OrderedDict
 
 from contextlib import contextmanager
 
@@ -166,3 +167,11 @@ def format_docstring(docstring):
 
     out_lines = ['"""'] + out_lines + ['"""']
     return "\n".join(out_lines)
+
+
+def deduplicate(list_):
+    o = OrderedDict()
+    for l in list_:
+        o[l] = l
+    return o.keys()
+

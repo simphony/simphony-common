@@ -197,10 +197,10 @@ class Class(object):
 
         for prop in [p for p in self.hierarchy_properties
                      if isinstance(p, VariableProperty)]:
-            if prop.default is not NoDefault:
-                hierarchy_optional.append(prop.name)
-            else:
+            if prop.default is NoDefault:
                 hierarchy_mandatory.append(prop.name)
+            else:
+                hierarchy_optional.append(prop.name)
 
             pass_down.append(prop.name)
 
@@ -208,8 +208,8 @@ class Class(object):
         cur_class_optional = []
         for prop in [p for p in self.properties
                      if isinstance(p, VariableProperty)]:
-            if (prop.name in hierarchy_mandatory
-                    and prop.default is not NoDefault):
+            if (prop.name in hierarchy_mandatory and
+                    prop.default is not NoDefault):
                 # A property that was mandatory now has a default.
                 hierarchy_mandatory.remove(prop.name)
                 cur_class_optional.append(prop.name)
@@ -221,14 +221,15 @@ class Class(object):
                 hierarchy_optional.remove(prop.name)
                 cur_class_mandatory.append(prop.name)
             else:
-                if prop.default is not NoDefault:
+                if prop.default is NoDefault:
                     cur_class_mandatory.append(prop.name)
                 else:
                     cur_class_optional.append(prop.name)
 
-        return (['self'] + cur_class_mandatory + hierarchy_mandatory,
-                cur_class_optional + hierarchy_optional,
-                pass_down)
+        return (['self'] +
+                utils.deduplicate(cur_class_mandatory + hierarchy_mandatory),
+                utils.deduplicate(cur_class_optional + hierarchy_optional),
+                utils.deduplicate(pass_down))
 
     def _render_supported_parameters(self):
         params = []
