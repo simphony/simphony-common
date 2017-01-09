@@ -14,12 +14,14 @@ class NoseHoover(Thermostat):
     cuba_key = CUBA.NOSE_HOOVER
 
     def __init__(self,
-                 coupling_time=Default,
-                 temperature=Default,
-                 *args,
-                 **kwargs):
+                 coupling_time,
+                 temperature,
+                 material,
+                 description=Default,
+                 name=Default):
 
-        super(NoseHoover, self).__init__(*args, **kwargs)
+        super(NoseHoover, self).__init__(
+            material=material, description=description, name=name)
         self._init_coupling_time(coupling_time)
         self._init_temperature(temperature)
 

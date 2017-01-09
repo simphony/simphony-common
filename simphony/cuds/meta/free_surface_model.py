@@ -8,9 +8,10 @@ class FreeSurfaceModel(PhysicsEquation):
     """
     cuba_key = CUBA.FREE_SURFACE_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(FreeSurfaceModel, self).__init__(*args, **kwargs)
+        super(FreeSurfaceModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:

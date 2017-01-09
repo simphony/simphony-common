@@ -12,14 +12,15 @@ class HerschelBulkleyModel(RheologyModel):
     cuba_key = CUBA.HERSCHEL_BULKLEY_MODEL
 
     def __init__(self,
-                 initial_viscosity=Default,
-                 relaxation_time=Default,
-                 linear_constant=Default,
-                 power_law_index=Default,
-                 *args,
-                 **kwargs):
+                 initial_viscosity,
+                 relaxation_time,
+                 linear_constant,
+                 power_law_index,
+                 description=Default,
+                 name=Default):
 
-        super(HerschelBulkleyModel, self).__init__(*args, **kwargs)
+        super(HerschelBulkleyModel, self).__init__(
+            description=description, name=name)
         self._init_initial_viscosity(initial_viscosity)
         self._init_relaxation_time(relaxation_time)
         self._init_linear_constant(linear_constant)

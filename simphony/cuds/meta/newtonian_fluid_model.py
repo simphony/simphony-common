@@ -9,9 +9,10 @@ class NewtonianFluidModel(RheologyModel):
     """
     cuba_key = CUBA.NEWTONIAN_FLUID_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(NewtonianFluidModel, self).__init__(*args, **kwargs)
+        super(NewtonianFluidModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:

@@ -8,9 +8,9 @@ class Dem(ComputationalMethod):
     """
     cuba_key = CUBA.DEM
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(Dem, self).__init__(*args, **kwargs)
+        super(Dem, self).__init__(description=description, name=name)
 
     def supported_parameters(self):
         try:

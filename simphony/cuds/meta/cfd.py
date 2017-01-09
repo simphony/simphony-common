@@ -18,17 +18,17 @@ class Cfd(PhysicsEquation):
     cuba_key = CUBA.CFD
 
     def __init__(self,
-                 multiphase_model=Default,
-                 rheology_model=Default,
-                 turbulence_model=Default,
-                 gravity_model=Default,
-                 thermal_model=Default,
-                 compressibility_model=Default,
-                 electrostatic_model=Default,
-                 *args,
-                 **kwargs):
+                 multiphase_model,
+                 rheology_model,
+                 turbulence_model,
+                 gravity_model,
+                 thermal_model,
+                 compressibility_model,
+                 electrostatic_model,
+                 description=Default,
+                 name=Default):
 
-        super(Cfd, self).__init__(*args, **kwargs)
+        super(Cfd, self).__init__(description=description, name=name)
         self._init_multiphase_model(multiphase_model)
         self._init_rheology_model(rheology_model)
         self._init_turbulence_model(turbulence_model)

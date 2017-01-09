@@ -8,9 +8,10 @@ class TurbulenceModel(PhysicsEquation):
     """
     cuba_key = CUBA.TURBULENCE_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(TurbulenceModel, self).__init__(*args, **kwargs)
+        super(TurbulenceModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:

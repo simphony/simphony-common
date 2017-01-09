@@ -8,9 +8,10 @@ class ComputationalMethod(SolverParameter):
     """
     cuba_key = CUBA.COMPUTATIONAL_METHOD
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(ComputationalMethod, self).__init__(*args, **kwargs)
+        super(ComputationalMethod, self).__init__(
+            description=description, name=name)
         self._init_physics_equations()
 
     def supported_parameters(self):

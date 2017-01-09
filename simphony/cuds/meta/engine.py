@@ -11,9 +11,9 @@ class Engine(SoftwareTool):
     """
     cuba_key = CUBA.ENGINE
 
-    def __init__(self, engine_feature, *args, **kwargs):
+    def __init__(self, engine_feature=Default, version=Default):
 
-        super(Engine, self).__init__(*args, **kwargs)
+        super(Engine, self).__init__(version=version)
         self._init_engine_feature(engine_feature)
 
     def supported_parameters(self):

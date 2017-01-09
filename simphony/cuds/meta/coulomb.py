@@ -12,12 +12,18 @@ class Coulomb(PairPotential):
     cuba_key = CUBA.COULOMB
 
     def __init__(self,
-                 cutoff_distance=Default,
-                 dielectric_constant=Default,
-                 *args,
-                 **kwargs):
+                 cutoff_distance,
+                 dielectric_constant,
+                 material,
+                 material,
+                 description=Default,
+                 name=Default):
 
-        super(Coulomb, self).__init__(*args, **kwargs)
+        super(Coulomb, self).__init__(
+            material=material,
+            material=material,
+            description=description,
+            name=name)
         self._init_cutoff_distance(cutoff_distance)
         self._init_dielectric_constant(dielectric_constant)
 

@@ -12,14 +12,11 @@ class IntegrationStep(SolverParameter):
     """
     cuba_key = CUBA.INTEGRATION_STEP
 
-    def __init__(self,
-                 current=Default,
-                 size=Default,
-                 final=Default,
-                 *args,
-                 **kwargs):
+    def __init__(self, current, size, final, description=Default,
+                 name=Default):
 
-        super(IntegrationStep, self).__init__(*args, **kwargs)
+        super(IntegrationStep, self).__init__(
+            description=description, name=name)
         self._init_current(current)
         self._init_size(size)
         self._init_final(final)

@@ -10,9 +10,9 @@ class Bond(CUDSItem):
     """
     cuba_key = CUBA.BOND
 
-    def __init__(self, particle, *args, **kwargs):
+    def __init__(self, particle=Default):
 
-        super(Bond, self).__init__(*args, **kwargs)
+        super(Bond, self).__init__()
         self._init_particle(particle)
 
     def supported_parameters(self):

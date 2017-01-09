@@ -11,14 +11,15 @@ class BirdCarreauModel(RheologyModel):
     cuba_key = CUBA.BIRD_CARREAU_MODEL
 
     def __init__(self,
-                 initial_viscosity=Default,
-                 linear_constant=Default,
-                 maximum_viscosity=Default,
-                 power_law_index=Default,
-                 *args,
-                 **kwargs):
+                 initial_viscosity,
+                 linear_constant,
+                 maximum_viscosity,
+                 power_law_index,
+                 description=Default,
+                 name=Default):
 
-        super(BirdCarreauModel, self).__init__(*args, **kwargs)
+        super(BirdCarreauModel, self).__init__(
+            description=description, name=name)
         self._init_initial_viscosity(initial_viscosity)
         self._init_linear_constant(linear_constant)
         self._init_maximum_viscosity(maximum_viscosity)

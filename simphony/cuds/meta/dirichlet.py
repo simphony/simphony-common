@@ -11,9 +11,9 @@ class Dirichlet(Condition):
     """
     cuba_key = CUBA.DIRICHLET
 
-    def __init__(self, variable=Default, material=Default, *args, **kwargs):
+    def __init__(self, variable, material, description=Default, name=Default):
 
-        super(Dirichlet, self).__init__(*args, **kwargs)
+        super(Dirichlet, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
         self._init_material(material)

@@ -10,9 +10,9 @@ class Empty(Condition):
     """
     cuba_key = CUBA.EMPTY
 
-    def __init__(self, variable=Default, material=Default, *args, **kwargs):
+    def __init__(self, variable, material, description=Default, name=Default):
 
-        super(Empty, self).__init__(*args, **kwargs)
+        super(Empty, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
         self._init_material(material)

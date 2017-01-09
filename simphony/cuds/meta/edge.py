@@ -8,9 +8,9 @@ class Edge(MeshElement):
     """
     cuba_key = CUBA.EDGE
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, point):
 
-        super(Edge, self).__init__(*args, **kwargs)
+        super(Edge, self).__init__(point=point)
 
     def supported_parameters(self):
         try:

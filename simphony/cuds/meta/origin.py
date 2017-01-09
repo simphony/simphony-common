@@ -10,9 +10,9 @@ class Origin(CUDSComponent):
     """
     cuba_key = CUBA.ORIGIN
 
-    def __init__(self, position=Default, *args, **kwargs):
+    def __init__(self, position, description=Default, name=Default):
 
-        super(Origin, self).__init__(*args, **kwargs)
+        super(Origin, self).__init__(description=description, name=name)
         self._init_position(position)
 
     def supported_parameters(self):

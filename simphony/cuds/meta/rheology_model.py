@@ -8,9 +8,9 @@ class RheologyModel(PhysicsEquation):
     """
     cuba_key = CUBA.RHEOLOGY_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(RheologyModel, self).__init__(*args, **kwargs)
+        super(RheologyModel, self).__init__(description=description, name=name)
 
     def supported_parameters(self):
         try:

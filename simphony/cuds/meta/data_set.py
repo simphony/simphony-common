@@ -9,9 +9,9 @@ class DataSet(CUDSComponent):
     """
     cuba_key = CUBA.DATA_SET
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(DataSet, self).__init__(*args, **kwargs)
+        super(DataSet, self).__init__(description=description, name=name)
         self._init_models()
 
     def supported_parameters(self):

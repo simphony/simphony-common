@@ -10,9 +10,9 @@ class PrimitiveCell(CUDSComponent):
     """
     cuba_key = CUBA.PRIMITIVE_CELL
 
-    def __init__(self, lattice_vectors=Default, *args, **kwargs):
+    def __init__(self, lattice_vectors, description=Default, name=Default):
 
-        super(PrimitiveCell, self).__init__(*args, **kwargs)
+        super(PrimitiveCell, self).__init__(description=description, name=name)
         self._init_lattice_vectors(lattice_vectors)
 
     def supported_parameters(self):

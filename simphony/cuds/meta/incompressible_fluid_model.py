@@ -8,9 +8,10 @@ class IncompressibleFluidModel(CompressibilityModel):
     """
     cuba_key = CUBA.INCOMPRESSIBLE_FLUID_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(IncompressibleFluidModel, self).__init__(*args, **kwargs)
+        super(IncompressibleFluidModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:

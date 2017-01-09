@@ -8,9 +8,9 @@ class Electronic(ComputationalModel):
     """
     cuba_key = CUBA.ELECTRONIC
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(Electronic, self).__init__(*args, **kwargs)
+        super(Electronic, self).__init__(description=description, name=name)
 
     def supported_parameters(self):
         try:

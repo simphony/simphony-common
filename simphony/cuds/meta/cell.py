@@ -8,9 +8,9 @@ class Cell(MeshElement):
     """
     cuba_key = CUBA.CELL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, point):
 
-        super(Cell, self).__init__(*args, **kwargs)
+        super(Cell, self).__init__(point=point)
 
     def supported_parameters(self):
         try:

@@ -8,9 +8,9 @@ class Face(MeshElement):
     """
     cuba_key = CUBA.FACE
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, point):
 
-        super(Face, self).__init__(*args, **kwargs)
+        super(Face, self).__init__(point=point)
 
     def supported_parameters(self):
         try:

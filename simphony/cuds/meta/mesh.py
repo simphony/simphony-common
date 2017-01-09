@@ -10,9 +10,15 @@ class Mesh(DataSet):
     """
     cuba_key = CUBA.MESH
 
-    def __init__(self, point, face, cell, edge, *args, **kwargs):
+    def __init__(self,
+                 point=Default,
+                 face=Default,
+                 cell=Default,
+                 edge=Default,
+                 description=Default,
+                 name=Default):
 
-        super(Mesh, self).__init__(*args, **kwargs)
+        super(Mesh, self).__init__(description=description, name=name)
         self._init_point(point)
         self._init_face(face)
         self._init_cell(cell)

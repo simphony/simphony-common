@@ -10,9 +10,15 @@ class SurfaceTensionRelation(MaterialRelation):
     """
     cuba_key = CUBA.SURFACE_TENSION_RELATION
 
-    def __init__(self, material, surface_tension=Default, *args, **kwargs):
+    def __init__(self,
+                 surface_tension,
+                 material,
+                 material=Default,
+                 description=Default,
+                 name=Default):
 
-        super(SurfaceTensionRelation, self).__init__(material, *args, **kwargs)
+        super(SurfaceTensionRelation, self).__init__(
+            material=material, description=description, name=name)
         self._init_surface_tension(surface_tension)
 
     def supported_parameters(self):

@@ -8,9 +8,9 @@ class Fem(ComputationalMethod):
     """
     cuba_key = CUBA.FEM
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(Fem, self).__init__(*args, **kwargs)
+        super(Fem, self).__init__(description=description, name=name)
 
     def supported_parameters(self):
         try:

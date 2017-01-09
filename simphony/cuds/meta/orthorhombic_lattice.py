@@ -8,9 +8,21 @@ class OrthorhombicLattice(BravaisLattice):
     """
     cuba_key = CUBA.ORTHORHOMBIC_LATTICE
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 primitive_cell,
+                 origin,
+                 lattice_parameter=Default,
+                 size=Default,
+                 description=Default,
+                 name=Default):
 
-        super(OrthorhombicLattice, self).__init__(*args, **kwargs)
+        super(OrthorhombicLattice, self).__init__(
+            lattice_parameter=lattice_parameter,
+            primitive_cell=primitive_cell,
+            size=size,
+            origin=origin,
+            description=description,
+            name=name)
 
     def supported_parameters(self):
         try:

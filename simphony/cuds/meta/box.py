@@ -13,9 +13,14 @@ class Box(Boundary):
     """
     cuba_key = CUBA.BOX
 
-    def __init__(self, condition=Default, vector=Default, *args, **kwargs):
+    def __init__(self,
+                 vector,
+                 condition=Default,
+                 description=Default,
+                 name=Default):
 
-        super(Box, self).__init__(condition, *args, **kwargs)
+        super(Box, self).__init__(
+            condition=condition, description=description, name=name)
         self._init_vector(vector)
 
     def supported_parameters(self):

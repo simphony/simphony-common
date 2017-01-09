@@ -9,9 +9,9 @@ class ModelEquation(CUDSComponent):
     """
     cuba_key = CUBA.MODEL_EQUATION
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(ModelEquation, self).__init__(*args, **kwargs)
+        super(ModelEquation, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variables()
 

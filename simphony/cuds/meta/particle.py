@@ -8,9 +8,9 @@ class Particle(Point):
     """
     cuba_key = CUBA.PARTICLE
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, position=Default):
 
-        super(Particle, self).__init__(*args, **kwargs)
+        super(Particle, self).__init__(position=position)
 
     def supported_parameters(self):
         try:

@@ -10,9 +10,9 @@ class Atom(Particle):
     """
     cuba_key = CUBA.ATOM
 
-    def __init__(self, mass=Default, *args, **kwargs):
+    def __init__(self, mass, position=Default):
 
-        super(Atom, self).__init__(*args, **kwargs)
+        super(Atom, self).__init__(position=position)
         self._init_mass(mass)
 
     def supported_parameters(self):

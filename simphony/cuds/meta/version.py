@@ -10,9 +10,13 @@ class Version(CUDSItem):
     """
     cuba_key = CUBA.VERSION
 
-    def __init__(self, minor, patch, major, full, *args, **kwargs):
+    def __init__(self,
+                 minor=Default,
+                 patch=Default,
+                 major=Default,
+                 full=Default):
 
-        super(Version, self).__init__(*args, **kwargs)
+        super(Version, self).__init__()
         self._init_minor(minor)
         self._init_patch(patch)
         self._init_major(major)

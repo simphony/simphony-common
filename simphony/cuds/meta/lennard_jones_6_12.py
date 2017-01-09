@@ -11,13 +11,19 @@ class LennardJones_6_12(PairPotential):
     cuba_key = CUBA.LENNARD_JONES_6_12
 
     def __init__(self,
-                 van_der_waals_radius=Default,
-                 cutoff_distance=Default,
-                 energy_well_depth=Default,
-                 *args,
-                 **kwargs):
+                 van_der_waals_radius,
+                 cutoff_distance,
+                 energy_well_depth,
+                 material,
+                 material,
+                 description=Default,
+                 name=Default):
 
-        super(LennardJones_6_12, self).__init__(*args, **kwargs)
+        super(LennardJones_6_12, self).__init__(
+            material=material,
+            material=material,
+            description=description,
+            name=name)
         self._init_van_der_waals_radius(van_der_waals_radius)
         self._init_cutoff_distance(cutoff_distance)
         self._init_energy_well_depth(energy_well_depth)

@@ -10,9 +10,14 @@ class SjkrCohesionForce(MaterialRelation):
     """
     cuba_key = CUBA.SJKR_COHESION_FORCE
 
-    def __init__(self, cohesion_energy_density=Default, *args, **kwargs):
+    def __init__(self,
+                 cohesion_energy_density,
+                 material,
+                 description=Default,
+                 name=Default):
 
-        super(SjkrCohesionForce, self).__init__(*args, **kwargs)
+        super(SjkrCohesionForce, self).__init__(
+            material=material, description=description, name=name)
         self._init_cohesion_energy_density(cohesion_energy_density)
 
     def supported_parameters(self):

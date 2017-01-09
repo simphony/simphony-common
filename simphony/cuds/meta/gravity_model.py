@@ -10,9 +10,9 @@ class GravityModel(PhysicsEquation):
     """
     cuba_key = CUBA.GRAVITY_MODEL
 
-    def __init__(self, acceleration=Default, *args, **kwargs):
+    def __init__(self, acceleration, description=Default, name=Default):
 
-        super(GravityModel, self).__init__(*args, **kwargs)
+        super(GravityModel, self).__init__(description=description, name=name)
         self._init_acceleration(acceleration)
 
     def supported_parameters(self):

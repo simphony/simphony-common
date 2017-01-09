@@ -9,9 +9,9 @@ class CUDSItem(object):
     """
     cuba_key = CUBA.CUDS_ITEM
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
 
-        super(CUDSItem, self).__init__(*args, **kwargs)
+        super(CUDSItem, self).__init__()
         self._init_definition()
         self._init_data()
         self._init_uuid()

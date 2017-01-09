@@ -8,9 +8,9 @@ class ThermalModel(PhysicsEquation):
     """
     cuba_key = CUBA.THERMAL_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(ThermalModel, self).__init__(*args, **kwargs)
+        super(ThermalModel, self).__init__(description=description, name=name)
 
     def supported_parameters(self):
         try:

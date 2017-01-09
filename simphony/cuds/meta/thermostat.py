@@ -10,9 +10,10 @@ class Thermostat(MaterialRelation):
     """
     cuba_key = CUBA.THERMOSTAT
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, material, description=Default, name=Default):
 
-        super(Thermostat, self).__init__(*args, **kwargs)
+        super(Thermostat, self).__init__(
+            material=material, description=description, name=name)
 
     def supported_parameters(self):
         try:

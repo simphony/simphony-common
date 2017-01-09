@@ -9,9 +9,10 @@ class IsothermalModel(ThermalModel):
     """
     cuba_key = CUBA.ISOTHERMAL_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(IsothermalModel, self).__init__(*args, **kwargs)
+        super(IsothermalModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:

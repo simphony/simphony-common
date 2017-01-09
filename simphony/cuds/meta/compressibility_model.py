@@ -8,9 +8,10 @@ class CompressibilityModel(PhysicsEquation):
     """
     cuba_key = CUBA.COMPRESSIBILITY_MODEL
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, description=Default, name=Default):
 
-        super(CompressibilityModel, self).__init__(*args, **kwargs)
+        super(CompressibilityModel, self).__init__(
+            description=description, name=name)
 
     def supported_parameters(self):
         try:
