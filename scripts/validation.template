@@ -1,4 +1,3 @@
-import re
 import warnings
 
 import numpy
@@ -100,8 +99,7 @@ def validate_cuba_keyword(value, key):
 
         # Check shape, keyword.shape needs to be converted
         # to our shape syntax
-        shape = '({})'.format(str(keyword.shape).strip('[]'))
-        check_shape(value, shape)
+        check_shape(value, keyword.shape)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))

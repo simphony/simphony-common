@@ -31,5 +31,3 @@ class MetaClassGenerator(object):
         # Create an empty __init__.py
         init_path = os.path.join(out_path, '__init__.py')
         open(init_path, 'a').close()
-
-
