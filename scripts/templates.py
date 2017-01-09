@@ -477,7 +477,7 @@ class VariableProperty(Property):
 class DataProperty(FixedProperty):
     """Special data property is handled slightly different"""
     def __init__(self):
-        super(DataProperty, self).__init__("data")
+        super(DataProperty, self).__init__("data", None, False)
 
     def import_required(self):
         return [ShortcutImport("DataContainer")]
@@ -511,7 +511,7 @@ class DataProperty(FixedProperty):
 
 class UUIDProperty(FixedProperty):
     def __init__(self):
-        super(UUIDProperty, self).__init__("uuid")
+        super(UUIDProperty, self).__init__("uuid", None, False)
 
     def import_required(self):
         return [ShortcutImport('uuid')]
