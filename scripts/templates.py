@@ -1,5 +1,6 @@
 import abc
 import textwrap
+from collections import OrderedDict, namedtuple
 
 from scripts.utils import NoDefault
 from . import utils
@@ -91,10 +92,13 @@ class Class(object):
                  class_name,
                  cuba_key,
                  parent_class_name,
+                 hierarchy_properties,
                  docstring=""):
+
         self.class_name = class_name
         self.cuba_key = cuba_key
         self.parent_class_name = parent_class_name
+        self.hierarchy_properties = hierarchy_properties
         self.docstring = docstring
         self.methods = []
         self.properties = []
@@ -144,32 +148,18 @@ class Class(object):
         # We need to take care of the combinations
         # so that the init is well behaved
 
-        mandatory_properties = []
-        optional_properties = []
-        reimplemented_properties = []
-        for prop in [p for p in self.properties
-                     if isinstance(p, VariableProperty)]:
-
-            if prop.default is NoDefault:
-                mandatory_properties.append(prop.name)
-            else:
-                optional_properties.append(prop.name)
-
-            if prop.reimplemented:
-                reimplemented_properties.append(prop.name)
-
-        init_args = ['self']
-        init_args.extend(["{}".format(arg)
-                          for arg in mandatory_properties])
-        init_args.extend(["{}=Default".format(arg)
-                          for arg in optional_properties])
-        init_args.extend(['*args', '**kwargs'])
-
-        # Those we have to pass to the super()
+        mandatory, optional, pass_down = self._compute_init_args_info()
+        init_args = []
         super_init_args = []
-        super_init_args.extend(["{}".format(arg)
-                                for arg in reimplemented_properties])
-        super_init_args.extend(['*args', '**kwargs'])
+
+        for arg in mandatory:
+            init_args.append("{}".format(arg))
+
+        for arg in optional:
+            init_args.append("{}=Default".format(arg))
+
+        for arg in pass_down:
+            super_init_args.append("{}={}".format(arg, arg))
 
         s = textwrap.dedent("""
             def __init__({init_args_str}):
@@ -200,6 +190,46 @@ class Class(object):
                     """.format(prop_name=prop.name)))
 
         return s
+
+    def _compute_init_args_info(self):
+        hierarchy_mandatory = []
+        hierarchy_optional = []
+        pass_down = []
+
+        for prop in [p for p in self.hierarchy_properties
+                     if isinstance(p, VariableProperty)]:
+            if prop.default is not NoDefault:
+                hierarchy_optional.append(prop.name)
+            else:
+                hierarchy_mandatory.append(prop.name)
+
+            pass_down.append(prop.name)
+
+        cur_class_mandatory = []
+        cur_class_optional = []
+        for prop in [p for p in self.properties
+                     if isinstance(p, VariableProperty)]:
+            if (prop.name in hierarchy_mandatory
+                    and prop.default is not NoDefault):
+                # A property that was mandatory now has a default.
+                hierarchy_mandatory.remove(prop.name)
+                cur_class_optional.append(prop.name)
+
+            elif (prop.name in hierarchy_optional and
+                  prop.default is NoDefault):
+                # A property that was optional has been reimplemented
+                # without default
+                hierarchy_optional.remove(prop.name)
+                cur_class_mandatory.append(prop.name)
+            else:
+                if prop.default is not NoDefault:
+                    cur_class_mandatory.append(prop.name)
+                else:
+                    cur_class_optional.append(prop.name)
+
+        return (['self'] + cur_class_mandatory + hierarchy_mandatory,
+                cur_class_optional + hierarchy_optional,
+                pass_down)
 
     def _render_supported_parameters(self):
         params = []
