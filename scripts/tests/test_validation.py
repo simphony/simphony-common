@@ -14,7 +14,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(
             check_shape_at_least(
                 ((1, 2, 3), (4, 5, 6)),  # shape: (2, 3)
-                 (2, 3)))
+                (2, 3)))
 
     def test_validate_cuba_keyword(self):
         ''' Test for valid cases for CUBA keyword values '''

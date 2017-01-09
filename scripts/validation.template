@@ -22,14 +22,14 @@ def check_shape_at_least(value, shape):
         if the `value` does not comply with the required `shape`
     """
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
-    value_shape = numpy.asarray(value).shape or (1,)
+    value_ndim = numpy.asarray(value).shape or (1,)
 
     msg_fmt = ("value has a shape of {value_shape}, "
                "which does not comply with shape: {shape}")
     error_message = msg_fmt.format(value_shape=value_shape,
                                    shape=shape)
 
-    if len(shape) >= len(value_shape):
+    if len(shape) > len(value_shape):
         raise ValueError(error_message)
 
 
