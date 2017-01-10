@@ -516,24 +516,24 @@ class DataProperty(FixedProperty):
         return ""
 
 
-class UUIDProperty(FixedProperty):
+class UIDProperty(FixedProperty):
     def __init__(self):
-        super(UUIDProperty, self).__init__("uuid", None, False)
+        super(UIDProperty, self).__init__("uid", None, False)
 
     def import_required(self):
         return [ShortcutImport('uuid')]
 
     def _render_init(self):
         return textwrap.dedent("""
-            def _init_uuid(self):
-                self.data[CUBA.UUID] = uuid.uuid4()
+            def _init_uid(self):
+                self.data[CUBA.UID] = uuid.uuid4()
         """)
 
     def _render_getter(self):
         return textwrap.dedent("""
             @property
-            def uuid(self):
-                return self.data[CUBA.UUID]
+            def uid(self):
+                return self.data[CUBA.UID]
         """)
 
     def _render_setter(self):
