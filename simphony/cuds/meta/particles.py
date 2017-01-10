@@ -16,9 +16,10 @@ class Particles(DataSet):
         self._init_particle(particle)
         self._init_bond(bond)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Particles, self).supported_parameters()
+            base_params = super(Particles, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class Particles(DataSet):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'PARTICLE')
 
         return value
@@ -71,7 +72,7 @@ class Particles(DataSet):
 
     def _validate_bond(self, value):
         value = validation.cast_data_type(value, 'BOND')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'BOND')
 
         return value

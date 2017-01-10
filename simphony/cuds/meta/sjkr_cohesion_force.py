@@ -20,9 +20,10 @@ class SjkrCohesionForce(MaterialRelation):
             material=material, description=description, name=name)
         self._init_cohesion_energy_density(cohesion_energy_density)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(SjkrCohesionForce, self).supported_parameters()
+            base_params = super(SjkrCohesionForce, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -51,7 +52,7 @@ class SjkrCohesionForce(MaterialRelation):
 
     def _validate_cohesion_energy_density(self, value):
         value = validation.cast_data_type(value, 'COHESION_ENERGY_DENSITY')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'COHESION_ENERGY_DENSITY')
         return value
 

@@ -17,9 +17,10 @@ class EngineFeature(CUDSItem):
         self._init_computational_method(computational_method)
         self._init_physics_equation(physics_equation)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(EngineFeature, self).supported_parameters()
+            base_params = super(EngineFeature, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -44,7 +45,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_computational_method(self, value):
         value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'COMPUTATIONAL_METHOD')
 
         return value
@@ -72,7 +73,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_physics_equation(self, value):
         value = validation.cast_data_type(value, 'PHYSICS_EQUATION')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value
 

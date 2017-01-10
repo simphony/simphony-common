@@ -25,9 +25,10 @@ class IntegrationStep(SolverParameter):
         self._init_size(size)
         self._init_final(final)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(IntegrationStep, self).supported_parameters()
+            base_params = super(IntegrationStep, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -56,7 +57,7 @@ class IntegrationStep(SolverParameter):
 
     def _validate_current(self, value):
         value = validation.cast_data_type(value, 'CURRENT')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'CURRENT')
         return value
 
@@ -80,7 +81,7 @@ class IntegrationStep(SolverParameter):
 
     def _validate_size(self, value):
         value = validation.cast_data_type(value, 'SIZE')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'SIZE')
         return value
 
@@ -104,7 +105,7 @@ class IntegrationStep(SolverParameter):
 
     def _validate_final(self, value):
         value = validation.cast_data_type(value, 'FINAL')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'FINAL')
         return value
 

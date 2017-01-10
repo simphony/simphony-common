@@ -13,9 +13,10 @@ class Mesoscopic(ComputationalModel):
 
         super(Mesoscopic, self).__init__(description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Mesoscopic, self).supported_parameters()
+            base_params = super(Mesoscopic, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

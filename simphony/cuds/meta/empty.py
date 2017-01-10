@@ -21,9 +21,10 @@ class Empty(Condition):
         self._init_variable(variable)
         self._init_material(material)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Empty, self).supported_parameters()
+            base_params = super(Empty, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -61,7 +62,7 @@ class Empty(Condition):
 
     def _validate_variable(self, value):
         value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'VARIABLE')
 
         return value
@@ -86,7 +87,7 @@ class Empty(Condition):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'MATERIAL')
 
         return value

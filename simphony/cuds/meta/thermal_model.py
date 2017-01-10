@@ -13,9 +13,10 @@ class ThermalModel(PhysicsEquation):
 
         super(ThermalModel, self).__init__(description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(ThermalModel, self).supported_parameters()
+            base_params = super(ThermalModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

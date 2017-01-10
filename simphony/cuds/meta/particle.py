@@ -13,9 +13,10 @@ class Particle(Point):
 
         super(Particle, self).__init__(position=position)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Particle, self).supported_parameters()
+            base_params = super(Particle, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

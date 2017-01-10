@@ -15,9 +15,10 @@ class MeshElement(CUDSItem):
         super(MeshElement, self).__init__()
         self._init_point(point)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(MeshElement, self).supported_parameters()
+            base_params = super(MeshElement, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class MeshElement(CUDSItem):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'POINT')
 
         return value

@@ -24,9 +24,10 @@ class Box(Boundary):
             condition=condition, description=description, name=name)
         self._init_vector(vector)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Box, self).supported_parameters()
+            base_params = super(Box, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -54,7 +55,7 @@ class Box(Boundary):
 
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_shape_at_least(value, [3])
+        validation.check_valid_shape(value, [3])
         validation.check_elements(value, [3], 'CONDITION')
 
         return value
@@ -79,7 +80,7 @@ class Box(Boundary):
 
     def _validate_vector(self, value):
         value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_shape_at_least(value, [3])
+        validation.check_valid_shape(value, [3])
         validation.check_elements(value, [3], 'VECTOR')
 
         return value

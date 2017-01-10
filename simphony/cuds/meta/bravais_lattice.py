@@ -25,9 +25,10 @@ class BravaisLattice(Lattice):
         self._init_size(size)
         self._init_origin(origin)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(BravaisLattice, self).supported_parameters()
+            base_params = super(BravaisLattice, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -57,7 +58,7 @@ class BravaisLattice(Lattice):
 
     def _validate_lattice_parameter(self, value):
         value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
-        validation.check_shape_at_least(value, [3])
+        validation.check_valid_shape(value, [3])
         validation.check_elements(value, [3], 'LATTICE_PARAMETER')
 
         return value
@@ -82,7 +83,7 @@ class BravaisLattice(Lattice):
 
     def _validate_primitive_cell(self, value):
         value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
@@ -106,7 +107,7 @@ class BravaisLattice(Lattice):
 
     def _validate_size(self, value):
         value = validation.cast_data_type(value, 'SIZE')
-        validation.check_shape_at_least(value, [3])
+        validation.check_valid_shape(value, [3])
         validation.check_elements(value, [3], 'SIZE')
 
         return value
@@ -131,7 +132,7 @@ class BravaisLattice(Lattice):
 
     def _validate_origin(self, value):
         value = validation.cast_data_type(value, 'ORIGIN')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ORIGIN')
         return value
 

@@ -13,9 +13,10 @@ class Cell(MeshElement):
 
         super(Cell, self).__init__(point=point)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Cell, self).supported_parameters()
+            base_params = super(Cell, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

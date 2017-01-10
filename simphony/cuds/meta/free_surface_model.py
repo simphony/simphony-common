@@ -14,9 +14,10 @@ class FreeSurfaceModel(PhysicsEquation):
         super(FreeSurfaceModel, self).__init__(
             description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(FreeSurfaceModel, self).supported_parameters()
+            base_params = super(FreeSurfaceModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

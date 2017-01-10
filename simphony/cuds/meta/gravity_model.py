@@ -16,9 +16,10 @@ class GravityModel(PhysicsEquation):
         super(GravityModel, self).__init__(description=description, name=name)
         self._init_acceleration(acceleration)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(GravityModel, self).supported_parameters()
+            base_params = super(GravityModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -50,7 +51,7 @@ class GravityModel(PhysicsEquation):
 
     def _validate_acceleration(self, value):
         value = validation.cast_data_type(value, 'ACCELERATION')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ACCELERATION')
         return value
 

@@ -5,7 +5,7 @@ import numpy
 from scripts.utils import to_camel_case
 
 
-def check_shape_at_least(value, shape):
+def check_valid_shape(value, shape):
     """ Check if `value` is a sequence that comply with `shape`
 
     Parameters
@@ -30,6 +30,10 @@ def check_shape_at_least(value, shape):
 
     if len(shape) > len(value_shape):
         raise ValueError(error_message)
+
+    for s1, s2 in zip(shape, value_shape):
+        if s1 != s2:
+            raise ValueError(error_message)
 
 
 def validate_cuba_keyword(value, key):

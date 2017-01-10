@@ -25,9 +25,10 @@ class TetragonalLattice(BravaisLattice):
             description=description,
             name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(TetragonalLattice, self).supported_parameters()
+            base_params = super(TetragonalLattice, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

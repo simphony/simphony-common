@@ -16,9 +16,10 @@ class ModelEquation(CUDSComponent):
         self._init_models()
         self._init_variables()
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(ModelEquation, self).supported_parameters()
+            base_params = super(ModelEquation, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

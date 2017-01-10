@@ -18,9 +18,10 @@ class Version(CUDSItem):
         self._init_major(major)
         self._init_full(full)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Version, self).supported_parameters()
+            base_params = super(Version, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -47,7 +48,7 @@ class Version(CUDSItem):
 
     def _validate_minor(self, value):
         value = validation.cast_data_type(value, 'MINOR')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'MINOR')
         return value
 
@@ -74,7 +75,7 @@ class Version(CUDSItem):
 
     def _validate_patch(self, value):
         value = validation.cast_data_type(value, 'PATCH')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'PATCH')
         return value
 
@@ -98,7 +99,7 @@ class Version(CUDSItem):
 
     def _validate_major(self, value):
         value = validation.cast_data_type(value, 'MAJOR')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'MAJOR')
         return value
 
@@ -122,7 +123,7 @@ class Version(CUDSItem):
 
     def _validate_full(self, value):
         value = validation.cast_data_type(value, 'FULL')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'FULL')
         return value
 

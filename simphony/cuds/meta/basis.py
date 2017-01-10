@@ -15,9 +15,10 @@ class Basis(CUDSComponent):
         super(Basis, self).__init__(description=description, name=name)
         self._init_vector(vector)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Basis, self).supported_parameters()
+            base_params = super(Basis, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class Basis(CUDSComponent):
 
     def _validate_vector(self, value):
         value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_shape_at_least(value, [3])
+        validation.check_valid_shape(value, [3])
         validation.check_elements(value, [3], 'VECTOR')
 
         return value

@@ -13,9 +13,10 @@ class KsDft(PhysicsEquation):
 
         super(KsDft, self).__init__(description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(KsDft, self).supported_parameters()
+            base_params = super(KsDft, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

@@ -13,9 +13,10 @@ class Edge(MeshElement):
 
         super(Edge, self).__init__(point=point)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Edge, self).supported_parameters()
+            base_params = super(Edge, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

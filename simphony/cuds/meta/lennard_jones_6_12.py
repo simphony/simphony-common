@@ -24,9 +24,10 @@ class LennardJones_6_12(PairPotential):
         self._init_cutoff_distance(cutoff_distance)
         self._init_energy_well_depth(energy_well_depth)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(LennardJones_6_12, self).supported_parameters()
+            base_params = super(LennardJones_6_12, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -55,7 +56,7 @@ class LennardJones_6_12(PairPotential):
 
     def _validate_van_der_waals_radius(self, value):
         value = validation.cast_data_type(value, 'VAN_DER_WAALS_RADIUS')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'VAN_DER_WAALS_RADIUS')
         return value
 
@@ -85,7 +86,7 @@ class LennardJones_6_12(PairPotential):
 
     def _validate_cutoff_distance(self, value):
         value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
@@ -109,7 +110,7 @@ class LennardJones_6_12(PairPotential):
 
     def _validate_energy_well_depth(self, value):
         value = validation.cast_data_type(value, 'ENERGY_WELL_DEPTH')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'ENERGY_WELL_DEPTH')
         return value
 

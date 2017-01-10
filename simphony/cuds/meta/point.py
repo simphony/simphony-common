@@ -15,9 +15,10 @@ class Point(CUDSItem):
         super(Point, self).__init__()
         self._init_position(position)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Point, self).supported_parameters()
+            base_params = super(Point, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class Point(CUDSItem):
 
     def _validate_position(self, value):
         value = validation.cast_data_type(value, 'POSITION')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'POSITION')
         return value
 

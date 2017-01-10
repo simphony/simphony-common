@@ -15,9 +15,10 @@ class Atom(Particle):
         super(Atom, self).__init__(position=position)
         self._init_mass(mass)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Atom, self).supported_parameters()
+            base_params = super(Atom, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class Atom(Particle):
 
     def _validate_mass(self, value):
         value = validation.cast_data_type(value, 'MASS')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'MASS')
         return value
 

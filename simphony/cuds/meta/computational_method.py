@@ -15,10 +15,11 @@ class ComputationalMethod(SolverParameter):
             description=description, name=name)
         self._init_physics_equations()
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
             base_params = super(ComputationalMethod,
-                                self).supported_parameters()
+                                cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

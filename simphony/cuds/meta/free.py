@@ -14,9 +14,10 @@ class Free(Condition):
         super(Free, self).__init__(description=description, name=name)
         self._init_models()
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Free, self).supported_parameters()
+            base_params = super(Free, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

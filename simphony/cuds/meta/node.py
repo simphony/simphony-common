@@ -15,9 +15,10 @@ class Node(CUDSComponent):
         super(Node, self).__init__(description=description, name=name)
         self._init_index(index)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Node, self).supported_parameters()
+            base_params = super(Node, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class Node(CUDSComponent):
 
     def _validate_index(self, value):
         value = validation.cast_data_type(value, 'INDEX')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'INDEX')
         return value
 

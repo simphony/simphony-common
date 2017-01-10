@@ -24,10 +24,11 @@ class TemperatureRescaling(Thermostat):
         self._init_coupling_time(coupling_time)
         self._init_temperature(temperature)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
             base_params = super(TemperatureRescaling,
-                                self).supported_parameters()
+                                cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -58,7 +59,7 @@ class TemperatureRescaling(Thermostat):
 
     def _validate_coupling_time(self, value):
         value = validation.cast_data_type(value, 'COUPLING_TIME')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
@@ -82,7 +83,7 @@ class TemperatureRescaling(Thermostat):
 
     def _validate_temperature(self, value):
         value = validation.cast_data_type(value, 'TEMPERATURE')
-        validation.check_shape_at_least(value, [2])
+        validation.check_valid_shape(value, [2])
         validation.check_elements(value, [2], 'TEMPERATURE')
 
         return value

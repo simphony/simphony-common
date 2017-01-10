@@ -15,9 +15,10 @@ class MolecularDynamics(PhysicsEquation):
         super(MolecularDynamics, self).__init__(
             description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(MolecularDynamics, self).supported_parameters()
+            base_params = super(MolecularDynamics, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

@@ -16,9 +16,10 @@ class Boundary(CUDSComponent):
         super(Boundary, self).__init__(description=description, name=name)
         self._init_condition(condition)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Boundary, self).supported_parameters()
+            base_params = super(Boundary, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -44,7 +45,7 @@ class Boundary(CUDSComponent):
 
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'CONDITION')
 
         return value

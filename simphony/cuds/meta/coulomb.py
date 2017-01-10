@@ -23,9 +23,10 @@ class Coulomb(PairPotential):
         self._init_cutoff_distance(cutoff_distance)
         self._init_dielectric_constant(dielectric_constant)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Coulomb, self).supported_parameters()
+            base_params = super(Coulomb, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -56,7 +57,7 @@ class Coulomb(PairPotential):
 
     def _validate_cutoff_distance(self, value):
         value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
@@ -80,7 +81,7 @@ class Coulomb(PairPotential):
 
     def _validate_dielectric_constant(self, value):
         value = validation.cast_data_type(value, 'DIELECTRIC_CONSTANT')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
         return value
 

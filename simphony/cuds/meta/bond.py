@@ -15,9 +15,10 @@ class Bond(CUDSItem):
         super(Bond, self).__init__()
         self._init_particle(particle)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Bond, self).supported_parameters()
+            base_params = super(Bond, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -40,7 +41,7 @@ class Bond(CUDSItem):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'PARTICLE')
 
         return value

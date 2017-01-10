@@ -14,9 +14,10 @@ class Material(CUDSComponent):
 
         super(Material, self).__init__(description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Material, self).supported_parameters()
+            base_params = super(Material, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

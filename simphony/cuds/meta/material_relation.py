@@ -17,9 +17,10 @@ class MaterialRelation(ModelEquation):
             description=description, name=name)
         self._init_material(material)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(MaterialRelation, self).supported_parameters()
+            base_params = super(MaterialRelation, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -45,7 +46,7 @@ class MaterialRelation(ModelEquation):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'MATERIAL')
 
         return value

@@ -24,9 +24,10 @@ class Mesh(DataSet):
         self._init_cell(cell)
         self._init_edge(edge)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Mesh, self).supported_parameters()
+            base_params = super(Mesh, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -56,7 +57,7 @@ class Mesh(DataSet):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'POINT')
 
         return value
@@ -81,7 +82,7 @@ class Mesh(DataSet):
 
     def _validate_face(self, value):
         value = validation.cast_data_type(value, 'FACE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'FACE')
 
         return value
@@ -106,7 +107,7 @@ class Mesh(DataSet):
 
     def _validate_cell(self, value):
         value = validation.cast_data_type(value, 'CELL')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'CELL')
 
         return value
@@ -131,7 +132,7 @@ class Mesh(DataSet):
 
     def _validate_edge(self, value):
         value = validation.cast_data_type(value, 'EDGE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'EDGE')
 
         return value

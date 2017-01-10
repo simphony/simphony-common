@@ -14,10 +14,11 @@ class InteratomicPotential(MaterialRelation):
         super(InteratomicPotential, self).__init__(
             material=material, description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
             base_params = super(InteratomicPotential,
-                                self).supported_parameters()
+                                cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

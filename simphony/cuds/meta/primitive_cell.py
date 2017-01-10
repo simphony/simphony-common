@@ -18,9 +18,10 @@ class PrimitiveCell(CUDSComponent):
         super(PrimitiveCell, self).__init__(description=description, name=name)
         self._init_lattice_vectors(lattice_vectors)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(PrimitiveCell, self).supported_parameters()
+            base_params = super(PrimitiveCell, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -46,7 +47,7 @@ class PrimitiveCell(CUDSComponent):
 
     def _validate_lattice_vectors(self, value):
         value = validation.cast_data_type(value, 'LATTICE_VECTORS')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
         return value
 

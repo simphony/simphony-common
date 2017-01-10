@@ -16,9 +16,10 @@ class SoftwareTool(CUDSItem):
         super(SoftwareTool, self).__init__()
         self._init_version(version)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(SoftwareTool, self).supported_parameters()
+            base_params = super(SoftwareTool, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -44,7 +45,7 @@ class SoftwareTool(CUDSItem):
 
     def _validate_version(self, value):
         value = validation.cast_data_type(value, 'VERSION')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'VERSION')
         return value
 

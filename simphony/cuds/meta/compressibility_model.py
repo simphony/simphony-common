@@ -14,10 +14,11 @@ class CompressibilityModel(PhysicsEquation):
         super(CompressibilityModel, self).__init__(
             description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
             base_params = super(CompressibilityModel,
-                                self).supported_parameters()
+                                cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

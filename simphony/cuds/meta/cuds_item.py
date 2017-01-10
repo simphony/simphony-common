@@ -17,9 +17,10 @@ class CUDSItem(object):
         self._init_data()
         self._init_uid()
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(CUDSItem, self).supported_parameters()
+            base_params = super(CUDSItem, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

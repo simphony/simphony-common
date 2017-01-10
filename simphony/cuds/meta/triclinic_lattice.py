@@ -25,9 +25,10 @@ class TriclinicLattice(BravaisLattice):
             description=description,
             name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(TriclinicLattice, self).supported_parameters()
+            base_params = super(TriclinicLattice, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

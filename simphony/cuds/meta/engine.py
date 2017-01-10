@@ -16,9 +16,10 @@ class Engine(SoftwareTool):
         super(Engine, self).__init__(version=version)
         self._init_engine_feature(engine_feature)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Engine, self).supported_parameters()
+            base_params = super(Engine, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -44,7 +45,7 @@ class Engine(SoftwareTool):
 
     def _validate_engine_feature(self, value):
         value = validation.cast_data_type(value, 'ENGINE_FEATURE')
-        validation.check_shape_at_least(value, [None])
+        validation.check_valid_shape(value, [None])
         validation.check_elements(value, [None], 'ENGINE_FEATURE')
 
         return value

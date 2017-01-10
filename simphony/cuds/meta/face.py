@@ -13,9 +13,10 @@ class Face(MeshElement):
 
         super(Face, self).__init__(point=point)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(Face, self).supported_parameters()
+            base_params = super(Face, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

@@ -15,9 +15,10 @@ class PairPotential(InteratomicPotential):
         super(PairPotential, self).__init__(
             material=material, description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(PairPotential, self).supported_parameters()
+            base_params = super(PairPotential, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -46,7 +47,7 @@ class PairPotential(InteratomicPotential):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_shape_at_least(value, [2])
+        validation.check_valid_shape(value, [2])
         validation.check_elements(value, [2], 'MATERIAL')
 
         return value

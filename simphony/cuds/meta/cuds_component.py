@@ -16,9 +16,10 @@ class CUDSComponent(CUDSItem):
         self._init_description(description)
         self._init_name(name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(CUDSComponent, self).supported_parameters()
+            base_params = super(CUDSComponent, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -43,7 +44,7 @@ class CUDSComponent(CUDSItem):
 
     def _validate_description(self, value):
         value = validation.cast_data_type(value, 'DESCRIPTION')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'DESCRIPTION')
         return value
 
@@ -70,7 +71,7 @@ class CUDSComponent(CUDSItem):
 
     def _validate_name(self, value):
         value = validation.cast_data_type(value, 'NAME')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'NAME')
         return value
 

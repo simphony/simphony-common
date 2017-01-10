@@ -15,9 +15,10 @@ class IsothermalModel(ThermalModel):
         super(IsothermalModel, self).__init__(
             description=description, name=name)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(IsothermalModel, self).supported_parameters()
+            base_params = super(IsothermalModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 

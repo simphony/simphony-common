@@ -21,9 +21,10 @@ class DissipationForce(MaterialRelation):
             material=material, description=description, name=name)
         self._init_restitution_coefficient(restitution_coefficient)
 
-    def supported_parameters(self):
+    @classmethod
+    def supported_parameters(cls):
         try:
-            base_params = super(DissipationForce, self).supported_parameters()
+            base_params = super(DissipationForce, cls).supported_parameters()
         except AttributeError:
             base_params = ()
 
@@ -52,7 +53,7 @@ class DissipationForce(MaterialRelation):
 
     def _validate_restitution_coefficient(self, value):
         value = validation.cast_data_type(value, 'RESTITUTION_COEFFICIENT')
-        validation.check_shape_at_least(value, [1])
+        validation.check_valid_shape(value, [1])
         validation.validate_cuba_keyword(value, 'RESTITUTION_COEFFICIENT')
         return value
 
