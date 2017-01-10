@@ -2,6 +2,7 @@ from simphony.core import Default  # noqa
 from . import validation
 from .boundary import Boundary
 from simphony.core.cuba import CUBA
+from .empty import Empty
 
 
 class Box(Boundary):
@@ -14,7 +15,7 @@ class Box(Boundary):
     cuba_key = CUBA.BOX
 
     def __init__(self,
-                 condition,
+                 condition=Default,
                  vector=Default,
                  description=Default,
                  name=Default):
@@ -59,7 +60,7 @@ class Box(Boundary):
         return value
 
     def _default_condition(self):
-        raise TypeError("No default for condition")
+        return [Empty(), Empty(), Empty()]
 
     def _init_vector(self, value):
         if value is Default:
