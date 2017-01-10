@@ -3,7 +3,7 @@ import unittest
 from simphony.core.keywords import KEYWORDS
 from simphony.cuds.meta import api
 from simphony.cuds.meta.validation import \
-    (check_shape_at_least,
+    (check_valid_shape,
      validate_cuba_keyword)
 
 
@@ -12,7 +12,7 @@ class TestValidation(unittest.TestCase):
     def test_check_shape_simple(self):
         # These values are valid for the given `shape`
         self.assertIsNone(
-            check_shape_at_least(
+            check_valid_shape(
                 ((1, 2, 3), (4, 5, 6)),  # shape: (2, 3)
                 (2, 3)))
 
