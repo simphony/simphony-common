@@ -248,11 +248,12 @@ class Class(object):
                 params.append("CUBA.UID")
 
         s = textwrap.dedent("""
-            def supported_parameters(self):
+            @classmethod
+            def supported_parameters(cls):
                 try:
                     base_params = super(
                         {class_name},
-                        self).supported_parameters()
+                        cls).supported_parameters()
                 except AttributeError:
                     base_params = ()
 
