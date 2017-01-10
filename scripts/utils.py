@@ -174,3 +174,12 @@ def deduplicate(list_):
     for l in list_:
         o[l] = l
     return o.keys()
+
+
+def cuba_key_to_instantiation(cuba_key):
+    if is_cuba_key(cuba_key):
+        return "{cuba_meta_class_name}()".format(
+            cuba_meta_class_name=cuba_key_to_meta_class_name(cuba_key)
+        )
+    else:
+        raise ValueError("{} is not a cuba_key".format(cuba_key))

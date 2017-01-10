@@ -284,8 +284,10 @@ class MetaAPIMethods(object):
 class ABCProperty(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, name):
+    def __init__(self, name, default=utils.NoDefault, docstring=""):
         self.name = name
+        self.default = default
+        self.docstring = docstring
 
     @abc.abstractmethod
     def import_required(self):
@@ -322,75 +324,7 @@ class ABCProperty(object):
         out.write(utils.indent(s, indent_level))
 
 
-class Property(ABCProperty):
-    def __init__(self, name, default=utils.NoDefault, docstring=""):
-        super(Property, self).__init__(name)
-        self.default = default
-        self.docstring = docstring
-
-    def import_required(self):
-        imp = [ShortcutImport("Default")]
-
-        return imp
-
-    def _render_setter(self):
-        return textwrap.dedent("""
-            @{name}.setter
-            def {name}(self, value):
-                \"\"\"
-                {docstring}
-                \"\"\"
-                value = self._validate_{name}(value)
-                self._{name} = value
-        """).format(name=self.name,
-                    docstring=self.docstring)
-
-    def _render_getter(self):
-        return textwrap.dedent("""
-            @property
-            def {name}(self):
-                return self._{name}
-        """).format(name=self.name)
-
-    def _render_init(self):
-        return textwrap.dedent("""
-        def _init_{name}(self, value):
-            if value is Default:
-                value = self._default_{name}()
-
-            self.{name} = value
-        """).format(name=self.name)
-
-    def _render_validation(self):
-        return textwrap.dedent("""
-        def _validate_{name}(value):
-            return value
-        """).format(name=self.name)
-
-    def _render_default(self):
-        if self.default == utils.NoDefault:
-            return textwrap.dedent("""
-            def _default_{name}(self):
-                raise TypeError("No default for {name}")
-            """).format(name=self.name)
-
-        if utils.is_cuba_key(self.default):
-            default = "{cuba_meta_class_name}()".format(
-                cuba_meta_class_name=utils.cuba_key_to_meta_class_name(
-                    self.default
-                )
-            )
-        else:
-            default = utils.quoted_if_string(self.default)
-
-        return textwrap.dedent("""
-        def _default_{name}(self):
-            return {default}
-        """).format(name=self.name,
-                    default=default)
-
-
-class FixedProperty(Property):
+class FixedProperty(ABCProperty):
     def __init__(self, name, default, reimplemented):
         super(FixedProperty, self).__init__(name, default)
 
@@ -420,16 +354,21 @@ class FixedProperty(Property):
     def _render_getter(self):
         if self.reimplemented:
             return ""
-        return super(FixedProperty, self)._render_getter()
+        return textwrap.dedent("""
+            @property
+            def {name}(self):
+                return self._{name}
+        """).format(name=self.name)
+
 
     def import_required(self):
         imp = []
         return imp
 
 
-class VariableProperty(Property):
+class VariableProperty(ABCProperty):
     def import_required(self):
-        imp = super(VariableProperty, self).import_required()
+        imp = [ShortcutImport("Default")]
         imp += [ShortcutImport("validation")]
 
         if utils.is_cuba_key(self.default):
@@ -439,6 +378,16 @@ class VariableProperty(Property):
                         self.default)
                 )
             )
+        elif isinstance(self.default, (list, tuple)):
+            default = '{}'.format(self.default)
+            if 'CUBA.' in default:
+                for elem in self.default:
+                    if utils.is_cuba_key(elem):
+                        imp.append(
+                            MetaClassImport(
+                                meta_class_name=
+                                    utils.cuba_key_to_meta_class_name(elem)))
+
         return imp
 
     def __init__(self, qual_cuba_key, default, shape, reimplemented):
@@ -452,6 +401,15 @@ class VariableProperty(Property):
         self.qual_cuba_key = qual_cuba_key
         self.shape = shape
         self.reimplemented = reimplemented
+
+    def _render_init(self):
+        return textwrap.dedent("""
+        def _init_{name}(self, value):
+            if value is Default:
+                value = self._default_{name}()
+
+            self.{name} = value
+        """).format(name=self.name)
 
     def _render_setter(self):
         return textwrap.dedent("""
@@ -495,6 +453,34 @@ class VariableProperty(Property):
             """.format(prop_name=self.name,
                        cuba_key=cuba_key,
                        shape=self.shape))
+
+    def _render_default(self):
+        if self.default == utils.NoDefault:
+            return textwrap.dedent("""
+            def _default_{name}(self):
+                raise TypeError("No default for {name}")
+            """).format(name=self.name)
+
+        if utils.is_cuba_key(self.default):
+            default = utils.cuba_key_to_instantiation(self.default)
+        elif isinstance(self.default, (list, tuple)):
+            default = '{}'.format(self.default)
+            if 'CUBA.' in default:
+                elements = []
+                for elem in self.default:
+                    if utils.is_cuba_key(elem):
+                        elem = utils.cuba_key_to_instantiation(elem)
+                    elements.append(elem)
+
+                default = '[' + ", ".join(elements) + ']'
+        else:
+            default = utils.quoted_if_string(self.default)
+
+        return textwrap.dedent("""
+        def _default_{name}(self):
+            return {default}
+        """).format(name=self.name,
+                    default=default)
 
 
 class DataProperty(FixedProperty):
