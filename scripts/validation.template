@@ -101,7 +101,7 @@ def validate_cuba_keyword(value, key):
                           'Please fix the cuba.yml shape syntax.')
             return
 
-        check_shape_at_least(value, keyword.shape)
+        check_valid_shape(value, keyword.shape)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))
