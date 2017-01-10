@@ -157,3 +157,21 @@ def cast_data_type(value, key):
 
     else:
         return value
+
+
+def check_elements(value, shape, cuba_key):
+    for entry in flatten_to_shape(value, shape)
+        validation.validate_cuba_keyword(entry, '{cuba_key}')
+
+
+def flatten_to_shape(container, shape):
+    if not isinstance(container, (list, tuple)):
+        raise TypeError("container must be iterable")
+
+    if len(shape) == 1:
+        for i in container:
+            yield i
+    else:
+        for i in container:
+            for value in flatten_to_shape(i, shape[1:]):
+                yield value

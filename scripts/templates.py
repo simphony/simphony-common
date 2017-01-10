@@ -481,22 +481,7 @@ class VariableProperty(Property):
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_shape_at_least(value, {shape})
-
-                def flatten(container):
-                    for i in container:
-                        if isinstance(i, (list,tuple)):
-                            for j in flatten(i):
-                                yield j
-                        else:
-                            yield i
-
-                if hasattr(value, "flatten"):
-                    flat_array = value.flatten()
-                else:
-                    flat_array = flatten(value)
-
-                for entry in flat_array:
-                    validation.validate_cuba_keyword(entry, '{cuba_key}')
+                validation.check_elements(value, {shape}, '{cuba_key}')
 
                 return value
             """.format(prop_name=self.name,
