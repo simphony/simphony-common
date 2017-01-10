@@ -753,10 +753,10 @@ KEYWORDS = {
         shape=[3],
         length=None,
         dtype=numpy.float64),
-    'UUID': Keyword(
-        name='Uuid',
+    'UID': Keyword(
+        name='Uid',
         definition='Universal unique id represented as a hex string size 32',  # noqa
-        key='UUID',
+        key='UID',
         shape=[1],
         length=32,
         dtype=numpy.str),

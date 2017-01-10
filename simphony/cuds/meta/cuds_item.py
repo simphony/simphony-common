@@ -15,7 +15,7 @@ class CUDSItem(object):
         super(CUDSItem, self).__init__()
         self._init_definition()
         self._init_data()
-        self._init_uuid()
+        self._init_uid()
 
     def supported_parameters(self):
         try:
@@ -23,7 +23,7 @@ class CUDSItem(object):
         except AttributeError:
             base_params = ()
 
-        return (CUBA.UUID, ) + base_params
+        return (CUBA.UID, ) + base_params
 
     @classmethod
     def parents(cls):
@@ -51,9 +51,9 @@ class CUDSItem(object):
     def data(self, new_data):
         self._data = DataContainer(new_data)
 
-    def _init_uuid(self):
-        self.data[CUBA.UUID] = uuid.uuid4()
+    def _init_uid(self):
+        self.data[CUBA.UID] = uuid.uuid4()
 
     @property
-    def uuid(self):
-        return self.data[CUBA.UUID]
+    def uid(self):
+        return self.data[CUBA.UID]
