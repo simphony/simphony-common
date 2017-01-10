@@ -22,8 +22,9 @@ def check_valid_shape(value, shape, cuba_key):
         if the `value` does not comply with the required `shape`
     """
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
+    from simphony.core.keywords import KEYWORDS
 
-    keyword = KEYWORDS[utils.without_cuba_prefix(cuba_key)]
+    keyword = KEYWORDS[without_cuba_prefix(cuba_key)]
 
     expected_shape = []
     if list(shape) != [1]:
@@ -116,7 +117,7 @@ def validate_cuba_keyword(value, key):
                           'Please fix the cuba.yml shape syntax.')
             return
 
-        check_valid_shape(value, keyword.shape)
+        check_valid_shape(value, keyword.shape, keyword_name)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))
