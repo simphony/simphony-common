@@ -5,7 +5,6 @@ based on SimPhoNy metadata.
 """
 import uuid
 
-from simphony.cuds.utils import deprecated
 from .store import MemoryStateDataStore
 from .abc_particles import ABCParticles
 from .abc_lattice import ABCLattice
