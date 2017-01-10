@@ -4,6 +4,7 @@ from .constant_electrostatic_field_model import ConstantElectrostaticFieldModel
 from .isothermal_model import IsothermalModel
 from simphony.core.cuba import CUBA
 from . import validation
+from .gravity_model import GravityModel
 from .laminar_flow_model import LaminarFlowModel
 from .physics_equation import PhysicsEquation
 from .single_phase_model import SinglePhaseModel
@@ -159,7 +160,7 @@ class Cfd(PhysicsEquation):
         return value
 
     def _default_gravity_model(self):
-        return None
+        return GravityModel()
 
     def _init_thermal_model(self, value):
         if value is Default:
