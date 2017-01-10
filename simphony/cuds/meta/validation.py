@@ -1,4 +1,5 @@
 import warnings
+import itertools
 
 import numpy
 
@@ -60,6 +61,38 @@ def check_valid_shape(value, shape, cuba_key):
                               "{expected_shape}. ").format(
                                   expected_shape=expected_shape,
                                   value_shape=value_shape))
+
+
+def check_cuba_shape(value, cuba_key):
+    """ Check if `value` is a sequence that comply with the cuba shape
+
+    Parameters
+    ----------
+    cuba_key: cuba key
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        if the `value` does not comply with the required cuba shape
+    """
+    # FIXME: cuba.yml uses [1] to mean a single value with no shape
+    from simphony.core.keywords import KEYWORDS
+
+    keyword = KEYWORDS[without_cuba_prefix(cuba_key)]
+    expected_shape = list(keyword.shape)
+    value_shape = list(numpy.asarray(value).shape or [1])
+
+    if expected_shape != value_shape:
+        raise ValueError(("Incongruent shapes."
+                          "Value shape of {value_shape}, "
+                          "not compliant with expected CUBA shape "
+                          "{expected_shape}. ").format(
+                              expected_shape=expected_shape,
+                              value_shape=value_shape))
 
 
 def validate_cuba_keyword(value, key):
@@ -126,7 +159,7 @@ def validate_cuba_keyword(value, key):
                           'Please fix the cuba.yml shape syntax.')
             return
 
-        check_valid_shape(value, keyword.shape, keyword_name)
+        check_cuba_shape(value, keyword_name)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))
