@@ -360,7 +360,6 @@ class FixedProperty(ABCProperty):
                 return self._{name}
         """).format(name=self.name)
 
-
     def import_required(self):
         imp = []
         return imp
@@ -385,8 +384,7 @@ class VariableProperty(ABCProperty):
                     if utils.is_cuba_key(elem):
                         imp.append(
                             MetaClassImport(
-                                meta_class_name=
-                                    utils.cuba_key_to_meta_class_name(elem)))
+                                meta_class_name=utils.cuba_key_to_meta_class_name(elem)))  # noqa
 
         return imp
 
