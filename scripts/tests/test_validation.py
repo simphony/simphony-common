@@ -23,6 +23,7 @@ class TestValidation(unittest.TestCase):
                               [1],
                               'CUBA.ACCELERATION')
         )
+
     def test_validate_cuba_keyword(self):
         ''' Test for valid cases for CUBA keyword values '''
         # Check valid cases
