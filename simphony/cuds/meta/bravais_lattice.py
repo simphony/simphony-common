@@ -58,22 +58,7 @@ class BravaisLattice(Lattice):
     def _validate_lattice_parameter(self, value):
         value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
         validation.check_shape_at_least(value, [3])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'LATTICE_PARAMETER')
+        validation.check_elements(value, [3], 'LATTICE_PARAMETER')
 
         return value
 
@@ -122,22 +107,7 @@ class BravaisLattice(Lattice):
     def _validate_size(self, value):
         value = validation.cast_data_type(value, 'SIZE')
         validation.check_shape_at_least(value, [3])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'SIZE')
+        validation.check_elements(value, [3], 'SIZE')
 
         return value
 

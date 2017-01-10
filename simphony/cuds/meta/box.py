@@ -14,7 +14,7 @@ class Box(Boundary):
     cuba_key = CUBA.BOX
 
     def __init__(self,
-                 condition=Default,
+                 condition,
                  vector=Default,
                  description=Default,
                  name=Default):
@@ -54,27 +54,12 @@ class Box(Boundary):
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
         validation.check_shape_at_least(value, [3])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'CONDITION')
+        validation.check_elements(value, [3], 'CONDITION')
 
         return value
 
     def _default_condition(self):
-        return None
+        raise TypeError("No default for condition")
 
     def _init_vector(self, value):
         if value is Default:
@@ -94,22 +79,7 @@ class Box(Boundary):
     def _validate_vector(self, value):
         value = validation.cast_data_type(value, 'VECTOR')
         validation.check_shape_at_least(value, [3])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'VECTOR')
+        validation.check_elements(value, [3], 'VECTOR')
 
         return value
 

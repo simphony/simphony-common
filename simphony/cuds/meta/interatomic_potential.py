@@ -9,7 +9,7 @@ class InteratomicPotential(MaterialRelation):
     """
     cuba_key = CUBA.INTERATOMIC_POTENTIAL
 
-    def __init__(self, material, description=Default, name=Default):
+    def __init__(self, material=Default, description=Default, name=Default):
 
         super(InteratomicPotential, self).__init__(
             material=material, description=description, name=name)

@@ -11,7 +11,7 @@ class MaterialRelation(ModelEquation):
     """
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material, description=Default, name=Default):
+    def __init__(self, material=Default, description=Default, name=Default):
 
         super(MaterialRelation, self).__init__(
             description=description, name=name)
@@ -46,24 +46,9 @@ class MaterialRelation(ModelEquation):
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'MATERIAL')
+        validation.check_elements(value, [None], 'MATERIAL')
 
         return value
 
     def _default_material(self):
-        raise TypeError("No default for material")
+        return []

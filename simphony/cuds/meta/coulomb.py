@@ -15,6 +15,7 @@ class Coulomb(PairPotential):
                  material,
                  cutoff_distance=Default,
                  dielectric_constant=Default,
+                 material=Default,
                  description=Default,
                  name=Default):
 

@@ -63,22 +63,7 @@ class Dirichlet(Condition):
     def _validate_variable(self, value):
         value = validation.cast_data_type(value, 'VARIABLE')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'VARIABLE')
+        validation.check_elements(value, [None], 'VARIABLE')
 
         return value
 
@@ -103,22 +88,7 @@ class Dirichlet(Condition):
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'MATERIAL')
+        validation.check_elements(value, [None], 'MATERIAL')
 
         return value
 

@@ -45,22 +45,7 @@ class EngineFeature(CUDSItem):
     def _validate_computational_method(self, value):
         value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'COMPUTATIONAL_METHOD')
+        validation.check_elements(value, [None], 'COMPUTATIONAL_METHOD')
 
         return value
 

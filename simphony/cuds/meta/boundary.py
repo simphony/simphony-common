@@ -11,7 +11,7 @@ class Boundary(CUDSComponent):
     """
     cuba_key = CUBA.BOUNDARY
 
-    def __init__(self, condition, description=Default, name=Default):
+    def __init__(self, condition=Default, description=Default, name=Default):
 
         super(Boundary, self).__init__(description=description, name=name)
         self._init_condition(condition)
@@ -45,24 +45,9 @@ class Boundary(CUDSComponent):
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'CONDITION')
+        validation.check_elements(value, [None], 'CONDITION')
 
         return value
 
     def _default_condition(self):
-        raise TypeError("No default for condition")
+        return []

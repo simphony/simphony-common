@@ -12,8 +12,8 @@ class DissipationForce(MaterialRelation):
     cuba_key = CUBA.DISSIPATION_FORCE
 
     def __init__(self,
-                 material,
                  restitution_coefficient=Default,
+                 material=Default,
                  description=Default,
                  name=Default):
 

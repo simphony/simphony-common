@@ -57,22 +57,7 @@ class Mesh(DataSet):
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'POINT')
+        validation.check_elements(value, [None], 'POINT')
 
         return value
 
@@ -97,22 +82,7 @@ class Mesh(DataSet):
     def _validate_face(self, value):
         value = validation.cast_data_type(value, 'FACE')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'FACE')
+        validation.check_elements(value, [None], 'FACE')
 
         return value
 
@@ -137,22 +107,7 @@ class Mesh(DataSet):
     def _validate_cell(self, value):
         value = validation.cast_data_type(value, 'CELL')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'CELL')
+        validation.check_elements(value, [None], 'CELL')
 
         return value
 
@@ -177,22 +132,7 @@ class Mesh(DataSet):
     def _validate_edge(self, value):
         value = validation.cast_data_type(value, 'EDGE')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'EDGE')
+        validation.check_elements(value, [None], 'EDGE')
 
         return value
 

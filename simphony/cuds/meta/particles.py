@@ -44,22 +44,7 @@ class Particles(DataSet):
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'PARTICLE')
+        validation.check_elements(value, [None], 'PARTICLE')
 
         return value
 
@@ -87,22 +72,7 @@ class Particles(DataSet):
     def _validate_bond(self, value):
         value = validation.cast_data_type(value, 'BOND')
         validation.check_shape_at_least(value, [None])
-
-        def flatten(container):
-            for i in container:
-                if isinstance(i, (list, tuple)):
-                    for j in flatten(i):
-                        yield j
-                else:
-                    yield i
-
-        if hasattr(value, "flatten"):
-            flat_array = value.flatten()
-        else:
-            flat_array = flatten(value)
-
-        for entry in flat_array:
-            validation.validate_cuba_keyword(entry, 'BOND')
+        validation.check_elements(value, [None], 'BOND')
 
         return value
 
