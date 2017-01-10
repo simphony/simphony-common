@@ -244,8 +244,8 @@ class Class(object):
         for prop in self.properties:
             if isinstance(prop, VariableProperty):
                 params.append(prop.qual_cuba_key)
-            elif isinstance(prop, UUIDProperty):
-                params.append("CUBA.UUID")
+            elif isinstance(prop, UIDProperty):
+                params.append("CUBA.UID")
 
         s = textwrap.dedent("""
             def supported_parameters(self):
@@ -360,7 +360,6 @@ class FixedProperty(ABCProperty):
                 return self._{name}
         """).format(name=self.name)
 
-
     def import_required(self):
         imp = []
         return imp
@@ -385,8 +384,7 @@ class VariableProperty(ABCProperty):
                     if utils.is_cuba_key(elem):
                         imp.append(
                             MetaClassImport(
-                                meta_class_name=
-                                    utils.cuba_key_to_meta_class_name(elem)))
+                                meta_class_name=utils.cuba_key_to_meta_class_name(elem)))  # noqa
 
         return imp
 
@@ -518,24 +516,24 @@ class DataProperty(FixedProperty):
         return ""
 
 
-class UUIDProperty(FixedProperty):
+class UIDProperty(FixedProperty):
     def __init__(self):
-        super(UUIDProperty, self).__init__("uuid", None, False)
+        super(UIDProperty, self).__init__("uid", None, False)
 
     def import_required(self):
         return [ShortcutImport('uuid')]
 
     def _render_init(self):
         return textwrap.dedent("""
-            def _init_uuid(self):
-                self.data[CUBA.UUID] = uuid.uuid4()
+            def _init_uid(self):
+                self.data[CUBA.UID] = uuid.uuid4()
         """)
 
     def _render_getter(self):
         return textwrap.dedent("""
             @property
-            def uuid(self):
-                return self.data[CUBA.UUID]
+            def uid(self):
+                return self.data[CUBA.UID]
         """)
 
     def _render_setter(self):

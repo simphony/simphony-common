@@ -90,8 +90,8 @@ class SingleMetaClassGenerator(object):
                 continue
             if prop_key == "data":
                 properties.append(templates.DataProperty())
-            elif prop_key == "CUBA.UUID":
-                properties.append(templates.UUIDProperty())
+            elif prop_key == "CUBA.UID":
+                properties.append(templates.UIDProperty())
             elif prop_key in KNOWN_FIXED_PROPERTIES:
                 if prop_key in class_data:
                     properties.append(

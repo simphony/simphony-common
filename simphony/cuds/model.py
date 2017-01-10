@@ -160,16 +160,12 @@ class CUDS(object):
         uid = self._name_to_id_map.get(name)
         return self.get_by_uid(uid)
 
-    @deprecated
     def get_by_uid(self, uid):
-        return self.get_by_uuid(uid)
-
-    def get_by_uuid(self, uuid):
         """Get the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        uuid: uuid.UUID
+        uid: uuid.UUID
             uid of the component
 
         Returns
@@ -177,8 +173,8 @@ class CUDS(object):
         component: CUDSComponent
             the corresponding CUDS component
         """
-        if uuid in self._map:
-            return self._map[uuid]()
+        if uid in self._map:
+            return self._map[uid]()
 
     def remove(self, name):
         """Remove the corresponding component from the CUDS computational model.
@@ -206,16 +202,12 @@ class CUDS(object):
         if name in self._name_to_id_map:
             del self._name_to_id_map[name]
 
-    @deprecated
     def remove_by_uid(self, uid):
-        self.remove_by_uuid(uid)
-
-    def remove_by_uuid(self, uuid):
         """Remove the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        uuid: uuid.UUID
+        uid: uuid.UUID
             uid of the component to be removed
 
         Raises
@@ -223,13 +215,13 @@ class CUDS(object):
         KeyError
             if no component exists of the given uid
         """
-        component = self.get_by_uid(uuid)
+        component = self.get_by_uid(uid)
         if not component:
-            raise KeyError('No component exists for %s' % uuid)
+            raise KeyError('No component exists for %s' % uid)
         if self._is_dataset(component):
             self._dataset_store.remove(component.name)
         else:
-            del self._store[uuid]
+            del self._store[uid]
         # Delete object key from the mappings
         if component.name in self._name_to_id_map:
             del self._name_to_id_map[component.name]

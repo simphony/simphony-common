@@ -40,12 +40,12 @@ class TestMetaClass(unittest.TestCase):
 
     def check_cuds_item(self, instance):
         ''' Check properties of a CUDSItem '''
-        self.assertIsInstance(instance.uuid, uuid.UUID)
+        self.assertIsInstance(instance.uid, uuid.UUID)
         self.assertIsNotNone(instance.data)
 
         # uuid is read-only
         with self.assertRaises(AttributeError):
-            instance.uuid = uuid.uuid4()
+            instance.uid = uuid.uuid4()
 
     def check_cuds_component(self, instance):
         ''' Check properties of a CUDS Component '''

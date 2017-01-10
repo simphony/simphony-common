@@ -22,8 +22,8 @@ class TestMaterials(unittest.TestCase):
 
     def test_add_get_material(self):
         self.materials.add(self.example_materials[0])
-        self.assertEqual(self.materials.get_by_uuid(
-            self.example_materials[0].uuid),
+        self.assertEqual(self.materials.get_by_uid(
+            self.example_materials[0].uid),
             self.example_materials[0])
 
     def test_add_existing_material(self):
@@ -47,33 +47,33 @@ class TestMaterials(unittest.TestCase):
             self.materials.add(material)
 
         # when
-        iterated_all_materials = {material.uuid: material for material
+        iterated_all_materials = {material.uid: material for material
                                   in self.materials.iter(Material)}
 
         # then
         self.assertEqual(len(iterated_all_materials),
                          len(self.example_materials))
         for material in self.example_materials:
-            self.assertEqual(material, iterated_all_materials[material.uuid])
+            self.assertEqual(material, iterated_all_materials[material.uid])
 
     def test_iter_subset_of_materials_with_ids(self):
         # given
         material_subset = [material for material in self.example_materials[:2]]
 
-        subset_ids = [material.uuid for material in material_subset]
+        subset_ids = [material.uid for material in material_subset]
         for material in self.example_materials:
             self.materials.add(material)
 
         # when
-        iterated_materials = {material.uuid: material for material
+        iterated_materials = {material.uid: material for material
                               in self.materials.iter(Material)
-                              if material.uuid in subset_ids}
+                              if material.uid in subset_ids}
 
         # then
         self.assertEqual(len(iterated_materials),
                          len(material_subset))
         for material in material_subset:
-            self.assertEqual(material, iterated_materials[material.uuid])
+            self.assertEqual(material, iterated_materials[material.uid])
 
 
 if __name__ == '__main__':
