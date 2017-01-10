@@ -435,7 +435,7 @@ class VariableProperty(ABCProperty):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_valid_shape(value, {shape})
+                validation.check_valid_shape(value, {shape}, '{cuba_key}')
                 validation.validate_cuba_keyword(value, '{cuba_key}')
                 return value
             """.format(prop_name=self.name,
@@ -445,7 +445,7 @@ class VariableProperty(ABCProperty):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_valid_shape(value, {shape})
+                validation.check_valid_shape(value, {shape}, '{cuba_key}')
                 validation.check_elements(value, {shape}, '{cuba_key}')
 
                 return value
