@@ -15,7 +15,6 @@ class LennardJones_6_12(PairPotential):
                  van_der_waals_radius=Default,
                  cutoff_distance=Default,
                  energy_well_depth=Default,
-                 material=Default,
                  description=Default,
                  name=Default):
 
