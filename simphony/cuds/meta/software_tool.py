@@ -1,6 +1,5 @@
 from simphony.core import Default  # noqa
 from . import validation
-from .version import Version
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -12,7 +11,7 @@ class SoftwareTool(CUDSItem):
     """
     cuba_key = CUBA.SOFTWARE_TOOL
 
-    def __init__(self, version=Default):
+    def __init__(self, version):
 
         super(SoftwareTool, self).__init__()
         self._init_version(version)
@@ -50,4 +49,4 @@ class SoftwareTool(CUDSItem):
         return value
 
     def _default_version(self):
-        return Version()
+        raise TypeError("No default for version")

@@ -11,7 +11,7 @@ class Engine(SoftwareTool):
     """
     cuba_key = CUBA.ENGINE
 
-    def __init__(self, engine_feature, version=Default):
+    def __init__(self, engine_feature, version):
 
         super(Engine, self).__init__(version=version)
         self._init_engine_feature(engine_feature)
