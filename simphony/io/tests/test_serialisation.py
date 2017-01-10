@@ -6,6 +6,7 @@ import os
 import shutil
 from contextlib import closing
 import tempfile
+import uuid
 
 from simphony.cuds.meta.cuds_component import CUDSComponent
 from simphony.cuds.meta.material import Material
@@ -117,6 +118,12 @@ def _compare_components(comp1, comp2, testcase):
                                             self)
                     else:
                         self.assertEqual(value[i], comp2.data[key][i])
+            elif type(value) == uuid.UUID:
+                # Skip the uuid
+                continue
             self.assertEqual(value, comp2.data[key])
+    elif isinstance(comp1, uuid.UUID):
+        # Skip the uuid
+        pass
     else:
         self.assertEqual(comp1, comp2)
