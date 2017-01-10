@@ -31,7 +31,7 @@ def check_valid_shape(value, shape, cuba_key):
         expected_shape += list(shape)
 
     if list(keyword.shape) != [1]:
-        expected_shape != list(keyword.shape)
+        expected_shape += list(keyword.shape)
 
     if expected_shape == []:
         expected_shape = [1]
