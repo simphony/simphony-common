@@ -44,7 +44,7 @@ class Basis(CUDSComponent):
 
     def _validate_vector(self, value):
         value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_valid_shape(value, [3])
+        validation.check_valid_shape(value, [3], 'VECTOR')
         validation.check_elements(value, [3], 'VECTOR')
 
         return value

@@ -58,7 +58,7 @@ class Berendsen(Thermostat):
 
     def _validate_coupling_time(self, value):
         value = validation.cast_data_type(value, 'COUPLING_TIME')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'COUPLING_TIME')
         validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
@@ -82,7 +82,7 @@ class Berendsen(Thermostat):
 
     def _validate_temperature(self, value):
         value = validation.cast_data_type(value, 'TEMPERATURE')
-        validation.check_valid_shape(value, [2])
+        validation.check_valid_shape(value, [2], 'TEMPERATURE')
         validation.check_elements(value, [2], 'TEMPERATURE')
 
         return value

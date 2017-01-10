@@ -44,7 +44,7 @@ class MeshElement(CUDSItem):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'POINT')
         validation.check_elements(value, [None], 'POINT')
 
         return value

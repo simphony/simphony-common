@@ -64,7 +64,7 @@ class Neumann(Condition):
 
     def _validate_variable(self, value):
         value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'VARIABLE')
         validation.check_elements(value, [None], 'VARIABLE')
 
         return value
@@ -89,7 +89,7 @@ class Neumann(Condition):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'MATERIAL')
         validation.check_elements(value, [None], 'MATERIAL')
 
         return value

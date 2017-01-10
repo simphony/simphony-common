@@ -60,7 +60,7 @@ class PowerLawViscosityModel(RheologyModel):
 
     def _validate_linear_constant(self, value):
         value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
         validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
@@ -87,7 +87,7 @@ class PowerLawViscosityModel(RheologyModel):
 
     def _validate_minimum_viscosity(self, value):
         value = validation.cast_data_type(value, 'MINIMUM_VISCOSITY')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'MINIMUM_VISCOSITY')
         validation.validate_cuba_keyword(value, 'MINIMUM_VISCOSITY')
         return value
 
@@ -111,7 +111,7 @@ class PowerLawViscosityModel(RheologyModel):
 
     def _validate_maximum_viscosity(self, value):
         value = validation.cast_data_type(value, 'MAXIMUM_VISCOSITY')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'MAXIMUM_VISCOSITY')
         validation.validate_cuba_keyword(value, 'MAXIMUM_VISCOSITY')
         return value
 
@@ -135,7 +135,7 @@ class PowerLawViscosityModel(RheologyModel):
 
     def _validate_power_law_index(self, value):
         value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
         validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
 

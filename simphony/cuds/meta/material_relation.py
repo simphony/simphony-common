@@ -46,7 +46,7 @@ class MaterialRelation(ModelEquation):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'MATERIAL')
         validation.check_elements(value, [None], 'MATERIAL')
 
         return value

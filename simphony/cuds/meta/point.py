@@ -44,7 +44,7 @@ class Point(CUDSItem):
 
     def _validate_position(self, value):
         value = validation.cast_data_type(value, 'POSITION')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'POSITION')
         validation.validate_cuba_keyword(value, 'POSITION')
         return value
 

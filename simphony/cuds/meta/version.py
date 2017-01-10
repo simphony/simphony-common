@@ -48,7 +48,7 @@ class Version(CUDSItem):
 
     def _validate_minor(self, value):
         value = validation.cast_data_type(value, 'MINOR')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'MINOR')
         validation.validate_cuba_keyword(value, 'MINOR')
         return value
 
@@ -75,7 +75,7 @@ class Version(CUDSItem):
 
     def _validate_patch(self, value):
         value = validation.cast_data_type(value, 'PATCH')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'PATCH')
         validation.validate_cuba_keyword(value, 'PATCH')
         return value
 
@@ -99,7 +99,7 @@ class Version(CUDSItem):
 
     def _validate_major(self, value):
         value = validation.cast_data_type(value, 'MAJOR')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'MAJOR')
         validation.validate_cuba_keyword(value, 'MAJOR')
         return value
 
@@ -123,7 +123,7 @@ class Version(CUDSItem):
 
     def _validate_full(self, value):
         value = validation.cast_data_type(value, 'FULL')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'FULL')
         validation.validate_cuba_keyword(value, 'FULL')
         return value
 

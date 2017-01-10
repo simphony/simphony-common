@@ -44,7 +44,7 @@ class Atom(Particle):
 
     def _validate_mass(self, value):
         value = validation.cast_data_type(value, 'MASS')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'MASS')
         validation.validate_cuba_keyword(value, 'MASS')
         return value
 

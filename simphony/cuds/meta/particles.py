@@ -44,7 +44,7 @@ class Particles(DataSet):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'PARTICLE')
         validation.check_elements(value, [None], 'PARTICLE')
 
         return value
@@ -72,7 +72,7 @@ class Particles(DataSet):
 
     def _validate_bond(self, value):
         value = validation.cast_data_type(value, 'BOND')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'BOND')
         validation.check_elements(value, [None], 'BOND')
 
         return value

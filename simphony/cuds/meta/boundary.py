@@ -45,7 +45,7 @@ class Boundary(CUDSComponent):
 
     def _validate_condition(self, value):
         value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'CONDITION')
         validation.check_elements(value, [None], 'CONDITION')
 
         return value

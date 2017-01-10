@@ -54,7 +54,7 @@ class CoulombFrictionForce(MaterialRelation):
 
     def _validate_friction_coefficient(self, value):
         value = validation.cast_data_type(value, 'FRICTION_COEFFICIENT')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'FRICTION_COEFFICIENT')
         validation.validate_cuba_keyword(value, 'FRICTION_COEFFICIENT')
         return value
 

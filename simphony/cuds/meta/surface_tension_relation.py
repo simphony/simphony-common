@@ -55,7 +55,7 @@ class SurfaceTensionRelation(MaterialRelation):
 
     def _validate_material(self, value):
         value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [2])
+        validation.check_valid_shape(value, [2], 'MATERIAL')
         validation.check_elements(value, [2], 'MATERIAL')
 
         return value
@@ -80,7 +80,7 @@ class SurfaceTensionRelation(MaterialRelation):
 
     def _validate_surface_tension(self, value):
         value = validation.cast_data_type(value, 'SURFACE_TENSION')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'SURFACE_TENSION')
         validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
         return value
 

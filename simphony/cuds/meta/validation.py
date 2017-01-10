@@ -2,10 +2,10 @@ import warnings
 
 import numpy
 
-from scripts.utils import to_camel_case
+from scripts.utils import to_camel_case, without_cuba_prefix
 
 
-def check_valid_shape(value, shape):
+def check_valid_shape(value, shape, cuba_key):
     """ Check if `value` is a sequence that comply with `shape`
 
     Parameters
@@ -22,16 +22,32 @@ def check_valid_shape(value, shape):
         if the `value` does not comply with the required `shape`
     """
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
-    value_shape = numpy.asarray(value).shape or (1, )
+    from simphony.core.keywords import KEYWORDS
+
+    keyword = KEYWORDS[without_cuba_prefix(cuba_key)]
+
+    expected_shape = []
+    if list(shape) != [1]:
+        expected_shape += list(shape)
+
+    if list(keyword.shape) != [1]:
+        expected_shape != list(keyword.shape)
+
+    if expected_shape == []:
+        expected_shape = [1]
+
+    value_shape = numpy.asarray(value).shape or [1]
 
     msg_fmt = ("value has a shape of {value_shape}, "
                "which does not comply with shape: {shape}")
     error_message = msg_fmt.format(value_shape=value_shape, shape=shape)
 
-    if len(shape) > len(value_shape):
+    if len(expected_shape) != len(value_shape):
         raise ValueError(error_message)
 
-    for s1, s2 in zip(shape, value_shape):
+    for s1, s2 in zip(expected_shape, value_shape):
+        if s1 is None:
+            continue
         if s1 != s2:
             raise ValueError(error_message)
 
@@ -100,7 +116,7 @@ def validate_cuba_keyword(value, key):
                           'Please fix the cuba.yml shape syntax.')
             return
 
-        check_shape_at_least(value, keyword.shape)
+        check_valid_shape(value, keyword.shape, keyword_name)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))

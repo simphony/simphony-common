@@ -57,7 +57,7 @@ class Mesh(DataSet):
 
     def _validate_point(self, value):
         value = validation.cast_data_type(value, 'POINT')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'POINT')
         validation.check_elements(value, [None], 'POINT')
 
         return value
@@ -82,7 +82,7 @@ class Mesh(DataSet):
 
     def _validate_face(self, value):
         value = validation.cast_data_type(value, 'FACE')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'FACE')
         validation.check_elements(value, [None], 'FACE')
 
         return value
@@ -107,7 +107,7 @@ class Mesh(DataSet):
 
     def _validate_cell(self, value):
         value = validation.cast_data_type(value, 'CELL')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'CELL')
         validation.check_elements(value, [None], 'CELL')
 
         return value
@@ -132,7 +132,7 @@ class Mesh(DataSet):
 
     def _validate_edge(self, value):
         value = validation.cast_data_type(value, 'EDGE')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'EDGE')
         validation.check_elements(value, [None], 'EDGE')
 
         return value

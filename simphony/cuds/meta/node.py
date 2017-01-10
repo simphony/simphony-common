@@ -44,7 +44,7 @@ class Node(CUDSComponent):
 
     def _validate_index(self, value):
         value = validation.cast_data_type(value, 'INDEX')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'INDEX')
         validation.validate_cuba_keyword(value, 'INDEX')
         return value
 

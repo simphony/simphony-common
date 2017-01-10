@@ -41,7 +41,7 @@ class Bond(CUDSItem):
 
     def _validate_particle(self, value):
         value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'PARTICLE')
         validation.check_elements(value, [None], 'PARTICLE')
 
         return value

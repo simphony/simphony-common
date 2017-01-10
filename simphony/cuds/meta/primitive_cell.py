@@ -47,7 +47,7 @@ class PrimitiveCell(CUDSComponent):
 
     def _validate_lattice_vectors(self, value):
         value = validation.cast_data_type(value, 'LATTICE_VECTORS')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'LATTICE_VECTORS')
         validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
         return value
 

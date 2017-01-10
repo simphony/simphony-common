@@ -45,7 +45,7 @@ class SoftwareTool(CUDSItem):
 
     def _validate_version(self, value):
         value = validation.cast_data_type(value, 'VERSION')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'VERSION')
         validation.validate_cuba_keyword(value, 'VERSION')
         return value
 

@@ -45,7 +45,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_computational_method(self, value):
         value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
-        validation.check_valid_shape(value, [None])
+        validation.check_valid_shape(value, [None], 'COMPUTATIONAL_METHOD')
         validation.check_elements(value, [None], 'COMPUTATIONAL_METHOD')
 
         return value
@@ -73,7 +73,7 @@ class EngineFeature(CUDSItem):
 
     def _validate_physics_equation(self, value):
         value = validation.cast_data_type(value, 'PHYSICS_EQUATION')
-        validation.check_valid_shape(value, [1])
+        validation.check_valid_shape(value, [1], 'PHYSICS_EQUATION')
         validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value
 
