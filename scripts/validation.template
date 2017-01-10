@@ -161,7 +161,7 @@ def cast_data_type(value, key):
 
 def check_elements(value, shape, cuba_key):
     for entry in flatten_to_shape(value, shape):
-        validation.validate_cuba_keyword(entry, '{cuba_key}')
+        validate_cuba_keyword(entry, '{cuba_key}')
 
 
 def flatten_to_shape(container, shape):
