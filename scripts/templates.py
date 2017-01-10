@@ -244,8 +244,8 @@ class Class(object):
         for prop in self.properties:
             if isinstance(prop, VariableProperty):
                 params.append(prop.qual_cuba_key)
-            elif isinstance(prop, UUIDProperty):
-                params.append("CUBA.UUID")
+            elif isinstance(prop, UIDProperty):
+                params.append("CUBA.UID")
 
         s = textwrap.dedent("""
             def supported_parameters(self):
