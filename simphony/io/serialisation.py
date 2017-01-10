@@ -243,7 +243,7 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
         supp_params = [str(e).replace('CUBA.', '')
                        for e in comp_class.supported_parameters()]
         # Don't accept UUID entry from the yaml file
-        supp_params.remove('UUID')
+        supp_params.remove('UID')
         for key in comp.keys():
             # Check if the key is supported
             if key in supp_params:
