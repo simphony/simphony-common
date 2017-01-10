@@ -248,11 +248,12 @@ class Class(object):
                 params.append("CUBA.UID")
 
         s = textwrap.dedent("""
-            def supported_parameters(self):
+            @classmethod
+            def supported_parameters(cls):
                 try:
                     base_params = super(
                         {class_name},
-                        self).supported_parameters()
+                        cls).supported_parameters()
                 except AttributeError:
                     base_params = ()
 
@@ -434,7 +435,7 @@ class VariableProperty(ABCProperty):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_shape_at_least(value, {shape})
+                validation.check_valid_shape(value, {shape})
                 validation.validate_cuba_keyword(value, '{cuba_key}')
                 return value
             """.format(prop_name=self.name,
@@ -444,7 +445,7 @@ class VariableProperty(ABCProperty):
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
                 value = validation.cast_data_type(value, '{cuba_key}')
-                validation.check_shape_at_least(value, {shape})
+                validation.check_valid_shape(value, {shape})
                 validation.check_elements(value, {shape}, '{cuba_key}')
 
                 return value
