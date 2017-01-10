@@ -1,5 +1,4 @@
 import warnings
-import itertools
 
 import numpy
 
