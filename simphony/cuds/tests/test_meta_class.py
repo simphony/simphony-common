@@ -339,7 +339,7 @@ class TestMetaClass(unittest.TestCase):
 
     def test_TemperatureRescaling(self):
         material = meta_class.Material()
-        temp_rescaling = meta_class.TemperatureRescaling([material])
+        temp_rescaling = meta_class.TemperatureRescaling(material=[material])
         self.assertIsNotNone(temp_rescaling.data)
 
     def test_Thermostat(self):
