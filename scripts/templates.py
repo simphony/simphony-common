@@ -197,6 +197,10 @@ class Class(object):
 
         for prop in [p for p in self.hierarchy_properties
                      if isinstance(p, VariableProperty)]:
+            if (prop.name in hierarchy_mandatory or
+                    prop.name in hierarchy_optional):
+                continue
+
             if prop.default is NoDefault:
                 hierarchy_mandatory.append(prop.name)
             else:
@@ -225,7 +229,11 @@ class Class(object):
                     cur_class_mandatory.append(prop.name)
                 else:
                     cur_class_optional.append(prop.name)
-
+        print(hierarchy_optional)
+        print(hierarchy_mandatory)
+        print(cur_class_mandatory)
+        print(cur_class_optional)
+        print(pass_down)
         return (['self'] +
                 utils.deduplicate(cur_class_mandatory + hierarchy_mandatory),
                 utils.deduplicate(cur_class_optional + hierarchy_optional),
