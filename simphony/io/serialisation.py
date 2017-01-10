@@ -148,7 +148,10 @@ def _CUDSComponent_to_yaml(comp, stream):
     cdata = comp._data
     for key in cdata.keys():
         # Check if the data is a list or numpy types or CUDSComponents
-        if type(cdata[key]) == list:
+        # Skip the UID key, as it's not accepted by the deserializer
+        if key == 'UID':
+            continue
+        elif type(cdata[key]) == list:
             # List of simple types?
             if KEYWORDS[key._name_].dtype in [numpy.float64,
                                               numpy.int32, bool]:
