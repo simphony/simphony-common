@@ -18,6 +18,11 @@ class TestValidation(unittest.TestCase):
                 "CUBA.MINOR"
             ))
 
+        self.assertIsNone(
+            check_valid_shape([1, 2, 3],
+                              [1],
+                              'CUBA.ACCELERATION')
+        )
     def test_validate_cuba_keyword(self):
         ''' Test for valid cases for CUBA keyword values '''
         # Check valid cases

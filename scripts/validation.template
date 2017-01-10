@@ -38,19 +38,28 @@ def check_valid_shape(value, shape, cuba_key):
 
     value_shape = numpy.asarray(value).shape or [1]
 
-    msg_fmt = ("value has a shape of {value_shape}, "
-               "which does not comply with shape: {shape}")
-    error_message = msg_fmt.format(value_shape=value_shape,
-                                   shape=shape)
 
     if len(expected_shape) != len(value_shape):
+        msg_fmt = ("Value shape of {value_shape}, "
+                   "not comply with shape: {expected_shape}. "
+                   "len(expected_shape) = {len_expected}, "
+                   "len(value_shape) = {len_value}")
+        error_message = msg_fmt.format(value_shape=value_shape,
+                                       expected_shape=expected_shape,
+                                       len_expected=len(expected_shape),
+                                       len_value=len(value_shape))
         raise ValueError(error_message)
 
     for s1, s2 in zip(expected_shape, value_shape):
         if s1 is None:
             continue
         if s1 != s2:
-            raise ValueError(error_message)
+            raise ValueError(("Incongruent shapes."
+                              "Value shape of {value_shape}, "
+                              "not compliant with expected shape: "
+                              "{expected_shape}. ").format(
+                                  expected_shape=expected_shape,
+                                  value_shape=value_shape))
 
 
 def validate_cuba_keyword(value, key):
