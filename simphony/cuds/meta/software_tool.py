@@ -1,5 +1,6 @@
 from simphony.core import Default  # noqa
 from . import validation
+from .version import Version
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -49,4 +50,4 @@ class SoftwareTool(CUDSItem):
         return value
 
     def _default_version(self):
-        return None
+        return Version()
