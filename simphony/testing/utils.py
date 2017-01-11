@@ -16,9 +16,11 @@ from ..cuds.mesh_items import Edge, Face, Cell, Point
 def compare_particles_datasets(particles, reference, testcase=None):
     self = testcase
     self.assertEqual(particles.name, reference.name)
-    for b, r in zip(particles.iter_bonds(), reference.iter_bonds()):
+    for b, r in zip(particles.iter(item_type=CUBA.BOND),
+                    reference.iter(item_type=CUBA.BOND)):
         compare_bonds(b, r, testcase=self)
-    for p, r in zip(particles.iter_particles(), reference.iter_particles()):
+    for p, r in zip(particles.iter(item_type=CUBA.PARTICLE),
+                    reference.iter(item_type=CUBA.PARTICLE)):
         compare_particles(p, r, testcase=self)
     compare_data_containers(particles.data, reference.data, testcase=self)
 
@@ -26,13 +28,17 @@ def compare_particles_datasets(particles, reference, testcase=None):
 def compare_mesh_datasets(mesh, reference, testcase=None):
     self = testcase
     self.assertEqual(mesh.name, reference.name)
-    for p, r in zip(mesh.iter_points(), reference.iter_points()):
+    for p, r in zip(mesh.iter(item_type=CUBA.POINT),
+                    reference.iter(item_type=CUBA.POINT)):
         compare_points(p, r, testcase=self)
-    for e, r in zip(mesh.iter_edges(), reference.iter_edges()):
+    for e, r in zip(mesh.iter(item_type=CUBA.EDGE),
+                    reference.iter(item_type=CUBA.EDGE)):
         compare_elements(e, r, testcase=self)
-    for f, r in zip(mesh.iter_faces(), reference.iter_faces()):
+    for f, r in zip(mesh.iter(item_type=CUBA.FACE),
+                    reference.iter(item_type=CUBA.FACE)):
         compare_elements(f, r, testcase=self)
-    for c, r in zip(mesh.iter_cells(), reference.iter_cells()):
+    for c, r in zip(mesh.iter(item_type=CUBA.CELL),
+                    reference.iter(item_type=CUBA.CELL)):
         compare_elements(c, r, testcase=self)
     compare_data_containers(mesh.data, reference.data, testcase=self)
 
@@ -40,7 +46,8 @@ def compare_mesh_datasets(mesh, reference, testcase=None):
 def compare_lattice_datasets(lattice, reference, testcase=None):
     self = testcase
     self.assertEqual(lattice.name, reference.name)
-    for l, r in zip(lattice.iter_nodes(), reference.iter_nodes()):
+    for l, r in zip(lattice.iter(item_type=CUBA.NODE),
+                    reference.iter(item_type=CUBA.NODE)):
         compare_lattice_nodes(l, r, testcase=self)
     compare_data_containers(lattice.data, reference.data, testcase=self)
     self.assertEqual(lattice.primitive_cell.bravais_lattice,
