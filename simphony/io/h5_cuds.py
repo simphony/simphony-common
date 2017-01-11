@@ -359,9 +359,9 @@ class H5CUDS(object):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.NODE]})
-                h5_lattice.add([item])
+                h5_lattice.update([item])
         else:
-            h5_lattice.add(lattice.iter())
+            h5_lattice.update(lattice.iter(item_type=CUBA.NODE))
 
     def _get_particles(self, name):
         """Get particle container from file.
