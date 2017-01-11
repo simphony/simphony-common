@@ -263,20 +263,19 @@ class H5CUDS(object):
         h5_particles.data = particles.data
 
         if cuba_keys is not None:
-            for item in particles.iter_particles():
+            for item in particles.iter(item_type=CUBA.PARTICLE):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.PARTICLE]})
-                h5_particles.add_particles([item])
+                h5_particles.add([item])
 
-            for item in particles.iter_bonds():
+            for item in particles.iter(item_type=CUBA.BOND):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.BOND]})
-                h5_particles.add_bonds([item])
+                h5_particles.add([item])
         else:
-            h5_particles.add_particles(particles.iter_particles())
-            h5_particles.add_bonds(particles.iter_bonds())
+            h5_particles.add(particles.iter())
 
     def _add_mesh(self, mesh, cuba_keys):
         """Add a mesh to the file.
@@ -304,34 +303,31 @@ class H5CUDS(object):
         h5_mesh.data = mesh.data
 
         if cuba_keys is not None:
-            for item in mesh.iter_points():
+            for item in mesh.iter(item_type=CUBA.POINT):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.POINT]})
-                h5_mesh.add_points([item])
+                h5_mesh.add([item])
 
-            for item in mesh.iter_edges():
+            for item in mesh.iter(item_type=CUBA.EDGE):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.EDGE]})
-                h5_mesh.add_edges([item])
+                h5_mesh.add([item])
 
-            for item in mesh.iter_faces():
+            for item in mesh.iter(item_type=CUBA.FACE):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.FACE]})
-                h5_mesh.add_faces([item])
+                h5_mesh.add([item])
 
-            for item in mesh.iter_cells():
+            for item in mesh.iter(item_type=CUBA.CELL):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.CELL]})
-                h5_mesh.add_cells([item])
+                h5_mesh.add([item])
         else:
-            h5_mesh.add_points(mesh.iter_points())
-            h5_mesh.add_edges(mesh.iter_edges())
-            h5_mesh.add_faces(mesh.iter_faces())
-            h5_mesh.add_cells(mesh.iter_cells())
+            h5_mesh.add(mesh.iter())
 
     def _add_lattice(self, lattice, cuba_keys):
         """Add lattice to the file.
@@ -359,13 +355,13 @@ class H5CUDS(object):
         h5_lattice.data = lattice.data
 
         if cuba_keys is not None:
-            for item in lattice.iter_nodes():
+            for item in lattice.iter(item_type=CUBA.NODE):
                 item.data = DataContainer(
                     {key: item.data[key] for key in item.data
                      if key in cuba_keys[CUBA.NODE]})
-                h5_lattice.update_nodes([item])
+                h5_lattice.add([item])
         else:
-            h5_lattice.update_nodes(lattice.iter_nodes())
+            h5_lattice.add(lattice.iter())
 
     def _get_particles(self, name):
         """Get particle container from file.

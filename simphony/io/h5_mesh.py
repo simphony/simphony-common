@@ -115,11 +115,7 @@ class H5Mesh(ABCMesh):
 
     See Also
     --------
-    get_point, get_edge, get_face, get_cell
-    add_point, add_edge, add_face, add_cell
-    update_point, update_edge, update_face, update_cell
-    iter_points, iter_edges, iter_faces, iter_cells
-    has_edges, has_faces, has_cells
+    get, add, update, iter, has,
     _create_points_table, _create_edges_table
     _create_faces_table, _create_cells_table
 
@@ -677,7 +673,7 @@ class H5Mesh(ABCMesh):
                 )
         else:
             for uid in uids:
-                yield self.get_point(uid)
+                yield self._get_point(uid)
 
     def _iter_edges(self, uids=None):
         """ Returns an iterator over edges.
@@ -706,7 +702,7 @@ class H5Mesh(ABCMesh):
                 )
         else:
             for uid in uids:
-                yield self.get_edge(uid)
+                yield self._get_edge(uid)
 
     def _iter_faces(self, uids=None):
         """ Returns an iterator over faces.
@@ -735,7 +731,7 @@ class H5Mesh(ABCMesh):
                 )
         else:
             for uid in uids:
-                yield self.get_face(uid)
+                yield self._get_face(uid)
 
     def _iter_cells(self, uids=None):
         """ Returns an iterator over cells.
@@ -764,7 +760,7 @@ class H5Mesh(ABCMesh):
                 )
         else:
             for uid in uids:
-                yield self.get_cell(uid)
+                yield self._get_cell(uid)
 
     def _has_points(self):
         """ Check if the mesh container has edges
