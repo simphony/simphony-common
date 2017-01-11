@@ -82,10 +82,12 @@ class CheckMeshItemOperations(object):
     __metaclass__ = abc.ABCMeta
 
     operation_mapping = {
-        'get item': 'none',
-        'add item': 'none',
-        'update item': 'none',
-        'iter items': 'none'}
+        'get item': 'get',
+        'add item': 'add',
+        'update item': 'update',
+        'iter items': 'iter',
+        'has items': 'has_type',
+        'count items': 'count_of'}
 
     def setUp(self):
         self.item_list = self.create_items()
@@ -105,6 +107,12 @@ class CheckMeshItemOperations(object):
     def create_item(self, uid):
         """ Create an item with the provided uid
 
+        """
+
+    @abc.abstractproperty
+    def item_type(self):
+        """
+        The item type this subclass handles
         """
 
     @abc.abstractmethod
@@ -252,7 +260,7 @@ class CheckMeshItemOperations(object):
         # given
         container = self.container
         self._add_items(container)
-        items = list(self.iter_operation(container))
+        items = list(self.iter_operation(container, item_type=self.item_type))
         for item in items:
             item.data = create_data_container(restrict=self.supported_cuba())
 
@@ -283,7 +291,7 @@ class CheckMeshItemOperations(object):
         # given
         container = self.container
         self._add_items(container)
-        items = list(self.iter_operation(container))
+        items = list(self.iter_operation(container, item_type=self.item_type))
         for item in items:
             item.data = create_data_container()
 
@@ -343,7 +351,8 @@ class CheckMeshItemOperations(object):
         item.data = DataContainer()
 
         # then
-        retrieved = tuple(self.iter_operation(container))[0]
+        retrieved = tuple(self.iter_operation(container,
+                                              item_type=self.item_type))[0]
         self.assertNotEqual(retrieved, item)
         self.assertNotEqual(retrieved.data, item.data)
 
@@ -370,7 +379,8 @@ class CheckMeshItemOperations(object):
 
         # when
         iterated_items = [
-            item for item in self.iter_operation(container)]
+            item for item in self.iter_operation(container,
+                                                 item_type=self.item_type)]
 
         # then
         # The order of iteration is not important in this case.
@@ -427,12 +437,9 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
             coordinates=(0.1, -3.5, 44),
             data=create_data_container(restrict=self.supported_cuba()))
 
-    operation_mapping = {
-        'get item': 'get_point',
-        'add item': 'add_points',
-        'update item': 'update_points',
-        'iter items': 'iter_points',
-        'count items': 'count_of'}
+    @property
+    def item_type(self):
+        return CUBA.POINT
 
     def count_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['count items'])
@@ -526,21 +533,11 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
         CheckMeshItemOperations.setUp(self)
-        self.container.add_points(self.points)
-
-    operation_mapping = {
-        'get item': 'none',
-        'add item': 'none',
-        'update item': 'none',
-        'iter items': 'none',
-        'has items': 'none',
-        'count items': 'none'}
+        self.container.add(self.points)
 
     points_range = None
 
     point_groups = [1]
-
-    item_type = None
 
     def has_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['has items'])
@@ -554,11 +551,13 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
 
         # container without items
-        self.assertFalse(self.has_items_operation(container))
+        self.assertFalse(self.has_items_operation(container,
+                                                  item_type=self.item_type))
 
         # container with items
         self.add_operation(container, [self.item_list[0]])
-        self.assertTrue(self.has_items_operation(container))
+        self.assertTrue(self.has_items_operation(container,
+                                                 item_type=self.item_type))
 
     def test_count_items(self):
         container = self.container
@@ -589,7 +588,7 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        point_uids = container.add_points([
+        point_uids = container.add([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
             for i in range(self.points_range[-1])])
 
@@ -622,9 +621,10 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
         self._add_items(container)
         items = [
-            i for i in self.iter_operation(container)]
+            i for i in self.iter_operation(container,
+                                           item_type=self.item_type)]
 
-        point_uids = container.add_points([
+        point_uids = container.add([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
             for i in range(self.points_range[-1])])
 
@@ -664,19 +664,13 @@ class CheckMeshEdgeOperations(CheckMeshElementOperations):
         self.addTypeEqualityFunc(
             Edge, partial(compare_elements, testcase=self))
 
-    operation_mapping = {
-        'get item': 'get_edge',
-        'add item': 'add_edges',
-        'update item': 'update_edges',
-        'iter items': 'iter_edges',
-        'has items': 'has_edges',
-        'count items': 'count_of'}
-
     points_range = [2]
 
     point_groups = [1, 2]
 
-    item_type = CUBA.EDGE
+    @property
+    def item_type(self):
+        return CUBA.EDGE
 
     def create_items(self):
         uids = self.uids
@@ -700,19 +694,13 @@ class CheckMeshFaceOperations(CheckMeshElementOperations):
         self.addTypeEqualityFunc(
             Face, partial(compare_elements, testcase=self))
 
-    operation_mapping = {
-        'get item': 'get_face',
-        'add item': 'add_faces',
-        'update item': 'update_faces',
-        'iter items': 'iter_faces',
-        'has items': 'has_faces',
-        'count items': 'count_of'}
-
     points_range = [3, 4]
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUBA.FACE
+    @property
+    def item_type(self):
+        return CUBA.FACE
 
     def create_items(self):
         uids = self.uids
@@ -736,19 +724,13 @@ class CheckMeshCellOperations(CheckMeshElementOperations):
         self.addTypeEqualityFunc(
             Cell, partial(compare_elements, testcase=self))
 
-    operation_mapping = {
-        'get item': 'get_cell',
-        'add item': 'add_cells',
-        'update item': 'update_cells',
-        'iter items': 'iter_cells',
-        'has items': 'has_cells',
-        'count items': 'count_of'}
-
     points_range = range(4, 8)
 
     point_groups = [1, 2, 3, 4]
 
-    item_type = CUBA.CELL
+    @property
+    def item_type(self):
+        return CUBA.CELL
 
     def create_items(self):
         uids = self.uids
