@@ -147,8 +147,11 @@ def _CUDSComponent_to_yaml(comp, stream):
     # Go through the keys in the component
     cdata = comp._data
     for key in cdata.keys():
+        # Skip the UID key, as it's not accepted by the deserializer
+        if key == CUBA.UID:
+            continue
         # Check if the data is a list or numpy types or CUDSComponents
-        if type(cdata[key]) == list:
+        elif type(cdata[key]) == list:
             # List of simple types?
             if KEYWORDS[key._name_].dtype in [numpy.float64,
                                               numpy.int32, bool]:
@@ -243,7 +246,7 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
         supp_params = [str(e).replace('CUBA.', '')
                        for e in comp_class.supported_parameters()]
         # Don't accept UUID entry from the yaml file
-        supp_params.remove('UUID')
+        supp_params.remove('UID')
         for key in comp.keys():
             # Check if the key is supported
             if key in supp_params:

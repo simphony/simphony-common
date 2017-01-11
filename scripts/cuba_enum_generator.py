@@ -1,6 +1,3 @@
-from scripts.single_meta_class_generator import CUBA_DATA_CONTAINER_EXCLUDE
-
-
 class CUBAEnumGenerator(object):
     """Generator class for cuba.py enumeration.
     """
@@ -18,16 +15,14 @@ class CUBAEnumGenerator(object):
             '\n',
             '\n',
             '@unique\n',
-            'class CUBA(Enum):\n',
-            '\n']
-        template = '    {} = "{}"\n'
+            'class CUBA(Enum):\n'
+            ]
+        template = '    {keyword} = "{keyword}"\n'
 
         all_keys = set(
             cuba_dict['CUBA_KEYS']) | set(simphony_metadata_dict['CUDS_KEYS'])
 
         for keyword in sorted(list(all_keys)):
-            if keyword in CUBA_DATA_CONTAINER_EXCLUDE:
-                continue
-            lines.append(template.format(keyword, keyword))
+            lines.append(template.format(keyword=keyword))
 
         output.writelines(lines)

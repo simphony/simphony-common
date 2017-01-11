@@ -1,51 +1,24 @@
-import re
+# This file is copied and renamed in simphony/cuds/meta/ to support the
+# meta classes in performing validation
 import warnings
 
 import numpy
 
-from scripts.utils import to_camel_case
+from scripts.utils import to_camel_case, without_cuba_prefix
 
 
-def decode_shape(shape_code):
-    """ Decode the 'shape' attribute in the metadata schema
-
-    Parameters
-    ----------
-    shape_code : str
-
-    Returns
-    -------
-    tuple
-
-    Examples
-    --------
-    >>> decode_shape("(1:)")
-    ((1, inf),)
-
-    >>> decode_shape("(:, :10)")
-    ((-inf, inf), (-inf, 10))
-    """
-    matched = re.finditer(
-        r'([0-9+]):([0-9]+)|([0-9]+):|:([0-9]+)|([0-9]+)|[^0-9](:)[^0-9]',
-        shape_code)
-
-    shapes = []
-
-    for code in matched:
-        min_size = code.group(1) or code.group(3) or code.group(5)
-        min_size = int(min_size) if min_size else -numpy.inf
-        max_size = code.group(2) or code.group(4) or code.group(5)
-        max_size = int(max_size) if max_size else numpy.inf
-        shapes.append((min_size, max_size))
-    return tuple(shapes)
-
-
-def check_shape(value, shape):
-    """ Check if `value` is a sequence that comply with `shape`
+def check_valid_shape(value, shape, cuba_key):
+    """ Check if `value` is a sequence that comply with `shape`.
+    Note that the cuba data dimensionality is also taken into account.
 
     Parameters
     ----------
-    shape : str
+    value :
+        The value to check
+    shape : list or tuple
+        The expected shape
+    cuba_key:
+        The key of the data expected to be contained.
 
     Returns
     -------
@@ -56,26 +29,79 @@ def check_shape(value, shape):
     ValueError
         if the `value` does not comply with the required `shape`
     """
-    decoded_shape = decode_shape(shape)
-    if len(decoded_shape) == 0:
-        # Any shape is allowed
-        return
-
     # FIXME: cuba.yml uses [1] to mean a single value with no shape
-    value_shape = numpy.asarray(value).shape or (1,)
+    from simphony.core.keywords import KEYWORDS
 
-    msg_fmt = ("value has a shape of {value_shape}, "
-               "which does not comply with shape: {shape}")
-    error_message = msg_fmt.format(value_shape=value_shape,
-                                   shape=shape)
+    keyword = KEYWORDS[without_cuba_prefix(cuba_key)]
 
-    if len(decoded_shape) != len(value_shape):
+    expected_shape = []
+    if list(shape) != [1]:
+        expected_shape += list(shape)
+
+    if list(keyword.shape) != [1]:
+        expected_shape += list(keyword.shape)
+
+    if expected_shape == []:
+        expected_shape = [1]
+
+    value_shape = numpy.asarray(value).shape or [1]
+
+    if len(expected_shape) != len(value_shape):
+        msg_fmt = ("Value shape of {value_shape}, "
+                   "not comply with shape: {expected_shape}. "
+                   "len(expected_shape) = {len_expected}, "
+                   "len(value_shape) = {len_value}")
+        error_message = msg_fmt.format(value_shape=value_shape,
+                                       expected_shape=expected_shape,
+                                       len_expected=len(expected_shape),
+                                       len_value=len(value_shape))
         raise ValueError(error_message)
 
-    for (min_size, max_size), size in zip(decoded_shape, value_shape):
-        if not (size >= min_size and size <= max_size):
-            raise ValueError(error_message)
+    for s1, s2 in zip(expected_shape, value_shape):
+        if s1 is None:
+            continue
+        if s1 != s2:
+            raise ValueError(("Incongruent shapes."
+                              "Value shape of {value_shape}, "
+                              "not compliant with expected shape: "
+                              "{expected_shape}. ").format(
+                                  expected_shape=expected_shape,
+                                  value_shape=value_shape))
 
+
+def check_cuba_shape(value, cuba_key):
+    """ Check if `value` is a sequence that comply with the cuba shape
+
+    Parameters
+    ----------
+    value:
+        the value to check
+    cuba_key: cuba key
+        the cuba key of the data
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        if the `value` does not comply with the required cuba shape
+    """
+    # FIXME: cuba.yml uses [1] to mean a single value with no shape
+    from simphony.core.keywords import KEYWORDS
+
+    keyword = KEYWORDS[without_cuba_prefix(cuba_key)]
+    expected_shape = list(keyword.shape)
+    value_shape = list(numpy.asarray(value).shape or [1])
+
+    if expected_shape != value_shape:
+        raise ValueError(("Incongruent shapes."
+                          "Value shape of {value_shape}, "
+                          "not compliant with expected CUBA shape "
+                          "{expected_shape}. ").format(
+                              expected_shape=expected_shape,
+                              value_shape=value_shape))
 
 def validate_cuba_keyword(value, key):
     ''' Validate the given `value` against `key` such that
@@ -141,10 +167,7 @@ def validate_cuba_keyword(value, key):
                           'Please fix the cuba.yml shape syntax.')
             return
 
-        # Check shape, keyword.shape needs to be converted
-        # to our shape syntax
-        shape = '({})'.format(str(keyword.shape).strip('[]'))
-        check_shape(value, shape)
+        check_cuba_shape(value, keyword_name)
     else:
         message = '{} is not defined in CUBA keyword or meta data'
         warnings.warn(message.format(key.upper()))
@@ -204,3 +227,27 @@ def cast_data_type(value, key):
 
     else:
         return value
+
+
+def check_elements(value, shape, cuba_key):
+    """Check each individual element of value to see if it matches the
+    expected shape for a given cuba key
+    """
+    for entry in flatten_to_shape(value, shape):
+        validate_cuba_keyword(entry, cuba_key)
+
+
+def flatten_to_shape(container, shape):
+    """Flatten an array, but only partially, so that higher dimensionality
+    arrays can remain if required.
+    """
+    if not isinstance(container, (list, tuple)):
+        raise TypeError("container must be iterable")
+
+    if len(shape) == 1:
+        for i in container:
+            yield i
+    else:
+        for i in container:
+            for value in flatten_to_shape(i, shape[1:]):
+                yield value

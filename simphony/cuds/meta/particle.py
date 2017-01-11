@@ -1,46 +1,26 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .point import Point
 
 
 class Particle(Point):
-    '''A particle in a 3D space system  # noqa
-    '''
-
+    """
+    A particle in a 3D space system
+    """
     cuba_key = CUBA.PARTICLE
 
-    def __init__(self, position=None):
+    def __init__(self, position=Default):
 
-        self._data = DataContainer()
-
-        if position is None:
-            self.position = [0, 0, 0]
-        # This is a system-managed, read-only attribute
-        self._definition = 'A particle in a 3D space system'  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(Particle, self).__init__(position=position)
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.POSITION, CUBA.UUID)
+        try:
+            base_params = super(Particle, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.POINT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_definition(self):
+        return "A particle in a 3D space system"  # noqa

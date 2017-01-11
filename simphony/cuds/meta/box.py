@@ -1,41 +1,48 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .boundary import Boundary
+from simphony.core import Default  # noqa
 from . import validation
+from .boundary import Boundary
+from simphony.core.cuba import CUBA
+from .empty import Empty
 
 
 class Box(Boundary):
-    '''A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).  # noqa
-    '''
-
+    """
+    A simple hexahedron simulation box defining six boundary
+    faces that are defined by three box vectors. The same
+    boundary condition should be specified for each direction
+    (two faces at a time).
+    """
     cuba_key = CUBA.BOX
 
-    def __init__(self, description="", name="", condition=None, vector=None):
+    def __init__(self,
+                 condition=Default,
+                 vector=Default,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(Box, self).__init__(
+            condition=condition, description=description, name=name)
+        self._init_vector(vector)
 
-        if vector is None:
-            self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-        self.condition = condition
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time).'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Box, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def vector(self):
-        return self.data[CUBA.VECTOR]
+        return (
+            CUBA.CONDITION,
+            CUBA.VECTOR, ) + base_params
 
-    @vector.setter
-    def vector(self, value):
-        value = validation.cast_data_type(value, 'vector')
-        validation.check_shape(value, '(3,3)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'vector')
-        data = self.data
-        data[CUBA.VECTOR] = value
-        self.data = data
+    def _default_definition(self):
+        return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa
+
+    def _init_condition(self, value):
+        if value is Default:
+            value = self._default_condition()
+
+        self.condition = value
 
     @property
     def condition(self):
@@ -43,38 +50,40 @@ class Box(Boundary):
 
     @condition.setter
     def condition(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'condition')
-            validation.check_shape(value, '(3)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'condition')
-        data = self.data
-        data[CUBA.CONDITION] = value
-        self.data = data
+        value = self._validate_condition(value)
+        self.data[CUBA.CONDITION] = value
+
+    def _validate_condition(self, value):
+        value = validation.cast_data_type(value, 'CONDITION')
+        validation.check_valid_shape(value, [3], 'CONDITION')
+        validation.check_elements(value, [3], 'CONDITION')
+
+        return value
+
+    def _default_condition(self):
+        return [Empty(), Empty(), Empty()]
+
+    def _init_vector(self, value):
+        if value is Default:
+            value = self._default_vector()
+
+        self.vector = value
 
     @property
-    def definition(self):
-        return self._definition
+    def vector(self):
+        return self.data[CUBA.VECTOR]
 
-    @property
-    def data(self):
-        return self._data
+    @vector.setter
+    def vector(self, value):
+        value = self._validate_vector(value)
+        self.data[CUBA.VECTOR] = value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    def _validate_vector(self, value):
+        value = validation.cast_data_type(value, 'VECTOR')
+        validation.check_valid_shape(value, [3], 'VECTOR')
+        validation.check_elements(value, [3], 'VECTOR')
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        return value
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CONDITION, CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID,
-                CUBA.VECTOR)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.BOUNDARY, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_vector(self):
+        return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

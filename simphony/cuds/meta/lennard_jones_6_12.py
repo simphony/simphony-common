@@ -1,62 +1,49 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
-from . import validation
 
 
 class LennardJones_6_12(PairPotential):
-    '''A Lennard-Jones 6-12 Potential  # noqa
-    '''
-
+    """
+    A Lennard-Jones 6-12 Potential
+    """
     cuba_key = CUBA.LENNARD_JONES_6_12
 
     def __init__(self,
                  material,
-                 description="",
-                 name="",
-                 van_der_waals_radius=1.0,
-                 cutoff_distance=1.0,
-                 energy_well_depth=1.0):
+                 van_der_waals_radius=Default,
+                 cutoff_distance=Default,
+                 energy_well_depth=Default,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(LennardJones_6_12, self).__init__(
+            material=material, description=description, name=name)
+        self._init_van_der_waals_radius(van_der_waals_radius)
+        self._init_cutoff_distance(cutoff_distance)
+        self._init_energy_well_depth(energy_well_depth)
 
-        self.material = material
-        self.energy_well_depth = energy_well_depth
-        self.cutoff_distance = cutoff_distance
-        self.van_der_waals_radius = van_der_waals_radius
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'A Lennard-Jones 6-12 Potential'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = [CUBA.POSITION, CUBA.POTENTIAL_ENERGY]
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(LennardJones_6_12, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def energy_well_depth(self):
-        return self.data[CUBA.ENERGY_WELL_DEPTH]
+        return (
+            CUBA.VAN_DER_WAALS_RADIUS,
+            CUBA.CUTOFF_DISTANCE,
+            CUBA.ENERGY_WELL_DEPTH, ) + base_params
 
-    @energy_well_depth.setter
-    def energy_well_depth(self, value):
-        value = validation.cast_data_type(value, 'energy_well_depth')
-        validation.validate_cuba_keyword(value, 'energy_well_depth')
-        data = self.data
-        data[CUBA.ENERGY_WELL_DEPTH] = value
-        self.data = data
+    def _default_definition(self):
+        return "A Lennard-Jones 6-12 Potential"  # noqa
 
-    @property
-    def cutoff_distance(self):
-        return self.data[CUBA.CUTOFF_DISTANCE]
+    def _init_van_der_waals_radius(self, value):
+        if value is Default:
+            value = self._default_van_der_waals_radius()
 
-    @cutoff_distance.setter
-    def cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'cutoff_distance')
-        validation.validate_cuba_keyword(value, 'cutoff_distance')
-        data = self.data
-        data[CUBA.CUTOFF_DISTANCE] = value
-        self.data = data
+        self.van_der_waals_radius = value
 
     @property
     def van_der_waals_radius(self):
@@ -64,45 +51,68 @@ class LennardJones_6_12(PairPotential):
 
     @van_der_waals_radius.setter
     def van_der_waals_radius(self, value):
-        value = validation.cast_data_type(value, 'van_der_waals_radius')
-        validation.validate_cuba_keyword(value, 'van_der_waals_radius')
-        data = self.data
-        data[CUBA.VAN_DER_WAALS_RADIUS] = value
-        self.data = data
+        value = self._validate_van_der_waals_radius(value)
+        self.data[CUBA.VAN_DER_WAALS_RADIUS] = value
+
+    def _validate_van_der_waals_radius(self, value):
+        value = validation.cast_data_type(value, 'VAN_DER_WAALS_RADIUS')
+        validation.check_valid_shape(value, [1], 'VAN_DER_WAALS_RADIUS')
+        validation.validate_cuba_keyword(value, 'VAN_DER_WAALS_RADIUS')
+        return value
+
+    def _default_van_der_waals_radius(self):
+        return 1.0
+
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa
+
+    def _default_variables(self):
+        return ['CUBA.POSITION', 'CUBA.POTENTIAL_ENERGY']  # noqa
+
+    def _init_cutoff_distance(self, value):
+        if value is Default:
+            value = self._default_cutoff_distance()
+
+        self.cutoff_distance = value
 
     @property
-    def models(self):
-        return self._models
+    def cutoff_distance(self):
+        return self.data[CUBA.CUTOFF_DISTANCE]
+
+    @cutoff_distance.setter
+    def cutoff_distance(self, value):
+        value = self._validate_cutoff_distance(value)
+        self.data[CUBA.CUTOFF_DISTANCE] = value
+
+    def _validate_cutoff_distance(self, value):
+        value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
+        validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
+        validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
+        return value
+
+    def _default_cutoff_distance(self):
+        return 1.0
+
+    def _init_energy_well_depth(self, value):
+        if value is Default:
+            value = self._default_energy_well_depth()
+
+        self.energy_well_depth = value
 
     @property
-    def definition(self):
-        return self._definition
+    def energy_well_depth(self):
+        return self.data[CUBA.ENERGY_WELL_DEPTH]
 
-    @property
-    def variables(self):
-        return self._variables
+    @energy_well_depth.setter
+    def energy_well_depth(self, value):
+        value = self._validate_energy_well_depth(value)
+        self.data[CUBA.ENERGY_WELL_DEPTH] = value
 
-    @property
-    def data(self):
-        return self._data
+    def _validate_energy_well_depth(self, value):
+        value = validation.cast_data_type(value, 'ENERGY_WELL_DEPTH')
+        validation.check_valid_shape(value, [1], 'ENERGY_WELL_DEPTH')
+        validation.validate_cuba_keyword(value, 'ENERGY_WELL_DEPTH')
+        return value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CUTOFF_DISTANCE, CUBA.DESCRIPTION, CUBA.ENERGY_WELL_DEPTH,
-                CUBA.MATERIAL, CUBA.NAME, CUBA.UUID, CUBA.VAN_DER_WAALS_RADIUS)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
-                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_energy_well_depth(self):
+        return 1.0

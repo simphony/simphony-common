@@ -1,52 +1,39 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .solver_parameter import SolverParameter
 
 
 class ComputationalMethod(SolverParameter):
-    '''A computational method according to the RoMM  # noqa
-    '''
-
+    """
+    A computational method according to the RoMM
+    """
     cuba_key = CUBA.COMPUTATIONAL_METHOD
 
-    def __init__(self, description="", name=""):
+    def __init__(self, description=Default, name=Default):
 
-        self._data = DataContainer()
-
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._physics_equation = []
-        # This is a system-managed, read-only attribute
-        self._definition = 'A computational method according to the RoMM'  # noqa
-
-    @property
-    def physics_equation(self):
-        return self._physics_equation
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(ComputationalMethod, self).__init__(
+            description=description, name=name)
+        self._init_physics_equations()
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.PHYSICS_EQUATION, CUBA.UUID)
+        try:
+            base_params = super(ComputationalMethod,
+                                cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.SOLVER_PARAMETER, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_definition(self):
+        return "A computational method according to the RoMM"  # noqa
+
+    def _init_physics_equations(self):
+        self._physics_equations = self._default_physics_equations()  # noqa
+
+    @property
+    def physics_equations(self):
+        return self._physics_equations
+
+    def _default_physics_equations(self):
+        return []  # noqa

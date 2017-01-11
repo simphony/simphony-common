@@ -339,7 +339,7 @@ class TestMetaClass(unittest.TestCase):
 
     def test_TemperatureRescaling(self):
         material = meta_class.Material()
-        temp_rescaling = meta_class.TemperatureRescaling([material])
+        temp_rescaling = meta_class.TemperatureRescaling(material=[material])
         self.assertIsNotNone(temp_rescaling.data)
 
     def test_Thermostat(self):
@@ -349,7 +349,7 @@ class TestMetaClass(unittest.TestCase):
 
     def test_NoseHooverBoundary(self):
         material = meta_class.Material()
-        nose_hoover = meta_class.NoseHoover([material])
+        nose_hoover = meta_class.NoseHoover(material=[material])
         self.assertIsNotNone(nose_hoover.data)
 
     def test_not_sharing_mutable(self):

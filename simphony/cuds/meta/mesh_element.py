@@ -1,23 +1,37 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
-from . import validation
 
 
 class MeshElement(CUDSItem):
-    '''An element for storing geometrical objects  # noqa
-    '''
-
+    """
+    An element for storing geometrical objects
+    """
     cuba_key = CUBA.MESH_ELEMENT
 
     def __init__(self, point):
 
-        self._data = DataContainer()
+        super(MeshElement, self).__init__()
+        self._init_point(point)
 
-        self.point = point
-        # This is a system-managed, read-only attribute
-        self._definition = 'An element for storing geometrical objects'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(MeshElement, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.POINT, ) + base_params
+
+    def _default_definition(self):
+        return "An element for storing geometrical objects"  # noqa
+
+    def _init_point(self, value):
+        if value is Default:
+            value = self._default_point()
+
+        self.point = value
 
     @property
     def point(self):
@@ -25,37 +39,15 @@ class MeshElement(CUDSItem):
 
     @point.setter
     def point(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'point')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'point')
-        data = self.data
-        data[CUBA.POINT] = value
-        self.data = data
+        value = self._validate_point(value)
+        self.data[CUBA.POINT] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_point(self, value):
+        value = validation.cast_data_type(value, 'POINT')
+        validation.check_valid_shape(value, [None], 'POINT')
+        validation.check_elements(value, [None], 'POINT')
 
-    @property
-    def data(self):
-        return self._data
+        return value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.POINT, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+    def _default_point(self):
+        raise TypeError("No default for point")

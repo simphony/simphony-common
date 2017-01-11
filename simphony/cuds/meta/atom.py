@@ -1,25 +1,37 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .particle import Particle
-from . import validation
 
 
 class Atom(Particle):
-    '''An atom  # noqa
-    '''
-
+    """
+    An atom
+    """
     cuba_key = CUBA.ATOM
 
-    def __init__(self, position=None, mass=1.0):
+    def __init__(self, mass=Default, position=Default):
 
-        self._data = DataContainer()
+        super(Atom, self).__init__(position=position)
+        self._init_mass(mass)
 
-        self.mass = mass
-        if position is None:
-            self.position = [0, 0, 0]
-        # This is a system-managed, read-only attribute
-        self._definition = 'An atom'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Atom, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.MASS, ) + base_params
+
+    def _default_definition(self):
+        return "An atom"  # noqa
+
+    def _init_mass(self, value):
+        if value is Default:
+            value = self._default_mass()
+
+        self.mass = value
 
     @property
     def mass(self):
@@ -27,34 +39,14 @@ class Atom(Particle):
 
     @mass.setter
     def mass(self, value):
-        value = validation.cast_data_type(value, 'mass')
-        validation.validate_cuba_keyword(value, 'mass')
-        data = self.data
-        data[CUBA.MASS] = value
-        self.data = data
+        value = self._validate_mass(value)
+        self.data[CUBA.MASS] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_mass(self, value):
+        value = validation.cast_data_type(value, 'MASS')
+        validation.check_valid_shape(value, [1], 'MASS')
+        validation.validate_cuba_keyword(value, 'MASS')
+        return value
 
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.MASS, CUBA.POSITION, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PARTICLE, CUBA.POINT, CUBA.CUDS_ITEM)
+    def _default_mass(self):
+        return 1.0

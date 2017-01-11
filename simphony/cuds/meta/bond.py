@@ -1,23 +1,34 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
-from . import validation
 
 
 class Bond(CUDSItem):
-    '''A bond between two or more atoms or particles  # noqa
-    '''
-
+    """
+    A bond between two or more atoms or particles
+    """
     cuba_key = CUBA.BOND
 
     def __init__(self, particle):
 
-        self._data = DataContainer()
+        super(Bond, self).__init__()
+        self._init_particle(particle)
 
-        self.particle = particle
-        # This is a system-managed, read-only attribute
-        self._definition = 'A bond between two or more atoms or particles'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Bond, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.PARTICLE, ) + base_params
+
+    def _init_particle(self, value):
+        if value is Default:
+            value = self._default_particle()
+
+        self.particle = value
 
     @property
     def particle(self):
@@ -25,37 +36,18 @@ class Bond(CUDSItem):
 
     @particle.setter
     def particle(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'particle')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'particle')
-        data = self.data
-        data[CUBA.PARTICLE] = value
-        self.data = data
+        value = self._validate_particle(value)
+        self.data[CUBA.PARTICLE] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_particle(self, value):
+        value = validation.cast_data_type(value, 'PARTICLE')
+        validation.check_valid_shape(value, [None], 'PARTICLE')
+        validation.check_elements(value, [None], 'PARTICLE')
 
-    @property
-    def data(self):
-        return self._data
+        return value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    def _default_particle(self):
+        raise TypeError("No default for particle")
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.PARTICLE, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_ITEM, )
+    def _default_definition(self):
+        return "A bond between two or more atoms or particles"  # noqa

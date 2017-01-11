@@ -1,4 +1,4 @@
-from scripts.utils import to_camel_case
+from . import utils
 
 
 class KeywordsGenerator(object):
@@ -21,7 +21,7 @@ class KeywordsGenerator(object):
             '\n',
             '\n',
             'ATTRIBUTES = [\n'
-            '    "name", "definition", "key", "shape", "dtype"]\n'  # noqa
+            '    "name", "definition", "key", "shape", "length", "dtype"]\n'  # noqa
             'Keyword = namedtuple("Keyword", ATTRIBUTES)\n',
             '\n',
             '\n',
@@ -38,21 +38,25 @@ class KeywordsGenerator(object):
             "        definition='{definition}',  # noqa\n"
             "        key='{key}',\n"
             "        shape={shape},\n"
+            "        length={length},\n"
             "        dtype={type}),\n")
         for keyword, content in sorted(cuba_dict['CUBA_KEYS'].items(),
                                        key=lambda x: x[0]):
             content['type'] = data_types[content['type']]
-            content['name'] = to_camel_case(keyword)
+            content['name'] = utils.to_camel_case(keyword)
             content['key'] = keyword
+            content['shape'] = content.get("shape", [1])
+            content['length'] = content.get("length", None)
             lines.extend(template.format(**content))
 
         for keyword, content in sorted(
                 simphony_metadata_dict['CUDS_KEYS'].items(),
                 key=lambda x: x[0]):
             content['type'] = "None"
-            content['name'] = to_camel_case(keyword)
+            content['name'] = utils.to_camel_case(keyword)
             content['key'] = keyword
-            content['shape'] = [1]
+            content['shape'] = content.get("shape", [1])
+            content['length'] = "None"
             lines.extend(template.format(**content))
         lines.append('}\n')
 
