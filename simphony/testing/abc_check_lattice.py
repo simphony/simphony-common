@@ -141,18 +141,19 @@ class CheckLatticeNodeOperations(object):
         container = self.container
 
         # number of nodes
-        number_of_nodes = sum(1 for node in container.iter_nodes())
+        number_of_nodes = sum(1 for node in container.iter(
+            item_type=CUBA.NODE))
         self.assertEqual(number_of_nodes, numpy.prod(self.size))
 
         # data
-        for node in container.iter_nodes():
+        for node in container.iter(item_type=CUBA.NODE):
             self.assertEqual(node.data, DataContainer())
 
         # indexes
         x, y, z = numpy.meshgrid(
             range(self.size[0]), range(self.size[1]), range(self.size[2]))
         expected = set(zip(x.flat, y.flat, z.flat))
-        indexes = {node.index for node in container.iter_nodes()}
+        indexes = {node.index for node in container.iter(item_type=CUBA.NODE)}
         self.assertEqual(indexes, expected)
 
     def test_iter_nodes_subset(self):
@@ -165,62 +166,63 @@ class CheckLatticeNodeOperations(object):
         expected = set(zip(x.flat, y.flat, z.flat))
 
         # data
-        for node in container.iter_nodes(expected):
+        for node in container.iter(expected, item_type=CUBA.NODE):
             self.assertEqual(node.data, DataContainer())
 
         # indexes
-        indexes = {node.index for node in container.iter_nodes(expected)}
+        indexes = {node.index for node in container.iter(expected,
+                                                         item_type=CUBA.NODE)}
         self.assertEqual(indexes, expected)
 
     def test_get_node(self):
         container = self.container
 
         index = 2, 3, 4
-        node = container.get_node(index)
+        node = container.get(index)
         expected = LatticeNode(index)
         self.assertEqual(node, expected)
 
         # check that mutating the node does not change internal info
         node.data = create_data_container()
-        self.assertNotEqual(container.get_node(index), node)
+        self.assertNotEqual(container.get(index), node)
 
     def test_get_node_with_invalid_index(self):
         container = self.container
 
         index = 2, 300, 4
         with self.assertRaises(IndexError):
-            container.get_node(index)
+            container.get(index)
 
         index = 2, 3, -4
         with self.assertRaises(IndexError):
-            container.get_node(index)
+            container.get(index)
 
     def test_update_nodes_with_invalid_index(self):
         container = self.container
 
         index = 2, 3, 4
-        node = container.get_node(index)
+        node = container.get(index)
 
         node.index = 2, 300, 4
         with self.assertRaises(IndexError):
-            container.update_nodes((node,))
+            container.update((node,))
 
         node.index = 2, 3, -4
         with self.assertRaises(IndexError):
-            container.update_nodes((node,))
+            container.update((node,))
 
     def test_update_nodes(self):
         container = self.container
 
         indices = ((2, 3, 4), (1, 2, 3))
-        nodes = [container.get_node(index) for index in indices]
+        nodes = [container.get(index) for index in indices]
         for node in nodes:
             node.data = create_data_container(restrict=self.supported_cuba())
-        container.update_nodes(nodes)
+        container.update(nodes)
 
         for n in xrange(len(indices)):
             index = indices[n]
-            new_node = container.get_node(index)
+            new_node = container.get(index)
             self.assertEqual(new_node, nodes[n])
             # Check that `new_node` is not the same instance as `node`
             self.assertIsNot(new_node, nodes[n])
@@ -229,15 +231,15 @@ class CheckLatticeNodeOperations(object):
         container = self.container
 
         indices = ((2, 3, 4), (1, 2, 3))
-        nodes = [container.get_node(index) for index in indices]
+        nodes = [container.get(index) for index in indices]
         # Update with full DataContainer.
         for node in nodes:
             node.data = create_data_container()
-        container.update_nodes(nodes)
+        container.update(nodes)
 
         for n in xrange(len(indices)):
             index = indices[n]
-            new_node = container.get_node(index)
+            new_node = container.get(index)
             # We expect only the supported CUBA to be stored.
             expected = LatticeNode(
                 index=nodes[n].index,

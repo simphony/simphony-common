@@ -370,7 +370,8 @@ class CheckMeshItemOperations(object):
 
         # when
         iterated_items = [
-            item for item in self.iter_operation(container)]
+            item for item in self.iter_operation(container,
+                                                 item_type=self.item_type)]
 
         # then
         # The order of iteration is not important in this case.
@@ -428,11 +429,13 @@ class CheckMeshPointOperations(CheckMeshItemOperations):
             data=create_data_container(restrict=self.supported_cuba()))
 
     operation_mapping = {
-        'get item': 'get_point',
-        'add item': 'add_points',
-        'update item': 'update_points',
-        'iter items': 'iter_points',
+        'get item': 'get',
+        'add item': 'add',
+        'update item': 'update',
+        'iter items': 'iter',
         'count items': 'count_of'}
+
+    item_type = CUBA.POINT
 
     def count_items_operation(self, container, *args, **kwrds):
         method = getattr(container, self.operation_mapping['count items'])
@@ -526,7 +529,7 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         for uid, point in zip(self.uids, self.points):
             point.uid = uid
         CheckMeshItemOperations.setUp(self)
-        self.container.add_points(self.points)
+        self.container.add(self.points)
 
     operation_mapping = {
         'get item': 'none',
@@ -554,11 +557,13 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
 
         # container without items
-        self.assertFalse(self.has_items_operation(container))
+        self.assertFalse(self.has_items_operation(container,
+                                                  item_type=self.item_type))
 
         # container with items
         self.add_operation(container, [self.item_list[0]])
-        self.assertTrue(self.has_items_operation(container))
+        self.assertTrue(self.has_items_operation(container,
+                                                 item_type=self.item_type))
 
     def test_count_items(self):
         container = self.container
@@ -589,7 +594,7 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
         uids = self._add_items(container)
         item = self.get_operation(container, uids[2])
-        point_uids = container.add_points([
+        point_uids = container.add([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
             for i in range(self.points_range[-1])])
 
@@ -622,9 +627,10 @@ class CheckMeshElementOperations(CheckMeshItemOperations):
         container = self.container
         self._add_items(container)
         items = [
-            i for i in self.iter_operation(container)]
+            i for i in self.iter_operation(container,
+                                           item_type=self.item_type)]
 
-        point_uids = container.add_points([
+        point_uids = container.add([
             Point((1.0 * i, 1.0 * i, 1.0 * i))
             for i in range(self.points_range[-1])])
 
@@ -665,11 +671,11 @@ class CheckMeshEdgeOperations(CheckMeshElementOperations):
             Edge, partial(compare_elements, testcase=self))
 
     operation_mapping = {
-        'get item': 'get_edge',
-        'add item': 'add_edges',
-        'update item': 'update_edges',
-        'iter items': 'iter_edges',
-        'has items': 'has_edges',
+        'get item': 'get',
+        'add item': 'add',
+        'update item': 'update',
+        'iter items': 'iter',
+        'has items': 'has_type',
         'count items': 'count_of'}
 
     points_range = [2]
@@ -701,11 +707,11 @@ class CheckMeshFaceOperations(CheckMeshElementOperations):
             Face, partial(compare_elements, testcase=self))
 
     operation_mapping = {
-        'get item': 'get_face',
-        'add item': 'add_faces',
-        'update item': 'update_faces',
-        'iter items': 'iter_faces',
-        'has items': 'has_faces',
+        'get item': 'get',
+        'add item': 'add',
+        'update item': 'update',
+        'iter items': 'iter',
+        'has items': 'has_type',
         'count items': 'count_of'}
 
     points_range = [3, 4]
@@ -737,11 +743,11 @@ class CheckMeshCellOperations(CheckMeshElementOperations):
             Cell, partial(compare_elements, testcase=self))
 
     operation_mapping = {
-        'get item': 'get_cell',
-        'add item': 'add_cells',
-        'update item': 'update_cells',
-        'iter items': 'iter_cells',
-        'has items': 'has_cells',
+        'get item': 'get',
+        'add item': 'add',
+        'update item': 'update',
+        'iter items': 'iter',
+        'has items': 'has_type',
         'count items': 'count_of'}
 
     points_range = range(4, 8)
