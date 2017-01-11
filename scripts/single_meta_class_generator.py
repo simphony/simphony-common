@@ -11,11 +11,31 @@ KNOWN_FIXED_PROPERTIES = [
 
 
 class SingleMetaClassGenerator(object):
+    """Generator for a single meta class file.
+    """
     def __init__(self, cuba_key, simphony_metadata_dict):
+        """Initializes the generator.
+
+        Parameters
+        ----------
+        cuba_key: str
+            the cuba key of the meta class.
+
+        simphony_metadata_dict:
+            the full yaml parsed content of the simphony_metadata file.
+        """
         self.cuba_key = cuba_key
         self.simphony_metadata_dict = simphony_metadata_dict
 
     def generate(self, out):
+        """Generates the meta class content, and writes them
+        to the out file handler.
+
+        Parameters
+        ----------
+        out: handle
+            File handler where to write the content.
+        """
         print("Generating for {}".format(self.cuba_key))
 
         cuds_keys = self.simphony_metadata_dict["CUDS_KEYS"]
@@ -84,6 +104,22 @@ class SingleMetaClassGenerator(object):
         f.render(out)
 
     def _extract_properties(self, class_data, parent_keys):
+        """Helper method. Extracts all the properties from a given
+        class.
+
+        Parameters
+        ----------
+        class_data: dict
+            the data of the CUDS entry, as from yaml parsed dict.
+
+        parent_keys: list
+            the list of parent cuba keys
+
+        Return
+        ------
+        list
+            A list of templates Properties
+        """
         properties = []
         for prop_key in [p for p in class_data.keys()]:
             if prop_key == "parent":
@@ -129,6 +165,21 @@ class SingleMetaClassGenerator(object):
 
 
 def is_variable_reimplemented(prop_key, parent_keys, simphony_metadata_dict):
+    """Checks if a given variable is reimplemented from a base parent class.
+
+    Parameters
+    ----------
+    prop_key: str
+        The key of the property
+    parent_keys: list
+        a list of all the parent classes, from top to bottom (None)
+    simphony_metadata_dict: dict
+        the full yaml parsed dictionary
+
+    Returns
+    -------
+    True or False
+    """
     for parent_key in parent_keys:
         if parent_key is None:
             return False
@@ -139,6 +190,21 @@ def is_variable_reimplemented(prop_key, parent_keys, simphony_metadata_dict):
 
 
 def all_parent_keys(key, simphony_metadata_dict):
+    """Traverses the hierarchy and returns the keys of all the parents.
+
+    Parameters
+    ----------
+    key: str
+        The starting key
+    simphony_metadata_dict: dict
+        the full yaml parsed dictionary
+
+    Return
+    ------
+    list:
+        A list of the parent keys, from most recent to
+        least recent ancestor (None)
+    """
     cur_key = key
 
     while cur_key is not None:

@@ -1,3 +1,5 @@
+# This file is copied and renamed in simphony/cuds/meta/ to support the
+# meta classes in performing validation
 import warnings
 
 import numpy
@@ -6,11 +8,17 @@ from scripts.utils import to_camel_case, without_cuba_prefix
 
 
 def check_valid_shape(value, shape, cuba_key):
-    """ Check if `value` is a sequence that comply with `shape`
+    """ Check if `value` is a sequence that comply with `shape`.
+    Note that the cuba data dimensionality is also taken into account.
 
     Parameters
     ----------
+    value :
+        The value to check
     shape : list or tuple
+        The expected shape
+    cuba_key:
+        The key of the data expected to be contained.
 
     Returns
     -------
@@ -66,7 +74,10 @@ def check_cuba_shape(value, cuba_key):
 
     Parameters
     ----------
+    value:
+        the value to check
     cuba_key: cuba key
+        the cuba key of the data
 
     Returns
     -------
@@ -219,11 +230,17 @@ def cast_data_type(value, key):
 
 
 def check_elements(value, shape, cuba_key):
+    """Check each individual element of value to see if it matches the
+    expected shape for a given cuba key
+    """
     for entry in flatten_to_shape(value, shape):
         validate_cuba_keyword(entry, cuba_key)
 
 
 def flatten_to_shape(container, shape):
+    """Flatten an array, but only partially, so that higher dimensionality
+    arrays can remain if required.
+    """
     if not isinstance(container, (list, tuple)):
         raise TypeError("container must be iterable")
 

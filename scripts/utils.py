@@ -8,6 +8,8 @@ from contextlib import contextmanager
 
 
 class NoDefault(object):
+    """Marker class. Specifies that no default has been specified.
+    We don't use None because None can be a valid default"""
     pass
 
 
@@ -84,22 +86,27 @@ def without_cuba_prefix(string):
 
 
 def is_cuba_key(value):
+    """True if value is a qualified cuba key"""
     return isinstance(value, (str, unicode)) and value.startswith("CUBA.")
 
 
 def cuba_key_to_meta_class_name(string):
+    """Converts a cuba key in the associated class name."""
     return to_camel_case(without_cuba_prefix(string))
 
 
 def cuba_key_to_meta_class_module_name(string):
+    """Converts a cuba key in the associated python module name"""
     return without_cuba_prefix(string).lower()
 
 
 def cuba_key_to_property_name(string):
+    """Converts a cuba key in the associated property name"""
     return without_cuba_prefix(string).lower()
 
 
 def meta_class_name_to_module_name(string, special={"CUDS": "Cuds"}):
+    """Converts a class name to an appropriate module name"""
     for search, replace in special.items():
         string = re.sub(search, replace, string)
 
@@ -123,6 +130,11 @@ def quoted_if_string(value):
 
 
 def parse_shape(shape_spec):
+    """Parses the shape as specified in the yaml file.
+    Note that the colon notation e.g. (3, :) maps to a None e.g. (3, None).
+
+    If shape is None, it will return the default [1].
+    """
     if shape_spec is None:
         return [1]
 
@@ -159,6 +171,7 @@ def parse_shape(shape_spec):
 
 
 def format_docstring(docstring):
+    """Formats a docstring appropriately"""
     lines = docstring.splitlines()
 
     out_lines = []
@@ -170,6 +183,8 @@ def format_docstring(docstring):
 
 
 def deduplicate(list_):
+    """Removes duplicates from a list, even when not contiguous.
+    Returns a list without duplicates. Only the leftmost element stays."""
     o = OrderedDict()
     for l in list_:
         o[l] = l
@@ -177,6 +192,8 @@ def deduplicate(list_):
 
 
 def cuba_key_to_instantiation(cuba_key):
+    """Given a cuba key, creates an "instantiation string" for the associated
+    class."""
     if is_cuba_key(cuba_key):
         return "{cuba_meta_class_name}()".format(
             cuba_meta_class_name=cuba_key_to_meta_class_name(cuba_key)
