@@ -765,7 +765,7 @@ class CheckManipulatingBonds(object):
 
         # when
         iterated_bonds = [
-            bond for bond in self.container.iter()]
+            bond for bond in self.container.iter(item_type=CUBA.BOND)]
 
         # then
         # The order of iteration is not important in this case.
