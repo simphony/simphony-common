@@ -111,7 +111,7 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_add_named_dataset(self):
         ps = Particles('my particles')
-        ps.add_particles([Particle(), Particle()])
+        ps.add([Particle(), Particle()])
         c = CUDS()
         c.add(ps)
 
@@ -120,7 +120,7 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_add_nameless_dataset(self):
         ps = Particles(None)
-        ps.add_particles([Particle(), Particle()])
+        ps.add([Particle(), Particle()])
         c = CUDS()
 
         self.assertRaises(TypeError, c.add, ps)
@@ -160,7 +160,7 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_remove_dataset(self):
         ps = Particles('my particles')
-        ps.add_particles([Particle(), Particle()])
+        ps.add([Particle(), Particle()])
         c = CUDS()
         c.add(ps)
         c.remove(ps.name)
@@ -170,8 +170,8 @@ class CUDSTestCase(unittest.TestCase):
     def test_get_dataset_names(self):
         ps1 = Particles('M1')
         ps2 = Particles('M2')
-        ps1.add_particles([Particle(), Particle()])
-        ps2.add_particles([Particle(), Particle()])
+        ps1.add([Particle(), Particle()])
+        ps2.add([Particle(), Particle()])
         c = CUDS()
         c.add(ps1)
         c.add(ps2)
@@ -191,8 +191,8 @@ class CUDSTestCase(unittest.TestCase):
     def test_iter_datasets_dimention(self):
         ps1 = Particles('M1')
         ps2 = Particles('M2')
-        ps1.add_particles([Particle(), Particle()])
-        ps2.add_particles([Particle(), Particle()])
+        ps1.add([Particle(), Particle()])
+        ps2.add([Particle(), Particle()])
         c = CUDS()
         c.add(ps1)
         c.add(ps2)
@@ -204,8 +204,8 @@ class CUDSTestCase(unittest.TestCase):
 
     def test_iter_datasets_types(self):
         dataset = Particles('M1')
-        dataset.add_particles([Particle(),
-                               Particle()])
+        dataset.add([Particle(),
+                     Particle()])
         c = CUDS()
         c.add(dataset)
 

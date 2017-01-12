@@ -133,10 +133,10 @@ class Lattice(ABCLattice):
         """
         if indices is None:
             for index, val in np.ndenumerate(self._dcs):
-                yield self.get_node(index)
+                yield self.get(index)
         else:
             for index in indices:
-                yield self.get_node(index)
+                yield self.get(index)
 
 
 def make_cubic_lattice(name, h, size, origin=(0, 0, 0)):

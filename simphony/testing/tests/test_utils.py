@@ -37,11 +37,11 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         bond_list = create_bonds()
         data = DataContainer()
 
-        particles.add_particles(particle_list)
-        reference.add_particles(particle_list)
+        particles.add(particle_list)
+        reference.add(particle_list)
 
-        particles.add_bonds(bond_list)
-        reference.add_bonds(bond_list)
+        particles.add(bond_list)
+        reference.add(bond_list)
 
         particles.data = data
         reference.data = data
@@ -58,11 +58,11 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         bond_list = create_bonds()
         data = create_data_container()
 
-        particles.add_particles(particle_list)
-        reference.add_particles(particle_list)
+        particles.add(particle_list)
+        reference.add(particle_list)
 
-        particles.add_bonds(bond_list)
-        reference.add_bonds(bond_list)
+        particles.add(bond_list)
+        reference.add(bond_list)
 
         particles.data = data
         reference.data = data
@@ -75,8 +75,8 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         test_particles = create_particles_with_id()
 
         particles = Particles(name=reference.name)
-        particles.add_particles(test_particles)
-        particles.add_bonds(bond_list)
+        particles.add(test_particles)
+        particles.add(bond_list)
         particles.data = data
 
         # when/then
@@ -87,8 +87,8 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         test_bonds = create_bonds()
 
         particles = Particles(name=reference.name)
-        particles.add_particles(particle_list)
-        particles.add_bonds(test_bonds)
+        particles.add(particle_list)
+        particles.add(test_bonds)
         particles.data = data
 
         # when/then
@@ -99,8 +99,8 @@ class TestCompareParticlesDatasets(unittest.TestCase):
         test_data = DataContainer()
 
         particles = Particles(name=reference.name)
-        particles.add_particles(particle_list)
-        particles.add_bonds(bond_list)
+        particles.add(particle_list)
+        particles.add(bond_list)
         particles.data = test_data
 
         # when/then
@@ -122,15 +122,15 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         data = DataContainer()
 
-        mesh.add_points(point_list)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(face_list)
-        mesh.add_cells(cell_list)
+        mesh.add(point_list)
+        mesh.add(edge_list)
+        mesh.add(face_list)
+        mesh.add(cell_list)
 
-        reference.add_points(point_list)
-        reference.add_edges(edge_list)
-        reference.add_faces(face_list)
-        reference.add_cells(cell_list)
+        reference.add(point_list)
+        reference.add(edge_list)
+        reference.add(face_list)
+        reference.add(cell_list)
 
         mesh.data = data
         reference.data = data
@@ -150,15 +150,15 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         data = create_data_container()
 
-        mesh.add_points(point_list)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(face_list)
-        mesh.add_cells(cell_list)
+        mesh.add(point_list)
+        mesh.add(edge_list)
+        mesh.add(face_list)
+        mesh.add(cell_list)
 
-        reference.add_points(point_list)
-        reference.add_edges(edge_list)
-        reference.add_faces(face_list)
-        reference.add_cells(cell_list)
+        reference.add(point_list)
+        reference.add(edge_list)
+        reference.add(face_list)
+        reference.add(cell_list)
 
         mesh.data = data
         reference.data = data
@@ -172,10 +172,10 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         mesh = Mesh(name=reference.name)
 
-        mesh.add_points(test_points)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(face_list)
-        mesh.add_cells(cell_list)
+        mesh.add(test_points)
+        mesh.add(edge_list)
+        mesh.add(face_list)
+        mesh.add(cell_list)
 
         mesh.data = data
 
@@ -188,10 +188,10 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         mesh = Mesh(name=reference.name)
 
-        mesh.add_points(point_list)
-        mesh.add_edges(test_edges)
-        mesh.add_faces(face_list)
-        mesh.add_cells(cell_list)
+        mesh.add(point_list)
+        mesh.add(test_edges)
+        mesh.add(face_list)
+        mesh.add(cell_list)
 
         mesh.data = data
 
@@ -204,10 +204,10 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         mesh = Mesh(name=reference.name)
 
-        mesh.add_points(point_list)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(test_faces)
-        mesh.add_cells(cell_list)
+        mesh.add(point_list)
+        mesh.add(edge_list)
+        mesh.add(test_faces)
+        mesh.add(cell_list)
 
         mesh.data = data
 
@@ -220,10 +220,10 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         mesh = Mesh(name=reference.name)
 
-        mesh.add_points(point_list)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(face_list)
-        mesh.add_cells(test_cells)
+        mesh.add(point_list)
+        mesh.add(edge_list)
+        mesh.add(face_list)
+        mesh.add(test_cells)
 
         mesh.data = data
 
@@ -236,10 +236,10 @@ class TestCompareMeshDatasets(unittest.TestCase):
 
         mesh = Mesh(name=reference.name)
 
-        mesh.add_points(point_list)
-        mesh.add_edges(edge_list)
-        mesh.add_faces(face_list)
-        mesh.add_cells(cell_list)
+        mesh.add(point_list)
+        mesh.add(edge_list)
+        mesh.add(face_list)
+        mesh.add(cell_list)
 
         mesh.data = test_data
 

@@ -194,4 +194,4 @@ class H5Lattice(ABCLattice):
                 yield LatticeNode(index, data)
         else:
             for index in indices:
-                yield self.get_node(index)
+                yield self._get_node(index)
