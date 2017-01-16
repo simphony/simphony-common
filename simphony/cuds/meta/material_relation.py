@@ -1,29 +1,39 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .model_equation import ModelEquation
-from . import validation
 
 
 class MaterialRelation(ModelEquation):
-    '''Material relation which together with the Physics equation gives the model equation  # noqa
-    '''
-
+    """
+    Material relation which together with the Physics equation
+    gives the model equation
+    """
     cuba_key = CUBA.MATERIAL_RELATION
 
-    def __init__(self, material, description="", name=""):
+    def __init__(self, material=Default, description=Default, name=Default):
 
-        self._data = DataContainer()
+        super(MaterialRelation, self).__init__(
+            description=description, name=name)
+        self._init_material(material)
 
-        self.material = material
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Material relation which together with the Physics equation gives the model equation'  # noqa
-        # This is a system-managed, read-only attribute
-        self._models = []
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(MaterialRelation, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.MATERIAL, ) + base_params
+
+    def _default_definition(self):
+        return "Material relation which together with the Physics equation gives the model equation"  # noqa
+
+    def _init_material(self, value):
+        if value is Default:
+            value = self._default_material()
+
+        self.material = value
 
     @property
     def material(self):
@@ -31,45 +41,15 @@ class MaterialRelation(ModelEquation):
 
     @material.setter
     def material(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'material')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'material')
-        data = self.data
-        data[CUBA.MATERIAL] = value
-        self.data = data
+        value = self._validate_material(value)
+        self.data[CUBA.MATERIAL] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_material(self, value):
+        value = validation.cast_data_type(value, 'MATERIAL')
+        validation.check_valid_shape(value, [None], 'MATERIAL')
+        validation.check_elements(value, [None], 'MATERIAL')
 
-    @property
-    def models(self):
-        return self._models
+        return value
 
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_material(self):
+        return []

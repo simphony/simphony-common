@@ -1,45 +1,26 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .mesh_element import MeshElement
 
 
 class Face(MeshElement):
-    '''Element for storing 2D geometrical objects  # noqa
-    '''
-
+    """
+    Element for storing 2D geometrical objects
+    """
     cuba_key = CUBA.FACE
 
     def __init__(self, point):
 
-        self._data = DataContainer()
-
-        self.point = point
-        # This is a system-managed, read-only attribute
-        self._definition = 'Element for storing 2D geometrical objects'  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(Face, self).__init__(point=point)
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.POINT, CUBA.UUID)
+        try:
+            base_params = super(Face, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.MESH_ELEMENT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_definition(self):
+        return "Element for storing 2D geometrical objects"  # noqa

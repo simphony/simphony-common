@@ -1,46 +1,27 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
+from simphony.core import Default  # noqa
 from .cuds_component import CUDSComponent
+from simphony.core.cuba import CUBA
 
 
 class Material(CUDSComponent):
-    '''Definition of a material and its properties in the data container  # noqa
-    '''
-
+    """
+    Definition of a material and its properties in the data
+    container
+    """
     cuba_key = CUBA.MATERIAL
 
-    def __init__(self, description="", name=""):
+    def __init__(self, description=Default, name=Default):
 
-        self._data = DataContainer()
-
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Definition of a material and its properties in the data container'  # noqa
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(Material, self).__init__(description=description, name=name)
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
+        try:
+            base_params = super(Material, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_definition(self):
+        return "Definition of a material and its properties in the data container"  # noqa

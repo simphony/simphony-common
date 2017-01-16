@@ -141,10 +141,10 @@ class TestParticlesCudsOperations(ParticlesEngineCheck, unittest.TestCase):
         # Add some CUBA data
         for particle in items:
             particle.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
-            expected.add_particles([particle])
+            expected.add([particle])
             particle.data = DataContainer(
                 {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
-            reference.add_particles([particle])
+            reference.add([particle])
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUBA.PARTICLE: [CUBA.VELOCITY]})
@@ -189,22 +189,22 @@ class TestMeshCudsOperations(MeshEngineCheck, unittest.TestCase):
         # Add some CUBA data
         for point in [p for p in items if isinstance(p, Point)]:
             point.data = DataContainer({CUBA.VELOCITY: [1, 0, 0]})
-            expected.add_points([point])
+            expected.add([point])
             point.data = DataContainer(
                 {CUBA.VELOCITY: [1, 0, 0], CUBA.MASS: 1})
-            reference.add_points([point])
+            reference.add([point])
 
         for edge in [e for e in items if isinstance(e, Edge)]:
-            expected.add_edges([edge])
-            reference.add_edges([edge])
+            expected.add([edge])
+            reference.add([edge])
 
         for face in [f for f in items if isinstance(f, Face)]:
-            expected.add_faces([face])
-            reference.add_faces([face])
+            expected.add([face])
+            reference.add([face])
 
         for cell in [c for c in items if isinstance(c, Cell)]:
-            expected.add_cells([cell])
-            reference.add_cells([cell])
+            expected.add([cell])
+            reference.add([cell])
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUBA.POINT: [CUBA.VELOCITY]})
@@ -246,12 +246,12 @@ class TestLatticeCudsOperations(LatticeEngineCheck, unittest.TestCase):
         expected = self.create_dataset(name='test')
 
         # Add some CUBA data
-        for node in reference.iter_nodes():
+        for node in reference.iter(item_type=CUBA.NODE):
             node.data = DataContainer({CUBA.NAME: 'test_container'})
-            expected.update_nodes([node])
+            expected.update([node])
             node.data = DataContainer({CUBA.NAME: 'test_container',
                                        CUBA.DENSITY: 2})
-            reference.update_nodes([node])
+            reference.update([node])
 
         # Store reference dataset along with its data
         engine.add_dataset(reference, {CUBA.NODE: [CUBA.NAME]})

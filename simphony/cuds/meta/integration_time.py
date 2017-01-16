@@ -1,58 +1,49 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .computational_method import ComputationalMethod
+from simphony.core import Default  # noqa
 from . import validation
+from simphony.core.cuba import CUBA
+from .solver_parameter import SolverParameter
 
 
-class IntegrationTime(ComputationalMethod):
-    '''the current time, time step, and final time for a simulation stored on each cuds (a specific state).  # noqa
-    '''
-
+class IntegrationTime(SolverParameter):
+    """
+    the current time, time step, and final time for a simulation
+    stored on each cuds (a specific state).
+    """
     cuba_key = CUBA.INTEGRATION_TIME
 
     def __init__(self,
-                 description="",
-                 name="",
-                 current=0.0,
-                 size=0.0,
-                 final=0.0):
+                 current=Default,
+                 size=Default,
+                 final=Default,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(IntegrationTime, self).__init__(
+            description=description, name=name)
+        self._init_current(current)
+        self._init_size(size)
+        self._init_final(final)
 
-        self.final = final
-        self.size = size
-        self.current = current
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'the current time, time step, and final time for a simulation stored on each cuds (a specific state).'  # noqa
-        # This is a system-managed, read-only attribute
-        self._physics_equation = []
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(IntegrationTime, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def final(self):
-        return self.data[CUBA.FINAL]
+        return (
+            CUBA.CURRENT,
+            CUBA.SIZE,
+            CUBA.FINAL, ) + base_params
 
-    @final.setter
-    def final(self, value):
-        value = validation.cast_data_type(value, 'final')
-        validation.validate_cuba_keyword(value, 'final')
-        data = self.data
-        data[CUBA.FINAL] = value
-        self.data = data
+    def _default_definition(self):
+        return "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."  # noqa
 
-    @property
-    def size(self):
-        return self.data[CUBA.SIZE]
+    def _init_current(self, value):
+        if value is Default:
+            value = self._default_current()
 
-    @size.setter
-    def size(self, value):
-        value = validation.cast_data_type(value, 'size')
-        validation.validate_cuba_keyword(value, 'size')
-        data = self.data
-        data[CUBA.SIZE] = value
-        self.data = data
+        self.current = value
 
     @property
     def current(self):
@@ -60,39 +51,62 @@ class IntegrationTime(ComputationalMethod):
 
     @current.setter
     def current(self, value):
-        value = validation.cast_data_type(value, 'current')
-        validation.validate_cuba_keyword(value, 'current')
-        data = self.data
-        data[CUBA.CURRENT] = value
-        self.data = data
+        value = self._validate_current(value)
+        self.data[CUBA.CURRENT] = value
+
+    def _validate_current(self, value):
+        value = validation.cast_data_type(value, 'CURRENT')
+        validation.check_valid_shape(value, [1], 'CURRENT')
+        validation.validate_cuba_keyword(value, 'CURRENT')
+        return value
+
+    def _default_current(self):
+        return 0.0
+
+    def _init_size(self, value):
+        if value is Default:
+            value = self._default_size()
+
+        self.size = value
 
     @property
-    def definition(self):
-        return self._definition
+    def size(self):
+        return self.data[CUBA.SIZE]
+
+    @size.setter
+    def size(self, value):
+        value = self._validate_size(value)
+        self.data[CUBA.SIZE] = value
+
+    def _validate_size(self, value):
+        value = validation.cast_data_type(value, 'SIZE')
+        validation.check_valid_shape(value, [1], 'SIZE')
+        validation.validate_cuba_keyword(value, 'SIZE')
+        return value
+
+    def _default_size(self):
+        return 0.0
+
+    def _init_final(self, value):
+        if value is Default:
+            value = self._default_final()
+
+        self.final = value
 
     @property
-    def physics_equation(self):
-        return self._physics_equation
+    def final(self):
+        return self.data[CUBA.FINAL]
 
-    @property
-    def data(self):
-        return DataContainer(self._data)
+    @final.setter
+    def final(self, value):
+        value = self._validate_final(value)
+        self.data[CUBA.FINAL] = value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    def _validate_final(self, value):
+        value = validation.cast_data_type(value, 'FINAL')
+        validation.check_valid_shape(value, [1], 'FINAL')
+        validation.validate_cuba_keyword(value, 'FINAL')
+        return value
 
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CURRENT, CUBA.DESCRIPTION, CUBA.FINAL, CUBA.NAME,
-                CUBA.PHYSICS_EQUATION, CUBA.SIZE, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.COMPUTATIONAL_METHOD, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_final(self):
+        return 0.0

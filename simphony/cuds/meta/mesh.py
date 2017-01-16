@@ -1,73 +1,50 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from simphony.core import Default  # noqa
 from . import validation
+from .data_set import DataSet
+from simphony.core.cuba import CUBA
 
 
-class Mesh(CUDSComponent):
-    '''A mesh  # noqa
-    '''
-
+class Mesh(DataSet):
+    """
+    A mesh
+    """
     cuba_key = CUBA.MESH
 
-    def __init__(self, point, face, cell, edge, description="", name=""):
+    def __init__(self,
+                 point,
+                 face,
+                 cell,
+                 edge,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(Mesh, self).__init__(description=description, name=name)
+        self._init_point(point)
+        self._init_face(face)
+        self._init_cell(cell)
+        self._init_edge(edge)
 
-        self.edge = edge
-        self.cell = cell
-        self.face = face
-        self.point = point
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A mesh'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Mesh, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def edge(self):
-        return self.data[CUBA.EDGE]
+        return (
+            CUBA.POINT,
+            CUBA.FACE,
+            CUBA.CELL,
+            CUBA.EDGE, ) + base_params
 
-    @edge.setter
-    def edge(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'edge')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'edge')
-        data = self.data
-        data[CUBA.EDGE] = value
-        self.data = data
+    def _default_definition(self):
+        return "A mesh"  # noqa
 
-    @property
-    def cell(self):
-        return self.data[CUBA.CELL]
+    def _init_point(self, value):
+        if value is Default:
+            value = self._default_point()
 
-    @cell.setter
-    def cell(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'cell')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'cell')
-        data = self.data
-        data[CUBA.CELL] = value
-        self.data = data
-
-    @property
-    def face(self):
-        return self.data[CUBA.FACE]
-
-    @face.setter
-    def face(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'face')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'face')
-        data = self.data
-        data[CUBA.FACE] = value
-        self.data = data
+        self.point = value
 
     @property
     def point(self):
@@ -75,38 +52,90 @@ class Mesh(CUDSComponent):
 
     @point.setter
     def point(self, value):
-        if value is not None:
-            value = validation.cast_data_type(value, 'point')
-            validation.check_shape(value, '(:)')
-            for item in value:
-                validation.validate_cuba_keyword(item, 'point')
-        data = self.data
-        data[CUBA.POINT] = value
-        self.data = data
+        value = self._validate_point(value)
+        self.data[CUBA.POINT] = value
+
+    def _validate_point(self, value):
+        value = validation.cast_data_type(value, 'POINT')
+        validation.check_valid_shape(value, [None], 'POINT')
+        validation.check_elements(value, [None], 'POINT')
+
+        return value
+
+    def _default_point(self):
+        raise TypeError("No default for point")
+
+    def _init_face(self, value):
+        if value is Default:
+            value = self._default_face()
+
+        self.face = value
 
     @property
-    def definition(self):
-        return self._definition
+    def face(self):
+        return self.data[CUBA.FACE]
+
+    @face.setter
+    def face(self, value):
+        value = self._validate_face(value)
+        self.data[CUBA.FACE] = value
+
+    def _validate_face(self, value):
+        value = validation.cast_data_type(value, 'FACE')
+        validation.check_valid_shape(value, [None], 'FACE')
+        validation.check_elements(value, [None], 'FACE')
+
+        return value
+
+    def _default_face(self):
+        raise TypeError("No default for face")
+
+    def _init_cell(self, value):
+        if value is Default:
+            value = self._default_cell()
+
+        self.cell = value
 
     @property
-    def data(self):
-        return DataContainer(self._data)
+    def cell(self):
+        return self.data[CUBA.CELL]
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
+    @cell.setter
+    def cell(self, value):
+        value = self._validate_cell(value)
+        self.data[CUBA.CELL] = value
+
+    def _validate_cell(self, value):
+        value = validation.cast_data_type(value, 'CELL')
+        validation.check_valid_shape(value, [None], 'CELL')
+        validation.check_elements(value, [None], 'CELL')
+
+        return value
+
+    def _default_cell(self):
+        raise TypeError("No default for cell")
+
+    def _init_edge(self, value):
+        if value is Default:
+            value = self._default_edge()
+
+        self.edge = value
 
     @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+    def edge(self):
+        return self.data[CUBA.EDGE]
 
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CELL, CUBA.DESCRIPTION, CUBA.EDGE, CUBA.FACE, CUBA.NAME,
-                CUBA.POINT, CUBA.UUID)
+    @edge.setter
+    def edge(self, value):
+        value = self._validate_edge(value)
+        self.data[CUBA.EDGE] = value
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _validate_edge(self, value):
+        value = validation.cast_data_type(value, 'EDGE')
+        validation.check_valid_shape(value, [None], 'EDGE')
+        validation.check_elements(value, [None], 'EDGE')
+
+        return value
+
+    def _default_edge(self):
+        raise TypeError("No default for edge")

@@ -11,7 +11,7 @@ with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
 # Setup version
-VERSION = '0.3.1.dev0'
+VERSION = '0.5.0.dev0'
 
 
 @contextlib.contextmanager
@@ -64,6 +64,13 @@ class BuildMeta(Command):
                     raise
 
                 try:
+                    print("Fetching")
+                    check_call(["git", "fetch"])
+                except CalledProcessError:
+                    print("Failed to fetch")
+                    raise
+
+                try:
                     print("Checking out {}".format(self.repotag))
                     check_call(["git", "checkout", self.repotag])
                 except CalledProcessError:
@@ -80,7 +87,7 @@ class BuildMeta(Command):
             "cuba.yml")
 
         if not (os.path.exists(cuba_yml) and os.path.exists(metadata_yml)):
-            print (textwrap.dedent("""
+            print(textwrap.dedent("""
                 Cannot open simphony-metadata YAML files.
                 Please specify an appropriate path to the simphony-metadata
                 git repository in setup.cfg.
@@ -89,7 +96,7 @@ class BuildMeta(Command):
 
         print("Building classes")
         with open(metadata_yml, 'rb') as simphony_metadata:
-            from scripts.generate import meta_class
+            from scripts.cli.generator import meta_class
             meta_class.callback(simphony_metadata, "simphony/cuds/meta/", True)
 
         print("Building keywords")
@@ -97,7 +104,7 @@ class BuildMeta(Command):
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/keywords.py", "wb") as keywords_out:
 
-            from scripts.generate import keywords
+            from scripts.cli.generator import keywords
             keywords.callback(cuba, simphony_metadata, keywords_out)
 
         print("Building enums")
@@ -105,7 +112,7 @@ class BuildMeta(Command):
                 open(cuba_yml, 'rb') as cuba, \
                 open("simphony/core/cuba.py", "wb") as cuba_out:
 
-            from scripts.generate import cuba_enum
+            from scripts.cli.generator import cuba_enum
             cuba_enum.callback(cuba, simphony_metadata, cuba_out)
 
         print("Running yapf")
@@ -115,7 +122,7 @@ class BuildMeta(Command):
             check_call(cmd_args + ["simphony/core/keywords.py"])
             check_call(cmd_args + ["--recursive", "simphony/cuds/meta/"])
         except OSError:
-            print (textwrap.dedent("""
+            print(textwrap.dedent("""
                 Failed to run yapf. Make sure it is installed in your
                 python environment, by running
 
@@ -136,6 +143,8 @@ version = '%s'
         fh.write(ver % VERSION)
     finally:
         fh.close()
+
+
 write_version_py()
 
 
@@ -160,5 +169,5 @@ setup(
     entry_points={
         'console_scripts': [
             ('simphony-meta-generate = '
-             'scripts.generate:cli')]},
+             'scripts.cli.generator:cli')]},
     )

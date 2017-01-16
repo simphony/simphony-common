@@ -1,6 +1,18 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.4.0
+-------------
+
+* Not updating to latest version of pip on appveyor (#274)
+* Fixed broken CUDS.iter (#294)
+* Add support for restricted cuba key in DataContainer (#293)
+* Cleanup of code inspection for metadata loading (#292, #291)
+* Create new uuid when add component to CUDS (#288)
+* Add CUDS support to SimPhoNy (#286)
+* Fix: CUBA.NUMBER_OF_TIME_STEPS is currently a float (#271)
+* Add DEM related material relations (#269)
+
 Release 0.3.0
 -------------
 

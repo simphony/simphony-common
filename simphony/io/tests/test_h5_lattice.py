@@ -186,5 +186,6 @@ class TestH5LatticeVersions(unittest.TestCase):
             with self.assertRaises(ValueError):
                 H5Lattice(handle.get_node("/" + group_name))
 
+
 if __name__ == '__main__':
     unittest.main()

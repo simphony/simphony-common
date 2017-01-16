@@ -1,48 +1,50 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
+from . import validation
 from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
-from . import validation
 
 
 class Coulomb(PairPotential):
-    '''The standard electrostatic Coulombic interaction potential between a pair of point charges  # noqa
-    '''
-
+    """
+    The standard electrostatic Coulombic interaction potential
+    between a pair of point charges
+    """
     cuba_key = CUBA.COULOMB
 
     def __init__(self,
                  material,
-                 description="",
-                 name="",
-                 cutoff_distance=1.0,
-                 dielectric_constant=1.0):
+                 cutoff_distance=Default,
+                 dielectric_constant=Default,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(Coulomb, self).__init__(
+            material=material, description=description, name=name)
+        self._init_cutoff_distance(cutoff_distance)
+        self._init_dielectric_constant(dielectric_constant)
 
-        self.material = material
-        self.dielectric_constant = dielectric_constant
-        self.cutoff_distance = cutoff_distance
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.ATOMISTIC]
-        # This is a system-managed, read-only attribute
-        self._definition = 'The standard electrostatic Coulombic interaction potential between a pair of point charges'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Coulomb, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @property
-    def dielectric_constant(self):
-        return self.data[CUBA.DIELECTRIC_CONSTANT]
+        return (
+            CUBA.CUTOFF_DISTANCE,
+            CUBA.DIELECTRIC_CONSTANT, ) + base_params
 
-    @dielectric_constant.setter
-    def dielectric_constant(self, value):
-        value = validation.cast_data_type(value, 'dielectric_constant')
-        validation.validate_cuba_keyword(value, 'dielectric_constant')
-        data = self.data
-        data[CUBA.DIELECTRIC_CONSTANT] = value
-        self.data = data
+    def _default_models(self):
+        return ['CUBA.ATOMISTIC']  # noqa
+
+    def _default_definition(self):
+        return "The standard electrostatic Coulombic interaction potential between a pair of point charges"  # noqa
+
+    def _init_cutoff_distance(self, value):
+        if value is Default:
+            value = self._default_cutoff_distance()
+
+        self.cutoff_distance = value
 
     @property
     def cutoff_distance(self):
@@ -50,45 +52,38 @@ class Coulomb(PairPotential):
 
     @cutoff_distance.setter
     def cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'cutoff_distance')
-        validation.validate_cuba_keyword(value, 'cutoff_distance')
-        data = self.data
-        data[CUBA.CUTOFF_DISTANCE] = value
-        self.data = data
+        value = self._validate_cutoff_distance(value)
+        self.data[CUBA.CUTOFF_DISTANCE] = value
+
+    def _validate_cutoff_distance(self, value):
+        value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
+        validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
+        validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
+        return value
+
+    def _default_cutoff_distance(self):
+        return 1.0
+
+    def _init_dielectric_constant(self, value):
+        if value is Default:
+            value = self._default_dielectric_constant()
+
+        self.dielectric_constant = value
 
     @property
-    def models(self):
-        return self._models
+    def dielectric_constant(self):
+        return self.data[CUBA.DIELECTRIC_CONSTANT]
 
-    @property
-    def definition(self):
-        return self._definition
+    @dielectric_constant.setter
+    def dielectric_constant(self, value):
+        value = self._validate_dielectric_constant(value)
+        self.data[CUBA.DIELECTRIC_CONSTANT] = value
 
-    @property
-    def variables(self):
-        return self._variables
+    def _validate_dielectric_constant(self, value):
+        value = validation.cast_data_type(value, 'DIELECTRIC_CONSTANT')
+        validation.check_valid_shape(value, [1], 'DIELECTRIC_CONSTANT')
+        validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
+        return value
 
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.CUTOFF_DISTANCE, CUBA.DESCRIPTION,
-                CUBA.DIELECTRIC_CONSTANT, CUBA.MATERIAL, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.PAIR_POTENTIAL, CUBA.INTERATOMIC_POTENTIAL,
-                CUBA.MATERIAL_RELATION, CUBA.MODEL_EQUATION,
-                CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_dielectric_constant(self):
+        return 1.0

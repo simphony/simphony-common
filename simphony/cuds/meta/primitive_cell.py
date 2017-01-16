@@ -1,27 +1,40 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from simphony.core import Default  # noqa
 from . import validation
+from .cuds_component import CUDSComponent
+from simphony.core.cuba import CUBA
 
 
 class PrimitiveCell(CUDSComponent):
-    '''A lattice primitive cell  # noqa
-    '''
-
+    """
+    A lattice primitive cell
+    """
     cuba_key = CUBA.PRIMITIVE_CELL
 
-    def __init__(self, description="", name="", lattice_vectors=None):
+    def __init__(self,
+                 lattice_vectors=Default,
+                 description=Default,
+                 name=Default):
 
-        self._data = DataContainer()
+        super(PrimitiveCell, self).__init__(description=description, name=name)
+        self._init_lattice_vectors(lattice_vectors)
 
-        if lattice_vectors is None:
-            self.lattice_vectors = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0],
-                                    [0.0, 0.0, 1.0]]
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A lattice primitive cell'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(PrimitiveCell, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.LATTICE_VECTORS, ) + base_params
+
+    def _default_definition(self):
+        return "A lattice primitive cell"  # noqa
+
+    def _init_lattice_vectors(self, value):
+        if value is Default:
+            value = self._default_lattice_vectors()
+
+        self.lattice_vectors = value
 
     @property
     def lattice_vectors(self):
@@ -29,34 +42,14 @@ class PrimitiveCell(CUDSComponent):
 
     @lattice_vectors.setter
     def lattice_vectors(self, value):
-        value = validation.cast_data_type(value, 'lattice_vectors')
-        validation.validate_cuba_keyword(value, 'lattice_vectors')
-        data = self.data
-        data[CUBA.LATTICE_VECTORS] = value
-        self.data = data
+        value = self._validate_lattice_vectors(value)
+        self.data[CUBA.LATTICE_VECTORS] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_lattice_vectors(self, value):
+        value = validation.cast_data_type(value, 'LATTICE_VECTORS')
+        validation.check_valid_shape(value, [1], 'LATTICE_VECTORS')
+        validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
+        return value
 
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.LATTICE_VECTORS, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_lattice_vectors(self):
+        return [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]

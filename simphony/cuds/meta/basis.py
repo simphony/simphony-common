@@ -1,26 +1,37 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from simphony.core import Default  # noqa
 from . import validation
+from .cuds_component import CUDSComponent
+from simphony.core.cuba import CUBA
 
 
 class Basis(CUDSComponent):
-    '''Space basis vectors (row wise)  # noqa
-    '''
-
+    """
+    Space basis vectors (row wise)
+    """
     cuba_key = CUBA.BASIS
 
-    def __init__(self, description="", name="", vector=None):
+    def __init__(self, vector=Default, description=Default, name=Default):
 
-        self._data = DataContainer()
+        super(Basis, self).__init__(description=description, name=name)
+        self._init_vector(vector)
 
-        if vector is None:
-            self.vector = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Space basis vectors (row wise)'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Basis, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.VECTOR, ) + base_params
+
+    def _default_definition(self):
+        return "Space basis vectors (row wise)"  # noqa
+
+    def _init_vector(self, value):
+        if value is Default:
+            value = self._default_vector()
+
+        self.vector = value
 
     @property
     def vector(self):
@@ -28,36 +39,15 @@ class Basis(CUDSComponent):
 
     @vector.setter
     def vector(self, value):
-        value = validation.cast_data_type(value, 'vector')
-        validation.check_shape(value, '(3, 3)')
-        for item in value:
-            validation.validate_cuba_keyword(item, 'vector')
-        data = self.data
-        data[CUBA.VECTOR] = value
-        self.data = data
+        value = self._validate_vector(value)
+        self.data[CUBA.VECTOR] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_vector(self, value):
+        value = validation.cast_data_type(value, 'VECTOR')
+        validation.check_valid_shape(value, [3], 'VECTOR')
+        validation.check_elements(value, [3], 'VECTOR')
 
-    @property
-    def data(self):
-        return DataContainer(self._data)
+        return value
 
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID, CUBA.VECTOR)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_vector(self):
+        return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

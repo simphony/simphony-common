@@ -1,25 +1,37 @@
-import uuid
-from simphony.core.data_container import DataContainer
-from simphony.core.cuba import CUBA
-from .cuds_component import CUDSComponent
+from simphony.core import Default  # noqa
 from . import validation
+from .cuds_component import CUDSComponent
+from simphony.core.cuba import CUBA
 
 
 class Node(CUDSComponent):
-    '''A node on a structured grid like lattice  # noqa
-    '''
-
+    """
+    A node on a structured grid like lattice
+    """
     cuba_key = CUBA.NODE
 
-    def __init__(self, index, description="", name=""):
+    def __init__(self, index, description=Default, name=Default):
 
-        self._data = DataContainer()
+        super(Node, self).__init__(description=description, name=name)
+        self._init_index(index)
 
-        self.index = index
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'A node on a structured grid like lattice'  # noqa
+    @classmethod
+    def supported_parameters(cls):
+        try:
+            base_params = super(Node, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
+
+        return (CUBA.INDEX, ) + base_params
+
+    def _default_definition(self):
+        return "A node on a structured grid like lattice"  # noqa
+
+    def _init_index(self, value):
+        if value is Default:
+            value = self._default_index()
+
+        self.index = value
 
     @property
     def index(self):
@@ -27,34 +39,14 @@ class Node(CUDSComponent):
 
     @index.setter
     def index(self, value):
-        value = validation.cast_data_type(value, 'index')
-        validation.validate_cuba_keyword(value, 'index')
-        data = self.data
-        data[CUBA.INDEX] = value
-        self.data = data
+        value = self._validate_index(value)
+        self.data[CUBA.INDEX] = value
 
-    @property
-    def definition(self):
-        return self._definition
+    def _validate_index(self, value):
+        value = validation.cast_data_type(value, 'INDEX')
+        validation.check_valid_shape(value, [1], 'INDEX')
+        validation.validate_cuba_keyword(value, 'INDEX')
+        return value
 
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
-
-    @classmethod
-    def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.INDEX, CUBA.NAME, CUBA.UUID)
-
-    @classmethod
-    def parents(cls):
-        return (CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+    def _default_index(self):
+        raise TypeError("No default for index")

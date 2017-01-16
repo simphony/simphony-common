@@ -1,59 +1,32 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .rheology_model import RheologyModel
 
 
 class NewtonianFluidModel(RheologyModel):
-    '''Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation  # noqa
-    '''
-
+    """
+    Newtonian fluid model assuming the viscous stresses are
+    proportional to the rates of deformation
+    """
     cuba_key = CUBA.NEWTONIAN_FLUID_MODEL
 
-    def __init__(self, description="", name=""):
+    def __init__(self, description=Default, name=Default):
 
-        self._data = DataContainer()
-
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._models = [CUBA.CONTINUUM]
-        # This is a system-managed, read-only attribute
-        self._definition = 'Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation'  # noqa
-        # This is a system-managed, read-only attribute
-        self._variables = []
-
-    @property
-    def models(self):
-        return self._models
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(NewtonianFluidModel, self).__init__(
+            description=description, name=name)
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
+        try:
+            base_params = super(NewtonianFluidModel,
+                                cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.RHEOLOGY_MODEL, CUBA.PHYSICS_EQUATION,
-                CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_models(self):
+        return ['CUBA.CONTINUUM']  # noqa
+
+    def _default_definition(self):
+        return "Newtonian fluid model assuming the viscous stresses are proportional to the rates of deformation"  # noqa

@@ -1,58 +1,27 @@
-import uuid
-from simphony.core.data_container import DataContainer
+from simphony.core import Default  # noqa
 from simphony.core.cuba import CUBA
 from .model_equation import ModelEquation
 
 
 class PhysicsEquation(ModelEquation):
-    '''Physics equation  # noqa
-    '''
-
+    """
+    Physics equation
+    """
     cuba_key = CUBA.PHYSICS_EQUATION
 
-    def __init__(self, description="", name=""):
+    def __init__(self, description=Default, name=Default):
 
-        self._data = DataContainer()
-
-        self.name = name
-        self.description = description
-        # This is a system-managed, read-only attribute
-        self._definition = 'Physics equation'  # noqa
-        # This is a system-managed, read-only attribute
-        self._models = []
-        # This is a system-managed, read-only attribute
-        self._variables = []
-
-    @property
-    def definition(self):
-        return self._definition
-
-    @property
-    def models(self):
-        return self._models
-
-    @property
-    def variables(self):
-        return self._variables
-
-    @property
-    def data(self):
-        return DataContainer(self._data)
-
-    @data.setter
-    def data(self, new_data):
-        self._data = DataContainer(new_data)
-
-    @property
-    def uid(self):
-        if not hasattr(self, '_uid') or self._uid is None:
-            self._uid = uuid.uuid4()
-        return self._uid
+        super(PhysicsEquation, self).__init__(
+            description=description, name=name)
 
     @classmethod
     def supported_parameters(cls):
-        return (CUBA.DESCRIPTION, CUBA.NAME, CUBA.UUID)
+        try:
+            base_params = super(PhysicsEquation, cls).supported_parameters()
+        except AttributeError:
+            base_params = ()
 
-    @classmethod
-    def parents(cls):
-        return (CUBA.MODEL_EQUATION, CUBA.CUDS_COMPONENT, CUBA.CUDS_ITEM)
+        return () + base_params
+
+    def _default_definition(self):
+        return "Physics equation"  # noqa
