@@ -13,6 +13,7 @@ Release 0.5.0
   and repository tag to checkout from simphony-metadata (#350)
 * Added new entry point ``simphony.pre_processing`` (#312) 
 * Serialization of CUDS to Yaml scripts (#322)
+* Upgraded required numpy to 1.11.1 (#355)
 * Fix: Fixed incorrect call in _add_mesh giving incorrect behavior for H5CUDS (#318)
 * Fix: Ensure strings are properly initialized (#343)
 
