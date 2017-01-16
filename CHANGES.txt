@@ -1,6 +1,21 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.5.0
+-------------
+
+* Complete refactoring of the meta class generator (#365, #366, #368)
+* Removal of deprecated methods in abstract classes ABCMesh/ABCParticles/ABCLattice (#326, #327, #328, #370)
+* Removed obsolete module CUDSItem (#353, #371)
+* Removed MATERIAL_ID (#338)
+* Changed representation of the CUBA enum to strings (#340)
+* Introduced new setup.py command to rebuild the meta classes (#329)
+  and repository tag to checkout from simphony-metadata (#350)
+* Added new entry point ``simphony.pre_processing`` (#312) 
+* Serialization of CUDS to Yaml scripts (#322)
+* Fix: Fixed incorrect call in _add_mesh giving incorrect behavior for H5CUDS (#318)
+* Fix: Ensure strings are properly initialized (#343)
+
 Release 0.4.0
 -------------
 
