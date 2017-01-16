@@ -371,6 +371,23 @@ class CheckMeshItemOperations(object):
         for item, reference in map(None, iterated_items, items):
             self.assertEqual(item, reference)
 
+    def test_iterate_items_when_passing_ids_and_types(self):
+        # given
+        container = self.container
+        self._add_items(container)
+        items = [item for item in self.item_list[::2]]
+        ids = [item.uid for item in items]
+
+        # when
+        iterated_items = [
+            item for item in self.iter_operation(container,
+                                                 ids,
+                                                 item_type=self.item_type)]
+
+        # then
+        for item, reference in map(None, iterated_items, items):
+            self.assertEqual(item, reference)
+
     def test_iterate_all_items(self):
         # given
         container = self.container
