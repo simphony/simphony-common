@@ -1012,6 +1012,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'CUDS': Keyword(
+        name='CUDS',
+        definition='CUDS Container',  # noqa
+        key='CUDS',
+        shape=[1],
+        length=None,
+        dtype=None),
     'CUDS_COMPONENT': Keyword(
         name='CUDSComponent',
         definition='Base data type for the CUDS components',  # noqa
