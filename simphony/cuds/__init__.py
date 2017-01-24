@@ -7,7 +7,7 @@ from .lattice import Lattice
 from .lattice_items import LatticeNode
 from .particles import Particles
 from .particles_items import Particle, Bond
-from .model import CUDS
+from .cuds import CUDS
 from .simulation import Simulation
 from .meta import api
 
