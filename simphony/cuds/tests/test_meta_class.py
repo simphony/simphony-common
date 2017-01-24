@@ -352,8 +352,8 @@ class TestMetaClass(unittest.TestCase):
         nose_hoover = meta_class.NoseHoover(material=[material])
         self.assertIsNotNone(nose_hoover.data)
 
-    def test_not_sharing_mutable(self):
-        box1 = meta_class.Box()
-        box2 = meta_class.Box()
-        box1.vector[0][0] = 3.
-        self.assertNotEqual(box1.vector[0][0], box2.vector[0][0])
+    def test_whether_data_is_reference(self):
+        material = meta_class.Material()
+        data = material.data
+
+        self.assertEqual(data, material.data)

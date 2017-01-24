@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from ..core import CUBA
-from ..core.data_container import DataContainer
 from . import ABCParticles
 from .particles_items import Particle, Bond
+from ..core import CUBA
+from ..core.data_container import DataContainer
 
 
 class Particles(ABCParticles):
@@ -42,6 +42,12 @@ class Particles(ABCParticles):
             CUBA.PARTICLE: lambda: self._particles,
             CUBA.BOND: lambda: self._bonds
         }
+
+        self._uid = uuid.uuid4()
+
+    @property
+    def uid(self):
+        return self._uid
 
     @property
     def data(self):
