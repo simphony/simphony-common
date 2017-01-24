@@ -174,6 +174,8 @@ class CUDS(object):
         """
         if uid in self._map:
             return self._map[uid]()
+        else:
+            raise Exception("Object with uid %s not found" % uid)
 
     def remove(self, name):
         """Remove the corresponding component from the CUDS computational model.
