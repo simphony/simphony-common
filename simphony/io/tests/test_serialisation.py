@@ -8,10 +8,10 @@ from contextlib import closing
 import tempfile
 import uuid
 
-from simphony.cuds.meta.cuds_component import CUDSComponent
-from simphony.cuds.meta.material import Material
-from simphony.cuds.meta.material_relation import MaterialRelation
-from simphony.cuds.model import CUDS
+from simphony.cuds.meta.api import CUDSComponent
+from simphony.cuds.meta.api import Material
+from simphony.cuds.meta.api import MaterialRelation
+from simphony.cuds import CUDS
 from simphony.io.serialisation import save_CUDS, load_CUDS
 
 
@@ -62,8 +62,8 @@ class TestSerialisation(unittest.TestCase):
 
     def test_save_CUDS_complicated_data(self):
         filename = os.path.join(self.temp_dir, 'test_full.yml')
-        C = CUDS(name='full',
-                 description='model with crossreferenced components')
+        cuds = CUDS(name='full',
+                    description='model with crossreferenced components')
 
         M1 = Material(name='steel',
                       description='FCC steel sphere structure')
@@ -74,31 +74,42 @@ class TestSerialisation(unittest.TestCase):
         MR2 = MaterialRelation(name='epoxy in sheet metal container',
                                material=[M2, M3])
         # M1 is not added
-        C.add(M2)
-        C.add(M3)
-        C.add(MR1)
-        C.add(MR2)
+        cuds.add(M2)
+        cuds.add(M3)
+        cuds.add(MR1)
+        cuds.add(MR2)
 
         with closing(open(filename, 'w')) as handle:
-            save_CUDS(handle, C)
+            save_CUDS(handle, cuds)
+            print("cuds data", cuds.data)
 
         with closing(open(filename, 'r')) as handle:
-            CC = load_CUDS(handle)
+            loaded_cuds = load_CUDS(handle)
+            print("loaded_cuds data", loaded_cuds.data)
 
-        self.assertEqual(CC.name, C.name)
-        self.assertEqual(CC.description, C.description)
+        self.assertEqual(loaded_cuds.name, cuds.name)
+        self.assertEqual(loaded_cuds.description, cuds.description)
+
+        for cuds_item in cuds.iter(CUDSComponent):
+            print('item original', cuds_item)
+
+        for cuds_item in loaded_cuds.iter(CUDSComponent):
+            print('item loaded', cuds_item)
 
         # Iterate over components in the original model and check
         # that they are present in the loaded model. Loaded model
         # has additionally material 'M1' included.
-        for Citem in C.iter(CUDSComponent):
+        for cuds_item in cuds.iter(CUDSComponent):
             # Check items that have name parameter defined
-            if Citem.name is not None:
-                CCitem = CC.get(Citem.name)
-                for key in Citem.data.keys():
-                    Ci = Citem.data[key]
-                    CCi = CCitem.data[key]
-                    _compare_components(Ci, CCi, testcase=self)
+            print("cuds_item", cuds_item)
+            if cuds_item.name is not None:
+                loaded_item = loaded_cuds.get_by_uid(cuds_item.uid)
+                print("loaded_item", loaded_item)
+                for key in cuds_item.data.keys():
+                    print(key)
+                    ci = cuds_item.data[key]
+                    li = loaded_item.data[key]
+                    _compare_components(ci, li, testcase=self)
 
 
 def _compare_components(comp1, comp2, testcase):
