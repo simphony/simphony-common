@@ -26,7 +26,7 @@ class Particles(ABCParticles):
 
     """
     cuba_key = CUBA.PARTICLES
-    
+
     def __init__(self, name):
         """ Constructor
 

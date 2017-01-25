@@ -3,8 +3,6 @@
 This module contains the classes used to represent a computational model,
 based on SimPhoNy metadata.
 """
-import uuid
-
 from .meta import api
 from .utils import map_cuba_key_to_cuds_class
 from .abc_dataset import ABCDataset
@@ -46,12 +44,6 @@ class CUDS(api.CUDS):
         return isinstance(obj, (ABCDataset,
                                 api.DataSet))
 
-    @staticmethod
-    def _is_dataset_subclass(obj):
-        """Check if the object is a dataset."""
-        return any([issubclass(component_type, ABCDataset),
-                    issubclass(component_type, api.DataSet)])
-
     def add(self, components):
         """Add a number of components to the CUDS computational model.
 
@@ -73,7 +65,8 @@ class CUDS(api.CUDS):
             # Only accept CUDSComponent subclasses and datasets
             if not (isinstance(component, api.CUDSComponent) or
                     self._is_dataset(component)):
-                raise TypeError('Not a CUDSComponent nor a dataset object: %s.' %
+                raise TypeError('Not a CUDSComponent nor'
+                                'a dataset object: %s.' %
                                 type(component))
 
             # Do not accept items with duplicate names.
@@ -122,7 +115,7 @@ class CUDS(api.CUDS):
         """Update a component"""
         if component.uid not in self._store:
             raise ValueError("Component {name:uid} does not exist."
-                .format(name=component.name, uid=component.uid))
+                             .format(name=component.name, uid=component.uid))
 
         self._store[component.uid] = component
 
@@ -173,7 +166,7 @@ class CUDS(api.CUDS):
         """
         if uid not in self._store:
             raise KeyError("No object found for uid: {uid}"
-                .format(uid=uid))
+                           .format(uid=uid))
 
         return self._store.get(uid)
 
@@ -194,8 +187,6 @@ class CUDS(api.CUDS):
             component = self.get(uid)
             if not component:
                 raise KeyError('No component exists for %s' % uid)
-            # if self._is_dataset(component):
-                #self._dataset_store.remove(component.uid)
 
             # Delete the object from the internal store
             del self._store[uid]
@@ -231,8 +222,7 @@ class CUDS(api.CUDS):
         """
         if uids:
             if not all(uid in self._store for uid in uids):
-                raise KeyError('No object exists for uid: {uid}'
-                    .format(uid=uid))
+                raise KeyError('No object exists for uid')
         else:
             uids = self._store.keys()
 

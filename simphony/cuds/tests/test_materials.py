@@ -47,8 +47,9 @@ class TestMaterials(unittest.TestCase):
             self.materials.add([material])
 
         # when
-        iterated_all_materials = {material.uid: material for material
-                                  in self.materials.iter(item_type=CUBA.MATERIAL)}
+        iterated_all_materials =\
+            {material.uid: material for material
+             in self.materials.iter(item_type=CUBA.MATERIAL)}
 
         # then
         self.assertEqual(len(iterated_all_materials),

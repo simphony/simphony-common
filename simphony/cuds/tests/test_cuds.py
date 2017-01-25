@@ -130,7 +130,7 @@ class CUDSTestCase(unittest.TestCase):
         c.add([self.named_cuds_1])
         c.remove([self.named_cuds_1.uid])
 
-        self.assertRaises(KeyError, c.get_by_name, 
+        self.assertRaises(KeyError, c.get_by_name,
                           self.named_cuds_1.name)
 
     def test_remove_nameless_component_by_uid(self):
@@ -139,7 +139,7 @@ class CUDSTestCase(unittest.TestCase):
         c.add([self.nameless_cuds_1])
         c.remove([self.nameless_cuds_1.uid])
 
-        self.assertRaises(KeyError, 
+        self.assertRaises(KeyError,
                           c.get,
                           self.nameless_cuds_1.uid)
 
