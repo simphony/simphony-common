@@ -8,6 +8,7 @@ from contextlib import closing
 import tempfile
 import uuid
 
+from simphony.core import CUBA
 from simphony.cuds.meta.api import CUDSComponent
 from simphony.cuds.meta.api import Material
 from simphony.cuds.meta.api import MaterialRelation
@@ -57,7 +58,7 @@ class TestSerialisation(unittest.TestCase):
         self.assertEqual(CC.name, C.name)
         self.assertEqual(CC.description, C.description)
 
-        for item in CC.iter(CUDSComponent):
+        for item in CC.iter(item_type=CUBA.CUDS_COMPONENT):
             self.assertEqual(item, None)
 
     def test_save_CUDS_complicated_data(self):
@@ -74,10 +75,10 @@ class TestSerialisation(unittest.TestCase):
         MR2 = MaterialRelation(name='epoxy in sheet metal container',
                                material=[M2, M3])
         # M1 is not added
-        cuds.add(M2)
-        cuds.add(M3)
-        cuds.add(MR1)
-        cuds.add(MR2)
+        cuds.add([M2])
+        cuds.add([M3])
+        cuds.add([MR1])
+        cuds.add([MR2])
 
         with closing(open(filename, 'w')) as handle:
             save_CUDS(handle, cuds)
@@ -90,23 +91,22 @@ class TestSerialisation(unittest.TestCase):
         self.assertEqual(loaded_cuds.name, cuds.name)
         self.assertEqual(loaded_cuds.description, cuds.description)
 
-        for cuds_item in cuds.iter(CUDSComponent):
+        for cuds_item in cuds.iter(item_type=CUBA.CUDS_COMPONENT):
             print('item original', cuds_item)
 
-        for cuds_item in loaded_cuds.iter(CUDSComponent):
+        for cuds_item in loaded_cuds.iter(item_type=CUBA.CUDS_COMPONENT):
             print('item loaded', cuds_item)
 
         # Iterate over components in the original model and check
         # that they are present in the loaded model. Loaded model
         # has additionally material 'M1' included.
-        for cuds_item in cuds.iter(CUDSComponent):
+        for cuds_item in cuds.iter(item_type=CUBA.CUDS_COMPONENT):
             # Check items that have name parameter defined
             print("cuds_item", cuds_item)
             if cuds_item.name is not None:
-                loaded_item = loaded_cuds.get_by_uid(cuds_item.uid)
+                loaded_item = loaded_cuds.get(cuds_item.uid)
                 print("loaded_item", loaded_item)
                 for key in cuds_item.data.keys():
-                    print(key)
                     ci = cuds_item.data[key]
                     li = loaded_item.data[key]
                     _compare_components(ci, li, testcase=self)
