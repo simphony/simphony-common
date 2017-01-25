@@ -1,13 +1,13 @@
 import yaml
 import numpy
-
-from simphony.cuds.model import CUDS
-from simphony.cuds.meta.cuds_component import CUDSComponent
-from simphony.core.keywords import KEYWORDS
-# from simphony.cuds.meta import *
-from simphony.core.cuba import CUBA
+import uuid
 from collections import OrderedDict
 from importlib import import_module
+
+from simphony.core import CUBA
+from simphony.core.keywords import KEYWORDS
+from simphony.cuds import CUDS
+from simphony.cuds.meta.api import CUDSComponent
 from simphony.cuds.meta.validation import to_camel_case
 
 _CUDSREFMAP = OrderedDict()
@@ -91,7 +91,7 @@ def load_CUDS(handle):
 
     """
 
-    comp_dict = {}
+    cuds_components = {}
     name = None
     desc = None
     for data in yaml.safe_load_all(handle):
@@ -104,11 +104,11 @@ def load_CUDS(handle):
                 desc = dict_cuds['DESCRIPTION']
             else:
                 _dict_to_CUDSComponent(cubatype, dict_cuds[cubatype],
-                                       comp_dict)
+                                       cuds_components)
 
     model = CUDS(name=name, description=desc)
-    for compid in comp_dict.keys():
-        model.add(comp_dict[compid])
+    for comp in cuds_components.values():
+        model.add(comp)
 
     return model
 
@@ -147,11 +147,8 @@ def _CUDSComponent_to_yaml(comp, stream):
     # Go through the keys in the component
     cdata = comp._data
     for key in cdata.keys():
-        # Skip the UID key, as it's not accepted by the deserializer
-        if key == CUBA.UID:
-            continue
         # Check if the data is a list or numpy types or CUDSComponents
-        elif type(cdata[key]) == list:
+        if type(cdata[key]) == list:
             # List of simple types?
             if KEYWORDS[key._name_].dtype in [numpy.float64,
                                               numpy.int32, bool]:
@@ -210,7 +207,7 @@ def _CUDSComponent_to_yaml(comp, stream):
     return stream
 
 
-def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
+def _dict_to_CUDSComponent(cubatype, comp, comp_dict=None):
     """ Generate a CUDSComponent on the basis of a dictionary
     provided by PyYaml library.
 
@@ -226,11 +223,15 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
             id(CUDSComponent): CUDSComponent
 
     """
-
+    if comp_dict is None:
+        comp_dict = {}
     # Check that comp does not refer to one of the components that
     # have been already constructed
     if id(comp) in comp_dict.keys():
         return
+
+    # Pop out uid, since we need to set it differently.
+    uid = comp.pop('UID')
 
     if cubatype in KEYWORDS.keys():
         # Find corresponding module and instantiate the class
@@ -245,8 +246,7 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
         system_managed_keys = {}
         supp_params = [str(e).replace('CUBA.', '')
                        for e in comp_class.supported_parameters()]
-        # Don't accept UUID entry from the yaml file
-        supp_params.remove('UID')
+
         for key in comp.keys():
             # Check if the key is supported
             if key in supp_params:
@@ -290,6 +290,9 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
         # Add system managed components by updating the DataContainer
         data = comp_inst.data
         data.update(system_managed_keys)
+
+        # Set the initial uid
+        data[CUBA.UID] = uuid.UUID(uid)
         comp_inst.data = data
     else:
         message = 'Unknown CUDSComponent "{}"'
@@ -298,3 +301,5 @@ def _dict_to_CUDSComponent(cubatype, comp, comp_dict={}):
     # Store component under the key representing it's memory location
     # so that correct object references from the yaml file are preserved
     comp_dict[id(comp)] = comp_inst
+
+    return comp_dict

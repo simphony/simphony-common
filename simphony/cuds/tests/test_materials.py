@@ -2,7 +2,7 @@ import unittest
 import uuid
 from functools import partial
 
-from simphony.cuds.model import CUDS
+from simphony.cuds import CUDS
 from simphony.cuds.meta.api import Material
 from simphony.testing.utils import compare_material
 

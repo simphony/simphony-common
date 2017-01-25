@@ -42,12 +42,12 @@ CUDS Computational Model
 
 .. autosummary::
 
-   ~model.CUDS
+   ~cuds.CUDS
    ~simulation.Simulation
 
 .. rubric:: Description
 
-.. automodule:: simphony.cuds.model
+.. automodule:: simphony.cuds.cuds
    :members:
    :undoc-members:
 
