@@ -1,6 +1,7 @@
 import warnings
 import importlib
 from functools import wraps
+from .meta import api
 
 _CUBA_CUDS_MAP = None
 
@@ -14,7 +15,7 @@ def deprecated(func):
     return _deprecated
 
 
-def turn_cuba_into_cuds(cuba_key):
+def map_cuba_key_to_cuds_class(cuba_key):
 	"""Return the equivalent CUDS class for the given CUBA key.
 
 	Parameters
@@ -48,4 +49,5 @@ def _fill_cuba_cuds_map():
 	global _CUBA_CUDS_MAP
 	_CUBA_CUDS_MAP = \
 		dict([(cls.cuba_key, cls) for name, cls \
-			in api_mod.__dict__.items() if isinstance(cls, type)])
+			in api_mod.__dict__.items() \
+			if isinstance(cls, type) and issubclass(cls, api.CUDSItem)])
