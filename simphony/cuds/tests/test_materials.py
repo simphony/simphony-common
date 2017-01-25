@@ -2,6 +2,7 @@ import unittest
 import uuid
 from functools import partial
 
+from simphony.core import CUBA
 from simphony.cuds import CUDS
 from simphony.cuds.meta.api import Material
 from simphony.testing.utils import compare_material
@@ -21,34 +22,34 @@ class TestMaterials(unittest.TestCase):
             self.example_materials.append(m)
 
     def test_add_get_material(self):
-        self.materials.add(self.example_materials[0])
-        self.assertEqual(self.materials.get_by_uid(
+        self.materials.add([self.example_materials[0]])
+        self.assertEqual(self.materials.get(
             self.example_materials[0].uid),
             self.example_materials[0])
 
     def test_add_existing_material(self):
         # Adding the same material has no effect
-        self.materials.add(self.example_materials[0])
-        self.materials.add(self.example_materials[0])
+        self.materials.add([self.example_materials[0]])
+        self.materials.add([self.example_materials[0]])
 
-        # API not there yet...
-        # self.assertEqual(self.materials.count_of(Material), 1)
+        self.assertEqual(self.materials.count_of(CUBA.MATERIAL), 1)
 
     def test_get_missing_material(self):
-        self.assertIsNone(self.materials.get(uuid.uuid4()))
+        self.assertRaises(KeyError, self.materials.get, uuid.uuid4())
 
     def test_remove_missing_material(self):
         with self.assertRaises(KeyError):
-            self.materials.remove(uuid.uuid4())
+            self.materials.remove([uuid.uuid4()])
 
     def test_iter_all_materials_with_ids(self):
         # given
         for material in self.example_materials:
-            self.materials.add(material)
+            self.materials.add([material])
 
         # when
-        iterated_all_materials = {material.uid: material for material
-                                  in self.materials.iter(Material)}
+        iterated_all_materials =\
+            {material.uid: material for material
+             in self.materials.iter(item_type=CUBA.MATERIAL)}
 
         # then
         self.assertEqual(len(iterated_all_materials),
@@ -62,11 +63,11 @@ class TestMaterials(unittest.TestCase):
 
         subset_ids = [material.uid for material in material_subset]
         for material in self.example_materials:
-            self.materials.add(material)
+            self.materials.add([material])
 
         # when
         iterated_materials = {material.uid: material for material
-                              in self.materials.iter(Material)
+                              in self.materials.iter(item_type=CUBA.MATERIAL)
                               if material.uid in subset_ids}
 
         # then

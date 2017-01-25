@@ -49,6 +49,8 @@ class Mesh(ABCMesh):
 
     """
 
+    cuba_key = CUBA.MESH
+
     def __init__(self, name):
         self.name = name
 

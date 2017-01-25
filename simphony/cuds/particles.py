@@ -25,6 +25,8 @@ class Particles(ABCParticles):
         data attributes of the element
 
     """
+    cuba_key = CUBA.PARTICLES
+
     def __init__(self, name):
         """ Constructor
 

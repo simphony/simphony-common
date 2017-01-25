@@ -43,7 +43,7 @@ def save_CUDS(handle, model):
     # Construct a map of referenced objects
     global _CUDSREFMAP
     _CUDSREFMAP.clear()
-    for comp in model.iter(CUDSComponent):
+    for comp in model.iter(item_type=CUBA.CUDS_COMPONENT):
         # Add component to dictionary if it's not there already
         if comp.uid not in _CUDSREFMAP.keys():
             _CUDSREFMAP[comp.uid] = []
@@ -63,7 +63,7 @@ def save_CUDS(handle, model):
                         _CUDSREFMAP[elem.uid] += [comp.uid]
 
     # Save CUDSComponents
-    for comp in model.iter(CUDSComponent):
+    for comp in model.iter(item_type=CUBA.CUDS_COMPONENT):
         if _CUDSREFMAP[comp.uid] is not 'saved':
             stream = ''
             stream = _CUDSComponent_to_yaml(comp, stream)
@@ -106,9 +106,9 @@ def load_CUDS(handle):
                 _dict_to_CUDSComponent(cubatype, dict_cuds[cubatype],
                                        cuds_components)
 
-    model = CUDS(name=name, description=desc)
+    model = CUDS(name=name or '', description=desc or '')
     for comp in cuds_components.values():
-        model.add(comp)
+        model.add([comp])
 
     return model
 
