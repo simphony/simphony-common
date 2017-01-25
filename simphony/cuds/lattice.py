@@ -1,3 +1,4 @@
+import uuid
 import numpy as np
 
 from ..core import CUBA
@@ -37,6 +38,11 @@ class Lattice(ABCLattice):
         self._items_count = {
             CUBA.NODE: lambda: self._size
         }
+        self._uid = uuid.uuid4()
+
+    @property
+    def uid(self):
+        return self._uid
 
     def count_of(self, item_type):
         """ Return the count of item_type in the container.

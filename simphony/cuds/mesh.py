@@ -66,6 +66,12 @@ class Mesh(ABCMesh):
             CUBA.CELL: lambda: self._cells
         }
 
+        self._uid = uuid.uuid4()
+
+    @property
+    def uid(self):
+        return self._uid
+
     @property
     def data(self):
         return dc.DataContainer(self._data)
