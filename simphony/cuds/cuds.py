@@ -5,15 +5,13 @@ based on SimPhoNy metadata.
 """
 import uuid
 
-from .store import MemoryStateDataStore
-from .abc_particles import ABCParticles
-from .abc_lattice import ABCLattice
-from .abc_mesh import ABCMesh
 from .meta import api
-from ..core import DataContainer
+from .utils import map_cuba_key_to_cuds_class
+from .abc_dataset import ABCDataset
+from ..core import CUBA, DataContainer
 
 
-class CUDS(object):
+class CUDS(api.CUDS):
     """Common Universal Data Structure, i.e. CUDS computational model.
 
     This is the main data structure to hold all the information regarding
@@ -28,66 +26,41 @@ class CUDS(object):
     description: str
         More information about this CUDS
     """
-    def __init__(self, name=None, description=None):
+    def __init__(self, name='', description=''):
 
-        # Assign unique ID
-        self._uid = uuid.uuid4()
-
-        # Add name
-        self.name = name
-
-        # Add description
-        self.description = description
-
-        # Add datasets to memory datastore by default
-        self._dataset_store = MemoryStateDataStore()
-
-        # Memory storage to keep CUDS components
+        # A dictionary to keep all CUDS
         self._store = {}
 
         # The generic data container
         self._data = DataContainer()
 
-        # A map to find the object for a given id among datasets or
-        # simple components. Unfortunately, at the moment dataset
-        # containers do not have `uid' and therefore this workaround
-        # is necessary. This is a dict of key of any kind and a lambda
-        # that will return the corresponding value.
-        self._map = {}
+        # Another map to keep a mapping between names and uids
+        self._name_uid_map = {}
 
-        # Another map to keep a mapping between names and ids
-        self._name_to_id_map = {}
-
-    @property
-    def uid(self):
-        return self._uid
+        # Call parent
+        super(CUDS, self).__init__(name=name, description=description)
 
     @staticmethod
     def _is_dataset(obj):
         """Check if the object is a dataset."""
-        return isinstance(obj, (ABCParticles,
-                                ABCLattice,
-                                ABCMesh,
+        return isinstance(obj, (ABCDataset,
                                 api.DataSet))
 
-    @property
-    def data(self):
-        """Data container for CUDS items."""
-        return DataContainer(self._data)
+    @staticmethod
+    def _is_dataset_subclass(obj):
+        """Check if the object is a dataset."""
+        return any([issubclass(component_type, ABCDataset),
+                    issubclass(component_type, api.DataSet)])
 
-    @data.setter
-    def data(self, value):
-        self._data = DataContainer(value)
-
-    def add(self, component):
-        """Add a component to the CUDS computational model.
+    def add(self, components):
+        """Add a number of components to the CUDS computational model.
 
         This will replace any existing value with the same `uid`.
 
         Parameters
         ----------
-        component: CUDSComponent
-            a CUDS component according to the SimPhoNy metadata
+        component: list of CUDSComponents
+            list of CUDS components according to the SimPhoNy metadata
 
         Raises
         ------
@@ -96,46 +69,64 @@ class CUDS(object):
         ValueError
             if a component with the same name already exists
         """
-        # Only accept CUDSComponent subclasses and datasets
-        if not (isinstance(component, api.CUDSComponent) or
-                self._is_dataset(component)):
-            raise TypeError('Not a CUDSComponent nor a dataset object: %s.' %
-                            type(component))
+        for component in components:
+            # Only accept CUDSComponent subclasses and datasets
+            if not (isinstance(component, api.CUDSComponent) or
+                    self._is_dataset(component)):
+                raise TypeError('Not a CUDSComponent nor a dataset object: %s.' %
+                                type(component))
 
-        # Do not accept items with duplicate names.
-        # Components/datasets with no name will be added, however
-        # it is not possible to get/remove them with `name`
-        if component.name in self._name_to_id_map:
-            raise ValueError('Name clash. Component with uid `%s`'
-                             ' is already named `%s`'
-                             % (self._name_to_id_map[component.name],
-                                component.name))
+            # Do not accept items with duplicate names.
+            # Components/datasets with no name will be added, however
+            # it is not possible to get/remove them with `name`
+            if component.name in self._name_uid_map:
+                raise ValueError('Name clash. Component with uid `%s`'
+                                 ' is already named `%s`'
+                                 % (self._name_uid_map[component.name],
+                                    component.name))
 
-        # Add datasets separately
-        if self._is_dataset(component):
-            if not component.name:
-                raise TypeError('Dataset must have a name.')
+            # Make sure datasets have names
+            if self._is_dataset(component):
+                if not component.name:
+                    raise TypeError('Dataset must have a name.')
 
-            self._dataset_store.add(component)
-            # Datasets at the moment do not have uid
-            self._map[component.name] = \
-                lambda key=component.name: self._dataset_store.get(key)
-            # Datasets use name as id
-            self._name_to_id_map[component.name] = component.name
-        else:
-            # Delete existing item with the same name
-            # Store the component. Any CUDS item has uid property.
+                # self._dataset_store.add(component)
+
+            # Add the component to the generic store
             self._store[component.uid] = component
-            self._map[component.uid] = \
-                lambda key=component.uid: self._store.get(key)
-            # Store name for name-to-id mapping.
-            # Components with no name will are not added to the mapping
-            # and it is not possible to access them using add/remove
-            # methods. Use `get_by_uid` and `remove_by_uid` instead.
-            if component.name not in (None, ''):
-                self._name_to_id_map[component.name] = component.uid
 
-    def get(self, name):
+            # Add the component to the data using its CUBA key
+            self._data[component.cuba_key] = component
+
+            # Keep a name:uid map
+            # FIXME: if user changes the name, this will go out of sync
+            if component.name not in (None, ''):
+                self._name_uid_map[component.name] = component.uid
+
+    def update(self, components):
+        """Update existing components with provided ones.
+
+        Parameters
+        ----------
+        components: list of CUDSComponents
+
+        Raises
+        ------
+        ValueError :
+            If any object inside the iterable does not exist.
+        """
+        for component in components:
+            self._update(component)
+
+    def _update(self, component):
+        """Update a component"""
+        if component.uid not in self._store:
+            raise ValueError("Component {name:uid} does not exist."
+                .format(name=component.name, uid=component.uid))
+
+        self._store[component.uid] = component
+
+    def get_by_name(self, name):
         """Get the corresponding component from the CUDS computational model.
 
         Parameters
@@ -152,14 +143,17 @@ class CUDS(object):
         ------
         TypeError
             if the name is not a non empty string
+        KeyError
+            when no object with the given uid exists
+
         """
         if not name:
             raise TypeError('name must be a non empty string.')
 
-        uid = self._name_to_id_map.get(name)
-        return self.get_by_uid(uid)
+        uid = self._name_uid_map.get(name)
+        return self.get(uid)
 
-    def get_by_uid(self, uid):
+    def get(self, uid):
         """Get the corresponding component from the CUDS computational model.
 
         Parameters
@@ -167,104 +161,163 @@ class CUDS(object):
         uid: uuid.UUID
             uid of the component
 
+        Raises
+        ------
+        KeyError
+            when no object with the given uid exists
+
         Returns
         -------
         component: CUDSComponent
             the corresponding CUDS component
         """
-        if uid in self._map:
-            return self._map[uid]()
+        if uid not in self._store:
+            raise KeyError("No object found for uid: {uid}"
+                .format(uid=uid))
 
-    def remove(self, name):
+        return self._store.get(uid)
+
+    def remove(self, uids):
         """Remove the corresponding component from the CUDS computational model.
 
         Parameters
         ----------
-        name: str
-            name of the component to be removed
-
-        Raises
-        ------
-        KeyError
-            if no component exists of the given name
-
-        TypeError
-            if the name is not a non empty string
-        """
-        if not name:
-            raise TypeError('name must be a non empty string.')
-
-        uid = self._name_to_id_map.get(name)
-        self.remove_by_uid(uid)
-
-        # Delete object's key from the mapping
-        if name in self._name_to_id_map:
-            del self._name_to_id_map[name]
-
-    def remove_by_uid(self, uid):
-        """Remove the corresponding component from the CUDS computational model.
-
-        Parameters
-        ----------
-        uid: uuid.UUID
-            uid of the component to be removed
+        uid: list of uuid.UUID
+            uid of the components to be removed
 
         Raises
         ------
         KeyError
             if no component exists of the given uid
         """
-        component = self.get_by_uid(uid)
-        if not component:
-            raise KeyError('No component exists for %s' % uid)
-        if self._is_dataset(component):
-            self._dataset_store.remove(component.name)
-        else:
-            del self._store[uid]
-        # Delete object key from the mappings
-        if component.name in self._name_to_id_map:
-            del self._name_to_id_map[component.name]
+        for uid in uids:
+            component = self.get(uid)
+            if not component:
+                raise KeyError('No component exists for %s' % uid)
+            # if self._is_dataset(component):
+                #self._dataset_store.remove(component.uid)
 
-    # This should be query method
-    def iter(self, component_type):
+            # Delete the object from the internal store
+            del self._store[uid]
+
+            # Delete object key from the mappings
+            if component.name in self._name_uid_map:
+                del self._name_uid_map[component.name]
+
+    # TODO: This should be a query method
+    def iter(self, uids=None, item_type=None):
         """Returns an iterator for the components of the given type.
 
         Parameters
         ----------
-        component_type: CUDSComponent class
-            a component of CUDS, reflecting SimPhoNy metadata
+        uids : iterable of uuid.UUID, optional
+            sequence containing the uids of the objects that will be
+            iterated. When the uids are provided, then the objects are
+            returned in the same order the uids are returned by the iterable.
+            If uids is None, then all objects are returned by the iterable
+            and there is no restriction on the order that they are returned.
+
+        item_type: CUBA
+            Restricts iteration only to the specified CUBA.
+
+        Raises
+        ------
+        KeyError
+            if any of the ids passed as parameters are not in the container.
 
         Yields
         ------
         iterator over the components of the given type
         """
-        values = None
-        if issubclass(component_type, (ABCParticles, ABCLattice, ABCMesh)):
-            values = self._dataset_store.iter_datasets()
+        if uids:
+            if not all(uid in self._store for uid in uids):
+                raise KeyError('No object exists for uid: {uid}'
+                    .format(uid=uid))
         else:
-            values = self._store.itervalues()
+            uids = self._store.keys()
 
-        for component in values:
-            if isinstance(component, component_type):
-                yield component
+        # Get the equivalent class type for the key
+        if item_type:
+            # FIXME: dirty hack for now
+            if item_type in (CUBA.PARTICLES, CUBA.LATTICE, CUBA.MESH):
+                component_type = ABCDataset
+            else:
+                component_type = map_cuba_key_to_cuds_class(item_type)
+        else:
+            component_type = object
 
-    def get_names(self, component_type):
-        """Get names of the components of the given type.
+        for uid in uids:
+            if isinstance(self._store[uid], component_type):
+                yield self._store[uid]
+
+    def has(self, uid):
+        """Checks if an object with the given uid already exists
+        in the dataset.
 
         Parameters
         ----------
-        component_type: CUDSComponent class
-            a component of CUDS, reflecting SimPhoNy metadata
+        uid : uuid.UUID
+            the uid of the object
 
         Returns
         -------
-        names: list
-            names of the items of the given type
+        True if the uid is found, False otherwise.
         """
-        if any([issubclass(component_type, ABCParticles),
-                issubclass(component_type, ABCLattice),
-                issubclass(component_type, ABCMesh)]):
-            return self._dataset_store.get_names()
-        else:
-            return [cp.name for cp in self._store.itervalues()
-                    if isinstance(cp, component_type)]
+        return uid in self._store
+
+    def has_type(self, item_type):
+        """Checks if the specified CUBA type is present
+        in the dataset.
+
+        Parameters
+        ----------
+        item_type : CUBA
+            The CUBA enum of the type of the items to return the count of.
+
+        Returns
+        -------
+        True if the type is present, False otherwise.
+        """
+        # Get the equivalent class type for the key
+        component_type = map_cuba_key_to_cuds_class(item_type)
+
+        for component in self._store.itervalues():
+            if isinstance(component, component_type):
+                return True
+        return False
+
+    def count_of(self, item_type):
+        """Returns an iterator for the components of the given type.
+
+        Parameters
+        ----------
+        item_type: CUBA
+            Restricts iteration only to the specified CUBA.
+
+        Yields
+        ------
+        iterator over the components of the given type
+        """
+        # Get the equivalent class type for the key
+        component_type = map_cuba_key_to_cuds_class(item_type)
+
+        length = 0
+        for component in self._store.itervalues():
+            if isinstance(component, component_type):
+                length += 1
+        return length
+
+    def __len__(self):
+        """Returns the total number of items in the container.
+
+        Returns
+        -------
+        count : int
+            The number of items in the dataset.
+        """
+        return len(self._store)
+
+    def __contains__(self, item):
+        """Implements the `in` interface. Behaves as the has() method.
+        """
+        return self.has(item)
