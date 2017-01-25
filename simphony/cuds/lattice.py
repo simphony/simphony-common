@@ -26,6 +26,8 @@ class Lattice(ABCLattice):
         high level CUBA data assigned to lattice
     """
 
+    cuba_key = CUBA.LATTICE
+
     def __init__(self, name, primitive_cell, size, origin):
         self.name = name
         self._primitive_cell = primitive_cell
