@@ -38,7 +38,7 @@ class Particles(ABCParticles):
         self._particles = {}
         self._bonds = {}
         self._data = DataContainer()
-        self.name = name
+        self._name = name
 
         self._items_count = {
             CUBA.PARTICLE: lambda: self._particles,
@@ -46,6 +46,14 @@ class Particles(ABCParticles):
         }
 
         self._uid = uuid.uuid4()
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
 
     @property
     def uid(self):
