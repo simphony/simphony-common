@@ -1,6 +1,15 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.6.0
+-------------
+
+* Renamed model module to cuds (#376)
+* Regenerated meta classes from metafile version 0.6.0 (#377)
+* Added uids to datasets (#378)
+* Updated API for CUDS (#379)
+* Added setter/getter for name property (#380)
+
 Release 0.5.0
 -------------
 

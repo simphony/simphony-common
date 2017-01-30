@@ -1014,7 +1014,7 @@ KEYWORDS = {
         dtype=None),
     'CUDS': Keyword(
         name='CUDS',
-        definition='CUDS Container',  # noqa
+        definition='CUDS Container, a knowledge-based container of semantic concepts used to agglomerate relevant data and information.',  # noqa
         key='CUDS',
         shape=[1],
         length=None,
