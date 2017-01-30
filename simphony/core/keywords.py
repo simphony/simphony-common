@@ -1012,6 +1012,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'CUDS': Keyword(
+        name='CUDS',
+        definition='CUDS Container, a knowledge-based container of semantic concepts used to agglomerate relevant data and information.',  # noqa
+        key='CUDS',
+        shape=[1],
+        length=None,
+        dtype=None),
     'CUDS_COMPONENT': Keyword(
         name='CUDSComponent',
         definition='Base data type for the CUDS components',  # noqa

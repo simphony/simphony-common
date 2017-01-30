@@ -24,6 +24,7 @@ from .coulomb import Coulomb  # noqa
 from .coulomb_friction_force import CoulombFrictionForce  # noqa
 from .cross_power_law_model import CrossPowerLawModel  # noqa
 from .cubic_lattice import CubicLattice  # noqa
+from .cuds import CUDS  # noqa
 from .cuds_component import CUDSComponent  # noqa
 from .cuds_item import CUDSItem  # noqa
 from .data_set import DataSet  # noqa
