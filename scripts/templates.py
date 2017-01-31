@@ -229,11 +229,7 @@ class Class(object):
                     cur_class_mandatory.append(prop.name)
                 else:
                     cur_class_optional.append(prop.name)
-        print(hierarchy_optional)
-        print(hierarchy_mandatory)
-        print(cur_class_mandatory)
-        print(cur_class_optional)
-        print(pass_down)
+
         return (['self'] +
                 utils.deduplicate(cur_class_mandatory + hierarchy_mandatory),
                 utils.deduplicate(cur_class_optional + hierarchy_optional),

@@ -12,87 +12,68 @@ from scripts.meta_class_generator import MetaClassGenerator
 from scripts.validation_generator import ValidationGenerator
 
 
-@click.group()
-def cli():
-    """ Auto-generate code from simphony-metadata yaml description. """
-
-
-@cli.command()
-@click.argument('yaml_file', type=click.File('rb'))
-@click.argument('out_path', type=click.Path())
+@click.command()
+@click.argument('yaml_dir', type=click.Path())
+@click.argument('module_root_path', type=click.Path())
 @click.option('-O', '--overwrite', is_flag=True, default=False,
               help='Overwrite OUT_PATH')
-def meta_class(yaml_file, out_path, overwrite):
+def cli(yaml_dir, module_root_path, overwrite):
     """ Create the Simphony Metadata classes
 
     yaml_file:
         path to the simphony_metadata yaml file
 
-    out_path:
-        path to the directory where the output files should be placed
+    module_root_path:
+        path to the root directory of the simphony module.
+        Output files will be placed in the appropriate locations
+        under this module.
 
     overwrite:
         Allow overwrite of the file.
     """
-    simphony_metadata_dict = yaml.safe_load(yaml_file)
 
-    if os.path.exists(out_path):
+    meta_class_output = os.path.join(module_root_path, "cuds", "meta")
+    keyword_output = os.path.join(module_root_path, "core", "keywords.py")
+    cuba_output = os.path.join(module_root_path, "core", "cuba.py")
+
+    if any([os.path.exists(x) for x in [
+        meta_class_output, keyword_output, cuba_output]
+           ]):
         if overwrite:
-            shutil.rmtree(out_path)
+            shutil.rmtree(meta_class_output)
+            os.remove(keyword_output)
+            os.remove(cuba_output)
         else:
-            raise OSError('Destination already exists: {!r}'.format(
-                out_path))
+            raise OSError('Generated files already present. '
+                          'Will not overwrite without --overwrite')
 
-    os.mkdir(out_path)
+    try:
+        os.mkdir(meta_class_output)
+    except OSError:
+        pass
 
-    meta_class_generator = MetaClassGenerator()
-    meta_class_generator.generate(simphony_metadata_dict, out_path)
-    api_generator = APIGenerator()
-    api_generator.generate(simphony_metadata_dict, out_path)
-    validation_generator = ValidationGenerator()
-    validation_generator.generate(out_path)
+    cuba_input = os.path.join(yaml_dir, "cuba.yml")
+    cuds_input = os.path.join(yaml_dir, "simphony_metadata.yml")
 
+    with open(cuba_input) as f:
+        cuba_dict = yaml.safe_load(f)
 
-@cli.command()
-@click.argument('cuba_input', type=click.File('rb'))
-@click.argument('cuds_input', type=click.File('rb'))
-@click.argument('output', type=click.File('wb'))
-def cuba_enum(cuba_input, cuds_input, output):
-    """ Create the CUBA Enum
+    with open(cuds_input) as f:
+        simphony_metadata_dict = yaml.safe_load(f)
 
-    cuba_input:
-        Path to the cuba.yml
-
-    cuds_input:
-        Path to the simphony_metadata.yml
-
-    output:
-        Path to the output cuba.py file
-    """
-    cuba_dict = yaml.safe_load(cuba_input)
-    simphony_metadata_dict = yaml.safe_load(cuds_input)
+    generator = KeywordsGenerator()
+    with open(keyword_output, "wb") as f:
+        generator.generate(cuba_dict, simphony_metadata_dict, f)
 
     generator = CUBAEnumGenerator()
-    generator.generate(cuba_dict, simphony_metadata_dict, output)
+    with open(cuba_output, "wb") as f:
+        generator.generate(cuba_dict, simphony_metadata_dict, f)
 
+    meta_class_generator = MetaClassGenerator()
+    meta_class_generator.generate(simphony_metadata_dict, meta_class_output)
 
-@cli.command()
-@click.argument('cuba_input', type=click.File('rb'))
-@click.argument('cuds_input', type=click.File('rb'))
-@click.argument('output', type=click.File('wb'))
-def keywords(cuba_input, cuds_input, output):
-    """ Create a dictionary of keywords.
+    api_generator = APIGenerator()
+    api_generator.generate(simphony_metadata_dict, meta_class_output)
 
-    cuba_input:
-        Path to the cuba.yml
-
-    cuds_input:
-        Path to the simphony_metadata.yml
-
-    output:
-        Path to the output keywords.py file
-    """
-    cuba_dict = yaml.safe_load(cuba_input)
-    simphony_metadata_dict = yaml.safe_load(cuds_input)
-    generator = KeywordsGenerator()
-    generator.generate(cuba_dict, simphony_metadata_dict, output)
+    validation_generator = ValidationGenerator()
+    validation_generator.generate(meta_class_output)

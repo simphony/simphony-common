@@ -17,7 +17,7 @@ class MetaClassGenerator(object):
         emptied first.
         """
 
-        for key, class_data in simphony_metadata_dict['CUDS_KEYS'].items():
+        for key, _ in simphony_metadata_dict['CUDS_KEYS'].items():
             gen = SingleMetaClassGenerator(key, simphony_metadata_dict)
 
             filename = os.path.join(

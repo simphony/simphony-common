@@ -42,6 +42,7 @@ class KeywordsGenerator(object):
             "        dtype={type}),\n")
         for keyword, content in sorted(cuba_dict['CUBA_KEYS'].items(),
                                        key=lambda x: x[0]):
+            content = dict(content)
             content['type'] = data_types[content['type']]
             content['name'] = utils.to_camel_case(keyword)
             content['key'] = keyword
@@ -52,6 +53,7 @@ class KeywordsGenerator(object):
         for keyword, content in sorted(
                 simphony_metadata_dict['CUDS_KEYS'].items(),
                 key=lambda x: x[0]):
+            content = dict(content)
             content['type'] = "None"
             content['name'] = utils.to_camel_case(keyword)
             content['key'] = keyword
