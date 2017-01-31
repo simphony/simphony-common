@@ -1,0 +1,2 @@
+numexpr
+git+https://github.com/simphony/simphony-metaparser.git@0.1.0#egg=simphony_metaparser
