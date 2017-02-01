@@ -69,22 +69,6 @@ def indent(text, level=1):
     return "\n".join((spaces + line) for line in dedent_text.splitlines())
 
 
-def with_cuba_prefix(string):
-    """Adds the CUBA. prefix to the string if not there."""
-    if is_cuba_key(string):
-        return string
-
-    return "CUBA." + string
-
-
-def without_cuba_prefix(string):
-    """Removes the CUBA. prefix to the string if there."""
-    if is_cuba_key(string):
-        return string[5:]
-
-    return string
-
-
 def is_cuba_key(value):
     """True if value is a qualified cuba key"""
     return isinstance(value, (str, unicode)) and value.startswith("CUBA.")
@@ -97,11 +81,6 @@ def cuba_key_to_meta_class_name(string):
 
 def cuba_key_to_meta_class_module_name(string):
     """Converts a cuba key in the associated python module name"""
-    return without_cuba_prefix(string).lower()
-
-
-def cuba_key_to_property_name(string):
-    """Converts a cuba key in the associated property name"""
     return without_cuba_prefix(string).lower()
 
 

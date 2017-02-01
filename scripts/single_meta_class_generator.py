@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from simphony_metaparser.utils import without_cuba_prefix, with_cuba_prefix
+
 from . import templates
 from . import utils
 
@@ -83,7 +85,7 @@ class SingleMetaClassGenerator(object):
             if parent_key is None:
                 break
             parent_class_data = cuds_keys[
-                utils.without_cuba_prefix(parent_key)]
+                without_cuba_prefix(parent_key)]
             hierarchy_properties += self._extract_properties(parent_class_data,
                                                              parent_keys[idx:])
 
@@ -186,7 +188,7 @@ def is_variable_reimplemented(prop_key, parent_keys, simphony_metadata_dict):
             return False
 
         if prop_key in simphony_metadata_dict["CUDS_KEYS"][
-                utils.without_cuba_prefix(parent_key)]:
+                without_cuba_prefix(parent_key)]:
             return True
 
 
@@ -210,7 +212,7 @@ def all_parent_keys(key, simphony_metadata_dict):
 
     while cur_key is not None:
         class_data = simphony_metadata_dict["CUDS_KEYS"][cur_key]
-        parent_key = utils.without_cuba_prefix(class_data['parent'])
-        yield (utils.with_cuba_prefix(parent_key)
+        parent_key = without_cuba_prefix(class_data['parent'])
+        yield (with_cuba_prefix(parent_key)
                if parent_key is not None else None)
         cur_key = parent_key

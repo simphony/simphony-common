@@ -1,6 +1,9 @@
 import abc
 import textwrap
 
+from simphony_metaparser.utils import with_cuba_prefix, \
+    cuba_key_to_property_name, without_cuba_prefix
+
 from scripts.utils import NoDefault
 from . import utils
 
@@ -124,7 +127,7 @@ class Class(object):
         )
         s += utils.indent(utils.format_docstring(self.docstring))+'\n'
         s += utils.indent("cuba_key = {qualified_cuba_key}".format(
-            qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)))+'\n'
+            qualified_cuba_key=with_cuba_prefix(self.cuba_key)))+'\n'
 
         out.write(utils.indent(s, indent_level))
 
@@ -389,7 +392,7 @@ class VariableProperty(ABCProperty):
         if shape is None:
             raise ValueError("shape cannot be None")
 
-        prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
+        prop_name = cuba_key_to_property_name(qual_cuba_key)
         super(VariableProperty, self).__init__(
             name=prop_name,
             default=default)
@@ -426,7 +429,7 @@ class VariableProperty(ABCProperty):
             qual_cuba_key=self.qual_cuba_key)
 
     def _render_validation(self):
-        cuba_key = utils.without_cuba_prefix(self.qual_cuba_key)
+        cuba_key = without_cuba_prefix(self.qual_cuba_key)
         if self.shape == [1]:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
