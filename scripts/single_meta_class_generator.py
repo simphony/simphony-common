@@ -159,7 +159,7 @@ class SingleMetaClassGenerator(object):
                     ),
                 )
             else:
-                raise ValueError("Unrecognized property {}. class data"
+                raise ValueError("Unrecognized property {}. class data "
                                  "{}".format(prop_key, class_data))
 
         return properties

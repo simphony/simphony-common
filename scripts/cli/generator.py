@@ -40,9 +40,12 @@ def cli(yaml_dir, module_root_path, overwrite):
         meta_class_output, keyword_output, cuba_output]
            ]):
         if overwrite:
-            shutil.rmtree(meta_class_output)
-            os.remove(keyword_output)
-            os.remove(cuba_output)
+            try:
+                shutil.rmtree(meta_class_output)
+                os.remove(keyword_output)
+                os.remove(cuba_output)
+            except OSError:
+                pass
         else:
             raise OSError('Generated files already present. '
                           'Will not overwrite without --overwrite')
