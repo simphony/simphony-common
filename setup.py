@@ -77,43 +77,19 @@ class BuildMeta(Command):
                     print("Failed to checkout {}".format(self.repotag))
                     raise
 
-        metadata_yml = os.path.join(
-            self.repopath,
-            "yaml_files",
-            "simphony_metadata.yml")
-        cuba_yml = os.path.join(
-            self.repopath,
-            "yaml_files",
-            "cuba.yml")
+        yaml_dir = os.path.join(self.repopath, "yaml_files")
 
-        if not (os.path.exists(cuba_yml) and os.path.exists(metadata_yml)):
+        if not os.path.exists(yaml_dir):
             print(textwrap.dedent("""
-                Cannot open simphony-metadata YAML files.
+                Cannot find simphony-metadata YAML dir files.
                 Please specify an appropriate path to the simphony-metadata
                 git repository in setup.cfg.
                 """))
             raise RuntimeError("Unrecoverable error.")
 
-        print("Building classes")
-        with open(metadata_yml, 'rb') as simphony_metadata:
-            from scripts.cli.generator import meta_class
-            meta_class.callback(simphony_metadata, "simphony/cuds/meta/", True)
-
-        print("Building keywords")
-        with open(metadata_yml, 'rb') as simphony_metadata, \
-                open(cuba_yml, 'rb') as cuba, \
-                open("simphony/core/keywords.py", "wb") as keywords_out:
-
-            from scripts.cli.generator import keywords
-            keywords.callback(cuba, simphony_metadata, keywords_out)
-
-        print("Building enums")
-        with open(metadata_yml, 'rb') as simphony_metadata, \
-                open(cuba_yml, 'rb') as cuba, \
-                open("simphony/core/cuba.py", "wb") as cuba_out:
-
-            from scripts.cli.generator import cuba_enum
-            cuba_enum.callback(cuba, simphony_metadata, cuba_out)
+        print("Building")
+        from scripts.cli.generator import cli
+        cli.callback(yaml_dir, "simphony", True)
 
         print("Running yapf")
         cmd_args = ["yapf", "--style", "pep8", "--in-place"]
