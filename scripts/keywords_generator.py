@@ -42,24 +42,24 @@ class KeywordsGenerator(object):
             "        dtype={type}),\n")
         for keyword, content in sorted(cuba_dict['CUBA_KEYS'].items(),
                                        key=lambda x: x[0]):
-            content = dict(content)
-            content['type'] = data_types[content['type']]
-            content['name'] = utils.to_camel_case(keyword)
-            content['key'] = keyword
-            content['shape'] = content.get("shape", [1])
-            content['length'] = content.get("length", None)
-            lines.extend(template.format(**content))
+            template_ctx = dict(content)
+            template_ctx['type'] = data_types[content['type']]
+            template_ctx['name'] = utils.to_camel_case(keyword)
+            template_ctx['key'] = keyword
+            template_ctx['shape'] = content.get("shape", [1])
+            template_ctx['length'] = content.get("length", None)
+            lines.extend(template.format(**template_ctx))
 
         for keyword, content in sorted(
                 simphony_metadata_dict['CUDS_KEYS'].items(),
                 key=lambda x: x[0]):
-            content = dict(content)
-            content['type'] = "None"
-            content['name'] = utils.to_camel_case(keyword)
-            content['key'] = keyword
-            content['shape'] = content.get("shape", [1])
-            content['length'] = "None"
-            lines.extend(template.format(**content))
+            template_ctx = dict(content)
+            template_ctx['type'] = "None"
+            template_ctx['name'] = utils.to_camel_case(keyword)
+            template_ctx['key'] = keyword
+            template_ctx['shape'] = content.get("shape", [1])
+            template_ctx['length'] = "None"
+            lines.extend(template.format(**template_ctx))
         lines.append('}\n')
 
         output.writelines(lines)
