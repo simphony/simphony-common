@@ -6,6 +6,8 @@ from collections import OrderedDict
 
 from contextlib import contextmanager
 
+from simphony_metaparser.utils import without_cuba_prefix
+
 
 class NoDefault(object):
     """Marker class. Specifies that no default has been specified.
@@ -15,19 +17,21 @@ class NoDefault(object):
 
 @contextmanager
 def make_temporary_directory():
-    ''' Context Manager for creating a temporary directory
+    """Context Manager for creating a temporary directory
     and remove the tree on exit
 
     Yields
     ------
     temp_dir : str
         absolute path to temporary directory
-    '''
+    """
+    temp_dir = None
     try:
         temp_dir = tempfile.mkdtemp()
         yield temp_dir
     finally:
-        shutil.rmtree(temp_dir)
+        if temp_dir is not None:
+            shutil.rmtree(temp_dir)
 
 
 def to_camel_case(text, special={'cuds': 'CUDS'}):
