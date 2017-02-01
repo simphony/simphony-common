@@ -5,7 +5,8 @@ from simphony.core.cuba import CUBA
 
 class CUDS(CUDSComponent):
     """
-    CUDS Container
+    CUDS Container, a knowledge-based container of semantic
+    concepts used to agglomerate relevant data and information.
     """
     cuba_key = CUBA.CUDS
 
@@ -23,4 +24,4 @@ class CUDS(CUDSComponent):
         return () + base_params
 
     def _default_definition(self):
-        return "CUDS Container"  # noqa
+        return "CUDS Container, a knowledge-based container of semantic concepts used to agglomerate relevant data and information."  # noqa
