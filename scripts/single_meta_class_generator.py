@@ -198,21 +198,22 @@ def all_parent_keys(key, simphony_metadata_dict):
     Parameters
     ----------
     key: str
-        The starting key
+        The starting key, as a non-qualified CUBA key
     simphony_metadata_dict: dict
         the full yaml parsed dictionary
 
     Return
     ------
     list:
-        A list of the parent keys, from most recent to
+        A list of the parent qualified keys, from most recent to
         least recent ancestor (None)
     """
-    cur_key = key
+    cur_key = without_cuba_prefix(key) if key is not None else None
 
     while cur_key is not None:
         class_data = simphony_metadata_dict["CUDS_KEYS"][cur_key]
-        parent_key = without_cuba_prefix(class_data['parent'])
+        parent_key = class_data['parent']
         yield (with_cuba_prefix(parent_key)
                if parent_key is not None else None)
-        cur_key = parent_key
+        cur_key = (without_cuba_prefix(parent_key) if parent_key is not None
+                   else None)
