@@ -1,6 +1,11 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.6.0.dev0
+-------------
+
+* Generator command now requires only one invocation. (#382) 
+
 Release 0.6.0
 -------------
 
