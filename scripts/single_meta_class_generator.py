@@ -1,6 +1,9 @@
 from __future__ import print_function
 
-from simphony_metaparser.utils import without_cuba_prefix, with_cuba_prefix
+from simphony_metaparser.nodes import FixedPropertyEntry, VariablePropertyEntry
+
+from simphony_metaparser.utils import (
+    without_cuba_prefix, traverse_to_root)
 
 from . import templates
 from . import utils
@@ -15,97 +18,53 @@ KNOWN_FIXED_PROPERTIES = [
 class SingleMetaClassGenerator(object):
     """Generator for a single meta class file.
     """
-    def __init__(self, cuba_key, simphony_metadata_dict):
-        """Initializes the generator.
 
-        Parameters
-        ----------
-        cuba_key: str
-            the cuba key of the meta class.
-
-        simphony_metadata_dict:
-            the full yaml parsed content of the simphony_metadata file.
-        """
-        self.cuba_key = cuba_key
-        self.simphony_metadata_dict = simphony_metadata_dict
-
-    def generate(self, out):
+    def generate(self, ontology, item, output):
         """Generates the meta class content, and writes them
         to the out file handler.
 
         Parameters
         ----------
-        out: handle
+        ontology: Ontology
+            The ontology
+
+        item: CUDSItem
+            The item to render.
+
+        out: file
             File handler where to write the content.
         """
-        print("Generating for {}".format(self.cuba_key))
-
-        cuds_keys = self.simphony_metadata_dict["CUDS_KEYS"]
-
-        # Catch inconsistent definitions that would choke the generator
-        parent_keys = list(
-            all_parent_keys(
-                self.cuba_key,
-                self.simphony_metadata_dict))
-
-        parent_class_key = parent_keys[0]
-        if (parent_class_key and parent_class_key.replace('CUBA.', '')
-                not in cuds_keys):
-            raise ValueError(
-                'parent {parent} of {cuba_key} '
-                'is not defined in CUDS_KEYS'.format(parent=parent_class_key,
-                                                     cuba_key=self.cuba_key)
-            )
-
-        if self.cuba_key.lower() in ('validation', 'api'):
-            raise ValueError(
-                'Name clashes with utility modules: '+self.cuba_key.lower()
-            )
-
-        class_data = cuds_keys[self.cuba_key]
+        print("Generating for {}".format(item.name))
 
         f = templates.File()
         f.imports.add(templates.ShortcutImport("CUBA"))
 
-        if parent_class_key is None:
-            parent_class_name = None
+        if item.parent is None:
             print ("  Hierarchy root")
         else:
-            if not parent_class_key.startswith('CUBA.'):
-                message = "'parent' should be either empty " \
-                          "or a CUBA value, got {}".format(parent_class_key)
-                raise ValueError(message)
-
-            parent_class_name = utils.cuba_key_to_meta_class_name(
-                parent_class_key)
-            print ("  Descendant of {}".format(parent_class_name))
+            print ("  Descendant of {}".format(item.parent.name))
 
         hierarchy_properties = []
-        for idx, parent_key in enumerate(parent_keys):
-            if parent_key is None:
-                break
-            parent_class_data = cuds_keys[
-                without_cuba_prefix(parent_key)]
-            hierarchy_properties += self._extract_properties(parent_class_data,
-                                                             parent_keys[idx:])
+        for parent in traverse_to_root(item):
+            hierarchy_properties += self._create_property_templates(parent)
 
         class_ = templates.Class(
-            utils.cuba_key_to_meta_class_name(self.cuba_key),
-            self.cuba_key,
-            parent_class_name,
+            utils.cuba_key_to_meta_class_name(item.name),
+            item.name,
+            item.parent.name,
             hierarchy_properties,
-            docstring=class_data["definition"]
+            docstring=""
         )
 
-        if parent_class_key is None:
+        if item.parent is None:
             class_.methods.append(templates.MetaAPIMethods())
 
-        class_.properties = self._extract_properties(class_data, parent_keys)
+        class_.properties = self._create_property_templates(item)
 
         f.classes.append(class_)
-        f.render(out)
+        f.render(output)
 
-    def _extract_properties(self, class_data, parent_keys):
+    def _create_property_templates(self, item):
         """Helper method. Extracts all the properties from a given
         class.
 
@@ -123,51 +82,43 @@ class SingleMetaClassGenerator(object):
             A list of templates Properties
         """
         properties = []
-        for prop_key in [p for p in class_data.keys()]:
-            if prop_key == "parent":
-                continue
-            if prop_key == "data":
+        for prop in item.property_entries.values():
+            if prop.name == "data":
                 properties.append(templates.DataProperty())
-            elif prop_key == "CUBA.UID":
+            elif prop.name == "CUBA.UID":
                 properties.append(templates.UIDProperty())
-            elif prop_key in KNOWN_FIXED_PROPERTIES:
-                if prop_key in class_data:
-                    properties.append(
+            elif isinstance(prop, FixedPropertyEntry):
+                properties.append(
                         templates.FixedProperty(
-                            prop_key,
-                            default=class_data[prop_key],
+                            prop.name,
+                            default=prop.default,
                             reimplemented=is_variable_reimplemented(
-                                prop_key,
-                                parent_keys,
-                                self.simphony_metadata_dict
+                                prop.name,
+                                item
                             )
                         )
                     )
 
-            elif prop_key.startswith("CUBA."):
-                property_entry = class_data[prop_key]
-                if property_entry is None:
-                    property_entry = {}
+            elif isinstance(prop, VariablePropertyEntry):
                 properties.append(
                     templates.VariableProperty(
-                        prop_key,
-                        default=property_entry.get("default", utils.NoDefault),
-                        shape=utils.parse_shape(property_entry.get("shape")),
+                        prop.name,
+                        default=prop.default,
+                        shape=prop.shape,
                         reimplemented=is_variable_reimplemented(
-                            prop_key,
-                            parent_keys,
-                            self.simphony_metadata_dict
+                            prop.name,
+                            item,
                         )
                     ),
                 )
             else:
-                raise ValueError("Unrecognized property {}. class data "
-                                 "{}".format(prop_key, class_data))
+                raise ValueError("Unrecognized property {}, item {} "
+                                 .format(prop, item.name))
 
         return properties
 
 
-def is_variable_reimplemented(prop_key, parent_keys, simphony_metadata_dict):
+def is_variable_reimplemented(prop_key, parent_keys):
     """Checks if a given variable is reimplemented from a base parent class.
 
     Parameters
@@ -192,28 +143,3 @@ def is_variable_reimplemented(prop_key, parent_keys, simphony_metadata_dict):
             return True
 
 
-def all_parent_keys(key, simphony_metadata_dict):
-    """Traverses the hierarchy and returns the keys of all the parents.
-
-    Parameters
-    ----------
-    key: str
-        The starting key, as a non-qualified CUBA key
-    simphony_metadata_dict: dict
-        the full yaml parsed dictionary
-
-    Return
-    ------
-    list:
-        A list of the parent qualified keys, from most recent to
-        least recent ancestor (None)
-    """
-    cur_key = without_cuba_prefix(key) if key is not None else None
-
-    while cur_key is not None:
-        class_data = simphony_metadata_dict["CUDS_KEYS"][cur_key]
-        parent_key = class_data['parent']
-        yield (with_cuba_prefix(parent_key)
-               if parent_key is not None else None)
-        cur_key = (without_cuba_prefix(parent_key) if parent_key is not None
-                   else None)
