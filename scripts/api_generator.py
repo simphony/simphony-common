@@ -1,23 +1,29 @@
 from __future__ import print_function
 
 import os
-from scripts.utils import to_camel_case
+
+from simphony_metaparser.utils import traverse
+
+from scripts.utils import cuba_key_to_meta_class_module_name, \
+    cuba_key_to_meta_class_name
 
 
 class APIGenerator(object):
-    def generate(self, simphony_metadata_dict, out_path):
+    def generate(self, ontology, output):
         """
         Generates the api.py with the appropriate imports.
         The imports are alphabetically ordered.
+
+        ontology: Ontology
+            The node of the ontology
+
+        output: file
+            The file on which to write the result
         """
 
-        for key in sorted(simphony_metadata_dict['CUDS_KEYS'].keys()):
-            with open(os.path.join(out_path, "api.py"), 'ab') as api_file:
-                print(
-                    'from .{} import {}   # noqa'.format(
-                        key.lower(),
-                        to_camel_case(key)
-                    ),
-                    sep='\n',
-                    file=api_file
-                )
+        for cuds_item, _ in traverse(ontology.root_cuds_item):
+            output.write('from .{} import {}   # noqa\n'.format(
+                    cuba_key_to_meta_class_module_name(cuds_item.name),
+                    cuba_key_to_meta_class_name(cuds_item.name)
+                ),
+            )

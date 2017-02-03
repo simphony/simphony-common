@@ -33,6 +33,7 @@ def cli(yaml_dir, module_root_path, overwrite):
     """
 
     meta_class_output = os.path.join(module_root_path, "cuds", "meta")
+    api_output = os.path.join(module_root_path, "cuds", "meta", "api.py")
     keyword_output = os.path.join(module_root_path, "core", "keywords.py")
     cuba_output = os.path.join(module_root_path, "core", "cuba.py")
 
@@ -76,7 +77,8 @@ def cli(yaml_dir, module_root_path, overwrite):
     meta_class_generator.generate(simphony_metadata_dict, meta_class_output)
 
     api_generator = APIGenerator()
-    api_generator.generate(simphony_metadata_dict, meta_class_output)
+    with open(api_output, "wb") as f:
+        api_generator.generate(cuba_dict, f)
 
     validation_generator = ValidationGenerator()
     validation_generator.generate(meta_class_output)
