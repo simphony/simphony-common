@@ -7,7 +7,7 @@ from scripts.tests import fixtures
 
 class TestCUBAEnumGenerator(unittest.TestCase):
     def setUp(self):
-        self.ontology = fixtures.trivial_ontology
+        self.ontology = fixtures.trivial_ontology()
 
     def test_basic_parsing(self):
         generator = CUBAEnumGenerator()
