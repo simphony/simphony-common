@@ -30,8 +30,8 @@ class FaceCenteredOrthorhombicLattice(BravaisLattice):
             base_params = super(FaceCenteredOrthorhombicLattice,
                                 cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([]) | base_params
+            base_params = ()
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "A face centered orthorhombic lattice"  # noqa

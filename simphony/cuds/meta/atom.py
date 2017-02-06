@@ -19,8 +19,8 @@ class Atom(Particle):
         try:
             base_params = super(Atom, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.MASS, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.MASS, ) + base_params))
 
     def _default_definition(self):
         return "An atom"  # noqa

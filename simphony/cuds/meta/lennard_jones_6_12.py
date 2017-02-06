@@ -28,12 +28,12 @@ class LennardJones_6_12(PairPotential):
         try:
             base_params = super(LennardJones_6_12, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([
-            CUBA.VAN_DER_WAALS_RADIUS,
-            CUBA.CUTOFF_DISTANCE,
-            CUBA.ENERGY_WELL_DEPTH,
-        ]) | base_params
+            base_params = ()
+        return tuple(
+            set((
+                CUBA.VAN_DER_WAALS_RADIUS,
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.ENERGY_WELL_DEPTH, ) + base_params))
 
     def _default_definition(self):
         return "A Lennard-Jones 6-12 Potential"  # noqa

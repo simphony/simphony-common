@@ -19,8 +19,8 @@ class Point(CUDSItem):
         try:
             base_params = super(Point, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.POSITION, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.POSITION, ) + base_params))
 
     def _default_definition(self):
         return "A point in a 3D space system"  # noqa

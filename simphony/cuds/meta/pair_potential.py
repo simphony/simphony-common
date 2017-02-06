@@ -19,8 +19,8 @@ class PairPotential(InteratomicPotential):
         try:
             base_params = super(PairPotential, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.MATERIAL, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.MATERIAL, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

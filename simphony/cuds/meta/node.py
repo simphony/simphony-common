@@ -19,8 +19,8 @@ class Node(CUDSComponent):
         try:
             base_params = super(Node, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.INDEX, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.INDEX, ) + base_params))
 
     def _default_definition(self):
         return "A node on a structured grid like lattice"  # noqa

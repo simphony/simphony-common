@@ -21,8 +21,8 @@ class CUDSItem(object):
         try:
             base_params = super(CUDSItem, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.UID, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.UID, ) + base_params))
 
     @classmethod
     def parents(cls):

@@ -22,8 +22,8 @@ class PrimitiveCell(CUDSComponent):
         try:
             base_params = super(PrimitiveCell, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.LATTICE_VECTORS, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.LATTICE_VECTORS, ) + base_params))
 
     def _default_definition(self):
         return "A lattice primitive cell"  # noqa

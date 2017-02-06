@@ -19,8 +19,8 @@ class Bond(CUDSItem):
         try:
             base_params = super(Bond, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.PARTICLE, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.PARTICLE, ) + base_params))
 
     def _init_particle(self, value):
         if value is Default:

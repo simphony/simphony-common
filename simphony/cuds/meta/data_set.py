@@ -19,8 +19,8 @@ class DataSet(CUDSComponent):
         try:
             base_params = super(DataSet, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([]) | base_params
+            base_params = ()
+        return tuple(set(() + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

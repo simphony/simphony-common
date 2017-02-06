@@ -17,8 +17,8 @@ class Fem(ComputationalMethod):
         try:
             base_params = super(Fem, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([]) | base_params
+            base_params = ()
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Finite element method"  # noqa

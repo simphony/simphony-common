@@ -42,16 +42,16 @@ class Cfd(PhysicsEquation):
         try:
             base_params = super(Cfd, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([
-            CUBA.MULTIPHASE_MODEL,
-            CUBA.RHEOLOGY_MODEL,
-            CUBA.TURBULENCE_MODEL,
-            CUBA.GRAVITY_MODEL,
-            CUBA.THERMAL_MODEL,
-            CUBA.COMPRESSIBILITY_MODEL,
-            CUBA.ELECTROSTATIC_MODEL,
-        ]) | base_params
+            base_params = ()
+        return tuple(
+            set((
+                CUBA.MULTIPHASE_MODEL,
+                CUBA.RHEOLOGY_MODEL,
+                CUBA.TURBULENCE_MODEL,
+                CUBA.GRAVITY_MODEL,
+                CUBA.THERMAL_MODEL,
+                CUBA.COMPRESSIBILITY_MODEL,
+                CUBA.ELECTROSTATIC_MODEL, ) + base_params))
 
     def _init_multiphase_model(self, value):
         if value is Default:

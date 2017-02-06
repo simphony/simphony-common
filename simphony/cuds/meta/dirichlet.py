@@ -26,11 +26,10 @@ class Dirichlet(Condition):
         try:
             base_params = super(Dirichlet, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([
+            base_params = ()
+        return tuple(set((
             CUBA.VARIABLE,
-            CUBA.MATERIAL,
-        ]) | base_params
+            CUBA.MATERIAL, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

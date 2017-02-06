@@ -18,8 +18,8 @@ class ElectrostaticModel(PhysicsEquation):
         try:
             base_params = super(ElectrostaticModel, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([]) | base_params
+            base_params = ()
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return []  # noqa

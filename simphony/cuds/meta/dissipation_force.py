@@ -25,8 +25,8 @@ class DissipationForce(MaterialRelation):
         try:
             base_params = super(DissipationForce, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.RESTITUTION_COEFFICIENT, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.RESTITUTION_COEFFICIENT, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

@@ -19,8 +19,8 @@ class Origin(CUDSComponent):
         try:
             base_params = super(Origin, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.POSITION, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.POSITION, ) + base_params))
 
     def _default_definition(self):
         return "The origin of a space system"  # noqa

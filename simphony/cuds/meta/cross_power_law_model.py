@@ -29,13 +29,13 @@ class CrossPowerLawModel(RheologyModel):
         try:
             base_params = super(CrossPowerLawModel, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([
-            CUBA.INITIAL_VISCOSITY,
-            CUBA.LINEAR_CONSTANT,
-            CUBA.MAXIMUM_VISCOSITY,
-            CUBA.POWER_LAW_INDEX,
-        ]) | base_params
+            base_params = ()
+        return tuple(
+            set((
+                CUBA.INITIAL_VISCOSITY,
+                CUBA.LINEAR_CONSTANT,
+                CUBA.MAXIMUM_VISCOSITY,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Viscosity Cross power law model"  # noqa

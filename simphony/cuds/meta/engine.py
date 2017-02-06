@@ -20,8 +20,8 @@ class Engine(SoftwareTool):
         try:
             base_params = super(Engine, cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.ENGINE_FEATURE, ]) | base_params
+            base_params = ()
+        return tuple(set((CUBA.ENGINE_FEATURE, ) + base_params))
 
     def _default_definition(self):
         return "Represents a software tool which is used to solve the physics equation"  # noqa
