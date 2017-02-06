@@ -243,7 +243,7 @@ class Class(object):
         params = []
         for prop in self.properties:
             if isinstance(prop, VariableProperty):
-                params.append(prop.qual_cuba_key)
+                params.append(prop.source_key)
             elif isinstance(prop, UIDProperty):
                 params.append("CUBA.UID")
 
@@ -255,8 +255,8 @@ class Class(object):
                         {class_name},
                         cls).supported_parameters()
                 except AttributeError:
-                    base_params = ()
-                return ({params}) + base_params
+                    base_params = set()
+                return set([{params}]) | base_params
                 """.format(
                     class_name=self.class_name,
                     params="".join([p+", " for p in params]))
@@ -283,6 +283,9 @@ class MetaAPIMethods(object):
 
 
 class ABCProperty(object):
+    """Describes a template for a generic python property.
+    It's an abstract class. Derived classes must reimplement the
+    appropriate methods for rendering"""
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, name, default=NoDefault, docstring=""):
@@ -292,29 +295,48 @@ class ABCProperty(object):
 
     @abc.abstractmethod
     def import_required(self):
-        pass
+        """Must return the import required to make the property work,
+        as a list of ShortcutImport or MetaClassImport"""
 
     @abc.abstractmethod
     def _render_init(self):
-        pass
+        """Renders the initialization routine. This is called
+        by the class __init__ method.
+        Must return a string containing the rendered data."""
 
     @abc.abstractmethod
     def _render_setter(self):
-        pass
+        """Renders the setter method.
+        Must return a string containing the rendered data."""
 
     @abc.abstractmethod
     def _render_getter(self):
-        pass
+        """Renders the getter method.
+        Must return a string containing the rendered data.
+        """
 
     @abc.abstractmethod
     def _render_validation(self):
-        pass
+        """Renders the validation method.
+        Must return a string containing the rendered data.
+        """
 
     @abc.abstractmethod
     def _render_default(self):
+        """Renders a routine that returns the appropriate default.
+        Must return a string containing the rendered data.
+        """
         pass
 
     def render(self, out, indent_level=0):
+        """Triggers the rendering
+
+        out: file-like
+            Where to write the rendering
+
+        indent_level: int
+            used to indent the rendering of a given level amount.
+        """
         s = self._render_init()
         s += self._render_getter()
         s += self._render_setter()
@@ -325,9 +347,20 @@ class ABCProperty(object):
 
 
 class FixedProperty(ABCProperty):
-    def __init__(self, name, default, reimplemented):
-        super(FixedProperty, self).__init__(name, default)
+    """Describes a fixed property template."""
 
+    def __init__(self, source_key, default, reimplemented):
+        """Defines a fixed property"""
+        super(FixedProperty, self).__init__(source_key, default)
+
+        # This is the original name as it comes from the ontology tree.
+        # the template "property name" is the actual name that goes in the
+        # python code.
+        self.source_key = source_key
+
+        # True if the property is reimplemented on the base class, hence
+        # its rendering must keep this into account for appropriate
+        # initialization
         self.reimplemented = reimplemented
 
     def _render_init(self):
@@ -367,6 +400,8 @@ class FixedProperty(ABCProperty):
 
 
 class VariableProperty(ABCProperty):
+    """Describes a variable (CUBA) property template."""
+
     def import_required(self):
         imp = [ShortcutImport("Default")]
         imp += [ShortcutImport("validation")]
@@ -393,11 +428,11 @@ class VariableProperty(ABCProperty):
         if shape is None:
             raise ValueError("shape cannot be None")
 
+        self.source_key = qual_cuba_key
         prop_name = cuba_key_to_property_name(qual_cuba_key)
         super(VariableProperty, self).__init__(
             name=prop_name,
             default=default)
-        self.qual_cuba_key = qual_cuba_key
         self.shape = shape
         self.reimplemented = reimplemented
 
@@ -418,7 +453,7 @@ class VariableProperty(ABCProperty):
                 self.data[{qual_cuba_key}] = value
         """).format(
             prop_name=self.name,
-            qual_cuba_key=self.qual_cuba_key)
+            qual_cuba_key=self.source_key)
 
     def _render_getter(self):
         return textwrap.dedent("""
@@ -427,10 +462,10 @@ class VariableProperty(ABCProperty):
                 return self.data[{qual_cuba_key}]
         """).format(
             prop_name=self.name,
-            qual_cuba_key=self.qual_cuba_key)
+            qual_cuba_key=self.source_key)
 
     def _render_validation(self):
-        cuba_key = without_cuba_prefix(self.qual_cuba_key)
+        cuba_key = without_cuba_prefix(self.source_key)
         if self.shape == [1]:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
@@ -483,9 +518,12 @@ class VariableProperty(ABCProperty):
 
 
 class DataProperty(FixedProperty):
-    """Special data property is handled slightly different"""
+    """Special data property is handled slightly different.
+    It is a fixed property, but the value does not come from
+    a hardcoded value in its default."""
     def __init__(self):
         super(DataProperty, self).__init__("data", None, False)
+        self.source_key = "data"
 
     def import_required(self):
         return [ShortcutImport("DataContainer")]
@@ -518,8 +556,12 @@ class DataProperty(FixedProperty):
 
 
 class UIDProperty(FixedProperty):
+    """Special property that handles the special case of CUBA.UID.
+    It behaves like a fixed property, but it has a CUBA qualified key.
+    """
     def __init__(self):
         super(UIDProperty, self).__init__("uid", None, False)
+        self.source_key = "uid"
 
     def import_required(self):
         return [ShortcutImport('uuid')]

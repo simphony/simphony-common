@@ -125,6 +125,60 @@ def complex_ontology():
     return ontology
 
 
+def ontology_with_reimplemented_variable_properties():
+    ontology = Ontology()
+    cuds_item = CUDSItem(name="CUBA.CUDS_ITEM")
+    cuds_item.property_entries["data"] = FixedPropertyEntry(
+        name="data",
+        scope="CUBA.SYSTEM",
+        default=NoDefault
+    )
+
+    cuds_item.property_entries["CUBA.UID"] = VariablePropertyEntry(
+        name="CUBA.UID",
+        scope="CUBA.SYSTEM",
+        shape=[1],
+        default=NoDefault
+    )
+
+    cuds_component = CUDSItem(name="CUBA.CUDS_COMPONENT",
+                              parent=cuds_item)
+    cuds_item.children.append(cuds_component)
+    cuds_component.property_entries["CUBA.NAME"] = VariablePropertyEntry(
+        name="CUBA.NAME",
+        scope="CUBA.USER",
+        shape=[1],
+        default=""
+    )
+
+    # -------
+    material_relation = CUDSItem(name="CUBA.MATERIAL_RELATION",
+                                 parent=cuds_component)
+    cuds_component.children.append(material_relation)
+    material_relation.property_entries["CUBA.MATERIAL"] = \
+        VariablePropertyEntry(name="CUBA.MATERIAL",
+                              scope="CUBA.USER",
+                              shape=[None],
+                              default=[])
+
+    interatomic_potential = CUDSItem(name="CUBA.INTERATOMIC_POTENTIAL",
+                                     parent=material_relation)
+
+    material_relation.children.append(interatomic_potential)
+    pair_potential = CUDSItem(name="CUBA.PAIR_POTENTIAL",
+                              parent=interatomic_potential)
+    interatomic_potential.children.append(pair_potential)
+
+    pair_potential.property_entries["CUBA.MATERIAL"] = \
+        VariablePropertyEntry(name="CUBA.MATERIAL",
+                              scope="CUBA.USER",
+                              shape=[2],
+                              default=NoDefault)
+
+    ontology.root_cuds_item = cuds_item
+    return ontology
+
+
 def complex_ontology_output_gravity_model():
     return '''from simphony.core import Default  # noqa
 from . import validation
@@ -146,8 +200,8 @@ class GravityModel(PhysicsEquation):
                 GravityModel,
                 cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.ACCELERATION, ) + base_params
+            base_params = set()
+        return set([CUBA.ACCELERATION, ]) | base_params
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

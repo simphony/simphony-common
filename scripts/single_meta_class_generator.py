@@ -83,7 +83,7 @@ class SingleMetaClassGenerator(object):
                                                          reimplemented_keys)
             properties.append(item_props)
             for p in item_props:
-                reimplemented_keys.add(p.name)
+                reimplemented_keys.add(p.source_key)
 
         # We reverse them again, so that they are in the same order as
         # in a item to root traversal
@@ -97,6 +97,10 @@ class SingleMetaClassGenerator(object):
         ----------
         item: CUDSItem
             the item of the CUDS entry.
+
+        reimplemented_keys: set
+            A set containing the identifying key of the properties that
+            are already defined in a base class.
 
         Return
         ------
@@ -121,7 +125,7 @@ class SingleMetaClassGenerator(object):
             elif isinstance(prop, VariablePropertyEntry):
                 properties.append(
                     templates.VariableProperty(
-                        prop.name,
+                        qual_cuba_key=prop.name,
                         default=prop.default,
                         shape=prop.shape,
                         reimplemented=(prop.name in reimplemented_keys)
