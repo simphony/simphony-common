@@ -11,4 +11,6 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 cd examples/plugin
 python setup.py develop
 if %errorlevel% neq 0 exit /b %errorlevel%
+python setup.py build_meta
+if %errorlevel% neq 0 exit /b %errorlevel%
 cd ..
