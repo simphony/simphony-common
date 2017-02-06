@@ -126,8 +126,8 @@ class Class(object):
             parent_class_name=parent_class_name,
         )
         s += utils.indent(utils.format_docstring(self.docstring))+'\n'
-        s += utils.indent("cuba_key = {qualified_cuba_key}".format(
-            qualified_cuba_key=with_cuba_prefix(self.cuba_key)))+'\n'
+        s += utils.indent("cuba_key = {qualified_cuba_key}\n".format(
+            qualified_cuba_key=with_cuba_prefix(self.cuba_key)))
 
         out.write(utils.indent(s, indent_level))
 
@@ -163,18 +163,14 @@ class Class(object):
         for arg in pass_down:
             super_init_args.append("{}={}".format(arg, arg))
 
-        s = textwrap.dedent("""
-            def __init__({init_args_str}):
-            """.format(
-            init_args_str=", ".join(init_args))
+        s = textwrap.dedent("""def __init__({init_args_str}):""".format(
+            init_args_str=", ".join(init_args))+'\n'
         )
 
-        s += utils.indent(textwrap.dedent("""
-                super({class_name}, self).__init__({super_init_args_str})
-            """.format(
+        s += utils.indent(textwrap.dedent("""super({class_name}, self).__init__({super_init_args_str})""".format(  # noqa
                 class_name=self.class_name,
                 super_init_args_str=", ".join(super_init_args))
-        ))
+        ))+'\n'
 
         for prop in self.properties:
             if prop.reimplemented:
@@ -182,14 +178,14 @@ class Class(object):
 
             if isinstance(prop, VariableProperty):
                 s += utils.indent(
-                    textwrap.dedent("""
-                    self._init_{prop_name}({prop_name})
-                    """.format(prop_name=prop.name)))
+                    textwrap.dedent(
+                        """self._init_{prop_name}({prop_name})""".format(  # noqa
+                            prop_name=prop.name)))+'\n'
             else:
                 s += utils.indent(
-                    textwrap.dedent("""
-                    self._init_{prop_name}()
-                    """.format(prop_name=prop.name)))
+                    textwrap.dedent(
+                        """self._init_{prop_name}()""".format(
+                        prop_name=prop.name)))+'\n'
 
         return s
 
@@ -255,10 +251,10 @@ class Class(object):
                         cls).supported_parameters()
                 except AttributeError:
                     base_params = ()
-
                 return ({params}) + base_params
-            """.format(class_name=self.class_name,
-                       params="".join([p+", " for p in params]))
+                """.format(
+                    class_name=self.class_name,
+                    params="".join([p+", " for p in params]))
         )
 
         return s
@@ -268,7 +264,7 @@ class MetaAPIMethods(object):
     """These methods go only in the base class (whose parent is empty)"""
     def render(self, out, indent_level=0):
         out.write(
-            utils.indent(
+            utils.indent(textwrap.dedent(
                 """
                 @classmethod
                 def parents(cls):
@@ -276,7 +272,7 @@ class MetaAPIMethods(object):
                         c.cuba_key
                         for c in cls.__mro__[1:]
                         if hasattr(c, "cuba_key"))
-                """,
+                """),
                 indent_level)
         )
 
@@ -319,7 +315,6 @@ class ABCProperty(object):
         s += self._render_setter()
         s += self._render_validation()
         s += self._render_default()
-        s += '\n'
 
         out.write(utils.indent(s, indent_level))
 
@@ -336,7 +331,8 @@ class FixedProperty(ABCProperty):
         return textwrap.dedent("""
         def _init_{name}(self):
             self._{name} = self._default_{name}()  # noqa
-        """).format(name=self.name)
+            """).format(
+            name=self.name)
 
     def _render_default(self):
         return textwrap.dedent("""
@@ -405,7 +401,6 @@ class VariableProperty(ABCProperty):
         def _init_{name}(self, value):
             if value is Default:
                 value = self._default_{name}()
-
             self.{name} = value
         """).format(name=self.name)
 
@@ -446,7 +441,6 @@ class VariableProperty(ABCProperty):
                 value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_valid_shape(value, {shape}, '{cuba_key}')
                 validation.check_elements(value, {shape}, '{cuba_key}')
-
                 return value
             """.format(prop_name=self.name,
                        cuba_key=cuba_key,

@@ -70,7 +70,15 @@ def indent(text, level=1):
     """
     dedent_text = textwrap.dedent(text)
     spaces = 4 * level * " "
-    return "\n".join((spaces + line) for line in dedent_text.splitlines())
+
+    out_lines = []
+    for src_line in dedent_text.splitlines(True):
+        if len(src_line.strip()) == 0:
+            out_lines.append('\n')
+        else:
+            out_lines.append(spaces + src_line)
+
+    return "".join(out_lines)
 
 
 def is_cuba_key(value):

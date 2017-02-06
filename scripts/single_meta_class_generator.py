@@ -47,7 +47,8 @@ class SingleMetaClassGenerator(object):
         class_ = templates.Class(
             utils.cuba_key_to_meta_class_name(item.name),
             item.name,
-            item.parent.name if item.parent is not None else None,
+            (utils.cuba_key_to_meta_class_name(item.parent.name)
+             if item.parent is not None else None),
             hierarchy_properties,
             docstring=""
         )
@@ -55,10 +56,13 @@ class SingleMetaClassGenerator(object):
         if item.parent is None:
             class_.methods.append(templates.MetaAPIMethods())
 
+        class_.properties = object_properties
+
         f.classes.append(class_)
         f.render(output)
 
     def _extract_properties(self, item):
+        """Extracts the properties from the entity"""
         base_properties = []
         reimplemented_keys = set()
 
@@ -68,7 +72,8 @@ class SingleMetaClassGenerator(object):
             base_properties += self._create_property_templates(
                 parent,
                 reimplemented_keys)
-            reimplemented_keys.add([p.name for p in base_properties])
+            for p in base_properties:
+                reimplemented_keys.add(p.name)
 
         object_properties = self._create_property_templates(
             item,
@@ -120,23 +125,3 @@ class SingleMetaClassGenerator(object):
 
         return properties
 
-
-def is_variable_reimplemented(prop_key, item):
-    """Checks if a given variable is reimplemented from a base parent class.
-
-    Parameters
-    ----------
-    prop_key: str
-        The key of the property
-    item: the current item
-        a list of all the parent classes, from top to bottom (None)
-
-    Returns
-    -------
-    True or False
-    """
-    for parent in traverse_to_root(item)[1:]:
-        if prop_key in parent.property_entries:
-            return True
-
-    return False
