@@ -186,7 +186,7 @@ class Class(object):
                 s += utils.indent(
                     textwrap.dedent(
                         """self._init_{prop_name}()""".format(
-                        prop_name=prop.name)))+'\n'
+                            prop_name=prop.name)))+'\n'
 
         return s
 

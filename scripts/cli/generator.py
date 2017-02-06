@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import yaml
 import click
 import os
 import shutil

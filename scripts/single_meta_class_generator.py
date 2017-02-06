@@ -132,4 +132,3 @@ class SingleMetaClassGenerator(object):
                                  .format(prop, item.name))
 
         return properties
-

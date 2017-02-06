@@ -1,13 +1,12 @@
 from __future__ import print_function
-import unittest
 from six import StringIO
-import difflib
 
 from scripts.single_meta_class_generator import SingleMetaClassGenerator
+from .base_test_case import BaseTestCase
 from . import fixtures
 
 
-class TestSingleMetaClassGenerator(unittest.TestCase):
+class TestSingleMetaClassGenerator(BaseTestCase):
     def setUp(self):
         self.ontology = fixtures.trivial_ontology()
         self.complex_ontology = fixtures.complex_ontology()
@@ -31,11 +30,5 @@ class TestSingleMetaClassGenerator(unittest.TestCase):
 
         generator.generate(gravity_model, output)
 
-        expected_output = fixtures.complex_ontology_output_gravity_model()
-        obtained_output = output.getvalue()
-
-        if expected_output != obtained_output:
-            diff = difflib.ndiff(obtained_output.splitlines(True),
-                                 expected_output.splitlines(True))
-            print("".join(diff))
-            self.fail("expected output and obtained output are different")
+        self.assertTextEqual(fixtures.complex_ontology_output_gravity_model(),
+                             output.getvalue())

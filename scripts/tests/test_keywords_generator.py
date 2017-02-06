@@ -1,11 +1,11 @@
-import unittest
 from six import StringIO
 
 from scripts.keywords_generator import KeywordsGenerator
-from scripts.tests import fixtures
+from . import fixtures
+from .base_test_case import BaseTestCase
 
 
-class TestKeywordsGenerator(unittest.TestCase):
+class TestKeywordsGenerator(BaseTestCase):
     def setUp(self):
         self.ontology = fixtures.trivial_ontology()
 
@@ -15,6 +15,5 @@ class TestKeywordsGenerator(unittest.TestCase):
 
         generator.generate(self.ontology, output)
 
-        print output.getvalue()
-
-
+        self.assertTextEqual(fixtures.trivial_ontology_keywords_output(),
+                             output.getvalue())
