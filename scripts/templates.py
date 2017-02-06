@@ -255,8 +255,8 @@ class Class(object):
                         {class_name},
                         cls).supported_parameters()
                 except AttributeError:
-                    base_params = set()
-                return set([{params}]) | base_params
+                    base_params = ()
+                return list(set(({params}) + base_params))
                 """.format(
                     class_name=self.class_name,
                     params="".join([p+", " for p in params]))
