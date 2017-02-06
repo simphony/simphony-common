@@ -10,18 +10,17 @@ class FaceCenteredCubicLattice(BravaisLattice):
     cuba_key = CUBA.FACE_CENTERED_CUBIC_LATTICE
 
     def __init__(self,
-                 primitive_cell,
                  origin,
+                 primitive_cell,
                  lattice_parameter=Default,
                  size=Default,
                  description=Default,
                  name=Default):
-
         super(FaceCenteredCubicLattice, self).__init__(
             lattice_parameter=lattice_parameter,
+            origin=origin,
             primitive_cell=primitive_cell,
             size=size,
-            origin=origin,
             description=description,
             name=name)
 
@@ -32,7 +31,6 @@ class FaceCenteredCubicLattice(BravaisLattice):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

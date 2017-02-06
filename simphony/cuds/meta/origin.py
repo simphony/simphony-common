@@ -11,7 +11,6 @@ class Origin(CUDSComponent):
     cuba_key = CUBA.ORIGIN
 
     def __init__(self, position=Default, description=Default, name=Default):
-
         super(Origin, self).__init__(description=description, name=name)
         self._init_position(position)
 
@@ -21,7 +20,6 @@ class Origin(CUDSComponent):
             base_params = super(Origin, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.POSITION, ) + base_params
 
     def _default_definition(self):

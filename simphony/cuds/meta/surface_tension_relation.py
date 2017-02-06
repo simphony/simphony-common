@@ -15,9 +15,9 @@ class SurfaceTensionRelation(MaterialRelation):
                  surface_tension=Default,
                  description=Default,
                  name=Default):
-
         super(SurfaceTensionRelation, self).__init__(
             material=material, description=description, name=name)
+        self._init_material(material)
         self._init_surface_tension(surface_tension)
 
     @classmethod
@@ -27,7 +27,6 @@ class SurfaceTensionRelation(MaterialRelation):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.MATERIAL,
             CUBA.SURFACE_TENSION, ) + base_params

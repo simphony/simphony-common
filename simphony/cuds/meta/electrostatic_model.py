@@ -10,7 +10,6 @@ class ElectrostaticModel(PhysicsEquation):
     cuba_key = CUBA.ELECTROSTATIC_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(ElectrostaticModel, self).__init__(
             description=description, name=name)
 
@@ -20,7 +19,6 @@ class ElectrostaticModel(PhysicsEquation):
             base_params = super(ElectrostaticModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_models(self):

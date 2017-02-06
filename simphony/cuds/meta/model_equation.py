@@ -11,7 +11,6 @@ class ModelEquation(CUDSComponent):
     cuba_key = CUBA.MODEL_EQUATION
 
     def __init__(self, description=Default, name=Default):
-
         super(ModelEquation, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variables()
@@ -22,7 +21,6 @@ class ModelEquation(CUDSComponent):
             base_params = super(ModelEquation, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _init_models(self):

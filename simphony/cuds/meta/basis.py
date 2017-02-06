@@ -11,7 +11,6 @@ class Basis(CUDSComponent):
     cuba_key = CUBA.BASIS
 
     def __init__(self, vector=Default, description=Default, name=Default):
-
         super(Basis, self).__init__(description=description, name=name)
         self._init_vector(vector)
 
@@ -21,7 +20,6 @@ class Basis(CUDSComponent):
             base_params = super(Basis, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.VECTOR, ) + base_params
 
     def _default_definition(self):

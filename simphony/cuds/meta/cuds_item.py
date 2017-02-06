@@ -11,7 +11,6 @@ class CUDSItem(object):
     cuba_key = CUBA.CUDS_ITEM
 
     def __init__(self):
-
         super(CUDSItem, self).__init__()
         self._init_definition()
         self._init_data()
@@ -23,7 +22,6 @@ class CUDSItem(object):
             base_params = super(CUDSItem, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.UID, ) + base_params
 
     @classmethod

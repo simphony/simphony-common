@@ -11,7 +11,6 @@ class MeshElement(CUDSItem):
     cuba_key = CUBA.MESH_ELEMENT
 
     def __init__(self, point):
-
         super(MeshElement, self).__init__()
         self._init_point(point)
 
@@ -21,7 +20,6 @@ class MeshElement(CUDSItem):
             base_params = super(MeshElement, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.POINT, ) + base_params
 
     def _default_definition(self):

@@ -11,7 +11,6 @@ class Material(CUDSComponent):
     cuba_key = CUBA.MATERIAL
 
     def __init__(self, description=Default, name=Default):
-
         super(Material, self).__init__(description=description, name=name)
 
     @classmethod
@@ -20,7 +19,6 @@ class Material(CUDSComponent):
             base_params = super(Material, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

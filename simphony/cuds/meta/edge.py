@@ -10,7 +10,6 @@ class Edge(MeshElement):
     cuba_key = CUBA.EDGE
 
     def __init__(self, point):
-
         super(Edge, self).__init__(point=point)
 
     @classmethod
@@ -19,7 +18,6 @@ class Edge(MeshElement):
             base_params = super(Edge, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

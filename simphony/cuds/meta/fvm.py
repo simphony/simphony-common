@@ -10,7 +10,6 @@ class Fvm(ComputationalMethod):
     cuba_key = CUBA.FVM
 
     def __init__(self, description=Default, name=Default):
-
         super(Fvm, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Fvm(ComputationalMethod):
             base_params = super(Fvm, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

@@ -12,7 +12,6 @@ class GravityModel(PhysicsEquation):
 
     def __init__(self, acceleration=Default, description=Default,
                  name=Default):
-
         super(GravityModel, self).__init__(description=description, name=name)
         self._init_acceleration(acceleration)
 
@@ -22,7 +21,6 @@ class GravityModel(PhysicsEquation):
             base_params = super(GravityModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.ACCELERATION, ) + base_params
 
     def _default_models(self):

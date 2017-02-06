@@ -14,11 +14,10 @@ class IntegrationStep(SolverParameter):
 
     def __init__(self,
                  current=Default,
-                 size=Default,
                  final=Default,
+                 size=Default,
                  description=Default,
                  name=Default):
-
         super(IntegrationStep, self).__init__(
             description=description, name=name)
         self._init_current(current)
@@ -31,7 +30,6 @@ class IntegrationStep(SolverParameter):
             base_params = super(IntegrationStep, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.CURRENT,
             CUBA.SIZE,

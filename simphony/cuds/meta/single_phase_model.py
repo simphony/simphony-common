@@ -10,7 +10,6 @@ class SinglePhaseModel(MultiphaseModel):
     cuba_key = CUBA.SINGLE_PHASE_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(SinglePhaseModel, self).__init__(
             description=description, name=name)
 
@@ -20,7 +19,6 @@ class SinglePhaseModel(MultiphaseModel):
             base_params = super(SinglePhaseModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_models(self):

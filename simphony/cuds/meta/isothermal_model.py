@@ -11,7 +11,6 @@ class IsothermalModel(ThermalModel):
     cuba_key = CUBA.ISOTHERMAL_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(IsothermalModel, self).__init__(
             description=description, name=name)
 
@@ -21,7 +20,6 @@ class IsothermalModel(ThermalModel):
             base_params = super(IsothermalModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_models(self):

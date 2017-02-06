@@ -11,7 +11,6 @@ class CUDSComponent(CUDSItem):
     cuba_key = CUBA.CUDS_COMPONENT
 
     def __init__(self, description=Default, name=Default):
-
         super(CUDSComponent, self).__init__()
         self._init_description(description)
         self._init_name(name)
@@ -22,10 +21,12 @@ class CUDSComponent(CUDSItem):
             base_params = super(CUDSComponent, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.DESCRIPTION,
             CUBA.NAME, ) + base_params
+
+    def _default_definition(self):
+        return "Base data type for the CUDS components"  # noqa
 
     def _init_description(self, value):
         if value is Default:
@@ -50,9 +51,6 @@ class CUDSComponent(CUDSItem):
 
     def _default_description(self):
         return ""
-
-    def _default_definition(self):
-        return "Base data type for the CUDS components"  # noqa
 
     def _init_name(self, value):
         if value is Default:

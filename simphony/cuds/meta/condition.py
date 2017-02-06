@@ -10,7 +10,6 @@ class Condition(CUDSComponent):
     cuba_key = CUBA.CONDITION
 
     def __init__(self, description=Default, name=Default):
-
         super(Condition, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Condition(CUDSComponent):
             base_params = super(Condition, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

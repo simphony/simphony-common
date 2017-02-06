@@ -12,11 +12,10 @@ class Dirichlet(Condition):
     cuba_key = CUBA.DIRICHLET
 
     def __init__(self,
-                 variable=Default,
                  material=Default,
+                 variable=Default,
                  description=Default,
                  name=Default):
-
         super(Dirichlet, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
@@ -28,7 +27,6 @@ class Dirichlet(Condition):
             base_params = super(Dirichlet, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.VARIABLE,
             CUBA.MATERIAL, ) + base_params

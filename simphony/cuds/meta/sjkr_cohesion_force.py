@@ -15,7 +15,6 @@ class SjkrCohesionForce(MaterialRelation):
                  material=Default,
                  description=Default,
                  name=Default):
-
         super(SjkrCohesionForce, self).__init__(
             material=material, description=description, name=name)
         self._init_cohesion_energy_density(cohesion_energy_density)
@@ -26,7 +25,6 @@ class SjkrCohesionForce(MaterialRelation):
             base_params = super(SjkrCohesionForce, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.COHESION_ENERGY_DENSITY, ) + base_params
 
     def _default_models(self):

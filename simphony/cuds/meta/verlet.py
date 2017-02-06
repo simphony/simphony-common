@@ -10,7 +10,6 @@ class Verlet(ComputationalMethod):
     cuba_key = CUBA.VERLET
 
     def __init__(self, description=Default, name=Default):
-
         super(Verlet, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Verlet(ComputationalMethod):
             base_params = super(Verlet, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

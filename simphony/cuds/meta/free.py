@@ -10,7 +10,6 @@ class Free(Condition):
     cuba_key = CUBA.FREE
 
     def __init__(self, description=Default, name=Default):
-
         super(Free, self).__init__(description=description, name=name)
         self._init_models()
 
@@ -20,7 +19,6 @@ class Free(Condition):
             base_params = super(Free, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _init_models(self):

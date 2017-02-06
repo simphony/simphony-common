@@ -19,7 +19,6 @@ class NoseHoover(Thermostat):
                  material=Default,
                  description=Default,
                  name=Default):
-
         super(NoseHoover, self).__init__(
             material=material, description=description, name=name)
         self._init_coupling_time(coupling_time)
@@ -31,7 +30,6 @@ class NoseHoover(Thermostat):
             base_params = super(NoseHoover, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.COUPLING_TIME,
             CUBA.TEMPERATURE, ) + base_params

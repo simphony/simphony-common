@@ -10,7 +10,6 @@ class Fem(ComputationalMethod):
     cuba_key = CUBA.FEM
 
     def __init__(self, description=Default, name=Default):
-
         super(Fem, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Fem(ComputationalMethod):
             base_params = super(Fem, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

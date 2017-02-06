@@ -10,7 +10,6 @@ class ThermalModel(PhysicsEquation):
     cuba_key = CUBA.THERMAL_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(ThermalModel, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class ThermalModel(PhysicsEquation):
             base_params = super(ThermalModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_models(self):

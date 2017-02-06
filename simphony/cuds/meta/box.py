@@ -19,9 +19,9 @@ class Box(Boundary):
                  vector=Default,
                  description=Default,
                  name=Default):
-
         super(Box, self).__init__(
             condition=condition, description=description, name=name)
+        self._init_condition(condition)
         self._init_vector(vector)
 
     @classmethod
@@ -30,7 +30,6 @@ class Box(Boundary):
             base_params = super(Box, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.CONDITION,
             CUBA.VECTOR, ) + base_params

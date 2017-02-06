@@ -11,18 +11,17 @@ class Mesh(DataSet):
     cuba_key = CUBA.MESH
 
     def __init__(self,
-                 point,
-                 face,
                  cell,
                  edge,
+                 face,
+                 point,
                  description=Default,
                  name=Default):
-
         super(Mesh, self).__init__(description=description, name=name)
-        self._init_point(point)
+        self._init_edge(edge)
         self._init_face(face)
         self._init_cell(cell)
-        self._init_edge(edge)
+        self._init_point(point)
 
     @classmethod
     def supported_parameters(cls):
@@ -30,40 +29,39 @@ class Mesh(DataSet):
             base_params = super(Mesh, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
-            CUBA.POINT,
+            CUBA.EDGE,
             CUBA.FACE,
             CUBA.CELL,
-            CUBA.EDGE, ) + base_params
+            CUBA.POINT, ) + base_params
 
     def _default_definition(self):
         return "A mesh"  # noqa
 
-    def _init_point(self, value):
+    def _init_edge(self, value):
         if value is Default:
-            value = self._default_point()
+            value = self._default_edge()
 
-        self.point = value
+        self.edge = value
 
     @property
-    def point(self):
-        return self.data[CUBA.POINT]
+    def edge(self):
+        return self.data[CUBA.EDGE]
 
-    @point.setter
-    def point(self, value):
-        value = self._validate_point(value)
-        self.data[CUBA.POINT] = value
+    @edge.setter
+    def edge(self, value):
+        value = self._validate_edge(value)
+        self.data[CUBA.EDGE] = value
 
-    def _validate_point(self, value):
-        value = validation.cast_data_type(value, 'POINT')
-        validation.check_valid_shape(value, [None], 'POINT')
-        validation.check_elements(value, [None], 'POINT')
+    def _validate_edge(self, value):
+        value = validation.cast_data_type(value, 'EDGE')
+        validation.check_valid_shape(value, [None], 'EDGE')
+        validation.check_elements(value, [None], 'EDGE')
 
         return value
 
-    def _default_point(self):
-        raise TypeError("No default for point")
+    def _default_edge(self):
+        raise TypeError("No default for edge")
 
     def _init_face(self, value):
         if value is Default:
@@ -115,27 +113,27 @@ class Mesh(DataSet):
     def _default_cell(self):
         raise TypeError("No default for cell")
 
-    def _init_edge(self, value):
+    def _init_point(self, value):
         if value is Default:
-            value = self._default_edge()
+            value = self._default_point()
 
-        self.edge = value
+        self.point = value
 
     @property
-    def edge(self):
-        return self.data[CUBA.EDGE]
+    def point(self):
+        return self.data[CUBA.POINT]
 
-    @edge.setter
-    def edge(self, value):
-        value = self._validate_edge(value)
-        self.data[CUBA.EDGE] = value
+    @point.setter
+    def point(self, value):
+        value = self._validate_point(value)
+        self.data[CUBA.POINT] = value
 
-    def _validate_edge(self, value):
-        value = validation.cast_data_type(value, 'EDGE')
-        validation.check_valid_shape(value, [None], 'EDGE')
-        validation.check_elements(value, [None], 'EDGE')
+    def _validate_point(self, value):
+        value = validation.cast_data_type(value, 'POINT')
+        validation.check_valid_shape(value, [None], 'POINT')
+        validation.check_elements(value, [None], 'POINT')
 
         return value
 
-    def _default_edge(self):
-        raise TypeError("No default for edge")
+    def _default_point(self):
+        raise TypeError("No default for point")

@@ -13,12 +13,11 @@ class PowerLawViscosityModel(RheologyModel):
 
     def __init__(self,
                  linear_constant=Default,
-                 minimum_viscosity=Default,
                  maximum_viscosity=Default,
+                 minimum_viscosity=Default,
                  power_law_index=Default,
                  description=Default,
                  name=Default):
-
         super(PowerLawViscosityModel, self).__init__(
             description=description, name=name)
         self._init_linear_constant(linear_constant)
@@ -33,7 +32,6 @@ class PowerLawViscosityModel(RheologyModel):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.LINEAR_CONSTANT,
             CUBA.MINIMUM_VISCOSITY,

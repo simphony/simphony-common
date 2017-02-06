@@ -10,7 +10,6 @@ class Continuum(ComputationalModel):
     cuba_key = CUBA.CONTINUUM
 
     def __init__(self, description=Default, name=Default):
-
         super(Continuum, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Continuum(ComputationalModel):
             base_params = super(Continuum, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

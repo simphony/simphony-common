@@ -10,7 +10,6 @@ class Dem(ComputationalMethod):
     cuba_key = CUBA.DEM
 
     def __init__(self, description=Default, name=Default):
-
         super(Dem, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,7 +18,6 @@ class Dem(ComputationalMethod):
             base_params = super(Dem, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):

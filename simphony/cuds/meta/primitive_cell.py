@@ -14,7 +14,6 @@ class PrimitiveCell(CUDSComponent):
                  lattice_vectors=Default,
                  description=Default,
                  name=Default):
-
         super(PrimitiveCell, self).__init__(description=description, name=name)
         self._init_lattice_vectors(lattice_vectors)
 
@@ -24,7 +23,6 @@ class PrimitiveCell(CUDSComponent):
             base_params = super(PrimitiveCell, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.LATTICE_VECTORS, ) + base_params
 
     def _default_definition(self):

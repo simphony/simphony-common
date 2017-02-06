@@ -11,7 +11,6 @@ class Atom(Particle):
     cuba_key = CUBA.ATOM
 
     def __init__(self, mass=Default, position=Default):
-
         super(Atom, self).__init__(position=position)
         self._init_mass(mass)
 
@@ -21,7 +20,6 @@ class Atom(Particle):
             base_params = super(Atom, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.MASS, ) + base_params
 
     def _default_definition(self):

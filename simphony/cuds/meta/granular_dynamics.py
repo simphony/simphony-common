@@ -10,7 +10,6 @@ class GranularDynamics(PhysicsEquation):
     cuba_key = CUBA.GRANULAR_DYNAMICS
 
     def __init__(self, description=Default, name=Default):
-
         super(GranularDynamics, self).__init__(
             description=description, name=name)
 
@@ -20,7 +19,6 @@ class GranularDynamics(PhysicsEquation):
             base_params = super(GranularDynamics, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_models(self):

@@ -11,9 +11,9 @@ class PairPotential(InteratomicPotential):
     cuba_key = CUBA.PAIR_POTENTIAL
 
     def __init__(self, material, description=Default, name=Default):
-
         super(PairPotential, self).__init__(
             material=material, description=description, name=name)
+        self._init_material(material)
 
     @classmethod
     def supported_parameters(cls):
@@ -21,7 +21,6 @@ class PairPotential(InteratomicPotential):
             base_params = super(PairPotential, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.MATERIAL, ) + base_params
 
     def _default_models(self):

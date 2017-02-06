@@ -12,7 +12,6 @@ class SoftwareTool(CUDSItem):
     cuba_key = CUBA.SOFTWARE_TOOL
 
     def __init__(self, version):
-
         super(SoftwareTool, self).__init__()
         self._init_version(version)
 
@@ -22,7 +21,6 @@ class SoftwareTool(CUDSItem):
             base_params = super(SoftwareTool, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.VERSION, ) + base_params
 
     def _default_definition(self):

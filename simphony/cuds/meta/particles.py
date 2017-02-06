@@ -10,8 +10,7 @@ class Particles(DataSet):
     """
     cuba_key = CUBA.PARTICLES
 
-    def __init__(self, particle, bond, description=Default, name=Default):
-
+    def __init__(self, bond, particle, description=Default, name=Default):
         super(Particles, self).__init__(description=description, name=name)
         self._init_particle(particle)
         self._init_bond(bond)
@@ -22,7 +21,6 @@ class Particles(DataSet):
             base_params = super(Particles, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.PARTICLE,
             CUBA.BOND, ) + base_params

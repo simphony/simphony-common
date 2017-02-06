@@ -11,11 +11,10 @@ class Empty(Condition):
     cuba_key = CUBA.EMPTY
 
     def __init__(self,
-                 variable=Default,
                  material=Default,
+                 variable=Default,
                  description=Default,
                  name=Default):
-
         super(Empty, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
@@ -27,7 +26,6 @@ class Empty(Condition):
             base_params = super(Empty, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.VARIABLE,
             CUBA.MATERIAL, ) + base_params

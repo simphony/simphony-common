@@ -12,7 +12,6 @@ class MaterialRelation(ModelEquation):
     cuba_key = CUBA.MATERIAL_RELATION
 
     def __init__(self, material=Default, description=Default, name=Default):
-
         super(MaterialRelation, self).__init__(
             description=description, name=name)
         self._init_material(material)
@@ -23,7 +22,6 @@ class MaterialRelation(ModelEquation):
             base_params = super(MaterialRelation, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.MATERIAL, ) + base_params
 
     def _default_definition(self):

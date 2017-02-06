@@ -11,7 +11,6 @@ class Point(CUDSItem):
     cuba_key = CUBA.POINT
 
     def __init__(self, position=Default):
-
         super(Point, self).__init__()
         self._init_position(position)
 
@@ -21,7 +20,6 @@ class Point(CUDSItem):
             base_params = super(Point, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.POSITION, ) + base_params
 
     def _default_definition(self):

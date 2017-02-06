@@ -11,7 +11,6 @@ class Bond(CUDSItem):
     cuba_key = CUBA.BOND
 
     def __init__(self, particle):
-
         super(Bond, self).__init__()
         self._init_particle(particle)
 
@@ -21,7 +20,6 @@ class Bond(CUDSItem):
             base_params = super(Bond, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (CUBA.PARTICLE, ) + base_params
 
     def _init_particle(self, value):

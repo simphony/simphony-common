@@ -17,7 +17,6 @@ class Coulomb(PairPotential):
                  dielectric_constant=Default,
                  description=Default,
                  name=Default):
-
         super(Coulomb, self).__init__(
             material=material, description=description, name=name)
         self._init_cutoff_distance(cutoff_distance)
@@ -29,7 +28,6 @@ class Coulomb(PairPotential):
             base_params = super(Coulomb, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return (
             CUBA.CUTOFF_DISTANCE,
             CUBA.DIELECTRIC_CONSTANT, ) + base_params

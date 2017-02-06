@@ -10,7 +10,6 @@ class SolverParameter(CUDSComponent):
     cuba_key = CUBA.SOLVER_PARAMETER
 
     def __init__(self, description=Default, name=Default):
-
         super(SolverParameter, self).__init__(
             description=description, name=name)
 
@@ -20,7 +19,6 @@ class SolverParameter(CUDSComponent):
             base_params = super(SolverParameter, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
         return () + base_params
 
     def _default_definition(self):
