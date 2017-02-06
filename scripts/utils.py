@@ -9,12 +9,6 @@ from contextlib import contextmanager
 from simphony_metaparser.utils import without_cuba_prefix
 
 
-class NoDefault(object):
-    """Marker class. Specifies that no default has been specified.
-    We don't use None because None can be a valid default"""
-    pass
-
-
 @contextmanager
 def make_temporary_directory():
     """Context Manager for creating a temporary directory

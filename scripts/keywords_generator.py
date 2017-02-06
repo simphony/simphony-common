@@ -45,7 +45,7 @@ class KeywordsGenerator(object):
                 type=data_types[data_type.type],
                 name=utils.cuba_key_to_meta_class_name(
                     data_type.name),
-                definition="",
+                definition=data_type.definition,
                 key=without_cuba_prefix(data_type.name),
                 shape=data_type.shape,
                 length=data_type.length,
@@ -55,10 +55,16 @@ class KeywordsGenerator(object):
         for cuds_item in sorted(
                 [d for d, _ in traverse(ontology.root_cuds_item)],
                 key=lambda x: x.name):
+
+            try:
+                definition = cuds_item.property_entries["definition"].default
+            except KeyError:
+                definition = ""
+
             template_ctx = dict(
                 type="None",
                 name=utils.cuba_key_to_meta_class_name(cuds_item.name),
-                definition="",
+                definition=definition,
                 key=without_cuba_prefix(cuds_item.name),
                 shape=[1],
                 length="None")

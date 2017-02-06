@@ -35,6 +35,7 @@ class TestSingleMetaClassGenerator(unittest.TestCase):
         obtained_output = output.getvalue()
 
         if expected_output != obtained_output:
-            diff = difflib.ndiff(obtained_output, expected_output)
-            print(diff)
+            diff = difflib.ndiff(obtained_output.splitlines(True),
+                                 expected_output.splitlines(True))
+            print("".join(diff))
             self.fail("expected output and obtained output are different")

@@ -1,10 +1,11 @@
 import abc
 import textwrap
 
+from simphony_metaparser.flags import NoDefault
+
 from simphony_metaparser.utils import with_cuba_prefix, \
     cuba_key_to_property_name, without_cuba_prefix
 
-from scripts.utils import NoDefault
 from . import utils
 
 
@@ -194,23 +195,27 @@ class Class(object):
         hierarchy_optional = []
         pass_down = []
 
-        for prop in [p for p in self.hierarchy_properties
-                     if isinstance(p, VariableProperty)]:
-            if (prop.name in hierarchy_mandatory or
-                    prop.name in hierarchy_optional):
-                continue
+        for prop_group in self.hierarchy_properties:
+            for prop in sorted(
+                    [p for p in prop_group if isinstance(p, VariableProperty)],
+                    key=lambda x: x.name):
+                if (prop.name in hierarchy_mandatory or
+                        prop.name in hierarchy_optional):
+                    continue
 
-            if prop.default is NoDefault:
-                hierarchy_mandatory.append(prop.name)
-            else:
-                hierarchy_optional.append(prop.name)
+                if prop.default is NoDefault:
+                    hierarchy_mandatory.append(prop.name)
+                else:
+                    hierarchy_optional.append(prop.name)
 
-            pass_down.append(prop.name)
+                pass_down.append(prop.name)
 
         cur_class_mandatory = []
         cur_class_optional = []
-        for prop in [p for p in self.properties
-                     if isinstance(p, VariableProperty)]:
+        for prop in sorted(
+                [p for p in self.properties
+                 if isinstance(p, VariableProperty)],
+                key=lambda x: x.name):
             if (prop.name in hierarchy_mandatory and
                     prop.default is not NoDefault):
                 # A property that was mandatory now has a default.
@@ -280,7 +285,7 @@ class MetaAPIMethods(object):
 class ABCProperty(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, name, default=utils.NoDefault, docstring=""):
+    def __init__(self, name, default=NoDefault, docstring=""):
         self.name = name
         self.default = default
         self.docstring = docstring
@@ -401,6 +406,7 @@ class VariableProperty(ABCProperty):
         def _init_{name}(self, value):
             if value is Default:
                 value = self._default_{name}()
+
             self.{name} = value
         """).format(name=self.name)
 
@@ -441,13 +447,14 @@ class VariableProperty(ABCProperty):
                 value = validation.cast_data_type(value, '{cuba_key}')
                 validation.check_valid_shape(value, {shape}, '{cuba_key}')
                 validation.check_elements(value, {shape}, '{cuba_key}')
+
                 return value
             """.format(prop_name=self.name,
                        cuba_key=cuba_key,
                        shape=self.shape))
 
     def _render_default(self):
-        if self.default == utils.NoDefault:
+        if self.default == NoDefault:
             return textwrap.dedent("""
             def _default_{name}(self):
                 raise TypeError("No default for {name}")

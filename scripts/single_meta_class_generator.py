@@ -41,45 +41,53 @@ class SingleMetaClassGenerator(object):
         else:
             print ("  Descendant of {}".format(item.parent.name))
 
-        hierarchy_properties, object_properties = self._extract_properties(
-            item)
+        properties = self._extract_properties(item)
+
+        try:
+            definition = item.property_entries["definition"].default
+        except KeyError:
+            definition = ""
 
         class_ = templates.Class(
             utils.cuba_key_to_meta_class_name(item.name),
             item.name,
             (utils.cuba_key_to_meta_class_name(item.parent.name)
              if item.parent is not None else None),
-            hierarchy_properties,
-            docstring=""
+            properties[1:],
+            docstring=definition
         )
 
         if item.parent is None:
             class_.methods.append(templates.MetaAPIMethods())
 
-        class_.properties = object_properties
+        class_.properties = properties[0]
 
         f.classes.append(class_)
         f.render(output)
 
     def _extract_properties(self, item):
-        """Extracts the properties from the entity"""
-        base_properties = []
+        """Extracts the properties from the entity.
+        Returns a list of lists, each list being the properties of the
+        associated object in the traversal, the first element being associated
+        to root, the last being associated to item.
+        """
+        properties = []
         reimplemented_keys = set()
 
-        traversal = list(reversed(list(traverse_to_root(item))))[:-1]
+        # We reverse the traversal, so that we can build up the
+        # reimplemented keys from the root of the hierarchy as we descend
+        # the tree. Traverse to root walks in the opposite direction.
 
-        for parent in traversal:
-            base_properties += self._create_property_templates(
-                parent,
-                reimplemented_keys)
-            for p in base_properties:
+        for item in reversed(list(traverse_to_root(item))):
+            item_props = self._create_property_templates(item,
+                                                         reimplemented_keys)
+            properties.append(item_props)
+            for p in item_props:
                 reimplemented_keys.add(p.name)
 
-        object_properties = self._create_property_templates(
-            item,
-            reimplemented_keys)
-
-        return base_properties, object_properties
+        # We reverse them again, so that they are in the same order as
+        # in a item to root traversal
+        return list(reversed(properties))
 
     def _create_property_templates(self, item, reimplemented_keys):
         """Helper method. Extracts all the properties from a given

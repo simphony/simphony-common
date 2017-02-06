@@ -107,6 +107,7 @@ class GravityModel(PhysicsEquation):
     def _init_acceleration(self, value):
         if value is Default:
             value = self._default_acceleration()
+
         self.acceleration = value
 
     @property

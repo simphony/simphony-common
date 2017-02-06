@@ -25,7 +25,7 @@ class MetaClassGenerator(object):
 
             # Now write the code
             with open(filename, 'wb') as generated_file:
-                gen.generate(ontology, item, generated_file)
+                gen.generate(item, generated_file)
 
         # Create an empty __init__.py
         init_path = os.path.join(output_dir, '__init__.py')
