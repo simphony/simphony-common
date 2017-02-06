@@ -2,6 +2,7 @@
 call setenv /x64
 
 rem install python packages
+pip install -r requirements.txt
 pip install -r dev_requirements.txt
 
 rem install simphony-common 
