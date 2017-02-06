@@ -11,7 +11,6 @@ class MolecularDynamics(PhysicsEquation):
     cuba_key = CUBA.MOLECULAR_DYNAMICS
 
     def __init__(self, description=Default, name=Default):
-
         super(MolecularDynamics, self).__init__(
             description=description, name=name)
 
@@ -21,8 +20,7 @@ class MolecularDynamics(PhysicsEquation):
             base_params = super(MolecularDynamics, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

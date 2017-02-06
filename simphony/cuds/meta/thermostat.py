@@ -12,7 +12,6 @@ class Thermostat(MaterialRelation):
     cuba_key = CUBA.THERMOSTAT
 
     def __init__(self, material=Default, description=Default, name=Default):
-
         super(Thermostat, self).__init__(
             material=material, description=description, name=name)
 
@@ -22,8 +21,7 @@ class Thermostat(MaterialRelation):
             base_params = super(Thermostat, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa

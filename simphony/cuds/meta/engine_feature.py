@@ -12,7 +12,6 @@ class EngineFeature(CUDSItem):
     cuba_key = CUBA.ENGINE_FEATURE
 
     def __init__(self, computational_method, physics_equation):
-
         super(EngineFeature, self).__init__()
         self._init_computational_method(computational_method)
         self._init_physics_equation(physics_equation)
@@ -23,10 +22,10 @@ class EngineFeature(CUDSItem):
             base_params = super(EngineFeature, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.COMPUTATIONAL_METHOD,
-            CUBA.PHYSICS_EQUATION, ) + base_params
+        return tuple(
+            set((
+                CUBA.COMPUTATIONAL_METHOD,
+                CUBA.PHYSICS_EQUATION, ) + base_params))
 
     def _init_computational_method(self, value):
         if value is Default:

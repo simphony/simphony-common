@@ -10,7 +10,6 @@ class Particle(Point):
     cuba_key = CUBA.PARTICLE
 
     def __init__(self, position=Default):
-
         super(Particle, self).__init__(position=position)
 
     @classmethod
@@ -19,8 +18,7 @@ class Particle(Point):
             base_params = super(Particle, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "A particle in a 3D space system"  # noqa

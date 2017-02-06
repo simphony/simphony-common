@@ -12,12 +12,11 @@ class LennardJones_6_12(PairPotential):
 
     def __init__(self,
                  material,
-                 van_der_waals_radius=Default,
                  cutoff_distance=Default,
                  energy_well_depth=Default,
+                 van_der_waals_radius=Default,
                  description=Default,
                  name=Default):
-
         super(LennardJones_6_12, self).__init__(
             material=material, description=description, name=name)
         self._init_van_der_waals_radius(van_der_waals_radius)
@@ -30,11 +29,11 @@ class LennardJones_6_12(PairPotential):
             base_params = super(LennardJones_6_12, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.VAN_DER_WAALS_RADIUS,
-            CUBA.CUTOFF_DISTANCE,
-            CUBA.ENERGY_WELL_DEPTH, ) + base_params
+        return tuple(
+            set((
+                CUBA.VAN_DER_WAALS_RADIUS,
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.ENERGY_WELL_DEPTH, ) + base_params))
 
     def _default_definition(self):
         return "A Lennard-Jones 6-12 Potential"  # noqa

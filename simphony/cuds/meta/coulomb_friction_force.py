@@ -16,7 +16,6 @@ class CoulombFrictionForce(MaterialRelation):
                  material=Default,
                  description=Default,
                  name=Default):
-
         super(CoulombFrictionForce, self).__init__(
             material=material, description=description, name=name)
         self._init_friction_coefficient(friction_coefficient)
@@ -28,8 +27,7 @@ class CoulombFrictionForce(MaterialRelation):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (CUBA.FRICTION_COEFFICIENT, ) + base_params
+        return tuple(set((CUBA.FRICTION_COEFFICIENT, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

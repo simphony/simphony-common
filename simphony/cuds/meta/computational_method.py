@@ -10,7 +10,6 @@ class ComputationalMethod(SolverParameter):
     cuba_key = CUBA.COMPUTATIONAL_METHOD
 
     def __init__(self, description=Default, name=Default):
-
         super(ComputationalMethod, self).__init__(
             description=description, name=name)
         self._init_physics_equations()
@@ -22,8 +21,7 @@ class ComputationalMethod(SolverParameter):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "A computational method according to the RoMM"  # noqa

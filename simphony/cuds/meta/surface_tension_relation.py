@@ -15,7 +15,6 @@ class SurfaceTensionRelation(MaterialRelation):
                  surface_tension=Default,
                  description=Default,
                  name=Default):
-
         super(SurfaceTensionRelation, self).__init__(
             material=material, description=description, name=name)
         self._init_surface_tension(surface_tension)
@@ -27,10 +26,10 @@ class SurfaceTensionRelation(MaterialRelation):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.MATERIAL,
-            CUBA.SURFACE_TENSION, ) + base_params
+        return tuple(
+            set((
+                CUBA.MATERIAL,
+                CUBA.SURFACE_TENSION, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

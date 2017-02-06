@@ -11,7 +11,6 @@ class DataSet(CUDSComponent):
     cuba_key = CUBA.DATA_SET
 
     def __init__(self, description=Default, name=Default):
-
         super(DataSet, self).__init__(description=description, name=name)
         self._init_models()
 
@@ -21,8 +20,7 @@ class DataSet(CUDSComponent):
             base_params = super(DataSet, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

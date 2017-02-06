@@ -10,18 +10,17 @@ class CubicLattice(TetragonalLattice):
     cuba_key = CUBA.CUBIC_LATTICE
 
     def __init__(self,
-                 primitive_cell,
                  origin,
+                 primitive_cell,
                  lattice_parameter=Default,
                  size=Default,
                  description=Default,
                  name=Default):
-
         super(CubicLattice, self).__init__(
             lattice_parameter=lattice_parameter,
+            origin=origin,
             primitive_cell=primitive_cell,
             size=size,
-            origin=origin,
             description=description,
             name=name)
 
@@ -31,8 +30,7 @@ class CubicLattice(TetragonalLattice):
             base_params = super(CubicLattice, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "A cubic lattice"  # noqa

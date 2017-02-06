@@ -13,11 +13,10 @@ class Neumann(Condition):
     cuba_key = CUBA.NEUMANN
 
     def __init__(self,
-                 variable=Default,
                  material=Default,
+                 variable=Default,
                  description=Default,
                  name=Default):
-
         super(Neumann, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
@@ -29,10 +28,9 @@ class Neumann(Condition):
             base_params = super(Neumann, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
+        return tuple(set((
             CUBA.VARIABLE,
-            CUBA.MATERIAL, ) + base_params
+            CUBA.MATERIAL, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

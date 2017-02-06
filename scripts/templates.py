@@ -1,7 +1,11 @@
 import abc
 import textwrap
 
-from scripts.utils import NoDefault
+from simphony_metaparser.flags import NoDefault
+
+from simphony_metaparser.utils import with_cuba_prefix, \
+    cuba_key_to_property_name, without_cuba_prefix
+
 from . import utils
 
 
@@ -123,8 +127,8 @@ class Class(object):
             parent_class_name=parent_class_name,
         )
         s += utils.indent(utils.format_docstring(self.docstring))+'\n'
-        s += utils.indent("cuba_key = {qualified_cuba_key}".format(
-            qualified_cuba_key=utils.with_cuba_prefix(self.cuba_key)))+'\n'
+        s += utils.indent("cuba_key = {qualified_cuba_key}\n".format(
+            qualified_cuba_key=with_cuba_prefix(self.cuba_key)))
 
         out.write(utils.indent(s, indent_level))
 
@@ -160,18 +164,14 @@ class Class(object):
         for arg in pass_down:
             super_init_args.append("{}={}".format(arg, arg))
 
-        s = textwrap.dedent("""
-            def __init__({init_args_str}):
-            """.format(
-            init_args_str=", ".join(init_args))
+        s = textwrap.dedent("""def __init__({init_args_str}):""".format(
+            init_args_str=", ".join(init_args))+'\n'
         )
 
-        s += utils.indent(textwrap.dedent("""
-                super({class_name}, self).__init__({super_init_args_str})
-            """.format(
+        s += utils.indent(textwrap.dedent("""super({class_name}, self).__init__({super_init_args_str})""".format(  # noqa
                 class_name=self.class_name,
                 super_init_args_str=", ".join(super_init_args))
-        ))
+        ))+'\n'
 
         for prop in self.properties:
             if prop.reimplemented:
@@ -179,14 +179,14 @@ class Class(object):
 
             if isinstance(prop, VariableProperty):
                 s += utils.indent(
-                    textwrap.dedent("""
-                    self._init_{prop_name}({prop_name})
-                    """.format(prop_name=prop.name)))
+                    textwrap.dedent(
+                        """self._init_{prop_name}({prop_name})""".format(  # noqa
+                            prop_name=prop.name)))+'\n'
             else:
                 s += utils.indent(
-                    textwrap.dedent("""
-                    self._init_{prop_name}()
-                    """.format(prop_name=prop.name)))
+                    textwrap.dedent(
+                        """self._init_{prop_name}()""".format(
+                            prop_name=prop.name)))+'\n'
 
         return s
 
@@ -195,23 +195,27 @@ class Class(object):
         hierarchy_optional = []
         pass_down = []
 
-        for prop in [p for p in self.hierarchy_properties
-                     if isinstance(p, VariableProperty)]:
-            if (prop.name in hierarchy_mandatory or
-                    prop.name in hierarchy_optional):
-                continue
+        for prop_group in self.hierarchy_properties:
+            for prop in sorted(
+                    [p for p in prop_group if isinstance(p, VariableProperty)],
+                    key=lambda x: x.name):
+                if (prop.name in hierarchy_mandatory or
+                        prop.name in hierarchy_optional):
+                    continue
 
-            if prop.default is NoDefault:
-                hierarchy_mandatory.append(prop.name)
-            else:
-                hierarchy_optional.append(prop.name)
+                if prop.default is NoDefault:
+                    hierarchy_mandatory.append(prop.name)
+                else:
+                    hierarchy_optional.append(prop.name)
 
-            pass_down.append(prop.name)
+                pass_down.append(prop.name)
 
         cur_class_mandatory = []
         cur_class_optional = []
-        for prop in [p for p in self.properties
-                     if isinstance(p, VariableProperty)]:
+        for prop in sorted(
+                [p for p in self.properties
+                 if isinstance(p, VariableProperty)],
+                key=lambda x: x.name):
             if (prop.name in hierarchy_mandatory and
                     prop.default is not NoDefault):
                 # A property that was mandatory now has a default.
@@ -239,7 +243,7 @@ class Class(object):
         params = []
         for prop in self.properties:
             if isinstance(prop, VariableProperty):
-                params.append(prop.qual_cuba_key)
+                params.append(prop.source_key)
             elif isinstance(prop, UIDProperty):
                 params.append("CUBA.UID")
 
@@ -252,10 +256,10 @@ class Class(object):
                         cls).supported_parameters()
                 except AttributeError:
                     base_params = ()
-
-                return ({params}) + base_params
-            """.format(class_name=self.class_name,
-                       params="".join([p+", " for p in params]))
+                return tuple(set(({params}) + base_params))
+                """.format(
+                    class_name=self.class_name,
+                    params="".join([p+", " for p in params]))
         )
 
         return s
@@ -265,7 +269,7 @@ class MetaAPIMethods(object):
     """These methods go only in the base class (whose parent is empty)"""
     def render(self, out, indent_level=0):
         out.write(
-            utils.indent(
+            utils.indent(textwrap.dedent(
                 """
                 @classmethod
                 def parents(cls):
@@ -273,58 +277,90 @@ class MetaAPIMethods(object):
                         c.cuba_key
                         for c in cls.__mro__[1:]
                         if hasattr(c, "cuba_key"))
-                """,
+                """),
                 indent_level)
         )
 
 
 class ABCProperty(object):
+    """Describes a template for a generic python property.
+    It's an abstract class. Derived classes must reimplement the
+    appropriate methods for rendering"""
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, name, default=utils.NoDefault, docstring=""):
+    def __init__(self, name, default=NoDefault, docstring=""):
         self.name = name
         self.default = default
         self.docstring = docstring
 
     @abc.abstractmethod
     def import_required(self):
-        pass
+        """Must return the import required to make the property work,
+        as a list of ShortcutImport or MetaClassImport"""
 
     @abc.abstractmethod
     def _render_init(self):
-        pass
+        """Renders the initialization routine. This is called
+        by the class __init__ method.
+        Must return a string containing the rendered data."""
 
     @abc.abstractmethod
     def _render_setter(self):
-        pass
+        """Renders the setter method.
+        Must return a string containing the rendered data."""
 
     @abc.abstractmethod
     def _render_getter(self):
-        pass
+        """Renders the getter method.
+        Must return a string containing the rendered data.
+        """
 
     @abc.abstractmethod
     def _render_validation(self):
-        pass
+        """Renders the validation method.
+        Must return a string containing the rendered data.
+        """
 
     @abc.abstractmethod
     def _render_default(self):
+        """Renders a routine that returns the appropriate default.
+        Must return a string containing the rendered data.
+        """
         pass
 
     def render(self, out, indent_level=0):
+        """Triggers the rendering
+
+        out: file-like
+            Where to write the rendering
+
+        indent_level: int
+            used to indent the rendering of a given level amount.
+        """
         s = self._render_init()
         s += self._render_getter()
         s += self._render_setter()
         s += self._render_validation()
         s += self._render_default()
-        s += '\n'
 
         out.write(utils.indent(s, indent_level))
 
 
 class FixedProperty(ABCProperty):
-    def __init__(self, name, default, reimplemented):
-        super(FixedProperty, self).__init__(name, default)
+    """Describes a fixed property template."""
 
+    def __init__(self, source_key, default, reimplemented):
+        """Defines a fixed property"""
+        super(FixedProperty, self).__init__(source_key, default)
+
+        # This is the original name as it comes from the ontology tree.
+        # the template "property name" is the actual name that goes in the
+        # python code.
+        self.source_key = source_key
+
+        # True if the property is reimplemented on the base class, hence
+        # its rendering must keep this into account for appropriate
+        # initialization
         self.reimplemented = reimplemented
 
     def _render_init(self):
@@ -333,7 +369,8 @@ class FixedProperty(ABCProperty):
         return textwrap.dedent("""
         def _init_{name}(self):
             self._{name} = self._default_{name}()  # noqa
-        """).format(name=self.name)
+            """).format(
+            name=self.name)
 
     def _render_default(self):
         return textwrap.dedent("""
@@ -363,6 +400,8 @@ class FixedProperty(ABCProperty):
 
 
 class VariableProperty(ABCProperty):
+    """Describes a variable (CUBA) property template."""
+
     def import_required(self):
         imp = [ShortcutImport("Default")]
         imp += [ShortcutImport("validation")]
@@ -389,11 +428,11 @@ class VariableProperty(ABCProperty):
         if shape is None:
             raise ValueError("shape cannot be None")
 
-        prop_name = utils.cuba_key_to_property_name(qual_cuba_key)
+        self.source_key = qual_cuba_key
+        prop_name = cuba_key_to_property_name(qual_cuba_key)
         super(VariableProperty, self).__init__(
             name=prop_name,
             default=default)
-        self.qual_cuba_key = qual_cuba_key
         self.shape = shape
         self.reimplemented = reimplemented
 
@@ -414,7 +453,7 @@ class VariableProperty(ABCProperty):
                 self.data[{qual_cuba_key}] = value
         """).format(
             prop_name=self.name,
-            qual_cuba_key=self.qual_cuba_key)
+            qual_cuba_key=self.source_key)
 
     def _render_getter(self):
         return textwrap.dedent("""
@@ -423,10 +462,10 @@ class VariableProperty(ABCProperty):
                 return self.data[{qual_cuba_key}]
         """).format(
             prop_name=self.name,
-            qual_cuba_key=self.qual_cuba_key)
+            qual_cuba_key=self.source_key)
 
     def _render_validation(self):
-        cuba_key = utils.without_cuba_prefix(self.qual_cuba_key)
+        cuba_key = without_cuba_prefix(self.source_key)
         if self.shape == [1]:
             return textwrap.dedent("""
             def _validate_{prop_name}(self, value):
@@ -450,7 +489,7 @@ class VariableProperty(ABCProperty):
                        shape=self.shape))
 
     def _render_default(self):
-        if self.default == utils.NoDefault:
+        if self.default == NoDefault:
             return textwrap.dedent("""
             def _default_{name}(self):
                 raise TypeError("No default for {name}")
@@ -479,9 +518,12 @@ class VariableProperty(ABCProperty):
 
 
 class DataProperty(FixedProperty):
-    """Special data property is handled slightly different"""
+    """Special data property is handled slightly different.
+    It is a fixed property, but the value does not come from
+    a hardcoded value in its default."""
     def __init__(self):
         super(DataProperty, self).__init__("data", None, False)
+        self.source_key = "data"
 
     def import_required(self):
         return [ShortcutImport("DataContainer")]
@@ -514,8 +556,12 @@ class DataProperty(FixedProperty):
 
 
 class UIDProperty(FixedProperty):
+    """Special property that handles the special case of CUBA.UID.
+    It behaves like a fixed property, but it has a CUBA qualified key.
+    """
     def __init__(self):
         super(UIDProperty, self).__init__("uid", None, False)
+        self.source_key = "uid"
 
     def import_required(self):
         return [ShortcutImport('uuid')]

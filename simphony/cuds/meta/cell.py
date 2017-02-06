@@ -10,7 +10,6 @@ class Cell(MeshElement):
     cuba_key = CUBA.CELL
 
     def __init__(self, point):
-
         super(Cell, self).__init__(point=point)
 
     @classmethod
@@ -19,8 +18,7 @@ class Cell(MeshElement):
             base_params = super(Cell, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Element for storing 3D geometrical objects"  # noqa

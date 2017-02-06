@@ -6,28 +6,26 @@ from collections import OrderedDict
 
 from contextlib import contextmanager
 
-
-class NoDefault(object):
-    """Marker class. Specifies that no default has been specified.
-    We don't use None because None can be a valid default"""
-    pass
+from simphony_metaparser.utils import without_cuba_prefix
 
 
 @contextmanager
 def make_temporary_directory():
-    ''' Context Manager for creating a temporary directory
+    """Context Manager for creating a temporary directory
     and remove the tree on exit
 
     Yields
     ------
     temp_dir : str
         absolute path to temporary directory
-    '''
+    """
+    temp_dir = None
     try:
         temp_dir = tempfile.mkdtemp()
         yield temp_dir
     finally:
-        shutil.rmtree(temp_dir)
+        if temp_dir is not None:
+            shutil.rmtree(temp_dir)
 
 
 def to_camel_case(text, special={'cuds': 'CUDS'}):
@@ -66,23 +64,15 @@ def indent(text, level=1):
     """
     dedent_text = textwrap.dedent(text)
     spaces = 4 * level * " "
-    return "\n".join((spaces + line) for line in dedent_text.splitlines())
 
+    out_lines = []
+    for src_line in dedent_text.splitlines(True):
+        if len(src_line.strip()) == 0:
+            out_lines.append('\n')
+        else:
+            out_lines.append(spaces + src_line)
 
-def with_cuba_prefix(string):
-    """Adds the CUBA. prefix to the string if not there."""
-    if is_cuba_key(string):
-        return string
-
-    return "CUBA." + string
-
-
-def without_cuba_prefix(string):
-    """Removes the CUBA. prefix to the string if there."""
-    if is_cuba_key(string):
-        return string[5:]
-
-    return string
+    return "".join(out_lines)
 
 
 def is_cuba_key(value):
@@ -97,11 +87,6 @@ def cuba_key_to_meta_class_name(string):
 
 def cuba_key_to_meta_class_module_name(string):
     """Converts a cuba key in the associated python module name"""
-    return without_cuba_prefix(string).lower()
-
-
-def cuba_key_to_property_name(string):
-    """Converts a cuba key in the associated property name"""
     return without_cuba_prefix(string).lower()
 
 

@@ -11,7 +11,6 @@ class Node(CUDSComponent):
     cuba_key = CUBA.NODE
 
     def __init__(self, index, description=Default, name=Default):
-
         super(Node, self).__init__(description=description, name=name)
         self._init_index(index)
 
@@ -21,8 +20,7 @@ class Node(CUDSComponent):
             base_params = super(Node, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (CUBA.INDEX, ) + base_params
+        return tuple(set((CUBA.INDEX, ) + base_params))
 
     def _default_definition(self):
         return "A node on a structured grid like lattice"  # noqa

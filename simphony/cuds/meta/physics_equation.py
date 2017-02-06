@@ -10,7 +10,6 @@ class PhysicsEquation(ModelEquation):
     cuba_key = CUBA.PHYSICS_EQUATION
 
     def __init__(self, description=Default, name=Default):
-
         super(PhysicsEquation, self).__init__(
             description=description, name=name)
 
@@ -20,8 +19,7 @@ class PhysicsEquation(ModelEquation):
             base_params = super(PhysicsEquation, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Physics equation"  # noqa

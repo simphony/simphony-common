@@ -14,11 +14,10 @@ class IntegrationStep(SolverParameter):
 
     def __init__(self,
                  current=Default,
-                 size=Default,
                  final=Default,
+                 size=Default,
                  description=Default,
                  name=Default):
-
         super(IntegrationStep, self).__init__(
             description=description, name=name)
         self._init_current(current)
@@ -31,11 +30,11 @@ class IntegrationStep(SolverParameter):
             base_params = super(IntegrationStep, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.CURRENT,
-            CUBA.SIZE,
-            CUBA.FINAL, ) + base_params
+        return tuple(
+            set((
+                CUBA.CURRENT,
+                CUBA.SIZE,
+                CUBA.FINAL, ) + base_params))
 
     def _default_definition(self):
         return "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa

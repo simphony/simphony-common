@@ -10,7 +10,6 @@ class Mesoscopic(ComputationalModel):
     cuba_key = CUBA.MESOSCOPIC
 
     def __init__(self, description=Default, name=Default):
-
         super(Mesoscopic, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,8 +18,7 @@ class Mesoscopic(ComputationalModel):
             base_params = super(Mesoscopic, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Mesoscopic model category according to the RoMM"  # noqa

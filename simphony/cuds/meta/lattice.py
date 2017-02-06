@@ -10,7 +10,6 @@ class Lattice(DataSet):
     cuba_key = CUBA.LATTICE
 
     def __init__(self, description=Default, name=Default):
-
         super(Lattice, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,8 +18,7 @@ class Lattice(DataSet):
             base_params = super(Lattice, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "A lattice"  # noqa

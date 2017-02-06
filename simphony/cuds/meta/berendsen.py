@@ -18,7 +18,6 @@ class Berendsen(Thermostat):
                  material=Default,
                  description=Default,
                  name=Default):
-
         super(Berendsen, self).__init__(
             material=material, description=description, name=name)
         self._init_coupling_time(coupling_time)
@@ -30,10 +29,10 @@ class Berendsen(Thermostat):
             base_params = super(Berendsen, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.COUPLING_TIME,
-            CUBA.TEMPERATURE, ) + base_params
+        return tuple(
+            set((
+                CUBA.COUPLING_TIME,
+                CUBA.TEMPERATURE, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa

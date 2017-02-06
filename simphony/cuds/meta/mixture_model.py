@@ -10,7 +10,6 @@ class MixtureModel(PhysicsEquation):
     cuba_key = CUBA.MIXTURE_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(MixtureModel, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,8 +18,7 @@ class MixtureModel(PhysicsEquation):
             base_params = super(MixtureModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

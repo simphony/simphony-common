@@ -10,7 +10,6 @@ class KsDft(PhysicsEquation):
     cuba_key = CUBA.KS_DFT
 
     def __init__(self, description=Default, name=Default):
-
         super(KsDft, self).__init__(description=description, name=name)
 
     @classmethod
@@ -19,8 +18,7 @@ class KsDft(PhysicsEquation):
             base_params = super(KsDft, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return ['CUBA.ELECTRONIC']  # noqa

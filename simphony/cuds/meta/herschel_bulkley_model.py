@@ -13,12 +13,11 @@ class HerschelBulkleyModel(RheologyModel):
 
     def __init__(self,
                  initial_viscosity=Default,
-                 relaxation_time=Default,
                  linear_constant=Default,
                  power_law_index=Default,
+                 relaxation_time=Default,
                  description=Default,
                  name=Default):
-
         super(HerschelBulkleyModel, self).__init__(
             description=description, name=name)
         self._init_initial_viscosity(initial_viscosity)
@@ -33,12 +32,12 @@ class HerschelBulkleyModel(RheologyModel):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.INITIAL_VISCOSITY,
-            CUBA.RELAXATION_TIME,
-            CUBA.LINEAR_CONSTANT,
-            CUBA.POWER_LAW_INDEX, ) + base_params
+        return tuple(
+            set((
+                CUBA.INITIAL_VISCOSITY,
+                CUBA.RELAXATION_TIME,
+                CUBA.LINEAR_CONSTANT,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa

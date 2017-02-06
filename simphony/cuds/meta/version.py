@@ -10,13 +10,12 @@ class Version(CUDSItem):
     """
     cuba_key = CUBA.VERSION
 
-    def __init__(self, minor, patch, major, full):
-
+    def __init__(self, full, major, minor, patch):
         super(Version, self).__init__()
         self._init_minor(minor)
-        self._init_patch(patch)
         self._init_major(major)
         self._init_full(full)
+        self._init_patch(patch)
 
     @classmethod
     def supported_parameters(cls):
@@ -24,12 +23,12 @@ class Version(CUDSItem):
             base_params = super(Version, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.MINOR,
-            CUBA.PATCH,
-            CUBA.MAJOR,
-            CUBA.FULL, ) + base_params
+        return tuple(
+            set((
+                CUBA.MINOR,
+                CUBA.MAJOR,
+                CUBA.FULL,
+                CUBA.PATCH, ) + base_params))
 
     def _init_minor(self, value):
         if value is Default:
@@ -57,30 +56,6 @@ class Version(CUDSItem):
 
     def _default_definition(self):
         return "Version of a software tool used in a simulation"  # noqa
-
-    def _init_patch(self, value):
-        if value is Default:
-            value = self._default_patch()
-
-        self.patch = value
-
-    @property
-    def patch(self):
-        return self.data[CUBA.PATCH]
-
-    @patch.setter
-    def patch(self, value):
-        value = self._validate_patch(value)
-        self.data[CUBA.PATCH] = value
-
-    def _validate_patch(self, value):
-        value = validation.cast_data_type(value, 'PATCH')
-        validation.check_valid_shape(value, [1], 'PATCH')
-        validation.validate_cuba_keyword(value, 'PATCH')
-        return value
-
-    def _default_patch(self):
-        raise TypeError("No default for patch")
 
     def _init_major(self, value):
         if value is Default:
@@ -129,3 +104,27 @@ class Version(CUDSItem):
 
     def _default_full(self):
         raise TypeError("No default for full")
+
+    def _init_patch(self, value):
+        if value is Default:
+            value = self._default_patch()
+
+        self.patch = value
+
+    @property
+    def patch(self):
+        return self.data[CUBA.PATCH]
+
+    @patch.setter
+    def patch(self, value):
+        value = self._validate_patch(value)
+        self.data[CUBA.PATCH] = value
+
+    def _validate_patch(self, value):
+        value = validation.cast_data_type(value, 'PATCH')
+        validation.check_valid_shape(value, [1], 'PATCH')
+        validation.validate_cuba_keyword(value, 'PATCH')
+        return value
+
+    def _default_patch(self):
+        raise TypeError("No default for patch")

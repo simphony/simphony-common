@@ -17,7 +17,6 @@ class CrossPowerLawModel(RheologyModel):
                  power_law_index=Default,
                  description=Default,
                  name=Default):
-
         super(CrossPowerLawModel, self).__init__(
             description=description, name=name)
         self._init_initial_viscosity(initial_viscosity)
@@ -31,12 +30,12 @@ class CrossPowerLawModel(RheologyModel):
             base_params = super(CrossPowerLawModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
-            CUBA.INITIAL_VISCOSITY,
-            CUBA.LINEAR_CONSTANT,
-            CUBA.MAXIMUM_VISCOSITY,
-            CUBA.POWER_LAW_INDEX, ) + base_params
+        return tuple(
+            set((
+                CUBA.INITIAL_VISCOSITY,
+                CUBA.LINEAR_CONSTANT,
+                CUBA.MAXIMUM_VISCOSITY,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Viscosity Cross power law model"  # noqa

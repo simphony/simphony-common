@@ -10,7 +10,6 @@ class MultiphaseModel(PhysicsEquation):
     cuba_key = CUBA.MULTIPHASE_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(MultiphaseModel, self).__init__(
             description=description, name=name)
 
@@ -20,8 +19,7 @@ class MultiphaseModel(PhysicsEquation):
             base_params = super(MultiphaseModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Multiphase model"  # noqa

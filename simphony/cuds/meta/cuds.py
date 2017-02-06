@@ -11,7 +11,6 @@ class CUDS(CUDSComponent):
     cuba_key = CUBA.CUDS
 
     def __init__(self, description=Default, name=Default):
-
         super(CUDS, self).__init__(description=description, name=name)
 
     @classmethod
@@ -20,8 +19,7 @@ class CUDS(CUDSComponent):
             base_params = super(CUDS, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "CUDS Container, a knowledge-based container of semantic concepts used to agglomerate relevant data and information."  # noqa

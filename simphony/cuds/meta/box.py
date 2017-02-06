@@ -19,7 +19,6 @@ class Box(Boundary):
                  vector=Default,
                  description=Default,
                  name=Default):
-
         super(Box, self).__init__(
             condition=condition, description=description, name=name)
         self._init_vector(vector)
@@ -30,10 +29,9 @@ class Box(Boundary):
             base_params = super(Box, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (
+        return tuple(set((
             CUBA.CONDITION,
-            CUBA.VECTOR, ) + base_params
+            CUBA.VECTOR, ) + base_params))
 
     def _default_definition(self):
         return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa

@@ -14,7 +14,6 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
                  electrostatic_field=Default,
                  description=Default,
                  name=Default):
-
         super(ConstantElectrostaticFieldModel, self).__init__(
             description=description, name=name)
         self._init_electrostatic_field(electrostatic_field)
@@ -26,8 +25,7 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
                                 cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (CUBA.ELECTROSTATIC_FIELD, ) + base_params
+        return tuple(set((CUBA.ELECTROSTATIC_FIELD, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.MESOSCOPIC', 'CUBA.CONTINUUM']  # noqa

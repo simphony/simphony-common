@@ -10,7 +10,6 @@ class LaminarFlowModel(TurbulenceModel):
     cuba_key = CUBA.LAMINAR_FLOW_MODEL
 
     def __init__(self, description=Default, name=Default):
-
         super(LaminarFlowModel, self).__init__(
             description=description, name=name)
 
@@ -20,8 +19,7 @@ class LaminarFlowModel(TurbulenceModel):
             base_params = super(LaminarFlowModel, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

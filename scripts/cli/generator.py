@@ -1,9 +1,10 @@
 from __future__ import print_function
 
-import yaml
 import click
 import os
 import shutil
+
+from simphony_metaparser.yamldirparser import YamlDirParser
 
 from scripts.api_generator import APIGenerator
 from scripts.cuba_enum_generator import CUBAEnumGenerator
@@ -33,6 +34,7 @@ def cli(yaml_dir, module_root_path, overwrite):
     """
 
     meta_class_output = os.path.join(module_root_path, "cuds", "meta")
+    api_output = os.path.join(module_root_path, "cuds", "meta", "api.py")
     keyword_output = os.path.join(module_root_path, "core", "keywords.py")
     cuba_output = os.path.join(module_root_path, "core", "cuba.py")
 
@@ -55,28 +57,23 @@ def cli(yaml_dir, module_root_path, overwrite):
     except OSError:
         pass
 
-    cuba_input = os.path.join(yaml_dir, "cuba.yml")
-    cuds_input = os.path.join(yaml_dir, "simphony_metadata.yml")
-
-    with open(cuba_input) as f:
-        cuba_dict = yaml.safe_load(f)
-
-    with open(cuds_input) as f:
-        simphony_metadata_dict = yaml.safe_load(f)
+    parser = YamlDirParser()
+    ontology = parser.parse(yaml_dir)
 
     generator = KeywordsGenerator()
     with open(keyword_output, "wb") as f:
-        generator.generate(cuba_dict, simphony_metadata_dict, f)
+        generator.generate(ontology, f)
 
     generator = CUBAEnumGenerator()
     with open(cuba_output, "wb") as f:
-        generator.generate(cuba_dict, simphony_metadata_dict, f)
+        generator.generate(ontology, f)
 
     meta_class_generator = MetaClassGenerator()
-    meta_class_generator.generate(simphony_metadata_dict, meta_class_output)
+    meta_class_generator.generate(ontology, meta_class_output)
 
     api_generator = APIGenerator()
-    api_generator.generate(simphony_metadata_dict, meta_class_output)
+    with open(api_output, "wb") as f:
+        api_generator.generate(ontology, f)
 
     validation_generator = ValidationGenerator()
     validation_generator.generate(meta_class_output)

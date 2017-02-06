@@ -12,7 +12,6 @@ class Engine(SoftwareTool):
     cuba_key = CUBA.ENGINE
 
     def __init__(self, engine_feature, version):
-
         super(Engine, self).__init__(version=version)
         self._init_engine_feature(engine_feature)
 
@@ -22,8 +21,7 @@ class Engine(SoftwareTool):
             base_params = super(Engine, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (CUBA.ENGINE_FEATURE, ) + base_params
+        return tuple(set((CUBA.ENGINE_FEATURE, ) + base_params))
 
     def _default_definition(self):
         return "Represents a software tool which is used to solve the physics equation"  # noqa

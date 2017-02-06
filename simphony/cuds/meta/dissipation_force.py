@@ -16,7 +16,6 @@ class DissipationForce(MaterialRelation):
                  material=Default,
                  description=Default,
                  name=Default):
-
         super(DissipationForce, self).__init__(
             material=material, description=description, name=name)
         self._init_restitution_coefficient(restitution_coefficient)
@@ -27,8 +26,7 @@ class DissipationForce(MaterialRelation):
             base_params = super(DissipationForce, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return (CUBA.RESTITUTION_COEFFICIENT, ) + base_params
+        return tuple(set((CUBA.RESTITUTION_COEFFICIENT, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

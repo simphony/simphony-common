@@ -10,7 +10,6 @@ class Face(MeshElement):
     cuba_key = CUBA.FACE
 
     def __init__(self, point):
-
         super(Face, self).__init__(point=point)
 
     @classmethod
@@ -19,8 +18,7 @@ class Face(MeshElement):
             base_params = super(Face, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-
-        return () + base_params
+        return tuple(set(() + base_params))
 
     def _default_definition(self):
         return "Element for storing 2D geometrical objects"  # noqa
