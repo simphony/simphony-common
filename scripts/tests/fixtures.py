@@ -200,8 +200,8 @@ class GravityModel(PhysicsEquation):
                 GravityModel,
                 cls).supported_parameters()
         except AttributeError:
-            base_params = set()
-        return set([CUBA.ACCELERATION, ]) | base_params
+            base_params = ()
+        return list(set((CUBA.ACCELERATION, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa
