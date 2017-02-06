@@ -29,8 +29,8 @@ class MonoclinicLattice(BravaisLattice):
         try:
             base_params = super(MonoclinicLattice, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "A monoclinic lattice"  # noqa

@@ -20,8 +20,8 @@ class Boundary(CUDSComponent):
         try:
             base_params = super(Boundary, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.CONDITION, ) + base_params
+            base_params = set()
+        return set([CUBA.CONDITION, ]) | base_params
 
     def _default_definition(self):
         return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa

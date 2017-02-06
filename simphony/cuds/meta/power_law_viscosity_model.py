@@ -31,12 +31,13 @@ class PowerLawViscosityModel(RheologyModel):
             base_params = super(PowerLawViscosityModel,
                                 cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.LINEAR_CONSTANT,
             CUBA.MINIMUM_VISCOSITY,
             CUBA.MAXIMUM_VISCOSITY,
-            CUBA.POWER_LAW_INDEX, ) + base_params
+            CUBA.POWER_LAW_INDEX,
+        ]) | base_params
 
     def _default_definition(self):
         return "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa

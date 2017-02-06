@@ -28,12 +28,13 @@ class Mesh(DataSet):
         try:
             base_params = super(Mesh, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.EDGE,
             CUBA.FACE,
             CUBA.CELL,
-            CUBA.POINT, ) + base_params
+            CUBA.POINT,
+        ]) | base_params
 
     def _default_definition(self):
         return "A mesh"  # noqa

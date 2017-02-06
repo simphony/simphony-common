@@ -19,8 +19,8 @@ class MeshElement(CUDSItem):
         try:
             base_params = super(MeshElement, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.POINT, ) + base_params
+            base_params = set()
+        return set([CUBA.POINT, ]) | base_params
 
     def _default_definition(self):
         return "An element for storing geometrical objects"  # noqa

@@ -20,10 +20,11 @@ class Particles(DataSet):
         try:
             base_params = super(Particles, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.PARTICLE,
-            CUBA.BOND, ) + base_params
+            CUBA.BOND,
+        ]) | base_params
 
     def _init_particle(self, value):
         if value is Default:

@@ -18,8 +18,8 @@ class ComputationalModel(CUDSComponent):
         try:
             base_params = super(ComputationalModel, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "Model category according to the RoMM"  # noqa

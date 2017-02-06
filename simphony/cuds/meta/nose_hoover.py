@@ -29,10 +29,11 @@ class NoseHoover(Thermostat):
         try:
             base_params = super(NoseHoover, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.COUPLING_TIME,
-            CUBA.TEMPERATURE, ) + base_params
+            CUBA.TEMPERATURE,
+        ]) | base_params
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa

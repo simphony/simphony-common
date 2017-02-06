@@ -21,8 +21,8 @@ class MaterialRelation(ModelEquation):
         try:
             base_params = super(MaterialRelation, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.MATERIAL, ) + base_params
+            base_params = set()
+        return set([CUBA.MATERIAL, ]) | base_params
 
     def _default_definition(self):
         return "Material relation which together with the Physics equation gives the model equation"  # noqa

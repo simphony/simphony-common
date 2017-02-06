@@ -20,8 +20,8 @@ class SoftwareTool(CUDSItem):
         try:
             base_params = super(SoftwareTool, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.VERSION, ) + base_params
+            base_params = set()
+        return set([CUBA.VERSION, ]) | base_params
 
     def _default_definition(self):
         return "Represents a software tool which is used to solve the model or in pre/post processing"  # noqa

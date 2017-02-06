@@ -21,10 +21,11 @@ class EngineFeature(CUDSItem):
         try:
             base_params = super(EngineFeature, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.COMPUTATIONAL_METHOD,
-            CUBA.PHYSICS_EQUATION, ) + base_params
+            CUBA.PHYSICS_EQUATION,
+        ]) | base_params
 
     def _init_computational_method(self, value):
         if value is Default:

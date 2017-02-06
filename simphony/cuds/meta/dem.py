@@ -17,8 +17,8 @@ class Dem(ComputationalMethod):
         try:
             base_params = super(Dem, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "Discrete element method"  # noqa

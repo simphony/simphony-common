@@ -29,12 +29,13 @@ class BravaisLattice(Lattice):
         try:
             base_params = super(BravaisLattice, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.PRIMITIVE_CELL,
             CUBA.LATTICE_PARAMETER,
             CUBA.ORIGIN,
-            CUBA.SIZE, ) + base_params
+            CUBA.SIZE,
+        ]) | base_params
 
     def _default_definition(self):
         return "A Bravais lattice"  # noqa

@@ -19,8 +19,8 @@ class Basis(CUDSComponent):
         try:
             base_params = super(Basis, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.VECTOR, ) + base_params
+            base_params = set()
+        return set([CUBA.VECTOR, ]) | base_params
 
     def _default_definition(self):
         return "Space basis vectors (row wise)"  # noqa

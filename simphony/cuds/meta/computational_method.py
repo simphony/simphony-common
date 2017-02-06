@@ -20,8 +20,8 @@ class ComputationalMethod(SolverParameter):
             base_params = super(ComputationalMethod,
                                 cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "A computational method according to the RoMM"  # noqa

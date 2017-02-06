@@ -19,8 +19,8 @@ class IsothermalModel(ThermalModel):
         try:
             base_params = super(IsothermalModel, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

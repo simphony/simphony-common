@@ -22,12 +22,13 @@ class Version(CUDSItem):
         try:
             base_params = super(Version, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (
+            base_params = set()
+        return set([
             CUBA.MINOR,
             CUBA.MAJOR,
             CUBA.FULL,
-            CUBA.PATCH, ) + base_params
+            CUBA.PATCH,
+        ]) | base_params
 
     def _init_minor(self, value):
         if value is Default:

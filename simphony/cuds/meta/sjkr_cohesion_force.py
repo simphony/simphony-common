@@ -24,8 +24,8 @@ class SjkrCohesionForce(MaterialRelation):
         try:
             base_params = super(SjkrCohesionForce, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return (CUBA.COHESION_ENERGY_DENSITY, ) + base_params
+            base_params = set()
+        return set([CUBA.COHESION_ENERGY_DENSITY, ]) | base_params
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

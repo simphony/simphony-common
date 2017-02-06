@@ -30,8 +30,8 @@ class BodyCenteredOrthorhombicLattice(BravaisLattice):
             base_params = super(BodyCenteredOrthorhombicLattice,
                                 cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "A body centered orthorhombic lattice"  # noqa

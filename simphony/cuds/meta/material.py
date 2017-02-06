@@ -18,8 +18,8 @@ class Material(CUDSComponent):
         try:
             base_params = super(Material, cls).supported_parameters()
         except AttributeError:
-            base_params = ()
-        return () + base_params
+            base_params = set()
+        return set([]) | base_params
 
     def _default_definition(self):
         return "Definition of a material and its properties in the data container"  # noqa
