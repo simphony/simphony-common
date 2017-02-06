@@ -21,9 +21,13 @@ class APIGenerator(object):
             The file on which to write the result
         """
 
+        lines = []
         for cuds_item, _ in traverse(ontology.root_cuds_item):
-            output.write('from .{} import {}   # noqa\n'.format(
+            lines.append('from .{} import {}   # noqa\n'.format(
                     cuba_key_to_meta_class_module_name(cuds_item.name),
                     cuba_key_to_meta_class_name(cuds_item.name)
-                ),
+                )
             )
+
+        for line in sorted(lines):
+            output.write(line)
