@@ -90,7 +90,7 @@ def complex_ontology():
         name="CUBA.UID",
         scope="CUBA.SYSTEM",
         shape=[1],
-        default=NoDefault
+        default=NoDefault,
         item=cuds_item
     )
 
@@ -101,7 +101,7 @@ def complex_ontology():
         name="CUBA.NAME",
         scope="CUBA.USER",
         shape=[1],
-        default=""
+        default="",
         item=cuds_component
     )
 
@@ -115,7 +115,7 @@ def complex_ontology():
     gravity_model.properties["models"] = FixedProperty(
         name="models",
         scope="CUBA.USER",
-        default=["CUBA.MESOSCOPIC", "CUBA.CONTINUUM"]
+        default=["CUBA.MESOSCOPIC", "CUBA.CONTINUUM"],
         item=gravity_model
     )
     gravity_model.properties["CUBA.ACCELERATION"] = \
