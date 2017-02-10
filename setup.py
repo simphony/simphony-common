@@ -132,14 +132,17 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "enum34>=1.0.4",
-        "stevedore>=1.2.0",
-        "numpy>=1.11.1",
-        "simphony_metaparser>=0.1.0"
+        "enum34 >= 1.0.4",
+        "stevedore >= 1.2.0",
+        "numpy ~= 1.11",
         ],
     extras_require={
         'H5IO': ["tables>=3.1.1"],
-        'CUBAGen': ["click >= 3.3", "pyyaml >= 3.11"]},
+        'CUBAGen': [
+            "simphony_metaparser >= 0.1.0",
+            "click >= 3.3",
+            "pyyaml >= 3.11"
+            ]},
     packages=find_packages(),
     cmdclass={
         'build_meta': BuildMeta,
