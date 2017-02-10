@@ -57,7 +57,7 @@ class KeywordsGenerator(object):
                 key=lambda x: x.name):
 
             try:
-                definition = cuds_item.property_entries["definition"].default
+                definition = cuds_item.properties["definition"].default
             except KeyError:
                 definition = ""
 
@@ -69,6 +69,7 @@ class KeywordsGenerator(object):
                 shape=[1],
                 length="None")
             lines.extend(template.format(**template_ctx))
+
         lines.append('}\n')
 
         output.writelines(lines)

@@ -19,9 +19,9 @@ class BravaisLattice(Lattice):
                  name=Default):
         super(BravaisLattice, self).__init__(
             description=description, name=name)
-        self._init_primitive_cell(primitive_cell)
-        self._init_lattice_parameter(lattice_parameter)
         self._init_origin(origin)
+        self._init_lattice_parameter(lattice_parameter)
+        self._init_primitive_cell(primitive_cell)
         self._init_size(size)
 
     @classmethod
@@ -32,37 +32,37 @@ class BravaisLattice(Lattice):
             base_params = ()
         return tuple(
             set((
-                CUBA.PRIMITIVE_CELL,
-                CUBA.LATTICE_PARAMETER,
                 CUBA.ORIGIN,
+                CUBA.LATTICE_PARAMETER,
+                CUBA.PRIMITIVE_CELL,
                 CUBA.SIZE, ) + base_params))
 
     def _default_definition(self):
         return "A Bravais lattice"  # noqa
 
-    def _init_primitive_cell(self, value):
+    def _init_origin(self, value):
         if value is Default:
-            value = self._default_primitive_cell()
+            value = self._default_origin()
 
-        self.primitive_cell = value
+        self.origin = value
 
     @property
-    def primitive_cell(self):
-        return self.data[CUBA.PRIMITIVE_CELL]
+    def origin(self):
+        return self.data[CUBA.ORIGIN]
 
-    @primitive_cell.setter
-    def primitive_cell(self, value):
-        value = self._validate_primitive_cell(value)
-        self.data[CUBA.PRIMITIVE_CELL] = value
+    @origin.setter
+    def origin(self, value):
+        value = self._validate_origin(value)
+        self.data[CUBA.ORIGIN] = value
 
-    def _validate_primitive_cell(self, value):
-        value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
-        validation.check_valid_shape(value, [1], 'PRIMITIVE_CELL')
-        validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
+    def _validate_origin(self, value):
+        value = validation.cast_data_type(value, 'ORIGIN')
+        validation.check_valid_shape(value, [1], 'ORIGIN')
+        validation.validate_cuba_keyword(value, 'ORIGIN')
         return value
 
-    def _default_primitive_cell(self):
-        raise TypeError("No default for primitive_cell")
+    def _default_origin(self):
+        raise TypeError("No default for origin")
 
     def _init_lattice_parameter(self, value):
         if value is Default:
@@ -89,29 +89,29 @@ class BravaisLattice(Lattice):
     def _default_lattice_parameter(self):
         return [1.0, 1.0, 1.0]
 
-    def _init_origin(self, value):
+    def _init_primitive_cell(self, value):
         if value is Default:
-            value = self._default_origin()
+            value = self._default_primitive_cell()
 
-        self.origin = value
+        self.primitive_cell = value
 
     @property
-    def origin(self):
-        return self.data[CUBA.ORIGIN]
+    def primitive_cell(self):
+        return self.data[CUBA.PRIMITIVE_CELL]
 
-    @origin.setter
-    def origin(self, value):
-        value = self._validate_origin(value)
-        self.data[CUBA.ORIGIN] = value
+    @primitive_cell.setter
+    def primitive_cell(self, value):
+        value = self._validate_primitive_cell(value)
+        self.data[CUBA.PRIMITIVE_CELL] = value
 
-    def _validate_origin(self, value):
-        value = validation.cast_data_type(value, 'ORIGIN')
-        validation.check_valid_shape(value, [1], 'ORIGIN')
-        validation.validate_cuba_keyword(value, 'ORIGIN')
+    def _validate_primitive_cell(self, value):
+        value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
+        validation.check_valid_shape(value, [1], 'PRIMITIVE_CELL')
+        validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
-    def _default_origin(self):
-        raise TypeError("No default for origin")
+    def _default_primitive_cell(self):
+        raise TypeError("No default for primitive_cell")
 
     def _init_size(self, value):
         if value is Default:

@@ -1,8 +1,8 @@
 from simphony_metaparser.flags import NoDefault
 
 from simphony_metaparser.nodes import (
-    Ontology, CUBADataType, CUDSItem, FixedPropertyEntry,
-    VariablePropertyEntry)
+    Ontology, CUBADataType, CUDSItem, FixedProperty,
+    VariableProperty)
 
 
 def trivial_ontology():
@@ -79,27 +79,30 @@ KEYWORDS = {
 def complex_ontology():
     ontology = Ontology()
     cuds_item = CUDSItem(name="CUBA.CUDS_ITEM")
-    cuds_item.property_entries["data"] = FixedPropertyEntry(
+    cuds_item.properties["data"] = FixedProperty(
         name="data",
         scope="CUBA.SYSTEM",
-        default=NoDefault
+        default=NoDefault,
+        item=cuds_item
     )
 
-    cuds_item.property_entries["CUBA.UID"] = VariablePropertyEntry(
+    cuds_item.properties["CUBA.UID"] = VariableProperty(
         name="CUBA.UID",
         scope="CUBA.SYSTEM",
         shape=[1],
-        default=NoDefault
+        default=NoDefault,
+        item=cuds_item
     )
 
     cuds_component = CUDSItem(name="CUBA.CUDS_COMPONENT",
                               parent=cuds_item)
     cuds_item.children.append(cuds_component)
-    cuds_component.property_entries["CUBA.NAME"] = VariablePropertyEntry(
+    cuds_component.properties["CUBA.NAME"] = VariableProperty(
         name="CUBA.NAME",
         scope="CUBA.USER",
         shape=[1],
-        default=""
+        default="",
+        item=cuds_component
     )
 
     physics_equation = CUDSItem(name="CUBA.PHYSICS_EQUATION",
@@ -109,16 +112,18 @@ def complex_ontology():
     gravity_model = CUDSItem(name="CUBA.GRAVITY_MODEL",
                              parent=physics_equation)
     physics_equation.children.append(gravity_model)
-    gravity_model.property_entries["models"] = FixedPropertyEntry(
+    gravity_model.properties["models"] = FixedProperty(
         name="models",
         scope="CUBA.USER",
-        default=["CUBA.MESOSCOPIC", "CUBA.CONTINUUM"]
+        default=["CUBA.MESOSCOPIC", "CUBA.CONTINUUM"],
+        item=gravity_model
     )
-    gravity_model.property_entries["CUBA.ACCELERATION"] = \
-        VariablePropertyEntry(name="CUBA.ACCELERATION",
-                              scope="CUBA.USER",
-                              shape=[1],
-                              default=[0, 0, 0])
+    gravity_model.properties["CUBA.ACCELERATION"] = \
+        VariableProperty(name="CUBA.ACCELERATION",
+                         scope="CUBA.USER",
+                         shape=[1],
+                         default=[0, 0, 0],
+                         item=gravity_model)
 
     ontology.root_cuds_item = cuds_item
 
@@ -128,38 +133,42 @@ def complex_ontology():
 def ontology_with_reimplemented_variable_properties():
     ontology = Ontology()
     cuds_item = CUDSItem(name="CUBA.CUDS_ITEM")
-    cuds_item.property_entries["data"] = FixedPropertyEntry(
+    cuds_item.properties["data"] = FixedProperty(
         name="data",
         scope="CUBA.SYSTEM",
-        default=NoDefault
+        default=NoDefault,
+        item=cuds_item
     )
 
-    cuds_item.property_entries["CUBA.UID"] = VariablePropertyEntry(
+    cuds_item.properties["CUBA.UID"] = VariableProperty(
         name="CUBA.UID",
         scope="CUBA.SYSTEM",
         shape=[1],
-        default=NoDefault
+        default=NoDefault,
+        item=cuds_item
     )
 
     cuds_component = CUDSItem(name="CUBA.CUDS_COMPONENT",
                               parent=cuds_item)
     cuds_item.children.append(cuds_component)
-    cuds_component.property_entries["CUBA.NAME"] = VariablePropertyEntry(
+    cuds_component.properties["CUBA.NAME"] = VariableProperty(
         name="CUBA.NAME",
         scope="CUBA.USER",
         shape=[1],
-        default=""
+        default="",
+        item=cuds_component
     )
 
     # -------
     material_relation = CUDSItem(name="CUBA.MATERIAL_RELATION",
                                  parent=cuds_component)
     cuds_component.children.append(material_relation)
-    material_relation.property_entries["CUBA.MATERIAL"] = \
-        VariablePropertyEntry(name="CUBA.MATERIAL",
-                              scope="CUBA.USER",
-                              shape=[None],
-                              default=[])
+    material_relation.properties["CUBA.MATERIAL"] = \
+        VariableProperty(name="CUBA.MATERIAL",
+                         scope="CUBA.USER",
+                         shape=[None],
+                         default=[],
+                         item=material_relation)
 
     interatomic_potential = CUDSItem(name="CUBA.INTERATOMIC_POTENTIAL",
                                      parent=material_relation)
@@ -169,11 +178,12 @@ def ontology_with_reimplemented_variable_properties():
                               parent=interatomic_potential)
     interatomic_potential.children.append(pair_potential)
 
-    pair_potential.property_entries["CUBA.MATERIAL"] = \
-        VariablePropertyEntry(name="CUBA.MATERIAL",
-                              scope="CUBA.USER",
-                              shape=[2],
-                              default=NoDefault)
+    pair_potential.properties["CUBA.MATERIAL"] = \
+        VariableProperty(name="CUBA.MATERIAL",
+                         scope="CUBA.USER",
+                         shape=[2],
+                         default=NoDefault,
+                         item=pair_potential)
 
     ontology.root_cuds_item = cuds_item
     return ontology
