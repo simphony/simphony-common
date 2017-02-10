@@ -1,2 +1,6 @@
 numexpr
-git+https://github.com/simphony/simphony-metaparser.git@master#egg=simphony_metaparser
+enum34 >= 1.0.4
+tables >= 3.1.1
+stevedore >= 1.2.0
+# Pinned. Apparently 1.12 has problems compiling on Adham's platform
+numpy==1.11.1
