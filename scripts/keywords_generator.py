@@ -69,6 +69,7 @@ class KeywordsGenerator(object):
                 shape=[1],
                 length="None")
             lines.extend(template.format(**template_ctx))
+
         lines.append('}\n')
 
         output.writelines(lines)
