@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from simphony_metaparser.nodes import FixedPropertyEntry, VariablePropertyEntry
+from simphony_metaparser.nodes import FixedProperty, VariableProperty
 
 from simphony_metaparser.utils import (
     traverse_to_root)
@@ -44,7 +44,7 @@ class SingleMetaClassGenerator(object):
         properties = self._extract_properties(item)
 
         try:
-            definition = item.property_entries["definition"].default
+            definition = item.properties["definition"].default
         except KeyError:
             definition = ""
 
@@ -108,12 +108,12 @@ class SingleMetaClassGenerator(object):
             A list of templates Properties
         """
         properties = []
-        for prop in item.property_entries.values():
+        for prop in item.properties.values():
             if prop.name == "data":
                 properties.append(templates.DataProperty())
             elif prop.name == "CUBA.UID":
                 properties.append(templates.UIDProperty())
-            elif isinstance(prop, FixedPropertyEntry):
+            elif isinstance(prop, FixedProperty):
                 properties.append(
                     templates.FixedProperty(
                         prop.name,
@@ -122,7 +122,7 @@ class SingleMetaClassGenerator(object):
                     )
                 )
 
-            elif isinstance(prop, VariablePropertyEntry):
+            elif isinstance(prop, VariableProperty):
                 properties.append(
                     templates.VariableProperty(
                         qual_cuba_key=prop.name,

@@ -57,7 +57,7 @@ class KeywordsGenerator(object):
                 key=lambda x: x.name):
 
             try:
-                definition = cuds_item.property_entries["definition"].default
+                definition = cuds_item.properties["definition"].default
             except KeyError:
                 definition = ""
 

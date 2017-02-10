@@ -1,13 +1,13 @@
 from simphony.core import Default  # noqa
-from .newtonian_fluid_model import NewtonianFluidModel
 from .constant_electrostatic_field_model import ConstantElectrostaticFieldModel
+from .single_phase_model import SinglePhaseModel
+from .newtonian_fluid_model import NewtonianFluidModel
 from .isothermal_model import IsothermalModel
 from simphony.core.cuba import CUBA
 from . import validation
 from .gravity_model import GravityModel
 from .laminar_flow_model import LaminarFlowModel
 from .physics_equation import PhysicsEquation
-from .single_phase_model import SinglePhaseModel
 from .incompressible_fluid_model import IncompressibleFluidModel
 
 
@@ -30,9 +30,9 @@ class Cfd(PhysicsEquation):
                  name=Default):
         super(Cfd, self).__init__(description=description, name=name)
         self._init_multiphase_model(multiphase_model)
-        self._init_rheology_model(rheology_model)
-        self._init_turbulence_model(turbulence_model)
         self._init_gravity_model(gravity_model)
+        self._init_turbulence_model(turbulence_model)
+        self._init_rheology_model(rheology_model)
         self._init_thermal_model(thermal_model)
         self._init_compressibility_model(compressibility_model)
         self._init_electrostatic_model(electrostatic_model)
@@ -46,9 +46,9 @@ class Cfd(PhysicsEquation):
         return tuple(
             set((
                 CUBA.MULTIPHASE_MODEL,
-                CUBA.RHEOLOGY_MODEL,
-                CUBA.TURBULENCE_MODEL,
                 CUBA.GRAVITY_MODEL,
+                CUBA.TURBULENCE_MODEL,
+                CUBA.RHEOLOGY_MODEL,
                 CUBA.THERMAL_MODEL,
                 CUBA.COMPRESSIBILITY_MODEL,
                 CUBA.ELECTROSTATIC_MODEL, ) + base_params))
@@ -80,29 +80,29 @@ class Cfd(PhysicsEquation):
     def _default_definition(self):
         return "Computational fluid dynamics general (set of ) equations for momentum, mass and energy"  # noqa
 
-    def _init_rheology_model(self, value):
+    def _init_gravity_model(self, value):
         if value is Default:
-            value = self._default_rheology_model()
+            value = self._default_gravity_model()
 
-        self.rheology_model = value
+        self.gravity_model = value
 
     @property
-    def rheology_model(self):
-        return self.data[CUBA.RHEOLOGY_MODEL]
+    def gravity_model(self):
+        return self.data[CUBA.GRAVITY_MODEL]
 
-    @rheology_model.setter
-    def rheology_model(self, value):
-        value = self._validate_rheology_model(value)
-        self.data[CUBA.RHEOLOGY_MODEL] = value
+    @gravity_model.setter
+    def gravity_model(self, value):
+        value = self._validate_gravity_model(value)
+        self.data[CUBA.GRAVITY_MODEL] = value
 
-    def _validate_rheology_model(self, value):
-        value = validation.cast_data_type(value, 'RHEOLOGY_MODEL')
-        validation.check_valid_shape(value, [1], 'RHEOLOGY_MODEL')
-        validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
+    def _validate_gravity_model(self, value):
+        value = validation.cast_data_type(value, 'GRAVITY_MODEL')
+        validation.check_valid_shape(value, [1], 'GRAVITY_MODEL')
+        validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
         return value
 
-    def _default_rheology_model(self):
-        return NewtonianFluidModel()
+    def _default_gravity_model(self):
+        return GravityModel()
 
     def _init_turbulence_model(self, value):
         if value is Default:
@@ -138,29 +138,29 @@ class Cfd(PhysicsEquation):
             'CUBA.PRESSURE', 'CUBA.DYNAMIC_PRESSURE', 'CUBA.VOLUME_FRACTION'
         ]  # noqa
 
-    def _init_gravity_model(self, value):
+    def _init_rheology_model(self, value):
         if value is Default:
-            value = self._default_gravity_model()
+            value = self._default_rheology_model()
 
-        self.gravity_model = value
+        self.rheology_model = value
 
     @property
-    def gravity_model(self):
-        return self.data[CUBA.GRAVITY_MODEL]
+    def rheology_model(self):
+        return self.data[CUBA.RHEOLOGY_MODEL]
 
-    @gravity_model.setter
-    def gravity_model(self, value):
-        value = self._validate_gravity_model(value)
-        self.data[CUBA.GRAVITY_MODEL] = value
+    @rheology_model.setter
+    def rheology_model(self, value):
+        value = self._validate_rheology_model(value)
+        self.data[CUBA.RHEOLOGY_MODEL] = value
 
-    def _validate_gravity_model(self, value):
-        value = validation.cast_data_type(value, 'GRAVITY_MODEL')
-        validation.check_valid_shape(value, [1], 'GRAVITY_MODEL')
-        validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
+    def _validate_rheology_model(self, value):
+        value = validation.cast_data_type(value, 'RHEOLOGY_MODEL')
+        validation.check_valid_shape(value, [1], 'RHEOLOGY_MODEL')
+        validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
         return value
 
-    def _default_gravity_model(self):
-        return GravityModel()
+    def _default_rheology_model(self):
+        return NewtonianFluidModel()
 
     def _init_thermal_model(self, value):
         if value is Default:
