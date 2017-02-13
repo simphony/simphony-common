@@ -10,18 +10,6 @@ class ABCModelingEngine(object):  # pragma: no cover
     Through this interface, the user controls and interacts with the
     simulation/calculation (which is being performed by the modeling
     engine).
-
-    Attributes
-    ----------
-    BC : DataContainer
-        container of attributes related to the boundary conditions
-    CM : DataContainer
-        container of attributes related to the computational method
-    SP : DataContainer
-        container of attributes related to the system parameters/conditions
-    materials : Materials
-        materials related to state data
-
     """
     __metaclass__ = ABCMeta
 
