@@ -13,3 +13,11 @@ For more information see: http://www.simphony-project.eu/.
 :copyright: (c) 2014, 2015, 2016 SimPhoNy Consortium
 :license: BSD, see LICENSE for more details.
 """
+# Load engines in the beginning.
+# TODO: make engine loader explicit
+import simphony.engine # noqa
+
+from .core import CUBA
+from .cuds import CUDS, Simulation
+
+__all__ = ['CUBA', 'CUDS', 'Simulation']
