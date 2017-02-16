@@ -139,7 +139,7 @@ setup(
     extras_require={
         'H5IO': ["tables>=3.1.1"],
         'CUBAGen': [
-            "simphony_metaparser >= 0.2.0",
+            "simphony_metaparser >= 0.1.0",
             "click >= 3.3",
             "pyyaml >= 3.11"
             ]},
