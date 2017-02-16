@@ -15,7 +15,7 @@ For more information see: http://www.simphony-project.eu/.
 """
 # Load engines in the beginning.
 # TODO: make engine loader explicit
-import simphony.engine # noqa
+import simphony.engine  # noqa
 
 from .core import CUBA
 from .cuds import CUDS, Simulation
