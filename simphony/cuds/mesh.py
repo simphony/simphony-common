@@ -76,7 +76,7 @@ class Mesh(ABCMesh):
 
     @property
     def data(self):
-        return dc.DataContainer(self._data)
+        return self._data
 
     @data.setter
     def data(self, value):
