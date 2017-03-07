@@ -61,7 +61,7 @@ class Particles(ABCParticles):
 
     @property
     def data(self):
-        return self._data
+        return DataContainer(self._data)
 
     @data.setter
     def data(self, new_data):
