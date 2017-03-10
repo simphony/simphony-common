@@ -1,6 +1,11 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.6.1
+-------------
+
+* Revert relocation of validation support code to the module itself (#397)
+
 Release 0.6.0
 -------------
 
