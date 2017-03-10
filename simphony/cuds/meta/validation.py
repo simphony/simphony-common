@@ -1,10 +1,51 @@
 # This file is copied and renamed in simphony/cuds/meta/ to support the
 # meta classes in performing validation
 import warnings
-
+import re
 import numpy
 
-from scripts.utils import to_camel_case, without_cuba_prefix
+
+def to_camel_case(text, special={'cuds': 'CUDS'}):
+    """ Convert text to CamelCase (for class name)
+
+    Parameters
+    ----------
+    text : str
+        The text to be converted
+
+    special : dict
+        If any substring of text (lower case) matches a key of `special`,
+        the substring is replaced by the value
+
+    Returns
+    -------
+    result : str
+    """
+
+    def replace_func(matched):
+        # word should be lower case already
+        word = matched.group(0).strip("_")
+        if word in special:
+            # Handle special case
+            return special[word]
+        else:
+            # Capitalise the first character
+            return word[0].upper() + word[1:]
+
+    return re.sub(r'(_?[a-zA-Z]+)', replace_func, text.lower())
+
+
+def without_cuba_prefix(string):
+    """Removes the CUBA. prefix to the string if there."""
+    if is_cuba_key(string):
+        return string[5:]
+
+    return string
+
+
+def is_cuba_key(value):
+    """True if value is a qualified cuba key"""
+    return isinstance(value, (str, unicode)) and value.startswith("CUBA.")
 
 
 def check_valid_shape(value, shape, cuba_key):
