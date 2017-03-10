@@ -1,7 +1,7 @@
 # This file is copied and renamed in simphony/cuds/meta/ to support the
 # meta classes in performing validation
 import warnings
-
+import re
 import numpy
 
 
@@ -41,6 +41,11 @@ def without_cuba_prefix(string):
         return string[5:]
 
     return string
+
+
+def is_cuba_key(value):
+    """True if value is a qualified cuba key"""
+    return isinstance(value, (str, unicode)) and value.startswith("CUBA.")
 
 
 def check_valid_shape(value, shape, cuba_key):
