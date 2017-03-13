@@ -20,14 +20,18 @@ class CUBAEnumGenerator(object):
             '@unique\n',
             'class CUBA(Enum):\n'
             ]
-        template = '    {cuba_name} = "{cuba_name}"\n'
+        template = '    {cuba_name} = "{cuba_name}"'
 
         all_keys = set(d.name for d in ontology.data_types)
         all_keys.update([d.name for d, _ in traverse(ontology.root_cuds_item)])
 
         for keyword in sorted(list(all_keys)):
-            lines.append(
-                template.format(
-                    cuba_name=without_cuba_prefix(keyword)))
+            line = template.format(cuba_name=without_cuba_prefix(keyword))
+
+            # yapf does not break such lines, so we have to get creative.
+            if len(line) >= 79:
+                line += "  # noqa"
+
+            lines.append(line+'\n')
 
         output.writelines(lines)
