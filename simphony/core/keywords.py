@@ -394,6 +394,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=numpy.float64),
+    'MAGNITUDE': Keyword(
+        name='Magnitude',
+        definition='Magnitude of vector variable',  # noqa
+        key='MAGNITUDE',
+        shape=[1],
+        length=None,
+        dtype=numpy.float64),
     'MAJOR': Keyword(
         name='Major',
         definition='Major attribute of an entity.',  # noqa
@@ -415,6 +422,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=numpy.int32),
+    'MAXIMUM_COURANT_NUMBER': Keyword(
+        name='MaximumCourantNumber',
+        definition='Maximum Courant number',  # noqa
+        key='MAXIMUM_COURANT_NUMBER',
+        shape=[1],
+        length=None,
+        dtype=numpy.float64),
     'MAXIMUM_VISCOSITY': Keyword(
         name='MaximumViscosity',
         definition='Maximum viscosity',  # noqa
@@ -468,6 +482,13 @@ KEYWORDS = {
         name='None',
         definition='a general none value',  # noqa
         key='NONE',
+        shape=[1],
+        length=None,
+        dtype=numpy.int32),
+    'NUMBER_OF_CORES': Keyword(
+        name='NumberOfCores',
+        definition='Number of cpu cores to use',  # noqa
+        key='NUMBER_OF_CORES',
         shape=[1],
         length=None,
         dtype=numpy.int32),
@@ -688,6 +709,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=numpy.int32),
+    'STEADY_STATE': Keyword(
+        name='SteadyState',
+        definition='Use steady state solver',  # noqa
+        key='STEADY_STATE',
+        shape=[1],
+        length=None,
+        dtype=bool),
     'STRAIN_TENSOR': Keyword(
         name='StrainTensor',
         definition='Strain tensor',  # noqa
@@ -867,6 +895,13 @@ KEYWORDS = {
         name='Berendsen',
         definition='The Berendsen thermostat model for temperature rescaling of all particles. The coupling time specifies how rapidly the temperature should be relaxed or coupled to the bath.',  # noqa
         key='BERENDSEN',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'BINGHAM_PLASTIC_MODEL': Keyword(
+        name='BinghamPlasticModel',
+        definition='Bingham plastic viscosity model (only in mixture model)',  # noqa
+        key='BINGHAM_PLASTIC_MODEL',
         shape=[1],
         length=None,
         dtype=None),
@@ -1185,6 +1220,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'INLET_OUTLET': Keyword(
+        name='InletOutlet',
+        definition='Inlet outlet boundary condition (outlet condition is zero gradient and inlet given variable value)',  # noqa
+        key='INLET_OUTLET',
+        shape=[1],
+        length=None,
+        dtype=None),
     'INTEGRATION_STEP': Keyword(
         name='IntegrationStep',
         definition='the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state).',  # noqa
@@ -1273,6 +1315,20 @@ KEYWORDS = {
         name='Mesoscopic',
         definition='Mesoscopic model category according to the RoMM',  # noqa
         key='MESOSCOPIC',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'MESOSCOPIC_RELATIVE_VELOCITY_MODEL': Keyword(
+        name='MesoscopicRelativeVelocityModel',
+        definition='Relative velocity taken from meso scopic model',  # noqa
+        key='MESOSCOPIC_RELATIVE_VELOCITY_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'MESOSCOPIC_STRESS_MODEL': Keyword(
+        name='MesoscopicStressModel',
+        definition='Stress model from meso scopic to use in mixture model',  # noqa
+        key='MESOSCOPIC_STRESS_MODEL',
         shape=[1],
         length=None,
         dtype=None),
@@ -1416,6 +1472,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'RELATIVE_VELOCITY_MODEL': Keyword(
+        name='RelativeVelocityModel',
+        definition='Relative velocity model to use in mixture model',  # noqa
+        key='RELATIVE_VELOCITY_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
     'RHEOLOGY_MODEL': Keyword(
         name='RheologyModel',
         definition='Rheology model of a CFD fluid',  # noqa
@@ -1430,6 +1493,20 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'SHEAR_STRESS_POWER_LAW_SLIP_VELOCITY': Keyword(
+        name='ShearStressPowerLawSlipVelocity',
+        definition='Shear stress power law dependant slip velocity boundary condition. Nonlinear boundary condition for wall tangential velocity of the form v_s = CUBA.LINEAR_CONSTANT * S^CUBA.POWER_LAW_INDEX where v_s is the slip velocity (tangential velocity on the wall) and S is the wall shear stress',  # noqa
+        key='SHEAR_STRESS_POWER_LAW_SLIP_VELOCITY',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'SIMPLE_RELATIVE_VELOCITY_MODEL': Keyword(
+        name='SimpleRelativeVelocityModel',
+        definition='Simple relative velocity model to use in mixture model',  # noqa
+        key='SIMPLE_RELATIVE_VELOCITY_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
     'SINGLE_PHASE_MODEL': Keyword(
         name='SinglePhaseModel',
         definition='A single phase fluid model',  # noqa
@@ -1441,6 +1518,13 @@ KEYWORDS = {
         name='SjkrCohesionForce',
         definition='Additional normal force tending to maintain the contact',  # noqa
         key='SJKR_COHESION_FORCE',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'SLIP_VELOCITY': Keyword(
+        name='SlipVelocity',
+        definition='Wall free slip velocity boundary condition',  # noqa
+        key='SLIP_VELOCITY',
         shape=[1],
         length=None,
         dtype=None),
@@ -1462,6 +1546,20 @@ KEYWORDS = {
         name='Sph',
         definition='Smooth particle hydrodynamics',  # noqa
         key='SPH',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'STANDARD_STRESS_MODEL': Keyword(
+        name='StandardStressModel',
+        definition='Standard stress model (to use in mixture model)',  # noqa
+        key='STANDARD_STRESS_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'STRESS_MODEL': Keyword(
+        name='StressModel',
+        definition='Stress model to use in mixture model',  # noqa
+        key='STRESS_MODEL',
         shape=[1],
         length=None,
         dtype=None),
@@ -1525,6 +1623,13 @@ KEYWORDS = {
         name='Version',
         definition='Version of a software tool used in a simulation',  # noqa
         key='VERSION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'WETTING_ANGLE': Keyword(
+        name='WettingAngle',
+        definition='Volume fraction wall boundary condition with specified contact angle',  # noqa
+        key='WETTING_ANGLE',
         shape=[1],
         length=None,
         dtype=None),

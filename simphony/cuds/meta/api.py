@@ -4,6 +4,7 @@ from .base_centered_monoclinic_lattice import BaseCenteredMonoclinicLattice  # n
 from .base_centered_orthorhombic_lattice import BaseCenteredOrthorhombicLattice  # noqa
 from .basis import Basis  # noqa
 from .berendsen import Berendsen  # noqa
+from .bingham_plastic_model import BinghamPlasticModel  # noqa
 from .bird_carreau_model import BirdCarreauModel  # noqa
 from .body_centered_cubic_lattice import BodyCenteredCubicLattice  # noqa
 from .body_centered_orthorhombic_lattice import BodyCenteredOrthorhombicLattice  # noqa
@@ -49,6 +50,7 @@ from .gravity_model import GravityModel  # noqa
 from .herschel_bulkley_model import HerschelBulkleyModel  # noqa
 from .hexagonal_lattice import HexagonalLattice  # noqa
 from .incompressible_fluid_model import IncompressibleFluidModel  # noqa
+from .inlet_outlet import InletOutlet  # noqa
 from .integration_step import IntegrationStep  # noqa
 from .integration_time import IntegrationTime  # noqa
 from .interatomic_potential import InteratomicPotential  # noqa
@@ -62,6 +64,8 @@ from .material_relation import MaterialRelation  # noqa
 from .mesh import Mesh  # noqa
 from .mesh_element import MeshElement  # noqa
 from .mesoscopic import Mesoscopic  # noqa
+from .mesoscopic_relative_velocity_model import MesoscopicRelativeVelocityModel  # noqa
+from .mesoscopic_stress_model import MesoscopicStressModel  # noqa
 from .mixture_model import MixtureModel  # noqa
 from .model_equation import ModelEquation  # noqa
 from .molecular_dynamics import MolecularDynamics  # noqa
@@ -82,13 +86,19 @@ from .physics_equation import PhysicsEquation  # noqa
 from .point import Point  # noqa
 from .power_law_viscosity_model import PowerLawViscosityModel  # noqa
 from .primitive_cell import PrimitiveCell  # noqa
+from .relative_velocity_model import RelativeVelocityModel  # noqa
 from .rheology_model import RheologyModel  # noqa
 from .rhombohedral_lattice import RhombohedralLattice  # noqa
+from .shear_stress_power_law_slip_velocity import ShearStressPowerLawSlipVelocity  # noqa
+from .simple_relative_velocity_model import SimpleRelativeVelocityModel  # noqa
 from .single_phase_model import SinglePhaseModel  # noqa
 from .sjkr_cohesion_force import SjkrCohesionForce  # noqa
+from .slip_velocity import SlipVelocity  # noqa
 from .software_tool import SoftwareTool  # noqa
 from .solver_parameter import SolverParameter  # noqa
 from .sph import Sph  # noqa
+from .standard_stress_model import StandardStressModel  # noqa
+from .stress_model import StressModel  # noqa
 from .surface_tension_relation import SurfaceTensionRelation  # noqa
 from .temperature_rescaling import TemperatureRescaling  # noqa
 from .tetragonal_lattice import TetragonalLattice  # noqa
@@ -98,3 +108,4 @@ from .triclinic_lattice import TriclinicLattice  # noqa
 from .turbulence_model import TurbulenceModel  # noqa
 from .verlet import Verlet  # noqa
 from .version import Version  # noqa
+from .wetting_angle import WettingAngle  # noqa
