@@ -38,11 +38,8 @@ class ShearStressPowerLawSlipVelocity(Condition):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.DENSITY,
-                CUBA.VARIABLE,
-                CUBA.LINEAR_CONSTANT,
-                CUBA.POWER_LAW_INDEX, ) + base_params))
+            set((CUBA.DENSITY, CUBA.VARIABLE, CUBA.LINEAR_CONSTANT,
+                 CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Shear stress power law dependant slip velocity boundary condition. Nonlinear boundary condition for wall tangential velocity of the form v_s = CUBA.LINEAR_CONSTANT * S^CUBA.POWER_LAW_INDEX where v_s is the slip velocity (tangential velocity on the wall) and S is the wall shear stress"  # noqa

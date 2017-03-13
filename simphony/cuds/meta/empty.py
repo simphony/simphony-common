@@ -26,9 +26,7 @@ class Empty(Condition):
             base_params = super(Empty, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((
-            CUBA.VARIABLE,
-            CUBA.MATERIAL, ) + base_params))
+        return tuple(set((CUBA.VARIABLE, CUBA.MATERIAL, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

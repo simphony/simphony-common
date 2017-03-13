@@ -27,9 +27,7 @@ class SurfaceTensionRelation(MaterialRelation):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.MATERIAL,
-                CUBA.SURFACE_TENSION, ) + base_params))
+            set((CUBA.MATERIAL, CUBA.SURFACE_TENSION, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

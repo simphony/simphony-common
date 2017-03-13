@@ -24,11 +24,8 @@ class Version(CUDSItem):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.MINOR,
-                CUBA.MAJOR,
-                CUBA.FULL,
-                CUBA.PATCH, ) + base_params))
+            set((CUBA.MINOR, CUBA.MAJOR, CUBA.FULL, CUBA.PATCH, ) +
+                base_params))
 
     def _init_minor(self, value):
         if value is Default:

@@ -27,9 +27,7 @@ class WettingAngle(Condition):
             base_params = super(WettingAngle, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((
-            CUBA.VARIABLE,
-            CUBA.CONTACT_ANGLE, ) + base_params))
+        return tuple(set((CUBA.VARIABLE, CUBA.CONTACT_ANGLE, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa

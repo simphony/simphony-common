@@ -30,10 +30,8 @@ class BinghamPlasticModel(RheologyModel):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.LINEAR_CONSTANT,
-                CUBA.MAXIMUM_VISCOSITY,
-                CUBA.POWER_LAW_INDEX, ) + base_params))
+            set((CUBA.LINEAR_CONSTANT, CUBA.MAXIMUM_VISCOSITY,
+                 CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa

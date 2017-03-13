@@ -31,10 +31,7 @@ class IntegrationStep(SolverParameter):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.CURRENT,
-                CUBA.SIZE,
-                CUBA.FINAL, ) + base_params))
+            set((CUBA.CURRENT, CUBA.SIZE, CUBA.FINAL, ) + base_params))
 
     def _default_definition(self):
         return "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa
