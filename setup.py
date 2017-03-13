@@ -94,7 +94,7 @@ class BuildMeta(Command):
         print("Running yapf")
         cmd_args = ["yapf", "--style", "pep8", "--in-place"]
         try:
-            check_call(cmd_args + ["simphony/core/keywords.py"])
+            check_call(cmd_args + ["simphony/core/cuba.py"])
             check_call(cmd_args + ["simphony/core/keywords.py"])
             check_call(cmd_args + ["--recursive", "simphony/cuds/meta/"])
         except OSError:
