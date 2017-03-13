@@ -30,7 +30,7 @@ class CUBAEnumGenerator(object):
 
             # yapf does not break such lines, so we have to get creative.
             if len(line) >= 79:
-                line+="  # noqa"
+                line += "  # noqa"
 
             lines.append(line+'\n')
 
