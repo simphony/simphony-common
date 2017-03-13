@@ -4,18 +4,19 @@ from .condition import Condition
 from simphony.core.cuba import CUBA
 
 
-class Empty(Condition):
+class InletOutlet(Condition):
     """
-    Empty boundary condition
+    Inlet outlet boundary condition (outlet condition is zero
+    gradient and inlet given variable value)
     """
-    cuba_key = CUBA.EMPTY
+    cuba_key = CUBA.INLET_OUTLET
 
     def __init__(self,
                  material=Default,
                  variable=Default,
                  description=Default,
                  name=Default):
-        super(Empty, self).__init__(description=description, name=name)
+        super(InletOutlet, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
         self._init_material(material)
@@ -23,7 +24,7 @@ class Empty(Condition):
     @classmethod
     def supported_parameters(cls):
         try:
-            base_params = super(Empty, cls).supported_parameters()
+            base_params = super(InletOutlet, cls).supported_parameters()
         except AttributeError:
             base_params = ()
         return tuple(set((CUBA.VARIABLE, CUBA.MATERIAL, ) + base_params))
@@ -39,7 +40,7 @@ class Empty(Condition):
         return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Empty boundary condition"  # noqa
+        return "Inlet outlet boundary condition (outlet condition is zero gradient and inlet given variable value)"  # noqa
 
     def _init_variable(self, value):
         if value is Default:

@@ -31,11 +31,8 @@ class BravaisLattice(Lattice):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.ORIGIN,
-                CUBA.LATTICE_PARAMETER,
-                CUBA.PRIMITIVE_CELL,
-                CUBA.SIZE, ) + base_params))
+            set((CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.PRIMITIVE_CELL,
+                 CUBA.SIZE, ) + base_params))
 
     def _default_definition(self):
         return "A Bravais lattice"  # noqa

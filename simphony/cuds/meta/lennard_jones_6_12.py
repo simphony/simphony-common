@@ -30,10 +30,8 @@ class LennardJones_6_12(PairPotential):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.VAN_DER_WAALS_RADIUS,
-                CUBA.CUTOFF_DISTANCE,
-                CUBA.ENERGY_WELL_DEPTH, ) + base_params))
+            set((CUBA.VAN_DER_WAALS_RADIUS, CUBA.CUTOFF_DISTANCE,
+                 CUBA.ENERGY_WELL_DEPTH, ) + base_params))
 
     def _default_definition(self):
         return "A Lennard-Jones 6-12 Potential"  # noqa

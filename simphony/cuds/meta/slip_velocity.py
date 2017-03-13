@@ -4,29 +4,24 @@ from .condition import Condition
 from simphony.core.cuba import CUBA
 
 
-class Empty(Condition):
+class SlipVelocity(Condition):
     """
-    Empty boundary condition
+    Wall free slip velocity boundary condition
     """
-    cuba_key = CUBA.EMPTY
+    cuba_key = CUBA.SLIP_VELOCITY
 
-    def __init__(self,
-                 material=Default,
-                 variable=Default,
-                 description=Default,
-                 name=Default):
-        super(Empty, self).__init__(description=description, name=name)
+    def __init__(self, variable=Default, description=Default, name=Default):
+        super(SlipVelocity, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
-        self._init_material(material)
 
     @classmethod
     def supported_parameters(cls):
         try:
-            base_params = super(Empty, cls).supported_parameters()
+            base_params = super(SlipVelocity, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.VARIABLE, CUBA.MATERIAL, ) + base_params))
+        return tuple(set((CUBA.VARIABLE, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa
@@ -39,7 +34,7 @@ class Empty(Condition):
         return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Empty boundary condition"  # noqa
+        return "Wall free slip velocity boundary condition"  # noqa
 
     def _init_variable(self, value):
         if value is Default:
@@ -64,29 +59,4 @@ class Empty(Condition):
         return value
 
     def _default_variable(self):
-        return []
-
-    def _init_material(self, value):
-        if value is Default:
-            value = self._default_material()
-
-        self.material = value
-
-    @property
-    def material(self):
-        return self.data[CUBA.MATERIAL]
-
-    @material.setter
-    def material(self, value):
-        value = self._validate_material(value)
-        self.data[CUBA.MATERIAL] = value
-
-    def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None], 'MATERIAL')
-        validation.check_elements(value, [None], 'MATERIAL')
-
-        return value
-
-    def _default_material(self):
         return []

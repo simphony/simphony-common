@@ -4,29 +4,30 @@ from .condition import Condition
 from simphony.core.cuba import CUBA
 
 
-class Empty(Condition):
+class WettingAngle(Condition):
     """
-    Empty boundary condition
+    Volume fraction wall boundary condition with specified
+    contact angle
     """
-    cuba_key = CUBA.EMPTY
+    cuba_key = CUBA.WETTING_ANGLE
 
     def __init__(self,
-                 material=Default,
+                 contact_angle=Default,
                  variable=Default,
                  description=Default,
                  name=Default):
-        super(Empty, self).__init__(description=description, name=name)
+        super(WettingAngle, self).__init__(description=description, name=name)
         self._init_models()
         self._init_variable(variable)
-        self._init_material(material)
+        self._init_contact_angle(contact_angle)
 
     @classmethod
     def supported_parameters(cls):
         try:
-            base_params = super(Empty, cls).supported_parameters()
+            base_params = super(WettingAngle, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.VARIABLE, CUBA.MATERIAL, ) + base_params))
+        return tuple(set((CUBA.VARIABLE, CUBA.CONTACT_ANGLE, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa
@@ -39,7 +40,7 @@ class Empty(Condition):
         return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Empty boundary condition"  # noqa
+        return "Volume fraction wall boundary condition with specified contact angle"  # noqa
 
     def _init_variable(self, value):
         if value is Default:
@@ -66,27 +67,26 @@ class Empty(Condition):
     def _default_variable(self):
         return []
 
-    def _init_material(self, value):
+    def _init_contact_angle(self, value):
         if value is Default:
-            value = self._default_material()
+            value = self._default_contact_angle()
 
-        self.material = value
+        self.contact_angle = value
 
     @property
-    def material(self):
-        return self.data[CUBA.MATERIAL]
+    def contact_angle(self):
+        return self.data[CUBA.CONTACT_ANGLE]
 
-    @material.setter
-    def material(self, value):
-        value = self._validate_material(value)
-        self.data[CUBA.MATERIAL] = value
+    @contact_angle.setter
+    def contact_angle(self, value):
+        value = self._validate_contact_angle(value)
+        self.data[CUBA.CONTACT_ANGLE] = value
 
-    def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None], 'MATERIAL')
-        validation.check_elements(value, [None], 'MATERIAL')
-
+    def _validate_contact_angle(self, value):
+        value = validation.cast_data_type(value, 'CONTACT_ANGLE')
+        validation.check_valid_shape(value, [1], 'CONTACT_ANGLE')
+        validation.validate_cuba_keyword(value, 'CONTACT_ANGLE')
         return value
 
-    def _default_material(self):
-        return []
+    def _default_contact_angle(self):
+        return 45.0

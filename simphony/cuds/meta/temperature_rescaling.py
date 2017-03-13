@@ -31,9 +31,7 @@ class TemperatureRescaling(Thermostat):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.COUPLING_TIME,
-                CUBA.TEMPERATURE, ) + base_params))
+            set((CUBA.COUPLING_TIME, CUBA.TEMPERATURE, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa

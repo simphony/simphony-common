@@ -30,10 +30,7 @@ class IntegrationTime(SolverParameter):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.CURRENT,
-                CUBA.SIZE,
-                CUBA.FINAL, ) + base_params))
+            set((CUBA.CURRENT, CUBA.SIZE, CUBA.FINAL, ) + base_params))
 
     def _default_definition(self):
         return "the current time, time step, and final time for a simulation stored on each cuds (a specific state)."  # noqa

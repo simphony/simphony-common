@@ -30,11 +30,7 @@ class Mesh(DataSet):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.POINT,
-                CUBA.EDGE,
-                CUBA.CELL,
-                CUBA.FACE, ) + base_params))
+            set((CUBA.POINT, CUBA.EDGE, CUBA.CELL, CUBA.FACE, ) + base_params))
 
     def _default_definition(self):
         return "A mesh"  # noqa

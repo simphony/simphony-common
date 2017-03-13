@@ -29,9 +29,8 @@ class Coulomb(PairPotential):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.CUTOFF_DISTANCE,
-                CUBA.DIELECTRIC_CONSTANT, ) + base_params))
+            set((CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, ) +
+                base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa

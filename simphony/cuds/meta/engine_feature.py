@@ -23,9 +23,8 @@ class EngineFeature(CUDSItem):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((
-                CUBA.COMPUTATIONAL_METHOD,
-                CUBA.PHYSICS_EQUATION, ) + base_params))
+            set((CUBA.COMPUTATIONAL_METHOD, CUBA.PHYSICS_EQUATION, ) +
+                base_params))
 
     def _init_computational_method(self, value):
         if value is Default:

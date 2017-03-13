@@ -21,9 +21,7 @@ class CUDSComponent(CUDSItem):
             base_params = super(CUDSComponent, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((
-            CUBA.DESCRIPTION,
-            CUBA.NAME, ) + base_params))
+        return tuple(set((CUBA.DESCRIPTION, CUBA.NAME, ) + base_params))
 
     def _default_definition(self):
         return "Base data type for the CUDS components"  # noqa
