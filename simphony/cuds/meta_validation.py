@@ -1,5 +1,5 @@
-# This file is copied and renamed in simphony/cuds/meta/ to support the
-# meta classes in performing validation
+# This file is used by imphony/cuds/meta/ classes to support the
+# meta classes in performing validation.
 import warnings
 import re
 import numpy
