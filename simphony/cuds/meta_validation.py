@@ -144,6 +144,7 @@ def check_cuba_shape(value, cuba_key):
                               expected_shape=expected_shape,
                               value_shape=value_shape))
 
+
 def validate_cuba_keyword(value, key):
     ''' Validate the given `value` against `key` such that
     shape and type of value matches what was specified
