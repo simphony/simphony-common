@@ -88,8 +88,10 @@ class BuildMeta(Command):
             raise RuntimeError("Unrecoverable error.")
 
         print("Building")
-        from scripts.cli.generator import cli
-        cli.callback(yaml_dir, "simphony", True)
+        cmd_args = ["simphony-meta-generate",
+                    yaml_dir,
+                    "simphony",
+                    "--overwrite"]
 
         print("Running yapf")
         cmd_args = ["yapf", "--style", "pep8", "--in-place"]
@@ -138,17 +140,9 @@ setup(
         ],
     extras_require={
         'H5IO': ["tables>=3.1.1"],
-        'CUBAGen': [
-            "simphony_metaparser >= 0.2.0",
-            "click >= 3.3",
-            "pyyaml >= 3.11"
-            ]},
+        'CUBAGen': []},
     packages=find_packages(),
     cmdclass={
         'build_meta': BuildMeta,
     },
-    entry_points={
-        'console_scripts': [
-            ('simphony-meta-generate = '
-             'scripts.cli.generator:cli')]},
     )
