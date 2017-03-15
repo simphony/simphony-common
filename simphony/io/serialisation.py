@@ -8,7 +8,7 @@ from simphony.core import CUBA
 from simphony.core.keywords import KEYWORDS
 from simphony.cuds import CUDS
 from simphony.cuds.meta.api import CUDSComponent
-from simphony.cuds.meta.validation import to_camel_case
+from simphony.cuds.meta_validation import to_camel_case
 
 _CUDSREFMAP = OrderedDict()
 

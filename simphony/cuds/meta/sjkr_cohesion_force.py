@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 
@@ -49,9 +49,11 @@ class SjkrCohesionForce(MaterialRelation):
         self.data[CUBA.COHESION_ENERGY_DENSITY] = value
 
     def _validate_cohesion_energy_density(self, value):
-        value = validation.cast_data_type(value, 'COHESION_ENERGY_DENSITY')
-        validation.check_valid_shape(value, [1], 'COHESION_ENERGY_DENSITY')
-        validation.validate_cuba_keyword(value, 'COHESION_ENERGY_DENSITY')
+        value = meta_validation.cast_data_type(value,
+                                               'COHESION_ENERGY_DENSITY')
+        meta_validation.check_valid_shape(value, [1],
+                                          'COHESION_ENERGY_DENSITY')
+        meta_validation.validate_cuba_keyword(value, 'COHESION_ENERGY_DENSITY')
         return value
 
     def _default_cohesion_energy_density(self):

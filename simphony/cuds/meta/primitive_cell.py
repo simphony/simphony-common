@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class PrimitiveCell(CUDSComponent):
@@ -44,9 +44,9 @@ class PrimitiveCell(CUDSComponent):
         self.data[CUBA.LATTICE_VECTORS] = value
 
     def _validate_lattice_vectors(self, value):
-        value = validation.cast_data_type(value, 'LATTICE_VECTORS')
-        validation.check_valid_shape(value, [1], 'LATTICE_VECTORS')
-        validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
+        value = meta_validation.cast_data_type(value, 'LATTICE_VECTORS')
+        meta_validation.check_valid_shape(value, [1], 'LATTICE_VECTORS')
+        meta_validation.validate_cuba_keyword(value, 'LATTICE_VECTORS')
         return value
 
     def _default_lattice_vectors(self):

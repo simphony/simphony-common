@@ -30,13 +30,6 @@ Requirements
 Optional requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
-To support the cuba-generate script the following packages need to be installed
-prior to installing Simphony:
-
-- click >= 3.3
-- pyyaml >= 3.11
-- tabulate >= 0.7.4
-
 To support the HDF5 based native IO:
 
 - PyTables >= 3.1.1
@@ -134,22 +127,17 @@ For Developers
 
 The data structures used in this project are based on the metadata which is defined in a separate repository called ``simphony-metadata`` located at: https://github.com/simphony/simphony-metadata.
 
-In order to reflect latest changes to the metadata repository, one should regenerate these entities. There is a generator script available in `scripts` folder. The structure of this directory is defined below.
-
-Directories
------------
-
-- scripts/ : Contain the code generator for metadata class, CUBA Enum and KEYWORDS
-  - tests/ : Unit test cases for the generated code
-  - generate.py : Code generator
+In order to reflect latest changes to the metadata repository, one should regenerate these entities. 
+The generator is hosted in the repository simphony-metatools located at: https://github.com/simphony/simphony-metatools . The generator is
+used to recreate the python classes in simphony/cuds/meta.
 
 
 Guide to generating metadata classes
 ------------------------------------
 
-Rebuild the meta classes by issuing the following command::
+After installing the dev_requirements, rebuild the meta classes by issuing the following command::
 
     $ python setup.py build_meta
 
 The command will rebuild the classes against the simphony-metadata repository tag as
-written in setup.cfg build_meta/repotag entry
+written in setup.cfg build_meta/repotag entry.

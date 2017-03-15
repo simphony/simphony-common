@@ -1,5 +1,5 @@
-# This file is copied and renamed in simphony/cuds/meta/ to support the
-# meta classes in performing validation
+# This file is used by imphony/cuds/meta/ classes to support the
+# meta classes in performing validation.
 import warnings
 import re
 import numpy
@@ -143,6 +143,7 @@ def check_cuba_shape(value, cuba_key):
                           "{expected_shape}. ").format(
                               expected_shape=expected_shape,
                               value_shape=value_shape))
+
 
 def validate_cuba_keyword(value, key):
     ''' Validate the given `value` against `key` such that

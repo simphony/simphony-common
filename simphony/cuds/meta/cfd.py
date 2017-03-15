@@ -4,7 +4,7 @@ from .single_phase_model import SinglePhaseModel
 from .newtonian_fluid_model import NewtonianFluidModel
 from .isothermal_model import IsothermalModel
 from simphony.core.cuba import CUBA
-from . import validation
+from simphony.cuds import meta_validation
 from .gravity_model import GravityModel
 from .laminar_flow_model import LaminarFlowModel
 from .physics_equation import PhysicsEquation
@@ -44,10 +44,14 @@ class Cfd(PhysicsEquation):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.MULTIPHASE_MODEL, CUBA.GRAVITY_MODEL,
-                 CUBA.TURBULENCE_MODEL, CUBA.RHEOLOGY_MODEL,
-                 CUBA.THERMAL_MODEL, CUBA.COMPRESSIBILITY_MODEL,
-                 CUBA.ELECTROSTATIC_MODEL, ) + base_params))
+            set((
+                CUBA.MULTIPHASE_MODEL,
+                CUBA.GRAVITY_MODEL,
+                CUBA.TURBULENCE_MODEL,
+                CUBA.RHEOLOGY_MODEL,
+                CUBA.THERMAL_MODEL,
+                CUBA.COMPRESSIBILITY_MODEL,
+                CUBA.ELECTROSTATIC_MODEL, ) + base_params))
 
     def _init_multiphase_model(self, value):
         if value is Default:
@@ -65,9 +69,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.MULTIPHASE_MODEL] = value
 
     def _validate_multiphase_model(self, value):
-        value = validation.cast_data_type(value, 'MULTIPHASE_MODEL')
-        validation.check_valid_shape(value, [1], 'MULTIPHASE_MODEL')
-        validation.validate_cuba_keyword(value, 'MULTIPHASE_MODEL')
+        value = meta_validation.cast_data_type(value, 'MULTIPHASE_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'MULTIPHASE_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'MULTIPHASE_MODEL')
         return value
 
     def _default_multiphase_model(self):
@@ -92,9 +96,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.GRAVITY_MODEL] = value
 
     def _validate_gravity_model(self, value):
-        value = validation.cast_data_type(value, 'GRAVITY_MODEL')
-        validation.check_valid_shape(value, [1], 'GRAVITY_MODEL')
-        validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
+        value = meta_validation.cast_data_type(value, 'GRAVITY_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'GRAVITY_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'GRAVITY_MODEL')
         return value
 
     def _default_gravity_model(self):
@@ -116,9 +120,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.TURBULENCE_MODEL] = value
 
     def _validate_turbulence_model(self, value):
-        value = validation.cast_data_type(value, 'TURBULENCE_MODEL')
-        validation.check_valid_shape(value, [1], 'TURBULENCE_MODEL')
-        validation.validate_cuba_keyword(value, 'TURBULENCE_MODEL')
+        value = meta_validation.cast_data_type(value, 'TURBULENCE_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'TURBULENCE_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'TURBULENCE_MODEL')
         return value
 
     def _default_turbulence_model(self):
@@ -150,9 +154,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.RHEOLOGY_MODEL] = value
 
     def _validate_rheology_model(self, value):
-        value = validation.cast_data_type(value, 'RHEOLOGY_MODEL')
-        validation.check_valid_shape(value, [1], 'RHEOLOGY_MODEL')
-        validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
+        value = meta_validation.cast_data_type(value, 'RHEOLOGY_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'RHEOLOGY_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'RHEOLOGY_MODEL')
         return value
 
     def _default_rheology_model(self):
@@ -174,9 +178,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.THERMAL_MODEL] = value
 
     def _validate_thermal_model(self, value):
-        value = validation.cast_data_type(value, 'THERMAL_MODEL')
-        validation.check_valid_shape(value, [1], 'THERMAL_MODEL')
-        validation.validate_cuba_keyword(value, 'THERMAL_MODEL')
+        value = meta_validation.cast_data_type(value, 'THERMAL_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'THERMAL_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'THERMAL_MODEL')
         return value
 
     def _default_thermal_model(self):
@@ -198,9 +202,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.COMPRESSIBILITY_MODEL] = value
 
     def _validate_compressibility_model(self, value):
-        value = validation.cast_data_type(value, 'COMPRESSIBILITY_MODEL')
-        validation.check_valid_shape(value, [1], 'COMPRESSIBILITY_MODEL')
-        validation.validate_cuba_keyword(value, 'COMPRESSIBILITY_MODEL')
+        value = meta_validation.cast_data_type(value, 'COMPRESSIBILITY_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'COMPRESSIBILITY_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'COMPRESSIBILITY_MODEL')
         return value
 
     def _default_compressibility_model(self):
@@ -222,9 +226,9 @@ class Cfd(PhysicsEquation):
         self.data[CUBA.ELECTROSTATIC_MODEL] = value
 
     def _validate_electrostatic_model(self, value):
-        value = validation.cast_data_type(value, 'ELECTROSTATIC_MODEL')
-        validation.check_valid_shape(value, [1], 'ELECTROSTATIC_MODEL')
-        validation.validate_cuba_keyword(value, 'ELECTROSTATIC_MODEL')
+        value = meta_validation.cast_data_type(value, 'ELECTROSTATIC_MODEL')
+        meta_validation.check_valid_shape(value, [1], 'ELECTROSTATIC_MODEL')
+        meta_validation.validate_cuba_keyword(value, 'ELECTROSTATIC_MODEL')
         return value
 
     def _default_electrostatic_model(self):

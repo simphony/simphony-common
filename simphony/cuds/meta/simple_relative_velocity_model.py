@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .relative_velocity_model import RelativeVelocityModel
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class SimpleRelativeVelocityModel(RelativeVelocityModel):
@@ -28,8 +28,9 @@ class SimpleRelativeVelocityModel(RelativeVelocityModel):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.LINEAR_CONSTANT, CUBA.DIFFUSION_VELOCITY, ) +
-                base_params))
+            set((
+                CUBA.LINEAR_CONSTANT,
+                CUBA.DIFFUSION_VELOCITY, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa
@@ -53,9 +54,9 @@ class SimpleRelativeVelocityModel(RelativeVelocityModel):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
-        validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
+        value = meta_validation.cast_data_type(value, 'LINEAR_CONSTANT')
+        meta_validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
+        meta_validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
     def _default_linear_constant(self):
@@ -77,9 +78,9 @@ class SimpleRelativeVelocityModel(RelativeVelocityModel):
         self.data[CUBA.DIFFUSION_VELOCITY] = value
 
     def _validate_diffusion_velocity(self, value):
-        value = validation.cast_data_type(value, 'DIFFUSION_VELOCITY')
-        validation.check_valid_shape(value, [1], 'DIFFUSION_VELOCITY')
-        validation.validate_cuba_keyword(value, 'DIFFUSION_VELOCITY')
+        value = meta_validation.cast_data_type(value, 'DIFFUSION_VELOCITY')
+        meta_validation.check_valid_shape(value, [1], 'DIFFUSION_VELOCITY')
+        meta_validation.validate_cuba_keyword(value, 'DIFFUSION_VELOCITY')
         return value
 
     def _default_diffusion_velocity(self):

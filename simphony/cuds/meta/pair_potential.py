@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .interatomic_potential import InteratomicPotential
 
@@ -44,9 +44,9 @@ class PairPotential(InteratomicPotential):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [2], 'MATERIAL')
-        validation.check_elements(value, [2], 'MATERIAL')
+        value = meta_validation.cast_data_type(value, 'MATERIAL')
+        meta_validation.check_valid_shape(value, [2], 'MATERIAL')
+        meta_validation.check_elements(value, [2], 'MATERIAL')
 
         return value
 

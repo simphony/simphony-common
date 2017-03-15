@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .data_set import DataSet
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Particles(DataSet):
@@ -21,7 +21,9 @@ class Particles(DataSet):
             base_params = super(Particles, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.PARTICLE, CUBA.BOND, ) + base_params))
+        return tuple(set((
+            CUBA.PARTICLE,
+            CUBA.BOND, ) + base_params))
 
     def _init_particle(self, value):
         if value is Default:
@@ -39,9 +41,9 @@ class Particles(DataSet):
         self.data[CUBA.PARTICLE] = value
 
     def _validate_particle(self, value):
-        value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_valid_shape(value, [None], 'PARTICLE')
-        validation.check_elements(value, [None], 'PARTICLE')
+        value = meta_validation.cast_data_type(value, 'PARTICLE')
+        meta_validation.check_valid_shape(value, [None], 'PARTICLE')
+        meta_validation.check_elements(value, [None], 'PARTICLE')
 
         return value
 
@@ -67,9 +69,9 @@ class Particles(DataSet):
         self.data[CUBA.BOND] = value
 
     def _validate_bond(self, value):
-        value = validation.cast_data_type(value, 'BOND')
-        validation.check_valid_shape(value, [None], 'BOND')
-        validation.check_elements(value, [None], 'BOND')
+        value = meta_validation.cast_data_type(value, 'BOND')
+        meta_validation.check_valid_shape(value, [None], 'BOND')
+        meta_validation.check_elements(value, [None], 'BOND')
 
         return value
 

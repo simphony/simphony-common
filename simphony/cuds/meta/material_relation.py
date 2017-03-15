@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .model_equation import ModelEquation
 
@@ -43,9 +43,9 @@ class MaterialRelation(ModelEquation):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None], 'MATERIAL')
-        validation.check_elements(value, [None], 'MATERIAL')
+        value = meta_validation.cast_data_type(value, 'MATERIAL')
+        meta_validation.check_valid_shape(value, [None], 'MATERIAL')
+        meta_validation.check_elements(value, [None], 'MATERIAL')
 
         return value
 

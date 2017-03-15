@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -41,9 +41,9 @@ class MeshElement(CUDSItem):
         self.data[CUBA.POINT] = value
 
     def _validate_point(self, value):
-        value = validation.cast_data_type(value, 'POINT')
-        validation.check_valid_shape(value, [None], 'POINT')
-        validation.check_elements(value, [None], 'POINT')
+        value = meta_validation.cast_data_type(value, 'POINT')
+        meta_validation.check_valid_shape(value, [None], 'POINT')
+        meta_validation.check_elements(value, [None], 'POINT')
 
         return value
 

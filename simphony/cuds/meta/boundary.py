@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Boundary(CUDSComponent):
@@ -42,9 +42,9 @@ class Boundary(CUDSComponent):
         self.data[CUBA.CONDITION] = value
 
     def _validate_condition(self, value):
-        value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_valid_shape(value, [None], 'CONDITION')
-        validation.check_elements(value, [None], 'CONDITION')
+        value = meta_validation.cast_data_type(value, 'CONDITION')
+        meta_validation.check_valid_shape(value, [None], 'CONDITION')
+        meta_validation.check_elements(value, [None], 'CONDITION')
 
         return value
 

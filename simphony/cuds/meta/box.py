@@ -1,8 +1,8 @@
 from simphony.core import Default  # noqa
-from . import validation
+from .empty import Empty
 from .boundary import Boundary
 from simphony.core.cuba import CUBA
-from .empty import Empty
+from simphony.cuds import meta_validation
 
 
 class Box(Boundary):
@@ -29,7 +29,9 @@ class Box(Boundary):
             base_params = super(Box, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.CONDITION, CUBA.VECTOR, ) + base_params))
+        return tuple(set((
+            CUBA.CONDITION,
+            CUBA.VECTOR, ) + base_params))
 
     def _default_definition(self):
         return "A simple hexahedron simulation box defining six boundary faces that are defined by three box vectors. The same boundary condition should be specified for each direction (two faces at a time)."  # noqa
@@ -50,9 +52,9 @@ class Box(Boundary):
         self.data[CUBA.CONDITION] = value
 
     def _validate_condition(self, value):
-        value = validation.cast_data_type(value, 'CONDITION')
-        validation.check_valid_shape(value, [3], 'CONDITION')
-        validation.check_elements(value, [3], 'CONDITION')
+        value = meta_validation.cast_data_type(value, 'CONDITION')
+        meta_validation.check_valid_shape(value, [3], 'CONDITION')
+        meta_validation.check_elements(value, [3], 'CONDITION')
 
         return value
 
@@ -75,9 +77,9 @@ class Box(Boundary):
         self.data[CUBA.VECTOR] = value
 
     def _validate_vector(self, value):
-        value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_valid_shape(value, [3], 'VECTOR')
-        validation.check_elements(value, [3], 'VECTOR')
+        value = meta_validation.cast_data_type(value, 'VECTOR')
+        meta_validation.check_valid_shape(value, [3], 'VECTOR')
+        meta_validation.check_elements(value, [3], 'VECTOR')
 
         return value
 

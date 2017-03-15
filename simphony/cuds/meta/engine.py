@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .software_tool import SoftwareTool
 
@@ -42,9 +42,9 @@ class Engine(SoftwareTool):
         self.data[CUBA.ENGINE_FEATURE] = value
 
     def _validate_engine_feature(self, value):
-        value = validation.cast_data_type(value, 'ENGINE_FEATURE')
-        validation.check_valid_shape(value, [None], 'ENGINE_FEATURE')
-        validation.check_elements(value, [None], 'ENGINE_FEATURE')
+        value = meta_validation.cast_data_type(value, 'ENGINE_FEATURE')
+        meta_validation.check_valid_shape(value, [None], 'ENGINE_FEATURE')
+        meta_validation.check_elements(value, [None], 'ENGINE_FEATURE')
 
         return value
 

@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .electrostatic_model import ElectrostaticModel
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class ConstantElectrostaticFieldModel(ElectrostaticModel):
@@ -52,9 +52,9 @@ class ConstantElectrostaticFieldModel(ElectrostaticModel):
         self.data[CUBA.ELECTROSTATIC_FIELD] = value
 
     def _validate_electrostatic_field(self, value):
-        value = validation.cast_data_type(value, 'ELECTROSTATIC_FIELD')
-        validation.check_valid_shape(value, [1], 'ELECTROSTATIC_FIELD')
-        validation.validate_cuba_keyword(value, 'ELECTROSTATIC_FIELD')
+        value = meta_validation.cast_data_type(value, 'ELECTROSTATIC_FIELD')
+        meta_validation.check_valid_shape(value, [1], 'ELECTROSTATIC_FIELD')
+        meta_validation.validate_cuba_keyword(value, 'ELECTROSTATIC_FIELD')
         return value
 
     def _default_electrostatic_field(self):

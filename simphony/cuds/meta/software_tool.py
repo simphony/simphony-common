@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -42,9 +42,9 @@ class SoftwareTool(CUDSItem):
         self.data[CUBA.VERSION] = value
 
     def _validate_version(self, value):
-        value = validation.cast_data_type(value, 'VERSION')
-        validation.check_valid_shape(value, [1], 'VERSION')
-        validation.validate_cuba_keyword(value, 'VERSION')
+        value = meta_validation.cast_data_type(value, 'VERSION')
+        meta_validation.check_valid_shape(value, [1], 'VERSION')
+        meta_validation.validate_cuba_keyword(value, 'VERSION')
         return value
 
     def _default_version(self):

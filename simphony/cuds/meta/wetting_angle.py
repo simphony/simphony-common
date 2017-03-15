@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .condition import Condition
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class WettingAngle(Condition):
@@ -27,7 +27,9 @@ class WettingAngle(Condition):
             base_params = super(WettingAngle, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.VARIABLE, CUBA.CONTACT_ANGLE, ) + base_params))
+        return tuple(set((
+            CUBA.VARIABLE,
+            CUBA.CONTACT_ANGLE, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa
@@ -58,9 +60,9 @@ class WettingAngle(Condition):
         self.data[CUBA.VARIABLE] = value
 
     def _validate_variable(self, value):
-        value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_valid_shape(value, [None], 'VARIABLE')
-        validation.check_elements(value, [None], 'VARIABLE')
+        value = meta_validation.cast_data_type(value, 'VARIABLE')
+        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
+        meta_validation.check_elements(value, [None], 'VARIABLE')
 
         return value
 
@@ -83,9 +85,9 @@ class WettingAngle(Condition):
         self.data[CUBA.CONTACT_ANGLE] = value
 
     def _validate_contact_angle(self, value):
-        value = validation.cast_data_type(value, 'CONTACT_ANGLE')
-        validation.check_valid_shape(value, [1], 'CONTACT_ANGLE')
-        validation.validate_cuba_keyword(value, 'CONTACT_ANGLE')
+        value = meta_validation.cast_data_type(value, 'CONTACT_ANGLE')
+        meta_validation.check_valid_shape(value, [1], 'CONTACT_ANGLE')
+        meta_validation.validate_cuba_keyword(value, 'CONTACT_ANGLE')
         return value
 
     def _default_contact_angle(self):

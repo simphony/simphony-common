@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 
@@ -27,7 +27,9 @@ class SurfaceTensionRelation(MaterialRelation):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.MATERIAL, CUBA.SURFACE_TENSION, ) + base_params))
+            set((
+                CUBA.MATERIAL,
+                CUBA.SURFACE_TENSION, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa
@@ -51,9 +53,9 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [2], 'MATERIAL')
-        validation.check_elements(value, [2], 'MATERIAL')
+        value = meta_validation.cast_data_type(value, 'MATERIAL')
+        meta_validation.check_valid_shape(value, [2], 'MATERIAL')
+        meta_validation.check_elements(value, [2], 'MATERIAL')
 
         return value
 
@@ -76,9 +78,9 @@ class SurfaceTensionRelation(MaterialRelation):
         self.data[CUBA.SURFACE_TENSION] = value
 
     def _validate_surface_tension(self, value):
-        value = validation.cast_data_type(value, 'SURFACE_TENSION')
-        validation.check_valid_shape(value, [1], 'SURFACE_TENSION')
-        validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
+        value = meta_validation.cast_data_type(value, 'SURFACE_TENSION')
+        meta_validation.check_valid_shape(value, [1], 'SURFACE_TENSION')
+        meta_validation.validate_cuba_keyword(value, 'SURFACE_TENSION')
         return value
 
     def _default_surface_tension(self):

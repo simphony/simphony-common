@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -38,9 +38,9 @@ class Bond(CUDSItem):
         self.data[CUBA.PARTICLE] = value
 
     def _validate_particle(self, value):
-        value = validation.cast_data_type(value, 'PARTICLE')
-        validation.check_valid_shape(value, [None], 'PARTICLE')
-        validation.check_elements(value, [None], 'PARTICLE')
+        value = meta_validation.cast_data_type(value, 'PARTICLE')
+        meta_validation.check_valid_shape(value, [None], 'PARTICLE')
+        meta_validation.check_elements(value, [None], 'PARTICLE')
 
         return value
 

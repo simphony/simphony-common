@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 
@@ -51,9 +51,9 @@ class CoulombFrictionForce(MaterialRelation):
         self.data[CUBA.FRICTION_COEFFICIENT] = value
 
     def _validate_friction_coefficient(self, value):
-        value = validation.cast_data_type(value, 'FRICTION_COEFFICIENT')
-        validation.check_valid_shape(value, [1], 'FRICTION_COEFFICIENT')
-        validation.validate_cuba_keyword(value, 'FRICTION_COEFFICIENT')
+        value = meta_validation.cast_data_type(value, 'FRICTION_COEFFICIENT')
+        meta_validation.check_valid_shape(value, [1], 'FRICTION_COEFFICIENT')
+        meta_validation.validate_cuba_keyword(value, 'FRICTION_COEFFICIENT')
         return value
 
     def _default_friction_coefficient(self):

@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -23,8 +23,9 @@ class EngineFeature(CUDSItem):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.COMPUTATIONAL_METHOD, CUBA.PHYSICS_EQUATION, ) +
-                base_params))
+            set((
+                CUBA.COMPUTATIONAL_METHOD,
+                CUBA.PHYSICS_EQUATION, ) + base_params))
 
     def _init_computational_method(self, value):
         if value is Default:
@@ -42,9 +43,10 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.COMPUTATIONAL_METHOD] = value
 
     def _validate_computational_method(self, value):
-        value = validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
-        validation.check_valid_shape(value, [None], 'COMPUTATIONAL_METHOD')
-        validation.check_elements(value, [None], 'COMPUTATIONAL_METHOD')
+        value = meta_validation.cast_data_type(value, 'COMPUTATIONAL_METHOD')
+        meta_validation.check_valid_shape(value, [None],
+                                          'COMPUTATIONAL_METHOD')
+        meta_validation.check_elements(value, [None], 'COMPUTATIONAL_METHOD')
 
         return value
 
@@ -70,9 +72,9 @@ class EngineFeature(CUDSItem):
         self.data[CUBA.PHYSICS_EQUATION] = value
 
     def _validate_physics_equation(self, value):
-        value = validation.cast_data_type(value, 'PHYSICS_EQUATION')
-        validation.check_valid_shape(value, [1], 'PHYSICS_EQUATION')
-        validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
+        value = meta_validation.cast_data_type(value, 'PHYSICS_EQUATION')
+        meta_validation.check_valid_shape(value, [1], 'PHYSICS_EQUATION')
+        meta_validation.validate_cuba_keyword(value, 'PHYSICS_EQUATION')
         return value
 
     def _default_physics_equation(self):

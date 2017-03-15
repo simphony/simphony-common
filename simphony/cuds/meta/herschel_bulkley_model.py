@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .rheology_model import RheologyModel
 
@@ -33,8 +33,11 @@ class HerschelBulkleyModel(RheologyModel):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.INITIAL_VISCOSITY, CUBA.RELAXATION_TIME,
-                 CUBA.LINEAR_CONSTANT, CUBA.POWER_LAW_INDEX, ) + base_params))
+            set((
+                CUBA.INITIAL_VISCOSITY,
+                CUBA.RELAXATION_TIME,
+                CUBA.LINEAR_CONSTANT,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Herschel-Bulkley model combines the effects of Bingham plastic and power-law behavior in a fluid"  # noqa
@@ -55,9 +58,9 @@ class HerschelBulkleyModel(RheologyModel):
         self.data[CUBA.INITIAL_VISCOSITY] = value
 
     def _validate_initial_viscosity(self, value):
-        value = validation.cast_data_type(value, 'INITIAL_VISCOSITY')
-        validation.check_valid_shape(value, [1], 'INITIAL_VISCOSITY')
-        validation.validate_cuba_keyword(value, 'INITIAL_VISCOSITY')
+        value = meta_validation.cast_data_type(value, 'INITIAL_VISCOSITY')
+        meta_validation.check_valid_shape(value, [1], 'INITIAL_VISCOSITY')
+        meta_validation.validate_cuba_keyword(value, 'INITIAL_VISCOSITY')
         return value
 
     def _default_initial_viscosity(self):
@@ -82,9 +85,9 @@ class HerschelBulkleyModel(RheologyModel):
         self.data[CUBA.RELAXATION_TIME] = value
 
     def _validate_relaxation_time(self, value):
-        value = validation.cast_data_type(value, 'RELAXATION_TIME')
-        validation.check_valid_shape(value, [1], 'RELAXATION_TIME')
-        validation.validate_cuba_keyword(value, 'RELAXATION_TIME')
+        value = meta_validation.cast_data_type(value, 'RELAXATION_TIME')
+        meta_validation.check_valid_shape(value, [1], 'RELAXATION_TIME')
+        meta_validation.validate_cuba_keyword(value, 'RELAXATION_TIME')
         return value
 
     def _default_relaxation_time(self):
@@ -106,9 +109,9 @@ class HerschelBulkleyModel(RheologyModel):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
-        validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
+        value = meta_validation.cast_data_type(value, 'LINEAR_CONSTANT')
+        meta_validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
+        meta_validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
     def _default_linear_constant(self):
@@ -130,9 +133,9 @@ class HerschelBulkleyModel(RheologyModel):
         self.data[CUBA.POWER_LAW_INDEX] = value
 
     def _validate_power_law_index(self, value):
-        value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
-        validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
-        validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
+        value = meta_validation.cast_data_type(value, 'POWER_LAW_INDEX')
+        meta_validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
+        meta_validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
 
     def _default_power_law_index(self):

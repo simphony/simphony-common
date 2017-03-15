@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .lattice import Lattice
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class BravaisLattice(Lattice):
@@ -31,8 +31,11 @@ class BravaisLattice(Lattice):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.ORIGIN, CUBA.LATTICE_PARAMETER, CUBA.PRIMITIVE_CELL,
-                 CUBA.SIZE, ) + base_params))
+            set((
+                CUBA.ORIGIN,
+                CUBA.LATTICE_PARAMETER,
+                CUBA.PRIMITIVE_CELL,
+                CUBA.SIZE, ) + base_params))
 
     def _default_definition(self):
         return "A Bravais lattice"  # noqa
@@ -53,9 +56,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.ORIGIN] = value
 
     def _validate_origin(self, value):
-        value = validation.cast_data_type(value, 'ORIGIN')
-        validation.check_valid_shape(value, [1], 'ORIGIN')
-        validation.validate_cuba_keyword(value, 'ORIGIN')
+        value = meta_validation.cast_data_type(value, 'ORIGIN')
+        meta_validation.check_valid_shape(value, [1], 'ORIGIN')
+        meta_validation.validate_cuba_keyword(value, 'ORIGIN')
         return value
 
     def _default_origin(self):
@@ -77,9 +80,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.LATTICE_PARAMETER] = value
 
     def _validate_lattice_parameter(self, value):
-        value = validation.cast_data_type(value, 'LATTICE_PARAMETER')
-        validation.check_valid_shape(value, [3], 'LATTICE_PARAMETER')
-        validation.check_elements(value, [3], 'LATTICE_PARAMETER')
+        value = meta_validation.cast_data_type(value, 'LATTICE_PARAMETER')
+        meta_validation.check_valid_shape(value, [3], 'LATTICE_PARAMETER')
+        meta_validation.check_elements(value, [3], 'LATTICE_PARAMETER')
 
         return value
 
@@ -102,9 +105,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.PRIMITIVE_CELL] = value
 
     def _validate_primitive_cell(self, value):
-        value = validation.cast_data_type(value, 'PRIMITIVE_CELL')
-        validation.check_valid_shape(value, [1], 'PRIMITIVE_CELL')
-        validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
+        value = meta_validation.cast_data_type(value, 'PRIMITIVE_CELL')
+        meta_validation.check_valid_shape(value, [1], 'PRIMITIVE_CELL')
+        meta_validation.validate_cuba_keyword(value, 'PRIMITIVE_CELL')
         return value
 
     def _default_primitive_cell(self):
@@ -126,9 +129,9 @@ class BravaisLattice(Lattice):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-        value = validation.cast_data_type(value, 'SIZE')
-        validation.check_valid_shape(value, [3], 'SIZE')
-        validation.check_elements(value, [3], 'SIZE')
+        value = meta_validation.cast_data_type(value, 'SIZE')
+        meta_validation.check_valid_shape(value, [3], 'SIZE')
+        meta_validation.check_elements(value, [3], 'SIZE')
 
         return value
 

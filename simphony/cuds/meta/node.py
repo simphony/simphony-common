@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Node(CUDSComponent):
@@ -41,9 +41,9 @@ class Node(CUDSComponent):
         self.data[CUBA.INDEX] = value
 
     def _validate_index(self, value):
-        value = validation.cast_data_type(value, 'INDEX')
-        validation.check_valid_shape(value, [1], 'INDEX')
-        validation.validate_cuba_keyword(value, 'INDEX')
+        value = meta_validation.cast_data_type(value, 'INDEX')
+        meta_validation.check_valid_shape(value, [1], 'INDEX')
+        meta_validation.validate_cuba_keyword(value, 'INDEX')
         return value
 
     def _default_index(self):

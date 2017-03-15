@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .material_relation import MaterialRelation
 
@@ -50,9 +50,11 @@ class DissipationForce(MaterialRelation):
         self.data[CUBA.RESTITUTION_COEFFICIENT] = value
 
     def _validate_restitution_coefficient(self, value):
-        value = validation.cast_data_type(value, 'RESTITUTION_COEFFICIENT')
-        validation.check_valid_shape(value, [1], 'RESTITUTION_COEFFICIENT')
-        validation.validate_cuba_keyword(value, 'RESTITUTION_COEFFICIENT')
+        value = meta_validation.cast_data_type(value,
+                                               'RESTITUTION_COEFFICIENT')
+        meta_validation.check_valid_shape(value, [1],
+                                          'RESTITUTION_COEFFICIENT')
+        meta_validation.validate_cuba_keyword(value, 'RESTITUTION_COEFFICIENT')
         return value
 
     def _default_restitution_coefficient(self):

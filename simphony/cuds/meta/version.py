@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -24,8 +24,11 @@ class Version(CUDSItem):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.MINOR, CUBA.MAJOR, CUBA.FULL, CUBA.PATCH, ) +
-                base_params))
+            set((
+                CUBA.MINOR,
+                CUBA.MAJOR,
+                CUBA.FULL,
+                CUBA.PATCH, ) + base_params))
 
     def _init_minor(self, value):
         if value is Default:
@@ -43,9 +46,9 @@ class Version(CUDSItem):
         self.data[CUBA.MINOR] = value
 
     def _validate_minor(self, value):
-        value = validation.cast_data_type(value, 'MINOR')
-        validation.check_valid_shape(value, [1], 'MINOR')
-        validation.validate_cuba_keyword(value, 'MINOR')
+        value = meta_validation.cast_data_type(value, 'MINOR')
+        meta_validation.check_valid_shape(value, [1], 'MINOR')
+        meta_validation.validate_cuba_keyword(value, 'MINOR')
         return value
 
     def _default_minor(self):
@@ -70,9 +73,9 @@ class Version(CUDSItem):
         self.data[CUBA.MAJOR] = value
 
     def _validate_major(self, value):
-        value = validation.cast_data_type(value, 'MAJOR')
-        validation.check_valid_shape(value, [1], 'MAJOR')
-        validation.validate_cuba_keyword(value, 'MAJOR')
+        value = meta_validation.cast_data_type(value, 'MAJOR')
+        meta_validation.check_valid_shape(value, [1], 'MAJOR')
+        meta_validation.validate_cuba_keyword(value, 'MAJOR')
         return value
 
     def _default_major(self):
@@ -94,9 +97,9 @@ class Version(CUDSItem):
         self.data[CUBA.FULL] = value
 
     def _validate_full(self, value):
-        value = validation.cast_data_type(value, 'FULL')
-        validation.check_valid_shape(value, [1], 'FULL')
-        validation.validate_cuba_keyword(value, 'FULL')
+        value = meta_validation.cast_data_type(value, 'FULL')
+        meta_validation.check_valid_shape(value, [1], 'FULL')
+        meta_validation.validate_cuba_keyword(value, 'FULL')
         return value
 
     def _default_full(self):
@@ -118,9 +121,9 @@ class Version(CUDSItem):
         self.data[CUBA.PATCH] = value
 
     def _validate_patch(self, value):
-        value = validation.cast_data_type(value, 'PATCH')
-        validation.check_valid_shape(value, [1], 'PATCH')
-        validation.validate_cuba_keyword(value, 'PATCH')
+        value = meta_validation.cast_data_type(value, 'PATCH')
+        meta_validation.check_valid_shape(value, [1], 'PATCH')
+        meta_validation.validate_cuba_keyword(value, 'PATCH')
         return value
 
     def _default_patch(self):
