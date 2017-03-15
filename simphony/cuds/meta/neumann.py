@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .condition import Condition
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Neumann(Condition):
@@ -28,7 +28,9 @@ class Neumann(Condition):
             base_params = super(Neumann, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.VARIABLE, CUBA.MATERIAL, ) + base_params))
+        return tuple(set((
+            CUBA.VARIABLE,
+            CUBA.MATERIAL, ) + base_params))
 
     def _init_models(self):
         self._models = self._default_models()  # noqa
@@ -59,9 +61,9 @@ class Neumann(Condition):
         self.data[CUBA.VARIABLE] = value
 
     def _validate_variable(self, value):
-        value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_valid_shape(value, [None], 'VARIABLE')
-        validation.check_elements(value, [None], 'VARIABLE')
+        value = meta_validation.cast_data_type(value, 'VARIABLE')
+        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
+        meta_validation.check_elements(value, [None], 'VARIABLE')
 
         return value
 
@@ -84,9 +86,9 @@ class Neumann(Condition):
         self.data[CUBA.MATERIAL] = value
 
     def _validate_material(self, value):
-        value = validation.cast_data_type(value, 'MATERIAL')
-        validation.check_valid_shape(value, [None], 'MATERIAL')
-        validation.check_elements(value, [None], 'MATERIAL')
+        value = meta_validation.cast_data_type(value, 'MATERIAL')
+        meta_validation.check_valid_shape(value, [None], 'MATERIAL')
+        meta_validation.check_elements(value, [None], 'MATERIAL')
 
         return value
 

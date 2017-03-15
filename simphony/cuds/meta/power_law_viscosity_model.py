@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .rheology_model import RheologyModel
 
@@ -33,8 +33,11 @@ class PowerLawViscosityModel(RheologyModel):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.LINEAR_CONSTANT, CUBA.MINIMUM_VISCOSITY, CUBA.
-                 MAXIMUM_VISCOSITY, CUBA.POWER_LAW_INDEX, ) + base_params))
+            set((
+                CUBA.LINEAR_CONSTANT,
+                CUBA.MINIMUM_VISCOSITY,
+                CUBA.MAXIMUM_VISCOSITY,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Power law model for a variable viscosity function that is limited by minimum and maximum values"  # noqa
@@ -55,9 +58,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
-        validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
+        value = meta_validation.cast_data_type(value, 'LINEAR_CONSTANT')
+        meta_validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
+        meta_validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
     def _default_linear_constant(self):
@@ -82,9 +85,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MINIMUM_VISCOSITY] = value
 
     def _validate_minimum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'MINIMUM_VISCOSITY')
-        validation.check_valid_shape(value, [1], 'MINIMUM_VISCOSITY')
-        validation.validate_cuba_keyword(value, 'MINIMUM_VISCOSITY')
+        value = meta_validation.cast_data_type(value, 'MINIMUM_VISCOSITY')
+        meta_validation.check_valid_shape(value, [1], 'MINIMUM_VISCOSITY')
+        meta_validation.validate_cuba_keyword(value, 'MINIMUM_VISCOSITY')
         return value
 
     def _default_minimum_viscosity(self):
@@ -106,9 +109,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.MAXIMUM_VISCOSITY] = value
 
     def _validate_maximum_viscosity(self, value):
-        value = validation.cast_data_type(value, 'MAXIMUM_VISCOSITY')
-        validation.check_valid_shape(value, [1], 'MAXIMUM_VISCOSITY')
-        validation.validate_cuba_keyword(value, 'MAXIMUM_VISCOSITY')
+        value = meta_validation.cast_data_type(value, 'MAXIMUM_VISCOSITY')
+        meta_validation.check_valid_shape(value, [1], 'MAXIMUM_VISCOSITY')
+        meta_validation.validate_cuba_keyword(value, 'MAXIMUM_VISCOSITY')
         return value
 
     def _default_maximum_viscosity(self):
@@ -130,9 +133,9 @@ class PowerLawViscosityModel(RheologyModel):
         self.data[CUBA.POWER_LAW_INDEX] = value
 
     def _validate_power_law_index(self, value):
-        value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
-        validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
-        validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
+        value = meta_validation.cast_data_type(value, 'POWER_LAW_INDEX')
+        meta_validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
+        meta_validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
 
     def _default_power_law_index(self):

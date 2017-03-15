@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .cuds_component import CUDSComponent
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Basis(CUDSComponent):
@@ -41,9 +41,9 @@ class Basis(CUDSComponent):
         self.data[CUBA.VECTOR] = value
 
     def _validate_vector(self, value):
-        value = validation.cast_data_type(value, 'VECTOR')
-        validation.check_valid_shape(value, [3], 'VECTOR')
-        validation.check_elements(value, [3], 'VECTOR')
+        value = meta_validation.cast_data_type(value, 'VECTOR')
+        meta_validation.check_valid_shape(value, [3], 'VECTOR')
+        meta_validation.check_elements(value, [3], 'VECTOR')
 
         return value
 

@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .particle import Particle
 
@@ -41,9 +41,9 @@ class Atom(Particle):
         self.data[CUBA.MASS] = value
 
     def _validate_mass(self, value):
-        value = validation.cast_data_type(value, 'MASS')
-        validation.check_valid_shape(value, [1], 'MASS')
-        validation.validate_cuba_keyword(value, 'MASS')
+        value = meta_validation.cast_data_type(value, 'MASS')
+        meta_validation.check_valid_shape(value, [1], 'MASS')
+        meta_validation.validate_cuba_keyword(value, 'MASS')
         return value
 
     def _default_mass(self):

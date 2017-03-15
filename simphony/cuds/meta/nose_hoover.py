@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .thermostat import Thermostat
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class NoseHoover(Thermostat):
@@ -31,7 +31,9 @@ class NoseHoover(Thermostat):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.COUPLING_TIME, CUBA.TEMPERATURE, ) + base_params))
+            set((
+                CUBA.COUPLING_TIME,
+                CUBA.TEMPERATURE, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC', 'CUBA.MESOSCOPIC']  # noqa
@@ -55,9 +57,9 @@ class NoseHoover(Thermostat):
         self.data[CUBA.COUPLING_TIME] = value
 
     def _validate_coupling_time(self, value):
-        value = validation.cast_data_type(value, 'COUPLING_TIME')
-        validation.check_valid_shape(value, [1], 'COUPLING_TIME')
-        validation.validate_cuba_keyword(value, 'COUPLING_TIME')
+        value = meta_validation.cast_data_type(value, 'COUPLING_TIME')
+        meta_validation.check_valid_shape(value, [1], 'COUPLING_TIME')
+        meta_validation.validate_cuba_keyword(value, 'COUPLING_TIME')
         return value
 
     def _default_coupling_time(self):
@@ -79,9 +81,9 @@ class NoseHoover(Thermostat):
         self.data[CUBA.TEMPERATURE] = value
 
     def _validate_temperature(self, value):
-        value = validation.cast_data_type(value, 'TEMPERATURE')
-        validation.check_valid_shape(value, [2], 'TEMPERATURE')
-        validation.check_elements(value, [2], 'TEMPERATURE')
+        value = meta_validation.cast_data_type(value, 'TEMPERATURE')
+        meta_validation.check_valid_shape(value, [2], 'TEMPERATURE')
+        meta_validation.check_elements(value, [2], 'TEMPERATURE')
 
         return value
 

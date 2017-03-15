@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
 
@@ -30,8 +30,10 @@ class LennardJones_6_12(PairPotential):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.VAN_DER_WAALS_RADIUS, CUBA.CUTOFF_DISTANCE,
-                 CUBA.ENERGY_WELL_DEPTH, ) + base_params))
+            set((
+                CUBA.VAN_DER_WAALS_RADIUS,
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.ENERGY_WELL_DEPTH, ) + base_params))
 
     def _default_definition(self):
         return "A Lennard-Jones 6-12 Potential"  # noqa
@@ -52,9 +54,9 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.VAN_DER_WAALS_RADIUS] = value
 
     def _validate_van_der_waals_radius(self, value):
-        value = validation.cast_data_type(value, 'VAN_DER_WAALS_RADIUS')
-        validation.check_valid_shape(value, [1], 'VAN_DER_WAALS_RADIUS')
-        validation.validate_cuba_keyword(value, 'VAN_DER_WAALS_RADIUS')
+        value = meta_validation.cast_data_type(value, 'VAN_DER_WAALS_RADIUS')
+        meta_validation.check_valid_shape(value, [1], 'VAN_DER_WAALS_RADIUS')
+        meta_validation.validate_cuba_keyword(value, 'VAN_DER_WAALS_RADIUS')
         return value
 
     def _default_van_der_waals_radius(self):
@@ -82,9 +84,9 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.CUTOFF_DISTANCE] = value
 
     def _validate_cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
-        validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
-        validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
+        value = meta_validation.cast_data_type(value, 'CUTOFF_DISTANCE')
+        meta_validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
+        meta_validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
     def _default_cutoff_distance(self):
@@ -106,9 +108,9 @@ class LennardJones_6_12(PairPotential):
         self.data[CUBA.ENERGY_WELL_DEPTH] = value
 
     def _validate_energy_well_depth(self, value):
-        value = validation.cast_data_type(value, 'ENERGY_WELL_DEPTH')
-        validation.check_valid_shape(value, [1], 'ENERGY_WELL_DEPTH')
-        validation.validate_cuba_keyword(value, 'ENERGY_WELL_DEPTH')
+        value = meta_validation.cast_data_type(value, 'ENERGY_WELL_DEPTH')
+        meta_validation.check_valid_shape(value, [1], 'ENERGY_WELL_DEPTH')
+        meta_validation.validate_cuba_keyword(value, 'ENERGY_WELL_DEPTH')
         return value
 
     def _default_energy_well_depth(self):

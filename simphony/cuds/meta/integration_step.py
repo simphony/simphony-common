@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .solver_parameter import SolverParameter
 
@@ -31,7 +31,10 @@ class IntegrationStep(SolverParameter):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.CURRENT, CUBA.SIZE, CUBA.FINAL, ) + base_params))
+            set((
+                CUBA.CURRENT,
+                CUBA.SIZE,
+                CUBA.FINAL, ) + base_params))
 
     def _default_definition(self):
         return "the current step, integration step, and final number of steps for a simulation stored on each cuds (a specific state)."  # noqa
@@ -52,9 +55,9 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.CURRENT] = value
 
     def _validate_current(self, value):
-        value = validation.cast_data_type(value, 'CURRENT')
-        validation.check_valid_shape(value, [1], 'CURRENT')
-        validation.validate_cuba_keyword(value, 'CURRENT')
+        value = meta_validation.cast_data_type(value, 'CURRENT')
+        meta_validation.check_valid_shape(value, [1], 'CURRENT')
+        meta_validation.validate_cuba_keyword(value, 'CURRENT')
         return value
 
     def _default_current(self):
@@ -76,9 +79,9 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.SIZE] = value
 
     def _validate_size(self, value):
-        value = validation.cast_data_type(value, 'SIZE')
-        validation.check_valid_shape(value, [1], 'SIZE')
-        validation.validate_cuba_keyword(value, 'SIZE')
+        value = meta_validation.cast_data_type(value, 'SIZE')
+        meta_validation.check_valid_shape(value, [1], 'SIZE')
+        meta_validation.validate_cuba_keyword(value, 'SIZE')
         return value
 
     def _default_size(self):
@@ -100,9 +103,9 @@ class IntegrationStep(SolverParameter):
         self.data[CUBA.FINAL] = value
 
     def _validate_final(self, value):
-        value = validation.cast_data_type(value, 'FINAL')
-        validation.check_valid_shape(value, [1], 'FINAL')
-        validation.validate_cuba_keyword(value, 'FINAL')
+        value = meta_validation.cast_data_type(value, 'FINAL')
+        meta_validation.check_valid_shape(value, [1], 'FINAL')
+        meta_validation.validate_cuba_keyword(value, 'FINAL')
         return value
 
     def _default_final(self):

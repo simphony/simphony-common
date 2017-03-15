@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -41,9 +41,9 @@ class Point(CUDSItem):
         self.data[CUBA.POSITION] = value
 
     def _validate_position(self, value):
-        value = validation.cast_data_type(value, 'POSITION')
-        validation.check_valid_shape(value, [1], 'POSITION')
-        validation.validate_cuba_keyword(value, 'POSITION')
+        value = meta_validation.cast_data_type(value, 'POSITION')
+        meta_validation.check_valid_shape(value, [1], 'POSITION')
+        meta_validation.validate_cuba_keyword(value, 'POSITION')
         return value
 
     def _default_position(self):

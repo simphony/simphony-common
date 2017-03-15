@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .pair_potential import PairPotential
 
@@ -29,8 +29,9 @@ class Coulomb(PairPotential):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.CUTOFF_DISTANCE, CUBA.DIELECTRIC_CONSTANT, ) +
-                base_params))
+            set((
+                CUBA.CUTOFF_DISTANCE,
+                CUBA.DIELECTRIC_CONSTANT, ) + base_params))
 
     def _default_models(self):
         return ['CUBA.ATOMISTIC']  # noqa
@@ -54,9 +55,9 @@ class Coulomb(PairPotential):
         self.data[CUBA.CUTOFF_DISTANCE] = value
 
     def _validate_cutoff_distance(self, value):
-        value = validation.cast_data_type(value, 'CUTOFF_DISTANCE')
-        validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
-        validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
+        value = meta_validation.cast_data_type(value, 'CUTOFF_DISTANCE')
+        meta_validation.check_valid_shape(value, [1], 'CUTOFF_DISTANCE')
+        meta_validation.validate_cuba_keyword(value, 'CUTOFF_DISTANCE')
         return value
 
     def _default_cutoff_distance(self):
@@ -78,9 +79,9 @@ class Coulomb(PairPotential):
         self.data[CUBA.DIELECTRIC_CONSTANT] = value
 
     def _validate_dielectric_constant(self, value):
-        value = validation.cast_data_type(value, 'DIELECTRIC_CONSTANT')
-        validation.check_valid_shape(value, [1], 'DIELECTRIC_CONSTANT')
-        validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
+        value = meta_validation.cast_data_type(value, 'DIELECTRIC_CONSTANT')
+        meta_validation.check_valid_shape(value, [1], 'DIELECTRIC_CONSTANT')
+        meta_validation.validate_cuba_keyword(value, 'DIELECTRIC_CONSTANT')
         return value
 
     def _default_dielectric_constant(self):

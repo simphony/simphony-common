@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .data_set import DataSet
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class Mesh(DataSet):
@@ -30,7 +30,11 @@ class Mesh(DataSet):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.POINT, CUBA.EDGE, CUBA.CELL, CUBA.FACE, ) + base_params))
+            set((
+                CUBA.POINT,
+                CUBA.EDGE,
+                CUBA.CELL,
+                CUBA.FACE, ) + base_params))
 
     def _default_definition(self):
         return "A mesh"  # noqa
@@ -51,9 +55,9 @@ class Mesh(DataSet):
         self.data[CUBA.POINT] = value
 
     def _validate_point(self, value):
-        value = validation.cast_data_type(value, 'POINT')
-        validation.check_valid_shape(value, [None], 'POINT')
-        validation.check_elements(value, [None], 'POINT')
+        value = meta_validation.cast_data_type(value, 'POINT')
+        meta_validation.check_valid_shape(value, [None], 'POINT')
+        meta_validation.check_elements(value, [None], 'POINT')
 
         return value
 
@@ -76,9 +80,9 @@ class Mesh(DataSet):
         self.data[CUBA.EDGE] = value
 
     def _validate_edge(self, value):
-        value = validation.cast_data_type(value, 'EDGE')
-        validation.check_valid_shape(value, [None], 'EDGE')
-        validation.check_elements(value, [None], 'EDGE')
+        value = meta_validation.cast_data_type(value, 'EDGE')
+        meta_validation.check_valid_shape(value, [None], 'EDGE')
+        meta_validation.check_elements(value, [None], 'EDGE')
 
         return value
 
@@ -101,9 +105,9 @@ class Mesh(DataSet):
         self.data[CUBA.CELL] = value
 
     def _validate_cell(self, value):
-        value = validation.cast_data_type(value, 'CELL')
-        validation.check_valid_shape(value, [None], 'CELL')
-        validation.check_elements(value, [None], 'CELL')
+        value = meta_validation.cast_data_type(value, 'CELL')
+        meta_validation.check_valid_shape(value, [None], 'CELL')
+        meta_validation.check_elements(value, [None], 'CELL')
 
         return value
 
@@ -126,9 +130,9 @@ class Mesh(DataSet):
         self.data[CUBA.FACE] = value
 
     def _validate_face(self, value):
-        value = validation.cast_data_type(value, 'FACE')
-        validation.check_valid_shape(value, [None], 'FACE')
-        validation.check_elements(value, [None], 'FACE')
+        value = meta_validation.cast_data_type(value, 'FACE')
+        meta_validation.check_valid_shape(value, [None], 'FACE')
+        meta_validation.check_elements(value, [None], 'FACE')
 
         return value
 

@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from . import validation
+from simphony.cuds import meta_validation
 from simphony.core.cuba import CUBA
 from .cuds_item import CUDSItem
 
@@ -21,7 +21,9 @@ class CUDSComponent(CUDSItem):
             base_params = super(CUDSComponent, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((CUBA.DESCRIPTION, CUBA.NAME, ) + base_params))
+        return tuple(set((
+            CUBA.DESCRIPTION,
+            CUBA.NAME, ) + base_params))
 
     def _default_definition(self):
         return "Base data type for the CUDS components"  # noqa
@@ -42,9 +44,9 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.DESCRIPTION] = value
 
     def _validate_description(self, value):
-        value = validation.cast_data_type(value, 'DESCRIPTION')
-        validation.check_valid_shape(value, [1], 'DESCRIPTION')
-        validation.validate_cuba_keyword(value, 'DESCRIPTION')
+        value = meta_validation.cast_data_type(value, 'DESCRIPTION')
+        meta_validation.check_valid_shape(value, [1], 'DESCRIPTION')
+        meta_validation.validate_cuba_keyword(value, 'DESCRIPTION')
         return value
 
     def _default_description(self):
@@ -66,9 +68,9 @@ class CUDSComponent(CUDSItem):
         self.data[CUBA.NAME] = value
 
     def _validate_name(self, value):
-        value = validation.cast_data_type(value, 'NAME')
-        validation.check_valid_shape(value, [1], 'NAME')
-        validation.validate_cuba_keyword(value, 'NAME')
+        value = meta_validation.cast_data_type(value, 'NAME')
+        meta_validation.check_valid_shape(value, [1], 'NAME')
+        meta_validation.validate_cuba_keyword(value, 'NAME')
         return value
 
     def _default_name(self):

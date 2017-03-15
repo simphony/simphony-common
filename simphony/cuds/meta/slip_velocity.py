@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .condition import Condition
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class SlipVelocity(Condition):
@@ -52,9 +52,9 @@ class SlipVelocity(Condition):
         self.data[CUBA.VARIABLE] = value
 
     def _validate_variable(self, value):
-        value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_valid_shape(value, [None], 'VARIABLE')
-        validation.check_elements(value, [None], 'VARIABLE')
+        value = meta_validation.cast_data_type(value, 'VARIABLE')
+        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
+        meta_validation.check_elements(value, [None], 'VARIABLE')
 
         return value
 

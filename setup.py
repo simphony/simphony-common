@@ -92,6 +92,7 @@ class BuildMeta(Command):
                     yaml_dir,
                     "simphony",
                     "--overwrite"]
+        check_call(cmd_args)
 
         print("Running yapf")
         cmd_args = ["yapf", "--style", "pep8", "--in-place"]

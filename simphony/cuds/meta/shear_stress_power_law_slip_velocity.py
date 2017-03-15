@@ -1,7 +1,7 @@
 from simphony.core import Default  # noqa
-from . import validation
 from .condition import Condition
 from simphony.core.cuba import CUBA
+from simphony.cuds import meta_validation
 
 
 class ShearStressPowerLawSlipVelocity(Condition):
@@ -38,8 +38,11 @@ class ShearStressPowerLawSlipVelocity(Condition):
         except AttributeError:
             base_params = ()
         return tuple(
-            set((CUBA.DENSITY, CUBA.VARIABLE, CUBA.LINEAR_CONSTANT,
-                 CUBA.POWER_LAW_INDEX, ) + base_params))
+            set((
+                CUBA.DENSITY,
+                CUBA.VARIABLE,
+                CUBA.LINEAR_CONSTANT,
+                CUBA.POWER_LAW_INDEX, ) + base_params))
 
     def _default_definition(self):
         return "Shear stress power law dependant slip velocity boundary condition. Nonlinear boundary condition for wall tangential velocity of the form v_s = CUBA.LINEAR_CONSTANT * S^CUBA.POWER_LAW_INDEX where v_s is the slip velocity (tangential velocity on the wall) and S is the wall shear stress"  # noqa
@@ -60,9 +63,9 @@ class ShearStressPowerLawSlipVelocity(Condition):
         self.data[CUBA.DENSITY] = value
 
     def _validate_density(self, value):
-        value = validation.cast_data_type(value, 'DENSITY')
-        validation.check_valid_shape(value, [1], 'DENSITY')
-        validation.validate_cuba_keyword(value, 'DENSITY')
+        value = meta_validation.cast_data_type(value, 'DENSITY')
+        meta_validation.check_valid_shape(value, [1], 'DENSITY')
+        meta_validation.validate_cuba_keyword(value, 'DENSITY')
         return value
 
     def _default_density(self):
@@ -94,9 +97,9 @@ class ShearStressPowerLawSlipVelocity(Condition):
         self.data[CUBA.VARIABLE] = value
 
     def _validate_variable(self, value):
-        value = validation.cast_data_type(value, 'VARIABLE')
-        validation.check_valid_shape(value, [None], 'VARIABLE')
-        validation.check_elements(value, [None], 'VARIABLE')
+        value = meta_validation.cast_data_type(value, 'VARIABLE')
+        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
+        meta_validation.check_elements(value, [None], 'VARIABLE')
 
         return value
 
@@ -119,9 +122,9 @@ class ShearStressPowerLawSlipVelocity(Condition):
         self.data[CUBA.LINEAR_CONSTANT] = value
 
     def _validate_linear_constant(self, value):
-        value = validation.cast_data_type(value, 'LINEAR_CONSTANT')
-        validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
-        validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
+        value = meta_validation.cast_data_type(value, 'LINEAR_CONSTANT')
+        meta_validation.check_valid_shape(value, [1], 'LINEAR_CONSTANT')
+        meta_validation.validate_cuba_keyword(value, 'LINEAR_CONSTANT')
         return value
 
     def _default_linear_constant(self):
@@ -143,9 +146,9 @@ class ShearStressPowerLawSlipVelocity(Condition):
         self.data[CUBA.POWER_LAW_INDEX] = value
 
     def _validate_power_law_index(self, value):
-        value = validation.cast_data_type(value, 'POWER_LAW_INDEX')
-        validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
-        validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
+        value = meta_validation.cast_data_type(value, 'POWER_LAW_INDEX')
+        meta_validation.check_valid_shape(value, [1], 'POWER_LAW_INDEX')
+        meta_validation.validate_cuba_keyword(value, 'POWER_LAW_INDEX')
         return value
 
     def _default_power_law_index(self):
