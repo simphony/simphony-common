@@ -1,5 +1,5 @@
 from simphony.core import Default  # noqa
-from .empty import Empty
+from .empty_condition import EmptyCondition
 from .boundary import Boundary
 from simphony.core.cuba import CUBA
 from simphony.cuds import meta_validation
@@ -59,7 +59,7 @@ class Box(Boundary):
         return value
 
     def _default_condition(self):
-        return [Empty(), Empty(), Empty()]
+        return [EmptyCondition(), EmptyCondition(), EmptyCondition()]
 
     def _init_vector(self, value):
         if value is Default:
