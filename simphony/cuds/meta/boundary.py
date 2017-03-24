@@ -7,7 +7,8 @@ from simphony.cuds import meta_validation
 class Boundary(CUDSComponent):
     """
     A computational boundary in the system, it includes
-    translated physical boundaries to computational boundaries.
+    translated physical boundaries to computational boundaries
+    and a list of conditions operating on it.
     """
     cuba_key = CUBA.BOUNDARY
 
@@ -24,7 +25,7 @@ class Boundary(CUDSComponent):
         return tuple(set((CUBA.CONDITION, ) + base_params))
 
     def _default_definition(self):
-        return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries."  # noqa
+        return "A computational boundary in the system, it includes translated physical boundaries to computational boundaries and a list of conditions operating on it."  # noqa
 
     def _init_condition(self, value):
         if value is Default:

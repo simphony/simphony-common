@@ -1,10 +1,10 @@
 from simphony.core import Default  # noqa
-from .condition import Condition
-from simphony.core.cuba import CUBA
 from simphony.cuds import meta_validation
+from simphony.core.cuba import CUBA
+from .dirichlet import Dirichlet
 
 
-class ShearStressPowerLawSlipVelocity(Condition):
+class ShearStressPowerLawSlipVelocity(Dirichlet):
     """
     Shear stress power law dependant slip velocity boundary
     condition. Nonlinear boundary condition for wall tangential
@@ -16,17 +16,17 @@ class ShearStressPowerLawSlipVelocity(Condition):
     cuba_key = CUBA.SHEAR_STRESS_POWER_LAW_SLIP_VELOCITY
 
     def __init__(self,
+                 material,
                  density=Default,
                  linear_constant=Default,
                  power_law_index=Default,
-                 variable=Default,
                  description=Default,
                  name=Default):
         super(ShearStressPowerLawSlipVelocity, self).__init__(
-            description=description, name=name)
+            material=material, description=description, name=name)
         self._init_density(density)
         self._init_models()
-        self._init_variable(variable)
+        self._init_variables()
         self._init_linear_constant(linear_constant)
         self._init_power_law_index(power_law_index)
 
@@ -40,7 +40,6 @@ class ShearStressPowerLawSlipVelocity(Condition):
         return tuple(
             set((
                 CUBA.DENSITY,
-                CUBA.VARIABLE,
                 CUBA.LINEAR_CONSTANT,
                 CUBA.POWER_LAW_INDEX, ) + base_params))
 
@@ -81,30 +80,15 @@ class ShearStressPowerLawSlipVelocity(Condition):
     def _default_models(self):
         return ['CUBA.CONTINUUM']  # noqa
 
-    def _init_variable(self, value):
-        if value is Default:
-            value = self._default_variable()
-
-        self.variable = value
+    def _init_variables(self):
+        self._variables = self._default_variables()  # noqa
 
     @property
-    def variable(self):
-        return self.data[CUBA.VARIABLE]
+    def variables(self):
+        return self._variables
 
-    @variable.setter
-    def variable(self, value):
-        value = self._validate_variable(value)
-        self.data[CUBA.VARIABLE] = value
-
-    def _validate_variable(self, value):
-        value = meta_validation.cast_data_type(value, 'VARIABLE')
-        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
-        meta_validation.check_elements(value, [None], 'VARIABLE')
-
-        return value
-
-    def _default_variable(self):
-        return []
+    def _default_variables(self):
+        return ['CUBA.VELOCITY', 'CUBA.STRESS_TENSOR']  # noqa
 
     def _init_linear_constant(self, value):
         if value is Default:
