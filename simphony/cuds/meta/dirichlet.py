@@ -6,19 +6,13 @@ from simphony.cuds import meta_validation
 
 class Dirichlet(Condition):
     """
-    Dirichlet boundary condition, specify the value the
-    solutions takes on the boundary of the domain
+    Dirichlet boundary condition to specify the value the
+    solutions takes on the boundary of the domain.
     """
     cuba_key = CUBA.DIRICHLET
 
-    def __init__(self,
-                 material=Default,
-                 variable=Default,
-                 description=Default,
-                 name=Default):
+    def __init__(self, material, description=Default, name=Default):
         super(Dirichlet, self).__init__(description=description, name=name)
-        self._init_models()
-        self._init_variable(variable)
         self._init_material(material)
 
     @classmethod
@@ -27,47 +21,10 @@ class Dirichlet(Condition):
             base_params = super(Dirichlet, cls).supported_parameters()
         except AttributeError:
             base_params = ()
-        return tuple(set((
-            CUBA.VARIABLE,
-            CUBA.MATERIAL, ) + base_params))
-
-    def _init_models(self):
-        self._models = self._default_models()  # noqa
-
-    @property
-    def models(self):
-        return self._models
-
-    def _default_models(self):
-        return ['CUBA.CONTINUUM']  # noqa
+        return tuple(set((CUBA.MATERIAL, ) + base_params))
 
     def _default_definition(self):
-        return "Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain"  # noqa
-
-    def _init_variable(self, value):
-        if value is Default:
-            value = self._default_variable()
-
-        self.variable = value
-
-    @property
-    def variable(self):
-        return self.data[CUBA.VARIABLE]
-
-    @variable.setter
-    def variable(self, value):
-        value = self._validate_variable(value)
-        self.data[CUBA.VARIABLE] = value
-
-    def _validate_variable(self, value):
-        value = meta_validation.cast_data_type(value, 'VARIABLE')
-        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
-        meta_validation.check_elements(value, [None], 'VARIABLE')
-
-        return value
-
-    def _default_variable(self):
-        return []
+        return "Dirichlet boundary condition to specify the value the solutions takes on the boundary of the domain."  # noqa
 
     def _init_material(self, value):
         if value is Default:
@@ -86,10 +43,9 @@ class Dirichlet(Condition):
 
     def _validate_material(self, value):
         value = meta_validation.cast_data_type(value, 'MATERIAL')
-        meta_validation.check_valid_shape(value, [None], 'MATERIAL')
-        meta_validation.check_elements(value, [None], 'MATERIAL')
-
+        meta_validation.check_valid_shape(value, [1], 'MATERIAL')
+        meta_validation.validate_cuba_keyword(value, 'MATERIAL')
         return value
 
     def _default_material(self):
-        return []
+        raise TypeError("No default for material")

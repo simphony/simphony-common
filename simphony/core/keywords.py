@@ -942,7 +942,7 @@ KEYWORDS = {
         dtype=None),
     'BOUNDARY': Keyword(
         name='Boundary',
-        definition='A computational boundary in the system, it includes translated physical boundaries to computational boundaries.',  # noqa
+        definition='A computational boundary in the system, it includes translated physical boundaries to computational boundaries and a list of conditions operating on it.',  # noqa
         key='BOUNDARY',
         shape=[1],
         length=None,
@@ -1007,6 +1007,27 @@ KEYWORDS = {
         name='ConstantElectrostaticFieldModel',
         definition='A constant electrostatic field model',  # noqa
         key='CONSTANT_ELECTROSTATIC_FIELD_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'CONSTANT_PRESSURE_CONDITION': Keyword(
+        name='ConstantPressureCondition',
+        definition='Constant pressure condition',  # noqa
+        key='CONSTANT_PRESSURE_CONDITION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'CONSTANT_VELOCITY_CONDITION': Keyword(
+        name='ConstantVelocityCondition',
+        definition='Constant velocity condition',  # noqa
+        key='CONSTANT_VELOCITY_CONDITION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'CONSTANT_VOLUME_FRACTION_CONDITION': Keyword(
+        name='ConstantVolumeFractionCondition',
+        definition='Constant volume fraction condition',  # noqa
+        key='CONSTANT_VOLUME_FRACTION_CONDITION',
         shape=[1],
         length=None,
         dtype=None),
@@ -1082,7 +1103,7 @@ KEYWORDS = {
         dtype=None),
     'DIRICHLET': Keyword(
         name='Dirichlet',
-        definition='Dirichlet boundary condition, specify the value the solutions takes on the boundary of the domain',  # noqa
+        definition='Dirichlet boundary condition to specify the value the solutions takes on the boundary of the domain.',  # noqa
         key='DIRICHLET',
         shape=[1],
         length=None,
@@ -1115,10 +1136,10 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
-    'EMPTY': Keyword(
-        name='Empty',
-        definition='Empty boundary condition',  # noqa
-        key='EMPTY',
+    'EMPTY_CONDITION': Keyword(
+        name='EmptyCondition',
+        definition='an entity to represent that no condition is applied on that domain or entitiy(ies)',  # noqa
+        key='EMPTY_CONDITION',
         shape=[1],
         length=None,
         dtype=None),
@@ -1376,7 +1397,7 @@ KEYWORDS = {
         dtype=None),
     'NEUMANN': Keyword(
         name='Neumann',
-        definition='Neumann boundary condition, it specifies the values that the derivative of a solution is to take on the boundary of the domain.',  # noqa
+        definition='Neumann boundary condition, it specifies the values that the derivative of a solution with respect to the variable is to take on the boundary of the domain.',  # noqa
         key='NEUMANN',
         shape=[1],
         length=None,
@@ -1444,6 +1465,20 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'PHASE_VOLUME_FRACTION': Keyword(
+        name='PhaseVolumeFraction',
+        definition='volume fraction of a (one) phase (material) on a dataset entity',  # noqa
+        key='PHASE_VOLUME_FRACTION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'PHASE_VOLUME_FRACTIONS': Keyword(
+        name='PhaseVolumeFractions',
+        definition='volume fractions for a number of phases (material) on a dataset entity',  # noqa
+        key='PHASE_VOLUME_FRACTIONS',
+        shape=[1],
+        length=None,
+        dtype=None),
     'PHYSICS_EQUATION': Keyword(
         name='PhysicsEquation',
         definition='Physics equation',  # noqa
@@ -1490,6 +1525,13 @@ KEYWORDS = {
         name='RhombohedralLattice',
         definition='A rhombohedral lattice',  # noqa
         key='RHOMBOHEDRAL_LATTICE',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'ROBIN': Keyword(
+        name='Robin',
+        definition='A mixed boundary condition $\alpha \Phi (x) + \beta (x) \partial {\Phi} / \partial {\bf{n}} (x) = h(x)$, with $h$ is the value.',  # noqa
+        key='ROBIN',
         shape=[1],
         length=None,
         dtype=None),
@@ -1628,8 +1670,29 @@ KEYWORDS = {
         dtype=None),
     'WETTING_ANGLE': Keyword(
         name='WettingAngle',
-        definition='Volume fraction wall boundary condition with specified contact angle',  # noqa
+        definition='Wetting angle Volume fraction wall boundary condition',  # noqa
         key='WETTING_ANGLE',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'ZERO_GRADIENT_PRESSURE_CONDITION': Keyword(
+        name='ZeroGradientPressureCondition',
+        definition='Zero gradient pressure condition',  # noqa
+        key='ZERO_GRADIENT_PRESSURE_CONDITION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'ZERO_GRADIENT_VELOCITY_CONDITION': Keyword(
+        name='ZeroGradientVelocityCondition',
+        definition='Zero gradient velocity condition',  # noqa
+        key='ZERO_GRADIENT_VELOCITY_CONDITION',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'ZERO_GRADIENT_VOLUME_FRACTION_CONDITION': Keyword(
+        name='ZeroGradientVolumeFractionCondition',
+        definition='Zero gradient volume fraction condition',  # noqa
+        key='ZERO_GRADIENT_VOLUME_FRACTION_CONDITION',
         shape=[1],
         length=None,
         dtype=None),

@@ -1,24 +1,23 @@
 from simphony.core import Default  # noqa
-from .condition import Condition
-from simphony.core.cuba import CUBA
 from simphony.cuds import meta_validation
+from simphony.core.cuba import CUBA
+from .dirichlet import Dirichlet
 
 
-class WettingAngle(Condition):
+class WettingAngle(Dirichlet):
     """
-    Volume fraction wall boundary condition with specified
-    contact angle
+    Wetting angle Volume fraction wall boundary condition
     """
     cuba_key = CUBA.WETTING_ANGLE
 
     def __init__(self,
+                 material,
                  contact_angle=Default,
-                 variable=Default,
                  description=Default,
                  name=Default):
-        super(WettingAngle, self).__init__(description=description, name=name)
+        super(WettingAngle, self).__init__(
+            material=material, description=description, name=name)
         self._init_models()
-        self._init_variable(variable)
         self._init_contact_angle(contact_angle)
 
     @classmethod
@@ -28,7 +27,7 @@ class WettingAngle(Condition):
         except AttributeError:
             base_params = ()
         return tuple(set((
-            CUBA.VARIABLE,
+            CUBA.MATERIAL,
             CUBA.CONTACT_ANGLE, ) + base_params))
 
     def _init_models(self):
@@ -42,32 +41,32 @@ class WettingAngle(Condition):
         return ['CUBA.CONTINUUM']  # noqa
 
     def _default_definition(self):
-        return "Volume fraction wall boundary condition with specified contact angle"  # noqa
+        return "Wetting angle Volume fraction wall boundary condition"  # noqa
 
-    def _init_variable(self, value):
+    def _init_material(self, value):
         if value is Default:
-            value = self._default_variable()
+            value = self._default_material()
 
-        self.variable = value
+        self.material = value
 
     @property
-    def variable(self):
-        return self.data[CUBA.VARIABLE]
+    def material(self):
+        return self.data[CUBA.MATERIAL]
 
-    @variable.setter
-    def variable(self, value):
-        value = self._validate_variable(value)
-        self.data[CUBA.VARIABLE] = value
+    @material.setter
+    def material(self, value):
+        value = self._validate_material(value)
+        self.data[CUBA.MATERIAL] = value
 
-    def _validate_variable(self, value):
-        value = meta_validation.cast_data_type(value, 'VARIABLE')
-        meta_validation.check_valid_shape(value, [None], 'VARIABLE')
-        meta_validation.check_elements(value, [None], 'VARIABLE')
+    def _validate_material(self, value):
+        value = meta_validation.cast_data_type(value, 'MATERIAL')
+        meta_validation.check_valid_shape(value, [2], 'MATERIAL')
+        meta_validation.check_elements(value, [2], 'MATERIAL')
 
         return value
 
-    def _default_variable(self):
-        return []
+    def _default_material(self):
+        raise TypeError("No default for material")
 
     def _init_contact_angle(self, value):
         if value is Default:
@@ -91,4 +90,4 @@ class WettingAngle(Condition):
         return value
 
     def _default_contact_angle(self):
-        return 45.0
+        return 90.0

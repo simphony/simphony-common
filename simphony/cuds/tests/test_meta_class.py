@@ -218,13 +218,10 @@ class TestMetaClass(unittest.TestCase):
             # The items of the sequence are not instance of Material
             meta_obj.material = [1, 2]
 
-    def test_Empty(self):
-        ''' Test for EmptyBoundaryCondition '''
+    def test_EmptyCondition(self):
+        ''' Test for EmptyCondition '''
         # It can accept any number of materials
-        for num_materials in range(5):
-            materials = tuple(meta_class.Material()
-                              for _ in range(num_materials))
-            meta_obj = meta_class.Empty(material=materials)
+        meta_obj = meta_class.EmptyCondition()
 
         self.check_cuds_item(meta_obj)
         self.check_cuds_component(meta_obj)
@@ -265,7 +262,7 @@ class TestMetaClass(unittest.TestCase):
 
     def test_Dirichlet(self):
         meta_class.Dirichlet(
-            material=(meta_class.Material(), meta_class.Material()))
+            material=meta_class.Material())
 
     def test_DissipationForce(self):
         meta_class.DissipationForce(
@@ -280,9 +277,7 @@ class TestMetaClass(unittest.TestCase):
             material=(meta_class.Material(), meta_class.Material()))
 
     def test_Neumann(self):
-        meta_class.Neumann(
-            material=(meta_class.Material(), meta_class.Material(),
-                      meta_class.Material()))
+        meta_class.Neumann(material=meta_class.Material())
 
     def test_PairPotential(self):
         meta_class.PairPotential(
