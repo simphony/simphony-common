@@ -282,7 +282,6 @@ class TestMetaClass(unittest.TestCase):
     def test_Neumann(self):
         meta_class.Neumann(material=meta_class.Material())
 
-
     def test_PairPotential(self):
         meta_class.PairPotential(
             material=(meta_class.Material(), meta_class.Material()))
