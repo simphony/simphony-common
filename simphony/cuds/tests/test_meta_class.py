@@ -221,10 +221,7 @@ class TestMetaClass(unittest.TestCase):
     def test_EmptyCondition(self):
         ''' Test for EmptyCondition '''
         # It can accept any number of materials
-        for num_materials in range(5):
-            materials = tuple(meta_class.Material()
-                              for _ in range(num_materials))
-            meta_obj = meta_class.EmptyCondition(material=materials)
+        meta_obj = meta_class.EmptyCondition()
 
         self.check_cuds_item(meta_obj)
         self.check_cuds_component(meta_obj)
