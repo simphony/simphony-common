@@ -14,6 +14,7 @@ class ZeroGradientPressureCondition(Neumann):
         super(ZeroGradientPressureCondition, self).__init__(
             material=material, description=description, name=name)
         self._init_models()
+        self._init_variables()
         self._init_pressure(pressure)
 
     @classmethod
@@ -37,6 +38,16 @@ class ZeroGradientPressureCondition(Neumann):
 
     def _default_definition(self):
         return "Zero gradient pressure condition"  # noqa
+
+    def _init_variables(self):
+        self._variables = self._default_variables()  # noqa
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def _default_variables(self):
+        return ['CUBA.PRESSURE']  # noqa
 
     def _init_pressure(self, value):
         if value is Default:

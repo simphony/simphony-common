@@ -1192,6 +1192,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'FREE_SLIP_VELOCITY': Keyword(
+        name='FreeSlipVelocity',
+        definition='Wall free slip velocity boundary condition, normal velocity is zero and tangential velocities are solved for.',  # noqa
+        key='FREE_SLIP_VELOCITY',
+        shape=[1],
+        length=None,
+        dtype=None),
     'FREE_SURFACE_MODEL': Keyword(
         name='FreeSurfaceModel',
         definition='Free surface model',  # noqa
@@ -1388,6 +1395,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
+    'MULTIPHASE_MATERIAL': Keyword(
+        name='MultiphaseMaterial',
+        definition='a multiphase material system, specifies the materials composing the mixture, or suspension, or multicrystal, etc.',  # noqa
+        key='MULTIPHASE_MATERIAL',
+        shape=[1],
+        length=None,
+        dtype=None),
     'MULTIPHASE_MODEL': Keyword(
         name='MultiphaseModel',
         definition='Multiphase model',  # noqa
@@ -1560,13 +1574,6 @@ KEYWORDS = {
         name='SjkrCohesionForce',
         definition='Additional normal force tending to maintain the contact',  # noqa
         key='SJKR_COHESION_FORCE',
-        shape=[1],
-        length=None,
-        dtype=None),
-    'SLIP_VELOCITY': Keyword(
-        name='SlipVelocity',
-        definition='Wall free slip velocity boundary condition',  # noqa
-        key='SLIP_VELOCITY',
         shape=[1],
         length=None,
         dtype=None),

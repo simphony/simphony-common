@@ -46,6 +46,7 @@ from .face_centered_cubic_lattice import FaceCenteredCubicLattice  # noqa
 from .face_centered_orthorhombic_lattice import FaceCenteredOrthorhombicLattice  # noqa
 from .fem import Fem  # noqa
 from .free import Free  # noqa
+from .free_slip_velocity import FreeSlipVelocity  # noqa
 from .free_surface_model import FreeSurfaceModel  # noqa
 from .fvm import Fvm  # noqa
 from .granular_dynamics import GranularDynamics  # noqa
@@ -74,6 +75,7 @@ from .model_equation import ModelEquation  # noqa
 from .molecular_dynamics import MolecularDynamics  # noqa
 from .molecular_statics import MolecularStatics  # noqa
 from .monoclinic_lattice import MonoclinicLattice  # noqa
+from .multiphase_material import MultiphaseMaterial  # noqa
 from .multiphase_model import MultiphaseModel  # noqa
 from .neumann import Neumann  # noqa
 from .newtonian_fluid_model import NewtonianFluidModel  # noqa
@@ -99,7 +101,6 @@ from .shear_stress_power_law_slip_velocity import ShearStressPowerLawSlipVelocit
 from .simple_relative_velocity_model import SimpleRelativeVelocityModel  # noqa
 from .single_phase_model import SinglePhaseModel  # noqa
 from .sjkr_cohesion_force import SjkrCohesionForce  # noqa
-from .slip_velocity import SlipVelocity  # noqa
 from .software_tool import SoftwareTool  # noqa
 from .solver_parameter import SolverParameter  # noqa
 from .sph import Sph  # noqa
