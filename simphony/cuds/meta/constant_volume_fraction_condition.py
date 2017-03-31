@@ -18,6 +18,7 @@ class ConstantVolumeFractionCondition(Dirichlet):
         super(ConstantVolumeFractionCondition, self).__init__(
             material=material, description=description, name=name)
         self._init_models()
+        self._init_variables()
         self._init_volume_fraction(volume_fraction)
 
     @classmethod
@@ -41,6 +42,16 @@ class ConstantVolumeFractionCondition(Dirichlet):
 
     def _default_definition(self):
         return "Constant volume fraction condition"  # noqa
+
+    def _init_variables(self):
+        self._variables = self._default_variables()  # noqa
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def _default_variables(self):
+        return ['CUBA.VOLUME_FRACTION']  # noqa
 
     def _init_volume_fraction(self, value):
         if value is Default:
