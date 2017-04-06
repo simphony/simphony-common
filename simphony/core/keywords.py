@@ -1248,10 +1248,17 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=None),
-    'INLET_OUTLET': Keyword(
-        name='InletOutlet',
+    'INLET_OUTLET_VELOCITY': Keyword(
+        name='InletOutletVelocity',
         definition='Inlet outlet boundary condition (outlet condition is zero gradient and inlet given variable value)',  # noqa
-        key='INLET_OUTLET',
+        key='INLET_OUTLET_VELOCITY',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'INLET_OUTLET_VOLUME_FRACTION': Keyword(
+        name='InletOutletVolumeFraction',
+        definition='Inlet outlet boundary condition (outlet condition is zero gradient and inlet given variable value)',  # noqa
+        key='INLET_OUTLET_VOLUME_FRACTION',
         shape=[1],
         length=None,
         dtype=None),
@@ -1357,6 +1364,13 @@ KEYWORDS = {
         name='MesoscopicStressModel',
         definition='Stress model from meso scopic to use in mixture model',  # noqa
         key='MESOSCOPIC_STRESS_MODEL',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'MIXED_CONDITION': Keyword(
+        name='MixedCondition',
+        definition='general mixed boundary condition',  # noqa
+        key='MIXED_CONDITION',
         shape=[1],
         length=None,
         dtype=None),

@@ -54,7 +54,8 @@ from .gravity_model import GravityModel  # noqa
 from .herschel_bulkley_model import HerschelBulkleyModel  # noqa
 from .hexagonal_lattice import HexagonalLattice  # noqa
 from .incompressible_fluid_model import IncompressibleFluidModel  # noqa
-from .inlet_outlet import InletOutlet  # noqa
+from .inlet_outlet_velocity import InletOutletVelocity  # noqa
+from .inlet_outlet_volume_fraction import InletOutletVolumeFraction  # noqa
 from .integration_step import IntegrationStep  # noqa
 from .integration_time import IntegrationTime  # noqa
 from .interatomic_potential import InteratomicPotential  # noqa
@@ -70,6 +71,7 @@ from .mesh_element import MeshElement  # noqa
 from .mesoscopic import Mesoscopic  # noqa
 from .mesoscopic_relative_velocity_model import MesoscopicRelativeVelocityModel  # noqa
 from .mesoscopic_stress_model import MesoscopicStressModel  # noqa
+from .mixed_condition import MixedCondition  # noqa
 from .mixture_model import MixtureModel  # noqa
 from .model_equation import ModelEquation  # noqa
 from .molecular_dynamics import MolecularDynamics  # noqa

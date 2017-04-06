@@ -1,10 +1,10 @@
 from simphony.core import Default  # noqa
-from .condition import Condition
+from .mixed_condition import MixedCondition
 from simphony.core.cuba import CUBA
 from simphony.cuds import meta_validation
 
 
-class Robin(Condition):
+class Robin(MixedCondition):
     """
     A mixed boundary condition $\alpha \Phi (x) + \beta (x)
     \partial {\Phi} / \partial {\bf{n}} (x) = h(x)$, with $h$ is
@@ -12,8 +12,14 @@ class Robin(Condition):
     """
     cuba_key = CUBA.ROBIN
 
-    def __init__(self, dirichlet, neumann, description=Default, name=Default):
-        super(Robin, self).__init__(description=description, name=name)
+    def __init__(self,
+                 dirichlet,
+                 neumann,
+                 material,
+                 description=Default,
+                 name=Default):
+        super(Robin, self).__init__(
+            material=material, description=description, name=name)
         self._init_dirichlet(dirichlet)
         self._init_neumann(neumann)
 
