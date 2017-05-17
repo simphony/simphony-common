@@ -492,6 +492,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=numpy.int32),
+    'NUMBER_OF_PHYSICS_STATES': Keyword(
+        name='NumberOfPhysicsStates',
+        definition='Number of solution states to be saved',  # noqa
+        key='NUMBER_OF_PHYSICS_STATES',
+        shape=[1],
+        length=None,
+        dtype=numpy.int32),
     'NUMBER_OF_POINTS': Keyword(
         name='NumberOfPoints',
         definition='Number of points or nodes',  # noqa
@@ -1658,6 +1665,13 @@ KEYWORDS = {
         name='Thermostat',
         definition='A thermostat is a model that describes the thermal interaction of a material with the environment or a heat reservoir',  # noqa
         key='THERMOSTAT',
+        shape=[1],
+        length=None,
+        dtype=None),
+    'TOTAL_PRESSURE_CONDITION': Keyword(
+        name='TotalPressureCondition',
+        definition='Total pressure boundary condition',  # noqa
+        key='TOTAL_PRESSURE_CONDITION',
         shape=[1],
         length=None,
         dtype=None),

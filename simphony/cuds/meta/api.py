@@ -113,6 +113,7 @@ from .temperature_rescaling import TemperatureRescaling  # noqa
 from .tetragonal_lattice import TetragonalLattice  # noqa
 from .thermal_model import ThermalModel  # noqa
 from .thermostat import Thermostat  # noqa
+from .total_pressure_condition import TotalPressureCondition  # noqa
 from .triclinic_lattice import TriclinicLattice  # noqa
 from .turbulence_model import TurbulenceModel  # noqa
 from .verlet import Verlet  # noqa
