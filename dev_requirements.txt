@@ -5,7 +5,10 @@ tabulate >= 0.7.4
 mock==1.0.1
 coverage
 flake8<3
-hypothesis
+hypothesis==3.6.0
+pytest==2.9.1
+py==1.4.31
+pluggy==0.3.1
 # Pinned because older versions return status 2 for successful
 # operation, which is considered an error by setup.py
 yapf==0.14.0
