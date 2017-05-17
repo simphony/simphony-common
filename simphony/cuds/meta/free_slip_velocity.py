@@ -13,6 +13,7 @@ class FreeSlipVelocity(Condition):
     def __init__(self, description=Default, name=Default):
         super(FreeSlipVelocity, self).__init__(
             description=description, name=name)
+        self._init_variables()
 
     @classmethod
     def supported_parameters(cls):
@@ -24,3 +25,13 @@ class FreeSlipVelocity(Condition):
 
     def _default_definition(self):
         return "Wall free slip velocity boundary condition, normal velocity is zero and tangential velocities are solved for."  # noqa
+
+    def _init_variables(self):
+        self._variables = self._default_variables()  # noqa
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def _default_variables(self):
+        return ['CUBA.VELOCITY']  # noqa
