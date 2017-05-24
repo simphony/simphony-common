@@ -34,9 +34,9 @@ setup(
     install_requires=[
         "enum34>=1.0.4",
         "stevedore>=1.2.0",
-        "numpy>=1.4.1"],
+        "numpy>=1.12"],
     extras_require={
-        'H5IO': ["tables>=3.1.1"],
+        'H5IO': ["tables>=3.2.3.1"],
         'CUBAGen': ["click >= 3.3", "pyyaml >= 3.11"]},
     packages=find_packages(),
     entry_points={
