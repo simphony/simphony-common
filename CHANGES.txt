@@ -1,6 +1,11 @@
 SimPhoNy CHANGELOG
 ======================
 
+Release 0.4.1
+-------------
+* Updated versions of numpy and tables (#412)
+
+
 Release 0.4.0
 -------------
 
