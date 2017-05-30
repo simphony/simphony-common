@@ -15,6 +15,10 @@ The native implementation of the SimPhoNy cuds objects and io code (http://www.s
    :target: https://readthedocs.org/projects/simphony/?badge=master
    :alt: Documentation Status
 
+.. image:: https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg
+   :target: https://hub.docker.com/r/simphony/simphony-common/
+   :alt: Docker Image
+
 Repository
 ----------
 
