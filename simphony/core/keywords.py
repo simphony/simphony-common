@@ -79,6 +79,13 @@ KEYWORDS = {
         shape=[1],
         length=None,
         dtype=numpy.float64),
+    'COHESIVE_GROUP': Keyword(
+        name='CohesiveGroup',
+        definition='Group to define particles that can bond together',  # noqa
+        key='COHESIVE_GROUP',
+        shape=[1],
+        length=None,
+        dtype=numpy.int32),
     'COLLISION_OPERATOR': Keyword(
         name='CollisionOperator',
         definition='Collision operator of a model Boltzmann equation',  # noqa
