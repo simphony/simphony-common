@@ -137,10 +137,10 @@ setup(
     install_requires=[
         "enum34 >= 1.0.4",
         "stevedore >= 1.2.0",
-        "numpy ~= 1.11",
+        "numpy ~= 1.12",
         ],
     extras_require={
-        'H5IO': ["tables>=3.1.1"],
+        'H5IO': ["tables ~= 3.2.3.1"],
         'CUBAGen': []},
     packages=find_packages(),
     cmdclass={
