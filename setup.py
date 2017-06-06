@@ -68,8 +68,7 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "simphony_metatools >= 0.1.0",
-        "yapf >= 0.14",
+        "simphony_metatools >= 0.2.0",
         "enum34 >= 1.0.4",
         "stevedore >= 1.2.0",
         "numpy >= 1.11",

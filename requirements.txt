@@ -1,6 +1,5 @@
 git+https://github.com/simphony/simphony-metaparser.git@0.2.0#egg=simphony_metaparser
-git+https://github.com/simphony/simphony-metatools.git@0.1.0#egg=simphony_metatools
-yapf==0.14.0
+git+https://github.com/simphony/simphony-metatools.git@0.2.0#egg=simphony_metatools
 numexpr
 enum34 >= 1.0.4
 tables >= 3.1.1
