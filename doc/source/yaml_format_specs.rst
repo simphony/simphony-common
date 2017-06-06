@@ -168,7 +168,7 @@ The following ``Fixed properties`` keys MUST be present:
 
     - a string referring to another entry. for example::
 
-      parent: CUBA.PAIR_POTENTIAL
+        parent: CUBA.PAIR_POTENTIAL
 
     - or, an empty entry (yaml meaning: None), for the start of the hierarchy (parentless).
 
