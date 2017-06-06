@@ -30,21 +30,6 @@ def create_ontology_classes():
                 "--overwrite"]
     check_call(cmd_args)
 
-    print("Running yapf to reformat in pep8 style")
-    cmd_args = ["yapf", "--style", "pep8", "--in-place"]
-    try:
-        check_call(cmd_args + ["simphony/core/cuba.py"])
-        check_call(cmd_args + ["simphony/core/keywords.py"])
-        check_call(cmd_args + ["--recursive", "simphony/cuds/meta/"])
-    except OSError:
-        print(textwrap.dedent("""
-            Failed to run yapf. Make sure it is installed in your
-            python environment, by running
-
-            pip install yapf
-            """))
-        raise
-
 
 class Build(build_py):
     def run(self):
