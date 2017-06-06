@@ -18,6 +18,8 @@ User Manual
    CUBA <cuba_information>
    CUDS <cuds_definition>
    HDF5 Storage <hdf5_storage>
+   Metadata file format <yaml_format_specs>
+
 
 API Reference
 =============
