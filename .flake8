@@ -1,2 +1,2 @@
 [flake8]
-exclude=doc/*,build/*
+exclude=doc/*,build/*,simphony/core/keywords.py,simphony/core/cuba.py/simphony/cuds/meta/*
