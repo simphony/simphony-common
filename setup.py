@@ -4,7 +4,7 @@ import textwrap
 from subprocess import check_call, CalledProcessError
 
 from setuptools import setup, find_packages
-from distutils.command.build import build
+from setuptools.command.build_py import build_py
 
 # Read description
 with open('README.rst', 'r') as readme:
@@ -25,7 +25,7 @@ def cd(path):
         os.chdir(prev_cwd)
 
 
-class Build(build):
+class Build(build_py):
     def run(self):
         ontology_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -56,7 +56,7 @@ class Build(build):
                 pip install yapf
                 """))
             raise
-        build.run(self)
+        build_py.run(self)
 
 
 def write_version_py(filename=None):
@@ -93,6 +93,6 @@ setup(
         'CUBAGen': []},
     packages=find_packages(),
     cmdclass={
-        'build': Build,
+        'build_py': Build,
     },
     )

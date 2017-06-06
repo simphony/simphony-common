@@ -28,7 +28,6 @@ install:
   - pushd examples/plugin
   - python setup.py develop
   - popd
-  - python setup.py build_meta
 script:
   - flake8 .
   - py.test -v
