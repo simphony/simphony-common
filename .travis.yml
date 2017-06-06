@@ -20,6 +20,10 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
+  - yamllint -s -c .yamllint ontology/
+  - mkdir -p simphony/core/
+  - mkdir -p simphony/cuds/meta/
+  - simphony-meta-generate ontology simphony --overwrite
   - python setup.py develop
   - pushd examples/plugin
   - python setup.py develop

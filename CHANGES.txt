@@ -6,6 +6,20 @@ Release 0.7.0.dev0
 
 * Generator command now requires only one invocation. (#382) 
 
+* Ontology Changes (in legacy simphony-metadata):
+    * Added cohesive group (#139)
+    * Add CFD needed data (#137)
+    * Adds variable VELOCITY to FREE_SLIP_VELOCITY (#136)
+    * Inlet outlet BC fixing issue #133 (#134)
+    * Free slip condition is not constant velocity (#132)
+    * Adding a multiphase material metadata (#130)
+    * Added variables to allow more semantic query to conditions (#129)
+    * Fix EMPTY_CONDITION error (#128)
+    * Perform build of meta-classes to "lint" the contents. (#124)
+    * Add entries for PDE conditions (#121)
+    * added cfd metadata and keys (#120)
+    * Fixed yaml file. Stricter linting (#119)
+
 Release 0.6.0
 -------------
 
@@ -14,6 +28,18 @@ Release 0.6.0
 * Added uids to datasets (#378)
 * Updated API for CUDS (#379)
 * Added setter/getter for name property (#380)
+
+* Ontology Changes (in legacy simphony-metadata):
+    * Added CUDS class (#111, #114)
+    * Format specs: 
+       * Clarified the meaning of CUBA.SYSTEM (#112)
+       * Clarified format of fixed property entries (#112)
+       * Changed format of header (#113)
+       * Changed acceptance of default values when CUBA.SYSTEM is specified (#113)
+       * Specified lack of entry is None, not empty string (#115)
+       * Clarified lack of ordering in keys (#116)
+       * Specified dependency over CUBA hierarchy when a variable 
+         property refers to a CUBA object (#117)
 
 Release 0.5.0
 -------------
