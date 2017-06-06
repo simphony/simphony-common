@@ -19,14 +19,17 @@ before_install:
   - pip install --upgrade pip
 install:
   - pip install -r requirements.txt
-  - pip install yamllint
+  - pip install -r dev_requirements.txt
   - yamllint -s -c .yamllint ontology/
-  - python setup.py install 
+  - mkdir -p simphony/core/
+  - mkdir -p simphony/cuds/meta/
+  - simphony-meta-generate ontology simphony --overwrite
+  - python setup.py develop
   - pushd examples/plugin
   - python setup.py install 
+  - python setup.py develop
   - popd
 script:
-  - pip install -r dev_requirements.txt
   - flake8 .
   - py.test -v
   - sphinx-build -W doc/source doc/build/sphinx
