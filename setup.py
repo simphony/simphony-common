@@ -28,7 +28,8 @@ def create_ontology_classes():
                 "simphony",
                 "--overwrite"]
     check_call(cmd_args)
-
+    import time
+    time.sleep(10)
 
 class Build(build_py):
     def run(self):
@@ -58,6 +59,29 @@ version = '%s'
 
 write_version_py()
 
+# We cannot use find_packages because we are generating files during build.
+packages = [
+    'bench',
+    'simphony',
+    'bench.tests',
+    'simphony.core',
+    'simphony.cuds',
+    'simphony.engine',
+    'simphony.io',
+    'simphony.pre_processing',
+    'simphony.testing',
+    'simphony.tools',
+    'simphony.visualisation',
+    'simphony.core.tests',
+    'simphony.cuds.meta',
+    'simphony.cuds.tests',
+    'simphony.engine.tests',
+    'simphony.io.tests',
+    'simphony.pre_processing.tests',
+    'simphony.testing.tests',
+    'simphony.tools.tests',
+    'simphony.visualisation.tests'
+]
 
 # main setup configuration class
 setup(
@@ -75,7 +99,7 @@ setup(
     extras_require={
         'H5IO': ["tables ~= 3.2.3.1"],
         'CUBAGen': []},
-    packages=find_packages(),
+    packages=packages,
     cmdclass={
         'build_py': Build,
         'develop': Develop,
