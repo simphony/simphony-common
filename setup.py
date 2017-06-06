@@ -10,7 +10,7 @@ from setuptools.command.develop import develop
 with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
-# Setup version
+
 VERSION = '0.7.0.dev0'
 
 
