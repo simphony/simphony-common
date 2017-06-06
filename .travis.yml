@@ -20,6 +20,7 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
+  - pip install yamllint
   - yamllint -s -c .yamllint ontology/
   - mkdir -p simphony/core/
   - mkdir -p simphony/cuds/meta/
