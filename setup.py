@@ -83,9 +83,11 @@ setup(
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
+        "simphony_metatools >= 0.1.0",
+        "yapf >= 0.14",
         "enum34 >= 1.0.4",
         "stevedore >= 1.2.0",
-        "numpy ~= 1.12",
+        "numpy >= 1.11",
         ],
     extras_require={
         'H5IO': ["tables ~= 3.2.3.1"],
@@ -94,5 +96,5 @@ setup(
     cmdclass={
         'build_py': Build,
         'develop': Develop,
-    },
-    )
+    })
+
