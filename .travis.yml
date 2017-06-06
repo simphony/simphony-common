@@ -25,14 +25,16 @@ install:
   - mkdir -p simphony/core/
   - mkdir -p simphony/cuds/meta/
   - simphony-meta-generate ontology simphony --overwrite
-  - python setup.py develop
+  - python setup.py install
   - pushd examples/plugin
   - python setup.py install 
-  - python setup.py develop
   - popd
 script:
   - flake8 .
-  - py.test -v
+  - mkdir _test
+  - pushd _test
+  - py.test -v --pyargs simphony
+  - popd
   - sphinx-build -W doc/source doc/build/sphinx
 after_success:
   - pip install codecov
