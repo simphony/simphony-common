@@ -63,6 +63,9 @@ target/
 # PyCharm IDE stuff
 .idea
 simphony/version.py
-simphony-metadata
 *-venv
 venv
+simphony/core/cuba.py
+simphony/core/keywords.py
+simphony/cuds/meta/*
+
