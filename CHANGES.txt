@@ -1,7 +1,13 @@
 SimPhoNy CHANGELOG
 ======================
 
-Release 0.7.0.dev0
+Release 0.8.0.dev0
+------------------
+
+* Outdated and transported simphony-metadata content in this repository,
+  readapted build process, removed generated classes from repository.
+
+Release 0.7.0
 -------------
 
 * Generator command now requires only one invocation. (#382) 
