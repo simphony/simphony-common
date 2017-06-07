@@ -19,15 +19,20 @@ before_install:
   - pip install --upgrade pip
 install:
   - pip install -r requirements.txt
-  - pip install -r dev_requirements.txt
-  - python setup.py develop
+  - pip install yamllint
+  - yamllint -s -c .yamllint ontology/
+  - python setup.py install
   - pushd examples/plugin
-  - python setup.py develop
+  - python setup.py install 
   - popd
-  - python setup.py build_meta
 script:
+  - pip install -r dev_requirements.txt
   - flake8 .
-  - py.test -v
+  - mkdir _test
+  - pushd _test
+  - py.test -v --pyargs simphony
+  - popd
+  - pip install -r doc_requirements.txt
   - sphinx-build -W doc/source doc/build/sphinx
 after_success:
   - pip install codecov

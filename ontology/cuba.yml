@@ -1,0 +1,542 @@
+---
+VERSION: "1.0"
+
+CUBA: Common Unified Base Attributes
+
+Purpose: CUBA provides the most primitive definitions used in the SimPhoNy metadata schema
+
+CUBA_KEYS:
+
+  UID:
+    definition: Universal unique id represented as a hex string size 32
+    length: 32
+    type: string
+
+  NAME:
+    definition: Naming of high-level objects (e.g. solver models)
+    length: 20
+    type: string
+
+  POSITION:
+    definition: Position of a point or node or atom
+    shape: [3]
+    type: double
+
+  DIRECTION:
+    definition: Geometric (more general than, e.g., velocity) could be used for spin
+    shape: [3]
+    type: double
+
+  STATUS:
+    definition: Status of a point or node
+    type: integer
+
+  LABEL:
+    definition: Label for a point or node
+    type: integer
+
+  CHEMICAL_SPECIE:
+    definition: Chemical specie
+    length: 20
+    type: string
+
+  MATERIAL_TYPE:
+    definition: Material dimension and type
+    type: integer
+
+  SHAPE_CENTER:
+    definition: Geometrical center of the shape of the material
+    shape: [3]
+    type: double
+
+  SHAPE_LENGTH_UC:
+    definition: Length in units cells of the shape of the material
+    shape: [3]
+    type: double
+
+  SHAPE_LENGTH:
+    definition: Length in angstroms of the shape of the materials
+    shape: [3]
+    type: double
+
+  SHAPE_RADIUS:
+    definition: Radius for a spherical material
+    shape: [3]
+    type: double
+
+  SHAPE_SIDE:
+    definition: Side length for a hexagonal material
+    shape: [3]
+    type: double
+
+  CRYSTAL_STORAGE:
+    definition: Additional information for visualization
+    length: 20
+    type: string
+
+  NAME_UC:
+    definition: Name of the unit cell of the component
+    length: 20
+    type: string
+
+  LATTICE_VECTORS:
+    definition: Lattice vectors of unit cell of the component
+    shape: [3, 3]
+    type: double
+
+  SYMMETRY_LATTICE_VECTORS:
+    definition: Symmetry group
+    type: integer
+
+  OCCUPANCY:
+    definition: Occupancy of an atomic position
+    type: double
+
+  BOND_LABEL:
+    definition: Unique ID of atoms
+    length: 20
+    type: string
+
+  BOND_TYPE:
+    definition: Type of label
+    type: integer
+
+  VELOCITY:
+    definition: Velocity of a point or node
+    shape: [3]
+    type: double
+
+  ACCELERATION:
+    definition: Acceleration of a point or node
+    shape: [3]
+    type: double
+
+  NUMBER_OF_POINTS:
+    definition: Number of points or nodes
+    type: integer
+
+  RADIUS:
+    definition: Particle radius
+    type: double
+
+  SIZE:
+    definition: size of a parameter or quantity
+    type: double
+
+  MASS:
+    definition: Particle mass
+    type: double
+
+  VOLUME:
+    definition: Volume of a particle, cell, etc.
+    type: double
+
+  ANGULAR_VELOCITY:
+    definition: Angular velocity of a point or node
+    shape: [3]
+    type: double
+
+  ANGULAR_ACCELERATION:
+    definition: Angular acceleration of a point or node
+    shape: [3]
+    type: double
+
+  SIMULATION_DOMAIN_DIMENSIONS:
+    definition: Size of the simulation models
+    shape: [3]
+    type: double
+
+  SIMULATION_DOMAIN_ORIGIN:
+    definition: Offset for the simulation models
+    shape: [3]
+    type: double
+
+  DYNAMIC_VISCOSITY:
+    definition: Dynamic viscosity of fluid
+    type: double
+
+  KINEMATIC_VISCOSITY:
+    definition: Kinematic viscosity of fluid
+    type: double
+
+  DIFFUSION_COEFFICIENT:
+    definition: Diffusion coefficient
+    type: double
+
+  PROBABILITY_COEFFICIENT:
+    definition: For stochastic processes (e.g. sorption)
+    type: double
+
+  FRICTION_COEFFICIENT:
+    definition: Control particle friction
+    type: double
+
+  SCALING_COEFFICIENT:
+    definition: Coarsening or time-scale bridging
+    type: double
+
+  EQUATION_OF_STATE_COEFFICIENT:
+    definition: Equation of state for multiphase fluids
+    type: double
+
+  CONTACT_ANGLE:
+    definition: Wettability in multiphase flows
+    type: double
+
+  AMPHIPHILICITY:
+    definition: Hydrophilic/-phile behaviour of a particle
+    type: double
+
+  PHASE_INTERACTION_STRENGTH:
+    definition: Strength of phase interactions on a particle
+    type: double
+
+  HAMAKER_CONSTANT:
+    definition: Van der Waals body-body interaction
+    type: double
+
+  ZETA_POTENTIAL:
+    definition: Coulomb interaction between particles
+    type: double
+
+  ION_VALENCE_EFFECT:
+    definition: Coulomb interaction between particles
+    type: double
+
+  DEBYE_LENGTH:
+    definition: Electrostatic effects of particles in solution
+    type: double
+
+  SMOOTHING_LENGTH:
+    definition: Half of kernel cut-off for all splines
+    type: double
+
+  LATTICE_SPACING:
+    definition: Distance between adjacent lattice nodes
+    type: double
+
+  TIME_STEP:
+    definition: Length of a discrete time step
+    type: double
+
+  NUMBER_OF_TIME_STEPS:
+    definition: Number of discrete time steps
+    type: integer
+
+  FORCE:
+    definition: Force
+    shape: [3]
+    type: double
+
+  TORQUE:
+    definition: Torque
+    shape: [3]
+    type: double
+
+  DENSITY:
+    definition: Density
+    type: double
+
+  CONCENTRATION:
+    definition: Concentration of a substance
+    type: double
+
+  PRESSURE:
+    definition: Pressure
+    type: double
+
+  TEMPERATURE:
+    definition: Temperature
+    type: double
+
+  DISTRIBUTION:
+    definition: Single-particle distribution function
+    type: double
+
+  ORDER_PARAMETER:
+    definition: Phase field in multiphase flows
+    type: double
+
+  ORIGINAL_POSITION:
+    definition: Position at the beginning of the calculation
+    shape: [3]
+    type: double
+
+  CURRENT:
+    definition: current value of a parameter
+    type: double
+
+  FINAL:
+    definition: final value of a parameter
+    type: double
+
+  DELTA_DISPLACEMENT:
+    definition: Displacement during the last time step
+    shape: [3]
+    type: double
+
+  EXTERNAL_APPLIED_FORCE:
+    definition: Externally applied force (force fields, interactions, etc)
+    shape: [3]
+    type: double
+
+  EULER_ANGLES:
+    definition: Euler angles
+    shape: [3]
+    type: double
+
+  SPHERICITY:
+    definition: Sphericity of the particle
+    type: double
+
+  YOUNG_MODULUS:
+    definition: Young modulus
+    type: double
+
+  POISSON_RATIO:
+    definition: Poisson ratio
+    type: double
+
+  RESTITUTION_COEFFICIENT:
+    definition: Restitution coefficient
+    type: double
+
+  ROLLING_FRICTION:
+    definition: Rolling friction coefficient
+    type: double
+
+  VOLUME_FRACTION:
+    definition: Volume fraction
+    type: double
+
+  COUPLING_TIME:
+    definition: coupling time
+    type: double
+
+  CUTOFF_DISTANCE:
+    definition: Distance where force is no longer taken into account
+    type: double
+
+  ENERGY_WELL_DEPTH:
+    definition: Measurement of how strongly the two particles attract each other
+    type: double
+
+  VAN_DER_WAALS_RADIUS:
+    definition: Distance at which the intermolecular potential between the two particles is zero
+    type: double
+
+  DIELECTRIC_CONSTANT:
+    definition: Ratio of the permittivity of a substance to the permittivity of free space or vacuum
+    type: double
+
+  DYNAMIC_PRESSURE:
+    definition: Dynamic pressure
+    type: double
+
+  FLUX:
+    definition: Flux
+    type: double
+
+  HOMOGENIZED_STRESS_TENSOR:
+    definition: Homogenized stress tensor
+    shape: [9]
+    type: double
+
+  STRAIN_TENSOR:
+    definition: Strain tensor
+    shape: [9]
+    type: double
+
+  RELATIVE_VELOCITY:
+    definition: Relative velocity
+    shape: [3]
+    type: double
+
+  DIFFUSION_VELOCITY:
+    definition: Diffusion velocity
+    shape: [3]
+    type: double
+
+  STRESS_TENSOR:
+    definition: Stress tensor
+    shape: [9]
+    type: double
+
+  VOLUME_FRACTION_GRADIENT:
+    definition: Volume fraction gradient
+    shape: [3]
+    type: double
+
+  COHESION_ENERGY_DENSITY:
+    definition: Work of adhesion per unit contact area
+    type: double
+
+  MAJOR:
+    definition: Major attribute of an entity.
+    length: 8
+    type: string
+
+  MINOR:
+    definition: Minor attribute of an entity.
+    length: 8
+    type: string
+
+  PATCH:
+    definition: Patch attribute of an entity.
+    length: 8
+    type: string
+
+  FULL:
+    definition: Full attribute of an entity.
+    length: 128
+    type: string
+
+  CHARGE:
+    definition: Charge
+    type: double
+
+  CHARGE_DENSITY:
+    definition: Charge density
+    type: double
+
+  DESCRIPTION:
+    definition: Description text
+    length: 20
+    type: string
+
+  ELECTRIC_FIELD:
+    definition: Electric field
+    type: double
+
+  ELECTRON_MASS:
+    definition: Electron mass
+    type: double
+
+  ELECTROSTATIC_FIELD:
+    definition: Electrostatic field
+    shape: [3]
+    type: double
+
+  ENERGY:
+    definition: Energy
+    type: double
+
+  HEAT_CONDUCTIVITY:
+    definition: Heat conductivity
+    type: double
+
+  INITIAL_VISCOSITY:
+    definition: Initial viscosity
+    type: double
+
+  LINEAR_CONSTANT:
+    definition: Linear constant
+    type: double
+
+  MAXIMUM_VISCOSITY:
+    definition: Maximum viscosity
+    type: double
+
+  MINIMUM_VISCOSITY:
+    definition: Minimum viscosity
+    type: double
+
+  MOMENTUM:
+    definition: Momentum
+    type: double
+
+  MOMENT_INERTIA:
+    definition: Moment inertia
+    type: double
+
+  POTENTIAL_ENERGY:
+    definition: Potential energy
+    type: double
+
+  POWER_LAW_INDEX:
+    definition: Power law index
+    type: double
+
+  RELAXATION_TIME:
+    definition: Relaxation time
+    type: double
+
+  SURFACE_TENSION:
+    definition: Surface tension
+    type: double
+
+  TIME:
+    definition: Time
+    type: double
+
+  VISCOSITY:
+    definition: Viscosity
+    type: double
+
+  COLLISION_OPERATOR:
+    definition: Collision operator of a model Boltzmann equation
+    type: integer
+
+  REFERENCE_DENSITY:
+    definition: Reference value for density
+    type: double
+
+  EXTERNAL_FORCING:
+    definition: Toggle for an external force
+    type: boolean
+
+  FLOW_TYPE:
+    definition: Classification of a fluid flow type
+    type: integer
+
+  VECTOR:
+    definition: A vector in 3D geometric space
+    shape: [3]
+    type: double
+
+  INDEX:
+    definition: An integer vector in 3D geometric space
+    shape: [3]
+    type: integer
+
+  THERMODYNAMIC_ENSEMBLE:
+    definition: Thermodynamic ensemble
+    type: string
+    length: 4096
+
+  VARIABLE:
+    definition: a list of physics/chemistry variables in a PE or MR
+    type: string
+    length: 4096
+
+  NONE:
+    definition: a general none value
+    type: integer
+
+  LATTICE_PARAMETER:
+    definition: A lattice parameter to define a Bravais Lattice
+    type: double
+
+  STEADY_STATE:
+    definition: Use steady state solver
+    type: boolean
+
+  MAXIMUM_COURANT_NUMBER:
+    definition: Maximum Courant number
+    type: double
+
+  NUMBER_OF_CORES:
+    definition: Number of cpu cores to use
+    type: integer
+
+  MAGNITUDE:
+    definition: Magnitude of vector variable
+    type: double
+
+  NUMBER_OF_PHYSICS_STATES:
+    definition: Number of solution states to be saved
+    type: integer
+
+  COHESIVE_GROUP:
+    definition: Group to define particles that can bond together
+    type: integer
