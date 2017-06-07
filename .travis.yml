@@ -19,7 +19,6 @@ before_install:
   - pip install --upgrade pip
 install:
   - pip install -r requirements.txt
-  - pip install -r dev_requirements.txt
   - pip install yamllint
   - yamllint -s -c .yamllint ontology/
   - python setup.py install
@@ -27,11 +26,13 @@ install:
   - python setup.py install 
   - popd
 script:
+  - pip install -r dev_requirements.txt
   - flake8 .
   - mkdir _test
   - pushd _test
   - py.test -v --pyargs simphony
   - popd
+  - pip install -r doc_requirements.txt
   - sphinx-build -W doc/source doc/build/sphinx
 after_success:
   - pip install codecov
