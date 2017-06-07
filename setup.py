@@ -28,8 +28,7 @@ def create_ontology_classes():
                 "simphony",
                 "--overwrite"]
     check_call(cmd_args)
-    import time
-    time.sleep(10)
+
 
 class Build(build_py):
     def run(self):
