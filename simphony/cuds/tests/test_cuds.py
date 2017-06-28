@@ -207,3 +207,32 @@ class CUDSTestCase(unittest.TestCase):
         self.assertTrue(len(component_list), 1)
         self.assertEqual(component_list[0].uid,
                          self.named_cuds_1.uid)
+
+    def test_cuds_update(self):
+
+        component = api.Box(name='a box')
+
+        c = CUDS()
+
+        c.add([component])
+
+        component.name = 'updated box'
+
+        c.update([component])
+
+        updated_component = c.get(component.uid)
+
+        self.assertEqual(updated_component.name, 'updated box')
+
+
+    def test_cuds_update_invalid_component(self):
+        component = api.Box(name='a box')
+
+        c = CUDS()
+
+        c.add([component])
+
+        another_component = api.Box(name='another box')
+
+        c.update([another_component])
+
