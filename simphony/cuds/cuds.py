@@ -113,7 +113,7 @@ class CUDS(api.CUDS):
     def _update(self, component):
         """Update a component"""
         if component.uid not in self._store:
-            raise ValueError("Component {name:uid} does not exist."
+            raise ValueError("Component {name}:{uid} does not exist."
                              .format(name=component.name, uid=component.uid))
 
         self._store[component.uid] = component
