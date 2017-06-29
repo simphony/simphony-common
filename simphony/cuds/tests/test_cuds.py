@@ -224,7 +224,6 @@ class CUDSTestCase(unittest.TestCase):
 
         self.assertEqual(updated_component.name, 'updated box')
 
-
     def test_cuds_update_invalid_component(self):
         component = api.Box(name='a box')
 
@@ -234,5 +233,6 @@ class CUDSTestCase(unittest.TestCase):
 
         another_component = api.Box(name='another box')
 
-        c.update([another_component])
+        with self.assertRaisesRegexp(ValueError, 'Component another box:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} does not exist') as exc:
+            c.update([another_component])
 
