@@ -108,15 +108,14 @@ class CUDS(api.CUDS):
             If any object inside the iterable does not exist.
         """
         for component in components:
-            self._update(component)
+            if component.uid not in self._store:
+                raise ValueError(
+                    "Component {name}:{uid} does not exist.".format(
+                        name=component.name, uid=component.uid
+                    )
+                )
 
-    def _update(self, component):
-        """Update a component"""
-        if component.uid not in self._store:
-            raise ValueError("Component {name}:{uid} does not exist."
-                             .format(name=component.name, uid=component.uid))
-
-        self._store[component.uid] = component
+            self._store[component.uid] = component
 
     def get_by_name(self, name):
         """Get the corresponding component from the CUDS computational model.
