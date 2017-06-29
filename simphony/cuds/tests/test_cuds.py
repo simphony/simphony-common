@@ -211,15 +211,11 @@ class CUDSTestCase(unittest.TestCase):
     def test_cuds_update(self):
 
         component = api.Box(name='a box')
-
         c = CUDS()
-
         c.add([component])
 
         component.name = 'updated box'
-
         c.update([component])
-
         updated_component = c.get(component.uid)
 
         self.assertEqual(updated_component.name, 'updated box')
@@ -228,7 +224,6 @@ class CUDSTestCase(unittest.TestCase):
         component = api.Box(name='a box')
 
         c = CUDS()
-
         c.add([component])
 
         another_component = api.Box(name='another box')
