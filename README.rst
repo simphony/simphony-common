@@ -30,13 +30,10 @@ Requirements
 - enum34 >= 1.0.4
 - stevedore >= 1.2.0
 - numpy >= 1.11.1
+- PyTables >= 3.2.3.1
 
 Optional requirements
 ~~~~~~~~~~~~~~~~~~~~~
-
-To support the HDF5 based native IO:
-
-- PyTables >= 3.1.1
 
 To support the documentation built you need the following packages:
 
