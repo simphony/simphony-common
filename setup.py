@@ -94,9 +94,10 @@ setup(
         "enum34 >= 1.0.4",
         "stevedore >= 1.2.0",
         "numpy >= 1.11",
+        "tables >= 3.2.3.1",
     ],
     extras_require={
-        'H5IO': ["tables ~= 3.2.3.1"],
+        'H5IO': [],
         'CUBAGen': []},
     packages=packages,
     cmdclass={
