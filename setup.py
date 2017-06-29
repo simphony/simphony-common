@@ -96,9 +96,6 @@ setup(
         "numpy >= 1.11",
         "tables >= 3.2.3.1",
     ],
-    extras_require={
-        'H5IO': [],
-        'CUBAGen': []},
     packages=packages,
     cmdclass={
         'build_py': Build,
