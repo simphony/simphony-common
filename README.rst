@@ -40,17 +40,6 @@ To support the documentation built you need the following packages:
 - sphinx >= 1.3.1
 - mock
 
-.. note::
-
-  Packages that depend on the optional features and use setuptools should
-  append the ``H5IO`` and/or ``CUBAGen`` identifier next to
-  simphony in their ``setup_requires`` configuration option. For example::
-
-    install_requires = ["simphony[H5IO, CUBAGen]"]
-
-  Will make sure that the requirements of H5IO and CUBAGen support
-  are installed. (see `setuptools extras`_ for more information)
-
 Installation
 ------------
 
@@ -134,27 +123,15 @@ SimPhoNy Framework
 The ``simphony`` library is the core component of the SimPhoNy
 Framework; information on setting up the framework is provided on a
 separate repository https://github.com/simphony/simphony-framework.
-
-
-.. _setuptools extras: https://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
+Observe that this repository is in deprecation stage, as we are moving toward
+Enthought Deployment Manager (EDM) based installation and deployment.
 
 
 For Developers
 ==============
 
-The data structures used in this project are based on the metadata which is defined in a separate repository called ``simphony-metadata`` located at: https://github.com/simphony/simphony-metadata.
+The data structures used in this project are based on the metadata which is defined under ``ontology``.
 
 In order to reflect latest changes to the metadata repository, one should regenerate these entities. 
 The generator is hosted in the repository simphony-metatools located at: https://github.com/simphony/simphony-metatools . The generator is
-used to recreate the python classes in simphony/cuds/meta.
-
-
-Guide to generating metadata classes
-------------------------------------
-
-After installing the dev_requirements, rebuild the meta classes by issuing the following command::
-
-    $ python setup.py build_meta
-
-The command will rebuild the classes against the simphony-metadata repository tag as
-written in setup.cfg build_meta/repotag entry.
+used to recreate the python classes in simphony/cuds/meta. It is installed and invoked by the setup.py script.
