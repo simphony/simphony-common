@@ -228,6 +228,6 @@ class CUDSTestCase(unittest.TestCase):
 
         another_component = api.Box(name='another box')
 
-        with self.assertRaisesRegexp(ValueError, 'Component another box:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} does not exist') as exc:
+        error = 'Component another box:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} does not exist'  # noqa
+        with self.assertRaisesRegexp(ValueError, error):
             c.update([another_component])
-
