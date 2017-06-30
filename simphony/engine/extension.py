@@ -96,7 +96,7 @@ class ABCEngineExtension(object):
         ABCEngineExtension: A wrapper configured with cuds and ready to run
         """
 
-    def create_engine_metadata(name, features, interfaces):
+    def create_engine_metadata(self, name, features, interfaces):
         """Factory method to create engine metadata.
 
         Parameters
@@ -114,7 +114,7 @@ class ABCEngineExtension(object):
         """
         return EngineMetadata(name, features, interfaces)
 
-    def create_engine_metadata_feature(physics_equation, methods):
+    def create_engine_metadata_feature(self, physics_equation, methods):
         """Factory method to create engine metadata feature.
 
         Parameters
