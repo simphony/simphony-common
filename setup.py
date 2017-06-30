@@ -60,6 +60,16 @@ version = '%s'
 
 write_version_py()
 
+# Create the directory for the classes.
+# It must be present because otherwise setup will skip it.
+# Using a keepdir proved tricky because the compiler cleans up the directory
+# before creating new files. So we create it, let setup detect it, then let
+# the compiler do its magic.
+try:
+    os.makedirs("simphony/cuds/meta")
+except OSError:
+    pass
+
 # We cannot use find_packages because we are generating files during build.
 packages = [
     'bench',
