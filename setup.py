@@ -65,7 +65,10 @@ write_version_py()
 # Using a keepdir proved tricky because the compiler cleans up the directory
 # before creating new files. So we create it, let setup detect it, then let
 # the compiler do its magic.
-os.makedirs("simphony/cuds/meta")
+try:
+    os.makedirs("simphony/cuds/meta")
+except OSError:
+    pass
 
 # We cannot use find_packages because we are generating files during build.
 packages = [
