@@ -53,6 +53,22 @@ or::
     # build for in-place development
     python setup.py develop
 
+Generation of EDM egg
+---------------------
+
+An EDM egg can be generated with::
+    
+    python edmsetup.py egg
+
+the resulting egg will be left in the endist directory.
+Uploading to the repository is only possible from an Enthought jenkins build process.
+Automatic build of the eggs is performed when a branch (not a tag, due to jenkins github 
+limitations) named ``release-<version>-<build>`` is created. If the build is successful, 
+the package will appear in the enthought/simphony-dev repository shortly afterwards.
+
+We recommend to leave these branches for future reference.
+
+
 Testing
 -------
 

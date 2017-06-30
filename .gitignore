@@ -68,4 +68,5 @@ venv
 simphony/core/cuba.py
 simphony/core/keywords.py
 simphony/cuds/meta/*
-
+.devenv
+edmdist

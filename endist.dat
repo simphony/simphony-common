@@ -1,0 +1,6 @@
+packages = [
+  'enum34 1.1.6',
+  'stevedore 1.2.0',
+  'numpy 1.11.3',
+  'pytables 3.3.0'
+]

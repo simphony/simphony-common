@@ -6,6 +6,7 @@ Release 0.8.0.dev0
 
 * Outdated and transported simphony-metadata content in this repository,
   readapted build process, removed generated classes from repository.
+* Introduced EDM infrastructure to build edm egg. (#425)
 
 Release 0.7.0
 -------------
