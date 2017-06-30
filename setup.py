@@ -14,6 +14,7 @@ with open('README.rst', 'r') as readme:
 # Install the compiler
 subprocess.check_call(["pip", "install", "-r", "build_requirements.txt"])
 
+
 def create_ontology_classes():
     ontology_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),

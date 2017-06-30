@@ -1,7 +1,6 @@
 import sys
 import click
 import os
-import shutil
 import subprocess
 
 from packageinfo import BUILD, VERSION, NAME
@@ -22,7 +21,7 @@ def bootstrap_devenv():
     sys.path.insert(0, ".devenv/buildrecipes-common")
 
 bootstrap_devenv()
-import buildcommons as common
+import buildcommons as common  # noqa
 
 workspace = common.workspace()
 common.edmenv_setup()
