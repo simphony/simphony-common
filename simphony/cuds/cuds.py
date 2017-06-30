@@ -9,6 +9,11 @@ from .abc_dataset import ABCDataset
 from ..core import CUBA, DataContainer
 
 
+def is_dataset(obj):
+    """Check if the object is a dataset."""
+    return isinstance(obj, (ABCDataset, api.DataSet))
+
+
 class CUDS(api.CUDS):
     """Common Universal Data Structure, i.e. CUDS computational model.
 
@@ -38,12 +43,6 @@ class CUDS(api.CUDS):
         # Call parent
         super(CUDS, self).__init__(name=name, description=description)
 
-    @staticmethod
-    def _is_dataset(obj):
-        """Check if the object is a dataset."""
-        return isinstance(obj, (ABCDataset,
-                                api.DataSet))
-
     def add(self, components):
         """Add a number of components to the CUDS computational model.
 
@@ -64,7 +63,7 @@ class CUDS(api.CUDS):
         for component in components:
             # Only accept CUDSComponent subclasses and datasets
             if not (isinstance(component, api.CUDSComponent) or
-                    self._is_dataset(component)):
+                    is_dataset(component)):
                 raise TypeError('Not a CUDSComponent nor'
                                 'a dataset object: %s.' %
                                 type(component))
@@ -79,7 +78,7 @@ class CUDS(api.CUDS):
                                     component.name))
 
             # Make sure datasets have names
-            if self._is_dataset(component):
+            if is_dataset(component):
                 if not component.name:
                     raise TypeError('Dataset must have a name.')
 
@@ -109,15 +108,14 @@ class CUDS(api.CUDS):
             If any object inside the iterable does not exist.
         """
         for component in components:
-            self._update(component)
+            if component.uid not in self._store:
+                raise ValueError(
+                    "Component {name}:{uid} does not exist.".format(
+                        name=component.name, uid=component.uid
+                    )
+                )
 
-    def _update(self, component):
-        """Update a component"""
-        if component.uid not in self._store:
-            raise ValueError("Component {name:uid} does not exist."
-                             .format(name=component.name, uid=component.uid))
-
-        self._store[component.uid] = component
+            self._store[component.uid] = component
 
     def get_by_name(self, name):
         """Get the corresponding component from the CUDS computational model.
