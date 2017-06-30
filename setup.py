@@ -3,14 +3,16 @@ from subprocess import check_call
 from setuptools import setup
 from setuptools.command.build_py import build_py
 from setuptools.command.develop import develop
+import subprocess
 
+from packageinfo import VERSION, NAME
 
 # Read description
 with open('README.rst', 'r') as readme:
     README_TEXT = readme.read()
 
-
-VERSION = '0.8.0.dev0'
+# Install the compiler
+subprocess.check_call(["pip", "install", "-r", "build_requirements.txt"])
 
 
 def create_ontology_classes():
@@ -84,17 +86,16 @@ packages = [
 
 # main setup configuration class
 setup(
-    name='simphony',
+    name=NAME,
     version=VERSION,
     author='SimPhoNy, EU FP7 Project (Nr. 604005) www.simphony-project.eu',
     description='The native implementation of the SimPhoNy cuds objects',
     long_description=README_TEXT,
     install_requires=[
-        "simphony_metatools >= 0.2.0",
-        "enum34 >= 1.0.4",
-        "stevedore >= 1.2.0",
-        "numpy >= 1.11",
-        "tables >= 3.2.3.1",
+        "enum34>=1.0.4",
+        "stevedore>=1.2.0",
+        "numpy>=1.11",
+        "tables>=3.2.3.1",
     ],
     packages=packages,
     cmdclass={
