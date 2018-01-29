@@ -1,0 +1,351 @@
+digraph class_graph{
+  node [shape = plaintext]
+  rankdir = BT;
+  splines = ortho;
+
+  // ----- Nodes and attributes -----
+  "KS_DFT"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>KS_DFT</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "TURBULENCE_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>TURBULENCE_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "SINGLE_PHASE_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>SINGLE_PHASE_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MODEL_EQUATION"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MODEL_EQUATION</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "PHYSICS_EQUATION"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>PHYSICS_EQUATION</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "GRAVITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>GRAVITY_MODEL</td></tr>
+      <tr><td align='left' >ACCELERATION</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "THERMAL_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>THERMAL_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "GRANULAR_DYNAMICS"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>GRANULAR_DYNAMICS</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MOLECULAR_DYNAMICS"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MOLECULAR_DYNAMICS</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "FREE_SURFACE_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>FREE_SURFACE_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "INCOMPRESSIBLE_FLUID_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>INCOMPRESSIBLE_FLUID_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "CUDS_COMPONENT"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>CUDS_COMPONENT</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MESOSCOPIC_STRESS_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MESOSCOPIC_STRESS_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "COMPRESSIBILITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>COMPRESSIBILITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "HERSCHEL_BULKLEY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>HERSCHEL_BULKLEY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >INITIAL_VISCOSITY</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >POWER_LAW_INDEX</td></tr>
+      <tr><td align='left' >RELAXATION_TIME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "RHEOLOGY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>RHEOLOGY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MIXTURE_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MIXTURE_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MESOSCOPIC_RELATIVE_VELOCITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MESOSCOPIC_RELATIVE_VELOCITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "CROSS_POWER_LAW_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>CROSS_POWER_LAW_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >INITIAL_VISCOSITY</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >MAXIMUM_VISCOSITY</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >POWER_LAW_INDEX</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "ELECTROSTATIC_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>ELECTROSTATIC_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "LAMINAR_FLOW_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>LAMINAR_FLOW_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "BINGHAM_PLASTIC_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>BINGHAM_PLASTIC_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >MAXIMUM_VISCOSITY</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >POWER_LAW_INDEX</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "NEWTONIAN_FLUID_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>NEWTONIAN_FLUID_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "STANDARD_STRESS_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>STANDARD_STRESS_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MOLECULAR_STATICS"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MOLECULAR_STATICS</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "SIMPLE_RELATIVE_VELOCITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>SIMPLE_RELATIVE_VELOCITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >DIFFUSION_VELOCITY</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "ISOTHERMAL_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>ISOTHERMAL_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "POWER_LAW_VISCOSITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>POWER_LAW_VISCOSITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >MAXIMUM_VISCOSITY</td></tr>
+      <tr><td align='left' >MINIMUM_VISCOSITY</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >POWER_LAW_INDEX</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "CFD"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>CFD</td></tr>
+      <tr><td align='left' >COMPRESSIBILITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >ELECTROSTATIC_MODEL</td></tr>
+      <tr><td align='left' >GRAVITY_MODEL</td></tr>
+      <tr><td align='left' >MULTIPHASE_MODEL</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >RHEOLOGY_MODEL</td></tr>
+      <tr><td align='left' >THERMAL_MODEL</td></tr>
+      <tr><td align='left' >TURBULENCE_MODEL</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "CONSTANT_ELECTROSTATIC_FIELD_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>CONSTANT_ELECTROSTATIC_FIELD_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >ELECTROSTATIC_FIELD</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "BIRD_CARREAU_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>BIRD_CARREAU_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >INITIAL_VISCOSITY</td></tr>
+      <tr><td align='left' >LINEAR_CONSTANT</td></tr>
+      <tr><td align='left' >MAXIMUM_VISCOSITY</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >POWER_LAW_INDEX</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "STRESS_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>STRESS_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "RELATIVE_VELOCITY_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>RELATIVE_VELOCITY_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "CUDS_ITEM"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>CUDS_ITEM</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+  "MULTIPHASE_MODEL"
+    [label=
+    <<table border='1' cellborder='0' cellspacing='0'>
+      <tr><td bgcolor='grey'>MULTIPHASE_MODEL</td></tr>
+      <tr><td align='left' >DESCRIPTION</td></tr>
+      <tr><td align='left' >NAME</td></tr>
+      <tr><td align='left' >UID</td></tr>
+    </table>>];
+
+  // ----- Relationships -----
+  "KS_DFT" -> "PHYSICS_EQUATION";
+  "TURBULENCE_MODEL" -> "PHYSICS_EQUATION";
+  "SINGLE_PHASE_MODEL" -> "MULTIPHASE_MODEL";
+  "MODEL_EQUATION" -> "CUDS_COMPONENT";
+  "PHYSICS_EQUATION" -> "MODEL_EQUATION";
+  "GRAVITY_MODEL" -> "PHYSICS_EQUATION";
+  "THERMAL_MODEL" -> "PHYSICS_EQUATION";
+  "GRANULAR_DYNAMICS" -> "PHYSICS_EQUATION";
+  "MOLECULAR_DYNAMICS" -> "PHYSICS_EQUATION";
+  "FREE_SURFACE_MODEL" -> "PHYSICS_EQUATION";
+  "INCOMPRESSIBLE_FLUID_MODEL" -> "COMPRESSIBILITY_MODEL";
+  "CUDS_COMPONENT" -> "CUDS_ITEM";
+  "MESOSCOPIC_STRESS_MODEL" -> "STRESS_MODEL";
+  "COMPRESSIBILITY_MODEL" -> "PHYSICS_EQUATION";
+  "HERSCHEL_BULKLEY_MODEL" -> "RHEOLOGY_MODEL";
+  "RHEOLOGY_MODEL" -> "PHYSICS_EQUATION";
+  "MIXTURE_MODEL" -> "PHYSICS_EQUATION";
+  "MESOSCOPIC_RELATIVE_VELOCITY_MODEL" -> "RELATIVE_VELOCITY_MODEL";
+  "CROSS_POWER_LAW_MODEL" -> "RHEOLOGY_MODEL";
+  "ELECTROSTATIC_MODEL" -> "PHYSICS_EQUATION";
+  "LAMINAR_FLOW_MODEL" -> "TURBULENCE_MODEL";
+  "BINGHAM_PLASTIC_MODEL" -> "RHEOLOGY_MODEL";
+  "NEWTONIAN_FLUID_MODEL" -> "RHEOLOGY_MODEL";
+  "STANDARD_STRESS_MODEL" -> "STRESS_MODEL";
+  "MOLECULAR_STATICS" -> "PHYSICS_EQUATION";
+  "SIMPLE_RELATIVE_VELOCITY_MODEL" -> "RELATIVE_VELOCITY_MODEL";
+  "ISOTHERMAL_MODEL" -> "THERMAL_MODEL";
+  "POWER_LAW_VISCOSITY_MODEL" -> "RHEOLOGY_MODEL";
+  "CFD" -> "PHYSICS_EQUATION";
+  "CONSTANT_ELECTROSTATIC_FIELD_MODEL" -> "ELECTROSTATIC_MODEL";
+  "BIRD_CARREAU_MODEL" -> "RHEOLOGY_MODEL";
+  "STRESS_MODEL" -> "PHYSICS_EQUATION";
+  "RELATIVE_VELOCITY_MODEL" -> "PHYSICS_EQUATION";
+    "MULTIPHASE_MODEL" -> "PHYSICS_EQUATION";
+}
